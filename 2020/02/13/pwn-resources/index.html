@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="“pwn”（pwn）-表示要危害或控制，特别是另一台计算机（服务器或PC），网站，网关设备或应用程序。它与黑客或破解（包括iOS越狱）的定义同义。—维基百科  溢出攻击的本质在于冯·诺依曼计算机模型对数据和代码没有明确区分这一先天性缺陷。因为攻击者可以将代码放置于数据区段，转而让系统去执行。   shell-stormshell-storm 各类ctf的writeup和shellcode，以及c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pwn逆向资源以及各种poc收录">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/02/13/pwn-resources/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="“pwn”（pwn）-表示要危害或控制，特别是另一台计算机（服务器或PC），网站，网关设备或应用程序。它与黑客或破解（包括iOS越狱）的定义同义。—维基百科  溢出攻击的本质在于冯·诺依曼计算机模型对数据和代码没有明确区分这一先天性缺陷。因为攻击者可以将代码放置于数据区段，转而让系统去执行。   shell-stormshell-storm 各类ctf的writeup和shellcode，以及c">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-02-13T12:01:14.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:55:21.540Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/02/13/pwn-resources/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/02/13/pwn-resources/","path":"2020/02/13/pwn-resources/","title":"pwn逆向资源以及各种poc收录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>pwn逆向资源以及各种poc收录 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#shell-storm"><span class="nav-number">1.</span> <span class="nav-text">shell-storm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux-syscall-reference"><span class="nav-number">2.</span> <span class="nav-text">linux syscall reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Diary-of-a-reverse-engineer"><span class="nav-number">3.</span> <span class="nav-text">Diary of a reverse-engineer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ctf-wiki"><span class="nav-number">4.</span> <span class="nav-text">ctf wiki</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PWNABLE-TW"><span class="nav-number">5.</span> <span class="nav-text">PWNABLE.TW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gdb%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-number">6.</span> <span class="nav-text">gdb逆向调试工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwnable-kr"><span class="nav-number">7.</span> <span class="nav-text">pwnable.kr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ExploitBox"><span class="nav-number">8.</span> <span class="nav-text">ExploitBox</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LEGAL-HACKERS"><span class="nav-number">9.</span> <span class="nav-text">LEGAL HACKERS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86shellcode%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81"><span class="nav-number">10.</span> <span class="nav-text">将shellcode转换为汇编代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROPgadget"><span class="nav-number">11.</span> <span class="nav-text">ROPgadget</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shellcoding-for-Linux-and-Windows-Tutorial"><span class="nav-number">12.</span> <span class="nav-text">Shellcoding for Linux and Windows Tutorial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bypassing-non-executable-stack-during-exploitation-using-return-to-libc"><span class="nav-number">13.</span> <span class="nav-text">Bypassing non-executable-stack during exploitation using return-to-libc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BA%8EX86-x2F-64%E7%9A%84LINUX%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E8%A1%A8"><span class="nav-number">14.</span> <span class="nav-text">用于X86&#x2F;64的LINUX系统调用表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pwn%E4%BB%A5%E5%8F%8A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E5%AD%A6%E4%B9%A0%E6%96%87%E7%AB%A0%E6%8E%A8%E8%8D%90"><span class="nav-number">14.1.</span> <span class="nav-text">pwn以及缓冲区溢出学习文章推荐</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/02/13/pwn-resources/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="pwn逆向资源以及各种poc收录 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pwn逆向资源以及各种poc收录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-02-13 20:01:14" itemprop="dateCreated datePublished" datetime="2020-02-13T20:01:14+08:00">2020-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:55:21" itemprop="dateModified" datetime="2020-08-17T00:55:21+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/poc/" itemprop="url" rel="index"><span itemprop="name">poc</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/poc/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <ul>
+<li><p>“pwn”（pwn）-表示要危害或控制，特别是另一台计算机（服务器或PC），网站，网关设备或应用程序。它与黑客或破解（包括iOS越狱）的定义同义。—维基百科</p>
+</li>
+<li><p>溢出攻击的本质在于冯·诺依曼计算机模型对数据和代码没有明确区分这一先天性缺陷。因为攻击者可以将代码放置于数据区段，转而让系统去执行。</p>
+</li>
+</ul>
+<h3 id="shell-storm"><a href="#shell-storm" class="headerlink" title="shell-storm"></a>shell-storm</h3><p><span class="exturl" data-url="aHR0cDovL3NoZWxsLXN0b3JtLm9yZy8=">shell-storm<i class="fa fa-external-link-alt"></i></span></p>
+<p>各类ctf的writeup和shellcode，以及cve漏洞公开，缓冲区溢出等等。。。</p>
+<span id="more"></span>
+
+<h3 id="linux-syscall-reference"><a href="#linux-syscall-reference" class="headerlink" title="linux syscall reference"></a>linux syscall reference</h3><p><span class="exturl" data-url="aHR0cDovL3N5c2NhbGxzLmtlcm5lbGdyb2suY29tLw==">linux syscall reference<i class="fa fa-external-link-alt"></i></span></p>
+<p>linux syscal各类寄存器地址核对表</p>
+<h3 id="Diary-of-a-reverse-engineer"><a href="#Diary-of-a-reverse-engineer" class="headerlink" title="Diary of a reverse-engineer"></a>Diary of a reverse-engineer</h3><p><span class="exturl" data-url="aHR0cHM6Ly9kb2FyLWUuZ2l0aHViLmlvLw==">Diary of a reverse-engineer<i class="fa fa-external-link-alt"></i></span></p>
+<p>逆向大牛的手稿，其中包括各类逆向工程学，缓冲区溢出，cve等等知识。。。</p>
+<h3 id="ctf-wiki"><a href="#ctf-wiki" class="headerlink" title="ctf wiki"></a>ctf wiki</h3><p><span class="exturl" data-url="aHR0cHM6Ly9jdGYtd2lraS5naXRodWIuaW8vY3RmLXdpa2kv">CTF Wiki<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="PWNABLE-TW"><a href="#PWNABLE-TW" class="headerlink" title="PWNABLE.TW"></a>PWNABLE.TW</h3><p><span class="exturl" data-url="aHR0cHM6Ly9wd25hYmxlLnR3Lw==">PWNABLE.TW<i class="fa fa-external-link-alt"></i></span></p>
+<p>Pwnable.tw是一个供黑客测试和扩展其二进制利用pwn技能的ctf游戏网站。</p>
+<h3 id="gdb逆向调试工具"><a href="#gdb逆向调试工具" class="headerlink" title="gdb逆向调试工具"></a>gdb逆向调试工具</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B3bmRiZy9wd25kYmc=">pwndbg<i class="fa fa-external-link-alt"></i></span></p>
+<p>pwndbg是一个GDB插件，它使使用GDB进行调试的工作量减少，重点放在低级软件开发人员，硬件黑客，逆向工程人员和漏洞利用开发人员所需的功能上。它具有许多功能，请参阅<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B3bmRiZy9wd25kYmcvYmxvYi9kZXYvRkVBVFVSRVMubWQ=">pwndbg FEATURES<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlci9Qd25nZGI=">Pwngdb<i class="fa fa-external-link-alt"></i></span></p>
+<p>pwn专用gdb</p>
+<h3 id="pwnable-kr"><a href="#pwnable-kr" class="headerlink" title="pwnable.kr"></a>pwnable.kr</h3><p><span class="exturl" data-url="aHR0cDovL3B3bmFibGUua3Iv">pwnable.kr<i class="fa fa-external-link-alt"></i></span></p>
+<p>“pwnable.kr”是一个非商业性的ctf游戏网站，提供有关系统开发的各种pwn挑战。pwnable.kr的主要目的是“有趣”。请将每个挑战视为游戏。在玩pwnable.kr时，可以学习&#x2F;提高系统黑客技能，但这不是唯一目的。</p>
+<h3 id="ExploitBox"><a href="#ExploitBox" class="headerlink" title="ExploitBox"></a>ExploitBox</h3><p><span class="exturl" data-url="aHR0cHM6Ly9leHBsb2l0Ym94LmlvLw==">ExploitBox<i class="fa fa-external-link-alt"></i></span></p>
+<p>ExploitBox是一个面向黑客，Bug猎人，研究人员和其他安全人员的游乐场和实验室。</p>
+<h3 id="LEGAL-HACKERS"><a href="#LEGAL-HACKERS" class="headerlink" title="LEGAL HACKERS"></a>LEGAL HACKERS</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWdhbGhhY2tlcnMuY29tLw==">LEGAL HACKERS<i class="fa fa-external-link-alt"></i></span></p>
+<p>大神的一些漏洞poc，及其漏洞利用。。。</p>
+<h3 id="将shellcode转换为汇编代码"><a href="#将shellcode转换为汇编代码" class="headerlink" title="将shellcode转换为汇编代码"></a>将shellcode转换为汇编代码</h3><p>参考<span class="exturl" data-url="aHR0cHM6Ly9odm50M3IudG9wLzIwMTgvMTAvU2hlbGwtY29kZSVFNyU5QSU4NCVFNyVCQyU5NiVFNSU4NiU5OSVFNSU5MiU4QyVFNSU4OCVBOSVFNyU5NCVBOC8=">Shell-code的编写和利用<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="ROPgadget"><a href="#ROPgadget" class="headerlink" title="ROPgadget"></a>ROPgadget</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlci9ST1BnYWRnZXQ=">ROPgadget<i class="fa fa-external-link-alt"></i></span></p>
+<p>使用此工具，可以在二进制文件中搜索小工具，以方便对ROP的利用。ROPgadget在x86，x64，ARM，ARM64，PowerPC，SPARC和MIPS体系结构上支持ELF&#x2F;PE&#x2F;Mach-O格式。从版本5开始，ROPgadget具有一个新的内核，该内核使用Capstone反汇编框架以Python形式为小工具搜索引擎编写-较旧的版本可以在Archives目录中找到，但将无法维护。</p>
+<h3 id="Shellcoding-for-Linux-and-Windows-Tutorial"><a href="#Shellcoding-for-Linux-and-Windows-Tutorial" class="headerlink" title="Shellcoding for Linux and Windows Tutorial"></a>Shellcoding for Linux and Windows Tutorial</h3><p><span class="exturl" data-url="aHR0cDovL3d3dy52aXZpZG1hY2hpbmVzLmNvbS9zaGVsbGNvZGUvc2hlbGxjb2RlLmh0bWw=">Shellcoding for Linux and Windows Tutorial<i class="fa fa-external-link-alt"></i></span></p>
+<p>在计算机安全性方面，从最字面意义上来说，shellcoding意味着编写代码，这些代码在执行时将返回一个远程shell。Shellcode的含义已经发展，现在代表了将插入到漏洞利用中以完成所需任务的任何字节码。</p>
+<h3 id="Bypassing-non-executable-stack-during-exploitation-using-return-to-libc"><a href="#Bypassing-non-executable-stack-during-exploitation-using-return-to-libc" class="headerlink" title="Bypassing non-executable-stack during exploitation using return-to-libc"></a>Bypassing non-executable-stack during exploitation using return-to-libc</h3><p><span class="exturl" data-url="aHR0cDovL2Nzcy5jc2FpbC5taXQuZWR1LzYuODU4LzIwMTQvcmVhZGluZ3MvcmV0dXJuLXRvLWxpYmMucGRm">Bypassing non-executable-stack during exploitation using return-to-libc<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="用于X86-x2F-64的LINUX系统调用表"><a href="#用于X86-x2F-64的LINUX系统调用表" class="headerlink" title="用于X86&#x2F;64的LINUX系统调用表"></a>用于X86&#x2F;64的LINUX系统调用表</h3><p><span class="exturl" data-url="aHR0cDovL2Jsb2cucmNoYXBtYW4ub3JnL3Bvc3RzL0xpbnV4X1N5c3RlbV9DYWxsX1RhYmxlX2Zvcl94ODZfNjQv">用于X86&#x2F;64的LINUX系统调用表<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="pwn以及缓冲区溢出学习文章推荐"><a href="#pwn以及缓冲区溢出学习文章推荐" class="headerlink" title="pwn以及缓冲区溢出学习文章推荐"></a>pwn以及缓冲区溢出学习文章推荐</h4><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC9iYjA4MTYyOGEwODM=">栈的缓冲区溢出详解<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vd2ludHJ5c2VjL3AvMTA0ODMxNTQuaHRtbA==">Linux_x86_Pwn溢出漏洞<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC80N2Q0ODRiOTIyN2U=">栈溢出攻击及防护方法简介<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC83MjQxMWQ4Y2UyYWE=">缓冲区溢出攻击<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC8wMDYxMTc3ZTAzNTU=">通用shellcode的编写-调用-实验缓冲区溢出攻击-非远程-调用shellcode实例一<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC82MmVhYjU2MjA0OTA=">通用shellcode的编写-调用-实验缓冲区溢出攻击-非远程-调用shellcode实例二<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/02/13/pwn-resources/" title="pwn逆向资源以及各种poc收录">https://fdlucifer.github.io/2020/02/13/pwn-resources/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/12/Raven-1/" rel="prev" title="vulnhub靶机渗透[Raven-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[Raven-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/25/goendecoder/" rel="next" title="goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文">
+                  goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

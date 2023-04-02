@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="很长一段时间没有发vulnhub靶机的博客了，因为在闭关修炼golang语言，所以废话不多说，下面是这段时间的成果，由本菜独立开发，勿喷!!! :) Golang CTF加解密工具1234567891011---------------------------------------------------------- ____          _               _  __">
+<meta property="og:type" content="article">
+<meta property="og:title" content="goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/03/25/goendecoder/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="很长一段时间没有发vulnhub靶机的博客了，因为在闭关修炼golang语言，所以废话不多说，下面是这段时间的成果，由本菜独立开发，勿喷!!! :) Golang CTF加解密工具1234567891011---------------------------------------------------------- ____          _               _  __">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/FDlucifer/goendecoder/master/showpics/show.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/FDlucifer/goendecoder/master/showpics/show1.jpg">
+<meta property="article:published_time" content="2020-03-25T07:30:39.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:46:16.806Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="ctf tools">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/FDlucifer/goendecoder/master/showpics/show.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/03/25/goendecoder/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/03/25/goendecoder/","path":"2020/03/25/goendecoder/","title":"goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Golang-CTF%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">Golang CTF加解密工具</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-Pics"><span class="nav-number"></span> <span class="nav-text">Example Pics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usage"><span class="nav-number"></span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">1.</span> <span class="nav-text">Example</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#En-x2F-Dedode-a-string-without-spaces-using-ECC-Encryption"><span class="nav-number"></span> <span class="nav-text">En&#x2F;Dedode a string without spaces using ECC Encryption</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#En-x2F-Dedode-a-string-with-spaces-include-using-ECC-Encryption"><span class="nav-number"></span> <span class="nav-text">En&#x2F;Dedode a string with spaces include using ECC Encryption</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Support-Encryption-and-decryption-algorithm"><span class="nav-number">1.</span> <span class="nav-text">Support Encryption and decryption algorithm</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9%E7%89%B9%E8%89%B2"><span class="nav-number"></span> <span class="nav-text">优点特色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number"></span> <span class="nav-text">注意</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/03/25/goendecoder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-25 15:30:39" itemprop="dateCreated datePublished" datetime="2020-03-25T15:30:39+08:00">2020-03-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:46:16" itemprop="dateModified" datetime="2020-08-17T00:46:16+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><font color="green">很长一段时间没有发vulnhub靶机的博客了，因为在闭关修炼golang语言，所以废话不多说，下面是这段时间的成果，由本菜独立开发，勿喷!!! :)</font></p>
+<h4 id="Golang-CTF加解密工具"><a href="#Golang-CTF加解密工具" class="headerlink" title="Golang CTF加解密工具"></a>Golang CTF加解密工具</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">----------------------------------------------------------</span><br><span class="line"> ____          _               _  __           _ _</span><br><span class="line">| __ ) _   _  | |   _   _  ___(_)/ _| ___ _ __/ / |</span><br><span class="line">|  _ \| | | | | |  | | | |/ __| | |_ / _ \ <span class="string">&#x27;__| | |</span></span><br><span class="line"><span class="string">| |_) | |_| | | |__| |_| | (__| |  _|  __/ |  | | |</span></span><br><span class="line"><span class="string">|____/ \__, | |_____\__,_|\___|_|_|  \___|_|  |_|_|</span></span><br><span class="line"><span class="string">       |___/</span></span><br><span class="line"><span class="string">----------------------------------------------------------</span></span><br><span class="line"><span class="string">QQ 1185151867</span></span><br><span class="line"><span class="string">--############################ :)hack all asshole things:)</span></span><br><span class="line"><span class="string">----------------------------------------------------------</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlci9nb2VuZGVjb2Rlcg==">Download<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="Example-Pics"><a href="#Example-Pics" class="headerlink" title="Example Pics"></a>Example Pics</h3><p><img src="https://raw.githubusercontent.com/FDlucifer/goendecoder/master/showpics/show.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/FDlucifer/goendecoder/master/showpics/show1.jpg"></p>
+<span id="more"></span>
+
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">----------------------------------------------------------</span><br><span class="line">[+] please choose your choice to encode or decode strings:</span><br><span class="line">[+] usage: [your string to convert + choice number]</span><br><span class="line">[+] list of choices:</span><br><span class="line">----------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><h2 id="En-x2F-Dedode-a-string-without-spaces-using-ECC-Encryption"><a href="#En-x2F-Dedode-a-string-without-spaces-using-ECC-Encryption" class="headerlink" title="En&#x2F;Dedode a string without spaces using ECC Encryption"></a>En&#x2F;Dedode a string without spaces using ECC Encryption</h2><ul>
+<li>first generate ecc public and private key</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">n casdc 9999</span><br><span class="line">- you choose [n]</span><br><span class="line">- &#123;your string [casdc], your choice [9999]&#125;</span><br><span class="line">-- Generating ECC public and private keys......</span><br><span class="line">-- generat ECC public and private key successful......</span><br><span class="line">-- your ECC public key is:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJX</span><br><span class="line">QCCF5p90uwIaxXxmJw6aAwIrsNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">]</span><br><span class="line">------------------------------------------------------</span><br><span class="line">-- your ECC private key is:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">MHcCAQEEIH4OwCsvWhJGfSa6jestEaEEW/92rynOKvkq6t8glExooAoGCCqGSM49</span><br><span class="line">AwEHoUQDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJXQCCF5p90uwIaxXxmJw6aAwIr</span><br><span class="line">sNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>then input your string to encode</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">n 我草泥马 38</span><br><span class="line">- you choose [n]</span><br><span class="line">- &#123;your string [我草泥马], your choice [38]&#125;</span><br><span class="line">-- Reading eccpublic key from eccpublic.pem...</span><br><span class="line">-- eccpublic key:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJX</span><br><span class="line">QCCF5p90uwIaxXxmJw6aAwIrsNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">]</span><br><span class="line">[+] Beginning ECC Encryption......</span><br><span class="line">- start writing ECC encrypted data to ecc-encrypted.txt...</span><br><span class="line">- convert plaintext [我草泥马] to ECC hex encryption result [046210648396eadeec655a5e9e72f15ad49f140df0f04a825b499b902f471997b3b5f95b407d006441483bd2caf9717bb8a985457ffd08e59cb5ff65a68402a807b5c959953ac3c1ea17127a9aae06dddbb540cc43218ca6b100e15c3631d1e7155728b5171c1235bd6abe676732aa03268976e657a9a16e3a26678891]</span><br><span class="line">-----------------ecc encryption over-----------------</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>then decode the encrypted text to plaintext</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">n casd 39</span><br><span class="line">- you choose [n]</span><br><span class="line">- &#123;your string [casd], your choice [39]&#125;</span><br><span class="line">-- Reading eccprivate key from eccprivate.pem...</span><br><span class="line">-- eccprivate key:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">MHcCAQEEIH4OwCsvWhJGfSa6jestEaEEW/92rynOKvkq6t8glExooAoGCCqGSM49</span><br><span class="line">AwEHoUQDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJXQCCF5p90uwIaxXxmJw6aAwIr</span><br><span class="line">sNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">]</span><br><span class="line">[+] Beginning ECC Decryption......</span><br><span class="line">[+] Reading byte ecc encrypted data from ecc-encrypted.txt...</span><br><span class="line">- convert ecc encrypted byte data from ecc-encrypted.txt to plaintext: [我草泥马]</span><br><span class="line">-----------------ecc decryption over-----------------</span><br></pre></td></tr></table></figure>
+
+<h2 id="En-x2F-Dedode-a-string-with-spaces-include-using-ECC-Encryption"><a href="#En-x2F-Dedode-a-string-with-spaces-include-using-ECC-Encryption" class="headerlink" title="En&#x2F;Dedode a string with spaces include using ECC Encryption"></a>En&#x2F;Dedode a string with spaces include using ECC Encryption</h2><ul>
+<li>first generate ecc public and private key</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">n casdc 9999</span><br><span class="line">- you choose [n]</span><br><span class="line">- &#123;your string [casdc], your choice [9999]&#125;</span><br><span class="line">-- Generating ECC public and private keys......</span><br><span class="line">-- generat ECC public and private key successful......</span><br><span class="line">-- your ECC public key is:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJX</span><br><span class="line">QCCF5p90uwIaxXxmJw6aAwIrsNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">]</span><br><span class="line">------------------------------------------------------</span><br><span class="line">-- your ECC private key is:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">MHcCAQEEIH4OwCsvWhJGfSa6jestEaEEW/92rynOKvkq6t8glExooAoGCCqGSM49</span><br><span class="line">AwEHoUQDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJXQCCF5p90uwIaxXxmJw6aAwIr</span><br><span class="line">sNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>then input your string to encode</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">y 我 操 你 妈妈</span><br><span class="line">- you choose [y]</span><br><span class="line">- &#123;your string [我 操 你 妈妈</span><br><span class="line">]&#125;</span><br><span class="line">38</span><br><span class="line">- &#123;your choice [38]&#125;</span><br><span class="line">-- Reading eccpublic key from eccpublic.pem...</span><br><span class="line">-- eccpublic key:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJX</span><br><span class="line">QCCF5p90uwIaxXxmJw6aAwIrsNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PUBLIC KEY -----</span><br><span class="line">]</span><br><span class="line">[+] Beginning ECC Encryption......</span><br><span class="line">- start writing ECC encrypted data to ecc-encrypted.txt...</span><br><span class="line">- convert plaintext [我 操 你 妈妈</span><br><span class="line">] to ECC hex encryption result [0499173f0b7246278597bb1268ba64da228b6e447ea184dfa8c14277fff6c7da170cd24acf341ae2856137c90c00b495573484dd0bc133aae1a5540a17fcda9dd37b47d037f1410acc6b4ebcaa47ae18fd1b23bcc47cce5fa27b8746a1143908b9bab8cdea55d76ffc9f82e88ef2345240f7d10dde9962967bd6077c3e7f8023eb9e06b658]</span><br><span class="line">-----------------ecc encryption over-----------------</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>then decode the encrypted text to plaintext</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">y casd</span><br><span class="line">- you choose [y]</span><br><span class="line">- &#123;your string [casd</span><br><span class="line">]&#125;</span><br><span class="line">39</span><br><span class="line">- &#123;your choice [39]&#125;</span><br><span class="line">-- Reading eccprivate key from eccprivate.pem...</span><br><span class="line">-- eccprivate key:</span><br><span class="line"> [-----BEGIN  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">MHcCAQEEIH4OwCsvWhJGfSa6jestEaEEW/92rynOKvkq6t8glExooAoGCCqGSM49</span><br><span class="line">AwEHoUQDQgAEKKcMkz7SfPBUXpsDMdkFaZnYnQJXQCCF5p90uwIaxXxmJw6aAwIr</span><br><span class="line">sNvp/7oPDM2YfD0efFhHB4lbKsdR5WsV0Q==</span><br><span class="line">-----END  WUMAN ECC PRIVATE KEY -----</span><br><span class="line">]</span><br><span class="line">[+] Beginning ECC Decryption......</span><br><span class="line">[+] Reading byte ecc encrypted data from ecc-encrypted.txt...</span><br><span class="line">- convert ecc encrypted byte data from ecc-encrypted.txt to plaintext: [我 操 你 妈妈</span><br><span class="line">]</span><br><span class="line">-----------------ecc decryption over-----------------</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>other en&#x2F;decryption method are just like this</li>
+</ul>
+<h4 id="Support-Encryption-and-decryption-algorithm"><a href="#Support-Encryption-and-decryption-algorithm" class="headerlink" title="Support Encryption and decryption algorithm"></a>Support Encryption and decryption algorithm</h4><ul>
+<li><ol>
+<li>base64 encode</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>base64 decode</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>Aes cbc model encode</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>Aes cbc model decode</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>Aes ecb model encode</li>
+</ol>
+</li>
+<li><ol start="6">
+<li>Aes ecb model decode</li>
+</ol>
+</li>
+<li><ol start="7">
+<li>Aes cfb model encode</li>
+</ol>
+</li>
+<li><ol start="8">
+<li>Aes cfb model decode</li>
+</ol>
+</li>
+<li><ol start="9">
+<li>hex encode (ASCII hex)</li>
+</ol>
+</li>
+<li><ol start="10">
+<li>hex decode (ASCII hex)</li>
+</ol>
+</li>
+<li><ol start="11">
+<li>md5 encode (md5($pass.$salt);Joomia)</li>
+</ol>
+</li>
+<li><ol start="12">
+<li>sha1 encode</li>
+</ol>
+</li>
+<li><ol start="13">
+<li>hmac encode (md5)</li>
+</ol>
+</li>
+<li><ol start="14">
+<li>sha256 encode</li>
+</ol>
+</li>
+<li><ol start="15">
+<li>hmac-sha1 encode</li>
+</ol>
+</li>
+<li><ol start="17">
+<li>hmac-sha512 encode</li>
+</ol>
+</li>
+<li><ol start="18">
+<li>Base64Url Safe encode &lt;not contain (‘&#x2F;‘,’+’);replaced by (‘_’,’-‘);(‘&#x3D;’) removed&gt;</li>
+</ol>
+</li>
+<li><ol start="19">
+<li>Base64Url Safe decode</li>
+</ol>
+</li>
+<li><ol start="20">
+<li>des Ecb encryption</li>
+</ol>
+</li>
+<li><ol start="21">
+<li>des Ecb decryption</li>
+</ol>
+</li>
+<li><ol start="22">
+<li>des Cbc encryption</li>
+</ol>
+</li>
+<li><ol start="23">
+<li>des Cbc decryption</li>
+</ol>
+</li>
+<li><ol start="24">
+<li>3des Cbc encryption</li>
+</ol>
+</li>
+<li><ol start="25">
+<li>3des Cbc decryption</li>
+</ol>
+</li>
+<li><ol start="26">
+<li>Ripemd160 encryption</li>
+</ol>
+</li>
+<li><ol start="27">
+<li>3des Ecb encryption</li>
+</ol>
+</li>
+<li><ol start="28">
+<li>3des Ecb decryption</li>
+</ol>
+</li>
+<li><ol start="29">
+<li>Rc4 encryption</li>
+</ol>
+</li>
+<li><ol start="30">
+<li>AzDG encryption</li>
+</ol>
+</li>
+<li><ol start="31">
+<li>AzDG decryption</li>
+</ol>
+</li>
+<li><ol start="32">
+<li>Aes CTR encryption</li>
+</ol>
+</li>
+<li><ol start="33">
+<li>Aes CTR decryption</li>
+</ol>
+</li>
+<li><ol start="34">
+<li>PBKDF2 encryption (set &lt;passwdrd, salt, iter, keylen, hash&gt; to strong encrypt data)</li>
+</ol>
+</li>
+<li><ol start="999">
+<li>[–Generate Rsa Public and Private Key :)–]</li>
+</ol>
+</li>
+<li><ol start="35">
+<li>RSA hex formate encryption</li>
+</ol>
+</li>
+<li><ol start="36">
+<li>RSA hex formate decryption</li>
+</ol>
+</li>
+<li><ol start="37">
+<li>RSA sign confirm</li>
+</ol>
+</li>
+<li><ol start="9999">
+<li>[ECC Key generate] –(bitcoin and ID card … used)–[elliptic.P256() used]</li>
+</ol>
+</li>
+<li><ol start="38">
+<li>ECC Encryption –(bitcoin and ID card … used)–[elliptic.P256() used]</li>
+</ol>
+</li>
+<li><ol start="39">
+<li>ECC Decryption –(bitcoin and ID card … used)–[elliptic.P256() used]</li>
+</ol>
+</li>
+<li><ol start="40">
+<li>ECC sign confirm –(bitcoin and ID card … used)–[elliptic.P256() used]</li>
+</ol>
+</li>
+<li><ol start="41">
+<li>Blowfish Ecb Encryption</li>
+</ol>
+</li>
+<li><ol start="42">
+<li>Blowfish Ecb Decryption</li>
+</ol>
+</li>
+<li><ol start="43">
+<li>Md4 encryption</li>
+</ol>
+</li>
+<li><ol start="44">
+<li>Aes Gcm Encryption [Ethereum Whisper protocol used]</li>
+</ol>
+</li>
+<li><ol start="45">
+<li>Aes Gcm Decryption [Ethereum Whisper protocol used]</li>
+</ol>
+</li>
+<li><ol start="46">
+<li>des Cfb encryption</li>
+</ol>
+</li>
+<li><ol start="47">
+<li>des Cfb decryption</li>
+</ol>
+</li>
+<li><ol start="48">
+<li>AES OFB Encryption</li>
+</ol>
+</li>
+<li><ol start="49">
+<li>AES OFB Decryption</li>
+</ol>
+</li>
+<li><ol start="50">
+<li>des Ctr encryption</li>
+</ol>
+</li>
+<li><ol start="51">
+<li>des Ctr decryption</li>
+</ol>
+</li>
+<li><ol start="52">
+<li>des Ofb encryption</li>
+</ol>
+</li>
+<li><ol start="53">
+<li>des Ofb decryption</li>
+</ol>
+</li>
+<li><ol start="54">
+<li>Elliptic Curve Digital Signature Verified</li>
+</ol>
+</li>
+<li><ol start="55">
+<li>Vertfied pub key types</li>
+</ol>
+</li>
+<li><ol start="56">
+<li>HKDF encryption</li>
+</ol>
+</li>
+<li><ol start="57">
+<li>base32 encryption</li>
+</ol>
+</li>
+<li><ol start="58">
+<li>base32 decryption</li>
+</ol>
+</li>
+<li><ol start="59">
+<li>nacl box encryption and decryption</li>
+</ol>
+</li>
+<li><ol start="60">
+<li>nacl secretbox encryption and decryption</li>
+</ol>
+</li>
+<li><ol start="61">
+<li>scrypt encryption [Bitcoin used strong encryption]</li>
+</ol>
+</li>
+<li><ol start="62">
+<li>Shake256 encryption</li>
+</ol>
+</li>
+<li><ol start="63">
+<li>Caesar encryption</li>
+</ol>
+</li>
+<li><ol start="64">
+<li>Caesar decryption</li>
+</ol>
+</li>
+<li><ol start="65">
+<li>hex dump</li>
+</ol>
+</li>
+</ul>
+<h3 id="优点特色"><a href="#优点特色" class="headerlink" title="优点特色"></a>优点特色</h3><ul>
+<li>支持多达65种加解密算法</li>
+<li>彩色输出美化</li>
+<li>持续添加更多算法支持</li>
+</ul>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ul>
+<li>如果工具打开报错请把flag.txt和go build生成的goendecoder.exe放在同一目录下即可</li>
+<li>有任何问题请联系qq:1185151867 :)</li>
+</ul>
+<p><font color="yellow">:) enjoy it ! :)</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/03/25/goendecoder/" title="goendecoder-golang-ctf加解密工具-支持多达65种加密解密方法-可根据实际需要修改源码以解密密文">https://fdlucifer.github.io/2020/03/25/goendecoder/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"><i class="fa fa-tag"></i> golang</a>
+              <a href="/tags/ctf-tools/" rel="tag"><i class="fa fa-tag"></i> ctf tools</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/13/pwn-resources/" rel="prev" title="pwn逆向资源以及各种poc收录">
+                  <i class="fa fa-chevron-left"></i> pwn逆向资源以及各种poc收录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/25/goportscan/" rel="next" title="goportscan-go调用最大cpu内核数实现批量ip列表tcp端口快速扫描">
+                  goportscan-go调用最大cpu内核数实现批量ip列表tcp端口快速扫描 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

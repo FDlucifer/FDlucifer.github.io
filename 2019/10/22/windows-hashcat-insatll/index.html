@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="由于一般密码破解工具的破解速度实在是太慢，而且支持的密码破解协议也不多，暴力破解的话，有的密码1年时间也破不出来，用字典跑的话必须要明文密码在字典里才行，而且密码字典太大的话，也很浪费时间，跑不出来也是很常见的事情，下面推荐一款世界上破解密码速度最快的工具，hashcat，hashcat github地址,选择最新版的下载即可。 hashcat支持多种计算核心：GPUCPUAPUDSPFPGACo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows下hashcat利用GPU显卡性能破解密码">
+<meta property="og:url" content="https://fdlucifer.github.io/2019/10/22/windows-hashcat-insatll/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="由于一般密码破解工具的破解速度实在是太慢，而且支持的密码破解协议也不多，暴力破解的话，有的密码1年时间也破不出来，用字典跑的话必须要明文密码在字典里才行，而且密码字典太大的话，也很浪费时间，跑不出来也是很常见的事情，下面推荐一款世界上破解密码速度最快的工具，hashcat，hashcat github地址,选择最新版的下载即可。 hashcat支持多种计算核心：GPUCPUAPUDSPFPGACo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat4.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat5.jpg">
+<meta property="article:published_time" content="2019-10-22T02:34:41.000Z">
+<meta property="article:modified_time" content="2020-08-16T17:01:09.958Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="hashcat">
+<meta property="article:tag" content="gpu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat1.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2019/10/22/windows-hashcat-insatll/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2019/10/22/windows-hashcat-insatll/","path":"2019/10/22/windows-hashcat-insatll/","title":"windows下hashcat利用GPU显卡性能破解密码"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>windows下hashcat利用GPU显卡性能破解密码 | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#hashcat%E6%94%AF%E6%8C%81%E5%A4%9A%E7%A7%8D%E8%AE%A1%E7%AE%97%E6%A0%B8%E5%BF%83%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">hashcat支持多种计算核心：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPU%E7%9A%84%E9%A9%B1%E5%8A%A8%E8%A6%81%E6%B1%82"><span class="nav-number">2.</span> <span class="nav-text">GPU的驱动要求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E4%B8%8B%E8%BD%BD%E5%AE%98%E6%96%B9NVIDA%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.1.</span> <span class="nav-text">第一步：下载官方NVIDA驱动程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E6%B5%8B%E8%AF%95hashcat%E6%98%AF%E5%90%A6%E8%83%BD%E5%88%A9%E7%94%A8gpu%E8%BF%90%E7%AE%97%E9%80%9F%E5%BA%A6%E6%9D%A5%E7%A0%B4%E8%A7%A3%E5%AF%86%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">第二步：测试hashcat是否能利用gpu运算速度来破解密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9Ahashcat%E8%AF%A6%E7%BB%86%E5%91%BD%E4%BB%A4%E5%8F%8A%E4%BD%BF%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">第三步：hashcat详细命令及使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A"><span class="nav-number">3.</span> <span class="nav-text">普通</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">基准测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%82%E9%A1%B9"><span class="nav-number">5.</span> <span class="nav-text">杂项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90"><span class="nav-number">7.</span> <span class="nav-text">资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E5%88%99"><span class="nav-number">8.</span> <span class="nav-text">规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-number">9.</span> <span class="nav-text">自定义字符集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%BC%8F"><span class="nav-number">10.</span> <span class="nav-text">攻击模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">11.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%A8%A1%E5%BC%8F%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6-for-hybrid-mode-only-by-using-rules"><span class="nav-number">12.</span> <span class="nav-text">调试模式输出文件 (for hybrid mode only, by using rules):</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-number">13.</span> <span class="nav-text">内置的字符集:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%A8%A1%E5%BC%8F-1"><span class="nav-number">14.</span> <span class="nav-text">攻击模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B"><span class="nav-number">15.</span> <span class="nav-text">哈希类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9Ahashcat%E7%A0%B4%E8%A7%A3%E5%AF%86%E7%A0%81%E8%A7%84%E5%88%99%E7%A4%BA%E4%BE%8B"><span class="nav-number">15.1.</span> <span class="nav-text">第四步：hashcat破解密码规则示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EXAMPLES"><span class="nav-number">15.1.1.</span> <span class="nav-text">EXAMPLES</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3known-hosts%E4%B8%AD%E7%9A%84IP%E5%9C%B0%E5%9D%80"><span class="nav-number">15.2.</span> <span class="nav-text">破解known_hosts中的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3md5%E5%8A%A0%E5%AF%86%E7%9A%84IP%E5%9C%B0%E5%9D%80"><span class="nav-number">15.3.</span> <span class="nav-text">破解md5加密的IP地址</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93"><span class="nav-number">15.3.1.</span> <span class="nav-text">破解技巧总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E4%B8%80%E6%9D%A1md5%E5%80%BC"><span class="nav-number">15.4.</span> <span class="nav-text">暴力破解一条md5值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3%E5%B8%A6%E7%9B%90discuz%E5%AF%86%E7%A0%81"><span class="nav-number">15.5.</span> <span class="nav-text">破解带盐discuz密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E6%AF%8D%E7%A0%B4%E8%A7%A3"><span class="nav-number">15.6.</span> <span class="nav-text">字母破解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E6%AF%8D%E5%8A%A0%E6%95%B0%E5%AD%97"><span class="nav-number">15.7.</span> <span class="nav-text">字母加数字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%A0%B4%E8%A7%A3"><span class="nav-number">15.8.</span> <span class="nav-text">自定义破解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E5%85%B8%E7%A0%B4%E8%A7%A3%E6%A8%A1%E5%BC%8F"><span class="nav-number">15.9.</span> <span class="nav-text">字典破解模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E4%BF%9D%E5%AD%98%E5%8F%8A%E6%81%A2%E5%A4%8D%E7%A0%B4%E8%A7%A3"><span class="nav-number">15.10.</span> <span class="nav-text">会话保存及恢复破解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A9%E7%A0%81%E7%A0%B4%E8%A7%A3"><span class="nav-number">15.11.</span> <span class="nav-text">掩码破解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#hashcat%E5%8F%82%E6%95%B0%E4%BC%98%E5%8C%96"><span class="nav-number">15.11.1.</span> <span class="nav-text">hashcat参数优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LAST-%E5%AF%86%E7%A0%81%E8%AE%BE%E7%BD%AE%E5%BB%BA%E8%AE%AE"><span class="nav-number">15.11.2.</span> <span class="nav-text">LAST:密码设置建议</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2019/10/22/windows-hashcat-insatll/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="windows下hashcat利用GPU显卡性能破解密码 | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          windows下hashcat利用GPU显卡性能破解密码
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-10-22 10:34:41" itemprop="dateCreated datePublished" datetime="2019-10-22T10:34:41+08:00">2019-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2020-08-17 01:01:09" itemprop="dateModified" datetime="2020-08-17T01:01:09+08:00">2020-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3/" itemprop="url" rel="index"><span itemprop="name">密码破解</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><font color="green"><em><strong>由于一般密码破解工具的破解速度实在是太慢，而且支持的密码破解协议也不多，暴力破解的话，有的密码1年时间也破不出来，用字典跑的话必须要明文密码在字典里才行，而且密码字典太大的话，也很浪费时间，跑不出来也是很常见的事情，下面推荐一款世界上破解密码速度最快的工具，hashcat，<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2hhc2hjYXQvaGFzaGNhdA==">hashcat github地址<i class="fa fa-external-link-alt"></i></span>,选择最新版的下载即可。</strong></em></font></p>
+<h2 id="hashcat支持多种计算核心："><a href="#hashcat支持多种计算核心：" class="headerlink" title="hashcat支持多种计算核心："></a>hashcat支持多种计算核心：</h2><p>GPU<br>CPU<br>APU<br>DSP<br>FPGA<br>Coprocessor</p>
+<span id="more"></span>
+
+<h2 id="GPU的驱动要求"><a href="#GPU的驱动要求" class="headerlink" title="GPU的驱动要求"></a>GPU的驱动要求</h2><p>AMD GPUs on Linux require “RadeonOpenCompute (ROCm)” Software Platform (1.6.180 or later)<br>AMD GPUs on Windows require “AMD Radeon Software Crimson Edition” (15.12 or later)<br>Intel CPUs require “OpenCL Runtime for Intel Core and Intel Xeon Processors” (16.1.1 or later)<br>Intel GPUs on Linux require “OpenCL 2.0 GPU Driver Package for Linux” (2.0 or later)<br>Intel GPUs on Windows require “OpenCL Driver for Intel Iris and Intel HD Graphics”<br>NVIDIA GPUs require “NVIDIA Driver” (367.x or later)</p>
+<h3 id="第一步：下载官方NVIDA驱动程序"><a href="#第一步：下载官方NVIDA驱动程序" class="headerlink" title="第一步：下载官方NVIDA驱动程序"></a>第一步：下载官方NVIDA驱动程序</h3><p>到<span class="exturl" data-url="aHR0cHM6Ly93d3cubnZpZGlhLmNuL0Rvd25sb2FkL2luZGV4LmFzcHg/bGFuZz1jbg==">NVIDA官网<i class="fa fa-external-link-alt"></i></span>下载与自己电脑显卡型号相对应的显卡驱动程序如图所示，然后根据提示一步步安装即可。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat1.jpg" alt="hashcat"></p>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat2.jpg" alt="hashcat"></p>
+<p>安装完成后，重启电脑即可。</p>
+<p><font color="red">(NAVIDA的显卡只需要安装官方驱动即可，已经内含HASHCAT破解密码所需的GPU运算工具。记得使用上图官方下载的显卡驱动，不要使用windows自带的显卡驱动。)</font></p>
+<h3 id="第二步：测试hashcat是否能利用gpu运算速度来破解密码"><a href="#第二步：测试hashcat是否能利用gpu运算速度来破解密码" class="headerlink" title="第二步：测试hashcat是否能利用gpu运算速度来破解密码"></a>第二步：测试hashcat是否能利用gpu运算速度来破解密码</h3><p>命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat64.exe -b</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat3.jpg" alt="hashcat"><br>基准测试hashcat破解各种密码散列的速度。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat64.exe -I</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat4.jpg" alt="hashcat"><br>检查设置如果已正确安装了GPU能够看到它并会列出其属性和使用的驱动程序信息。</p>
+<p>破解examples:<br><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/hashcat5.jpg" alt="hashcat"></p>
+<h3 id="第三步：hashcat详细命令及使用"><a href="#第三步：hashcat详细命令及使用" class="headerlink" title="第三步：hashcat详细命令及使用"></a>第三步：hashcat详细命令及使用</h3><h2 id="普通"><a href="#普通" class="headerlink" title="普通"></a>普通</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-m, —hash-type=NUM           哈希类别，其NUM值参考其帮助信息下面的哈希类别值，其值为数字。如果不指定m值则默认指md5，例如-m 1800是sha512 Linux加密。</span><br><span class="line"></span><br><span class="line">-a, –attack-mode=NUM         攻击模式，其值参考后面对参数。“-a 0”字典攻击，“-a 1” 组合攻击；“-a 3”掩码攻击。</span><br><span class="line"></span><br><span class="line">-V, —version                            版本信息</span><br><span class="line"></span><br><span class="line">-h, –<span class="built_in">help</span>                                   帮助信息。</span><br><span class="line"></span><br><span class="line">–quiet                                       安静的模式, 抑制输出</span><br></pre></td></tr></table></figure>
+<h2 id="基准测试"><a href="#基准测试" class="headerlink" title="基准测试"></a>基准测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-b, –benchmark                       测试计算机破解速度和显示硬件相关信息</span><br></pre></td></tr></table></figure>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">–hex-salt                         salt值是用十六进制给出的</span><br><span class="line"></span><br><span class="line">–hex-charset                  设定字符集是十六进制给出</span><br><span class="line"></span><br><span class="line">–runtime=NUM              运行数秒（NUM值）后的中止会话</span><br><span class="line"></span><br><span class="line">–status                            启用状态屏幕的自动更新</span><br><span class="line"></span><br><span class="line">–status-timer=NUM       状态屏幕更新秒值</span><br><span class="line"></span><br><span class="line">–status-automat             以机器可读的格式显示状态视图</span><br><span class="line"></span><br><span class="line">–session                         后跟会话名称，主要用于中止任务后的恢复破解。</span><br></pre></td></tr></table></figure>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">-o,  –outfile=FILE                   定义哈希文件恢复输出文件</span><br><span class="line"></span><br><span class="line">–outfile-format=NUM            定义哈希文件输出格式，见下面的参考资料</span><br><span class="line"></span><br><span class="line">–outfile-autohex-disable       禁止使用十六进制输出明文</span><br><span class="line"></span><br><span class="line">-p,  –separator=CHAR         为哈希列表/输出文件定义分隔符字符</span><br><span class="line"></span><br><span class="line">–show                                     仅仅显示已经破解的密码</span><br><span class="line"></span><br><span class="line">–left                                         仅仅显示未破解的密码</span><br><span class="line"></span><br><span class="line">–username                            忽略<span class="built_in">hash</span>表中的用户名，对linux文件直接进行破解，不需要进行整理。</span><br><span class="line"></span><br><span class="line">–remove                                移除破解成功的<span class="built_in">hash</span>，当<span class="built_in">hash</span>是从文本中读取时有用，避免自己手工移除已经破解的<span class="built_in">hash</span></span><br><span class="line"></span><br><span class="line">–stdout                                  控制台模式</span><br><span class="line"></span><br><span class="line">–potfile-disable                    不写入pot文件</span><br><span class="line"></span><br><span class="line">–debug-mode=NUM           定义调试模式（仅通过使用规则进行混合），参见下面的参考资料</span><br><span class="line"></span><br><span class="line">–debug-file=FILE                调试规则的输出文件（请参阅调试模式）</span><br><span class="line"></span><br><span class="line">-e, –salt-file=FILE                定义加盐文件列表</span><br><span class="line"></span><br><span class="line">–logfile-disable                    禁止logfile</span><br></pre></td></tr></table></figure>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-c, –segment-size=NUM       字典文件缓存大小（M）</span><br><span class="line"></span><br><span class="line">-n, –threads=NUM                 线程数</span><br><span class="line"></span><br><span class="line">-s,  –words-skip=NUM          跳过单词数</span><br><span class="line"></span><br><span class="line">-l, –words-limit=NUM            限制单词数(分布式)</span><br></pre></td></tr></table></figure>
+<h2 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-r, –rules-file=FILE             使用规则文件: -r 1.rule，</span><br><span class="line"></span><br><span class="line">-g, –generate-rules=NUM       随机生成规则</span><br><span class="line"></span><br><span class="line">–generate-rules-func-min= 每个随机规则最小值</span><br><span class="line"></span><br><span class="line">–generate-rules-func-max=每个随机规则最大值</span><br><span class="line"></span><br><span class="line">–generate-rules-seed=NUM  强制RNG种子数</span><br></pre></td></tr></table></figure>
+<h2 id="自定义字符集"><a href="#自定义字符集" class="headerlink" title="自定义字符集"></a>自定义字符集</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-1,  –custom-charset1=CS  用户定义的字符集</span><br><span class="line"></span><br><span class="line">-2, –custom-charset2=CS  例如:</span><br><span class="line"></span><br><span class="line">-3, –custom-charset3=CS –custom-charset1=?dabcdef : 设置?1 为0123456789abcdef</span><br><span class="line"></span><br><span class="line">-4, –custom-charset4=CS   -2mycharset.hcchr : 设置 ?2 包含在mycharset.hcchr</span><br></pre></td></tr></table></figure>
+<h2 id="攻击模式"><a href="#攻击模式" class="headerlink" title="攻击模式"></a>攻击模式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">–toggle-min=NUM              在字典中字母的最小值</span><br><span class="line"></span><br><span class="line">–toggle-max=NUM              在字典中字母的最大值</span><br><span class="line"></span><br><span class="line">–increment                   使用增强模式</span><br><span class="line"></span><br><span class="line">–increment-min=NUM          增强模式开始值</span><br><span class="line"></span><br><span class="line">–increment-max=NUM          增强模式结束值</span><br><span class="line"></span><br><span class="line">–perm-min=NUM                过滤比NUM数小的单词</span><br><span class="line"></span><br><span class="line">–perm-max=NUM               过滤比NUM数大的单词</span><br><span class="line"></span><br><span class="line">-t, –table-file=FILE             表文件</span><br><span class="line"></span><br><span class="line">    –table-min=NUM               在字典中的最小字符值</span><br><span class="line"></span><br><span class="line">    –table-max=NUM               在字典中的最大字符值</span><br><span class="line"></span><br><span class="line">–pw-min=NUM                  如果长度大于NUM，则打印候选字符</span><br><span class="line"></span><br><span class="line">–pw-max=NUM                 如果长度小于NUM，则打印候选字符</span><br><span class="line"></span><br><span class="line">–elem-cnt-min=NUM            每个链的最小元素数</span><br><span class="line"></span><br><span class="line">–elem-cnt-max=NUM            每个链的最大元素数</span><br><span class="line"></span><br><span class="line">–wl-dist-len                从字典表中计算输出长度分布</span><br><span class="line"></span><br><span class="line">–wl-max=NUM             从字典文件中加载NUM个单词，设置0禁止加载。</span><br><span class="line"></span><br><span class="line">–case-permute             在字典中对每一个单词进行反转</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">1 = <span class="built_in">hash</span>[:salt]</span><br><span class="line"></span><br><span class="line">2 = plain 明文</span><br><span class="line"></span><br><span class="line">3 = <span class="built_in">hash</span>[:salt]:plain</span><br><span class="line"></span><br><span class="line">4 = hex_plain</span><br><span class="line"></span><br><span class="line">5 = <span class="built_in">hash</span>[:salt]:hex_plain</span><br><span class="line"></span><br><span class="line">6 = plain:hex_plain</span><br><span class="line"></span><br><span class="line">7 = <span class="built_in">hash</span>[:salt]:plain:hex_plain</span><br><span class="line"></span><br><span class="line">8 = crackpos</span><br><span class="line"></span><br><span class="line">9 = <span class="built_in">hash</span>[:salt]:crackpos</span><br><span class="line"></span><br><span class="line">10 = plain:crackpos</span><br><span class="line"></span><br><span class="line">11 = <span class="built_in">hash</span>[:salt]:plain:crackpos</span><br><span class="line"></span><br><span class="line">12 = hex_plain:crackpos</span><br><span class="line"></span><br><span class="line">13 = <span class="built_in">hash</span>[:salt]:hex_plain:crackpos</span><br><span class="line"></span><br><span class="line">14 = plain:hex_plain:crackpos</span><br><span class="line"></span><br><span class="line">15 = <span class="built_in">hash</span>[:salt]:plain:hex_plain:crackpos</span><br></pre></td></tr></table></figure>
+<h2 id="调试模式输出文件-for-hybrid-mode-only-by-using-rules"><a href="#调试模式输出文件-for-hybrid-mode-only-by-using-rules" class="headerlink" title="调试模式输出文件 (for hybrid mode only, by using rules):"></a>调试模式输出文件 (for hybrid mode only, by using rules):</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1 = save finding rule </span><br><span class="line"></span><br><span class="line">2 = save original word</span><br><span class="line"></span><br><span class="line">3 = save original word and finding rule</span><br><span class="line"></span><br><span class="line">4 = save original word, finding rule andmodified plain</span><br></pre></td></tr></table></figure>
+<h2 id="内置的字符集"><a href="#内置的字符集" class="headerlink" title="内置的字符集:"></a>内置的字符集:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">?l = abcdefghijklmnopqrstuvwxyz 代表小写字母</span><br><span class="line"></span><br><span class="line">?u = ABCDEFGHIJKLMNOPQRSTUVWXYZ 代表大写字母</span><br><span class="line"></span><br><span class="line">?d = 0123456789 代表数字</span><br><span class="line"></span><br><span class="line">?s = !”<span class="comment">#$%&amp;’()*+,-./:;&lt;=&gt;?@[\]^_`&#123;|&#125;~  代表特殊字符</span></span><br><span class="line"></span><br><span class="line">?a = ?l?u?d?s 大小写数字及特殊字符的组合</span><br><span class="line"></span><br><span class="line">?b = 0×00 – 0xff</span><br></pre></td></tr></table></figure>
+
+<h2 id="攻击模式-1"><a href="#攻击模式-1" class="headerlink" title="攻击模式"></a>攻击模式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">0 = Straight （字典破解）</span><br><span class="line"></span><br><span class="line">1 = Combination （组合破解）</span><br><span class="line"></span><br><span class="line">2 = Toggle-Case （大小写转换）</span><br><span class="line"></span><br><span class="line">3 = Brute-force（掩码暴力破解）</span><br><span class="line"></span><br><span class="line">4 = Permutation（序列破解）</span><br><span class="line"></span><br><span class="line">5 = Table-Lookup（查表破解）</span><br><span class="line"></span><br><span class="line">6 = Hybrid dict + mask 字典加掩码破解</span><br><span class="line"></span><br><span class="line">7 = Hybrid mask + dict 掩码+字典破解</span><br><span class="line"></span><br><span class="line">8 = Prince（王子破解）</span><br></pre></td></tr></table></figure>
+
+<h2 id="哈希类型"><a href="#哈希类型" class="headerlink" title="哈希类型"></a>哈希类型</h2><p>有关哈希具体值示例可以参考<span class="exturl" data-url="aHR0cHM6Ly9oYXNoY2F0Lm5ldC93aWtpL2Rva3UucGhwP2lkPWV4YW1wbGVfaGFzaGVz">网址<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br></pre></td><td class="code"><pre><span class="line">  0 = MD5</span><br><span class="line"></span><br><span class="line">  10 = md5(<span class="variable">$pass</span>.<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  20 = md5(<span class="variable">$salt</span>.<span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  30 = md5(unicode(<span class="variable">$pass</span>).<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  40 = md5(<span class="variable">$salt</span>.unicode(<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  50 = HMAC-MD5 (key = <span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  60 = HMAC-MD5 (key = <span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  100 = SHA1</span><br><span class="line"></span><br><span class="line">  110 = sha1(<span class="variable">$pass</span>.<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  120 = sha1(<span class="variable">$salt</span>.<span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  130 = sha1(unicode(<span class="variable">$pass</span>).<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  140 = sha1(<span class="variable">$salt</span>.unicode(<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  150 = HMAC-SHA1 (key = <span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  160 = HMAC-SHA1 (key = <span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  200 = MySQL323</span><br><span class="line"></span><br><span class="line">  300 = MySQL4.1/MySQL5</span><br><span class="line"></span><br><span class="line">  400 = phpass, MD5(WordPress), MD5(phpBB3),MD5(Joomla)</span><br><span class="line"></span><br><span class="line">  500 = md5crypt, MD5(Unix), FreeBSD MD5,Cisco-IOS MD5</span><br><span class="line"></span><br><span class="line">  900 = MD4</span><br><span class="line"></span><br><span class="line">  1000 = NTLM</span><br><span class="line"></span><br><span class="line">  1100 = Domain Cached Credentials (DCC), MSCache</span><br><span class="line"></span><br><span class="line">  1400 = SHA256</span><br><span class="line"></span><br><span class="line">  1410 = sha256(<span class="variable">$pass</span>.<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  1420 = sha256(<span class="variable">$salt</span>.<span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  1430 = sha256(unicode(<span class="variable">$pass</span>).<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  1431 = <span class="built_in">base64</span>(sha256(unicode(<span class="variable">$pass</span>)))</span><br><span class="line"></span><br><span class="line">  1440 = sha256(<span class="variable">$salt</span>.unicode(<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  1450 = HMAC-SHA256 (key = <span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  1460 = HMAC-SHA256 (key = <span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  1600 = md5apr1, MD5(APR), Apache MD5</span><br><span class="line"></span><br><span class="line">  1700 = SHA512</span><br><span class="line"></span><br><span class="line">  1710 = sha512(<span class="variable">$pass</span>.<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  1720 = sha512(<span class="variable">$salt</span>.<span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  1730 = sha512(unicode(<span class="variable">$pass</span>).<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  1740 = sha512(<span class="variable">$salt</span>.unicode(<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  1750 = HMAC-SHA512 (key = <span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  1760 = HMAC-SHA512 (key = <span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  1800 = SHA-512(Unix)</span><br><span class="line"></span><br><span class="line">  2400 = Cisco-PIX MD5</span><br><span class="line"></span><br><span class="line">  2410 = Cisco-ASA MD5</span><br><span class="line"></span><br><span class="line">  2500 = WPA/WPA2</span><br><span class="line"></span><br><span class="line">  2600 = Double MD5</span><br><span class="line"></span><br><span class="line">  3200 = bcrypt, Blowfish(OpenBSD)</span><br><span class="line"></span><br><span class="line">  3300 = MD5(Sun)</span><br><span class="line"></span><br><span class="line">  3500 = md5(md5(md5(<span class="variable">$pass</span>)))</span><br><span class="line"></span><br><span class="line">  3610 = md5(md5(<span class="variable">$salt</span>).<span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  3710 = md5(<span class="variable">$salt</span>.md5(<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  3720 = md5(<span class="variable">$pass</span>.md5(<span class="variable">$salt</span>))</span><br><span class="line"></span><br><span class="line">  3800 = md5(<span class="variable">$salt</span>.<span class="variable">$pass</span>.<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  3910 = md5(md5(<span class="variable">$pass</span>).md5(<span class="variable">$salt</span>))</span><br><span class="line"></span><br><span class="line">  4010 = md5(<span class="variable">$salt</span>.md5(<span class="variable">$salt</span>.<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  4110 = md5(<span class="variable">$salt</span>.md5(<span class="variable">$pass</span>.<span class="variable">$salt</span>))</span><br><span class="line"></span><br><span class="line">  4210 = md5(<span class="variable">$username</span>.0.<span class="variable">$pass</span>)</span><br><span class="line"></span><br><span class="line">  4300 = md5(strtoupper(md5(<span class="variable">$pass</span>)))</span><br><span class="line"></span><br><span class="line">  4400 = md5(sha1(<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  4500 = Double SHA1</span><br><span class="line"></span><br><span class="line">  4600 = sha1(sha1(sha1(<span class="variable">$pass</span>)))</span><br><span class="line"></span><br><span class="line">  4700 = sha1(md5(<span class="variable">$pass</span>))</span><br><span class="line"></span><br><span class="line">  4800 = MD5(Chap), iSCSI CHAP authentication</span><br><span class="line"></span><br><span class="line">  4900 = sha1(<span class="variable">$salt</span>.<span class="variable">$pass</span>.<span class="variable">$salt</span>)</span><br><span class="line"></span><br><span class="line">  5000 = SHA-3(Keccak)</span><br><span class="line"></span><br><span class="line">  5100 = Half MD5</span><br><span class="line"></span><br><span class="line">  5200 = Password Safe SHA-256</span><br><span class="line"></span><br><span class="line">  5300 = IKE-PSK MD5</span><br><span class="line"></span><br><span class="line">  5400 = IKE-PSK SHA1</span><br><span class="line"></span><br><span class="line">  5500 = NetNTLMv1-VANILLA / NetNTLMv1-ESS</span><br><span class="line"></span><br><span class="line">  5600 = NetNTLMv2</span><br><span class="line"></span><br><span class="line">  5700 = Cisco-IOS SHA256</span><br><span class="line"></span><br><span class="line">  5800 = Android PIN</span><br><span class="line"></span><br><span class="line">  6300 = AIX &#123;smd5&#125;</span><br><span class="line"></span><br><span class="line">  6400 = AIX &#123;ssha256&#125;</span><br><span class="line"></span><br><span class="line">  6500 = AIX &#123;ssha512&#125;</span><br><span class="line"></span><br><span class="line">  6700 = AIX &#123;ssha1&#125;</span><br><span class="line"></span><br><span class="line">  6900 = GOST, GOST R 34.11-94</span><br><span class="line"></span><br><span class="line">  7000 = Fortigate (FortiOS)</span><br><span class="line"></span><br><span class="line">  7100 = OS X v10.8+</span><br><span class="line"></span><br><span class="line">  7200 = GRUB 2</span><br><span class="line"></span><br><span class="line">  7300 = IPMI2 RAKP HMAC-SHA1</span><br><span class="line"></span><br><span class="line">  7400 = sha256crypt, SHA256(Unix)</span><br><span class="line"></span><br><span class="line">  7900 = Drupal7</span><br><span class="line"></span><br><span class="line">  8400 = WBB3, Woltlab Burning Board 3</span><br><span class="line"></span><br><span class="line">  8900 = scrypt</span><br><span class="line"></span><br><span class="line">  9200 = Cisco $8$</span><br><span class="line"></span><br><span class="line">  9300 = Cisco $9$</span><br><span class="line"></span><br><span class="line">  9800 = Radmin2</span><br><span class="line"></span><br><span class="line"> 10000 = Django (PBKDF2-SHA256)</span><br><span class="line"></span><br><span class="line"> 10200 = Cram MD5</span><br><span class="line"></span><br><span class="line"> 10300 = SAP CODVN H (PWDSALTEDHASH) iSSHA-1</span><br><span class="line"></span><br><span class="line"> 11000 = PrestaShop</span><br><span class="line"></span><br><span class="line"> 11100 = PostgreSQL Challenge-ResponseAuthentication (MD5)</span><br><span class="line"></span><br><span class="line"> 11200 = MySQL Challenge-Response Authentication(SHA1)</span><br><span class="line"></span><br><span class="line"> 11400 = SIP digest authentication (MD5)</span><br><span class="line"></span><br><span class="line"> 99999 = Plaintext</span><br><span class="line"></span><br><span class="line">特殊哈希类型</span><br><span class="line"></span><br><span class="line">   11 = Joomla &lt; 2.5.18</span><br><span class="line"></span><br><span class="line">   12 = PostgreSQL</span><br><span class="line"></span><br><span class="line">   21 = osCommerce, xt:Commerce</span><br><span class="line"></span><br><span class="line">   23 = Skype</span><br><span class="line"></span><br><span class="line">  101 = nsldap, SHA-1(Base64), Netscape LDAPSHA</span><br><span class="line"></span><br><span class="line">  111 = nsldaps, SSHA-1(Base64), Netscape LDAPSSHA</span><br><span class="line"></span><br><span class="line">  112 = Oracle S: Type (Oracle 11+)</span><br><span class="line"></span><br><span class="line">  121 = SMF &gt; v1.1</span><br><span class="line"></span><br><span class="line">  122 = OS X v10.4, v10.5, v10.6</span><br><span class="line"></span><br><span class="line">  123 = EPi</span><br><span class="line"></span><br><span class="line">  124 = Django (SHA-1)</span><br><span class="line"></span><br><span class="line">  131 = MSSQL(2000)</span><br><span class="line"></span><br><span class="line">  132 = MSSQL(2005)</span><br><span class="line"></span><br><span class="line">  133 = PeopleSoft</span><br><span class="line"></span><br><span class="line">  141 = EPiServer 6.x &lt; v4</span><br><span class="line"></span><br><span class="line"> 1421 = hMailServer</span><br><span class="line"></span><br><span class="line"> 1441 = EPiServer 6.x &gt; v4</span><br><span class="line"></span><br><span class="line"> 1711 = SSHA-512(Base64), LDAP &#123;SSHA512&#125;</span><br><span class="line"></span><br><span class="line"> 1722 = OS X v10.7</span><br><span class="line"></span><br><span class="line"> 1731 = MSSQL(2012 &amp; 2014)</span><br><span class="line"></span><br><span class="line"> 2611 = vBulletin &lt; v3.8.5</span><br><span class="line"></span><br><span class="line"> 2612 = PHPS</span><br><span class="line"></span><br><span class="line"> 2711 = vBulletin &gt; v3.8.5</span><br><span class="line"></span><br><span class="line"> 2811 = IPB2+, MyBB1.2+</span><br><span class="line"></span><br><span class="line"> 3711 = Mediawiki B <span class="built_in">type</span></span><br><span class="line"></span><br><span class="line"> 3721 = WebEdition CMS</span><br><span class="line"></span><br><span class="line"> 7600 = Redmine Project Management Web App</span><br></pre></td></tr></table></figure>
+
+<h3 id="第四步：hashcat破解密码规则示例"><a href="#第四步：hashcat破解密码规则示例" class="headerlink" title="第四步：hashcat破解密码规则示例"></a>第四步：hashcat破解密码规则示例</h3><p>(1)字典攻击</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-a 0 password.lst</span><br></pre></td></tr></table></figure>
+
+<p>(2)1到8为数字掩码攻击</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-a 3 --increment --increment-min 1--increment-max 8 ?d?d?d?d?d?d?d?d –O</span><br></pre></td></tr></table></figure>
+<p>?d代表数字，可以换成小写字母?l，大写字母?u，特殊字符?s，大小写字母+特殊字符?a，–O表示最优化破解模式，可以加该参数，也可以不加该参数。</p>
+<p>(3)8为数字攻击</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-a 3 ?d?d?d?d?d?d?d?d </span><br></pre></td></tr></table></figure>
+<p>同理可以根据位数设置为字母大写、小写、特殊字符等模式。</p>
+<p>(4)自定义字符<br>现在纯数字或者纯字母的密码是比较少见的，根据密码专家对泄漏密码的分析，90%的个人密码是字母和数字的组合，可以是自定义字符了来进行暴力破解，Hashcat支持4个自定义字符集，分别是 -1 -2 -3 -4。定义时只需要这样-2  ?l?d ，然后就可以在后面指定?2，?2表示小写字母和数字。这时候要破解一个8位混合的小写字母加数字：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat.exe -a 3 –force -2 ?l?d  hassh值或者<span class="built_in">hash</span>文件  ?2?2?2?2?2?2?2?2</span><br></pre></td></tr></table></figure>
+<p>例如破解dz小写字母+数字混合8位密码破解：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat -m 2611  -a 3 -2 ?l?d  dz.hash    ?2?2?2?2?2?2?2?2</span><br></pre></td></tr></table></figure>
+
+<p>(5)字典+掩码暴力破解<br>Hashcat还支持一种字典加暴力的破解方法，就是在字典前后再加上暴力的字符序列，比如在字典后面加上3为数字，这种密码是很常见的。使用第六种攻击模式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a-6 (Hybrid dict + mask)</span><br></pre></td></tr></table></figure>
+<p>如果是在字典前面加则使用第7中攻击模式也即( a-7 &#x3D; Hybridmask + dict)，下面对字典文件加数字123进行破解：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H.exe -a 6 ffe1cb31eb084cd7a8dd1228c23617c8  password.lst ?d?d?d</span><br></pre></td></tr></table></figure>
+<p>假如ffe1cb31eb084cd7a8dd1228c23617c8的密码为password123，则只要password.lst包含123即可</p>
+<p>(6)掩码+字典暴力破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H.exe -a 7  ffe1cb31eb084cd7a8dd1228c23617c8  password.lst ?d?d?d</span><br></pre></td></tr></table></figure>
+<p>假如ffe1cb31eb084cd7a8dd1228c23617c8的密码为123password，则只要password.lst包含password即可。</p>
+<p>(7)大小写转换攻击，对password.lst中的单词进行大小写转换攻击</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H.exe-a 2  ffe1cb31eb084cd7a8dd1228c23617c8  password.lst</span><br></pre></td></tr></table></figure>
+
+<h4 id="EXAMPLES"><a href="#EXAMPLES" class="headerlink" title="EXAMPLES"></a>EXAMPLES</h4><p>(1)8位数字破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64-m 9700 <span class="built_in">hash</span> -a 3 ?d?d?d?d?d?d?d?d -w 3 –O</span><br></pre></td></tr></table></figure>
+<p>(2)1-8位数字破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat-m 9700 <span class="built_in">hash</span> -a 3 --increment --increment-min 1--increment-max 8 ?d?d?d?d?d?d?d?d</span><br></pre></td></tr></table></figure>
+<p>(3)1到8位小写字母破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat-m 9700 <span class="built_in">hash</span> -a 3 --increment --increment-min 1--increment-max 8 ?l?l?l?l?l?l?l?l</span><br></pre></td></tr></table></figure>
+<p>(4)8位小写字母破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat-m 9700 <span class="built_in">hash</span> -a 3 ?l?l?l?l?l?l?l?l -w 3 –O</span><br></pre></td></tr></table></figure>
+<p>(5)1-8位大写字母破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat-m 9700 <span class="built_in">hash</span> -a 3 --increment --increment-min 1--increment-max 8 ?u?u?u?u?u?u?u?u</span><br></pre></td></tr></table></figure>
+<p>(6)8位大写字母破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat-m 9700 <span class="built_in">hash</span> -a 3 ?u?u?u?u?u?u?u?u -w 3 –O</span><br></pre></td></tr></table></figure>
+<p>(7)5位小写+ 大写+数字+特殊字符破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat-m 9700 <span class="built_in">hash</span> -a 3 ?b?b?b?b?b -w 3</span><br></pre></td></tr></table></figure>
+<p>(8)使用字典进行破解<br>使用password.lst字典进行暴力破解，-w 3参数是指定电力消耗</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat  -m 9700 -a 0 -w 3 <span class="built_in">hash</span>  password.lst</span><br></pre></td></tr></table></figure>
+
+<p><font color="blue">在执行破解成功后，hashcat会自动终止破解，并显示破解状态为Cracked，Recvoered中也会显示是否破解成功.</font></p>
+<h3 id="破解known-hosts中的IP地址"><a href="#破解known-hosts中的IP地址" class="headerlink" title="破解known_hosts中的IP地址"></a>破解known_hosts中的IP地址</h3><p>经过研究发现known_hosts中会对连接的IP地址进行HMAC SHA1加密，可以通过hexhosts攻击进行转换，然后通过hashcat进行暴力破解，其密码类型为160（HMAC-SHA1 (key &#x3D; $salt)）。</p>
+<p>(1)计算HMAC SHA1值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gitclone https://github.com/persona5/hexhosts.git</span><br><span class="line">cdhexhosts</span><br><span class="line">gcchexhosts.c -lresolv -w -o hexhosts</span><br><span class="line">./hexhosts</span><br></pre></td></tr></table></figure>
+<p>获取known_hosts的HMAC SHA1加密值：</p>
+<p>注意：known_hosts值一定要正确，可以将known_hosts文件复制到hexhosts文件目录。</p>
+<p>(2)组合攻击暴力破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat-a 1 -m 160 known_hosts.hash ips_left.txt ips_right.txt --hex-salt</span><br></pre></td></tr></table></figure>
+<p>组合攻击是将ips_left.txt和ips_right.txt进行组合，形成完整的IP地址进行暴力破解。</p>
+<p>ips_left.txt和ips_right.txt文件可以用以下代码进行生成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ip-gen.sh：</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> `<span class="built_in">seq</span> 0 255`</span><br><span class="line"></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> b <span class="keyword">in</span> `seq0 255`</span><br><span class="line"></span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">echo</span><span class="string">&quot;<span class="variable">$a</span>.<span class="variable">$b</span>.&quot;</span> &gt;&gt; ips_left.txt</span><br><span class="line"></span><br><span class="line">  <span class="built_in">echo</span><span class="string">&quot;<span class="variable">$a</span>.<span class="variable">$b</span>&quot;</span> &gt;&gt; ips_right.txt</span><br><span class="line"></span><br><span class="line">  <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>(3)使用掩码进行攻击</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat  -a 3 -m 160 known_hosts.hash ipv4.hcmask--hex-salt</span><br></pre></td></tr></table></figure>
+<p>ipv4.hcmask文件内容可在<span class="exturl" data-url="aHR0cHM6Ly9wYXN0ZWJpbi5jb20vNEhRNkM4Z0c=">此站<i class="fa fa-external-link-alt"></i></span>下载。</p>
+<h3 id="破解md5加密的IP地址"><a href="#破解md5加密的IP地址" class="headerlink" title="破解md5加密的IP地址"></a>破解md5加密的IP地址</h3><p>在CDN等网络或者配置中往往会对IP地址进行MD5加密，由于其位数3×4+3（xxx.xxx.xxx.xxx）&#x3D;17位，通过正常的密码破解其时间耗费非常长，但通过分析其IP地址的规律，发现其地址XXX均为数字，因此可以通过hashcat的组合和掩码进行攻击。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hashcat-a 1 –m 0 ip.md5.txt ips_left.txt ips_right.txt </span><br><span class="line"></span><br><span class="line">hashcat  -a1 -m 0 ip.md5.txt ipv4.hcmask</span><br></pre></td></tr></table></figure>
+<p>另外在F5的cookie中会对其IP地址进行加密，可以参考的破解代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import struct</span><br><span class="line"></span><br><span class="line">cookie = <span class="string">&quot;1005421066.20736.0000&quot;</span></span><br><span class="line"></span><br><span class="line">(ip,port,end)=cookie.split(<span class="string">&quot;.&quot;</span>)</span><br><span class="line"></span><br><span class="line">(a,b,c,d)=[ord(i) <span class="keyword">for</span> i <span class="keyword">in</span> struct.pack(<span class="string">&quot;i&quot;</span>,int(ip))]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;Decoded IP: %s %s %s %s&quot;</span> % (a,b,c,d)</span><br><span class="line"></span><br><span class="line">Decoded IP: 10.130.237.59</span><br></pre></td></tr></table></figure>
+
+<h4 id="破解技巧总结"><a href="#破解技巧总结" class="headerlink" title="破解技巧总结"></a>破解技巧总结</h4><p>在使用GPU模式进行破解时，可以使用-O参数自动进行优化</p>
+<h3 id="暴力破解一条md5值"><a href="#暴力破解一条md5值" class="headerlink" title="暴力破解一条md5值"></a>暴力破解一条md5值</h3><p>(1)9位数字破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force d98d28ca88f9966cb3aaefebbfc8196f ?d?d?d?d?d?d?d?d?d</span><br></pre></td></tr></table></figure>
+<p>单独破解一条md5值需要加force参数</p>
+<p>(2)9位字母破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force d98d28ca88f9966cb3aaefebbfc8196f ?l?l?l?l?l?l?l?l?l</span><br></pre></td></tr></table></figure>
+
+<h3 id="破解带盐discuz密码"><a href="#破解带盐discuz密码" class="headerlink" title="破解带盐discuz密码"></a>破解带盐discuz密码</h3><p>(1)数字破解<br>7位数字，7秒时间破解完成任务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?d?d?d?d?d?d?d</span><br></pre></td></tr></table></figure>
+<p>8位数字破解，9秒时间破解完成任务。：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?d?d?d?d?d?d?d?d </span><br></pre></td></tr></table></figure>
+<p>9位数字破解，9秒时间破解完成任务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?d?d?d?d?d?d?d?d?d</span><br></pre></td></tr></table></figure>
+
+<h3 id="字母破解"><a href="#字母破解" class="headerlink" title="字母破解"></a>字母破解</h3><p>(1)6位小写字母</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?l?l?l?l?l?l </span><br></pre></td></tr></table></figure>
+<p>(2)7位小写字母</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?l?l?l?l?l?l?l </span><br></pre></td></tr></table></figure>
+<p>(3)8位小写字母</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?l?l?l?l?l?l?l?l 9分钟左右完成破解任务</span><br></pre></td></tr></table></figure>
+<p>(4)9位小写字母</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?l?l?l?l?l?l?l?l?l -O</span><br></pre></td></tr></table></figure>
+
+<h3 id="字母加数字"><a href="#字母加数字" class="headerlink" title="字母加数字"></a>字母加数字</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 -2 ?d?l ffe1cb31eb084cd7a8dd1228c23617c8:f56463?2?2?2?2?2?2?2</span><br></pre></td></tr></table></figure>
+<p>(3)7位大写字母</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 –force –m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 ?u?u?u?u?u?u?u</span><br></pre></td></tr></table></figure>
+<p>(4)6到8位数字破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 –force –m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463--increment --increment-min 6 --increment-max 8 ?l?l?l?l?l?l?l?l </span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义破解"><a href="#自定义破解" class="headerlink" title="自定义破解"></a>自定义破解</h3><p>(1)使用数字加字母混合6位进行破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 -2 ?d?l ffe1cb31eb084cd7a8dd1228c23617c8:f56463?2?2?2?2?2?2 -O</span><br></pre></td></tr></table></figure>
+<p>(2)使用数字加字母混合7位进行破解，破解时间4分16秒</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 -2 ?d?l ffe1cb31eb084cd7a8dd1228c23617c8:f56463?2?2?2?2?2?2?2 –O</span><br></pre></td></tr></table></figure>
+<p>(3)使用数字加字母混合8位进行破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 3 --force -m 2611 -2 ?d?l ffe1cb31eb084cd7a8dd1228c23617c8:f56463?2?2?2?2?2?2?2?2 -O</span><br></pre></td></tr></table></figure>
+
+<h3 id="字典破解模式"><a href="#字典破解模式" class="headerlink" title="字典破解模式"></a>字典破解模式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat64.exe-a 0 --force -m 2611 ffe1cb31eb084cd7a8dd1228c23617c8:f56463 password.lst</span><br></pre></td></tr></table></figure>
+<p>使用字典文件夹下的字典进行破解:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashcat32.exe-m 300 mysqlhashes.txt –remove -o mysql-cracked.txt ..\dictionaries\*</span><br></pre></td></tr></table></figure>
+
+<h3 id="会话保存及恢复破解"><a href="#会话保存及恢复破解" class="headerlink" title="会话保存及恢复破解"></a>会话保存及恢复破解</h3><p>(1)使用mask文件规则来破解密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat-m 2611 -a 3 --session mydz dz.hash masks/rockyou-7-2592000.hcmask</span><br></pre></td></tr></table></figure>
+<p>(2)恢复会话</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat--session mydz --restore</span><br></pre></td></tr></table></figure>
+
+<h3 id="掩码破解"><a href="#掩码破解" class="headerlink" title="掩码破解"></a>掩码破解</h3><p>mask规则文件位于masks下，例如D:\PentestBox\hashcat-4.1.0\masks，执行破解设置为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">masks/8char-1l-1u-1d-1s-compliant.hcmask</span><br><span class="line">masks/8char-1l-1u-1d-1s-noncompliant.hcmask</span><br><span class="line">masks/rockyou-1-60.hcmask</span><br><span class="line">masks/rockyou-2-1800.hcmask</span><br><span class="line">masks/rockyou-3-3600.hcmask</span><br><span class="line">masks/rockyou-4-43200.hcmask</span><br><span class="line">masks/rockyou-5-86400.hcmask</span><br><span class="line">masks/rockyou-6-864000.hcmask</span><br><span class="line">masks/rockyou-7-2592000.hcmask</span><br></pre></td></tr></table></figure>
+<p>运用规则文件进行破解</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hashcat -m 300 mysqlhashes.txt–remove -o mysql-cracked.txt ..\dictionaries\* -r rules\best64.rule</span><br><span class="line"></span><br><span class="line">hashcat -m 2611 -a 0 dz.hashpassword.lst  -r rules\best64.rule  -O</span><br></pre></td></tr></table></figure>
+
+<h4 id="hashcat参数优化"><a href="#hashcat参数优化" class="headerlink" title="hashcat参数优化"></a>hashcat参数优化</h4><p><font color="blue">考虑到hashcat的破解速度以及资源的分配，我们可以对一些参数进行配置<br>1.Workload tuning 负载调优。<br>该参数支持的值有1,8,40,80,160</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--gpu-accel 160 可以让GPU发挥最大性能。</span><br></pre></td></tr></table></figure>
+
+<p>2.Gpu loops 负载微调<br>该参数支持的值的范围是8-1024（有些算法只支持到1000）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--gpu-loops 1024 可以让GPU发挥最大性能。</span><br></pre></td></tr></table></figure>
+
+<p>3.Segment size 字典缓存大小<br>该参数是设置内存缓存的大小，作用是将字典放入内存缓存以加快字典破解速度，默认为32MB，可以根据自身内存情况进行设置，当然是越大越块了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--segment-size 512 可以提高大字典破解的速度。</span><br></pre></td></tr></table></figure>
+</font>
+
+<h4 id="LAST-密码设置建议"><a href="#LAST-密码设置建议" class="headerlink" title="LAST:密码设置建议"></a>LAST:密码设置建议</h4><font color="red">
+使用更长的字符串
+
+<p>使用更大的字符集字母、数字、符号</p>
+<p>不要使用任何可能与你有关的字符作为密码或密码的一部分使用<br></font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2019/10/22/windows-hashcat-insatll/" title="windows下hashcat利用GPU显卡性能破解密码">https://fdlucifer.github.io/2019/10/22/windows-hashcat-insatll/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/hashcat/" rel="tag"><i class="fa fa-tag"></i> hashcat</a>
+              <a href="/tags/gpu/" rel="tag"><i class="fa fa-tag"></i> gpu</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/02/13/fight/" rel="prev" title="(肉搏)最快使人突然晕厥的方法">
+                  <i class="fa fa-chevron-left"></i> (肉搏)最快使人突然晕厥的方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/23/proxychains-ng/" rel="next" title="kali安装proxychains-ng(proxychains升级版)">
+                  kali安装proxychains-ng(proxychains升级版) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

