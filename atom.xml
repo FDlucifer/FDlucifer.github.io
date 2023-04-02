@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>lUc1f3r11&#39;s blog</title>
+  <icon>https://fdlucifer.github.io/icon.png</icon>
+  <subtitle>by lUc1f3r11</subtitle>
+  <link href="https://fdlucifer.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://fdlucifer.github.io/"/>
+  <updated>2023-02-11T17:06:20.951Z</updated>
+  <id>https://fdlucifer.github.io/</id>
+  
+  <author>
+    <name>lUc1f3r11</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HackTheBox Response [Msf Meterpreter 流量解密] + [破碎ssh key 复原]</title>
+    <link href="https://fdlucifer.github.io/2023/02/07/msf-meterpreter-traffic-decrypt/"/>
+    <id>https://fdlucifer.github.io/2023/02/07/msf-meterpreter-traffic-decrypt/</id>
+    <published>2023-02-07T05:28:19.000Z</published>
+    <updated>2023-02-11T17:06:20.951Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;这两个部分是insane难度的HTB Response机器的root部分，其中msf meterpreter流量解密是此box的特色，和最难的部分，为了blog美观。所以顺带把破碎ssh key 复原的部分也加进来了，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzAyLzA0L2h0Yi1yZXNwb25zZS5odG1s&quot;&gt;HTB response writeup from 0xdf’s blog&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续时间充足在做深入研究查阅，备忘。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/response.png&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="逆向" scheme="https://fdlucifer.github.io/categories/%E9%80%86%E5%90%91/"/>
+    
+    <category term="流量解密" scheme="https://fdlucifer.github.io/categories/%E9%80%86%E5%90%91/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86/"/>
+    
+    <category term="ssh key recover" scheme="https://fdlucifer.github.io/categories/%E9%80%86%E5%90%91/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86/ssh-key-recover/"/>
+    
+    
+    <category term="reversing" scheme="https://fdlucifer.github.io/tags/reversing/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mybb 1.8.32 代码审计 + LFI RCE 复现</title>
+    <link href="https://fdlucifer.github.io/2023/01/17/mybb1-8-32-LFI-RCE/"/>
+    <id>https://fdlucifer.github.io/2023/01/17/mybb1-8-32-LFI-RCE/</id>
+    <published>2023-01-17T01:08:39.000Z</published>
+    <updated>2023-01-18T08:08:10.883Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;MYBB论坛简介及漏洞历史&quot;&gt;&lt;a href=&quot;#MYBB论坛简介及漏洞历史&quot; class=&quot;headerlink&quot; title=&quot;MYBB论坛简介及漏洞历史&quot;&gt;&lt;/a&gt;MYBB论坛简介及漏洞历史&lt;/h1&gt;&lt;h2 id=&quot;MYBB论坛简介&quot;&gt;&lt;a href=&quot;#MYBB论坛简介&quot; class=&quot;headerlink&quot; title=&quot;MYBB论坛简介&quot;&gt;&lt;/a&gt;MYBB论坛简介&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb.png&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;MyBB，以前是MyBBoard，最初是MyBulletinBoard，是由MyBB group开发的免费和开源论坛软件。用PHP编写的，支持MySQL, PostgreSQL和SQLite数据库系统，此外，还具有数据库&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvRmFpbG92ZXI=&quot;&gt;failover&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;它支持多种语言，并在&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTEdQTA==&quot;&gt;LGPL&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;下获得许可该软件允许用户通过MyBB促进社区的交互。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="漏洞利用复现" scheme="https://fdlucifer.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+    <category term="漏洞利用复现" scheme="https://fdlucifer.github.io/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[Perspective]</title>
+    <link href="https://fdlucifer.github.io/2022/04/10/Perspective/"/>
+    <id>https://fdlucifer.github.io/2022/04/10/Perspective/</id>
+    <published>2022-04-10T13:05:04.000Z</published>
+    <updated>2022-10-15T15:29:55.987Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Windows&lt;br&gt;Difficulty:	 Insane&lt;br&gt;Points:	50&lt;br&gt;Release:	19 Mar 2022&lt;br&gt;IP:	10.10.11.151&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2210.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[talkactive]</title>
+    <link href="https://fdlucifer.github.io/2022/04/10/talkactive/"/>
+    <id>https://fdlucifer.github.io/2022/04/10/talkactive/</id>
+    <published>2022-04-10T13:04:20.000Z</published>
+    <updated>2022-08-27T17:33:04.895Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	09 Apr 2022&lt;br&gt;IP:	10.10.11.155&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2197.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[timelapse]</title>
+    <link href="https://fdlucifer.github.io/2022/03/27/timelapse/"/>
+    <id>https://fdlucifer.github.io/2022/03/27/timelapse/</id>
+    <published>2022-03-27T10:40:27.000Z</published>
+    <updated>2022-08-21T05:46:29.715Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Windows&lt;br&gt;Difficulty:	Easy&lt;br&gt;Points:	20&lt;br&gt;Release:	26 Mar 2022&lt;br&gt;IP:	10.10.11.152&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2193.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[phoenix]</title>
+    <link href="https://fdlucifer.github.io/2022/03/24/phoenix/"/>
+    <id>https://fdlucifer.github.io/2022/03/24/phoenix/</id>
+    <published>2022-03-24T05:30:09.000Z</published>
+    <updated>2022-06-25T15:43:01.498Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	05 Mar 2022&lt;br&gt;IP:	10.10.11.149&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2183.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[catch]</title>
+    <link href="https://fdlucifer.github.io/2022/03/23/catch/"/>
+    <id>https://fdlucifer.github.io/2022/03/23/catch/</id>
+    <published>2022-03-23T05:04:41.000Z</published>
+    <updated>2022-07-24T04:23:03.838Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Medium&lt;br&gt;Points:	30&lt;br&gt;Release:	12 Mar 2022&lt;br&gt;IP:	10.10.11.150&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2176.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[overflow]</title>
+    <link href="https://fdlucifer.github.io/2022/03/11/overflow/"/>
+    <id>https://fdlucifer.github.io/2022/03/11/overflow/</id>
+    <published>2022-03-11T14:03:10.000Z</published>
+    <updated>2022-04-09T15:52:42.638Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	23 Oct 2021&lt;br&gt;IP:	10.10.11.119&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2171.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[routerspace]</title>
+    <link href="https://fdlucifer.github.io/2022/03/02/routerspace/"/>
+    <id>https://fdlucifer.github.io/2022/03/02/routerspace/</id>
+    <published>2022-03-02T11:40:00.000Z</published>
+    <updated>2022-07-09T15:41:15.312Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Easy&lt;br&gt;Points:	20&lt;br&gt;Release:	26 Feb 2022&lt;br&gt;IP:	10.10.11.148&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2164.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[undetected]</title>
+    <link href="https://fdlucifer.github.io/2022/02/24/undetected/"/>
+    <id>https://fdlucifer.github.io/2022/02/24/undetected/</id>
+    <published>2022-02-24T00:59:41.000Z</published>
+    <updated>2022-07-03T04:46:46.066Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Medium&lt;br&gt;Points:	30&lt;br&gt;Release:	19 Feb 2022&lt;br&gt;IP:	10.10.11.146&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2155.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[acute]</title>
+    <link href="https://fdlucifer.github.io/2022/02/16/acute/"/>
+    <id>https://fdlucifer.github.io/2022/02/16/acute/</id>
+    <published>2022-02-16T14:45:25.000Z</published>
+    <updated>2022-07-17T07:57:21.154Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Windows&lt;br&gt;Difficulty:	Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	12 Feb 2022&lt;br&gt;IP:	10.10.11.145&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2150.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[stacked]</title>
+    <link href="https://fdlucifer.github.io/2022/02/14/stacked/"/>
+    <id>https://fdlucifer.github.io/2022/02/14/stacked/</id>
+    <published>2022-02-14T06:11:25.000Z</published>
+    <updated>2022-03-20T01:02:15.763Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	 Insane&lt;br&gt;Points:	50&lt;br&gt;Release:	18 Sep 2021&lt;br&gt;IP:	10.10.11.112&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2146.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[fingerprint]</title>
+    <link href="https://fdlucifer.github.io/2022/02/03/fingerprint/"/>
+    <id>https://fdlucifer.github.io/2022/02/03/fingerprint/</id>
+    <published>2022-02-03T12:48:34.000Z</published>
+    <updated>2022-05-21T02:20:40.720Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	 Insane&lt;br&gt;Points:	50&lt;br&gt;Release:	04 Dec 2021&lt;br&gt;IP:	10.10.11.127&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2141.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[meta]</title>
+    <link href="https://fdlucifer.github.io/2022/01/23/meta/"/>
+    <id>https://fdlucifer.github.io/2022/01/23/meta/</id>
+    <published>2022-01-23T12:49:26.000Z</published>
+    <updated>2022-06-12T04:33:40.405Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Medium&lt;br&gt;Points:	30&lt;br&gt;Release:	22 Jan 2022&lt;br&gt;IP:	10.10.11.140&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2138.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[admirertoo]</title>
+    <link href="https://fdlucifer.github.io/2022/01/23/admirertoo/"/>
+    <id>https://fdlucifer.github.io/2022/01/23/admirertoo/</id>
+    <published>2022-01-23T06:33:29.000Z</published>
+    <updated>2022-06-04T14:48:10.132Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	15 Jan 2022&lt;br&gt;IP:	10.10.11.137&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2130.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>拟态web---mimic-ssti</title>
+    <link href="https://fdlucifer.github.io/2022/01/17/mimic-ssti/"/>
+    <id>https://fdlucifer.github.io/2022/01/17/mimic-ssti/</id>
+    <published>2022-01-17T01:46:55.000Z</published>
+    <updated>2022-01-17T07:04:41.622Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;p&gt;本文内容来自于ichunqiu的伽玛实验场之拟态挑战mimic-ssti,借鉴邬江兴院士拟态防御理论设计的mimic-ssti题目，该题目是个考验模板注入的web环境，采用了3种渲染模板，代表了三种单异构体。一般黑客的攻击指令只会由一个异构体进行执行反馈，明确的攻击指令会有明确的反馈结果，但是在这道题中选手的攻击指令必须同时让3个异构体反馈一致的结果，不然在拟态的防御机制中，就会被表决失效。通过这样的设计，让大学生选手了解先进的防御理念，前沿的理论知识和应用场景，以便让更好的防御理念在未来的实战中得到应用。&lt;/p&gt;
+&lt;p&gt;类似于生物界的拟态防御，在网络空间防御领域中，使用拟态技术可极大的提升黑客攻击的难度。&lt;/p&gt;
+&lt;p&gt;本题采用了3种模板渲染，渲染的先后顺序分别是php、java、python，如果三者的渲染结果相同就返回内容。（php的模板渲染是latte-2.10.4，java的模板渲染是velocity 1.7，python版本为python3.6.9。）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;参考原writeup&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvOXZ1dUN1dUE1MlhHTGc3dklJcS1WUQ==&quot;&gt;【拟态挑战WP】2021年天津市大学生线上初赛mimic-ssti&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;，原writeup步骤不完整，故重新补充记录&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="ctf" scheme="https://fdlucifer.github.io/categories/ctf/"/>
+    
+    
+    <category term="web" scheme="https://fdlucifer.github.io/tags/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>拟态web---mimic-ssrf</title>
+    <link href="https://fdlucifer.github.io/2022/01/17/mimic-ssrf/"/>
+    <id>https://fdlucifer.github.io/2022/01/17/mimic-ssrf/</id>
+    <published>2022-01-17T01:46:50.000Z</published>
+    <updated>2022-01-17T03:59:38.599Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;p&gt;本文内容来自于ichunqiu的伽玛实验场之拟态挑战mimic-ssrf，借鉴邬江兴院士拟态防御理论设计的mimic-ssrf题目，该题目是个通过ssrf进行RCE的web环境，三种开发语言的debug调试器，代表了三种单异构体。一般黑客的攻击指令只会由一个异构体进行执行反馈，明确的攻击指令会有明确的反馈结果，但是在这道题中选手的攻击指令必须同时让3个异构体反馈一致的结果，不然在拟态的防御机制中，就会被表决失效。&lt;/p&gt;
+&lt;p&gt;类似于生物界的拟态防御，在网络空间防御领域中，使用拟态技术可极大的提升黑客攻击的难度。&lt;/p&gt;
+&lt;p&gt;本题内网使用了3种语言所搭建的服务，分别php、python和java，通过ssrf可以访问内网服务，并且服务都是设置debug模式，想办法获取到有用的信息，得到flag。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;参考原writeup&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3Mvb0M2OTBEUzA1emwwTnRGSVJaeEdHZw==&quot;&gt;【拟态挑战WP】2021年春秋杯秋季赛mimic-ssrf&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;，原writeup步骤不完整，故重新补充记录&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="ctf" scheme="https://fdlucifer.github.io/categories/ctf/"/>
+    
+    
+    <category term="web" scheme="https://fdlucifer.github.io/tags/web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[pandora]</title>
+    <link href="https://fdlucifer.github.io/2022/01/12/pandora/"/>
+    <id>https://fdlucifer.github.io/2022/01/12/pandora/</id>
+    <published>2022-01-12T05:32:53.000Z</published>
+    <updated>2022-05-28T00:58:57.107Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Easy&lt;br&gt;Points:	20&lt;br&gt;Release:	08 Jan 2022&lt;br&gt;IP:	10.10.11.136&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2122.jpg&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hack-The-Box-walkthrough[search]</title>
+    <link href="https://fdlucifer.github.io/2022/01/08/search/"/>
+    <id>https://fdlucifer.github.io/2022/01/08/search/</id>
+    <published>2022-01-07T16:15:22.000Z</published>
+    <updated>2022-05-01T03:27:27.592Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Windows&lt;br&gt;Difficulty:	Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	18 Dec 2021&lt;br&gt;IP:	10.10.11.129&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/search1.png&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
+    
+    
+    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>从pcap包中解密Winrm流量</title>
+    <link href="https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/"/>
+    <id>https://fdlucifer.github.io/2022/01/05/decrypt-winrm-traffic/</id>
+    <published>2022-01-05T06:05:26.000Z</published>
+    <updated>2022-01-05T08:33:53.558Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;p&gt;本文内容来自于hackthebox的forensics challenge的Keep the steam going的题解方法&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="ctf" scheme="https://fdlucifer.github.io/categories/ctf/"/>
+    
+    
+    <category term="forensics" scheme="https://fdlucifer.github.io/tags/forensics/"/>
+    
+  </entry>
+  
+</feed>
