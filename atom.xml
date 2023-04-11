@@ -6,7 +6,7 @@
   <link href="https://fdlucifer.github.io/atom.xml" rel="self"/>
   
   <link href="https://fdlucifer.github.io/"/>
-  <updated>2023-04-11T14:00:22.016Z</updated>
+  <updated>2023-04-11T14:05:31.476Z</updated>
   <id>https://fdlucifer.github.io/</id>
   
   <author>
@@ -21,17 +21,27 @@
     <link href="https://fdlucifer.github.io/2023/04/11/rails-doubletap/"/>
     <id>https://fdlucifer.github.io/2023/04/11/rails-doubletap/</id>
     <published>2023-04-11T01:34:54.000Z</published>
-    <updated>2023-04-11T14:00:22.016Z</updated>
+    <updated>2023-04-11T14:05:31.476Z</updated>
     
     
-      
-      
-        
-        
     <summary type="html">&lt;h1 id=&quot;复现环境&quot;&gt;&lt;a href=&quot;#复现环境&quot; class=&quot;headerlink&quot; title=&quot;复现环境&quot;&gt;&lt;/a&gt;复现环境&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;span class=&quot;exturl&quot;</summary>
-        
-      
+&lt;li&gt;&lt;p&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9naXRodWIuY29tL3JhaWxzL3JhaWxzL2FyY2hpdmUvcmVmcy90YWdzL3Y1LjIuMS56aXA=&quot;&gt;官方源码下载(rails 5.2.1)&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;环境: Ubuntu 18.04.6 LTS + Rails 5.2.1 + ruby 2.5.1&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;rails-doubletap-RCE-CVE-2019-5418-amp-CVE-2019-5420-代码审计分析-复现&quot;&gt;&lt;a href=&quot;#rails-doubletap-RCE-CVE-2019-5418-amp-CVE-2019-5420-代码审计分析-复现&quot; class=&quot;headerlink&quot; title=&quot;rails doubletap RCE (CVE-2019-5418 &amp;amp; CVE-2019-5420) 代码审计分析 + 复现&quot;&gt;&lt;/a&gt;rails doubletap RCE (CVE-2019-5418 &amp;amp; CVE-2019-5420) 代码审计分析 + 复现&lt;/h1&gt;&lt;h2 id=&quot;漏洞描述&quot;&gt;&lt;a href=&quot;#漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;漏洞描述&quot;&gt;&lt;/a&gt;漏洞描述&lt;/h2&gt;&lt;p&gt;rails doubletap RCE 由以下两个漏洞组合成:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9jdmUubWl0cmUub3JnL2NnaS1iaW4vY3ZlbmFtZS5jZ2k/bmFtZT1DVkUtMjAxOS01NDE4&quot;&gt;CVE-2019-5418&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ruby on Rails（或者简称 Rails）是一个 Web 开发框架，使用 Ruby 编程语言开发。而2018主要是由于rails使用Sprockets作为静态文件服务器，在 Sprockets 3.7.1及之前版本中存在一个两次解码的路径穿越漏洞。而2019则主要是由于使用了为指定参数的render file来渲染应用之外的视图，修改访问某控制器的请求包，通过”..&amp;#x2F;..&amp;#x2F;..&amp;#x2F;..&amp;#x2F;“来达到路径穿越，再通过2个”{“来进行模板查询路径的闭合，使得所要访问的文件被当做外部模板来解析。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9jdmUubWl0cmUub3JnL2NnaS1iaW4vY3ZlbmFtZS5jZ2k/bmFtZT1DVkUtMjAxOS01NDIw&quot;&gt;CVE-2019-5420&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Rails &amp;lt; 5.2.2.1, &amp;lt; 6.0.0.beta3 的远程代码执行漏洞, 允许攻击者猜测自动生成的开发模式secret token。这个secret token可以与其他Rails内部相结合,用来升级到远程代码执行exploit。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/ruby-doubletap.png&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
     
     
     
