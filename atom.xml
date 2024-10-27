@@ -6,7 +6,7 @@
   <link href="https://fdlucifer.github.io/atom.xml" rel="self"/>
   
   <link href="https://fdlucifer.github.io/"/>
-  <updated>2024-04-22T02:11:08.494Z</updated>
+  <updated>2024-10-27T09:38:33.210Z</updated>
   <id>https://fdlucifer.github.io/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HackTheBox Mist [CVE-2024-9405 + PetitPotam Attack + shadow credential + s4u impersonat + reading GMSA password + abusing AddKeyCredentialLink + exploiting ADCS ESC 13 twice]</title>
+    <link href="https://fdlucifer.github.io/2024/10/27/mist/"/>
+    <id>https://fdlucifer.github.io/2024/10/27/mist/</id>
+    <published>2024-10-27T02:04:52.000Z</published>
+    <updated>2024-10-27T09:38:33.210Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是Insane难度的HTB Mist机器的域渗透部分，其中CVE-2024-9405 + PetitPotam Attack + shadow credential + s4u impersonat + reading GMSA password + abusing AddKeyCredentialLink + exploiting ADCS ESC 13 twice等域渗透提权细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzEwLzI2L2h0Yi1taXN0Lmh0bWw=&quot;&gt;0xdf’s blog Mist walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Mist.png&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="CVE-2024-9405" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/"/>
+    
+    <category term="Bypass AMSI" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/"/>
+    
+    <category term="Malicious Link" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/"/>
+    
+    <category term="Mist-DC01-CA enroll templates" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/"/>
+    
+    <category term="Rubues Dump Hash" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/"/>
+    
+    <category term="Defender Exclusions" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/"/>
+    
+    <category term="PetitPotam Attack" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/"/>
+    
+    <category term="ntlm relay LDAP shell" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/"/>
+    
+    <category term="rubeus get Kerberos ticket" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/"/>
+    
+    <category term="s4u impersonating Administrator" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/"/>
+    
+    <category term="shadow credential" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/"/>
+    
+    <category term="ESC13 enum and attack" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/ESC13-enum-and-attack/"/>
+    
+    <category term="Bloodhound Pre-Defined Query" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/ESC13-enum-and-attack/Bloodhound-Pre-Defined-Query/"/>
+    
+    <category term="Exfil Reg Hives" scheme="https://fdlucifer.github.io/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/ESC13-enum-and-attack/Bloodhound-Pre-Defined-Query/Exfil-Reg-Hives/"/>
+    
+    
+    <category term="DC" scheme="https://fdlucifer.github.io/tags/DC/"/>
+    
+  </entry>
   
   <entry>
     <title>Grafana backend sql injection affected all version</title>
@@ -520,31 +568,6 @@
     <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Medium&lt;br&gt;Points:	30&lt;br&gt;Release:	12 Mar 2022&lt;br&gt;IP:	10.10.11.150&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2176.jpg&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="HackTheBox walkthrough" scheme="https://fdlucifer.github.io/categories/HackTheBox-walkthrough/"/>
-    
-    
-    <category term="HackTheBox靶机练习" scheme="https://fdlucifer.github.io/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hack-The-Box-walkthrough[overflow]</title>
-    <link href="https://fdlucifer.github.io/2022/03/11/overflow/"/>
-    <id>https://fdlucifer.github.io/2022/03/11/overflow/</id>
-    <published>2022-03-11T14:03:10.000Z</published>
-    <updated>2022-04-09T15:52:42.638Z</updated>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS:	 Linux&lt;br&gt;Difficulty:	Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	23 Oct 2021&lt;br&gt;IP:	10.10.11.119&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2171.jpg&quot;&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
 &lt;/li&gt;
