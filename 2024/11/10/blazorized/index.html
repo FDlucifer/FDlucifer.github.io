@@ -22,12 +22,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"fdlucifer.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="简述本文是Hard难度的HTB Blazorized机器的域渗透部分，其中   等域渗透提权细节是此box的特色，主要参考0xdf’s blog Blazorized walkthrough记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
+    <meta name="description" content="简述本文是Hard难度的HTB Blazorized机器的域渗透部分，其中WriteSPN Kerberoasting + DC session pirvesc + DCSync hash dump + Bloodhound-CE等域渗透提权细节是此box的特色，主要参考0xdf’s blog Blazorized walkthrough记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HackTheBox Blazorized [WriteSPN Kerberoasting + DC session pirvesc + DCSync hash dump + Bloodhound-CE]">
 <meta property="og:url" content="https://fdlucifer.github.io/2024/11/10/blazorized/index.html">
 <meta property="og:site_name" content="0xfd&#39;s blog">
-<meta property="og:description" content="简述本文是Hard难度的HTB Blazorized机器的域渗透部分，其中   等域渗透提权细节是此box的特色，主要参考0xdf’s blog Blazorized walkthrough记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
+<meta property="og:description" content="简述本文是Hard难度的HTB Blazorized机器的域渗透部分，其中WriteSPN Kerberoasting + DC session pirvesc + DCSync hash dump + Bloodhound-CE等域渗透提权细节是此box的特色，主要参考0xdf’s blog Blazorized walkthrough记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized1.png">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized8.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized9.png">
 <meta property="article:published_time" content="2024-11-09T18:08:29.000Z">
-<meta property="article:modified_time" content="2024-11-09T19:40:29.337Z">
+<meta property="article:modified_time" content="2024-11-09T19:46:14.831Z">
 <meta property="article:author" content="253">
 <meta property="article:tag" content="DC">
 <meta name="twitter:card" content="summary">
@@ -286,7 +286,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2024-11-10 02:08:29 / Modified: 03:40:29" itemprop="dateCreated datePublished" datetime="2024-11-10T02:08:29+08:00">2024-11-10</time>
+      <time title="Created: 2024-11-10 02:08:29 / Modified: 03:46:14" itemprop="dateCreated datePublished" datetime="2024-11-10T02:08:29+08:00">2024-11-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -324,7 +324,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.1k</span>
+      <span>3.2k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -342,7 +342,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文是Hard难度的HTB Blazorized机器的域渗透部分，其中   等域渗透提权细节是此box的特色，主要参考<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzExLzA5L2h0Yi1ibGF6b3JpemVkLmh0bWw=">0xdf’s blog Blazorized walkthrough<i class="fa fa-external-link-alt"></i></span>记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。</p>
+        <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>本文是Hard难度的HTB Blazorized机器的域渗透部分，其中WriteSPN Kerberoasting + DC session pirvesc + DCSync hash dump + Bloodhound-CE等域渗透提权细节是此box的特色，主要参考<span class="exturl" data-url="aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzExLzA5L2h0Yi1ibGF6b3JpemVkLmh0bWw=">0xdf’s blog Blazorized walkthrough<i class="fa fa-external-link-alt"></i></span>记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。</p>
 <ul>
 <li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized.png"></li>
 </ul>
