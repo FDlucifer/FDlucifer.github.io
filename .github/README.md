@@ -7,6 +7,7 @@
 | 我想… | 去哪里 |
 | --- | --- |
 | 阅读博客 | [lucifer11.xyz](https://lucifer11.xyz/) |
+| 第一次来，从主题开始读 | [博客导读](https://lucifer11.xyz/guide/) |
 | 按时间查文章 | [文章归档目录](../archives/) |
 | 按主题找文章 | [分类](../categories/) · [标签](../tags/) |
 | 查看站点索引 | [站点地图](../sitemap.xml) |
