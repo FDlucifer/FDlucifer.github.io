@@ -6,7 +6,7 @@
   <link href="https://lucifer11.xyz/atom.xml" rel="self"/>
   
   <link href="https://lucifer11.xyz/"/>
-  <updated>2024-11-09T19:46:14.831Z</updated>
+  <updated>2026-11-25T04:00:00.000Z</updated>
   <id>https://lucifer11.xyz/</id>
   
   <author>
@@ -17,571 +17,782 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>HackTheBox Blazorized [WriteSPN Kerberoasting + DC session pirvesc + DCSync hash dump + Bloodhound-CE]</title>
-    <link href="https://lucifer11.xyz/2024/11/10/blazorized/"/>
-    <id>https://lucifer11.xyz/2024/11/10/blazorized/</id>
-    <published>2024-11-09T18:08:29.000Z</published>
-    <updated>2024-11-09T19:46:14.831Z</updated>
+    <title>ESC13 组映射与多阶段域权限</title>
+    <link href="https://lucifer11.xyz/knowledge/adcs-advanced/"/>
+    <id>https://lucifer11.xyz/knowledge/adcs-advanced/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是Hard难度的HTB Blazorized机器的域渗透部分，其中WriteSPN Kerberoasting + DC session pirvesc + DCSync hash dump + Bloodhound-CE等域渗透提权细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzExLzA5L2h0Yi1ibGF6b3JpemVkLmh0bWw=&quot;&gt;0xdf’s blog Blazorized walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Blazorized.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">Mist 的长链涉及多个主机、服务账户和证书策略。本章沿原实验的身份切换顺序保留全部材料，着重核对 OID 组映射、gMSA 读取和证书模板之间的实际权限关系。</summary>
     
     
     
-    <category term="WriteSPN Kerberoasting" scheme="https://lucifer11.xyz/categories/WriteSPN-Kerberoasting/"/>
+    <category term="身份与域安全" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/"/>
     
-    <category term="DC session pirvesc" scheme="https://lucifer11.xyz/categories/WriteSPN-Kerberoasting/DC-session-pirvesc/"/>
-    
-    <category term="DCSync hash dump" scheme="https://lucifer11.xyz/categories/WriteSPN-Kerberoasting/DC-session-pirvesc/DCSync-hash-dump/"/>
-    
-    <category term="Bloodhound-CE" scheme="https://lucifer11.xyz/categories/WriteSPN-Kerberoasting/DC-session-pirvesc/DCSync-hash-dump/Bloodhound-CE/"/>
+    <category term="证书服务" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/%E8%AF%81%E4%B9%A6%E6%9C%8D%E5%8A%A1/"/>
     
     
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
-  </entry>
-  
-  <entry>
-    <title>HackTheBox Mist [CVE-2024-9405 + PetitPotam Attack + shadow credential + s4u impersonat + reading GMSA password + abusing AddKeyCredentialLink + exploiting ADCS ESC 13 twice]</title>
-    <link href="https://lucifer11.xyz/2024/10/27/mist/"/>
-    <id>https://lucifer11.xyz/2024/10/27/mist/</id>
-    <published>2024-10-27T02:04:52.000Z</published>
-    <updated>2024-10-27T11:36:29.422Z</updated>
+    <category term="ADCS" scheme="https://lucifer11.xyz/tags/ADCS/"/>
     
+    <category term="ESC13" scheme="https://lucifer11.xyz/tags/ESC13/"/>
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是Insane难度的HTB Mist机器的域渗透部分，其中CVE-2024-9405 + PetitPotam Attack + shadow credential + s4u impersonat + reading GMSA password + abusing AddKeyCredentialLink + exploiting ADCS ESC 13 twice等域渗透提权细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzEwLzI2L2h0Yi1taXN0Lmh0bWw=&quot;&gt;0xdf’s blog Mist walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Mist.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <category term="gMSA" scheme="https://lucifer11.xyz/tags/gMSA/"/>
     
-    
-    
-    <category term="CVE-2024-9405" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/"/>
-    
-    <category term="Bypass AMSI" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/"/>
-    
-    <category term="Malicious Link" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/"/>
-    
-    <category term="Mist-DC01-CA enroll templates" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/"/>
-    
-    <category term="Rubues Dump Hash" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/"/>
-    
-    <category term="Defender Exclusions" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/"/>
-    
-    <category term="PetitPotam Attack" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/"/>
-    
-    <category term="ntlm relay LDAP shell" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/"/>
-    
-    <category term="rubeus get Kerberos ticket" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/"/>
-    
-    <category term="s4u impersonating Administrator" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/"/>
-    
-    <category term="shadow credential" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/"/>
-    
-    <category term="ESC13 enum and attack" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/ESC13-enum-and-attack/"/>
-    
-    <category term="Bloodhound Pre-Defined Query" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/ESC13-enum-and-attack/Bloodhound-Pre-Defined-Query/"/>
-    
-    <category term="Exfil Reg Hives" scheme="https://lucifer11.xyz/categories/CVE-2024-9405/Bypass-AMSI/Malicious-Link/Mist-DC01-CA-enroll-templates/Rubues-Dump-Hash/Defender-Exclusions/PetitPotam-Attack/ntlm-relay-LDAP-shell/rubeus-get-Kerberos-ticket/s4u-impersonating-Administrator/shadow-credential/ESC13-enum-and-attack/Bloodhound-Pre-Defined-Query/Exfil-Reg-Hives/"/>
-    
-    
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="Shadow Credentials" scheme="https://lucifer11.xyz/tags/Shadow-Credentials/"/>
     
   </entry>
   
   <entry>
-    <title>Grafana backend sql injection affected all version</title>
-    <link href="https://lucifer11.xyz/2024/04/22/grafana-sql-injection/"/>
-    <id>https://lucifer11.xyz/2024/04/22/grafana-sql-injection/</id>
-    <published>2024-04-22T01:27:48.000Z</published>
-    <updated>2024-04-22T02:11:08.494Z</updated>
+    <title>ADCS 模板、证书映射与 CA 权限</title>
+    <link href="https://lucifer11.xyz/knowledge/adcs/"/>
+    <id>https://lucifer11.xyz/knowledge/adcs/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;Grafana-backend-sql-injection-affected-all-version&quot;&gt;&lt;a href=&quot;#Grafana-backend-sql-injection-affected-all-version&quot; class=&quot;headerlink&quot; title=&quot;Grafana backend sql injection affected all version&quot;&gt;&lt;/a&gt;Grafana backend sql injection affected all version&lt;/h1&gt;&lt;h2 id=&quot;Vuln-Description&quot;&gt;&lt;a href=&quot;#Vuln-Description&quot; class=&quot;headerlink&quot; title=&quot;Vuln Description&quot;&gt;&lt;/a&gt;Vuln Description&lt;/h2&gt;&lt;p&gt;The open-source platform for monitoring and observability&lt;/p&gt;
-&lt;p&gt;to exploit this sql injection vulnerability, someone must use a valid account login to the grafana web backend, then send malicious POST request to &amp;#x2F;api&amp;#x2F;ds&amp;#x2F;query “rawSql” entry.&lt;/p&gt;
-&lt;p&gt;if attackers login to the grafana web backend, they can use a post request to &amp;#x2F;api&amp;#x2F;ds&amp;#x2F;query api, then they can modify the “rawSql” filed to execute Malicious sql strings leading to time-based blind sql injection vulnerability, then leak data from databases.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/grafana.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">证书利用要同时核对注册者、模板字段、颁发条件与认证端的身份映射。本章对照 Coder、Authority、Escape 和 Manager，保留 certipy、Certify、Rubeus 与 PassTheCert 的原有输出和分支。</summary>
     
     
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="身份与域安全" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="证书服务" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/%E8%AF%81%E4%B9%A6%E6%9C%8D%E5%8A%A1/"/>
     
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="NTLM" scheme="https://lucifer11.xyz/tags/NTLM/"/>
     
-  </entry>
-  
-  <entry>
-    <title>HackTheBox Rebound [RID cycling + AS-REP-Roasting with Kerberoasting + Weak ACLs + ShadowCredentials attack + cross-session relay + Runascs and KrbRelay read gMSA password + Resource-Based Constrained Delegation (RBCD) + S4U2Self &amp; S4U2Proxy]</title>
-    <link href="https://lucifer11.xyz/2024/04/01/rebound/"/>
-    <id>https://lucifer11.xyz/2024/04/01/rebound/</id>
-    <published>2024-04-01T09:16:37.000Z</published>
-    <updated>2024-04-06T03:41:05.334Z</updated>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
+    <category term="ADCS" scheme="https://lucifer11.xyz/tags/ADCS/"/>
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是Insane难度的HTB Rebound机器的域渗透部分，其中RID cycling + AS-REP-Roasting with Kerberoasting + Weak ACLs + ShadowCredentials attack + cross-session relay + Runascs and KrbRelay read gMSA password + Resource-Based Constrained Delegation (RBCD) + S4U2Self &amp;amp; S4U2Proxy等域渗透提权细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzAzLzMwL2h0Yi1yZWJvdW5kLmh0bWw=&quot;&gt;0xdf’s blog rebound walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;和&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvUmVib3VuZC93cml0ZXVwcw==&quot;&gt;HTB的rebound官方writeup paper&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/rebound0.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <category term="MSSQL" scheme="https://lucifer11.xyz/tags/MSSQL/"/>
     
+    <category term="CVE-2022-26923" scheme="https://lucifer11.xyz/tags/CVE-2022-26923/"/>
     
+    <category term="BloodHound" scheme="https://lucifer11.xyz/tags/BloodHound/"/>
     
-    <category term="RID cycling" scheme="https://lucifer11.xyz/categories/RID-cycling/"/>
+    <category term="Silver Ticket" scheme="https://lucifer11.xyz/tags/Silver-Ticket/"/>
     
-    <category term="AS-REP-Roasting with Kerberoasting" scheme="https://lucifer11.xyz/categories/RID-cycling/AS-REP-Roasting-with-Kerberoasting/"/>
+    <category term="ESC1" scheme="https://lucifer11.xyz/tags/ESC1/"/>
     
-    <category term="Weak ACLs" scheme="https://lucifer11.xyz/categories/RID-cycling/AS-REP-Roasting-with-Kerberoasting/Weak-ACLs/"/>
+    <category term="Ansible" scheme="https://lucifer11.xyz/tags/Ansible/"/>
     
-    <category term="ShadowCredentials attack" scheme="https://lucifer11.xyz/categories/RID-cycling/AS-REP-Roasting-with-Kerberoasting/Weak-ACLs/ShadowCredentials-attack/"/>
+    <category term="PassTheCert" scheme="https://lucifer11.xyz/tags/PassTheCert/"/>
     
-    <category term="cross-session relay" scheme="https://lucifer11.xyz/categories/RID-cycling/AS-REP-Roasting-with-Kerberoasting/Weak-ACLs/ShadowCredentials-attack/cross-session-relay/"/>
-    
-    <category term="Runascs and KrbRelay read gMSA password" scheme="https://lucifer11.xyz/categories/RID-cycling/AS-REP-Roasting-with-Kerberoasting/Weak-ACLs/ShadowCredentials-attack/cross-session-relay/Runascs-and-KrbRelay-read-gMSA-password/"/>
-    
-    <category term="Resource-Based Constrained Delegation (RBCD)" scheme="https://lucifer11.xyz/categories/RID-cycling/AS-REP-Roasting-with-Kerberoasting/Weak-ACLs/ShadowCredentials-attack/cross-session-relay/Runascs-and-KrbRelay-read-gMSA-password/Resource-Based-Constrained-Delegation-RBCD/"/>
-    
-    <category term="S4U2Self &amp; S4U2Proxy" scheme="https://lucifer11.xyz/categories/RID-cycling/AS-REP-Roasting-with-Kerberoasting/Weak-ACLs/ShadowCredentials-attack/cross-session-relay/Runascs-and-KrbRelay-read-gMSA-password/Resource-Based-Constrained-Delegation-RBCD/S4U2Self-S4U2Proxy/"/>
-    
-    
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="ESC7" scheme="https://lucifer11.xyz/tags/ESC7/"/>
     
   </entry>
   
   <entry>
-    <title>HackTheBox Manager [RID cycling + MSSQL xp_dirtree + ESC7 exploitation]</title>
-    <link href="https://lucifer11.xyz/2024/03/17/htb-manager/"/>
-    <id>https://lucifer11.xyz/2024/03/17/htb-manager/</id>
-    <published>2024-03-17T06:51:41.000Z</published>
-    <updated>2024-03-17T08:13:05.977Z</updated>
+    <title>客户端、更新器与文档解析</title>
+    <link href="https://lucifer11.xyz/knowledge/client/"/>
+    <id>https://lucifer11.xyz/knowledge/client/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是Medium难度的HTB Manager机器的域渗透部分，其中RID cycling, MSSQL xp_dirtree, ESC7 exploitation等域渗透提权细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDI0LzAzLzE2L2h0Yi1tYW5hZ2VyLmh0bWw=&quot;&gt;0xdf’s blog manager walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;和&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvTWFuYWdlci93cml0ZXVwcw==&quot;&gt;HTB的manager官方writeup paper&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/manager.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">APK、桌面更新器、图像处理和 IoT 管理接口都可能把外部数据带入高权限逻辑。本章从原客户端请求和文件格式出发，保留静态分析、动态抓包、签名判断及实际执行身份。</summary>
     
     
     
-    <category term="RID cycling" scheme="https://lucifer11.xyz/categories/RID-cycling/"/>
+    <category term="漏洞研究" scheme="https://lucifer11.xyz/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/"/>
     
-    <category term="MSSQL xp_dirtree" scheme="https://lucifer11.xyz/categories/RID-cycling/MSSQL-xp-dirtree/"/>
-    
-    <category term="ESC7 exploitation" scheme="https://lucifer11.xyz/categories/RID-cycling/MSSQL-xp-dirtree/ESC7-exploitation/"/>
+    <category term="客户端与解析器" scheme="https://lucifer11.xyz/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E8%A7%A3%E6%9E%90%E5%99%A8/"/>
     
     
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="Redis" scheme="https://lucifer11.xyz/tags/Redis/"/>
     
-  </entry>
-  
-  <entry>
-    <title>HackTheBox Coder [Bloodhound AD Enumeration + ADCS CVE-2022-26923]</title>
-    <link href="https://lucifer11.xyz/2023/12/19/coder/"/>
-    <id>https://lucifer11.xyz/2023/12/19/coder/</id>
-    <published>2023-12-19T09:02:57.000Z</published>
-    <updated>2023-12-20T21:28:51.151Z</updated>
+    <category term="命令注入" scheme="https://lucifer11.xyz/tags/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/"/>
     
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是insane难度的HTB Coder机器的域渗透部分，其中Bloodhound AD Enumeration, ADCS CVE-2022-26923等域渗透提权细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzEyLzE2L2h0Yi1jb2Rlci5odG1s&quot;&gt;0xdf’s blog coder walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;和&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvQ29kZXIvd3JpdGV1cHM=&quot;&gt;HTB的coder官方writeup paper&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Coder.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <category term="Android" scheme="https://lucifer11.xyz/tags/Android/"/>
     
+    <category term="Electron" scheme="https://lucifer11.xyz/tags/Electron/"/>
     
+    <category term="更新机制" scheme="https://lucifer11.xyz/tags/%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6/"/>
     
-    <category term="Bloodhound AD Enumeration" scheme="https://lucifer11.xyz/categories/Bloodhound-AD-Enumeration/"/>
+    <category term="API Token" scheme="https://lucifer11.xyz/tags/API-Token/"/>
     
-    <category term="ADCS CVE-2022-26923" scheme="https://lucifer11.xyz/categories/Bloodhound-AD-Enumeration/ADCS-CVE-2022-26923/"/>
+    <category term="CVE-2021-39174" scheme="https://lucifer11.xyz/tags/CVE-2021-39174/"/>
     
+    <category term="ADB" scheme="https://lucifer11.xyz/tags/ADB/"/>
     
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="CVE-2019-6447" scheme="https://lucifer11.xyz/tags/CVE-2019-6447/"/>
+    
+    <category term="ExifTool" scheme="https://lucifer11.xyz/tags/ExifTool/"/>
+    
+    <category term="ImageMagick" scheme="https://lucifer11.xyz/tags/ImageMagick/"/>
+    
+    <category term="CVE-2021-22204" scheme="https://lucifer11.xyz/tags/CVE-2021-22204/"/>
     
   </entry>
   
   <entry>
-    <title>HackTheBox Authority [ansible hash crack + ESC1 attack + pass-the-cert attack]</title>
-    <link href="https://lucifer11.xyz/2023/12/11/htb-authority/"/>
-    <id>https://lucifer11.xyz/2023/12/11/htb-authority/</id>
-    <published>2023-12-11T05:50:55.000Z</published>
-    <updated>2023-12-12T05:33:39.481Z</updated>
+    <title>AWS 模拟环境、请求走私与密钥服务</title>
+    <link href="https://lucifer11.xyz/knowledge/cloud/"/>
+    <id>https://lucifer11.xyz/knowledge/cloud/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是medium难度的HTB authority机器的域渗透部分，其中ansible hash crack + ESC1 attack + pass-the-cert attack等域渗透只是细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzEyLzA5L2h0Yi1hdXRob3JpdHkuaHRtbA==&quot;&gt;0xdf’s blog authority walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;和&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvQXV0aG9yaXR5L3dyaXRldXBz&quot;&gt;HTB的authority官方writeup paper&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Authority.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">本章保留 S3、DynamoDB、LocalStack、Secrets Manager 和 KMS 在原靶场中的服务关系。权限、数据结构与应用消费逻辑比单独的 API 名称更能解释各段链如何衔接。</summary>
     
     
     
-    <category term="ansible hash crack" scheme="https://lucifer11.xyz/categories/ansible-hash-crack/"/>
+    <category term="云与容器安全" scheme="https://lucifer11.xyz/categories/%E4%BA%91%E4%B8%8E%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/"/>
     
-    <category term="ESC1 attack" scheme="https://lucifer11.xyz/categories/ansible-hash-crack/ESC1-attack/"/>
-    
-    <category term="pass-the-cert attack" scheme="https://lucifer11.xyz/categories/ansible-hash-crack/ESC1-attack/pass-the-cert-attack/"/>
+    <category term="云服务" scheme="https://lucifer11.xyz/categories/%E4%BA%91%E4%B8%8E%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/%E4%BA%91%E6%9C%8D%E5%8A%A1/"/>
     
     
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="Docker" scheme="https://lucifer11.xyz/tags/Docker/"/>
     
-  </entry>
-  
-  <entry>
-    <title>2023年春秋杯网络安全联赛春季赛 web php_again [PHP 8.2.2 OPcache Binary Webshell + CVE-2022-42919 LPE]</title>
-    <link href="https://lucifer11.xyz/2023/07/01/2023-chunqiubei-spring-php-again/"/>
-    <id>https://lucifer11.xyz/2023/07/01/2023-chunqiubei-spring-php-again/</id>
-    <published>2023-07-01T15:27:02.000Z</published>
-    <updated>2023-07-03T14:45:20.850Z</updated>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
+    <category term="AWS" scheme="https://lucifer11.xyz/tags/AWS/"/>
     
-    <summary type="html">&lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;p&gt;同样是在ichunqiu CTF大本营刷题的时候碰到一道高质量的web题，也比较有实战价值，比赛中算是web里耗时较长的的。网上已经有一些公开的writeup，但是为了加深理解记忆，故记录一篇blog。&lt;/p&gt;
-&lt;p&gt;其中包括一些网上没公开的一些CVE-2022-42919 LPE exp的利用细节及PHP 8.2.2 OPcache Binary Webshell手工利用方法。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;复现链接: &lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly93d3cuaWNodW5xaXUuY29tL2JhdHRhbGlvbj90PTEmcj03MjM2Ng==&quot;&gt;2023年春秋杯网络安全联赛春季赛 web php_again&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/php_again.png&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <category term="S3" scheme="https://lucifer11.xyz/tags/S3/"/>
     
+    <category term="DynamoDB" scheme="https://lucifer11.xyz/tags/DynamoDB/"/>
     
+    <category term="请求走私" scheme="https://lucifer11.xyz/tags/%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/"/>
     
-    <category term="ctf" scheme="https://lucifer11.xyz/categories/ctf/"/>
+    <category term="KMS" scheme="https://lucifer11.xyz/tags/KMS/"/>
     
+    <category term="CVE-2019-18277" scheme="https://lucifer11.xyz/tags/CVE-2019-18277/"/>
     
-    <category term="web" scheme="https://lucifer11.xyz/tags/web/"/>
+    <category term="LocalStack" scheme="https://lucifer11.xyz/tags/LocalStack/"/>
+    
+    <category term="XSS" scheme="https://lucifer11.xyz/tags/XSS/"/>
     
   </entry>
   
   <entry>
-    <title>ciscn 2022 ezpentest writeup [sql BIGINT盲注绕正则+解phpjiami混淆+反序列化POP链构造]</title>
-    <link href="https://lucifer11.xyz/2023/06/29/ciscn-2022-ezpentest/"/>
-    <id>https://lucifer11.xyz/2023/06/29/ciscn-2022-ezpentest/</id>
-    <published>2023-06-29T08:21:16.000Z</published>
-    <updated>2023-06-29T15:21:47.924Z</updated>
+    <title>Drupal 入口与本地权限衔接</title>
+    <link href="https://lucifer11.xyz/knowledge/cms-drupal/"/>
+    <id>https://lucifer11.xyz/knowledge/cms-drupal/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h1&gt;&lt;p&gt;最近在ichunqiu CTF大本营刷题的时候碰到一道高质量的web题，比赛中还算是web里难度比较大的。网上已经有很多公开的writeup，但是为了加深理解记忆，故记录一篇blog。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;复现链接: &lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly93d3cuaWNodW5xaXUuY29tL2JhdHRhbGlvbj90PTEmcj03MjI5MQ==&quot;&gt;第十五届全国大学生信息安全竞赛——创新实践能力赛 Ezpentest&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/ezpentest2.png&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">同样的 CMS 入口可能接到完全不同的本地权限问题。本章对照 Drupal 的版本信息、配置文件、用户哈希与后续 snap、SUID 和内核路线，保留每段操作所处的身份。</summary>
     
     
     
-    <category term="ctf" scheme="https://lucifer11.xyz/categories/ctf/"/>
+    <category term="Web安全" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="CMS与插件" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/CMS%E4%B8%8E%E6%8F%92%E4%BB%B6/"/>
     
     
-    <category term="web" scheme="https://lucifer11.xyz/tags/web/"/>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
-  </entry>
-  
-  <entry>
-    <title>HackTheBox Escape [Net-NTLMv2 + ADCS + PTH + Silver Ticket]</title>
-    <link href="https://lucifer11.xyz/2023/06/18/escape/"/>
-    <id>https://lucifer11.xyz/2023/06/18/escape/</id>
-    <published>2023-06-17T19:39:19.000Z</published>
-    <updated>2023-06-19T08:46:03.507Z</updated>
+    <category term="Drupal" scheme="https://lucifer11.xyz/tags/Drupal/"/>
     
+    <category term="配置泄露" scheme="https://lucifer11.xyz/tags/%E9%85%8D%E7%BD%AE%E6%B3%84%E9%9C%B2/"/>
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是medium难度的HTB Escape机器的域渗透部分，其中Net-NTLMv2, ADCS, PTH, Silver Ticket等域渗透细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzA2LzE3L2h0Yi1lc2NhcGUuaHRtbA==&quot;&gt;0xdf’s blog Escape walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;和&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvRXNjYXBlL3dhbGt0aHJvdWdocw==&quot;&gt;HTB’s official Escape walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Escape.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <category term="snap" scheme="https://lucifer11.xyz/tags/snap/"/>
     
+    <category term="SUID" scheme="https://lucifer11.xyz/tags/SUID/"/>
     
+    <category term="wget" scheme="https://lucifer11.xyz/tags/wget/"/>
     
-    <category term="Net-NTLMv2 hash crack" scheme="https://lucifer11.xyz/categories/Net-NTLMv2-hash-crack/"/>
+    <category term="Dirty COW" scheme="https://lucifer11.xyz/tags/Dirty-COW/"/>
     
-    <category term="ESC1 attack" scheme="https://lucifer11.xyz/categories/Net-NTLMv2-hash-crack/ESC1-attack/"/>
-    
-    <category term="PTH" scheme="https://lucifer11.xyz/categories/Net-NTLMv2-hash-crack/ESC1-attack/PTH/"/>
-    
-    <category term="Silver Ticket" scheme="https://lucifer11.xyz/categories/Net-NTLMv2-hash-crack/ESC1-attack/PTH/Silver-Ticket/"/>
-    
-    
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="内核" scheme="https://lucifer11.xyz/tags/%E5%86%85%E6%A0%B8/"/>
     
   </entry>
   
   <entry>
-    <title>HackTheBox Absolute [AS-Rep-Roast + Kerberos Authentication + ACLs Modification + KrbRelay]</title>
-    <link href="https://lucifer11.xyz/2023/05/29/htb-absolute/"/>
-    <id>https://lucifer11.xyz/2023/05/29/htb-absolute/</id>
-    <published>2023-05-29T01:30:51.000Z</published>
-    <updated>2023-05-31T09:12:13.578Z</updated>
+    <title>CMS 管理功能与历史执行链</title>
+    <link href="https://lucifer11.xyz/knowledge/cms-misc/"/>
+    <id>https://lucifer11.xyz/knowledge/cms-misc/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;本文是insane难度的HTB absolute机器的域渗透部分，其中大量的Kerberos，ACL，KrbRelay，bloodhound，Shadow Credentials Attack，ldap enumeration，PTH，GROUPS权限修改，interactive session等域渗透只是细节是此box的特色，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzA1LzI3L2h0Yi1hYnNvbHV0ZS5odG1s&quot;&gt;0xdf’s blog absolute walkthrough&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;和&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9hcHAuaGFja3RoZWJveC5jb20vbWFjaGluZXMvQWJzb2x1dGUvd2Fsa3Rocm91Z2hz&quot;&gt;HTB的absolute官方writeup paper&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/Absolute.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">管理后台中的上传、模板、命令配置和凭据重置可能连接到系统执行。本章保留多个 CMS 的原环境和完整分支，对照后台身份、版本、可写路径与后续本地权限。</summary>
     
     
     
-    <category term="Kerberos Authentication" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/"/>
+    <category term="Web安全" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/"/>
     
-    <category term="ACLs Modification" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/"/>
-    
-    <category term="KrbRelay" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/"/>
-    
-    <category term="nim dynamic analysis" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/"/>
-    
-    <category term="bloodhound" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/"/>
-    
-    <category term="Shadow Credentials Attack" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/"/>
-    
-    <category term="modified owner of groups" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/"/>
-    
-    <category term="ldap enumeration" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/ldap-enumeration/"/>
-    
-    <category term="PTH" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/ldap-enumeration/PTH/"/>
-    
-    <category term="interactive session logon type 9" scheme="https://lucifer11.xyz/categories/Kerberos-Authentication/ACLs-Modification/KrbRelay/nim-dynamic-analysis/bloodhound/Shadow-Credentials-Attack/modified-owner-of-groups/ldap-enumeration/PTH/interactive-session-logon-type-9/"/>
+    <category term="CMS与插件" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/CMS%E4%B8%8E%E6%8F%92%E4%BB%B6/"/>
     
     
-    <category term="DC" scheme="https://lucifer11.xyz/tags/DC/"/>
+    <category term="Capabilities" scheme="https://lucifer11.xyz/tags/Capabilities/"/>
     
-  </entry>
-  
-  <entry>
-    <title>Rails version &lt; 5.0.1 &amp; &lt; 4.2.11.2 CVE-2020-8163 RCE</title>
-    <link href="https://lucifer11.xyz/2023/04/15/CVE-2020-8163-RCE/"/>
-    <id>https://lucifer11.xyz/2023/04/15/CVE-2020-8163-RCE/</id>
-    <published>2023-04-14T18:01:27.000Z</published>
-    <updated>2023-04-14T20:10:26.740Z</updated>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
+    <category term="文件上传" scheme="https://lucifer11.xyz/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
     
-    <summary type="html">&lt;h1 id=&quot;Rails-version-lt-5-0-1-amp-lt-4-2-11-2-CVE-2020-8163-RCE复现&quot;&gt;&lt;a href=&quot;#Rails-version-lt-5-0-1-amp-lt-4-2-11-2-CVE-2020-8163-RCE复现&quot; class=&quot;headerlink&quot; title=&quot;Rails version &amp;lt; 5.0.1 &amp;amp; &amp;lt; 4.2.11.2 CVE-2020-8163 RCE复现&quot;&gt;&lt;/a&gt;Rails version &amp;lt; 5.0.1 &amp;amp; &amp;lt; 4.2.11.2 CVE-2020-8163 RCE复现&lt;/h1&gt;&lt;h2 id=&quot;漏洞描述&quot;&gt;&lt;a href=&quot;#漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;漏洞描述&quot;&gt;&lt;/a&gt;漏洞描述&lt;/h2&gt;&lt;p&gt;这是5.0.1之前版本的Rails中的一个代码注入漏洞，允许攻击者控制”render”调用的”locals”参数来执行RCE。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9jdmUubWl0cmUub3JnL2NnaS1iaW4vY3ZlbmFtZS5jZ2k/bmFtZT1DVkUtMjAyMC04MTYz&quot;&gt;CVE-2020-8163&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/li&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/CVE-2020-8163-1.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <category term="Bludit" scheme="https://lucifer11.xyz/tags/Bludit/"/>
     
+    <category term="sudo" scheme="https://lucifer11.xyz/tags/sudo/"/>
     
+    <category term="Moodle" scheme="https://lucifer11.xyz/tags/Moodle/"/>
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="邮件" scheme="https://lucifer11.xyz/tags/%E9%82%AE%E4%BB%B6/"/>
     
+    <category term="OverlayFS" scheme="https://lucifer11.xyz/tags/OverlayFS/"/>
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="Strapi" scheme="https://lucifer11.xyz/tags/Strapi/"/>
+    
+    <category term="Laravel" scheme="https://lucifer11.xyz/tags/Laravel/"/>
+    
+    <category term="CVE-2021-3129" scheme="https://lucifer11.xyz/tags/CVE-2021-3129/"/>
+    
+    <category term="osTicket" scheme="https://lucifer11.xyz/tags/osTicket/"/>
+    
+    <category term="CMS" scheme="https://lucifer11.xyz/tags/CMS/"/>
     
   </entry>
   
   <entry>
-    <title>rails doubletap RCE (CVE-2019-5418 &amp; CVE-2019-5420) 代码审计分析 + 复现</title>
-    <link href="https://lucifer11.xyz/2023/04/11/rails-doubletap/"/>
-    <id>https://lucifer11.xyz/2023/04/11/rails-doubletap/</id>
-    <published>2023-04-11T01:34:54.000Z</published>
-    <updated>2023-04-13T01:50:22.994Z</updated>
+    <title>WordPress 插件与管理权限</title>
+    <link href="https://lucifer11.xyz/knowledge/cms-wordpress/"/>
+    <id>https://lucifer11.xyz/knowledge/cms-wordpress/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;复现环境&quot;&gt;&lt;a href=&quot;#复现环境&quot; class=&quot;headerlink&quot; title=&quot;复现环境&quot;&gt;&lt;/a&gt;复现环境&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9naXRodWIuY29tL3JhaWxzL3JhaWxzL2FyY2hpdmUvcmVmcy90YWdzL3Y1LjIuMS56aXA=&quot;&gt;官方源码下载(rails 5.2.1)&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;环境: Ubuntu 18.04.6 LTS + Rails 5.2.1 + ruby 2.5.1&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;rails-doubletap-RCE-CVE-2019-5418-amp-CVE-2019-5420-代码审计分析-复现&quot;&gt;&lt;a href=&quot;#rails-doubletap-RCE-CVE-2019-5418-amp-CVE-2019-5420-代码审计分析-复现&quot; class=&quot;headerlink&quot; title=&quot;rails doubletap RCE (CVE-2019-5418 &amp;amp; CVE-2019-5420) 代码审计分析 + 复现&quot;&gt;&lt;/a&gt;rails doubletap RCE (CVE-2019-5418 &amp;amp; CVE-2019-5420) 代码审计分析 + 复现&lt;/h1&gt;&lt;h2 id=&quot;漏洞描述&quot;&gt;&lt;a href=&quot;#漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;漏洞描述&quot;&gt;&lt;/a&gt;漏洞描述&lt;/h2&gt;&lt;p&gt;rails doubletap RCE 由以下两个漏洞组合成:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9jdmUubWl0cmUub3JnL2NnaS1iaW4vY3ZlbmFtZS5jZ2k/bmFtZT1DVkUtMjAxOS01NDE4&quot;&gt;CVE-2019-5418&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Ruby on Rails（或者简称 Rails）是一个 Web 开发框架，使用 Ruby 编程语言开发。而2018主要是由于rails使用Sprockets作为静态文件服务器，在 Sprockets 3.7.1及之前版本中存在一个两次解码的路径穿越漏洞。而2019则主要是由于使用了为指定参数的render file来渲染应用之外的视图，修改访问某控制器的请求包，通过”..&amp;#x2F;..&amp;#x2F;..&amp;#x2F;..&amp;#x2F;“来达到路径穿越，再通过2个”{“来进行模板查询路径的闭合，使得所要访问的文件被当做外部模板来解析。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9jdmUubWl0cmUub3JnL2NnaS1iaW4vY3ZlbmFtZS5jZ2k/bmFtZT1DVkUtMjAxOS01NDIw&quot;&gt;CVE-2019-5420&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Rails &amp;lt; 5.2.2.1, &amp;lt; 6.0.0.beta3 的远程代码执行漏洞, 允许攻击者猜测自动生成的开发模式secret token。这个secret token可以与其他Rails内部相结合,用来升级到远程代码执行exploit。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/ruby-doubletap.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">WordPress 实验分别涉及登录反馈、插件读取、上传、数据库和本地任务。本章把同一入口之后的不同权限路径并列，保留原插件版本、账户状态与操作结果。</summary>
     
     
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="Web安全" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="CMS与插件" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/CMS%E4%B8%8E%E6%8F%92%E4%BB%B6/"/>
     
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="SQL注入" scheme="https://lucifer11.xyz/tags/SQL%E6%B3%A8%E5%85%A5/"/>
     
-  </entry>
-  
-  <entry>
-    <title>WordPress核心框架WP_Query - 带插件SQL注入代码审计复现(CVE-2022–21661)</title>
-    <link href="https://lucifer11.xyz/2023/04/08/wordpress-core-sql-CVE-2022%E2%80%9321661/"/>
-    <id>https://lucifer11.xyz/2023/04/08/wordpress-core-sql-CVE-2022%E2%80%9321661/</id>
-    <published>2023-04-08T01:41:41.000Z</published>
-    <updated>2023-04-09T07:12:25.147Z</updated>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
+    <category term="SUID" scheme="https://lucifer11.xyz/tags/SUID/"/>
     
-    <summary type="html">&lt;h1 id=&quot;复现环境&quot;&gt;&lt;a href=&quot;#复现环境&quot; class=&quot;headerlink&quot; title=&quot;复现环境&quot;&gt;&lt;/a&gt;复现环境&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly93b3JkcHJlc3Mub3JnL3dvcmRwcmVzcy01Ljcuemlw&quot;&gt;官方源码下载(wordpress 5.7.0)&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;环境: wampserver + php 8.0.26 + mysql 8.0.31 + apache 2.4.54.2&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;WordPress核心框架WP-Query-带插件SQL注入代码审计复现-CVE-2022–21661&quot;&gt;&lt;a href=&quot;#WordPress核心框架WP-Query-带插件SQL注入代码审计复现-CVE-2022–21661&quot; class=&quot;headerlink&quot; title=&quot;WordPress核心框架WP_Query - 带插件SQL注入代码审计复现(CVE-2022–21661)&quot;&gt;&lt;/a&gt;WordPress核心框架WP_Query - 带插件SQL注入代码审计复现(CVE-2022–21661)&lt;/h1&gt;&lt;h2 id=&quot;漏洞描述&quot;&gt;&lt;a href=&quot;#漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;漏洞描述&quot;&gt;&lt;/a&gt;漏洞描述&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/WordPress-sql.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Wordpress是世界上使用最多的开源 CMS 之一。在允许开发者自己构建插件和主题来管理网站时，使用许多便捷功能，wordpress的核心会提供插件&amp;#x2F;主题调用和使用wordpress函数的功能，如数据格式、查询数据库等许多选项在提供的众多wordpress ma类中，在提供查询DB的WP服务器类中发现SQL Injection bug: WP_Query。&lt;/p&gt;
-&lt;p&gt;由于WP_Query中的处理不当，在某些情况下，SQL注入可能通过以某种方式使用它的插件或主题实现。这个问题在WordPress 5.8.3版本中已经修复。&lt;/p&gt;
-&lt;p&gt;受影响的旧版本也通过安全发布进行了修复，可以向前追溯到3.7.37。强烈建议启用自动更新。&lt;/p&gt;
-&lt;p&gt;此漏洞最初由GiaoHangTietKiem JSC的ngocnb和khuyn报告给 &lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly93d3cuemVyb2RheWluaXRpYXRpdmUuY29tL2Fkdmlzb3JpZXMvWkRJLTIyLTAyMC8=&quot;&gt;ZDI&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;。&lt;/p&gt;</summary>
+    <category term="内核" scheme="https://lucifer11.xyz/tags/%E5%86%85%E6%A0%B8/"/>
     
+    <category term="文件上传" scheme="https://lucifer11.xyz/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/"/>
     
+    <category term="WordPress" scheme="https://lucifer11.xyz/tags/WordPress/"/>
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="凭据泄露" scheme="https://lucifer11.xyz/tags/%E5%87%AD%E6%8D%AE%E6%B3%84%E9%9C%B2/"/>
     
+    <category term="密码审计" scheme="https://lucifer11.xyz/tags/%E5%AF%86%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="2FA" scheme="https://lucifer11.xyz/tags/2FA/"/>
+    
+    <category term="rsync" scheme="https://lucifer11.xyz/tags/rsync/"/>
+    
+    <category term="LFI" scheme="https://lucifer11.xyz/tags/LFI/"/>
+    
+    <category term="MySQL" scheme="https://lucifer11.xyz/tags/MySQL/"/>
     
   </entry>
   
   <entry>
-    <title>HackTheBox Response [Msf Meterpreter 流量解密] + [破碎ssh key 复原]</title>
-    <link href="https://lucifer11.xyz/2023/02/07/msf-meterpreter-traffic-decrypt/"/>
-    <id>https://lucifer11.xyz/2023/02/07/msf-meterpreter-traffic-decrypt/</id>
-    <published>2023-02-07T05:28:19.000Z</published>
-    <updated>2023-02-11T17:06:20.951Z</updated>
+    <title>容器边界、网络拓扑与宿主权限</title>
+    <link href="https://lucifer11.xyz/knowledge/containers/"/>
+    <id>https://lucifer11.xyz/knowledge/containers/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;简述&quot;&gt;&lt;a href=&quot;#简述&quot; class=&quot;headerlink&quot; title=&quot;简述&quot;&gt;&lt;/a&gt;简述&lt;/h1&gt;&lt;p&gt;这两个部分是insane难度的HTB Response机器的root部分，其中msf meterpreter流量解密是此box的特色，和最难的部分，为了blog美观。所以顺带把破碎ssh key 复原的部分也加进来了，主要参考&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly8weGRmLmdpdGxhYi5pby8yMDIzLzAyLzA0L2h0Yi1yZXNwb25zZS5odG1s&quot;&gt;HTB response writeup from 0xdf’s blog&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;记录这篇博客加深记忆和理解，及供后续时间充足在做深入研究查阅，备忘。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/response.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">容器里的 root、宿主文件系统、Docker socket 和 Kubernetes API 代表不同控制面。本章保留原拓扑、挂载、能力和进程身份，按每一次跨边界的实际证据阅读。</summary>
     
     
     
-    <category term="逆向" scheme="https://lucifer11.xyz/categories/%E9%80%86%E5%90%91/"/>
+    <category term="云与容器安全" scheme="https://lucifer11.xyz/categories/%E4%BA%91%E4%B8%8E%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/"/>
     
-    <category term="流量解密" scheme="https://lucifer11.xyz/categories/%E9%80%86%E5%90%91/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86/"/>
-    
-    <category term="ssh key recover" scheme="https://lucifer11.xyz/categories/%E9%80%86%E5%90%91/%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86/ssh-key-recover/"/>
+    <category term="容器与编排" scheme="https://lucifer11.xyz/categories/%E4%BA%91%E4%B8%8E%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/%E5%AE%B9%E5%99%A8%E4%B8%8E%E7%BC%96%E6%8E%92/"/>
     
     
-    <category term="reversing" scheme="https://lucifer11.xyz/tags/reversing/"/>
+    <category term="Linux" scheme="https://lucifer11.xyz/tags/Linux/"/>
     
-  </entry>
-  
-  <entry>
-    <title>mybb 1.8.32 代码审计 + LFI RCE 复现</title>
-    <link href="https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/"/>
-    <id>https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/</id>
-    <published>2023-01-17T01:08:39.000Z</published>
-    <updated>2023-01-18T08:08:10.883Z</updated>
+    <category term="Docker" scheme="https://lucifer11.xyz/tags/Docker/"/>
     
+    <category term="容器逃逸" scheme="https://lucifer11.xyz/tags/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/"/>
     
-    <summary type="html">&lt;h1 id=&quot;MYBB论坛简介及漏洞历史&quot;&gt;&lt;a href=&quot;#MYBB论坛简介及漏洞历史&quot; class=&quot;headerlink&quot; title=&quot;MYBB论坛简介及漏洞历史&quot;&gt;&lt;/a&gt;MYBB论坛简介及漏洞历史&lt;/h1&gt;&lt;h2 id=&quot;MYBB论坛简介&quot;&gt;&lt;a href=&quot;#MYBB论坛简介&quot; class=&quot;headerlink&quot; title=&quot;MYBB论坛简介&quot;&gt;&lt;/a&gt;MYBB论坛简介&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb.png&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;MyBB，以前是MyBBoard，最初是MyBulletinBoard，是由MyBB group开发的免费和开源论坛软件。用PHP编写的，支持MySQL, PostgreSQL和SQLite数据库系统，此外，还具有数据库&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvRmFpbG92ZXI=&quot;&gt;failover&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;它支持多种语言，并在&lt;span class=&quot;exturl&quot; data-url=&quot;aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTEdQTA==&quot;&gt;LGPL&lt;i class=&quot;fa fa-external-link-alt&quot;&gt;&lt;/i&gt;&lt;/span&gt;下获得许可该软件允许用户通过MyBB促进社区的交互。&lt;/p&gt;</summary>
+    <category term="端口转发" scheme="https://lucifer11.xyz/tags/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
     
+    <category term="LXD" scheme="https://lucifer11.xyz/tags/LXD/"/>
     
+    <category term="Redis" scheme="https://lucifer11.xyz/tags/Redis/"/>
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="GitLab" scheme="https://lucifer11.xyz/tags/GitLab/"/>
     
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
-    <category term="漏洞利用复现" scheme="https://lucifer11.xyz/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/"/>
+    <category term="rsync" scheme="https://lucifer11.xyz/tags/rsync/"/>
+    
+    <category term="OFBiz" scheme="https://lucifer11.xyz/tags/OFBiz/"/>
+    
+    <category term="Cacti" scheme="https://lucifer11.xyz/tags/Cacti/"/>
+    
+    <category term="SYS_MODULE" scheme="https://lucifer11.xyz/tags/SYS-MODULE/"/>
+    
+    <category term="Rocket.Chat" scheme="https://lucifer11.xyz/tags/Rocket-Chat/"/>
     
   </entry>
   
   <entry>
-    <title>Hack-The-Box-walkthrough[Perspective]</title>
-    <link href="https://lucifer11.xyz/2022/04/10/Perspective/"/>
-    <id>https://lucifer11.xyz/2022/04/10/Perspective/</id>
-    <published>2022-04-10T13:05:04.000Z</published>
-    <updated>2022-04-10T13:05:04.000Z</updated>
+    <title>备份材料、验证流程与密码规则</title>
+    <link href="https://lucifer11.xyz/knowledge/credentials/"/>
+    <id>https://lucifer11.xyz/knowledge/credentials/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS: Windows&lt;br&gt;Difficulty: Insane&lt;br&gt;Points:	50&lt;br&gt;Release:	19 Mar 2022&lt;br&gt;IP:	10.10.11.151&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2210.jpg&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">原案例中的账户线索分布在工单、聊天、备份和本地文件里。本章保留材料来源、编码或哈希形式，以及恢复后在哪个接口得到验证，避免只记住一个最终口令。</summary>
     
     
     
-    <category term="HackTheBox walkthrough" scheme="https://lucifer11.xyz/categories/HackTheBox-walkthrough/"/>
+    <category term="身份与域安全" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="凭据分析" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/%E5%87%AD%E6%8D%AE%E5%88%86%E6%9E%90/"/>
     
     
-    <category term="HackTheBox靶机练习" scheme="https://lucifer11.xyz/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    <category term="Python" scheme="https://lucifer11.xyz/tags/Python/"/>
     
-  </entry>
-  
-  <entry>
-    <title>Hack-The-Box-walkthrough[talkactive]</title>
-    <link href="https://lucifer11.xyz/2022/04/10/talkactive/"/>
-    <id>https://lucifer11.xyz/2022/04/10/talkactive/</id>
-    <published>2022-04-10T13:04:20.000Z</published>
-    <updated>2022-04-10T13:04:20.000Z</updated>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
     
+    <category term="WordPress" scheme="https://lucifer11.xyz/tags/WordPress/"/>
     
-    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS: Linux&lt;br&gt;Difficulty: Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	09 Apr 2022&lt;br&gt;IP:	10.10.11.155&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2197.jpg&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <category term="密码审计" scheme="https://lucifer11.xyz/tags/%E5%AF%86%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
+    <category term="备份泄露" scheme="https://lucifer11.xyz/tags/%E5%A4%87%E4%BB%BD%E6%B3%84%E9%9C%B2/"/>
     
+    <category term="邮箱验证" scheme="https://lucifer11.xyz/tags/%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81/"/>
     
-    <category term="HackTheBox walkthrough" scheme="https://lucifer11.xyz/categories/HackTheBox-walkthrough/"/>
+    <category term="Mattermost" scheme="https://lucifer11.xyz/tags/Mattermost/"/>
     
-    
-    <category term="HackTheBox靶机练习" scheme="https://lucifer11.xyz/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    <category term="模糊测试" scheme="https://lucifer11.xyz/tags/%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
   <entry>
-    <title>Hack-The-Box-walkthrough[timelapse]</title>
-    <link href="https://lucifer11.xyz/2022/03/27/timelapse/"/>
-    <id>https://lucifer11.xyz/2022/03/27/timelapse/</id>
-    <published>2022-03-27T10:40:27.000Z</published>
-    <updated>2022-03-27T10:40:27.000Z</updated>
+    <title>数据库权限、UDF 与动态库加载</title>
+    <link href="https://lucifer11.xyz/knowledge/database/"/>
+    <id>https://lucifer11.xyz/knowledge/database/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS: Windows&lt;br&gt;Difficulty: Easy&lt;br&gt;Points:	20&lt;br&gt;Release:	26 Mar 2022&lt;br&gt;IP:	10.10.11.152&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2193.jpg&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">数据库账户、数据库进程的系统身份以及插件路径权限共同决定扩展能力。本章保留 MySQL UDF、MariaDB 配置与应用初始入口，按数据、文件和执行三层核查。</summary>
     
     
     
-    <category term="HackTheBox walkthrough" scheme="https://lucifer11.xyz/categories/HackTheBox-walkthrough/"/>
+    <category term="系统安全" scheme="https://lucifer11.xyz/categories/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="数据库权限" scheme="https://lucifer11.xyz/categories/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9D%83%E9%99%90/"/>
     
     
-    <category term="HackTheBox靶机练习" scheme="https://lucifer11.xyz/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="MySQL" scheme="https://lucifer11.xyz/tags/MySQL/"/>
+    
+    <category term="UDF" scheme="https://lucifer11.xyz/tags/UDF/"/>
+    
+    <category term="PHPMailer" scheme="https://lucifer11.xyz/tags/PHPMailer/"/>
+    
+    <category term="Zabbix" scheme="https://lucifer11.xyz/tags/Zabbix/"/>
+    
+    <category term="MariaDB" scheme="https://lucifer11.xyz/tags/MariaDB/"/>
+    
+    <category term="CVE-2021-27928" scheme="https://lucifer11.xyz/tags/CVE-2021-27928/"/>
     
   </entry>
   
   <entry>
-    <title>Hack-The-Box-walkthrough[phoenix]</title>
-    <link href="https://lucifer11.xyz/2022/03/24/phoenix/"/>
-    <id>https://lucifer11.xyz/2022/03/24/phoenix/</id>
-    <published>2022-03-24T05:30:09.000Z</published>
-    <updated>2022-03-24T05:30:09.000Z</updated>
+    <title>调试协议与服务暴露</title>
+    <link href="https://lucifer11.xyz/knowledge/debug/"/>
+    <id>https://lucifer11.xyz/knowledge/debug/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
     
     
-    <summary type="html">&lt;h1 id=&quot;introduce&quot;&gt;&lt;a href=&quot;#introduce&quot; class=&quot;headerlink&quot; title=&quot;introduce&quot;&gt;&lt;/a&gt;introduce&lt;/h1&gt;&lt;p&gt;OS: Linux&lt;br&gt;Difficulty: Hard&lt;br&gt;Points:	40&lt;br&gt;Release:	05 Mar 2022&lt;br&gt;IP:	10.10.11.149&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb2183.jpg&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;img src=&quot;http://www.hackthebox.eu/badge/image/235857&quot; alt=&quot;my htb rank&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
+    <summary type="html">调试功能本来就具备读取状态或执行表达式的能力，风险取决于谁能到达这些接口。本章并列 gdbserver、Xdebug、rpdb、JDWP 和 PHP-FPM 的原实验，保留协议格式、端口和触发时机。</summary>
     
     
     
-    <category term="HackTheBox walkthrough" scheme="https://lucifer11.xyz/categories/HackTheBox-walkthrough/"/>
+    <category term="Web安全" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="调试接口" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/%E8%B0%83%E8%AF%95%E6%8E%A5%E5%8F%A3/"/>
     
     
-    <category term="HackTheBox靶机练习" scheme="https://lucifer11.xyz/tags/HackTheBox%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0/"/>
+    <category term="SSRF" scheme="https://lucifer11.xyz/tags/SSRF/"/>
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="SUID" scheme="https://lucifer11.xyz/tags/SUID/"/>
+    
+    <category term="2FA" scheme="https://lucifer11.xyz/tags/2FA/"/>
+    
+    <category term="LFI" scheme="https://lucifer11.xyz/tags/LFI/"/>
+    
+    <category term="Xdebug" scheme="https://lucifer11.xyz/tags/Xdebug/"/>
+    
+    <category term="gdbserver" scheme="https://lucifer11.xyz/tags/gdbserver/"/>
+    
+    <category term="rpdb" scheme="https://lucifer11.xyz/tags/rpdb/"/>
+    
+    <category term="JDWP" scheme="https://lucifer11.xyz/tags/JDWP/"/>
+    
+    <category term="PHP-FPM" scheme="https://lucifer11.xyz/tags/PHP-FPM/"/>
+    
+    <category term="PATH" scheme="https://lucifer11.xyz/tags/PATH/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ACL、Shadow Credentials 与 Kerberos 委派</title>
+    <link href="https://lucifer11.xyz/knowledge/delegation/"/>
+    <id>https://lucifer11.xyz/knowledge/delegation/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">域内权限变化通常表现为目录属性、组成员和票据的连续变化。本章保留 Absolute、Intelligence 和 Rebound 的原账户路径，分别标明认证限制、对象控制和委派前提。</summary>
+    
+    
+    
+    <category term="身份与域安全" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="目录权限与委派" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/%E7%9B%AE%E5%BD%95%E6%9D%83%E9%99%90%E4%B8%8E%E5%A7%94%E6%B4%BE/"/>
+    
+    
+    <category term="Kerberos" scheme="https://lucifer11.xyz/tags/Kerberos/"/>
+    
+    <category term="DNS" scheme="https://lucifer11.xyz/tags/DNS/"/>
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="gMSA" scheme="https://lucifer11.xyz/tags/gMSA/"/>
+    
+    <category term="Shadow Credentials" scheme="https://lucifer11.xyz/tags/Shadow-Credentials/"/>
+    
+    <category term="ACL" scheme="https://lucifer11.xyz/tags/ACL/"/>
+    
+    <category term="KrbRelay" scheme="https://lucifer11.xyz/tags/KrbRelay/"/>
+    
+    <category term="委派" scheme="https://lucifer11.xyz/tags/%E5%A7%94%E6%B4%BE/"/>
+    
+    <category term="RBCD" scheme="https://lucifer11.xyz/tags/RBCD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>路径归一化、文件包含与日志内容</title>
+    <link href="https://lucifer11.xyz/knowledge/files/"/>
+    <id>https://lucifer11.xyz/knowledge/files/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">路径的字符串表示、Web 映射和文件系统解析可能不同。本章保留 alias、Unicode、PHP 流包装器及日志内容如何影响读取或执行，同时保留源码与实际响应的对照。</summary>
+    
+    
+    
+    <category term="Web安全" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="文件与路径" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/%E6%96%87%E4%BB%B6%E4%B8%8E%E8%B7%AF%E5%BE%84/"/>
+    
+    
+    <category term="Python" scheme="https://lucifer11.xyz/tags/Python/"/>
+    
+    <category term="SSH" scheme="https://lucifer11.xyz/tags/SSH/"/>
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="sudo" scheme="https://lucifer11.xyz/tags/sudo/"/>
+    
+    <category term="LFI" scheme="https://lucifer11.xyz/tags/LFI/"/>
+    
+    <category term="路径穿越" scheme="https://lucifer11.xyz/tags/%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A/"/>
+    
+    <category term="日志注入" scheme="https://lucifer11.xyz/tags/%E6%97%A5%E5%BF%97%E6%B3%A8%E5%85%A5/"/>
+    
+    <category term="Perl" scheme="https://lucifer11.xyz/tags/Perl/"/>
+    
+    <category term="PHP" scheme="https://lucifer11.xyz/tags/PHP/"/>
+    
+    <category term="Exim" scheme="https://lucifer11.xyz/tags/Exim/"/>
+    
+    <category term="Wine" scheme="https://lucifer11.xyz/tags/Wine/"/>
+    
+    <category term="Unicode" scheme="https://lucifer11.xyz/tags/Unicode/"/>
+    
+    <category term="JWT" scheme="https://lucifer11.xyz/tags/JWT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>加密流量、内存密钥与文件重组</title>
+    <link href="https://lucifer11.xyz/knowledge/forensics/"/>
+    <id>https://lucifer11.xyz/knowledge/forensics/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">流量解密依赖包结构、会话状态和可验证的密钥材料。本章保留 Cobalt Strike、WinRM 与 Meterpreter 的原解析脚本，把提取、解密、导出和最终文件对应起来。</summary>
+    
+    
+    
+    <category term="协议与取证" scheme="https://lucifer11.xyz/categories/%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%8F%96%E8%AF%81/"/>
+    
+    <category term="流量与内存" scheme="https://lucifer11.xyz/categories/%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%8F%96%E8%AF%81/%E6%B5%81%E9%87%8F%E4%B8%8E%E5%86%85%E5%AD%98/"/>
+    
+    
+    <category term="NTLM" scheme="https://lucifer11.xyz/tags/NTLM/"/>
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="PCAP" scheme="https://lucifer11.xyz/tags/PCAP/"/>
+    
+    <category term="AES" scheme="https://lucifer11.xyz/tags/AES/"/>
+    
+    <category term="Cobalt Strike" scheme="https://lucifer11.xyz/tags/Cobalt-Strike/"/>
+    
+    <category term="HMAC" scheme="https://lucifer11.xyz/tags/HMAC/"/>
+    
+    <category term="WinRM" scheme="https://lucifer11.xyz/tags/WinRM/"/>
+    
+    <category term="取证" scheme="https://lucifer11.xyz/tags/%E5%8F%96%E8%AF%81/"/>
+    
+    <category term="Meterpreter" scheme="https://lucifer11.xyz/tags/Meterpreter/"/>
+    
+    <category term="TLV" scheme="https://lucifer11.xyz/tags/TLV/"/>
+    
+    <category term="RSA" scheme="https://lucifer11.xyz/tags/RSA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>UAF、tcache 与分配器状态</title>
+    <link href="https://lucifer11.xyz/knowledge/heap/"/>
+    <id>https://lucifer11.xyz/knowledge/heap/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">堆利用首先需要理解对象生命周期和分配器状态。本章保留释放、重分配、别名指针和泄漏位置的原始顺序，再对照最后的 Python 脚本和远程结果。</summary>
+    
+    
+    
+    <category term="二进制安全" scheme="https://lucifer11.xyz/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="堆利用" scheme="https://lucifer11.xyz/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/%E5%A0%86%E5%88%A9%E7%94%A8/"/>
+    
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="堆利用" scheme="https://lucifer11.xyz/tags/%E5%A0%86%E5%88%A9%E7%94%A8/"/>
+    
+    <category term="tcache" scheme="https://lucifer11.xyz/tags/tcache/"/>
+    
+    <category term="UAF" scheme="https://lucifer11.xyz/tags/UAF/"/>
+    
+    <category term="libc" scheme="https://lucifer11.xyz/tags/libc/"/>
+    
+    <category term="格式化字符串" scheme="https://lucifer11.xyz/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>格式化字符串、地址泄漏与保护绕过</title>
+    <link href="https://lucifer11.xyz/knowledge/format/"/>
+    <id>https://lucifer11.xyz/knowledge/format/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">格式化字符串可以泄漏栈数据、恢复程序或构造写入原语，但每个目标的参数位置和保护组合不同。本章保留 PIE、Canary、ASLR 与 libc 的逐层确认过程，代码和运行输出可以互相对照。</summary>
+    
+    
+    
+    <category term="二进制安全" scheme="https://lucifer11.xyz/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="格式化字符串" scheme="https://lucifer11.xyz/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="libc" scheme="https://lucifer11.xyz/tags/libc/"/>
+    
+    <category term="格式化字符串" scheme="https://lucifer11.xyz/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    
+    <category term="ret2libc" scheme="https://lucifer11.xyz/tags/ret2libc/"/>
+    
+    <category term="Canary" scheme="https://lucifer11.xyz/tags/Canary/"/>
+    
+    <category term="信息泄漏" scheme="https://lucifer11.xyz/tags/%E4%BF%A1%E6%81%AF%E6%B3%84%E6%BC%8F/"/>
+    
+    <category term="PIE" scheme="https://lucifer11.xyz/tags/PIE/"/>
+    
+    <category term="字节序" scheme="https://lucifer11.xyz/tags/%E5%AD%97%E8%8A%82%E5%BA%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>认证程序逆向与 Salsa20 数据恢复</title>
+    <link href="https://lucifer11.xyz/knowledge/crypto/"/>
+    <id>https://lucifer11.xyz/knowledge/crypto/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">Rauth 的认证比较依赖加密后的输入。本章保留条件跳转分析和实际密钥恢复两个过程，核对 Salsa20 的 key、nonce、rounds 与字节序，最后以程序比较结果验证。</summary>
+    
+    
+    
+    <category term="二进制安全" scheme="https://lucifer11.xyz/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="逆向与密码" scheme="https://lucifer11.xyz/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/%E9%80%86%E5%90%91%E4%B8%8E%E5%AF%86%E7%A0%81/"/>
+    
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="字节序" scheme="https://lucifer11.xyz/tags/%E5%AD%97%E8%8A%82%E5%BA%8F/"/>
+    
+    <category term="逆向" scheme="https://lucifer11.xyz/tags/%E9%80%86%E5%90%91/"/>
+    
+    <category term="Salsa20" scheme="https://lucifer11.xyz/tags/Salsa20/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>认证状态、JWT 与访问控制</title>
+    <link href="https://lucifer11.xyz/knowledge/identity/"/>
+    <id>https://lucifer11.xyz/knowledge/identity/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">认证缺陷经常出现在状态的生成、签名、传递和使用之间。本章以原案例对照角色字段、JWT 密钥来源、会话标识、ViewState 和填充侧信道。每个案例的请求、返回值与身份变化都可展开核查。</summary>
+    
+    
+    
+    <category term="Web安全" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="认证与会话" scheme="https://lucifer11.xyz/categories/Web%E5%AE%89%E5%85%A8/%E8%AE%A4%E8%AF%81%E4%B8%8E%E4%BC%9A%E8%AF%9D/"/>
+    
+    
+    <category term="访问控制" scheme="https://lucifer11.xyz/tags/%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/"/>
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="ExifTool" scheme="https://lucifer11.xyz/tags/ExifTool/"/>
+    
+    <category term="sudo" scheme="https://lucifer11.xyz/tags/sudo/"/>
+    
+    <category term="Laravel" scheme="https://lucifer11.xyz/tags/Laravel/"/>
+    
+    <category term="凭据泄露" scheme="https://lucifer11.xyz/tags/%E5%87%AD%E6%8D%AE%E6%B3%84%E9%9C%B2/"/>
+    
+    <category term="LFI" scheme="https://lucifer11.xyz/tags/LFI/"/>
+    
+    <category term="JWT" scheme="https://lucifer11.xyz/tags/JWT/"/>
+    
+    <category term="逆向" scheme="https://lucifer11.xyz/tags/%E9%80%86%E5%90%91/"/>
+    
+    <category term="SQLite" scheme="https://lucifer11.xyz/tags/SQLite/"/>
+    
+    <category term="HQL" scheme="https://lucifer11.xyz/tags/HQL/"/>
+    
+    <category term="ECB" scheme="https://lucifer11.xyz/tags/ECB/"/>
+    
+    <category term="Padding Oracle" scheme="https://lucifer11.xyz/tags/Padding-Oracle/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Kerberos、凭据材料与服务权限</title>
+    <link href="https://lucifer11.xyz/knowledge/kerberos/"/>
+    <id>https://lucifer11.xyz/knowledge/kerberos/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">域用户口令、NTLM、证书、TGT 与服务票据能使用的接口并不相同。本章结合 IPv6 服务、WriteSPN、表格与 PFX 材料，记录原实验中的认证选择、时钟问题和目录读取权限。</summary>
+    
+    
+    
+    <category term="身份与域安全" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="域认证" scheme="https://lucifer11.xyz/categories/%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%9F%9F%E5%AE%89%E5%85%A8/%E5%9F%9F%E8%AE%A4%E8%AF%81/"/>
+    
+    
+    <category term="Active Directory" scheme="https://lucifer11.xyz/tags/Active-Directory/"/>
+    
+    <category term="NTLM" scheme="https://lucifer11.xyz/tags/NTLM/"/>
+    
+    <category term="Kerberos" scheme="https://lucifer11.xyz/tags/Kerberos/"/>
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="gMSA" scheme="https://lucifer11.xyz/tags/gMSA/"/>
+    
+    <category term="BloodHound" scheme="https://lucifer11.xyz/tags/BloodHound/"/>
+    
+    <category term="ACL" scheme="https://lucifer11.xyz/tags/ACL/"/>
+    
+    <category term="WinRM" scheme="https://lucifer11.xyz/tags/WinRM/"/>
+    
+    <category term="证书" scheme="https://lucifer11.xyz/tags/%E8%AF%81%E4%B9%A6/"/>
+    
+    <category term="IPv6" scheme="https://lucifer11.xyz/tags/IPv6/"/>
+    
+    <category term="DCSync" scheme="https://lucifer11.xyz/tags/DCSync/"/>
+    
+    <category term="LAPS" scheme="https://lucifer11.xyz/tags/LAPS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 权限、Capabilities 与周期任务</title>
+    <link href="https://lucifer11.xyz/knowledge/linux/"/>
+    <id>https://lucifer11.xyz/knowledge/linux/</id>
+    <published>2026-11-25T04:00:00.000Z</published>
+    <updated>2026-11-25T04:00:00.000Z</updated>
+    
+    
+    <summary type="html">从服务用户到 root，需要追踪 sudo、SUID、capabilities、目录 ACL 和任务的实际运行身份。本章按原实验保留环境变量、文件所有者、任务触发和输出，便于检查条件是否成立。</summary>
+    
+    
+    
+    <category term="系统安全" scheme="https://lucifer11.xyz/categories/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/"/>
+    
+    <category term="Linux权限" scheme="https://lucifer11.xyz/categories/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/Linux%E6%9D%83%E9%99%90/"/>
+    
+    
+    <category term="GTFOBins" scheme="https://lucifer11.xyz/tags/GTFOBins/"/>
+    
+    <category term="访问控制" scheme="https://lucifer11.xyz/tags/%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/"/>
+    
+    <category term="Capabilities" scheme="https://lucifer11.xyz/tags/Capabilities/"/>
+    
+    <category term="命令注入" scheme="https://lucifer11.xyz/tags/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5/"/>
+    
+    <category term="SSH" scheme="https://lucifer11.xyz/tags/SSH/"/>
+    
+    <category term="知识库" scheme="https://lucifer11.xyz/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/"/>
+    
+    <category term="SUID" scheme="https://lucifer11.xyz/tags/SUID/"/>
+    
+    <category term="sudo" scheme="https://lucifer11.xyz/tags/sudo/"/>
+    
+    <category term="PATH" scheme="https://lucifer11.xyz/tags/PATH/"/>
+    
+    <category term="PCAP" scheme="https://lucifer11.xyz/tags/PCAP/"/>
+    
+    <category term="计划任务" scheme="https://lucifer11.xyz/tags/%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1/"/>
+    
+    <category term="FTP" scheme="https://lucifer11.xyz/tags/FTP/"/>
+    
+    <category term="输入过滤" scheme="https://lucifer11.xyz/tags/%E8%BE%93%E5%85%A5%E8%BF%87%E6%BB%A4/"/>
     
   </entry>
   

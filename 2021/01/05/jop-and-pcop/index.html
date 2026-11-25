@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -19,23 +19,25 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="摘要return-oriented的编程是一种有效的代码重用攻击，在这种攻击中，在现有的二进制文件中找到以ret指令结尾的短代码序列，并通过控制堆栈以任意顺序执行。这允许对于Turing-complete行为在目标程序中没有需要注入攻击代码，从而显著否定当前的代码注入防御努力。在另一方面，它的固有特性，如对堆栈的依赖和返回的gadgets的连续执行，促使各种各样的防御发现或阻止它的发生。 本文介绍">
+    <meta name="description" content="分析 Jump-Oriented Programming 的调度器、功能 gadget、发现方法与示例执行。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jump-Oriented编程-[JOP]-一种新的代码复用攻击">
 <meta property="og:url" content="https://lucifer11.xyz/2021/01/05/jop-and-pcop/index.html">
 <meta property="og:site_name" content="0xfd&#39;s blog">
-<meta property="og:description" content="摘要return-oriented的编程是一种有效的代码重用攻击，在这种攻击中，在现有的二进制文件中找到以ret指令结尾的短代码序列，并通过控制堆栈以任意顺序执行。这允许对于Turing-complete行为在目标程序中没有需要注入攻击代码，从而显著否定当前的代码注入防御努力。在另一方面，它的固有特性，如对堆栈的依赖和返回的gadgets的连续执行，促使各种各样的防御发现或阻止它的发生。 本文介绍">
-<meta property="og:locale" content="en_US">
+<meta property="og:description" content="分析 Jump-Oriented Programming 的调度器、功能 gadget、发现方法与示例执行。">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop1.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop2.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop3.jpg">
 <meta property="article:published_time" content="2021-01-05T11:33:40.000Z">
-<meta property="article:modified_time" content="2021-01-07T19:36:04.082Z">
+<meta property="article:modified_time" content="2021-01-05T11:33:40.000Z">
 <meta property="article:author" content="253">
-<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="Gadget">
+<meta property="article:tag" content="JOP">
+<meta property="article:tag" content="代码复用">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop.jpg">
 
@@ -44,7 +46,7 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucifer11.xyz/2021/01/05/jop-and-pcop/","path":"2021/01/05/jop-and-pcop/","title":"Jump-Oriented编程-[JOP]-一种新的代码复用攻击"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lucifer11.xyz/2021/01/05/jop-and-pcop/","path":"2021/01/05/jop-and-pcop/","title":"Jump-Oriented编程-[JOP]-一种新的代码复用攻击"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Jump-Oriented编程-[JOP]-一种新的代码复用攻击 | 0xfd's blog</title>
@@ -59,6 +61,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="stylesheet" href="/css/cyberpunk.css">
 <script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -73,7 +76,7 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
@@ -92,7 +95,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -101,9 +104,9 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -118,7 +121,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close" role="button">
@@ -143,10 +146,10 @@
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -162,25 +165,25 @@
     <img class="site-author-image" itemprop="image" alt="253"
       src="/images/fifteen-katana-zero-katana-zero.gif">
   <p class="site-author-name" itemprop="name">253</p>
-  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">214</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">78</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -213,7 +216,7 @@
 
         </div>
       </div>
-        <div class="back-to-top animated" role="button" aria-label="Back to top">
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
           <i class="fa fa-arrow-up"></i>
           <span>0%</span>
         </div>
@@ -223,7 +226,7 @@
     <div class="sidebar-inner sidebar-blogroll">
       <div class="links-of-blogroll animated">
         <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
-          Links
+          链接
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
@@ -253,7 +256,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lucifer11.xyz/2021/01/05/jop-and-pcop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -263,12 +266,12 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="0xfd's blog">
-      <meta itemprop="description" content="All things about infosec & ctf">
+      <meta itemprop="description" content="漏洞分析、利用机制、二进制研究与安全工程">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="Jump-Oriented编程-[JOP]-一种新的代码复用攻击 | 0xfd's blog">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="分析 Jump-Oriented Programming 的调度器、功能 gadget、发现方法与示例执行。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -281,56 +284,50 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2021-01-05 19:33:40" itemprop="dateCreated datePublished" datetime="2021-01-05T19:33:40+08:00">2021-01-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-01-08 03:36:04" itemprop="dateModified" datetime="2021-01-08T03:36:04+08:00">2021-01-08</time>
+      <time title="创建时间：2021-01-05 19:33:40" itemprop="dateCreated datePublished" datetime="2021-01-05T19:33:40+08:00">2021-01-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">In</span>
+      <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+          <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">二进制安全</span></a>
         </span>
-          , 
+          ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+          <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">代码复用</span></a>
         </span>
     </span>
 
   
-    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
-      <span class="post-meta-item-text">Views: </span>
+      <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
     <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
+    <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
       </span>
-      <span class="post-meta-item-text">Word count in article: </span>
+      <span class="post-meta-item-text">本文字数：</span>
       <span>14k</span>
     </span>
-    <span class="post-meta-item" title="Reading time">
+    <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>50 mins.</span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>50 分钟</span>
     </span>
 </div>
 
+            <div class="post-description">分析 Jump-Oriented Programming 的调度器、功能 gadget、发现方法与示例执行。</div>
         </div>
       </header>
 
@@ -348,7 +345,7 @@
 <p>虽然return-into-libc功能强大，但它不允许在被利用的应用程序的上下文中进行任意计算。为此，攻击者可能转向返回导向编程(ROP)。与前面一样，ROP覆盖带有返回地址和参数的堆栈。然而地址现在指向任意现有的代码库，唯一的要求是这些代码片段或gadgets以ret指令结束,将控制转移到下一个gadgets.Return-oriented编程已经证明在上是Turing complete的各种平台和代码库，和自动化技术使此类攻击的开发成为一个简单的过程。真实世界该技术的危险性在Checkoway等人的研究中得到证实。用它来破坏一个常用的电子投票机的完整性。</p>
 <p>自从return-oriented的编程出现以来，人们提出了许多防御措施来检测或防止基于rop的攻击。例如，DynIMA检测每个以ret结尾的小指令序列的连续执行，并怀疑它们是ROP中的gadgets攻击。DROP观察到，ROP执行时连续弹出的返回地址总是指向同一个地址特定的内存空间，并认为这是rop固有的对其检测有用的特征。无返回方法更进一步，消除了程序中的所有ret指令，从而消除了以返回为导向的gadgets，排除了<br>ROP-based攻击。</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop.jpg"></li>
 </ul>
 <p>在本文中，提出了一种替代的攻击范式称为 jump-oriented的编程(JOP)。在一个JOP-based攻击时，攻击者放弃对堆栈的所有依赖控制流和ret用于gadgets的发现和链接，而不是仅仅使用一个间接跳转序列指令。因为几乎所有已知的防守技术对抗ROP取决于它对堆栈的依赖，或ret, 它们中有一种能够发现或防御这种情况的新方法。一个例外是强制执行的系统完全控制流完整性.不幸的是，这类系统并没有被广泛部署，可能是由于担心它们的复杂性和负面的性能影响。</p>
 <p>与ROP类似，JOP的构造模块仍然很短称为gadget的代码序列。然而，并没有结束每个这样的gadgets都以一个间接的jmp结尾。其中一些jmp指令是由编译器。其他的不是有意的，而是由于x86指令的密度和未对齐的可行性执行。然而，与ROP不同的是，ret设备可以控制的内容自然返回控件栈，jmp gadgets正在执行到它的目标的单向控制流传输，这使得很难重新获得控制，将下一个 jump-oriented的执行链返回gadgets。</p>
@@ -368,7 +365,7 @@
 <h2 id="2-背景"><a href="#2-背景" class="headerlink" title="2.背景"></a>2.背景</h2><p>了解本文的贡献，有必要简要总结一下return-oriented编程背后的技术。由于系统基于32位x86 architecture2，讨论主要集中在该平台。</p>
 <p>如图所示，x86堆栈由两个专用的CPU寄存器: esp的“堆栈指针”寄存器，它指向堆栈的顶部，和ebp的“基础”指针”寄存器，它指向当前的底部堆栈帧。因为堆栈向下增长，也就是增长在地址递减方向上，esp&lt;&#x3D;ebp。每一个堆栈帧存储每个函数调用的参数，返回地址、以前的堆栈帧指针和自动(局部)变量(如果有的话)。堆栈内容或指针可以是直接通过两个堆栈寄存器进行操作，或隐式地通过各种CPU操作码，如push和pop。指令集包括执行函数调用(call)和从函数调用返回(ret)的操作码。调用<br>指令推入下一条指令的地址(返回地址)到堆栈上。相反，ret指令将堆栈弹出到eip中，直接恢复执行后调用。</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop1.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop1.jpg"></li>
 </ul>
 <p>攻击者可以利用缓冲区溢出漏洞或覆盖部分堆栈的其他缺陷，如替换当前帧的返回地址和提供的值。在传统的返回到libc方法，这个新值是指向libc中由攻击者选择的函数的指针。后受害者程序使用新值并输入函数，即覆盖返回地址旁边的内存单元被函数解释为参数，允许攻击者指定的任意函数的执行参数。通过将这些恶意堆栈帧链接在一起，可以执行一系列函数。虽然这无疑是一种非常强大的能力，它不允许攻击者执行任意计算。为攻击需要启动另一个进程(例如，通过exec())或改变内存权限，使传统的代码注入攻击成为可能(例如，通过mprotect())。</p>
 <p>由于这些操作可能导致检测或拦截，隐蔽的攻击者可能转而转向return-oriented的编程，它允许任意计算在易受攻击的应用程序的上下文中。return-oriented的编程是由返回的洞察力驱动的栈上的地址可以指向任何地方，而不只是指向函数的开始，就像经典的return-into-libc攻击一样。因此，它可以通过一系列直接控制流这些是现有代码的小片段，每个片段以ret结尾小的代码片段称为gadgets，大的代码片段称为gadgets足够的代码库(如libc)，有大量的选择可供选择的gadgets在x86平台上，选择变得更大，因为指令是可变的长度，因此，如果解码从不同的字节开始，CPU将以不同的方式解释指令的原始字节偏移量。</p>
@@ -377,14 +374,14 @@
 <p>威胁模型在本工作中，假设对手可以将payload(例如，调度表-第3节)放入内存和增益控制寄存器的数量，特别是指令指针eip转移程序执行。这个假设是合理的，因为一些常见的漏洞，如缓冲区溢出、堆溢出和格式字符串错误存在满足这一要求。还假设存在一个重要的代码库，以便在其中查找gadget。与ROP一样，发现仅使用libc的内容可以实现，它是有类的unix环境动态链接的进程。在防御方面，脆弱的程序受到严格强制执行代码完整性的保护，从而击败传统代码注入攻击.</p>
 <h2 id="3-设计"><a href="#3-设计" class="headerlink" title="3.设计"></a>3.设计</h2><p>下图比较了return-oriented的编程(ROP)以及我们提出的jump-oriented编程(JOP)。就像在ROP是一个 jump-oriented的程序，它由一组gadgets地址和加载到内存中的数据值地址组成, 类似于新jump-oriented机器中的操作码。在ROP中，这些数据存储在堆栈中，栈指针esp充当“程序计数器” return-oriented程序。JOP并不局限于使用esp引用它的gadgets地址，控制流不会按照ret的指示被驱动。相反，JOP使用调度表保存gadget地址和数据。“程序计数器”是指向分派表的任何寄存器。控制流是由执行的特殊分派器gadgets顺序驱动gadgets的。在每次调用时，调度程序推进虚拟程序计数器，并启动相关的gadgets。</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop2.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop2.jpg"></li>
 </ul>
 <p>给出一个JOP程序的控制流程示例。在这个例子中，实际上增加了两个内存值(分别由eax和ebx指向), store将总和存入另一个由ecx指向的内存位置，即[ecx] ← [eax] + [ebx]。</p>
 <p>这项工作的主要目标是证明jump-oriented编程的可行性。证明它的表达能力可以与return-oriented编程相媲美。但是，通过不依赖堆栈进行控制流，JOP可以潜在地使用任何内存范围，甚至包括不连续内存，以保存调度表。</p>
 <p>下面，进一步阐述dispatcher gadgets(第3.1节)和功能gadgets(第3.2节)，它们的基本运算包括实际计算。在此之后，讨论常用的代码库(第3.3节)。最后，探索引导一个jump-oriented程序的可能方法(3.4节)。</p>
 <h3 id="3-1-分配器gadget"><a href="#3-1-分配器gadget" class="headerlink" title="3.1.分配器gadget"></a>3.1.分配器gadget</h3><p>dispatcher gadget在JOP技术中起着关键作用。它本质上维护一个虚拟程序计数器pc，并通过推进它来执行JOP程序一个接一个的gadget。具体来说，每个pc值指定调度表中的一个条目，它指向一个特定的jump-oriented功能性产品。一旦被调用，每个功能gadget将执行基本操作，如算术计算、分支或特定系统调用的调用。</p>
 <p>我们考虑任何可以实现jump-oriented的gadget以下算法作为调度程序候选。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pc ← f(pc);</span><br><span class="line">goto ∗ pc;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cGMg4oaQIGYocGMpOwpnb3RvIOKIlyBwYzsK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pc ← f(pc);</span><br><span class="line">goto ∗ pc;</span><br></pre></td></tr></table></figure>
 
 <p>在这里，pc可以是一个内存地址或寄存器，表示指向我们的跳转程序的指针。它不是CPU的指令指针——它指的是由攻击者提供的gadget表。函数f(pc)有改变程序计数器pc可预测任何操作和演进的方式。在某些情况下，它可以通过纯粹的算术简单地表示 (f(pc) &#x3D; pc + 4 as shown in Figure 3). 在其他情况下，它可能是内存解引用操作(例如，f(pc) &#x3D; ∗(pc−18))或任何其他可以被攻击者预先预测的表达式。每次调用dispatcher gadget时，都会调用相应的pc。然后调度程序取消对它的引用并跳转到产生的地址。</p>
 <p>考虑到dispatcher的广泛定义，没费什么事就找到了几个可行的候选libc。调度gadget推进pc的方式影响调度表的组织。具体地说,如果pc是重复的，调度表可以是一个简单的数组由一个常量(例如，f(pc) &#x3D; pc+4)或一个链接,如果内存被解引用，则列出(例如，f(pc) &#x3D; ∗(pc−18))。第4节中的示例攻击使用数组来组织分派表。</p>
@@ -412,7 +409,7 @@
 <p>上述设备足以使JOP Turing complete(即，能任意计算)，系统调用需要执行大多数实际任务。建立一个系统有几种不同的方法调用。首先，通过设置具有适当参数和返回值的堆栈，可以调用合法函数恢复适当CPU的gadget地址状态并执行调度程序。然而，因为它可能让现有的ROP防御系统检测到这一点，更谨慎的方法是直接进行系统调用。执行此操作的方法因CPU和操作系统的不同而不同。在基于x86的Linux上，可以执行, 如果要触发中断，需要跳转到内核提供的中断例程调用__kernel_vsyscall来执行一个sysenter指令，甚至直接执行sysenter指令。</p>
 <h3 id="3-3-gadget探索发现"><a href="#3-3-gadget探索发现" class="headerlink" title="3.3.gadget探索发现"></a>3.3.gadget探索发现</h3><p>na¨ıve方法就是拆解目标二进制和寻找间接跳转或者调用指令来定位产品。但是，在x86平台上，指令长度可变，因此从相同的内存解码一个偏移量与另一个偏移量的操作可以产生不同的集合。这意味着每个x86二进制文件都包含一个可以访问的意外代码序列跳转到不在原始指令边界上的偏移量。考虑到这一点，一个定位gadget的算法ret是Shacham在ROP背景下给出的。</p>
 <p>在gadget发现过程中采用了类似的方法。该算法通过扫描二进制文件的可执行区域来寻找间接分支指令的有效起始字节。在x86上，它由字节0xff和第二个字节组成，第二个字节具有特定的值范围，这样的序列可以通过线性搜索定位。从这里开始，一个字节一个字节地后退一步并解码每个可能终止于间接跳转的gadget是一件很简单的事情。这种方法在以下算法中正式定义。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># procedure IsViableGadget(G)</span></span><br><span class="line">1: V ← &#123;Registers and writable memory addresses&#125;</span><br><span class="line">2: J ← (Last instruction of G)</span><br><span class="line">3: <span class="keyword">if</span> (J is not an indirect jump) ∨ (J.operand /∈ V ) <span class="keyword">then</span></span><br><span class="line">4:     <span class="built_in">return</span> <span class="literal">false</span></span><br><span class="line">5: end <span class="keyword">if</span></span><br><span class="line">6: A ← &#123;Addresses of each instruction <span class="keyword">in</span> G&#125;</span><br><span class="line">7: <span class="keyword">for</span> all instructions I ∈ G, such that I != J <span class="keyword">do</span></span><br><span class="line">8:     <span class="keyword">if</span> (I is illegal) ∨ ((I is a branch) ∧ ¬ ((I is a conditional jump) ∧ (I.operand ∈ A))) <span class="keyword">then</span></span><br><span class="line">9:         <span class="built_in">return</span> <span class="literal">false</span></span><br><span class="line">10:     end <span class="keyword">if</span></span><br><span class="line">11: end <span class="keyword">for</span></span><br><span class="line">12: <span class="built_in">return</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># procedure FindGadgets(C)</span></span><br><span class="line">1: <span class="keyword">for</span> each address p that is an indirect branch <span class="keyword">in</span> C <span class="keyword">do</span></span><br><span class="line">2:     len ← (Length of the branch at C[p])</span><br><span class="line">3:     <span class="keyword">for</span> δ = 1 to δmax <span class="keyword">do</span></span><br><span class="line">4:         G ← disassemble(C[p − δ : p + len])</span><br><span class="line">5:         <span class="keyword">if</span> IsV iableGadget(G) ∧ Heuristic(G) <span class="keyword">then</span></span><br><span class="line">6:             <span class="built_in">print</span> G</span><br><span class="line">7:         end <span class="keyword">if</span></span><br><span class="line">8:     end <span class="keyword">for</span></span><br><span class="line">9: end <span class="keyword">for</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="IyBwcm9jZWR1cmUgSXNWaWFibGVHYWRnZXQoRykKMTogViDihpAge1JlZ2lzdGVycyBhbmQgd3JpdGFibGUgbWVtb3J5IGFkZHJlc3Nlc30KMjogSiDihpAgKExhc3QgaW5zdHJ1Y3Rpb24gb2YgRykKMzogaWYgKEogaXMgbm90IGFuIGluZGlyZWN0IGp1bXApIOKIqCAoSi5vcGVyYW5kIC/iiIggViApIHRoZW4KNDogICAgIHJldHVybiBmYWxzZQo1OiBlbmQgaWYKNjogQSDihpAge0FkZHJlc3NlcyBvZiBlYWNoIGluc3RydWN0aW9uIGluIEd9Cjc6IGZvciBhbGwgaW5zdHJ1Y3Rpb25zIEkg4oiIIEcsIHN1Y2ggdGhhdCBJICE9IEogZG8KODogICAgIGlmIChJIGlzIGlsbGVnYWwpIOKIqCAoKEkgaXMgYSBicmFuY2gpIOKIpyDCrCAoKEkgaXMgYSBjb25kaXRpb25hbCBqdW1wKSDiiKcgKEkub3BlcmFuZCDiiIggQSkpKSB0aGVuCjk6ICAgICAgICAgcmV0dXJuIGZhbHNlCjEwOiAgICAgZW5kIGlmCjExOiBlbmQgZm9yCjEyOiByZXR1cm4gdHJ1ZQoKIyBwcm9jZWR1cmUgRmluZEdhZGdldHMoQykKMTogZm9yIGVhY2ggYWRkcmVzcyBwIHRoYXQgaXMgYW4gaW5kaXJlY3QgYnJhbmNoIGluIEMgZG8KMjogICAgIGxlbiDihpAgKExlbmd0aCBvZiB0aGUgYnJhbmNoIGF0IENbcF0pCjM6ICAgICBmb3IgzrQgPSAxIHRvIM60bWF4IGRvCjQ6ICAgICAgICAgRyDihpAgZGlzYXNzZW1ibGUoQ1twIOKIkiDOtCA6IHAgKyBsZW5dKQo1OiAgICAgICAgIGlmIElzViBpYWJsZUdhZGdldChHKSDiiKcgSGV1cmlzdGljKEcpIHRoZW4KNjogICAgICAgICAgICAgcHJpbnQgRwo3OiAgICAgICAgIGVuZCBpZgo4OiAgICAgZW5kIGZvcgo5OiBlbmQgZm9yCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># procedure IsViableGadget(G)</span></span><br><span class="line">1: V ← &#123;Registers and writable memory addresses&#125;</span><br><span class="line">2: J ← (Last instruction of G)</span><br><span class="line">3: <span class="keyword">if</span> (J is not an indirect jump) ∨ (J.operand /∈ V ) <span class="keyword">then</span></span><br><span class="line">4:     <span class="built_in">return</span> <span class="literal">false</span></span><br><span class="line">5: end <span class="keyword">if</span></span><br><span class="line">6: A ← &#123;Addresses of each instruction <span class="keyword">in</span> G&#125;</span><br><span class="line">7: <span class="keyword">for</span> all instructions I ∈ G, such that I != J <span class="keyword">do</span></span><br><span class="line">8:     <span class="keyword">if</span> (I is illegal) ∨ ((I is a branch) ∧ ¬ ((I is a conditional jump) ∧ (I.operand ∈ A))) <span class="keyword">then</span></span><br><span class="line">9:         <span class="built_in">return</span> <span class="literal">false</span></span><br><span class="line">10:     end <span class="keyword">if</span></span><br><span class="line">11: end <span class="keyword">for</span></span><br><span class="line">12: <span class="built_in">return</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># procedure FindGadgets(C)</span></span><br><span class="line">1: <span class="keyword">for</span> each address p that is an indirect branch <span class="keyword">in</span> C <span class="keyword">do</span></span><br><span class="line">2:     len ← (Length of the branch at C[p])</span><br><span class="line">3:     <span class="keyword">for</span> δ = 1 to δmax <span class="keyword">do</span></span><br><span class="line">4:         G ← disassemble(C[p − δ : p + len])</span><br><span class="line">5:         <span class="keyword">if</span> IsV iableGadget(G) ∧ Heuristic(G) <span class="keyword">then</span></span><br><span class="line">6:             <span class="built_in">print</span> G</span><br><span class="line">7:         end <span class="keyword">if</span></span><br><span class="line">8:     end <span class="keyword">for</span></span><br><span class="line">9: end <span class="keyword">for</span></span><br></pre></td></tr></table></figure>
 
 <p>如算法中所示，FindGadget(C)过程使用字符串搜索来查找代码基C中的间接跳转，然后向后遍历最多δmax字节并反汇编每个结果代码区域。δmax的值是一个器件的最大尺寸，以字节为单位。它的选择取决于给定体系结构上指令的平均长度以及每个gadget要考虑的最大指令数。经验是，正如在ROP中观察到的，有用的gadget不需要超过5条指令。</p>
 <p>有几个标准可以在这个阶段消除潜在的gadgets; 这些由IsViableGadget(G)过程检测。首先，由于算法每次后退一个字节，因此最初是间接跳转的序列可能不再被解释为间接跳转。如果是这样，这个gadget就不存在了。其次，间接跳转的目标可以是一个寄存器值(例如，esi)、寄存器([esi])所指向的地址，或者内存解引用([0x7474505b])所指向的地址。在后一种情况下，如果给定的地址在运行时不太可能是有效的、可写的位置，那么这个gadget就被消除了。第三，如果这个gadget的任何部分没有编码合法的x86指令，这个gadget就会被删除。最后，gadget本身可能包含一个与最后间接分支分离的条件分支。如果这个分支的目标在gadget边界之外，gadget就被消除了。而且，如果分支的目标与gadget中确定的指令不一致，就会删除分支。</p>
@@ -438,13 +435,13 @@
 <h2 id="4-实现"><a href="#4-实现" class="headerlink" title="4.实现"></a>4.实现</h2><p>为了演示JOP技术的有效性，在现代Linux系统上开发了一种jump-oriented的攻击。具体来说，这种攻击是在32位x86平台上的Debian Linux 5.0.4下开发的，所有gadgets都是从GNU libc库中收集的。Debian为不同的CPU和虚拟化环境提供了libc的多个版本。目标库是&#x2F;lib&#x2F;i686&#x2F;cmov&#x2F;libc2.7. 所以，cpu版本支持条件移动(cmov)指令。下面，首先检查libc中gadget的总体可用性，然后介绍dispatcher和其他功能性gadget的选择。在此之后，将提供一个完全jump-oriented的示例攻击。</p>
 <h3 id="4-1-可用的gadgets"><a href="#4-1-可用的gadgets" class="headerlink" title="4.1.可用的gadgets"></a>4.1.可用的gadgets</h3><p>Jump-oriented编程需要以间接分支结尾的gadgets，而不是ret指令。这些分支可能是jmp指令，也可能是调用指令(不关心将堆栈用于控制流)。回想一下，x86的可变指令大小允许对同一代码进行多种解释，导致编译器生成一组预期的指令，以及通过从不同的偏移量重新解释代码发现的另一组意外指令。为了检查JOP和ROP中gadget的相对可用性，在图中显示了ret指令数量和间接jmp和call指令数量之间的比较。</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop3.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/jop3.jpg"></li>
 </ul>
 <p>如果被限制只使用预期的jmp和调用gadgets，那么仅在libc中就不太可能有足够的gadgets来维持一个Turing-complete的攻击代码，因为目前只有几百条这样的指令。然而，如果考虑到无意识的指令序列，就会有更多的gadgets可供选择。这在很大程度上是由于x86指令集的一个特定方面: 间接跳转的第一个操作码字节是0xff。因为x86使用2的补码带符号整数，所以小的负数包含一个或多个0xff字节。因此，除了操作码中提供的0xff字节外，代码流中存储的直接操作数中还有大量0xff字节可供选择。事实上，0xff是libc可执行区域中第二流行的字节，0x00是第一个。这意味着，在概率上，间接调用和跳转比其他情况要普遍得多。多亏了这一点，有大量候选跳跃gadgets可供选择。</p>
 <p>为了搜索gadgets，应用第3.3节给出的算法。在这样做时，必须为δmax选择一个值，δmax是要考虑的最大的器件尺寸，以字节为单位。保守值是平均gadgets长度(5)乘以平均指令长度(3.5)，即 5 · 3.5 &#x3D; 18。然而，使δmax太大的唯一副作用是包括可能因其长度用处有限的器具，所以在包容性方面犯错误，设置δmax &#x3D; 32字节。稍后，gadget列表可能按每个gadget的指令数量排序，以便专注于更短的、更有可能的选择。</p>
 <p>当gadgets搜索算法应用于libc的可执行区域时，可以找到31136个潜在的gadgets。下面两个部分描述了如何通过启发式和手工分析筛选这些候选对象，以定位调度程序和功能gadgets来发动攻击。</p>
 <h3 id="4-2-Dispatcher-Gadget"><a href="#4-2-Dispatcher-Gadget" class="headerlink" title="4.2.Dispatcher Gadget"></a>4.2.Dispatcher Gadget</h3><p>使用第3.3节中描述的启发式方法，将潜在gadget的完整集合减少到35个候选gadget。因为有如此多的选择，可以排除超过两个指令(任何有用的Gadget的最小长度)的序列，但仍然有14个候选指令可供选择。通过人工分析，发现其中12个是可行的。这些选择使用算术或解引用来改进pc，并依赖各种寄存器进行操作。由于调度程序使用的寄存器不能被功能性Gadget使用，因此选择使用最不常见寄存器的调度程序将使功能Gadget的范围更广。考虑到这一点，在示例shellcode中选择了以下dispatcher Gadget:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add ebp, edi</span><br><span class="line">jmp [ebp-0x39]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="YWRkIGVicCwgZWRpCmptcCBbZWJwLTB4MzldCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">add ebp, edi</span><br><span class="line">jmp [ebp-0x39]</span><br></pre></td></tr></table></figure>
 
 <p>这个Gadget使用堆栈基指针ebp作为跳转目标pc，向它添加存储在edi中的值。发现，就功能Gadget而言，这两个寄存器在编译器生成的代码中都没有发挥重要作用。同样，应用于jmp指令的常量偏移量-0x39的影响很小，因为在开始设置ebp时可以静态补偿这个偏移量。因为它简单、可预测，并且只使用两个不太需要的寄存器，所以选择这个dispatcher Gadget来驱动第4.4节中使用的shellcode示例。</p>
 <h3 id="4-3-其它gadget"><a href="#4-3-其它gadget" class="headerlink" title="4.3.其它gadget"></a>4.3.其它gadget</h3><p>一旦调度程序就位，首先需要的功能gadgets之一就是加载操作数的方法。在ROP中，这是通过将数据与指向gadget的返回地址混合放置在堆栈中实现的。这样，gadgets就可以使用pop指令来访问数据。没有理由不能在JOP中应用这种方法，因为反rop防御技术关注的是滥用堆栈作为控制执行流的手段，而不是数据。在实现中，攻击的一部分包括将堆栈指针esp移动到恶意缓冲区的一部分。然后可以通过pop指令直接从缓冲区加载数据。这构成了load data gadgets的基础。启发式可以用于定位这些gadgets; 唯一的要求是 (a)候选的第一个指令必须是一个弹出到一个通用寄存器，而不是所选择的调度程序(ebp和edi)使用的寄存器，以及 (b)结尾的间接跳转不能将这个寄存器用于它的目的地。这个启发式在libc中产生了60种可能性，因此进一步过滤结果，只包括具有3条或更少指令的gadget;这给出了22种可能性。手工分析这个列表会产生14个load data gadget，这些gadget可以用来加载没有涉及到dispatcher的任何通用寄存器。没有必要进一步过滤—因为这些gadgets有不同的副作用和间接跳转目标，每一个都可能在不同的时间有用，这取决于在jump-oriented的程序中用于计算的寄存器。</p>
@@ -457,17 +454,17 @@
 <p>(1)将eax设置为系统调用号，<br>(2)将寄存器ebx、ecx和edx设置为调用的参数，<br>(3)执行sysenter指令。</p>
 <p>通常，调用者也会将ecx、edx、ebp和下一条指令的地址推送到堆栈上，但是这种记录对于jump-oriented的攻击者来说是可选的。相反，可以利用返回地址是在堆栈上指定的这一事实，将它指向调度程序。这意味着sysenter gadget不需要以间接跳跃结束。注意，这个返回地址与普通函数的返回地址不同 — 内核接口允许用户设置这个值。这是因为所有的系统调用在用户空间中都有相同的退出点: 一小段内核提供的代码跳转回存储的地址。</p>
 <p>因此，进行系统调用的唯一挑战是填充正确的寄存器。随着参数数量的增加，这变得越来越困难。对于有三个参数(如execve())的调用，需要同时设置eax、ebx、ecx和edx。这有点棘手，因为除了系统调用所需的寄存器之外，没有任何popa gadgets会基于寄存器跳转，而且gadgets的选择也会受到限制，因为通用寄存器被特定的值所占用。然而，通过将多个gadgets链接在一起，只使用libc中的材料就可以进行任意的系统调用。例如，下面的gadgets序列将从攻击者提供的内存中加载eax、ebx、ecx和edx，然后进行系统调用。这个gadgets序列用于为下面给出的示例攻击构建shellcode。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">popa                ; 加载所有寄存器</span><br><span class="line">cmc                 ; 没有实际效果</span><br><span class="line">jmp far dword [ecx] ; 通过ecx回到 dispatcher</span><br><span class="line">xchg ecx, eax       ; 交换ecx 和 eax</span><br><span class="line">fdiv st, st(3)      ; 没有实际效果</span><br><span class="line">jmp [esi-0xf]       ; 通过esi回到 dispatcher</span><br><span class="line">mov eax, [esi+0xc]  ; 设置 eax</span><br><span class="line">mov [esp], eax      ; 没有实际效果</span><br><span class="line">call [esi+0x4]      ; 通过esi回到 dispatcher</span><br><span class="line">sysenter            ; 执行 system call</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cG9wYSAgICAgICAgICAgICAgICA7IOWKoOi9veaJgOacieWvhOWtmOWZqApjbWMgICAgICAgICAgICAgICAgIDsg5rKh5pyJ5a6e6ZmF5pWI5p6cCmptcCBmYXIgZHdvcmQgW2VjeF0gOyDpgJrov4dlY3jlm57liLAgZGlzcGF0Y2hlcgp4Y2hnIGVjeCwgZWF4ICAgICAgIDsg5Lqk5o2iZWN4IOWSjCBlYXgKZmRpdiBzdCwgc3QoMykgICAgICA7IOayoeacieWunumZheaViOaenApqbXAgW2VzaS0weGZdICAgICAgIDsg6YCa6L+HZXNp5Zue5YiwIGRpc3BhdGNoZXIKbW92IGVheCwgW2VzaSsweGNdICA7IOiuvue9riBlYXgKbW92IFtlc3BdLCBlYXggICAgICA7IOayoeacieWunumZheaViOaenApjYWxsIFtlc2krMHg0XSAgICAgIDsg6YCa6L+HZXNp5Zue5YiwIGRpc3BhdGNoZXIKc3lzZW50ZXIgICAgICAgICAgICA7IOaJp+ihjCBzeXN0ZW0gY2FsbAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">popa                ; 加载所有寄存器</span><br><span class="line">cmc                 ; 没有实际效果</span><br><span class="line">jmp far dword [ecx] ; 通过ecx回到 dispatcher</span><br><span class="line">xchg ecx, eax       ; 交换ecx 和 eax</span><br><span class="line">fdiv st, st(3)      ; 没有实际效果</span><br><span class="line">jmp [esi-0xf]       ; 通过esi回到 dispatcher</span><br><span class="line">mov eax, [esi+0xc]  ; 设置 eax</span><br><span class="line">mov [esp], eax      ; 没有实际效果</span><br><span class="line">call [esi+0x4]      ; 通过esi回到 dispatcher</span><br><span class="line">sysenter            ; 执行 system call</span><br></pre></td></tr></table></figure>
 
 <h3 id="4-4-示例攻击"><a href="#4-4-示例攻击" class="headerlink" title="4.4.示例攻击"></a>4.4.示例攻击</h3><p>由于其简单，使用一个类似于Checkoway和Shacham给出的漏洞测试程序。该程序的源代码如下所示。实际上，这个程序将第一个命令行参数argv复制到堆上256字节的缓冲区中。由于该程序没有限制复制的数据量，因此该程序容易受到第3.4节中描述的setjmp攻击。攻击者可以溢出缓冲区，并在第17行上调用longjmp函数时控制寄存器ebx、esi、edi、ebp、esp和指令指针eip。这个特定的应用程序仅仅是一个例子: 任何提供对指令指针和其他寄存器的控制的利用都有可能被用来发起jump-oriented攻击。</p>
 <ul>
 <li>示例漏洞程序:</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;string.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;setjmp.h&gt;</span></span><br><span class="line"></span><br><span class="line">struct foo &#123;</span><br><span class="line">    char buffer[256];</span><br><span class="line">    jmp_buf jb;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, char** argv, char** envp) &#123;</span><br><span class="line">    struct foo *f = malloc(sizeof(*f));</span><br><span class="line">    <span class="keyword">if</span> (setjmp(f-&gt;jb)) &#123;</span><br><span class="line">        <span class="built_in">return</span> 0;</span><br><span class="line">    &#125;</span><br><span class="line">    strcpy(f-&gt;buffer, argv[1]);</span><br><span class="line">    longjmp(f-&gt;jb, 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="I2luY2x1ZGUgPHN0ZGxpYi5oPgojaW5jbHVkZSA8c3RkaW8uaD4KI2luY2x1ZGUgPHN0cmluZy5oPgojaW5jbHVkZSA8c2V0am1wLmg+CgpzdHJ1Y3QgZm9vIHsKICAgIGNoYXIgYnVmZmVyWzI1Nl07CiAgICBqbXBfYnVmIGpiOwp9OwoKaW50IG1haW4oaW50IGFyZ2MsIGNoYXIqKiBhcmd2LCBjaGFyKiogZW52cCkgewogICAgc3RydWN0IGZvbyAqZiA9IG1hbGxvYyhzaXplb2YoKmYpKTsKICAgIGlmIChzZXRqbXAoZi0+amIpKSB7CiAgICAgICAgcmV0dXJuIDA7CiAgICB9CiAgICBzdHJjcHkoZi0+YnVmZmVyLCBhcmd2WzFdKTsKICAgIGxvbmdqbXAoZi0+amIsIDEpOwp9Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;string.h&gt;</span></span><br><span class="line"><span class="comment">#include &lt;setjmp.h&gt;</span></span><br><span class="line"></span><br><span class="line">struct foo &#123;</span><br><span class="line">    char buffer[256];</span><br><span class="line">    jmp_buf jb;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main(int argc, char** argv, char** envp) &#123;</span><br><span class="line">    struct foo *f = malloc(sizeof(*f));</span><br><span class="line">    <span class="keyword">if</span> (setjmp(f-&gt;jb)) &#123;</span><br><span class="line">        <span class="built_in">return</span> 0;</span><br><span class="line">    &#125;</span><br><span class="line">    strcpy(f-&gt;buffer, argv[1]);</span><br><span class="line">    longjmp(f-&gt;jb, 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>使用这个程序作为平台来启动一个jump-oriented的shellcode程序，该程序最终将使用execve系统调用来启动一个交互式shell。具体地说，示例攻击是在NASM中构造的，尽管NASM是一种汇编程序，但它只用于指定原始数据字段。NASM的宏和算术特性允许以一种简单的方式表达攻击代码。攻击的源代码在技术报告中给出。</p>
 <p>当NASM组装该脚本时，它将生成一个二进制利用文件，然后作为命令行参数提供给受攻击的程序:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./vulnerable <span class="string">&quot;`cat exploit.bin`&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="JCAuL3Z1bG5lcmFibGUgImBjYXQgZXhwbG9pdC5iaW5gIgo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./vulnerable <span class="string">&quot;`cat exploit.bin`&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>这将启动jump-oriented的程序，并最终产生一个交互式shell而不需要任何ret指令。</p>
 <h2 id="5-讨论"><a href="#5-讨论" class="headerlink" title="5.讨论"></a>5.讨论</h2><p>在本节中，将检查可能的限制，并讨论jump-oriented编程技术的进一步改进。首先，虽然发现JOP理论上能够进行任意计算，但手动构造攻击代码是一项复杂的任务，甚至比ROP还要复杂。主要原因是JOP gadgets增加了一层相互依赖。具体来说，由于依赖某些寄存器作为jump-oriented的系统的“状态”(例如，指向调度表的指针和每个gadgets执行后对调度程序的回调)，对于可以组装的gadgets的顺序有复杂的限制。通常，攻击者需要引入那些唯一目的是让下一个gadgets工作(例如，通过设置跳转到目标寄存器)。这自然会使自动化技术的开发复杂化，从而促进jump-oriented的编程。</p>
@@ -507,16 +504,16 @@
           <div class="reward-container">
   <div>Buy me a coffee</div>
   <button>
-    Donate
+    赞赏
   </button>
   <div class="post-reward">
       <div>
-        <img src="/images/wechatpay.png" alt="253 WeChat Pay">
-        <span>WeChat Pay</span>
+        <img src="/images/wechatpay.png" alt="253 微信">
+        <span>微信</span>
       </div>
       <div>
-        <img src="/images/alipay.png" alt="253 Alipay">
-        <span>Alipay</span>
+        <img src="/images/alipay.png" alt="253 支付宝">
+        <span>支付宝</span>
       </div>
 
   </div>
@@ -527,20 +524,20 @@
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>Post author:  </strong>253
+      <strong>本文作者： </strong>253
   </li>
   <li class="post-copyright-link">
-      <strong>Post link: </strong>
+      <strong>本文链接：</strong>
       <a href="https://lucifer11.xyz/2021/01/05/jop-and-pcop/" title="Jump-Oriented编程-[JOP]-一种新的代码复用攻击">https://lucifer11.xyz/2021/01/05/jop-and-pcop/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
   </li>
 </ul>
 </div>
 
           <div class="followme">
-  <span>Welcome to my other publishing channels</span>
+  <span>欢迎关注我的其它发布渠道</span>
 
   <div class="social-list">
 
@@ -599,20 +596,22 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+              <a href="/tags/JOP/" rel="tag"><i class="fa fa-tag"></i> JOP</a>
+              <a href="/tags/Gadget/" rel="tag"><i class="fa fa-tag"></i> Gadget</a>
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%94%A8/" rel="tag"><i class="fa fa-tag"></i> 代码复用</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/01/05/noreturn/" rel="prev" title="Hack-The-Box-pwn-challenge[no-return]">
-                  <i class="fa fa-chevron-left"></i> Hack-The-Box-pwn-challenge[no-return]
+                <a href="/2020/12/19/Trying-to-hack-Redis-via-HTTP-requests/" rel="prev" title="通过http请求入侵redis">
+                  <i class="fa fa-chevron-left"></i> 通过http请求入侵redis
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/01/08/sharp/" rel="next" title="Hack-The-Box-walkthrough[sharp]">
-                  Hack-The-Box-walkthrough[sharp] <i class="fa fa-chevron-right"></i>
+                <a href="/2021/01/24/JIT-engines-exploitation/" rel="next" title="JavaScript-JIT引擎逻辑漏洞利用">
+                  JavaScript-JIT引擎逻辑漏洞利用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -645,15 +644,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-      <span>Word count total: </span>
-    <span title="Word count total">666k</span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-      <span>Reading time total &asymp;</span>
-    <span title="Reading time total">40:23</span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -661,7 +660,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -669,12 +668,12 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
 </div>
-  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
   </div>
 
     </div>

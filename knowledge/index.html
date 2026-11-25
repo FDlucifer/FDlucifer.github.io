@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#0a080b" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a080b" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#0a080b">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lucifer11.xyz","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="漏洞分析与利用知识库这里把靶场和比赛记录按漏洞机制重新组织。每章先给出分析重点与案例对照，再提供可展开的原始技术记录。载荷、完整 exploit、攻击步骤、失败尝试和截图都与来源绑定，便于核查利用条件和复现差异。 168 篇实验记录 · 37 个主题章节 · 9 篇原加密记录已公开  原实验中的版本、目标地址、回连地址、文件路径、时钟、账户权限和二进制布局决定载荷的适用范围。阅读时可先查索引，再对">
+<meta property="og:type" content="website">
+<meta property="og:title" content="漏洞分析与利用知识库">
+<meta property="og:url" content="https://lucifer11.xyz/knowledge/index.html">
+<meta property="og:site_name" content="0xfd&#39;s blog">
+<meta property="og:description" content="漏洞分析与利用知识库这里把靶场和比赛记录按漏洞机制重新组织。每章先给出分析重点与案例对照，再提供可展开的原始技术记录。载荷、完整 exploit、攻击步骤、失败尝试和截图都与来源绑定，便于核查利用条件和复现差异。 168 篇实验记录 · 37 个主题章节 · 9 篇原加密记录已公开  原实验中的版本、目标地址、回连地址、文件路径、时钟、账户权限和二进制布局决定载荷的适用范围。阅读时可先查索引，再对">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-11-25T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-11-25T04:00:00.000Z">
+<meta property="article:author" content="253">
+<meta property="article:tag" content="漏洞研究,代码审计,二进制安全,Active Directory,流量取证">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://lucifer11.xyz/knowledge/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"https://lucifer11.xyz/knowledge/index.html","path":"knowledge/index.html","title":"漏洞分析与利用知识库"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>漏洞分析与利用知识库 | 0xfd's blog
+</title>
+  
+
+
+
+
+
+
+
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="/css/cyberpunk.css">
+<script src="/js/gargantua.js" defer></script>
+<script src="/js/reader.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="0xfd's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/fifteen-katana-zero-katana-zero.gif" alt="0xfd's blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">0xfd's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">by 0xfd</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-知识库"><a href="/knowledge/" rel="section"><i class="fa fa-book fa-fw"></i>知识库</a></li><li class="menu-item menu-item-导读"><a href="/guide/" rel="section"><i class="fa fa-compass fa-fw"></i>导读</a></li><li class="menu-item menu-item-分类"><a href="/categories/" rel="section"><i class="fa fa-folder-open fa-fw"></i>分类</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B8%8E%E5%88%A9%E7%94%A8%E7%9F%A5%E8%AF%86%E5%BA%93"><span class="nav-text">漏洞分析与利用知识库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%89%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91%E9%98%85%E8%AF%BB"><span class="nav-text">按研究方向阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%89%E6%8A%80%E6%9C%AF%E7%82%B9%E5%AE%9A%E4%BD%8D"><span class="nav-text">按技术点定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E6%A1%88%E4%BE%8B%E5%AF%B9%E7%85%A7"><span class="nav-text">原案例对照</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="253"
+      src="/images/fifteen-katana-zero-katana-zero.gif">
+  <p class="site-author-name" itemprop="name">253</p>
+  <div class="site-description" itemprop="description">漏洞分析、利用机制、二进制研究与安全工程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">65</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">312</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;FDlucifer"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOjExODUxNTE4NjdAcXEuY29t" title="E-Mail → mailto:1185151867@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly90d2l0dGVyLmNvbS9mZGx1Y2lmZXIxMQ==" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fdlucifer11"><i class="fab fa-twitter fa-fw"></i>Twitter</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDAxOTY5NDUyODYyMA==" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100019694528620"><i class="fab fa-facebook fa-fw"></i>FB Page</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vQGZkdm9pZDA=" title="YouTube → https:&#x2F;&#x2F;www.youtube.com&#x2F;@fdvoid0"><i class="fab fa-youtube fa-fw"></i>YouTube</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS95YW5nODkyOS8=" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;yang8929&#x2F;"><i class="fab fa-instagram fa-fw"></i>Instagram</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9pbmZvc2VjLmV4Y2hhbmdlL0BsVWMxZjNyMTE=" title="infosec.exchange → https:&#x2F;&#x2F;infosec.exchange&#x2F;@lUc1f3r11"><i class="fa fa-stack-exchange fa-fw"></i>infosec.exchange</span>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/big/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9hdHN1ZDAubWUv" title="https:&#x2F;&#x2F;atsud0.me&#x2F;">atsud0</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly9kcm9pZGthbGkuZ2l0aHViLmlvLw==" title="https:&#x2F;&#x2F;droidkali.github.io&#x2F;">记忆里的纯真</span>
+            </li>
+            <li class="links-of-blogroll-item">
+              <span class="exturl" data-url="aHR0cHM6Ly94aWFvbGltYXJzLndvcmRwcmVzcy5jb20v" title="https:&#x2F;&#x2F;xiaolimars.wordpress.com&#x2F;">小离</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">漏洞分析与利用知识库
+</h1>
+
+<div class="post-meta-container">
+</div>
+
+</header>
+
+      
+      
+      <div class="post-body">
+          <h1 id="漏洞分析与利用知识库"><a href="#漏洞分析与利用知识库" class="headerlink" title="漏洞分析与利用知识库"></a>漏洞分析与利用知识库</h1><p>这里把靶场和比赛记录按漏洞机制重新组织。每章先给出分析重点与案例对照，再提供可展开的原始技术记录。载荷、完整 exploit、攻击步骤、失败尝试和截图都与来源绑定，便于核查利用条件和复现差异。</p>
+<div class="kb-index-note">168 篇实验记录 · 37 个主题章节 · 9 篇原加密记录已公开</div>
+
+<p>原实验中的版本、目标地址、回连地址、文件路径、时钟、账户权限和二进制布局决定载荷的适用范围。阅读时可先查索引，再对照同一案例的输入、输出和最后脚本。</p>
+<p><a href="/guide/">研究导读</a> · <a href="/knowledge/source.md">下载完整 Markdown</a></p>
+<h2 id="按研究方向阅读"><a href="#按研究方向阅读" class="headerlink" title="按研究方向阅读"></a>按研究方向阅读</h2><h3 id="Web安全"><a href="#Web安全" class="headerlink" title="Web安全"></a>Web安全</h3><ul>
+<li><a href="/knowledge/php-runtime/">PHP 运行时、缓存与执行边界</a> · 3 个来源，67 个代码块。php_again 的 system_id 和 Zend Extension 差异决定缓存能否被目标加载，编译参数属于证据的一部分。</li>
+<li><a href="/knowledge/identity/">认证状态、JWT 与访问控制</a> · 7 个来源，187 个代码块。Academy、Previse 的服务端权限判断与页面跳转各有边界，页面可见性和操作权限需要分别验证。</li>
+<li><a href="/knowledge/ssrf/">SSRF、协议转换与内部管理面</a> · 3 个来源，116 个代码块。AdmirerToo 的 OpenTSDB 指标名称会影响后续执行是否真正到达目标函数。</li>
+<li><a href="/knowledge/cms-drupal/">Drupal 入口与本地权限衔接</a> · 3 个来源，36 个代码块。Armageddon 的 snap 分支保留原脚本失败后对载荷内容的处理。</li>
+<li><a href="/knowledge/debug/">调试协议与服务暴露</a> · 3 个来源，62 个代码块。Backdoor 先用文件读取定位进程，再连接 gdbserver。</li>
+<li><a href="/knowledge/cms-misc/">CMS 管理功能与历史执行链</a> · 5 个来源，70 个代码块。Blunder、GoldenEye 分别记录 Bludit 和 Moodle 的既有执行路线。</li>
+<li><a href="/knowledge/ssti/">模板注入与多语言表达式</a> · 5 个来源，116 个代码块。Bolt 与 Doctor 的配置、密钥和备份数据不同，读取与执行阶段需要沿各自证据核对。</li>
+<li><a href="/knowledge/xml/">XML 外部实体与二次解释</a> · 1 个来源，15 个代码块。Base64 和 URL 编码影响加号等字符在请求与响应中的传输。</li>
+<li><a href="/knowledge/serialization/">反序列化、对象生命周期与加载器</a> · 9 个来源，162 个代码块。Feline、Logforge、Time 和 Ophiuchi 分别依赖会话文件、JNDI、类型绑定和 YAML 加载。</li>
+<li><a href="/knowledge/queries/">SQL、NoSQL、HQL 与 XPath 注入</a> · 11 个来源，224 个代码块。Ezpentest 的 BIGINT 错误与 Mango 的 MongoDB 运算符采用不同判断条件。</li>
+<li><a href="/knowledge/xss/">浏览器上下文与跨权限操作</a> · 2 个来源，75 个代码块。Crossfit 记录读取页面、构造操作与后台任务，后续还有独立的密钥分析。</li>
+<li><a href="/knowledge/cms-wordpress/">WordPress 插件与管理权限</a> · 5 个来源，92 个代码块。Phoenix 的盲注与上传属于两个插件，OTP 和 rsync 是后续系统阶段。</li>
+<li><a href="/knowledge/middleware/">中间件请求解析与管理接口</a> · 4 个来源，72 个代码块。pWnOS 与 GoatseLinux 的管理接口保留文件读取和替代认证路径。</li>
+<li><a href="/knowledge/uploads/">文件写入、上传验证与后续解析</a> · 6 个来源，103 个代码块。Drunk Admin 与 In Plain Sight 的图像处理保留双后缀及内容检测。</li>
+<li><a href="/knowledge/files/">路径归一化、文件包含与日志内容</a> · 5 个来源，100 个代码块。Pikaboo 连接 alias、文件包含、FTP 日志和 Perl open。</li>
+</ul>
+<h3 id="系统安全"><a href="#系统安全" class="headerlink" title="系统安全"></a>系统安全</h3><ul>
+<li><a href="/knowledge/windows/">Windows 服务权限与执行上下文</a> · 7 个来源，188 个代码块。Acute、Reel2 的 PowerShell 会话限制与命令运行账户是不同条件。</li>
+<li><a href="/knowledge/linux/">Linux 权限、Capabilities 与周期任务</a> · 10 个来源，167 个代码块。Cap 的 Python capabilities、NullByte 的 PATH 和 Pit 的目录 ACL 属于不同权限机制。</li>
+<li><a href="/knowledge/services/">DNS、NFS、邮件与多主机信任</a> · 5 个来源，175 个代码块。Vulnix 的 UID 与 root_squash、Dynstr 的 PTR 与更新密钥各有明确配置条件。</li>
+<li><a href="/knowledge/database/">数据库权限、UDF 与动态库加载</a> · 3 个来源，63 个代码块。Raven 两篇分别保留 PHPMailer、编译的共享库、插件路径与 setuid 程序。</li>
+</ul>
+<h3 id="二进制安全"><a href="#二进制安全" class="headerlink" title="二进制安全"></a>二进制安全</h3><ul>
+<li><a href="/knowledge/stack/">栈与相邻对象覆盖</a> · 8 个来源，269 个代码块。Brainpan 系列保留偏移、函数指针与多种入口，不能只取最后一份脚本推断全部过程。</li>
+<li><a href="/knowledge/format/">格式化字符串、地址泄漏与保护绕过</a> · 5 个来源，63 个代码块。Echoland 从网络接口恢复 ELF，原脚本包含错误地址与崩溃处理。</li>
+<li><a href="/knowledge/rop/">ROP、SROP、JOP 与系统调用</a> · 6 个来源，76 个代码块。execve 与 mprotect 两篇实验保留可写区选择、页对齐和 read 输入的先后关系。</li>
+<li><a href="/knowledge/v8/">V8 类型推断与任意读写原语</a> · 2 个来源，72 个代码块。Math.expm1 题的关键是优化阶段对类型和边界的错误推断。</li>
+<li><a href="/knowledge/kernel/">内核接口、映射与权限原语</a> · 3 个来源，168 个代码块。RopeTwo 的 ralloc 记录 IOCTL、tty_operations、KASLR、栈迁移与权限恢复。</li>
+<li><a href="/knowledge/heap/">UAF、tcache 与分配器状态</a> · 3 个来源，98 个代码块。Little Tommy 用 memo 重用已释放账户，字段布局决定覆盖内容。</li>
+<li><a href="/knowledge/crypto/">认证程序逆向与 Salsa20 数据恢复</a> · 1 个来源，5 个代码块。修改条件跳转可以观察后续代码，真正的输入验证仍要恢复数据关系。</li>
+</ul>
+<h3 id="身份与域安全"><a href="#身份与域安全" class="headerlink" title="身份与域安全"></a>身份与域安全</h3><ul>
+<li><a href="/knowledge/kerberos/">Kerberos、凭据材料与服务权限</a> · 4 个来源，84 个代码块。APT 记录 NTLM 登录不可用而 TGT 可用的实际差异，同时保留 IPv6 网络位置要求。</li>
+<li><a href="/knowledge/adcs/">ADCS 模板、证书映射与 CA 权限</a> · 4 个来源，132 个代码块。Coder 的 dNSHostName 与模板状态不同于 Authority 的任意 SAN 条件。</li>
+<li><a href="/knowledge/credentials/">备份材料、验证流程与密码规则</a> · 3 个来源，57 个代码块。Delivery 的工单邮箱与 Mattermost 注册流程连接到密码规则。</li>
+<li><a href="/knowledge/delegation/">ACL、Shadow Credentials 与 Kerberos 委派</a> · 3 个来源，130 个代码块。Absolute 的禁用 NTLM、交互登录权限与成员回滚影响每次工具调用。</li>
+<li><a href="/knowledge/adcs-advanced/">ESC13 组映射与多阶段域权限</a> · 1 个来源，72 个代码块。Web 入口、认证 Relay 和 Shadow Credentials 分别对应不同执行身份。</li>
+</ul>
+<h3 id="漏洞研究"><a href="#漏洞研究" class="headerlink" title="漏洞研究"></a>漏洞研究</h3><ul>
+<li><a href="/knowledge/client/">客户端、更新器与文档解析</a> · 6 个来源，101 个代码块。Atom 的更新签名与 PortableKanban 密文属于两个独立问题。</li>
+<li><a href="/knowledge/source/">源码历史、配置泄露与后门逆向</a> · 6 个来源，178 个代码块。Secret、Laboratory 与 Devzat 的源码材料分别影响 Token、Rails 对象和系统命令。</li>
+</ul>
+<h3 id="云与容器安全"><a href="#云与容器安全" class="headerlink" title="云与容器安全"></a>云与容器安全</h3><ul>
+<li><a href="/knowledge/cloud/">AWS 模拟环境、请求走私与密钥服务</a> · 3 个来源，75 个代码块。Bucket 的表结构和 bucket-app 查询顺序决定文件内容如何被带入输出。</li>
+<li><a href="/knowledge/containers/">容器边界、网络拓扑与宿主权限</a> · 6 个来源，198 个代码块。Reddish 的多层网络与备份容器需要对应 IP、端口转发和任务触发。</li>
+</ul>
+<h3 id="协议与取证"><a href="#协议与取证" class="headerlink" title="协议与取证"></a>协议与取证</h3><ul>
+<li><a href="/knowledge/forensics/">加密流量、内存密钥与文件重组</a> · 3 个来源，62 个代码块。Beacon 的 AES&#x2F;HMAC 密钥通过 callback 验证，Meterpreter 另有 XOR 头和 TLV 结构。</li>
+</ul>
+<h3 id="工程与供应链"><a href="#工程与供应链" class="headerlink" title="工程与供应链"></a>工程与供应链</h3><ul>
+<li><a href="/knowledge/pipelines/">构建、包安装与自动化任务</a> · 4 个来源，102 个代码块。Worker 的仓库写入与 Agent 身份决定构建任务能做什么。</li>
+</ul>
+<p><a id="techniques"></a></p>
+<h2 id="按技术点定位"><a href="#按技术点定位" class="headerlink" title="按技术点定位"></a>按技术点定位</h2><details class="kb-catalog"><summary>展开技术点索引</summary>
+
+<table>
+<thead>
+<tr>
+<th>技术点</th>
+<th>对应案例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.NET</td>
+<td><a href="/knowledge/serialization/#case-sharp">sharp</a></td>
+</tr>
+<tr>
+<td>2FA</td>
+<td><a href="/knowledge/serialization/#case-jewel">jewel</a> · <a href="/knowledge/cms-wordpress/#case-phoenix">phoenix</a> · <a href="/knowledge/debug/#case-static">static</a></td>
+</tr>
+<tr>
+<td>ACL</td>
+<td><a href="/knowledge/kerberos/#case-blazorized">blazorized</a> · <a href="/knowledge/delegation/#case-htb-absolute">htb-absolute</a> · <a href="/knowledge/linux/#case-pit">pit</a> · <a href="/knowledge/delegation/#case-rebound">rebound</a></td>
+</tr>
+<tr>
+<td>Active Directory</td>
+<td><a href="/knowledge/windows/#case-acute">acute</a> · <a href="/knowledge/kerberos/#case-apt">apt</a></td>
+</tr>
+<tr>
+<td>ADB</td>
+<td><a href="/knowledge/client/#case-explore">explore</a></td>
+</tr>
+<tr>
+<td>ADCS</td>
+<td><a href="/knowledge/adcs/#case-coder">coder</a> · <a href="/knowledge/adcs/#case-escape">escape</a> · <a href="/knowledge/adcs/#case-htb-authority">htb-authority</a> · <a href="/knowledge/adcs/#case-htb-manager">htb-manager</a> · <a href="/knowledge/adcs-advanced/#case-mist">mist</a></td>
+</tr>
+<tr>
+<td>AES</td>
+<td><a href="/knowledge/forensics/#case-decrypt-cs-traffic">decrypt-cs-traffic</a> · <a href="/knowledge/forensics/#case-msf-meterpreter-traffic-decrypt">msf-meterpreter-traffic-decrypt</a></td>
+</tr>
+<tr>
+<td>AlwaysInstallElevated</td>
+<td><a href="/knowledge/uploads/#case-love">love</a></td>
+</tr>
+<tr>
+<td>Android</td>
+<td><a href="/knowledge/client/#case-catch">catch</a> · <a href="/knowledge/client/#case-explore">explore</a> · <a href="/knowledge/client/#case-routerspace">routerspace</a></td>
+</tr>
+<tr>
+<td>Ansible</td>
+<td><a href="/knowledge/adcs/#case-htb-authority">htb-authority</a> · <a href="/knowledge/pipelines/#case-seal">seal</a></td>
+</tr>
+<tr>
+<td>API Monitor</td>
+<td><a href="/knowledge/windows/#case-pivotapi">pivotapi</a></td>
+</tr>
+<tr>
+<td>API Token</td>
+<td><a href="/knowledge/client/#case-catch">catch</a></td>
+</tr>
+<tr>
+<td>APK</td>
+<td><a href="/knowledge/pipelines/#case-scriptkiddie">ScriptKiddie</a></td>
+</tr>
+<tr>
+<td>APT</td>
+<td><a href="/knowledge/queries/#case-writer">writer</a></td>
+</tr>
+<tr>
+<td>ARM</td>
+<td><a href="/knowledge/stack/#case-antidote">antidote</a></td>
+</tr>
+<tr>
+<td>ASLR</td>
+<td><a href="/knowledge/rop/#case-pwn-restaurant">pwn-restaurant</a></td>
+</tr>
+<tr>
+<td>AWS</td>
+<td><a href="/knowledge/cloud/#case-bucket">bucket</a> · <a href="/knowledge/cloud/#case-sink">sink</a></td>
+</tr>
+<tr>
+<td>Azure DevOps</td>
+<td><a href="/knowledge/pipelines/#case-worker">worker</a></td>
+</tr>
+<tr>
+<td>BloodHound</td>
+<td><a href="/knowledge/kerberos/#case-blazorized">blazorized</a> · <a href="/knowledge/adcs/#case-coder">coder</a> · <a href="/knowledge/kerberos/#case-search">search</a></td>
+</tr>
+<tr>
+<td>Bludit</td>
+<td><a href="/knowledge/cms-misc/#case-blunder">blunder</a></td>
+</tr>
+<tr>
+<td>Cacti</td>
+<td><a href="/knowledge/containers/#case-monitors">monitors</a></td>
+</tr>
+<tr>
+<td>Canary</td>
+<td><a href="/knowledge/format/#case-bad-grades">bad-grades</a> · <a href="/knowledge/format/#case-what-dose-the-f-say">what-dose-the-f-say</a></td>
+</tr>
+<tr>
+<td>Capabilities</td>
+<td><a href="/knowledge/linux/#case-cap">cap</a> · <a href="/knowledge/cms-misc/#case-os-hacknos-3">Os-hackNos-3</a></td>
+</tr>
+<tr>
+<td>CBC</td>
+<td><a href="/knowledge/identity/#case-perspective">Perspective</a></td>
+</tr>
+<tr>
+<td>chkrootkit</td>
+<td><a href="/knowledge/services/#case-ha-chanakya">HA-Chanakya</a> · <a href="/knowledge/uploads/#case-sickos-1-2">SickOs-1-2</a></td>
+</tr>
+<tr>
+<td>CI&#x2F;CD</td>
+<td><a href="/knowledge/pipelines/#case-worker">worker</a></td>
+</tr>
+<tr>
+<td>CMS</td>
+<td><a href="/knowledge/queries/#case-kvm3">KVM3</a> · <a href="/knowledge/cms-misc/#case-pwnos2-0-pre-release">pWnOS2-0-Pre-Release</a></td>
+</tr>
+<tr>
+<td>Cobalt Strike</td>
+<td><a href="/knowledge/forensics/#case-decrypt-cs-traffic">decrypt-cs-traffic</a></td>
+</tr>
+<tr>
+<td>Core Dump</td>
+<td><a href="/knowledge/source/#case-secret">secret</a></td>
+</tr>
+<tr>
+<td>Cuppa</td>
+<td><a href="/knowledge/files/#case-w1r3s-1-0-1">W1R3S-1-0-1</a></td>
+</tr>
+<tr>
+<td>CuteNews</td>
+<td><a href="/knowledge/uploads/#case-passage">passage</a></td>
+</tr>
+<tr>
+<td>CVE-2014-0476</td>
+<td><a href="/knowledge/uploads/#case-sickos-1-2">SickOs-1-2</a></td>
+</tr>
+<tr>
+<td>CVE-2019-12384</td>
+<td><a href="/knowledge/serialization/#case-time">time</a></td>
+</tr>
+<tr>
+<td>CVE-2019-18277</td>
+<td><a href="/knowledge/cloud/#case-sink">sink</a></td>
+</tr>
+<tr>
+<td>CVE-2019-20933</td>
+<td><a href="/knowledge/source/#case-devzat">devzat</a></td>
+</tr>
+<tr>
+<td>CVE-2019-6447</td>
+<td><a href="/knowledge/client/#case-explore">explore</a></td>
+</tr>
+<tr>
+<td>CVE-2020-14321</td>
+<td><a href="/knowledge/xss/#case-schooled">schooled</a></td>
+</tr>
+<tr>
+<td>CVE-2020-8831</td>
+<td><a href="/knowledge/kernel/#case-hackthebox-rope2-getroot">hackthebox-rope2-getroot</a></td>
+</tr>
+<tr>
+<td>CVE-2021-1675</td>
+<td><a href="/knowledge/windows/#case-driver">driver</a></td>
+</tr>
+<tr>
+<td>CVE-2021-21311</td>
+<td><a href="/knowledge/ssrf/#case-admirertoo">admirertoo</a></td>
+</tr>
+<tr>
+<td>CVE-2021-22204</td>
+<td><a href="/knowledge/client/#case-meta">meta</a></td>
+</tr>
+<tr>
+<td>CVE-2021-27928</td>
+<td><a href="/knowledge/database/#case-shibboleth">shibboleth</a></td>
+</tr>
+<tr>
+<td>CVE-2021-3129</td>
+<td><a href="/knowledge/cms-misc/#case-horizontall">horizontall</a></td>
+</tr>
+<tr>
+<td>CVE-2021-3156</td>
+<td><a href="/knowledge/client/#case-routerspace">routerspace</a></td>
+</tr>
+<tr>
+<td>CVE-2021-32099</td>
+<td><a href="/knowledge/queries/#case-pandora">pandora</a></td>
+</tr>
+<tr>
+<td>CVE-2021-39174</td>
+<td><a href="/knowledge/client/#case-catch">catch</a></td>
+</tr>
+<tr>
+<td>CVE-2021-44228</td>
+<td><a href="/knowledge/serialization/#case-log4j">log4j</a></td>
+</tr>
+<tr>
+<td>CVE-2022-26923</td>
+<td><a href="/knowledge/adcs/#case-coder">coder</a></td>
+</tr>
+<tr>
+<td>CVE-2022-42919</td>
+<td><a href="/knowledge/php-runtime/#case-2023-chunqiubei-spring-php-again">2023-chunqiubei-spring-php-again</a></td>
+</tr>
+<tr>
+<td>D-Bus</td>
+<td><a href="/knowledge/uploads/#case-passage">passage</a></td>
+</tr>
+<tr>
+<td>DCSync</td>
+<td><a href="/knowledge/kerberos/#case-blazorized">blazorized</a></td>
+</tr>
+<tr>
+<td>Device Portal</td>
+<td><a href="/knowledge/client/#case-omni">omni</a></td>
+</tr>
+<tr>
+<td>Dirty COW</td>
+<td><a href="/knowledge/cms-drupal/#case-lampiao-1">Lampiao-1</a></td>
+</tr>
+<tr>
+<td>disable_functions</td>
+<td><a href="/knowledge/php-runtime/#case-compromised">compromised</a></td>
+</tr>
+<tr>
+<td>distcc</td>
+<td><a href="/knowledge/middleware/#case-vulnos-1">vulnos-1</a></td>
+</tr>
+<tr>
+<td>DNS</td>
+<td><a href="/knowledge/services/#case-dynstr">dynstr</a> · <a href="/knowledge/delegation/#case-intelligence">intelligence</a></td>
+</tr>
+<tr>
+<td>doas</td>
+<td><a href="/knowledge/ssti/#case-luanne">luanne</a></td>
+</tr>
+<tr>
+<td>Docker</td>
+<td><a href="/knowledge/serialization/#case-feline">feline</a> · <a href="/knowledge/containers/#case-ready">ready</a> · <a href="/knowledge/containers/#case-reddish">reddish</a> · <a href="/knowledge/cloud/#case-stacked">stacked</a> · <a href="/knowledge/containers/#case-talkactive">talkactive</a></td>
+</tr>
+<tr>
+<td>Drupal</td>
+<td><a href="/knowledge/cms-drupal/#case-armageddon">Armageddon</a> · <a href="/knowledge/cms-drupal/#case-hacknos-os-hacknos-1">hackNos-Os-hackNos-1</a> · <a href="/knowledge/cms-drupal/#case-lampiao-1">Lampiao-1</a> · <a href="/knowledge/middleware/#case-vulnos-1">vulnos-1</a></td>
+</tr>
+<tr>
+<td>DynamoDB</td>
+<td><a href="/knowledge/cloud/#case-bucket">bucket</a></td>
+</tr>
+<tr>
+<td>ECB</td>
+<td><a href="/knowledge/identity/#case-fingerprint">fingerprint</a></td>
+</tr>
+<tr>
+<td>Egghunter</td>
+<td><a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr">hack-the-box-bigheadwebsvr</a> · <a href="/knowledge/rop/#case-hunting">hunting</a></td>
+</tr>
+<tr>
+<td>Electron</td>
+<td><a href="/knowledge/client/#case-atom">Atom</a></td>
+</tr>
+<tr>
+<td>EncFS</td>
+<td><a href="/knowledge/queries/#case-unbalanced">Unbalanced</a></td>
+</tr>
+<tr>
+<td>ESC1</td>
+<td><a href="/knowledge/adcs/#case-htb-authority">htb-authority</a></td>
+</tr>
+<tr>
+<td>ESC13</td>
+<td><a href="/knowledge/adcs-advanced/#case-mist">mist</a></td>
+</tr>
+<tr>
+<td>ESC7</td>
+<td><a href="/knowledge/adcs/#case-htb-manager">htb-manager</a></td>
+</tr>
+<tr>
+<td>eval</td>
+<td><a href="/knowledge/xml/#case-bountyhunter">bountyhunter</a></td>
+</tr>
+<tr>
+<td>ExifTool</td>
+<td><a href="/knowledge/client/#case-meta">meta</a> · <a href="/knowledge/identity/#case-overflow">overflow</a></td>
+</tr>
+<tr>
+<td>Exim</td>
+<td><a href="/knowledge/files/#case-pluck-1">pluck-1</a></td>
+</tr>
+<tr>
+<td>Flask</td>
+<td><a href="/knowledge/ssti/#case-bolt">bolt</a></td>
+</tr>
+<tr>
+<td>FreeBSD</td>
+<td><a href="/knowledge/xss/#case-schooled">schooled</a></td>
+</tr>
+<tr>
+<td>FTP</td>
+<td><a href="/knowledge/services/#case-ha-chanakya">HA-Chanakya</a> · <a href="/knowledge/linux/#case-sunset-1">sunset-1</a> · <a href="/knowledge/linux/#case-tr0ll-1">Tr0ll-1</a></td>
+</tr>
+<tr>
+<td>GC</td>
+<td><a href="/knowledge/queries/#case-ciscn-2022-ezpentest">ciscn-2022-ezpentest</a></td>
+</tr>
+<tr>
+<td>gdbserver</td>
+<td><a href="/knowledge/debug/#case-backdoor">backdoor</a></td>
+</tr>
+<tr>
+<td>Git</td>
+<td><a href="/knowledge/source/#case-devzat">devzat</a> · <a href="/knowledge/source/#case-secret">secret</a> · <a href="/knowledge/source/#case-timing">timing</a></td>
+</tr>
+<tr>
+<td>GitLab</td>
+<td><a href="/knowledge/source/#case-laboratory">laboratory</a> · <a href="/knowledge/containers/#case-ready">ready</a></td>
+</tr>
+<tr>
+<td>gMSA</td>
+<td><a href="/knowledge/delegation/#case-intelligence">intelligence</a> · <a href="/knowledge/adcs-advanced/#case-mist">mist</a> · <a href="/knowledge/delegation/#case-rebound">rebound</a> · <a href="/knowledge/kerberos/#case-search">search</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td><a href="/knowledge/source/#case-devzat">devzat</a> · <a href="/knowledge/serialization/#case-ophiuchi">Ophiuchi</a></td>
+</tr>
+<tr>
+<td>gopher</td>
+<td><a href="/knowledge/ssrf/#case-laser">laser</a></td>
+</tr>
+<tr>
+<td>GraphQL</td>
+<td><a href="/knowledge/serialization/#case-cereal">cereal</a></td>
+</tr>
+<tr>
+<td>gRPC</td>
+<td><a href="/knowledge/ssrf/#case-laser">laser</a></td>
+</tr>
+<tr>
+<td>GTFOBins</td>
+<td><a href="/knowledge/linux/#case-ha-dhanush">HA-Dhanush</a> · <a href="/knowledge/linux/#case-sunset-1">sunset-1</a> · <a href="/knowledge/middleware/#case-traverxec">Traverxec</a></td>
+</tr>
+<tr>
+<td>HMAC</td>
+<td><a href="/knowledge/forensics/#case-decrypt-cs-traffic">decrypt-cs-traffic</a></td>
+</tr>
+<tr>
+<td>HQL</td>
+<td><a href="/knowledge/identity/#case-fingerprint">fingerprint</a></td>
+</tr>
+<tr>
+<td>HTTP PUT</td>
+<td><a href="/knowledge/uploads/#case-sickos-1-2">SickOs-1-2</a></td>
+</tr>
+<tr>
+<td>IDA</td>
+<td><a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr-2">hack-the-box-bigheadwebsvr-2</a></td>
+</tr>
+<tr>
+<td>ImageMagick</td>
+<td><a href="/knowledge/client/#case-meta">meta</a></td>
+</tr>
+<tr>
+<td>InfluxDB</td>
+<td><a href="/knowledge/source/#case-devzat">devzat</a></td>
+</tr>
+<tr>
+<td>IPv6</td>
+<td><a href="/knowledge/kerberos/#case-apt">apt</a></td>
+</tr>
+<tr>
+<td>Jackson</td>
+<td><a href="/knowledge/serialization/#case-time">time</a></td>
+</tr>
+<tr>
+<td>Java</td>
+<td><a href="/knowledge/serialization/#case-feline">feline</a> · <a href="/knowledge/serialization/#case-log4j">log4j</a> · <a href="/knowledge/serialization/#case-ophiuchi">Ophiuchi</a></td>
+</tr>
+<tr>
+<td>JDWP</td>
+<td><a href="/knowledge/debug/#case-mimic-ssrf">mimic-ssrf</a></td>
+</tr>
+<tr>
+<td>Jinja2</td>
+<td><a href="/knowledge/ssti/#case-doctor">doctor</a> · <a href="/knowledge/ssti/#case-mimic-ssti">mimic-ssti</a></td>
+</tr>
+<tr>
+<td>JIT</td>
+<td><a href="/knowledge/v8/#case-exploiting-the-math-expm1-typing-bug-in-v8">Exploiting-the-Math-expm1-typing-bug-in-V8</a></td>
+</tr>
+<tr>
+<td>JNDI</td>
+<td><a href="/knowledge/serialization/#case-log4j">log4j</a></td>
+</tr>
+<tr>
+<td>JOP</td>
+<td><a href="/knowledge/rop/#case-noreturn">noreturn</a></td>
+</tr>
+<tr>
+<td>Junction</td>
+<td><a href="/knowledge/windows/#case-proper">proper</a></td>
+</tr>
+<tr>
+<td>JWT</td>
+<td><a href="/knowledge/identity/#case-breadcrumbs">breadcrumbs</a> · <a href="/knowledge/identity/#case-fingerprint">fingerprint</a> · <a href="/knowledge/source/#case-secret">secret</a> · <a href="/knowledge/identity/#case-thenotebook">TheNotebook</a> · <a href="/knowledge/files/#case-unicode">unicode</a></td>
+</tr>
+<tr>
+<td>KASLR</td>
+<td><a href="/knowledge/kernel/#case-hackthebox-rope2-getroot">hackthebox-rope2-getroot</a></td>
+</tr>
+<tr>
+<td>Kerberos</td>
+<td><a href="/knowledge/kerberos/#case-apt">apt</a> · <a href="/knowledge/kerberos/#case-blazorized">blazorized</a> · <a href="/knowledge/delegation/#case-htb-absolute">htb-absolute</a> · <a href="/knowledge/delegation/#case-intelligence">intelligence</a> · <a href="/knowledge/windows/#case-pivotapi">pivotapi</a> · <a href="/knowledge/delegation/#case-rebound">rebound</a> · <a href="/knowledge/kerberos/#case-search">search</a> · <a href="/knowledge/services/#case-tentacle">tentacle</a></td>
+</tr>
+<tr>
+<td>keytab</td>
+<td><a href="/knowledge/services/#case-tentacle">tentacle</a></td>
+</tr>
+<tr>
+<td>KMS</td>
+<td><a href="/knowledge/cloud/#case-sink">sink</a></td>
+</tr>
+<tr>
+<td>KrbRelay</td>
+<td><a href="/knowledge/delegation/#case-htb-absolute">htb-absolute</a></td>
+</tr>
+<tr>
+<td>Kubernetes</td>
+<td><a href="/knowledge/containers/#case-unobtainium">Unobtainium</a></td>
+</tr>
+<tr>
+<td>LAPS</td>
+<td><a href="/knowledge/kerberos/#case-timelapse">timelapse</a></td>
+</tr>
+<tr>
+<td>Laravel</td>
+<td><a href="/knowledge/identity/#case-academy">academy</a> · <a href="/knowledge/cms-misc/#case-horizontall">horizontall</a></td>
+</tr>
+<tr>
+<td>Latte</td>
+<td><a href="/knowledge/ssti/#case-mimic-ssti">mimic-ssti</a></td>
+</tr>
+<tr>
+<td>LFI</td>
+<td><a href="/knowledge/debug/#case-backdoor">backdoor</a> · <a href="/knowledge/identity/#case-breadcrumbs">breadcrumbs</a> · <a href="/knowledge/files/#case-pikaboo">pikaboo</a> · <a href="/knowledge/files/#case-pluck-1">pluck-1</a> · <a href="/knowledge/cms-wordpress/#case-stapler-1">Stapler-1</a> · <a href="/knowledge/source/#case-timing">timing</a> · <a href="/knowledge/files/#case-w1r3s-1-0-1">W1R3S-1-0-1</a></td>
+</tr>
+<tr>
+<td>libc</td>
+<td><a href="/knowledge/format/#case-format">format</a> · <a href="/knowledge/heap/#case-hackthebox-rope2-rshell-exploit">hackthebox-rope2-rshell-exploit</a></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td><a href="/knowledge/containers/#case-cynix">cynix</a></td>
+</tr>
+<tr>
+<td>Linux内核</td>
+<td><a href="/knowledge/kernel/#case-hackthebox-rope2-getroot">hackthebox-rope2-getroot</a> · <a href="/knowledge/kernel/#case-smasher2">Smasher2</a></td>
+</tr>
+<tr>
+<td>LocalStack</td>
+<td><a href="/knowledge/cloud/#case-stacked">stacked</a></td>
+</tr>
+<tr>
+<td>Log4Shell</td>
+<td><a href="/knowledge/serialization/#case-log4j">log4j</a></td>
+</tr>
+<tr>
+<td>Lua</td>
+<td><a href="/knowledge/ssti/#case-luanne">luanne</a></td>
+</tr>
+<tr>
+<td>LXD</td>
+<td><a href="/knowledge/containers/#case-cynix">cynix</a> · <a href="/knowledge/services/#case-wintermute-1">WinterMute-1</a></td>
+</tr>
+<tr>
+<td>MariaDB</td>
+<td><a href="/knowledge/database/#case-shibboleth">shibboleth</a></td>
+</tr>
+<tr>
+<td>Mattermost</td>
+<td><a href="/knowledge/credentials/#case-delivery">delivery</a></td>
+</tr>
+<tr>
+<td>Meterpreter</td>
+<td><a href="/knowledge/forensics/#case-msf-meterpreter-traffic-decrypt">msf-meterpreter-traffic-decrypt</a></td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td><a href="/knowledge/queries/#case-mango">mango</a> · <a href="/knowledge/containers/#case-talkactive">talkactive</a></td>
+</tr>
+<tr>
+<td>Moodle</td>
+<td><a href="/knowledge/cms-misc/#case-goldeneye-1">GoldenEye-1</a> · <a href="/knowledge/xss/#case-schooled">schooled</a></td>
+</tr>
+<tr>
+<td>mprotect</td>
+<td><a href="/knowledge/rop/#case-mprotect-and-shellcode">mprotect-and-shellcode</a> · <a href="/knowledge/rop/#case-sick-rop">sick-rop</a></td>
+</tr>
+<tr>
+<td>MSSQL</td>
+<td><a href="/knowledge/adcs/#case-escape">escape</a> · <a href="/knowledge/windows/#case-fighter">fighter</a> · <a href="/knowledge/adcs/#case-htb-manager">htb-manager</a></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><a href="/knowledge/queries/#case-hackademic-rtb2">Hackademic-RTB2</a> · <a href="/knowledge/queries/#case-kioptrix4">Kioptrix4</a> · <a href="/knowledge/linux/#case-nullbyte-1">NullByte-1</a> · <a href="/knowledge/cms-misc/#case-pwnos2-0-pre-release">pWnOS2-0-Pre-Release</a> · <a href="/knowledge/database/#case-raven-1">Raven-1</a> · <a href="/knowledge/database/#case-raven-2">Raven-2</a> · <a href="/knowledge/cms-wordpress/#case-stapler-1">Stapler-1</a></td>
+</tr>
+<tr>
+<td>NFS</td>
+<td><a href="/knowledge/services/#case-hacklab-vulnix">HackLAB-Vulnix</a></td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td><a href="/knowledge/containers/#case-unobtainium">Unobtainium</a></td>
+</tr>
+<tr>
+<td>NoSQL注入</td>
+<td><a href="/knowledge/queries/#case-mango">mango</a></td>
+</tr>
+<tr>
+<td>Nostromo</td>
+<td><a href="/knowledge/middleware/#case-traverxec">Traverxec</a></td>
+</tr>
+<tr>
+<td>NSClient++</td>
+<td><a href="/knowledge/windows/#case-servmon">ServMon</a></td>
+</tr>
+<tr>
+<td>NTLM</td>
+<td><a href="/knowledge/kerberos/#case-apt">apt</a> · <a href="/knowledge/forensics/#case-decrypt-winrm-traffic">decrypt-winrm-traffic</a> · <a href="/knowledge/windows/#case-driver">driver</a> · <a href="/knowledge/adcs/#case-escape">escape</a> · <a href="/knowledge/windows/#case-reel2">reel2</a></td>
+</tr>
+<tr>
+<td>NX</td>
+<td><a href="/knowledge/rop/#case-mprotect-and-shellcode">mprotect-and-shellcode</a></td>
+</tr>
+<tr>
+<td>OFBiz</td>
+<td><a href="/knowledge/containers/#case-monitors">monitors</a></td>
+</tr>
+<tr>
+<td>OPcache</td>
+<td><a href="/knowledge/php-runtime/#case-2023-chunqiubei-spring-php-again">2023-chunqiubei-spring-php-again</a></td>
+</tr>
+<tr>
+<td>OpenDocMan</td>
+<td><a href="/knowledge/queries/#case-vulnos-2">vulnos-2</a></td>
+</tr>
+<tr>
+<td>OpenSMTPD</td>
+<td><a href="/knowledge/services/#case-tentacle">tentacle</a></td>
+</tr>
+<tr>
+<td>OpenTSDB</td>
+<td><a href="/knowledge/ssrf/#case-admirertoo">admirertoo</a></td>
+</tr>
+<tr>
+<td>osTicket</td>
+<td><a href="/knowledge/cms-misc/#case-os-hacknos-3">Os-hackNos-3</a></td>
+</tr>
+<tr>
+<td>OverlayFS</td>
+<td><a href="/knowledge/cms-misc/#case-goldeneye-1">GoldenEye-1</a> · <a href="/knowledge/kernel/#case-lord-of-the-root-1-0-1">Lord-Of-The-Root-1-0-1</a> · <a href="/knowledge/linux/#case-tr0ll-1">Tr0ll-1</a> · <a href="/knowledge/queries/#case-vulnos-2">vulnos-2</a></td>
+</tr>
+<tr>
+<td>OWA</td>
+<td><a href="/knowledge/windows/#case-reel2">reel2</a></td>
+</tr>
+<tr>
+<td>Padding Oracle</td>
+<td><a href="/knowledge/identity/#case-overflow">overflow</a></td>
+</tr>
+<tr>
+<td>PAM</td>
+<td><a href="/knowledge/php-runtime/#case-compromised">compromised</a></td>
+</tr>
+<tr>
+<td>PassTheCert</td>
+<td><a href="/knowledge/adcs/#case-htb-authority">htb-authority</a></td>
+</tr>
+<tr>
+<td>PATH</td>
+<td><a href="/knowledge/source/#case-laboratory">laboratory</a> · <a href="/knowledge/linux/#case-nullbyte-1">NullByte-1</a> · <a href="/knowledge/identity/#case-previse">previse</a> · <a href="/knowledge/debug/#case-static">static</a></td>
+</tr>
+<tr>
+<td>PCAP</td>
+<td><a href="/knowledge/linux/#case-cap">cap</a> · <a href="/knowledge/forensics/#case-decrypt-cs-traffic">decrypt-cs-traffic</a> · <a href="/knowledge/forensics/#case-decrypt-winrm-traffic">decrypt-winrm-traffic</a> · <a href="/knowledge/services/#case-ha-chanakya">HA-Chanakya</a></td>
+</tr>
+<tr>
+<td>Perl</td>
+<td><a href="/knowledge/files/#case-pikaboo">pikaboo</a></td>
+</tr>
+<tr>
+<td>PGP</td>
+<td><a href="/knowledge/ssti/#case-bolt">bolt</a></td>
+</tr>
+<tr>
+<td>PHP</td>
+<td><a href="/knowledge/php-runtime/#case-2023-chunqiubei-spring-php-again">2023-chunqiubei-spring-php-again</a> · <a href="/knowledge/queries/#case-ciscn-2022-ezpentest">ciscn-2022-ezpentest</a> · <a href="/knowledge/php-runtime/#case-compromised">compromised</a> · <a href="/knowledge/php-runtime/#case-knife">knife</a> · <a href="/knowledge/files/#case-pluck-1">pluck-1</a> · <a href="/knowledge/serialization/#case-tenet">tenet</a> · <a href="/knowledge/serialization/#case-unserialize">unserialize</a> · <a href="/knowledge/uploads/#case-vulnhub-drunk-admin-web-hacking-challenge-1">vulnhub-Drunk-Admin-Web-Hacking-Challenge-1</a></td>
+</tr>
+<tr>
+<td>PHP-FPM</td>
+<td><a href="/knowledge/debug/#case-static">static</a></td>
+</tr>
+<tr>
+<td>PHPMailer</td>
+<td><a href="/knowledge/database/#case-raven-1">Raven-1</a> · <a href="/knowledge/database/#case-raven-2">Raven-2</a></td>
+</tr>
+<tr>
+<td>phpMyAdmin</td>
+<td><a href="/knowledge/queries/#case-hackademic-rtb2">Hackademic-RTB2</a></td>
+</tr>
+<tr>
+<td>PHPUnit</td>
+<td><a href="/knowledge/source/#case-undetected">undetected</a></td>
+</tr>
+<tr>
+<td>PIE</td>
+<td><a href="/knowledge/format/#case-format">format</a> · <a href="/knowledge/format/#case-what-dose-the-f-say">what-dose-the-f-say</a></td>
+</tr>
+<tr>
+<td>pip</td>
+<td><a href="/knowledge/pipelines/#case-sneakymailer">SneakyMailer</a> · <a href="/knowledge/linux/#case-wtf-1">WTF-1</a></td>
+</tr>
+<tr>
+<td>POP链</td>
+<td><a href="/knowledge/queries/#case-ciscn-2022-ezpentest">ciscn-2022-ezpentest</a> · <a href="/knowledge/serialization/#case-unserialize">unserialize</a></td>
+</tr>
+<tr>
+<td>PowerShell</td>
+<td><a href="/knowledge/windows/#case-acute">acute</a> · <a href="/knowledge/client/#case-omni">omni</a> · <a href="/knowledge/windows/#case-reel2">reel2</a></td>
+</tr>
+<tr>
+<td>PrintNightmare</td>
+<td><a href="/knowledge/windows/#case-driver">driver</a></td>
+</tr>
+<tr>
+<td>PrintSpoofer</td>
+<td><a href="/knowledge/windows/#case-pivotapi">pivotapi</a></td>
+</tr>
+<tr>
+<td>PyPI</td>
+<td><a href="/knowledge/pipelines/#case-sneakymailer">SneakyMailer</a></td>
+</tr>
+<tr>
+<td>Python</td>
+<td><a href="/knowledge/xml/#case-bountyhunter">bountyhunter</a> · <a href="/knowledge/ssrf/#case-forge">forge</a> · <a href="/knowledge/files/#case-unicode">unicode</a> · <a href="/knowledge/credentials/#case-view2akill">View2aKill</a> · <a href="/knowledge/queries/#case-writer">writer</a></td>
+</tr>
+<tr>
+<td>QEMU</td>
+<td><a href="/knowledge/stack/#case-antidote">antidote</a></td>
+</tr>
+<tr>
+<td>RBCD</td>
+<td><a href="/knowledge/delegation/#case-rebound">rebound</a></td>
+</tr>
+<tr>
+<td>Redis</td>
+<td><a href="/knowledge/client/#case-atom">Atom</a> · <a href="/knowledge/containers/#case-reddish">reddish</a></td>
+</tr>
+<tr>
+<td>ret2csu</td>
+<td><a href="/knowledge/stack/#case-antidote">antidote</a></td>
+</tr>
+<tr>
+<td>ret2libc</td>
+<td><a href="/knowledge/format/#case-bad-grades">bad-grades</a> · <a href="/knowledge/format/#case-echoland">echoland</a> · <a href="/knowledge/rop/#case-pwn-restaurant">pwn-restaurant</a> · <a href="/knowledge/format/#case-what-dose-the-f-say">what-dose-the-f-say</a></td>
+</tr>
+<tr>
+<td>Rocket.Chat</td>
+<td><a href="/knowledge/containers/#case-talkactive">talkactive</a></td>
+</tr>
+<tr>
+<td>ROP</td>
+<td><a href="/knowledge/stack/#case-antidote">antidote</a> · <a href="/knowledge/rop/#case-bin-sh-via-syscall">bin-sh-via-syscall</a> · <a href="/knowledge/kernel/#case-hackthebox-rope2-getroot">hackthebox-rope2-getroot</a> · <a href="/knowledge/rop/#case-mprotect-and-shellcode">mprotect-and-shellcode</a> · <a href="/knowledge/rop/#case-pwn-restaurant">pwn-restaurant</a> · <a href="/knowledge/rop/#case-sick-rop">sick-rop</a></td>
+</tr>
+<tr>
+<td>rpdb</td>
+<td><a href="/knowledge/debug/#case-mimic-ssrf">mimic-ssrf</a></td>
+</tr>
+<tr>
+<td>RSA</td>
+<td><a href="/knowledge/forensics/#case-msf-meterpreter-traffic-decrypt">msf-meterpreter-traffic-decrypt</a></td>
+</tr>
+<tr>
+<td>rsync</td>
+<td><a href="/knowledge/cms-wordpress/#case-phoenix">phoenix</a> · <a href="/knowledge/containers/#case-reddish">reddish</a></td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td><a href="/knowledge/serialization/#case-jewel">jewel</a> · <a href="/knowledge/php-runtime/#case-knife">knife</a> · <a href="/knowledge/source/#case-laboratory">laboratory</a></td>
+</tr>
+<tr>
+<td>S3</td>
+<td><a href="/knowledge/cloud/#case-bucket">bucket</a></td>
+</tr>
+<tr>
+<td>Salsa20</td>
+<td><a href="/knowledge/crypto/#case-rauth">rauth</a></td>
+</tr>
+<tr>
+<td>SaltStack</td>
+<td><a href="/knowledge/serialization/#case-feline">feline</a></td>
+</tr>
+<tr>
+<td>SCF</td>
+<td><a href="/knowledge/windows/#case-driver">driver</a></td>
+</tr>
+<tr>
+<td>SeImpersonate</td>
+<td><a href="/knowledge/serialization/#case-cereal">cereal</a></td>
+</tr>
+<tr>
+<td>Shadow Credentials</td>
+<td><a href="/knowledge/delegation/#case-htb-absolute">htb-absolute</a> · <a href="/knowledge/adcs-advanced/#case-mist">mist</a></td>
+</tr>
+<tr>
+<td>Shellcode</td>
+<td><a href="/knowledge/stack/#case-brainpan-1">brainpan-1</a> · <a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr">hack-the-box-bigheadwebsvr</a> · <a href="/knowledge/rop/#case-hunting">hunting</a> · <a href="/knowledge/stack/#case-pwn-space">pwn-space</a></td>
+</tr>
+<tr>
+<td>Shellshock</td>
+<td><a href="/knowledge/stack/#case-tr0ll-2">Tr0ll-2</a></td>
+</tr>
+<tr>
+<td>Silver Ticket</td>
+<td><a href="/knowledge/adcs/#case-escape">escape</a></td>
+</tr>
+<tr>
+<td>snap</td>
+<td><a href="/knowledge/cms-drupal/#case-armageddon">Armageddon</a></td>
+</tr>
+<tr>
+<td>SNMP</td>
+<td><a href="/knowledge/queries/#case-pandora">pandora</a> · <a href="/knowledge/linux/#case-pit">pit</a></td>
+</tr>
+<tr>
+<td>Solr</td>
+<td><a href="/knowledge/ssrf/#case-laser">laser</a></td>
+</tr>
+<tr>
+<td>Splunk</td>
+<td><a href="/knowledge/ssti/#case-doctor">doctor</a></td>
+</tr>
+<tr>
+<td>SQLite</td>
+<td><a href="/knowledge/identity/#case-breadcrumbs">breadcrumbs</a></td>
+</tr>
+<tr>
+<td>SQL注入</td>
+<td><a href="/knowledge/queries/#case-ciscn-2022-ezpentest">ciscn-2022-ezpentest</a> · <a href="/knowledge/queries/#case-hackademic-rtb2">Hackademic-RTB2</a> · <a href="/knowledge/queries/#case-kioptrix4">Kioptrix4</a> · <a href="/knowledge/queries/#case-kvm3">KVM3</a> · <a href="/knowledge/queries/#case-lampsecurity-ctf6">LAMPSecurity-CTF6</a> · <a href="/knowledge/queries/#case-pandora">pandora</a> · <a href="/knowledge/cms-wordpress/#case-phoenix">phoenix</a> · <a href="/knowledge/queries/#case-skytower-1">SkyTower-1</a> · <a href="/knowledge/ssti/#case-spider">spider</a> · <a href="/knowledge/queries/#case-vulnos-2">vulnos-2</a> · <a href="/knowledge/queries/#case-writer">writer</a></td>
+</tr>
+<tr>
+<td>Squid</td>
+<td><a href="/knowledge/linux/#case-sickos-1-1">SickOs-1-1</a> · <a href="/knowledge/queries/#case-skytower-1">SkyTower-1</a> · <a href="/knowledge/services/#case-tentacle">tentacle</a> · <a href="/knowledge/queries/#case-unbalanced">Unbalanced</a></td>
+</tr>
+<tr>
+<td>SROP</td>
+<td><a href="/knowledge/rop/#case-sick-rop">sick-rop</a></td>
+</tr>
+<tr>
+<td>SSH</td>
+<td><a href="/knowledge/stack/#case-brainpan2">brainpan2</a> · <a href="/knowledge/xss/#case-crossfit">crossfit</a> · <a href="/knowledge/services/#case-ha-chanakya">HA-Chanakya</a> · <a href="/knowledge/linux/#case-ha-dhanush">HA-Dhanush</a> · <a href="/knowledge/files/#case-pluck-1">pluck-1</a> · <a href="/knowledge/middleware/#case-pwnos-1">pWnOS-1</a> · <a href="/knowledge/middleware/#case-traverxec">Traverxec</a></td>
+</tr>
+<tr>
+<td>SSRF</td>
+<td><a href="/knowledge/ssrf/#case-admirertoo">admirertoo</a> · <a href="/knowledge/ssrf/#case-forge">forge</a> · <a href="/knowledge/uploads/#case-love">love</a> · <a href="/knowledge/debug/#case-mimic-ssrf">mimic-ssrf</a></td>
+</tr>
+<tr>
+<td>SSTI</td>
+<td><a href="/knowledge/ssti/#case-bolt">bolt</a> · <a href="/knowledge/ssti/#case-doctor">doctor</a> · <a href="/knowledge/ssti/#case-mimic-ssti">mimic-ssti</a> · <a href="/knowledge/ssti/#case-spider">spider</a></td>
+</tr>
+<tr>
+<td>Strapi</td>
+<td><a href="/knowledge/cms-misc/#case-horizontall">horizontall</a></td>
+</tr>
+<tr>
+<td>Struts</td>
+<td><a href="/knowledge/services/#case-wintermute-1">WinterMute-1</a></td>
+</tr>
+<tr>
+<td>sudo</td>
+<td><a href="/knowledge/identity/#case-academy">academy</a> · <a href="/knowledge/cms-misc/#case-blunder">blunder</a> · <a href="/knowledge/linux/#case-djinn-1">djinn-1</a> · <a href="/knowledge/linux/#case-ha-dhanush">HA-Dhanush</a> · <a href="/knowledge/php-runtime/#case-knife">knife</a> · <a href="/knowledge/queries/#case-kvm3">KVM3</a> · <a href="/knowledge/pipelines/#case-sneakymailer">SneakyMailer</a> · <a href="/knowledge/files/#case-sunset-sunrise">sunset-sunrise</a> · <a href="/knowledge/linux/#case-wtf-1">WTF-1</a></td>
+</tr>
+<tr>
+<td>SUID</td>
+<td><a href="/knowledge/debug/#case-backdoor">backdoor</a> · <a href="/knowledge/cms-drupal/#case-hacknos-os-hacknos-1">hackNos-Os-hackNos-1</a> · <a href="/knowledge/uploads/#case-in-plain-sight-1-0-1">In-Plain-Sight-1-0-1</a> · <a href="/knowledge/kernel/#case-lord-of-the-root-1-0-1">Lord-Of-The-Root-1-0-1</a> · <a href="/knowledge/cms-wordpress/#case-mr-robot-1">Mr-Robot-1</a> · <a href="/knowledge/linux/#case-nullbyte-1">NullByte-1</a> · <a href="/knowledge/source/#case-secret">secret</a> · <a href="/knowledge/stack/#case-tr0ll-2">Tr0ll-2</a> · <a href="/knowledge/linux/#case-tr0ll-3">Tr0ll-3</a></td>
+</tr>
+<tr>
+<td>SVN</td>
+<td><a href="/knowledge/pipelines/#case-worker">worker</a></td>
+</tr>
+<tr>
+<td>SYS_MODULE</td>
+<td><a href="/knowledge/containers/#case-monitors">monitors</a></td>
+</tr>
+<tr>
+<td>tcache</td>
+<td><a href="/knowledge/heap/#case-hackthebox-rope2-rshell-exploit">hackthebox-rope2-rshell-exploit</a> · <a href="/knowledge/heap/#case-toxin">toxin</a></td>
+</tr>
+<tr>
+<td>TLV</td>
+<td><a href="/knowledge/forensics/#case-msf-meterpreter-traffic-decrypt">msf-meterpreter-traffic-decrypt</a></td>
+</tr>
+<tr>
+<td>Tomcat</td>
+<td><a href="/knowledge/pipelines/#case-seal">seal</a></td>
+</tr>
+<tr>
+<td>UAF</td>
+<td><a href="/knowledge/heap/#case-little-tommy">little-tommy</a> · <a href="/knowledge/kernel/#case-smasher2">Smasher2</a> · <a href="/knowledge/heap/#case-toxin">toxin</a></td>
+</tr>
+<tr>
+<td>udev</td>
+<td><a href="/knowledge/queries/#case-lampsecurity-ctf6">LAMPSecurity-CTF6</a></td>
+</tr>
+<tr>
+<td>UDF</td>
+<td><a href="/knowledge/php-runtime/#case-compromised">compromised</a> · <a href="/knowledge/queries/#case-kioptrix4">Kioptrix4</a> · <a href="/knowledge/kernel/#case-lord-of-the-root-1-0-1">Lord-Of-The-Root-1-0-1</a> · <a href="/knowledge/database/#case-raven-1">Raven-1</a> · <a href="/knowledge/database/#case-raven-2">Raven-2</a></td>
+</tr>
+<tr>
+<td>UID</td>
+<td><a href="/knowledge/services/#case-hacklab-vulnix">HackLAB-Vulnix</a></td>
+</tr>
+<tr>
+<td>Unicode</td>
+<td><a href="/knowledge/files/#case-unicode">unicode</a></td>
+</tr>
+<tr>
+<td>Upstart</td>
+<td><a href="/knowledge/source/#case-spectra">spectra</a></td>
+</tr>
+<tr>
+<td>V8</td>
+<td><a href="/knowledge/v8/#case-chrome-browserv8-pwn">chrome-browserv8-pwn</a> · <a href="/knowledge/v8/#case-exploiting-the-math-expm1-typing-bug-in-v8">Exploiting-the-Math-expm1-typing-bug-in-V8</a></td>
+</tr>
+<tr>
+<td>Velocity</td>
+<td><a href="/knowledge/ssti/#case-mimic-ssti">mimic-ssti</a></td>
+</tr>
+<tr>
+<td>ViewState</td>
+<td><a href="/knowledge/identity/#case-perspective">Perspective</a></td>
+</tr>
+<tr>
+<td>WASM</td>
+<td><a href="/knowledge/serialization/#case-ophiuchi">Ophiuchi</a></td>
+</tr>
+<tr>
+<td>WCF</td>
+<td><a href="/knowledge/serialization/#case-sharp">sharp</a></td>
+</tr>
+<tr>
+<td>Webmin</td>
+<td><a href="/knowledge/middleware/#case-goatselinux-1">GoatseLinux-1</a> · <a href="/knowledge/middleware/#case-pwnos-1">pWnOS-1</a> · <a href="/knowledge/middleware/#case-vulnos-1">vulnos-1</a></td>
+</tr>
+<tr>
+<td>wget</td>
+<td><a href="/knowledge/cms-drupal/#case-hacknos-os-hacknos-1">hackNos-Os-hackNos-1</a> · <a href="/knowledge/source/#case-timing">timing</a></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr-2">hack-the-box-bigheadwebsvr-2</a> · <a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr">hack-the-box-bigheadwebsvr</a> · <a href="/knowledge/windows/#case-proper">proper</a></td>
+</tr>
+<tr>
+<td>Windows IoT</td>
+<td><a href="/knowledge/client/#case-omni">omni</a></td>
+</tr>
+<tr>
+<td>Wine</td>
+<td><a href="/knowledge/files/#case-sunset-sunrise">sunset-sunrise</a></td>
+</tr>
+<tr>
+<td>WinRM</td>
+<td><a href="/knowledge/forensics/#case-decrypt-winrm-traffic">decrypt-winrm-traffic</a> · <a href="/knowledge/kerberos/#case-timelapse">timelapse</a></td>
+</tr>
+<tr>
+<td>WordPress</td>
+<td><a href="/knowledge/cms-wordpress/#case-evm">evm</a> · <a href="/knowledge/cms-wordpress/#case-hackademic-rtb1">Hackademic-RTB1</a> · <a href="/knowledge/credentials/#case-hacknos-os-hacknos-2-1">hackNos-Os-hackNos-2-1</a> · <a href="/knowledge/uploads/#case-in-plain-sight-1-0-1">In-Plain-Sight-1-0-1</a> · <a href="/knowledge/cms-wordpress/#case-mr-robot-1">Mr-Robot-1</a> · <a href="/knowledge/cms-wordpress/#case-phoenix">phoenix</a> · <a href="/knowledge/source/#case-spectra">spectra</a> · <a href="/knowledge/cms-wordpress/#case-stapler-1">Stapler-1</a></td>
+</tr>
+<tr>
+<td>x86</td>
+<td><a href="/knowledge/rop/#case-bin-sh-via-syscall">bin-sh-via-syscall</a></td>
+</tr>
+<tr>
+<td>Xdebug</td>
+<td><a href="/knowledge/debug/#case-mimic-ssrf">mimic-ssrf</a> · <a href="/knowledge/debug/#case-static">static</a></td>
+</tr>
+<tr>
+<td>XPath</td>
+<td><a href="/knowledge/queries/#case-unbalanced">Unbalanced</a></td>
+</tr>
+<tr>
+<td>XSS</td>
+<td><a href="/knowledge/serialization/#case-cereal">cereal</a> · <a href="/knowledge/xss/#case-crossfit">crossfit</a> · <a href="/knowledge/identity/#case-perspective">Perspective</a> · <a href="/knowledge/xss/#case-schooled">schooled</a> · <a href="/knowledge/cloud/#case-stacked">stacked</a></td>
+</tr>
+<tr>
+<td>XXE</td>
+<td><a href="/knowledge/xml/#case-bountyhunter">bountyhunter</a> · <a href="/knowledge/ssti/#case-spider">spider</a></td>
+</tr>
+<tr>
+<td>YAML</td>
+<td><a href="/knowledge/serialization/#case-ophiuchi">Ophiuchi</a></td>
+</tr>
+<tr>
+<td>Zabbix</td>
+<td><a href="/knowledge/database/#case-shibboleth">shibboleth</a></td>
+</tr>
+<tr>
+<td>代码复用</td>
+<td><a href="/knowledge/rop/#case-noreturn">noreturn</a></td>
+</tr>
+<tr>
+<td>任意读写</td>
+<td><a href="/knowledge/v8/#case-chrome-browserv8-pwn">chrome-browserv8-pwn</a></td>
+</tr>
+<tr>
+<td>会话权限</td>
+<td><a href="/knowledge/windows/#case-acute">acute</a></td>
+</tr>
+<tr>
+<td>信息泄漏</td>
+<td><a href="/knowledge/format/#case-echoland">echoland</a> · <a href="/knowledge/format/#case-racecar">racecar</a></td>
+</tr>
+<tr>
+<td>内核</td>
+<td><a href="/knowledge/middleware/#case-goatselinux-1">GoatseLinux-1</a> · <a href="/knowledge/cms-wordpress/#case-hackademic-rtb1">Hackademic-RTB1</a> · <a href="/knowledge/cms-drupal/#case-lampiao-1">Lampiao-1</a> · <a href="/knowledge/cms-wordpress/#case-stapler-1">Stapler-1</a></td>
+</tr>
+<tr>
+<td>凭据复用</td>
+<td><a href="/knowledge/linux/#case-sickos-1-1">SickOs-1-1</a></td>
+</tr>
+<tr>
+<td>凭据泄露</td>
+<td><a href="/knowledge/identity/#case-academy">academy</a> · <a href="/knowledge/cms-wordpress/#case-evm">evm</a> · <a href="/knowledge/linux/#case-tr0ll-3">Tr0ll-3</a> · <a href="/knowledge/uploads/#case-vulnhub-jis-ctf-vulnupload">vulnhub-JIS-CTF-VulnUpload</a></td>
+</tr>
+<tr>
+<td>函数指针</td>
+<td><a href="/knowledge/stack/#case-brainpan-3">brainpan-3</a></td>
+</tr>
+<tr>
+<td>原型污染</td>
+<td><a href="/knowledge/containers/#case-unobtainium">Unobtainium</a></td>
+</tr>
+<tr>
+<td>反向代理</td>
+<td><a href="/knowledge/pipelines/#case-seal">seal</a></td>
+</tr>
+<tr>
+<td>反序列化</td>
+<td><a href="/knowledge/ssrf/#case-admirertoo">admirertoo</a> · <a href="/knowledge/serialization/#case-cereal">cereal</a> · <a href="/knowledge/serialization/#case-feline">feline</a> · <a href="/knowledge/serialization/#case-jewel">jewel</a> · <a href="/knowledge/source/#case-laboratory">laboratory</a> · <a href="/knowledge/serialization/#case-sharp">sharp</a> · <a href="/knowledge/serialization/#case-tenet">tenet</a> · <a href="/knowledge/serialization/#case-time">time</a> · <a href="/knowledge/serialization/#case-unserialize">unserialize</a></td>
+</tr>
+<tr>
+<td>取证</td>
+<td><a href="/knowledge/forensics/#case-decrypt-winrm-traffic">decrypt-winrm-traffic</a></td>
+</tr>
+<tr>
+<td>受限Shell</td>
+<td><a href="/knowledge/queries/#case-skytower-1">SkyTower-1</a></td>
+</tr>
+<tr>
+<td>后门分析</td>
+<td><a href="/knowledge/php-runtime/#case-knife">knife</a> · <a href="/knowledge/source/#case-undetected">undetected</a></td>
+</tr>
+<tr>
+<td>命令注入</td>
+<td><a href="/knowledge/stack/#case-brainpan2">brainpan2</a> · <a href="/knowledge/client/#case-catch">catch</a> · <a href="/knowledge/xss/#case-crossfit">crossfit</a> · <a href="/knowledge/linux/#case-djinn-1">djinn-1</a> · <a href="/knowledge/services/#case-dynstr">dynstr</a> · <a href="/knowledge/ssti/#case-luanne">luanne</a> · <a href="/knowledge/identity/#case-previse">previse</a> · <a href="/knowledge/client/#case-routerspace">routerspace</a> · <a href="/knowledge/pipelines/#case-scriptkiddie">ScriptKiddie</a></td>
+</tr>
+<tr>
+<td>响应侧信道</td>
+<td><a href="/knowledge/queries/#case-mango">mango</a></td>
+</tr>
+<tr>
+<td>堆利用</td>
+<td><a href="/knowledge/heap/#case-hackthebox-rope2-rshell-exploit">hackthebox-rope2-rshell-exploit</a> · <a href="/knowledge/heap/#case-little-tommy">little-tommy</a> · <a href="/knowledge/heap/#case-toxin">toxin</a></td>
+</tr>
+<tr>
+<td>堆溢出</td>
+<td><a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr-2">hack-the-box-bigheadwebsvr-2</a></td>
+</tr>
+<tr>
+<td>备份泄露</td>
+<td><a href="/knowledge/credentials/#case-hacknos-os-hacknos-2-1">hackNos-Os-hackNos-2-1</a> · <a href="/knowledge/source/#case-spectra">spectra</a> · <a href="/knowledge/credentials/#case-view2akill">View2aKill</a></td>
+</tr>
+<tr>
+<td>委派</td>
+<td><a href="/knowledge/delegation/#case-intelligence">intelligence</a></td>
+</tr>
+<tr>
+<td>字节序</td>
+<td><a href="/knowledge/format/#case-racecar">racecar</a> · <a href="/knowledge/crypto/#case-rauth">rauth</a></td>
+</tr>
+<tr>
+<td>容器逃逸</td>
+<td><a href="/knowledge/containers/#case-cynix">cynix</a> · <a href="/knowledge/containers/#case-monitors">monitors</a> · <a href="/knowledge/containers/#case-ready">ready</a> · <a href="/knowledge/identity/#case-thenotebook">TheNotebook</a></td>
+</tr>
+<tr>
+<td>密码审计</td>
+<td><a href="/knowledge/credentials/#case-delivery">delivery</a> · <a href="/knowledge/credentials/#case-hacknos-os-hacknos-2-1">hackNos-Os-hackNos-2-1</a> · <a href="/knowledge/cms-wordpress/#case-mr-robot-1">Mr-Robot-1</a> · <a href="/knowledge/linux/#case-sunset-1">sunset-1</a></td>
+</tr>
+<tr>
+<td>引用计数</td>
+<td><a href="/knowledge/kernel/#case-smasher2">Smasher2</a></td>
+</tr>
+<tr>
+<td>打印协议</td>
+<td><a href="/knowledge/ssrf/#case-laser">laser</a></td>
+</tr>
+<tr>
+<td>指针压缩</td>
+<td><a href="/knowledge/v8/#case-chrome-browserv8-pwn">chrome-browserv8-pwn</a></td>
+</tr>
+<tr>
+<td>文件上传</td>
+<td><a href="/knowledge/cms-misc/#case-blunder">blunder</a> · <a href="/knowledge/cms-wordpress/#case-evm">evm</a> · <a href="/knowledge/cms-wordpress/#case-hackademic-rtb1">Hackademic-RTB1</a> · <a href="/knowledge/uploads/#case-in-plain-sight-1-0-1">In-Plain-Sight-1-0-1</a> · <a href="/knowledge/uploads/#case-love">love</a> · <a href="/knowledge/cms-misc/#case-os-hacknos-3">Os-hackNos-3</a> · <a href="/knowledge/uploads/#case-passage">passage</a> · <a href="/knowledge/linux/#case-sickos-1-1">SickOs-1-1</a> · <a href="/knowledge/uploads/#case-vulnhub-drunk-admin-web-hacking-challenge-1">vulnhub-Drunk-Admin-Web-Hacking-Challenge-1</a> · <a href="/knowledge/uploads/#case-vulnhub-jis-ctf-vulnupload">vulnhub-JIS-CTF-VulnUpload</a></td>
+</tr>
+<tr>
+<td>文件权限</td>
+<td><a href="/knowledge/services/#case-dynstr">dynstr</a> · <a href="/knowledge/services/#case-hacklab-vulnix">HackLAB-Vulnix</a> · <a href="/knowledge/uploads/#case-vulnhub-jis-ctf-vulnupload">vulnhub-JIS-CTF-VulnUpload</a></td>
+</tr>
+<tr>
+<td>文件读取</td>
+<td><a href="/knowledge/middleware/#case-goatselinux-1">GoatseLinux-1</a> · <a href="/knowledge/files/#case-w1r3s-1-0-1">W1R3S-1-0-1</a></td>
+</tr>
+<tr>
+<td>无线取证</td>
+<td><a href="/knowledge/linux/#case-tr0ll-3">Tr0ll-3</a></td>
+</tr>
+<tr>
+<td>日志注入</td>
+<td><a href="/knowledge/files/#case-pikaboo">pikaboo</a></td>
+</tr>
+<tr>
+<td>更新机制</td>
+<td><a href="/knowledge/client/#case-atom">Atom</a></td>
+</tr>
+<tr>
+<td>栈溢出</td>
+<td><a href="/knowledge/stack/#case-brainpan-1">brainpan-1</a> · <a href="/knowledge/stack/#case-brainpan-3">brainpan-3</a> · <a href="/knowledge/stack/#case-brainpan2">brainpan2</a> · <a href="/knowledge/stack/#case-pwn-space">pwn-space</a> · <a href="/knowledge/stack/#case-tr0ll-2">Tr0ll-2</a></td>
+</tr>
+<tr>
+<td>格式化字符串</td>
+<td><a href="/knowledge/format/#case-bad-grades">bad-grades</a> · <a href="/knowledge/stack/#case-brainpan-3">brainpan-3</a> · <a href="/knowledge/format/#case-echoland">echoland</a> · <a href="/knowledge/format/#case-format">format</a> · <a href="/knowledge/format/#case-racecar">racecar</a> · <a href="/knowledge/heap/#case-toxin">toxin</a> · <a href="/knowledge/format/#case-what-dose-the-f-say">what-dose-the-f-say</a></td>
+</tr>
+<tr>
+<td>模糊测试</td>
+<td><a href="/knowledge/credentials/#case-view2akill">View2aKill</a></td>
+</tr>
+<tr>
+<td>短跳转</td>
+<td><a href="/knowledge/stack/#case-pwn-space">pwn-space</a></td>
+</tr>
+<tr>
+<td>竞态条件</td>
+<td><a href="/knowledge/windows/#case-proper">proper</a> · <a href="/knowledge/serialization/#case-tenet">tenet</a> · <a href="/knowledge/source/#case-timing">timing</a></td>
+</tr>
+<tr>
+<td>端口敲门</td>
+<td><a href="/knowledge/kernel/#case-lord-of-the-root-1-0-1">Lord-Of-The-Root-1-0-1</a></td>
+</tr>
+<tr>
+<td>端口转发</td>
+<td><a href="/knowledge/containers/#case-reddish">reddish</a> · <a href="/knowledge/windows/#case-servmon">ServMon</a> · <a href="/knowledge/services/#case-wintermute-1">WinterMute-1</a></td>
+</tr>
+<tr>
+<td>符号链接</td>
+<td><a href="/knowledge/windows/#case-reel2">reel2</a></td>
+</tr>
+<tr>
+<td>类型混淆</td>
+<td><a href="/knowledge/v8/#case-exploiting-the-math-expm1-typing-bug-in-v8">Exploiting-the-Math-expm1-typing-bug-in-V8</a></td>
+</tr>
+<tr>
+<td>系统调用</td>
+<td><a href="/knowledge/rop/#case-bin-sh-via-syscall">bin-sh-via-syscall</a> · <a href="/knowledge/rop/#case-hunting">hunting</a> · <a href="/knowledge/rop/#case-noreturn">noreturn</a></td>
+</tr>
+<tr>
+<td>编码</td>
+<td><a href="/knowledge/xml/#case-bountyhunter">bountyhunter</a> · <a href="/knowledge/uploads/#case-vulnhub-drunk-admin-web-hacking-challenge-1">vulnhub-Drunk-Admin-Web-Hacking-Challenge-1</a></td>
+</tr>
+<tr>
+<td>网络配置</td>
+<td><a href="/knowledge/linux/#case-wtf-1">WTF-1</a></td>
+</tr>
+<tr>
+<td>计划任务</td>
+<td><a href="/knowledge/xss/#case-crossfit">crossfit</a> · <a href="/knowledge/linux/#case-pit">pit</a> · <a href="/knowledge/pipelines/#case-scriptkiddie">ScriptKiddie</a> · <a href="/knowledge/linux/#case-tr0ll-1">Tr0ll-1</a></td>
+</tr>
+<tr>
+<td>访问控制</td>
+<td><a href="/knowledge/identity/#case-academy">academy</a> · <a href="/knowledge/linux/#case-cap">cap</a> · <a href="/knowledge/identity/#case-fingerprint">fingerprint</a> · <a href="/knowledge/identity/#case-previse">previse</a> · <a href="/knowledge/identity/#case-thenotebook">TheNotebook</a></td>
+</tr>
+<tr>
+<td>证书</td>
+<td><a href="/knowledge/kerberos/#case-search">search</a> · <a href="/knowledge/kerberos/#case-timelapse">timelapse</a></td>
+</tr>
+<tr>
+<td>请求走私</td>
+<td><a href="/knowledge/cloud/#case-sink">sink</a></td>
+</tr>
+<tr>
+<td>调试</td>
+<td><a href="/knowledge/stack/#case-brainpan-1">brainpan-1</a></td>
+</tr>
+<tr>
+<td>越界访问</td>
+<td><a href="/knowledge/v8/#case-exploiting-the-math-expm1-typing-bug-in-v8">Exploiting-the-Math-expm1-typing-bug-in-V8</a></td>
+</tr>
+<tr>
+<td>路径穿越</td>
+<td><a href="/knowledge/files/#case-pikaboo">pikaboo</a> · <a href="/knowledge/middleware/#case-pwnos-1">pWnOS-1</a> · <a href="/knowledge/windows/#case-servmon">ServMon</a> · <a href="/knowledge/files/#case-sunset-sunrise">sunset-sunrise</a> · <a href="/knowledge/files/#case-unicode">unicode</a></td>
+</tr>
+<tr>
+<td>输入过滤</td>
+<td><a href="/knowledge/linux/#case-djinn-1">djinn-1</a></td>
+</tr>
+<tr>
+<td>进程权限</td>
+<td><a href="/knowledge/queries/#case-lampsecurity-ctf6">LAMPSecurity-CTF6</a></td>
+</tr>
+<tr>
+<td>逆向</td>
+<td><a href="/knowledge/identity/#case-breadcrumbs">breadcrumbs</a> · <a href="/knowledge/windows/#case-fighter">fighter</a> · <a href="/knowledge/identity/#case-overflow">overflow</a> · <a href="/knowledge/crypto/#case-rauth">rauth</a> · <a href="/knowledge/serialization/#case-sharp">sharp</a> · <a href="/knowledge/source/#case-undetected">undetected</a></td>
+</tr>
+<tr>
+<td>邮件</td>
+<td><a href="/knowledge/cms-misc/#case-goldeneye-1">GoldenEye-1</a> · <a href="/knowledge/pipelines/#case-sneakymailer">SneakyMailer</a> · <a href="/knowledge/queries/#case-writer">writer</a></td>
+</tr>
+<tr>
+<td>邮箱验证</td>
+<td><a href="/knowledge/credentials/#case-delivery">delivery</a></td>
+</tr>
+<tr>
+<td>配置泄露</td>
+<td><a href="/knowledge/cms-drupal/#case-armageddon">Armageddon</a> · <a href="/knowledge/cms-misc/#case-pwnos2-0-pre-release">pWnOS2-0-Pre-Release</a></td>
+</tr>
+<tr>
+<td>重定向</td>
+<td><a href="/knowledge/ssrf/#case-forge">forge</a></td>
+</tr>
+<tr>
+<td>驱动漏洞</td>
+<td><a href="/knowledge/windows/#case-fighter">fighter</a></td>
+</tr>
+</tbody></table>
+</details>
+
+<p><a id="sources"></a></p>
+<h2 id="原案例对照"><a href="#原案例对照" class="headerlink" title="原案例对照"></a>原案例对照</h2><table>
+<thead>
+<tr>
+<th>原记录</th>
+<th>分析入口</th>
+<th>原日期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2023-chunqiubei-spring-php-again</td>
+<td><a href="/knowledge/php-runtime/#case-2023-chunqiubei-spring-php-again">OPcache 字节码与 forkserver 套接字</a></td>
+<td>2023-07-01</td>
+</tr>
+<tr>
+<td>academy</td>
+<td><a href="/knowledge/identity/#case-academy">角色字段、框架密钥与审计日志</a></td>
+<td>2020-11-14</td>
+</tr>
+<tr>
+<td>acute</td>
+<td><a href="/knowledge/windows/#case-acute">受限 PowerShell 会话与组成员权限</a></td>
+<td>2022-02-16</td>
+</tr>
+<tr>
+<td>admirertoo</td>
+<td><a href="/knowledge/ssrf/#case-admirertoo">Adminer 重定向与内部管理面</a></td>
+<td>2022-01-23</td>
+</tr>
+<tr>
+<td>antidote</td>
+<td><a href="/knowledge/stack/#case-antidote">ARM32 调用约定与 ret2csu</a></td>
+<td>2021-11-03</td>
+</tr>
+<tr>
+<td>apt</td>
+<td><a href="/knowledge/kerberos/#case-apt">IPv6 暴露面与认证协议差异</a></td>
+<td>2021-02-07</td>
+</tr>
+<tr>
+<td>Armageddon</td>
+<td><a href="/knowledge/cms-drupal/#case-armageddon">Drupal 凭据落点与 snap 权限</a></td>
+<td>2021-03-29</td>
+</tr>
+<tr>
+<td>Atom</td>
+<td><a href="/knowledge/client/#case-atom">更新签名校验与本地应用密文</a></td>
+<td>2021-04-23</td>
+</tr>
+<tr>
+<td>backdoor</td>
+<td><a href="/knowledge/debug/#case-backdoor">进程文件读取与 gdbserver</a></td>
+<td>2021-11-22</td>
+</tr>
+<tr>
+<td>bad-grades</td>
+<td><a href="/knowledge/format/#case-bad-grades">浮点输入中的 canary 绕过</a></td>
+<td>2021-09-01</td>
+</tr>
+<tr>
+<td>bin-sh-via-syscall</td>
+<td><a href="/knowledge/rop/#case-bin-sh-via-syscall">基于 int 0x80 的 execve 调用</a></td>
+<td>2021-09-14</td>
+</tr>
+<tr>
+<td>blazorized</td>
+<td><a href="/knowledge/kerberos/#case-blazorized">WriteSPN 权限与域会话分析</a></td>
+<td>2024-11-10</td>
+</tr>
+<tr>
+<td>blunder</td>
+<td><a href="/knowledge/cms-misc/#case-blunder">CMS 上传路径与 sudo 身份解析</a></td>
+<td>2020-06-05</td>
+</tr>
+<tr>
+<td>bolt</td>
+<td><a href="/knowledge/ssti/#case-bolt">Flask 模板执行与 PGP 数据恢复</a></td>
+<td>2021-09-29</td>
+</tr>
+<tr>
+<td>bountyhunter</td>
+<td><a href="/knowledge/xml/#case-bountyhunter">XML 编码链与票据校验中的 eval</a></td>
+<td>2021-07-26</td>
+</tr>
+<tr>
+<td>brainpan-1</td>
+<td><a href="/knowledge/stack/#case-brainpan-1">EIP 偏移、坏字符与 JMP ESP</a></td>
+<td>2020-01-26</td>
+</tr>
+<tr>
+<td>brainpan-3</td>
+<td><a href="/knowledge/stack/#case-brainpan-3">多个二进制之间的输入边界</a></td>
+<td>2020-02-03</td>
+</tr>
+<tr>
+<td>brainpan2</td>
+<td><a href="/knowledge/stack/#case-brainpan2">popen 解析与间接调用指针</a></td>
+<td>2020-02-01</td>
+</tr>
+<tr>
+<td>breadcrumbs</td>
+<td><a href="/knowledge/identity/#case-breadcrumbs">文件读取、会话构造与本地凭据</a></td>
+<td>2021-02-23</td>
+</tr>
+<tr>
+<td>bucket</td>
+<td><a href="/knowledge/cloud/#case-bucket">S3 写权限与 DynamoDB 数据流</a></td>
+<td>2020-11-07</td>
+</tr>
+<tr>
+<td>cap</td>
+<td><a href="/knowledge/linux/#case-cap">PCAP 凭据与 Python capabilities</a></td>
+<td>2021-06-06</td>
+</tr>
+<tr>
+<td>catch</td>
+<td><a href="/knowledge/client/#case-catch">APK 内嵌令牌与验证脚本</a></td>
+<td>2022-03-23</td>
+</tr>
+<tr>
+<td>cereal</td>
+<td><a href="/knowledge/serialization/#case-cereal">XSS 驱动的对象反序列化</a></td>
+<td>2021-01-15</td>
+</tr>
+<tr>
+<td>chrome-browserv8-pwn</td>
+<td><a href="/knowledge/v8/#case-chrome-browserv8-pwn">指针压缩下的 addrof 与 fakeobj</a></td>
+<td>2021-01-23</td>
+</tr>
+<tr>
+<td>ciscn-2022-ezpentest</td>
+<td><a href="/knowledge/queries/#case-ciscn-2022-ezpentest">BIGINT 错误侧信道与 PHP POP 链</a></td>
+<td>2023-06-29</td>
+</tr>
+<tr>
+<td>coder</td>
+<td><a href="/knowledge/adcs/#case-coder">dNSHostName 与证书模板状态</a></td>
+<td>2023-12-19</td>
+</tr>
+<tr>
+<td>compromised</td>
+<td><a href="/knowledge/php-runtime/#case-compromised">上传、运行时限制与 PAM 后门</a></td>
+<td>2020-09-16</td>
+</tr>
+<tr>
+<td>crossfit</td>
+<td><a href="/knowledge/xss/#case-crossfit">受害浏览器请求与任务执行</a></td>
+<td>2020-11-28</td>
+</tr>
+<tr>
+<td>cynix</td>
+<td><a href="/knowledge/containers/#case-cynix">LXD 组与宿主文件系统</a></td>
+<td>2020-05-20</td>
+</tr>
+<tr>
+<td>decrypt-cs-traffic</td>
+<td><a href="/knowledge/forensics/#case-decrypt-cs-traffic">内存密钥与 Beacon 流量解析</a></td>
+<td>2022-01-05</td>
+</tr>
+<tr>
+<td>decrypt-winrm-traffic</td>
+<td><a href="/knowledge/forensics/#case-decrypt-winrm-traffic">文件重组与 WinRM 解密</a></td>
+<td>2022-01-05</td>
+</tr>
+<tr>
+<td>delivery</td>
+<td><a href="/knowledge/credentials/#case-delivery">邮箱验证边界与密码规则</a></td>
+<td>2021-01-12</td>
+</tr>
+<tr>
+<td>devzat</td>
+<td><a href="/knowledge/source/#case-devzat">Git 历史、命令拼接与内部数据库</a></td>
+<td>2021-10-19</td>
+</tr>
+<tr>
+<td>djinn-1</td>
+<td><a href="/knowledge/linux/#case-djinn-1">命令过滤与自定义 sudo 程序</a></td>
+<td>2020-05-21</td>
+</tr>
+<tr>
+<td>doctor</td>
+<td><a href="/knowledge/ssti/#case-doctor">Jinja2 配置加载与日志凭据</a></td>
+<td>2020-09-29</td>
+</tr>
+<tr>
+<td>driver</td>
+<td><a href="/knowledge/windows/#case-driver">SCF 认证请求与打印服务</a></td>
+<td>2021-10-03</td>
+</tr>
+<tr>
+<td>dynstr</td>
+<td><a href="/knowledge/services/#case-dynstr">动态 DNS 更新与反向记录</a></td>
+<td>2021-06-14</td>
+</tr>
+<tr>
+<td>echoland</td>
+<td><a href="/knowledge/format/#case-echoland">盲格式化字符串与二进制恢复</a></td>
+<td>2021-12-11</td>
+</tr>
+<tr>
+<td>escape</td>
+<td><a href="/knowledge/adcs/#case-escape">SQL 服务账户与两种身份路径</a></td>
+<td>2023-06-18</td>
+</tr>
+<tr>
+<td>evm</td>
+<td><a href="/knowledge/cms-wordpress/#case-evm">WordPress 账户与配置凭据</a></td>
+<td>2020-05-23</td>
+</tr>
+<tr>
+<td>Exploiting-the-Math-expm1-typing-bug-in-V8</td>
+<td><a href="/knowledge/v8/#case-exploiting-the-math-expm1-typing-bug-in-v8">负零类型推断与越界原语</a></td>
+<td>2021-02-15</td>
+</tr>
+<tr>
+<td>explore</td>
+<td><a href="/knowledge/client/#case-explore">Android 文件服务与调试桥</a></td>
+<td>2021-06-27</td>
+</tr>
+<tr>
+<td>feline</td>
+<td><a href="/knowledge/serialization/#case-feline">Tomcat 会话文件与 Salt 管理面</a></td>
+<td>2020-09-03</td>
+</tr>
+<tr>
+<td>fighter</td>
+<td><a href="/knowledge/windows/#case-fighter">MSSQL 执行上下文与驱动漏洞</a></td>
+<td>2020-06-03</td>
+</tr>
+<tr>
+<td>fingerprint</td>
+<td><a href="/knowledge/identity/#case-fingerprint">多层认证与加密状态</a></td>
+<td>2022-02-03</td>
+</tr>
+<tr>
+<td>forge</td>
+<td><a href="/knowledge/ssrf/#case-forge">URL 验证、重定向与内部 FTP</a></td>
+<td>2021-09-13</td>
+</tr>
+<tr>
+<td>format</td>
+<td><a href="/knowledge/format/#case-format">PIE 泄漏与格式化写入</a></td>
+<td>2021-01-12</td>
+</tr>
+<tr>
+<td>GoatseLinux-1</td>
+<td><a href="/knowledge/middleware/#case-goatselinux-1">Webmin 文件读取与旧内核分支</a></td>
+<td>2019-12-18</td>
+</tr>
+<tr>
+<td>GoldenEye-1</td>
+<td><a href="/knowledge/cms-misc/#case-goldeneye-1">邮件线索与 Moodle 命令执行</a></td>
+<td>2020-01-08</td>
+</tr>
+<tr>
+<td>HA-Chanakya</td>
+<td><a href="/knowledge/services/#case-ha-chanakya">FTP 流量与授权密钥</a></td>
+<td>2019-12-16</td>
+</tr>
+<tr>
+<td>HA-Dhanush</td>
+<td><a href="/knowledge/linux/#case-ha-dhanush">cp 与 zip 的委托执行权限</a></td>
+<td>2019-12-17</td>
+</tr>
+<tr>
+<td>hack-the-box-bigheadwebsvr-2</td>
+<td><a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr-2">请求处理器中的长度与堆分配</a></td>
+<td>2020-12-30</td>
+</tr>
+<tr>
+<td>hack-the-box-bigheadwebsvr</td>
+<td><a href="/knowledge/stack/#case-hack-the-box-bigheadwebsvr">小缓冲区与 Egghunter 布局</a></td>
+<td>2020-12-26</td>
+</tr>
+<tr>
+<td>Hackademic-RTB1</td>
+<td><a href="/knowledge/cms-wordpress/#case-hackademic-rtb1">Web 写入与内核提权候选</a></td>
+<td>2019-12-11</td>
+</tr>
+<tr>
+<td>Hackademic-RTB2</td>
+<td><a href="/knowledge/queries/#case-hackademic-rtb2">注入、数据库文件写入与替代入口</a></td>
+<td>2019-12-12</td>
+</tr>
+<tr>
+<td>HackLAB-Vulnix</td>
+<td><a href="/knowledge/services/#case-hacklab-vulnix">NFS UID 映射与 root_squash</a></td>
+<td>2020-04-15</td>
+</tr>
+<tr>
+<td>hackNos-Os-hackNos-1</td>
+<td><a href="/knowledge/cms-drupal/#case-hacknos-os-hacknos-1">Drupal 执行与 wget 文件权限</a></td>
+<td>2019-12-22</td>
+</tr>
+<tr>
+<td>hackNos-Os-hackNos-2-1</td>
+<td><a href="/knowledge/credentials/#case-hacknos-os-hacknos-2-1">备份、哈希与 CMS 账户复用</a></td>
+<td>2019-12-19</td>
+</tr>
+<tr>
+<td>hackthebox-rope2-getroot</td>
+<td><a href="/knowledge/kernel/#case-hackthebox-rope2-getroot">ralloc、tty_operations 与内核 ROP</a></td>
+<td>2021-02-27</td>
+</tr>
+<tr>
+<td>hackthebox-rope2-rshell-exploit</td>
+<td><a href="/knowledge/heap/#case-hackthebox-rope2-rshell-exploit">realloc 状态与 tcache 指针</a></td>
+<td>2021-02-18</td>
+</tr>
+<tr>
+<td>horizontall</td>
+<td><a href="/knowledge/cms-misc/#case-horizontall">Strapi 认证重置与内部 Laravel</a></td>
+<td>2021-08-30</td>
+</tr>
+<tr>
+<td>htb-absolute</td>
+<td><a href="/knowledge/delegation/#case-htb-absolute">Kerberos 专用认证与 ACL 路径</a></td>
+<td>2023-05-29</td>
+</tr>
+<tr>
+<td>htb-authority</td>
+<td><a href="/knowledge/adcs/#case-htb-authority">ESC1 与不支持 PKINIT 时的证书认证</a></td>
+<td>2023-12-11</td>
+</tr>
+<tr>
+<td>htb-manager</td>
+<td><a href="/knowledge/adcs/#case-htb-manager">ManageCA 权限与 ESC7</a></td>
+<td>2024-03-17</td>
+</tr>
+<tr>
+<td>hunting</td>
+<td><a href="/knowledge/rop/#case-hunting">内存页可达性与 Egghunter</a></td>
+<td>2021-01-27</td>
+</tr>
+<tr>
+<td>In-Plain-Sight-1-0-1</td>
+<td><a href="/knowledge/uploads/#case-in-plain-sight-1-0-1">图像入口、注释与系统凭据</a></td>
+<td>2020-01-10</td>
+</tr>
+<tr>
+<td>intelligence</td>
+<td><a href="/knowledge/delegation/#case-intelligence">DNS 记录、gMSA 与服务委派</a></td>
+<td>2021-07-10</td>
+</tr>
+<tr>
+<td>jewel</td>
+<td><a href="/knowledge/serialization/#case-jewel">Ruby 对象状态与账户迁移</a></td>
+<td>2020-10-14</td>
+</tr>
+<tr>
+<td>Kioptrix4</td>
+<td><a href="/knowledge/queries/#case-kioptrix4">登录查询与 MySQL UDF 权限</a></td>
+<td>2019-12-10</td>
+</tr>
+<tr>
+<td>knife</td>
+<td><a href="/knowledge/php-runtime/#case-knife">开发版后门与 Ruby sudo</a></td>
+<td>2021-05-23</td>
+</tr>
+<tr>
+<td>KVM3</td>
+<td><a href="/knowledge/queries/#case-kvm3">CMS 查询与管理配置</a></td>
+<td>2019-12-13</td>
+</tr>
+<tr>
+<td>laboratory</td>
+<td><a href="/knowledge/source/#case-laboratory">GitLab 上传重写与密钥链</a></td>
+<td>2020-11-22</td>
+</tr>
+<tr>
+<td>Lampiao-1</td>
+<td><a href="/knowledge/cms-drupal/#case-lampiao-1">应用入口与 Dirty COW 分支</a></td>
+<td>2020-04-07</td>
+</tr>
+<tr>
+<td>LAMPSecurity-CTF6</td>
+<td><a href="/knowledge/queries/#case-lampsecurity-ctf6">SQL 数据到 udev 进程</a></td>
+<td>2019-12-16</td>
+</tr>
+<tr>
+<td>laser</td>
+<td><a href="/knowledge/ssrf/#case-laser">打印服务、gRPC 与内部 Solr</a></td>
+<td>2020-08-19</td>
+</tr>
+<tr>
+<td>little-tommy</td>
+<td><a href="/knowledge/heap/#case-little-tommy">悬空账户指针与 memo 重用</a></td>
+<td>2021-09-09</td>
+</tr>
+<tr>
+<td>log4j</td>
+<td><a href="/knowledge/serialization/#case-log4j">Logforge 中的 JNDI 与 classpath</a></td>
+<td>2021-12-29</td>
+</tr>
+<tr>
+<td>Lord-Of-The-Root-1-0-1</td>
+<td><a href="/knowledge/kernel/#case-lord-of-the-root-1-0-1">端口序列与多种本地提权</a></td>
+<td>2020-01-24</td>
+</tr>
+<tr>
+<td>love</td>
+<td><a href="/knowledge/uploads/#case-love">内部服务凭据与 MSI 策略</a></td>
+<td>2021-05-03</td>
+</tr>
+<tr>
+<td>luanne</td>
+<td><a href="/knowledge/ssti/#case-luanne">Lua 解析与 doas 身份变化</a></td>
+<td>2020-12-04</td>
+</tr>
+<tr>
+<td>mango</td>
+<td><a href="/knowledge/queries/#case-mango">MongoDB 运算符与响应侧信道</a></td>
+<td>2020-04-20</td>
+</tr>
+<tr>
+<td>meta</td>
+<td><a href="/knowledge/client/#case-meta">元数据解析与图像转换</a></td>
+<td>2022-01-23</td>
+</tr>
+<tr>
+<td>mimic-ssrf</td>
+<td><a href="/knowledge/debug/#case-mimic-ssrf">三个语言运行时的调试协议</a></td>
+<td>2022-01-17</td>
+</tr>
+<tr>
+<td>mimic-ssti</td>
+<td><a href="/knowledge/ssti/#case-mimic-ssti">三种模板的一致渲染约束</a></td>
+<td>2022-01-17</td>
+</tr>
+<tr>
+<td>mist</td>
+<td><a href="/knowledge/adcs-advanced/#case-mist">多次账户转换与 ESC13 组映射</a></td>
+<td>2024-10-27</td>
+</tr>
+<tr>
+<td>monitors</td>
+<td><a href="/knowledge/containers/#case-monitors">监控平台、内部 OFBiz 与 SYS_MODULE</a></td>
+<td>2021-05-01</td>
+</tr>
+<tr>
+<td>mprotect-and-shellcode</td>
+<td><a href="/knowledge/rop/#case-mprotect-and-shellcode">页权限与分段输入</a></td>
+<td>2021-09-14</td>
+</tr>
+<tr>
+<td>Mr-Robot-1</td>
+<td><a href="/knowledge/cms-wordpress/#case-mr-robot-1">认证响应、去重字典与交互式程序</a></td>
+<td>2020-01-02</td>
+</tr>
+<tr>
+<td>msf-meterpreter-traffic-decrypt</td>
+<td><a href="/knowledge/forensics/#case-msf-meterpreter-traffic-decrypt">Meterpreter TLV 与破损 RSA 材料</a></td>
+<td>2023-02-07</td>
+</tr>
+<tr>
+<td>noreturn</td>
+<td><a href="/knowledge/rop/#case-noreturn">无 ret 条件下的 JOP 调度表</a></td>
+<td>2021-01-05</td>
+</tr>
+<tr>
+<td>NullByte-1</td>
+<td><a href="/knowledge/linux/#case-nullbyte-1">PATH 解析与 SUID 子进程</a></td>
+<td>2020-01-02</td>
+</tr>
+<tr>
+<td>omni</td>
+<td><a href="/knowledge/client/#case-omni">Windows IoT 管理接口</a></td>
+<td>2020-08-28</td>
+</tr>
+<tr>
+<td>Ophiuchi</td>
+<td><a href="/knowledge/serialization/#case-ophiuchi">YAML 加载与 WASM 返回值</a></td>
+<td>2021-02-14</td>
+</tr>
+<tr>
+<td>Os-hackNos-3</td>
+<td><a href="/knowledge/cms-misc/#case-os-hacknos-3">后台上传与文件能力排查</a></td>
+<td>2019-12-31</td>
+</tr>
+<tr>
+<td>overflow</td>
+<td><a href="/knowledge/identity/#case-overflow">Padding Oracle 与任务身份</a></td>
+<td>2022-03-11</td>
+</tr>
+<tr>
+<td>pandora</td>
+<td><a href="/knowledge/queries/#case-pandora">SNMP 凭据与控制台会话注入</a></td>
+<td>2022-01-12</td>
+</tr>
+<tr>
+<td>passage</td>
+<td><a href="/knowledge/uploads/#case-passage">图像内容、新闻系统与 D-Bus</a></td>
+<td>2020-09-07</td>
+</tr>
+<tr>
+<td>Perspective</td>
+<td><a href="/knowledge/identity/#case-perspective">ViewState 密钥与 CBC 状态</a></td>
+<td>2022-04-10</td>
+</tr>
+<tr>
+<td>phoenix</td>
+<td><a href="/knowledge/cms-wordpress/#case-phoenix">插件盲注与双因素验证材料</a></td>
+<td>2022-03-24</td>
+</tr>
+<tr>
+<td>pikaboo</td>
+<td><a href="/knowledge/files/#case-pikaboo">alias 路径、日志内容与 Perl open</a></td>
+<td>2021-07-20</td>
+</tr>
+<tr>
+<td>pit</td>
+<td><a href="/knowledge/linux/#case-pit">SNMP 扩展命令与目录 ACL</a></td>
+<td>2021-05-22</td>
+</tr>
+<tr>
+<td>pivotapi</td>
+<td><a href="/knowledge/windows/#case-pivotapi">API 监控与服务凭据恢复</a></td>
+<td>2021-05-15</td>
+</tr>
+<tr>
+<td>pluck-1</td>
+<td><a href="/knowledge/files/#case-pluck-1">PHP 流包装器与受限菜单</a></td>
+<td>2020-04-08</td>
+</tr>
+<tr>
+<td>previse</td>
+<td><a href="/knowledge/identity/#case-previse">响应跳转与真实服务端授权</a></td>
+<td>2021-08-08</td>
+</tr>
+<tr>
+<td>proper</td>
+<td><a href="/knowledge/windows/#case-proper">完整性参数与目录 Junction</a></td>
+<td>2021-05-08</td>
+</tr>
+<tr>
+<td>pwn-restaurant</td>
+<td><a href="/knowledge/rop/#case-pwn-restaurant">两阶段 ret2libc 与接收时序</a></td>
+<td>2021-05-08</td>
+</tr>
+<tr>
+<td>pwn-space</td>
+<td><a href="/knowledge/stack/#case-pwn-space">分裂缓冲区中的短 shellcode</a></td>
+<td>2021-09-01</td>
+</tr>
+<tr>
+<td>pWnOS-1</td>
+<td><a href="/knowledge/middleware/#case-pwnos-1">Webmin 读取与多条服务入口</a></td>
+<td>2019-12-29</td>
+</tr>
+<tr>
+<td>pWnOS2-0-Pre-Release</td>
+<td><a href="/knowledge/cms-misc/#case-pwnos2-0-pre-release">CMS 执行与多份数据库配置</a></td>
+<td>2019-12-14</td>
+</tr>
+<tr>
+<td>racecar</td>
+<td><a href="/knowledge/format/#case-racecar">栈数据与小端重组</a></td>
+<td>2021-09-01</td>
+</tr>
+<tr>
+<td>rauth</td>
+<td><a href="/knowledge/crypto/#case-rauth">Salsa20 参数与认证比较</a></td>
+<td>2021-11-20</td>
+</tr>
+<tr>
+<td>Raven-1</td>
+<td><a href="/knowledge/database/#case-raven-1">数据库进程权限与 UDF</a></td>
+<td>2020-02-12</td>
+</tr>
+<tr>
+<td>Raven-2</td>
+<td><a href="/knowledge/database/#case-raven-2">PHPMailer 参数与 UDF 动态库</a></td>
+<td>2020-03-26</td>
+</tr>
+<tr>
+<td>ready</td>
+<td><a href="/knowledge/containers/#case-ready">GitLab 入口与特权容器</a></td>
+<td>2020-12-16</td>
+</tr>
+<tr>
+<td>rebound</td>
+<td><a href="/knowledge/delegation/#case-rebound">对象继承、跨会话 Relay 与 RBCD</a></td>
+<td>2024-04-01</td>
+</tr>
+<tr>
+<td>reddish</td>
+<td><a href="/knowledge/containers/#case-reddish">多层容器网络与备份任务</a></td>
+<td>2020-07-19</td>
+</tr>
+<tr>
+<td>reel2</td>
+<td><a href="/knowledge/windows/#case-reel2">邮件认证、受限会话与符号链接</a></td>
+<td>2020-10-13</td>
+</tr>
+<tr>
+<td>routerspace</td>
+<td><a href="/knowledge/client/#case-routerspace">APK 请求还原与 sudo 堆溢出</a></td>
+<td>2022-03-02</td>
+</tr>
+<tr>
+<td>schooled</td>
+<td><a href="/knowledge/xss/#case-schooled">教学平台角色边界与插件执行</a></td>
+<td>2021-04-09</td>
+</tr>
+<tr>
+<td>ScriptKiddie</td>
+<td><a href="/knowledge/pipelines/#case-scriptkiddie">APK 模板处理与日志消费</a></td>
+<td>2021-02-07</td>
+</tr>
+<tr>
+<td>seal</td>
+<td><a href="/knowledge/pipelines/#case-seal">反向代理映射与 Ansible 任务</a></td>
+<td>2021-07-12</td>
+</tr>
+<tr>
+<td>search</td>
+<td><a href="/knowledge/kerberos/#case-search">表格与证书中的身份材料</a></td>
+<td>2022-01-08</td>
+</tr>
+<tr>
+<td>secret</td>
+<td><a href="/knowledge/source/#case-secret">Git 中的 Token Secret 与 core dump</a></td>
+<td>2021-11-01</td>
+</tr>
+<tr>
+<td>ServMon</td>
+<td><a href="/knowledge/windows/#case-servmon">NVMS 路径与本机管理服务</a></td>
+<td>2020-04-23</td>
+</tr>
+<tr>
+<td>sharp</td>
+<td><a href="/knowledge/serialization/#case-sharp">应用配置、.NET Remoting 与 WCF</a></td>
+<td>2021-01-08</td>
+</tr>
+<tr>
+<td>shibboleth</td>
+<td><a href="/knowledge/database/#case-shibboleth">管理平台与 MariaDB 加载路径</a></td>
+<td>2021-11-14</td>
+</tr>
+<tr>
+<td>sick-rop</td>
+<td><a href="/knowledge/rop/#case-sick-rop">read 返回值与 sigreturn frame</a></td>
+<td>2021-01-11</td>
+</tr>
+<tr>
+<td>SickOs-1-1</td>
+<td><a href="/knowledge/linux/#case-sickos-1-1">代理可达性与 CMS 文件权限</a></td>
+<td>2020-03-27</td>
+</tr>
+<tr>
+<td>SickOs-1-2</td>
+<td><a href="/knowledge/uploads/#case-sickos-1-2">HTTP PUT 与周期性 chkrootkit</a></td>
+<td>2020-03-30</td>
+</tr>
+<tr>
+<td>sink</td>
+<td><a href="/knowledge/cloud/#case-sink">请求解析差异与 KMS 数据</a></td>
+<td>2021-02-07</td>
+</tr>
+<tr>
+<td>SkyTower-1</td>
+<td><a href="/knowledge/queries/#case-skytower-1">过滤差异与代理内 SSH</a></td>
+<td>2020-04-09</td>
+</tr>
+<tr>
+<td>Smasher2</td>
+<td><a href="/knowledge/kernel/#case-smasher2">引用计数与内核映射</a></td>
+<td>2019-12-26</td>
+</tr>
+<tr>
+<td>SneakyMailer</td>
+<td><a href="/knowledge/pipelines/#case-sneakymailer">邮件凭据与 Python 包执行</a></td>
+<td>2020-07-12</td>
+</tr>
+<tr>
+<td>spectra</td>
+<td><a href="/knowledge/source/#case-spectra">备份配置与 Upstart 任务</a></td>
+<td>2021-03-01</td>
+</tr>
+<tr>
+<td>spider</td>
+<td><a href="/knowledge/ssti/#case-spider">签名会话、模板与 XML</a></td>
+<td>2021-06-04</td>
+</tr>
+<tr>
+<td>stacked</td>
+<td><a href="/knowledge/cloud/#case-stacked">LocalStack 请求与容器边界</a></td>
+<td>2022-02-14</td>
+</tr>
+<tr>
+<td>Stapler-1</td>
+<td><a href="/knowledge/cms-wordpress/#case-stapler-1">插件文件读取与数据库写入</a></td>
+<td>2020-04-13</td>
+</tr>
+<tr>
+<td>static</td>
+<td><a href="/knowledge/debug/#case-static">损坏备份、OTP 与 Xdebug</a></td>
+<td>2021-06-26</td>
+</tr>
+<tr>
+<td>sunset-1</td>
+<td><a href="/knowledge/linux/#case-sunset-1">FTP 备份哈希与编辑器权限</a></td>
+<td>2020-04-14</td>
+</tr>
+<tr>
+<td>sunset-sunrise</td>
+<td><a href="/knowledge/files/#case-sunset-sunrise">Weborf 读取与 Wine 执行</a></td>
+<td>2019-12-24</td>
+</tr>
+<tr>
+<td>talkactive</td>
+<td><a href="/knowledge/containers/#case-talkactive">多语言管理面与 Docker 能力</a></td>
+<td>2022-04-10</td>
+</tr>
+<tr>
+<td>tenet</td>
+<td><a href="/knowledge/serialization/#case-tenet">PHP 对象析构与密钥写入竞态</a></td>
+<td>2021-01-18</td>
+</tr>
+<tr>
+<td>tentacle</td>
+<td><a href="/knowledge/services/#case-tentacle">代理、OpenSMTPD 与 keytab</a></td>
+<td>2021-01-31</td>
+</tr>
+<tr>
+<td>TheNotebook</td>
+<td><a href="/knowledge/identity/#case-thenotebook">JWT 的签名密钥来源与管理员声明</a></td>
+<td>2021-03-09</td>
+</tr>
+<tr>
+<td>time</td>
+<td><a href="/knowledge/serialization/#case-time">Jackson 类型绑定与可写任务</a></td>
+<td>2020-11-07</td>
+</tr>
+<tr>
+<td>timelapse</td>
+<td><a href="/knowledge/kerberos/#case-timelapse">PFX 身份与 LAPS 读取范围</a></td>
+<td>2022-03-27</td>
+</tr>
+<tr>
+<td>timing</td>
+<td><a href="/knowledge/source/#case-timing">上传时间窗口与自定义下载器</a></td>
+<td>2021-12-18</td>
+</tr>
+<tr>
+<td>toxin</td>
+<td><a href="/knowledge/heap/#case-toxin">格式化泄漏与 tcache poisoning</a></td>
+<td>2021-02-22</td>
+</tr>
+<tr>
+<td>Tr0ll-1</td>
+<td><a href="/knowledge/linux/#case-tr0ll-1">历史流量线索与可写清理任务</a></td>
+<td>2020-03-31</td>
+</tr>
+<tr>
+<td>Tr0ll-2</td>
+<td><a href="/knowledge/stack/#case-tr0ll-2">归档材料、Shellshock 与 SUID 溢出</a></td>
+<td>2020-04-01</td>
+</tr>
+<tr>
+<td>Tr0ll-3</td>
+<td><a href="/knowledge/linux/#case-tr0ll-3">无线捕获、编辑历史与权限程序</a></td>
+<td>2020-04-07</td>
+</tr>
+<tr>
+<td>Traverxec</td>
+<td><a href="/knowledge/middleware/#case-traverxec">Nostromo 映射与日志查看器</a></td>
+<td>2020-04-21</td>
+</tr>
+<tr>
+<td>Unbalanced</td>
+<td><a href="/knowledge/queries/#case-unbalanced">EncFS 配置与 XPath 查询</a></td>
+<td>2020-08-17</td>
+</tr>
+<tr>
+<td>undetected</td>
+<td><a href="/knowledge/source/#case-undetected">异常二进制与共享库后门</a></td>
+<td>2022-02-24</td>
+</tr>
+<tr>
+<td>unicode</td>
+<td><a href="/knowledge/files/#case-unicode">Unicode 归一化与路径判断</a></td>
+<td>2021-12-01</td>
+</tr>
+<tr>
+<td>Unobtainium</td>
+<td><a href="/knowledge/containers/#case-unobtainium">原型污染与 Pod 权限</a></td>
+<td>2021-04-23</td>
+</tr>
+<tr>
+<td>unserialize</td>
+<td><a href="/knowledge/serialization/#case-unserialize">PHP 魔术方法与对象状态</a></td>
+<td>2020-09-17</td>
+</tr>
+<tr>
+<td>View2aKill</td>
+<td><a href="/knowledge/credentials/#case-view2akill">应用备份与凭据线索</a></td>
+<td>2020-01-20</td>
+</tr>
+<tr>
+<td>vulnhub-Drunk-Admin-Web-Hacking-Challenge-1</td>
+<td><a href="/knowledge/uploads/#case-vulnhub-drunk-admin-web-hacking-challenge-1">图像验证与多重编码</a></td>
+<td>2019-12-08</td>
+</tr>
+<tr>
+<td>vulnhub-JIS-CTF-VulnUpload</td>
+<td><a href="/knowledge/uploads/#case-vulnhub-jis-ctf-vulnupload">后台资料与文件所有者枚举</a></td>
+<td>2019-12-07</td>
+</tr>
+<tr>
+<td>vulnos-1</td>
+<td><a href="/knowledge/middleware/#case-vulnos-1">distcc 与多个管理入口</a></td>
+<td>2020-04-16</td>
+</tr>
+<tr>
+<td>vulnos-2</td>
+<td><a href="/knowledge/queries/#case-vulnos-2">OpenDocMan 参数与替代提权</a></td>
+<td>2020-04-17</td>
+</tr>
+<tr>
+<td>W1R3S-1-0-1</td>
+<td><a href="/knowledge/files/#case-w1r3s-1-0-1">Cuppa 解析器与系统文件</a></td>
+<td>2020-01-03</td>
+</tr>
+<tr>
+<td>what-dose-the-f-say</td>
+<td><a href="/knowledge/format/#case-what-dose-the-f-say">PIE、Canary 与 libc 的分层泄漏</a></td>
+<td>2021-09-09</td>
+</tr>
+<tr>
+<td>WinterMute-1</td>
+<td><a href="/knowledge/services/#case-wintermute-1">双主机网络与 LXD 边界</a></td>
+<td>2020-01-13</td>
+</tr>
+<tr>
+<td>worker</td>
+<td><a href="/knowledge/pipelines/#case-worker">SVN 历史与 DevOps Agent 身份</a></td>
+<td>2020-08-18</td>
+</tr>
+<tr>
+<td>writer</td>
+<td><a href="/knowledge/queries/#case-writer">UNION 读取与应用命令边界</a></td>
+<td>2021-08-06</td>
+</tr>
+<tr>
+<td>WTF-1</td>
+<td><a href="/knowledge/linux/#case-wtf-1">既有回连配置与 sudo pip</a></td>
+<td>2019-12-24</td>
+</tr>
+</tbody></table>
+
+      </div>
+      
+      
+      
+    </div>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">253</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">696k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">42:11</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZEbHVjaWZlcg==" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
