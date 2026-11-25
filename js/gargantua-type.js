@@ -11,13 +11,15 @@ export function createTextLens(scene) {
   const field = document.createElement('canvas');
   field.width = field.height = 128;
   const ink = field.getContext('2d');
-  if (!ink) return { move() {}, clear() {} };
+  if (!ink) return { move() {} };
   const pixels = ink.createImageData(field.width, field.height);
   for (let y = 0; y < field.height; y++) {
     for (let x = 0; x < field.width; x++) {
       const dx = (2 * x + 1) / field.width - 1, dy = (2 * y + 1) / field.height - 1;
       const radius = Math.hypot(dx, dy);
-      const strength = Math.max(0, 1 - radius * radius) ** 2 / Math.max(radius, 0.32);
+      // Normalize the direction inside the opaque core. Everywhere visible,
+      // displacement magnitude falls monotonically as (1 - radius) squared.
+      const strength = Math.max(0, 1 - radius) ** 2 / Math.max(radius, 0.10);
       const i = (y * field.width + x) * 4;
       pixels.data[i] = 128 - 127 * dx * strength;
       pixels.data[i + 1] = 128 - 127 * dy * strength;
@@ -39,9 +41,9 @@ export function createTextLens(scene) {
   ].join(',');
   const visible = new Set();
   const active = new Map();
-  let serial = 0, frame = 0, enabled = false;
+  let serial = 0, frame = 0;
   function schedule() {
-    if (enabled && !frame) frame = requestAnimationFrame(update);
+    if (!frame) frame = requestAnimationFrame(update);
   }
   const observer = typeof IntersectionObserver === 'function' ? new IntersectionObserver(entries => {
     for (const entry of entries) {
@@ -90,7 +92,8 @@ export function createTextLens(scene) {
     const box = scene.getBoundingClientRect();
     const cx = box.left + box.width / 2, cy = box.top + box.height / 2;
     const radius = box.height * 0.69;
-    const scale = Math.min(5.4, Math.max(3.2, box.height * 0.026));
+    // SVG maps each channel to [-scale / 2, scale / 2] in CSS pixels.
+    const scale = Math.min(13.5, Math.max(7, box.height * 0.064));
     const nearby = new Map();
     for (const node of visible) {
       const rect = node.getBoundingClientRect();
@@ -135,13 +138,6 @@ export function createTextLens(scene) {
   window.addEventListener('resize', schedule, { passive: true });
   document.addEventListener('pjax:success', discover);
   discover();
-  return {
-    move() { enabled = true; schedule(); },
-    clear() {
-      enabled = false;
-      cancelAnimationFrame(frame);
-      frame = 0;
-      for (const [node, parts] of active) detach(node, parts);
-    }
-  };
+  schedule();
+  return { move: schedule };
 }

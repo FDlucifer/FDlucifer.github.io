@@ -63,7 +63,6 @@
     if (loadingTextLens) return;
     loadingTextLens = import(typeURL.href).then(module => {
       textLens = module.createTextLens(scene);
-      if (placement) textLens.move();
     }).catch(error => {
       loadingTextLens = null;
       console.warn('Gargantua text lens could not load.', error);
@@ -100,7 +99,7 @@
     }
     targetX = targetY = velocityX = velocityY = 0;
     projectionDirty = true;
-    textLens?.clear();
+    textLens?.move();
     requestPaint();
   }
 
@@ -367,7 +366,7 @@
   }
 
   function paintCore() {
-    if (!placement || !coreInk) return;
+    if (!coreInk) return;
     const side = Math.max(1, Math.round(sky.height * 0.58));
     if (coreCanvas.width !== side || coreCanvas.height !== side) {
       coreCanvas.width = coreCanvas.height = side;
@@ -413,7 +412,7 @@
 
   function resize() {
     projectionDirty = true;
-    if (placement) textLens?.move();
+    textLens?.move();
     requestPaint();
   }
 
@@ -447,5 +446,7 @@
   window.addEventListener('pageshow', () => { onPage = true; sync(); });
   document.addEventListener('visibilitychange', sync);
   motion.addEventListener('change', sync);
+  if ('requestIdleCallback' in window) window.requestIdleCallback(prepareTextLens, { timeout: 800 });
+  else window.setTimeout(prepareTextLens, 100);
   sync();
 })();
