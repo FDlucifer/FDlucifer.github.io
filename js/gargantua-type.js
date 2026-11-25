@@ -17,13 +17,15 @@ export function createTextLens(scene) {
     for (let x = 0; x < field.width; x++) {
       const dx = (2 * x + 1) / field.width - 1, dy = (2 * y + 1) / field.height - 1;
       const radius = Math.hypot(dx, dy);
-      // Normalize the direction inside the opaque core. Everywhere visible,
-      // displacement magnitude falls monotonically as (1 - radius) squared.
-      const strength = Math.max(0, 1 - radius) ** 2 / Math.max(radius, 0.10);
+      // The radial pull grows toward the shadow. Turn it toward the disk near
+      // the rim so even a baseline passing through the center bends visibly.
+      const falloff = Math.max(0, 1 - radius);
+      const strength = falloff * falloff / Math.max(radius, 0.10);
+      const angle = 0.96 * falloff, cosine = Math.cos(angle), sine = Math.sin(angle);
       const i = (y * field.width + x) * 4;
-      pixels.data[i] = 128 - 127 * dx * strength;
-      pixels.data[i + 1] = 128 - 127 * dy * strength;
-      pixels.data[i + 2] = 128;
+      pixels.data[i] = 128 - 127 * (dx * cosine - dy * sine) * strength;
+      pixels.data[i + 1] = 128 - 127 * (dx * sine + dy * cosine) * strength;
+      pixels.data[i + 2] = 255 * Math.min(1, falloff / 0.12);
       pixels.data[i + 3] = 255;
     }
   }
@@ -63,15 +65,24 @@ export function createTextLens(scene) {
     const id = 'gargantua-glyph-' + (++serial);
     const filter = svg('filter', {
       id, filterUnits: 'userSpaceOnUse', primitiveUnits: 'userSpaceOnUse',
-      x: -4, y: -4, 'color-interpolation-filters': 'sRGB'
+      'color-interpolation-filters': 'sRGB'
     });
     const neutral = svg('feFlood', { 'flood-color': '#808080', result: 'neutral' });
     const image = svg('feImage', { href: mapURL, preserveAspectRatio: 'none', result: 'local' });
     const combine = svg('feComposite', { in: 'local', in2: 'neutral', operator: 'over', result: 'field' });
     const bend = svg('feDisplacementMap', {
-      in: 'SourceGraphic', in2: 'field', xChannelSelector: 'R', yChannelSelector: 'G'
+      in: 'SourceGraphic', in2: 'field', xChannelSelector: 'R', yChannelSelector: 'G', result: 'bent'
     });
-    filter.append(neutral, image, combine, bend);
+    // A neutral byte is 128/255, not exactly 0.5. Composite the original
+    // glyphs outside the field to keep even the finest strokes pixel-exact.
+    const mask = svg('feColorMatrix', {
+      in: 'local', type: 'matrix', result: 'footprint',
+      values: '0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1 0 0'
+    });
+    const inner = svg('feComposite', { in: 'bent', in2: 'footprint', operator: 'in', result: 'inner' });
+    const outer = svg('feComposite', { in: 'SourceGraphic', in2: 'footprint', operator: 'out', result: 'outer' });
+    const merge = svg('feComposite', { in: 'inner', in2: 'outer', operator: 'arithmetic', k2: 1, k3: 1 });
+    filter.append(neutral, image, combine, bend, mask, inner, outer, merge);
     defs.append(filter);
     node.style.setProperty('--gargantua-type-lens', 'url("#' + id + '")');
     node.classList.add('gargantua-type-bent');
@@ -91,9 +102,10 @@ export function createTextLens(scene) {
     frame = 0;
     const box = scene.getBoundingClientRect();
     const cx = box.left + box.width / 2, cy = box.top + box.height / 2;
-    const radius = box.height * 0.69;
+    const radius = box.height * 0.76;
     // SVG maps each channel to [-scale / 2, scale / 2] in CSS pixels.
-    const scale = Math.min(13.5, Math.max(7, box.height * 0.064));
+    const scale = Math.min(48, Math.max(19, box.height * 0.225));
+    const padding = Math.ceil(scale / 2) + 2;
     const nearby = new Map();
     for (const node of visible) {
       const rect = node.getBoundingClientRect();
@@ -123,8 +135,10 @@ export function createTextLens(scene) {
       if (parent) continue;
       keep.add(node);
       const { filter, image, bend } = active.get(node) || attach(node);
-      filter.setAttribute('width', Math.ceil(rect.width) + 8);
-      filter.setAttribute('height', Math.ceil(rect.height) + 8);
+      filter.setAttribute('x', -padding);
+      filter.setAttribute('y', -padding);
+      filter.setAttribute('width', Math.ceil(rect.width) + 2 * padding);
+      filter.setAttribute('height', Math.ceil(rect.height) + 2 * padding);
       image.setAttribute('x', cx - rect.left - radius);
       image.setAttribute('y', cy - rect.top - radius);
       image.setAttribute('width', 2 * radius);
