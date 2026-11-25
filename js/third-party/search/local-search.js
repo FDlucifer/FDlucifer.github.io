@@ -66,19 +66,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   window.addEventListener('search:loaded', inputEventFunction);
 
-  // Handle and trigger popup window
+  const closeButton = document.querySelector('.popup-btn-close');
+  closeButton.setAttribute('aria-label', 'Close search');
+  for (const control of document.querySelectorAll('.popup-trigger, .popup-btn-close')) {
+    if (control.matches('button, a[href]')) continue;
+    control.tabIndex = 0;
+    control.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      control.click();
+    });
+  }
+
+  let opener;
+  let focusTimer;
   document.querySelectorAll('.popup-trigger').forEach(element => {
     element.addEventListener('click', () => {
+      opener = element;
       document.body.classList.add('search-active');
-      // Wait for search-popup animation to complete
-      setTimeout(() => input.focus(), 500);
+      clearTimeout(focusTimer);
+      focusTimer = setTimeout(() => input.focus(), 400);
       if (!localSearch.isfetched) localSearch.fetchData();
     });
   });
 
   // Monitor main search box
   const onPopupClose = () => {
+    if (!document.body.classList.contains('search-active')) return;
+    clearTimeout(focusTimer);
     document.body.classList.remove('search-active');
+    if (opener && opener.isConnected) opener.focus({ preventScroll: true });
+    opener = null;
   };
 
   document.querySelector('.search-pop-overlay').addEventListener('click', event => {
@@ -86,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
       onPopupClose();
     }
   });
-  document.querySelector('.popup-btn-close').addEventListener('click', onPopupClose);
+  closeButton.addEventListener('click', onPopupClose);
   document.addEventListener('pjax:success', () => {
     localSearch.highlightSearchWords(document.querySelector('.post-body'));
     onPopupClose();
