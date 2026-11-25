@@ -24,9 +24,12 @@ float stars(vec3 direction) {
   vec2 grid = sphere * vec2(78.0, 84.0);
   vec2 cell = floor(grid);
   float seed = hash(cell);
-  vec2 center = 0.2 + 0.6 * vec2(hash(cell + 7.3), hash(cell - 15.1));
-  float size = mix(0.10, 0.23, seed);
-  return step(0.89, seed) * (1.0 - smoothstep(0.0, size, length(fract(grid) - center)));
+  vec2 center = 0.31 + 0.38 * vec2(hash(cell + 7.3), hash(cell - 15.1));
+  float distance2 = dot(fract(grid) - center, fract(grid) - center);
+  float core = exp(-distance2 / mix(0.005, 0.020, seed));
+  float glow = exp(-30.0 * distance2) * (1.0 - smoothstep(0.05, 0.095, distance2));
+  float pulse = 0.88 + 0.12 * sin(0.62 * uTime + 2.0 * PI * seed);
+  return smoothstep(0.78, 0.99, seed) * pulse * (0.81 * core + 0.19 * glow);
 }
 
 vec3 diskEmission(vec3 hit, vec3 toEye, float r) {
@@ -41,8 +44,8 @@ vec3 diskEmission(vec3 hit, vec3 toEye, float r) {
   float filaments = 0.76 + 0.17 * sin(wave) + 0.12 * sin(2.3 * wave - 3.0 * phase);
   float heat = exp(-0.23 * (r - INNER));
   float temperature = clamp((shift - 0.53) * 1.5 + 0.25 * heat, 0.0, 1.0);
-  vec3 ember = vec3(0.98, 0.12, 0.085);
-  vec3 ivory = vec3(1.0, 0.86, 0.62);
+  vec3 ember = vec3(0.91, 0.105, 0.13);
+  vec3 ivory = vec3(1.0, 0.70, 0.53);
   vec3 color = mix(ember, ivory, temperature * temperature);
   return color * filaments * heat * (0.65 + 2.1 * shift * shift * shift);
 }
@@ -56,6 +59,12 @@ vec3 acceleration(vec3 position, float invRadius, float angularMomentum2) {
 
 void main() {
   vec2 screen = (2.0 * gl_FragCoord.xy - uResolution) / uResolution.y;
+  float skyRadius = length(screen / vec2(uResolution.x / uResolution.y, 1.0));
+  float envelope = 1.0 - smoothstep(0.50, 0.985, skyRadius);
+  if (envelope <= 0.0) {
+    gl_FragColor = vec4(0.0);
+    return;
+  }
   float roll = 0.13 + 0.38 * uLook.x;
   vec2 film = mat2(cos(roll), -sin(roll), sin(roll), cos(roll)) * screen;
   float pitch = 0.16 + 0.14 * uLook.y;
@@ -88,18 +97,22 @@ void main() {
       vec3 hit = mix(position, next, crossing);
       float diskRadius = length(hit.xz);
       if (diskRadius > INNER && diskRadius < OUTER) {
-        float opacity = smoothstep(INNER, INNER + 0.34, diskRadius)
-                      * (1.0 - smoothstep(OUTER - 1.9, OUTER, diskRadius)) * 0.86;
+        float opacity = smoothstep(INNER, INNER + 0.55, diskRadius)
+                      * (1.0 - smoothstep(4.3, OUTER, diskRadius)) * 0.83;
         vec3 toEye = -normalize(mix(velocity, nextVelocity, crossing));
         light += transmission * opacity * diskEmission(hit, toEye, diskRadius);
         transmission *= 1.0 - opacity;
       }
     }
 
-    // A thin emitting atmosphere softens the disk at grazing incidence.
-    if (r > INNER && r < OUTER && abs(position.y) < 0.85) {
-      float haze = exp(-7.5 * abs(position.y)) * (1.0 - smoothstep(INNER, OUTER, r));
-      light += transmission * haze * stride * vec3(0.28, 0.049, 0.023);
+    // Thin hot gas and a cooler, wider corona fade continuously past the visible disk.
+    if (r > 2.4 && r < 11.5 && abs(position.y) < 3.6) {
+      float density = smoothstep(2.4, 3.6, r) * (1.0 - smoothstep(4.0, 11.5, r));
+      float altitude = abs(position.y) / (0.56 + 0.084 * r);
+      float mist = exp(-1.36 * altitude * altitude) * (1.0 - smoothstep(2.0, 2.5, altitude));
+      vec3 gas = exp(-5.5 * abs(position.y)) * vec3(0.23, 0.044, 0.032)
+               + mist * vec3(0.066, 0.010, 0.017);
+      light += transmission * density * stride * gas;
     }
     position = next;
     velocity = nextVelocity;
@@ -112,19 +125,21 @@ void main() {
       break;
     }
     if (invRadius < 1.0 / 29.0 && dot(position, velocity) > 0.0) {
-      float star = stars(normalize(velocity)) * 0.64;
-      light += transmission * star * vec3(0.86, 0.68, 0.65);
-      transmission *= 1.0 - star;
+      float star = stars(normalize(velocity)) * (1.0 - smoothstep(0.43, 0.96, skyRadius));
+      light += transmission * star * vec3(0.78, 0.58, 0.57);
       break;
     }
   }
 
-  float photonRing = exp(-24.0 * abs(sqrt(angularMomentum2) - 2.598));
-  light += photonRing * vec3(0.32, 0.105, 0.053);
+  float ringDistance = abs(sqrt(angularMomentum2) - 2.598);
+  float photonRing = exp(-24.0 * ringDistance);
+  float aureole = exp(-3.4 * ringDistance);
+  light += photonRing * vec3(0.25, 0.088, 0.054) + aureole * vec3(0.062, 0.012, 0.017);
   light *= 0.98 + 0.035 * sin(uTime * 0.89);
-  float alpha = max(1.0 - transmission, clamp(max(light.r, light.b), 0.0, 1.0));
-  vec3 color = 1.0 - exp(-1.17 * light / max(alpha, 0.001));
-  vec2 edge = abs(screen) / vec2(uResolution.x / uResolution.y, 1.0);
-  float feather = 1.0 - smoothstep(0.78, 0.99, max(edge.x, edge.y));
-  gl_FragColor = vec4(pow(color, vec3(0.86)), alpha * feather);
+
+  // Tone-map emitted light before converting it to straight alpha. Low-density
+  // stars and gas then blend with the actual sky without a dark fringe.
+  vec3 emission = pow(1.0 - exp(-1.10 * light), vec3(0.94));
+  float alpha = max(1.0 - transmission, max(emission.r, max(emission.g, emission.b)));
+  gl_FragColor = vec4(emission / max(alpha, 0.0001), alpha * envelope);
 }

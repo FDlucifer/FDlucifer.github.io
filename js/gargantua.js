@@ -4,16 +4,19 @@
   const root = document.documentElement;
   const animated = matchMedia('(any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference)');
   const shaderURL = new URL('../shaders/gargantua.frag', document.currentScript.src);
+  const scene = document.createElement('div');
+  scene.className = 'gargantua-scene';
+  scene.setAttribute('aria-hidden', 'true');
   const sky = document.createElement('canvas');
   sky.className = 'gargantua-sky';
   sky.width = 320;
   sky.height = 180;
-  sky.setAttribute('aria-hidden', 'true');
   const corona = document.createElement('span');
   corona.className = 'gargantua-corona';
   corona.setAttribute('aria-hidden', 'true');
   corona.hidden = true;
-  document.body.append(sky, corona);
+  scene.append(sky);
+  document.body.append(scene, corona);
 
   let targetX = 0;
   let targetY = 0;
@@ -33,8 +36,8 @@
     // These are actual ray-traced views. The center tile also works without JS.
     const column = Math.round((targetX + 1) * 2);
     const row = Math.round(1 - targetY);
-    sky.parentElement.style.setProperty('--lens-column', column * 25 + '%');
-    sky.parentElement.style.setProperty('--lens-row', row * 50 + '%');
+    document.body.style.setProperty('--lens-column', column);
+    document.body.style.setProperty('--lens-row', row);
   }
 
   function point(event) {

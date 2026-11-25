@@ -30,13 +30,14 @@
   --highlight-foreground: #f1e6eb;
   --highlight-gutter-background: #20151e;
   --highlight-gutter-foreground: #be9baa;
-  --lens-width: clamp(184px, 24vw, 396px);
-  --lens-left: clamp(5px, 1.6vw, 40px);
-  --lens-top: clamp(12px, 2.9vh, 36px);
+  --lens-width: clamp(205px, 26vw, 422px);
+  --lens-right: clamp(28px, 4.2vw, 84px);
+  --lens-top: clamp(6px, 1.75vh, 25px);
   --city-position: center 58%;
 }
 
 body {
+  --lens-height: calc(var(--lens-width) * 0.5625);
   isolation: isolate;
   font-family: system-ui, "Microsoft YaHei", "PingFang SC", sans-serif;
 }
@@ -56,28 +57,44 @@ body::before {
 }
 
 body::after,
-.gargantua-sky {
+.gargantua-scene {
   position: fixed;
   z-index: -1;
-  top: var(--lens-top);
-  left: var(--lens-left);
-  width: var(--lens-width);
-  aspect-ratio: 16 / 9;
-  image-rendering: pixelated;
+  inset: 0;
+  /* Keep the skylight behind the rooftops, in the city's own cover coordinates. */
+  -webkit-mask: url("../images/cyberpunk-sky-mask.png") var(--city-position) / cover no-repeat;
+  mask: url("../images/cyberpunk-sky-mask.png") var(--city-position) / cover no-repeat;
+  clip-path: inset(var(--lens-top) var(--lens-right)
+    calc(100% - var(--lens-top) - var(--lens-height))
+    calc(100% - var(--lens-right) - var(--lens-width)));
   pointer-events: none;
 }
 
 body::after {
-  background: url("../images/gargantua-views.webp") var(--lens-column, 50%) var(--lens-row, 50%) / 500% 300% no-repeat;
+  /* Align one of the five by three views with the same viewport aperture. */
+  background-image: url("../images/gargantua-views.webp");
+  background-size: calc(5 * var(--lens-width)) auto;
+  background-position:
+    right calc(var(--lens-right) + (var(--lens-column, 2) - 4) * var(--lens-width))
+    top calc(var(--lens-top) - var(--lens-row, 1) * var(--lens-height));
+  background-repeat: no-repeat;
   content: "";
 }
 
-.gargantua-sky,
+.gargantua-sky {
+  position: absolute;
+  top: var(--lens-top);
+  right: var(--lens-right);
+  width: var(--lens-width);
+  height: var(--lens-height);
+}
+
+.gargantua-scene,
 .gargantua-live body::after {
   visibility: hidden;
 }
 
-.gargantua-live .gargantua-sky {
+.gargantua-live .gargantua-scene {
   visibility: visible;
 }
 
@@ -250,6 +267,12 @@ body::after {
 }
 
 @media (min-width: 768px) {
+  :root {
+    /* Wide windows crop the tops of the towers into view. Follow the open sky. */
+    --lens-right: min(16vw,
+      calc(clamp(28px, 4.2vw, 84px) + max(0px, 34vw - 60.4vh)));
+  }
+
   .menu.main-menu {
     display: flex;
     flex-wrap: wrap;
@@ -278,8 +301,7 @@ body::after {
 
 @media (min-width: 1200px) {
   .sidebar-active {
-    --lens-left: calc(var(--sidebar-width, 320px) + 8px);
-    --lens-width: clamp(176px, 17vw, 310px);
+    --lens-width: clamp(195px, 19vw, 320px);
   }
 }
 
@@ -519,9 +541,9 @@ body::after {
 @media (max-width: 767px) {
   :root {
     --city-position: 64% center;
-    --lens-top: 2px;
-    --lens-left: 2px;
-    --lens-width: clamp(92px, 22vw, 142px);
+    --lens-top: 0px;
+    --lens-right: clamp(3px, 1.6vw, 14px);
+    --lens-width: clamp(100px, 25vw, 150px);
   }
 
   .header,
@@ -558,7 +580,7 @@ body::after {
 @media print {
   body::before,
   body::after,
-  .gargantua-sky {
+  .gargantua-scene {
     display: none;
   }
 }
