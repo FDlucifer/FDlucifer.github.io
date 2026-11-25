@@ -33,7 +33,8 @@
   --lens-width: clamp(205px, 26vw, 422px);
   --lens-right: clamp(28px, 4.2vw, 84px);
   --lens-top: clamp(6px, 1.75vh, 25px);
-  --city-position: center 58%;
+  --city-x: 50%;
+  --city-y: 58%;
 }
 
 body {
@@ -49,53 +50,123 @@ body::before {
   background:
     radial-gradient(ellipse at 100% 55%, #e52e4715, transparent 57%),
     linear-gradient(180deg, #10080b35 12%, #0a080b62 52%, #0a080be6 100%),
-    url("../images/cyberpunk-pixel-city.webp") var(--city-position) / cover no-repeat,
+    url("../images/cyberpunk-pixel-city.webp") var(--city-x) var(--city-y) / cover no-repeat,
     radial-gradient(ellipse at 90% 25%, #63242e, #1a0d14 58%, var(--ink) 90%);
   content: "";
   image-rendering: pixelated;
   pointer-events: none;
 }
 
-body::after,
-.gargantua-scene {
+.gargantua-layer,
+.gargantua-front {
   position: fixed;
   z-index: -1;
   inset: 0;
-  /* Keep the skylight behind the rooftops, in the city's own cover coordinates. */
-  -webkit-mask: url("../images/cyberpunk-sky-mask.png") var(--city-position) / cover no-repeat;
-  mask: url("../images/cyberpunk-sky-mask.png") var(--city-position) / cover no-repeat;
-  clip-path: inset(var(--lens-top) var(--lens-right)
-    calc(100% - var(--lens-top) - var(--lens-height))
-    calc(100% - var(--lens-right) - var(--lens-width)));
+  overflow: hidden;
   pointer-events: none;
 }
 
+body::after,
+.gargantua-scene,
+.gargantua-core {
+  position: absolute;
+  left: calc(100% - var(--lens-right) - var(--lens-width) * .5);
+  top: calc(var(--lens-top) + var(--lens-height) * .5);
+  width: var(--lens-width);
+  height: var(--lens-height);
+  transform: translate(-50%, -50%);
+  --feather: radial-gradient(ellipse closest-side, #000 56%, #000f 64%, #0009 83%, transparent 99%);
+  -webkit-mask-image: var(--feather);
+  mask-image: var(--feather);
+  pointer-events: none;
+}
+
+body::after,
+.gargantua-poster {
+  background: url("../images/gargantua-views.webp") 50% 50% / 500% 300% no-repeat;
+}
+
 body::after {
-  /* Align one of the five by three views with the same viewport aperture. */
-  background-image: url("../images/gargantua-views.webp");
-  background-size: calc(5 * var(--lens-width)) auto;
-  background-position:
-    right calc(var(--lens-right) + (var(--lens-column, 2) - 4) * var(--lens-width))
-    top calc(var(--lens-top) - var(--lens-row, 1) * var(--lens-height));
-  background-repeat: no-repeat;
+  position: fixed;
+  z-index: -1;
   content: "";
 }
 
-.gargantua-sky {
-  position: absolute;
-  top: var(--lens-top);
-  right: var(--lens-right);
-  width: var(--lens-width);
-  height: var(--lens-height);
+.gargantua-ready body::after {
+  content: none;
 }
 
-.gargantua-scene,
-.gargantua-live body::after {
+.gargantua-poster,
+.gargantua-sky {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gargantua-sky,
+.gargantua-core-light,
+.gargantua-live .gargantua-poster {
   visibility: hidden;
 }
 
-.gargantua-live .gargantua-scene {
+.gargantua-live .gargantua-sky,
+.gargantua-live .gargantua-core-light {
   visibility: visible;
+}
+
+.gargantua-handle {
+  position: absolute;
+  inset: 23% 35%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.gargantua-handle:focus-visible {
+  outline: 2px dashed var(--red-light);
+  outline-offset: 5px;
+}
+
+.gargantua-front {
+  z-index: 6;
+  display: none;
+}
+
+.gargantua-placed .gargantua-front {
+  display: block;
+}
+
+.gargantua-core {
+  /* Full occultation inside the shadow, then increasing transmission all
+     the way to open sky. The accretion disk keeps its actual ray-traced color. */
+  --feather: radial-gradient(circle closest-side, #000 0% 25%, #000e 33%, #0007 43%, #0002 51%, transparent 58%);
+  background-color: #060408;
+}
+
+.gargantua-core-light {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--lens-height) * .58);
+  height: calc(var(--lens-height) * .58);
+  transform: translate(-50%, -50%);
+}
+
+.gargantua-type-field {
+  position: fixed;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gargantua-type-bent {
+  filter: var(--gargantua-type-lens);
 }
 
 ::selection {
@@ -130,11 +201,23 @@ body::after {
 }
 
 .site-brand-container .site-meta {
+  position: relative;
+  isolation: isolate;
   display: inline-grid;
   grid-template-columns: auto auto;
   align-items: center;
   justify-content: center;
   column-gap: clamp(8px, 2vw, 18px);
+}
+
+.site-brand-container .site-meta::before,
+.footer-inner::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -1em -2em;
+  background: radial-gradient(ellipse closest-side, #100b10c9 34%, #100b108a 65%, transparent);
+  pointer-events: none;
 }
 
 .site-meta .custom-logo-image,
@@ -179,7 +262,7 @@ body::after {
   font-weight: 700;
   letter-spacing: -0.075em;
   line-height: 1.25;
-  text-shadow: 0 0 24px #ff314c35, 0 2px 20px #000;
+  text-shadow: 0 1px 3px #100b10, 0 0 24px #ff314c35, 0 2px 20px #000;
 }
 
 .site-subtitle {
@@ -187,6 +270,7 @@ body::after {
   margin-top: 0.25em;
   color: #f4c3ce;
   font-family: var(--mono);
+  text-shadow: 0 1px 3px #100b10, 0 0 6px #100b10;
 }
 
 .site-nav {
@@ -198,7 +282,7 @@ body::after {
   padding: 7px 10px;
   border: 1px solid var(--line);
   border-top-color: #a34453;
-  background: #100b10ef;
+  background: #100b10d6;
   box-shadow: 0 12px 36px #0005;
   font-family: var(--mono);
 }
@@ -309,7 +393,7 @@ body::after {
   margin-top: 16px;
   padding: 18px clamp(16px, 3vw, 28px);
   border: 1px solid var(--line);
-  background: #100c12f5;
+  background: #100c12cf;
 }
 
 .home-guide-heading,
@@ -371,7 +455,7 @@ body::after {
   margin: 20px 0;
   padding: clamp(22px, 4vw, 52px);
   border: 1px solid var(--line);
-  background: var(--panel);
+  background: #110e14cc;
   box-shadow: 0 14px 34px #0006;
 }
 
@@ -690,6 +774,16 @@ body::after {
   background: transparent;
 }
 
+.footer-inner {
+  position: relative;
+  isolation: isolate;
+  text-shadow: 0 1px 3px #100b10, 0 0 6px #100b10;
+}
+
+.footer-inner::before {
+  inset: 0;
+}
+
 .gargantua-corona {
   position: fixed;
   z-index: 2147483647;
@@ -710,6 +804,23 @@ body::after {
   body *::after {
     cursor: url("../images/gargantua-cursor.png") 16 16, auto !important;
   }
+
+  html.gargantua-can-grab,
+  html.gargantua-can-grab body,
+  html.gargantua-can-grab body * {
+    cursor: grab !important;
+  }
+
+  html.gargantua-dragging,
+  html.gargantua-dragging body,
+  html.gargantua-dragging body * {
+    cursor: grabbing !important;
+  }
+}
+
+html.gargantua-dragging body {
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 @keyframes city-breath {
@@ -729,7 +840,8 @@ body::after {
 
 @media (prefers-reduced-motion: no-preference) {
   body::before,
-  body::after {
+  body::after,
+  .gargantua-poster {
     animation: city-breath 9.5s ease-in-out infinite;
   }
 
@@ -753,10 +865,11 @@ body::after {
 
 @media (max-width: 767px) {
   :root {
-    --city-position: 64% center;
-    --lens-top: 0px;
+    --city-x: 64%;
+    --city-y: 50%;
+    --lens-top: 4px;
     --lens-right: clamp(3px, 1.6vw, 14px);
-    --lens-width: clamp(100px, 25vw, 150px);
+    --lens-width: clamp(128px, 36vw, 190px);
   }
 
   .header,
@@ -793,7 +906,8 @@ body::after {
 @media print {
   body::before,
   body::after,
-  .gargantua-scene {
+  .gargantua-layer,
+  .gargantua-front {
     display: none;
   }
 }

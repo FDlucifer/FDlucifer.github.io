@@ -6,7 +6,12 @@ precision mediump float;
 
 uniform vec2 uResolution;
 uniform vec2 uLook;
+uniform vec2 uVelocity;
 uniform float uTime;
+uniform sampler2D uCity;
+// UV at the lens center and its full span in the CSS cover-sized city image.
+uniform vec4 uCityUV;
+uniform vec2 uPageY;
 
 const float PI = 3.14159265;
 // Distances are in Schwarzschild radii. The inner edge is near the ISCO.
@@ -65,10 +70,10 @@ void main() {
     gl_FragColor = vec4(0.0);
     return;
   }
-  float roll = 0.13 + 0.38 * uLook.x;
+  float roll = 0.13 + 0.38 * uLook.x + 0.19 * uVelocity.x;
   vec2 film = mat2(cos(roll), -sin(roll), sin(roll), cos(roll)) * screen;
-  float pitch = 0.16 + 0.14 * uLook.y;
-  float yaw = 0.42 + 0.52 * uLook.x;
+  float pitch = clamp(0.16 + 0.14 * uLook.y + 0.08 * uVelocity.y, 0.025, 0.38);
+  float yaw = 0.42 + 0.52 * uLook.x + 0.23 * uVelocity.x;
   vec3 outward = vec3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw));
   vec3 right = vec3(cos(yaw), 0.0, -sin(yaw));
   vec3 up = cross(outward, right);
@@ -141,5 +146,20 @@ void main() {
   // stars and gas then blend with the actual sky without a dark fringe.
   vec3 emission = pow(1.0 - exp(-1.10 * light), vec3(0.94));
   float alpha = max(1.0 - transmission, max(emission.r, max(emission.g, emission.b)));
+  if (uCityUV.z > 0.0 && transmission > 0.0) {
+    // Map the extended background through a thin lens. Its deflection falls
+    // with impact parameter; captured rays never sample the city.
+    vec2 offset = (gl_FragCoord.xy / uResolution - 0.5) * vec2(1.0, -1.0);
+    float deflection = min(1.55, 0.23 / max(dot(screen, screen), 0.10));
+    vec2 sourceUV = uCityUV.xy + (1.0 - deflection) * offset * uCityUV.zw;
+    vec3 city = texture2D(uCity, sourceUV).rgb;
+    float y = uPageY.x + offset.y * uPageY.y;
+    float shade = mix(0.21, 0.38, clamp((y - 0.12) / 0.40, 0.0, 1.0));
+    shade = mix(shade, 0.90, clamp((y - 0.52) / 0.48, 0.0, 1.0));
+    city = mix(city, vec3(0.047, 0.032, 0.044), shade);
+    float bent = (1.0 - alpha) * (1.0 - smoothstep(0.40, 0.95, skyRadius)) * 0.85;
+    emission += bent * city;
+    alpha += bent;
+  }
   gl_FragColor = vec4(emission / max(alpha, 0.0001), alpha * envelope);
 }
